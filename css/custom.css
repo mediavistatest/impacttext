@@ -53,3 +53,7 @@ background: #0570c5;
 padding: 15px 25px;
 background: #005faa;
 }
+
+.loginscreen .alert {
+margin-bottom: 25px;
+}
