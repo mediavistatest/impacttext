@@ -1,0 +1,55 @@
+.logo-name img {
+margin: 0 auto 60px auto;
+}
+
+.loginscreen.middle-box {
+width: 320px;
+margin-left: -160px;
+margin-top: -330px;
+}
+
+.btn-primary {
+background-color: #e36f1e;
+border-color: #e36f1e;
+color: #FFFFFF;
+}
+
+.btn-primary:hover, .btn-primary:active {
+background-color: #d26315;
+border-color: #d26315;
+color: #FFFFFF;
+}
+
+.btn-gray {
+color: white;
+background: #959595;
+border: 1px solid #959595;
+}
+
+.btn-gray:hover, .btn-gray:active {
+color: white;
+background: #878787;
+border: 1px solid #878787;
+}
+
+.theme-config {
+	display: none;
+}
+
+.main-logo {
+	margin-bottom: 30px;
+}
+
+nav.navbar-default.navbar-static-side {
+background: #005faa;
+}
+
+.nav > li.active {
+border-left: 4px solid #0570c5;
+background: #0570c5;
+}
+
+.nav-header {
+padding: 15px 25px;
+background: #005faa;
+}
