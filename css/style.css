@@ -404,6 +404,7 @@ body.fixed-sidebar.mini-navbar .navbar-default .nav li a span {
 .fixed-sidebar.mini-navbar .nav-second-level {
   left: 0px;
 }
+/* Horizontal Top navigation */
 .top-navigation #page-wrapper {
   margin-left: 0;
 }
@@ -460,6 +461,10 @@ body.fixed-sidebar.mini-navbar .navbar-default .nav li a span {
 .top-navigation .navbar-top-links li:last-child {
   margin-right: 0;
 }
+.top-navigation .navbar-header {
+  /*display: inline-block;*/
+  /*float: none;*/
+}
 .top-navigation.mini-navbar #page-wrapper,
 .top-navigation.body-small.fixed-sidebar.mini-navbar #page-wrapper,
 .mini-navbar .top-navigation #page-wrapper,
@@ -489,6 +494,11 @@ body-small.fixed-sidebar.mini-navbar .top-navigation #page-wrapper {
 .top-navigation .navbar-nav .open .dropdown-menu > li > a,
 .top-navigation .navbar-nav .open .dropdown-menu .dropdown-header {
   padding: 10px 15px 10px 20px;
+}
+@media (min-width: 768px) {
+  .top-navigation ul.nav.navbar-nav li.dropdown:hover > ul.dropdown-menu {
+    /*display: block;*/
+  }
 }
 @media (max-width: 768px) {
   .top-navigation .navbar-header {
@@ -3357,7 +3367,6 @@ table.table-mail tr td {
 /* For handle diferent bg color in MVC version */
 .Dashboard_2 .navbar.navbar-static-top,
 .Dashboard_3 .navbar.navbar-static-top,
-.Dashboard_4_1 .navbar.navbar-static-top,
 .ComposeEmail .navbar.navbar-static-top,
 .EmailView .navbar.navbar-static-top,
 .Inbox .navbar.navbar-static-top {
@@ -4264,13 +4273,6 @@ dd.project-people {
 }
 .chat-message-form .form-group {
   margin-bottom: 0;
-}
-/* jsTree */
-.jstree-open > .jstree-anchor > .fa-folder:before {
-  content: "\f07c";
-}
-.jstree-default .jstree-icon.none {
-  width: 0;
 }
 body.rtls {
   /* Theme config */

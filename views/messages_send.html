@@ -1,0 +1,94 @@
+<h1>Send</h1>
+<form>
+<div class="col-md-12 content-holder">
+
+<h2 class="section-title">Compose Message</h2>
+
+	<div class="form-group clearfix">
+
+		<label class="col-sm-2 control-label message-type">Message Type:</label>
+
+	    <div class="col-sm-10">
+	        <div class="radio"><label> <input icheck type="radio" name="messageType" ng-model="main.check8" checked> SMS </label> <label> <input icheck type="radio" name="messageType" ng-model="main.checkFour"> MMS </label></div>   
+	    </div>
+	</div>
+
+	<div class="form-group clearfix">
+
+		<label class="col-sm-2 control-label">From:</label>
+
+	    <div class="col-sm-10">
+		    <select class="form-control m-b" name="account">
+		        <option>+111 111 1111</option>
+		        <option>+222 222 2222</option>
+		        <option>+333 333 3333</option>
+		        <option>+444 444 4444</option>
+		    </select>
+		</div>
+	</div>
+
+	<div class="form-group clearfix">
+		<label class="col-sm-2 control-label">From Name:</label>
+
+    	<div class="col-sm-10">
+    		<input type="text" name="from" placeholder="e.g. Nestle chocolate" class="form-control">
+    	</div>
+	</div>
+
+	<div class="form-group clearfix">
+		<label class="col-sm-2 control-label">To:</label>
+
+    	<div class="col-sm-10">
+    		<div class="form-group" ng-show="!patient.archived">
+			<select chosen data-placeholder="Select from an existing list(s)..." class="chosen-select" multiple tabindex="4" >
+			<option value="Nestle">Nestle</option>
+			<option value="Nestle">Nestle</option>
+			<option value="BMW">BMW</option>
+			<option value="Mercedes">Mercedes</option>
+			<option value="Land Rover">Land Rover</option>
+			</select>
+			</div>
+
+			<div class="form-group" ng-show="patient.archived">
+    		<input type="text" name="to" placeholder="Insert phone numbers separated by comma ..." class="form-control" >
+    		</div>
+    		<a ng-app class="" ng-class="{true: 'addBtn', false: 'addBtn'}[!patient.archived]" ng-click="patient.archived = !patient.archived">{{!patient.archived && 'Or add numbers manually' || 'Or select from an existing list'}}</a>
+    	</div>
+	</div>
+
+	<div class="form-group clearfix">
+
+		<label class="col-sm-2 control-label message-type">Oup-out Message:</label>
+
+	    <div class="col-sm-10">
+	        <div class="radio">
+	        <label> <input icheck type="radio" name="optOut" value="standard" ng-model="main.checkOne"> Standard </label>
+	        <label> <input icheck type="radio" name="optOut" value="custom" ng-model="main.checkOne"> Customized </label>
+	        <label> <input icheck type="radio" name="optOut" value="write" ng-model="main.checkOne"> Write opt-out message </label></div>
+	        
+	        <textarea ng-show="main.checkOne == 'standard'" name="message" class="form-control" rows="2" ng-model="optCounter1" ng-init="optCounter1='This is standard'" disabled></textarea>
+	        <textarea ng-show="main.checkOne == 'custom'" name="message" class="form-control" rows="2" ng-model="optCounter2" ng-init="optCounter2='This is custom'" disabled></textarea>
+	        <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="main.checkOne == 'write'" name="message" class="form-control" rows="2" ng-model="optCounter3" maxlength="160"></textarea>   
+	    </div>
+	</div>
+
+	<div class="form-group clearfix">
+		<label class="col-sm-2 control-label">Message text:</label>
+
+    	<div class="col-sm-10">
+    		<textarea name="message" class="form-control" rows="3" ng-model="textCounter" ng-trim="false" maxlength="160"></textarea>
+    		<div class="text-counter">{{160 - optCounter3.length - textCounter.length}} characters left</div>
+    	</div>
+	</div>
+
+<br><br><br>
+<div class="col-sm-10 col-sm-offset-2">
+
+<a class="btn"><i class="fa fa-pencil"></i> Save as draft</a>
+<a class="btn"><i class="fa fa-clock-o"></i> Schedule for later</a>
+<a class="btn btn-discard"><i class="fa fa-times"></i> Discard</a>
+<a class="btn btn-send right"><i class="fa fa-paper-plane"></i> Send</a>
+
+
+</div>
+</form>
