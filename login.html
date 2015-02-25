@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="inspinia">
 
 <head>
 
@@ -19,7 +19,7 @@
 <body class="gray-bg">
 
     <div class="middle-box text-center loginscreen  animated fadeInDown">
-        <div>
+        <div  ng-controller="loginCtrl">
             
 			<div>
                 <h1 class="logo-name"><img src="img/login_logo.png" class="img-responsive"></h1>
@@ -29,19 +29,18 @@
             <br>
             <p>Log in to dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
             <br>
-			<div class="alert alert-danger" style="display:none">
+			<div class="alert alert-danger" ng-show="invalidCredentials">
                 Username or password is incorrect.
             </div>
 			
-            <form class="m-t" role="form" action="/dashboard">
+            <form class="m-t" role="form">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Username" required="">
+                    <input type="text" class="form-control" placeholder="Username" required="" ng-model="username">
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Password" required="">
+                    <input type="password" class="form-control" placeholder="Password" required="" ng-model="password">
                 </div>
-                <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
-
+                <button type="submit" class="btn btn-primary block full-width m-b" ng-click="login()">Login</button>
 
                 <!-- Hidden for now ! 
                 <a href="#"><small>Forgot password?</small></a>
@@ -59,8 +58,17 @@
     <!-- Mainly scripts -->
     <script src="js/jquery-2.1.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/angular.min.js"></script>
+	 <script src="js/angular/angular.js"></script>
+	 <script src="js/angular/angular-cookies.min.js"></script>
+	 <script src="js/plugins/oclazyload/dist/ocLazyLoad.min.js"></script>
+	 <script src="js/angular-translate/angular-translate.min.js"></script>
+	 <script src="js/ui-router/angular-ui-router.js"></script>
+	 <script src="js/bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
 
+
+	 <script src="js/app.js"></script>
+	 <script src="js/config.js"></script>
+	 <script src="js/controllers.js"></script>
 </body>
 
 </html>

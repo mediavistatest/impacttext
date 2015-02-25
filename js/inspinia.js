@@ -21,7 +21,7 @@ $(document).ready(function () {
         if(!$("body").hasClass('body-small')) {
             fix_height();
         }
-    })
+    });
     fix_height();
 
 });

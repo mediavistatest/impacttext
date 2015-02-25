@@ -181,7 +181,7 @@ function MainCtrl() {
     this.alerts = [
         { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
         { type: 'success', msg: 'Well done! You successfully read this important alert message.' },
-        { type: 'info', msg: 'OK, You are done a great job man.' },
+        { type: 'info', msg: 'OK, You are done a great job man.' }
     ];
 
     /**
@@ -237,14 +237,14 @@ function MainCtrl() {
     this.BarChart2 = {
         data: [5, 3, 9, 6, 5, 9, 7, 3, 5, 2],
         options: {
-            fill: ["#1ab394", "#d7d7d7"],
+            fill: ["#1ab394", "#d7d7d7"]
         }
     };
 
     this.BarChart3 = {
         data: [5, 3, 2, -1, -3, -2, 2, 3, 5, 2],
         options: {
-            fill: ["#1ab394", "#d7d7d7"],
+            fill: ["#1ab394", "#d7d7d7"]
         }
     };
 
@@ -571,7 +571,7 @@ function dashboardFlotTwo() {
             noColumns: 1,
             labelBoxBorderColor: "#d5d5d5",
             position: "nw"
-        },
+        }
 
     };
 
@@ -603,7 +603,7 @@ function dashboardMap() {
         "AU": 760,
         "BR": 550,
         "IN": 200,
-        "GB": 120,
+        "GB": 120
     };
 
     this.data = data;
@@ -681,22 +681,22 @@ function flotChartCtrl() {
         {
             label: "Sales 1",
             data: 21,
-            color: "#d3d3d3",
+            color: "#d3d3d3"
         },
         {
             label: "Sales 2",
             data: 3,
-            color: "#bababa",
+            color: "#bababa"
         },
         {
             label: "Sales 3",
             data: 15,
-            color: "#79d2c0",
+            color: "#79d2c0"
         },
         {
             label: "Sales 4",
             data: 52,
-            color: "#1ab394",
+            color: "#1ab394"
         }
     ];
 
@@ -1960,7 +1960,7 @@ function rickshawChartCtrl() {
      * Options for Multi line chart
      */
     var multiLineChartOptions = {
-        renderer: 'line',
+        renderer: 'line'
     };
 
     /**
@@ -2110,7 +2110,7 @@ function sparklineChartCtrl() {
     var inlineOptions = {
         type: 'line',
         lineColor: '#17997f',
-        fillColor: '#1ab394',
+        fillColor: '#1ab394'
     };
 
     /**
@@ -2155,7 +2155,7 @@ function sparklineChartCtrl() {
     /**
      * Discrate chart
      */
-    var discreteData = [4, 6, 7, 7, 4, 3, 2, 1, 4, 4, 5, 6, 3, 4, 5, 8, 7, 6, 9, 3, 2, 4, 1, 5, 6, 4, 3, 7, ];
+    var discreteData = [4, 6, 7, 7, 4, 3, 2, 1, 4, 4, 5, 6, 3, 4, 5, 8, 7, 6, 9, 3, 2, 4, 1, 5, 6, 4, 3, 7 ];
     var discreteOptions = {
         type: 'discrete',
         lineColor: '#1ab394'
@@ -2192,7 +2192,7 @@ function sparklineChartCtrl() {
         lineWidth: 1,
         height: '150px',
         lineColor: '#17997f',
-        fillColor: '#ffffff',
+        fillColor: '#ffffff'
     };
 
 
@@ -2253,19 +2253,19 @@ function widgetFlotChart() {
                     }, {
                         opacity: 1
                     }]
-                },
+                }
             },
             points: {
                 width: 0.1,
                 show: false
-            },
+            }
         },
         grid: {
             show: false,
             borderWidth: 0
         },
         legend: {
-            show: false,
+            show: false
         }
     };
 
@@ -2287,19 +2287,19 @@ function widgetFlotChart() {
                     }, {
                         opacity: 1
                     }]
-                },
+                }
             },
             points: {
                 width: 0.1,
                 show: false
-            },
+            }
         },
         grid: {
             show: false,
             borderWidth: 0
         },
         legend: {
-            show: false,
+            show: false
         }
     };
 
@@ -2322,19 +2322,19 @@ function widgetFlotChart() {
                     }, {
                         opacity: 1
                     }]
-                },
+                }
             },
             points: {
                 width: 0.1,
                 show: false
-            },
+            }
         },
         grid: {
             show: false,
             borderWidth: 0
         },
         legend: {
-            show: false,
+            show: false
         }
     };
 
@@ -2363,7 +2363,7 @@ function modalDemoCtrl($scope, $modal) {
 
         var modalInstance = $modal.open({
             templateUrl: 'views/modal_example.html',
-            controller: ModalInstanceCtrl,
+            controller: ModalInstanceCtrl
         });
     };
 
@@ -2386,7 +2386,7 @@ function modalDemoCtrl($scope, $modal) {
         var modalInstance = $modal.open({
             templateUrl: 'views/modal_example3.html',
             size: size,
-            controller: ModalInstanceCtrl,
+            controller: ModalInstanceCtrl
         });
     };
 
@@ -2634,7 +2634,7 @@ function chartJsCtrl() {
         animationSteps : 100,
         animationEasing : "easeOutBounce",
         animateRotate : true,
-        animateScale : false,
+        animateScale : false
     };
 
     /**
@@ -2672,7 +2672,7 @@ function chartJsCtrl() {
         animationSteps : 100,
         animationEasing : "easeOutBounce",
         animateRotate : true,
-        animateScale : false,
+        animateScale : false
     };
 
     /**
@@ -2745,7 +2745,7 @@ function chartJsCtrl() {
         pointHitDetectionRadius : 20,
         datasetStroke : true,
         datasetStrokeWidth : 2,
-        datasetFill : true,
+        datasetFill : true
     };
 
     /**
@@ -2759,7 +2759,7 @@ function chartJsCtrl() {
         barShowStroke : true,
         barStrokeWidth : 2,
         barValueSpacing : 5,
-        barDatasetSpacing : 1,
+        barDatasetSpacing : 1
 };
 
     /**
@@ -2836,7 +2836,7 @@ function chartJsCtrl() {
         pointHitDetectionRadius : 20,
         datasetStroke : true,
         datasetStrokeWidth : 2,
-        datasetFill : true,
+        datasetFill : true
     };
 
 
@@ -2925,7 +2925,7 @@ function nestableCtrl($scope) {
                 "title": "node1.2",
                 "nodes": []
             }
-        ],
+        ]
     }, {
         "id": 2,
         "title": "node2",
@@ -2940,7 +2940,7 @@ function nestableCtrl($scope) {
                 "title": "node2.2",
                 "nodes": []
             }
-        ],
+        ]
     }, {
         "id": 3,
         "title": "node3",
@@ -2950,7 +2950,7 @@ function nestableCtrl($scope) {
                 "title": "node3.1",
                 "nodes": []
             }
-        ],
+        ]
     }];
 }
 
@@ -3007,7 +3007,7 @@ function notifyCtrl($scope, notify) {
         notify({
             message: $scope.msg,
             classes: $scope.classes,
-            templateUrl: $scope.template,
+            templateUrl: $scope.template
         });
     };
     $scope.closeAll = function () {
@@ -3066,7 +3066,62 @@ $scope.OptOutMessage = [
   { 'snippet' : 'Write your own',
     'extraField' : true }
 ];
-};
+}
+
+/**
+ * Controller for the login functionality.
+ *
+ * @param $scope	angular js scope
+ */
+function loginCtrl($scope, $cookieStore, $http, $window) {
+	$scope.invalidCredentials = false;
+	//Reset authentication token
+	$cookieStore.put('auth-token', '');
+
+	//Login function
+	$scope.login = function() {
+		$scope.invalidCredentials = false;
+		//Checking if username and password are provided
+		if (typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
+			return;
+		}
+		if (typeof $scope.password == 'undefined' || $scope.password == null || $scope.password == '') {
+			return;
+		}
+		//Calling rest service to sign in
+		$http.post(
+			inspiniaNS.wsUrl + "login",
+			$.param({
+				username: $scope.username,
+				password: $scope.password
+			})
+		).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unknown error occurred when trying to sign in! Please try again.");
+					return;
+				}
+				if (data.apicode == 0) {
+					//User signed in successfully
+					$cookieStore.put('auth-token', data.apikey);
+					$window.location.href = "/#/dashboard";
+				} else if (data.apicode == 2) {
+					//Invalid credentials
+					$scope.invalidCredentials = true;
+				} else {
+					alert ("An error occurred when trying to sign in. Error code: " + data.apicode);
+				}
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				alert("Failed to sign in! Please try again.")
+			}
+		)
+	}
+}
 /**
  *
  * Pass all functions into module
@@ -3094,3 +3149,4 @@ angular
     .controller('translateCtrl', translateCtrl)
     .controller('imageCrop', imageCrop)
     .controller('FormCtrl' , FormCtrl)
+    .controller('loginCtrl' , ['$scope', '$cookieStore', '$http', '$window', loginCtrl]);

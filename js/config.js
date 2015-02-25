@@ -7,7 +7,7 @@
  * Initial there are written state for all view in theme.
  *
  */
-function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
+function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpProvider) {
     $urlRouterProvider.otherwise("/dashboard");
 
     $ocLazyLoadProvider.config({
@@ -20,17 +20,17 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         
         .state('dashboard', {
             url: "/dashboard",
-            templateUrl: "views/dashboard.html",
+            templateUrl: "views/dashboard.html"
         })
         .state('lists', {
             abstract: true,
             url: "/lists",
-            templateUrl: "views/common/content.html",
+            templateUrl: "views/common/content.html"
         })
         .state('lists.view', {
             url: "/lists_view",
             templateUrl: "views/lists_view.html",
-            data: { pageTitle: 'Lists' },
+            data: { pageTitle: 'Lists' }
             //resolve: {
             //    loadPlugin: function ($ocLazyLoad) {
             //        return $ocLazyLoad.load([
@@ -46,7 +46,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         .state('lists.manage', {
             url: "/lists_manage",
             templateUrl: "views/lists_manage.html",
-            data: { pageTitle: 'Manage List' },
+            data: { pageTitle: 'Manage List' }
             //resolve: {
             //    loadPlugin: function ($ocLazyLoad) {
             //        return $ocLazyLoad.load([
@@ -67,22 +67,22 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         .state('lists.add', {
             url: "/lists_add",
             templateUrl: "views/lists_add.html",
-            data: { pageTitle: 'Add List' },             
+            data: { pageTitle: 'Add List' }
         })
         .state('lists.add_contact', {
             url: "/lists_add_contact",
             templateUrl: "views/lists_add_contact.html",
-            data: { pageTitle: 'Add Contact' },
+            data: { pageTitle: 'Add Contact' }
         })
         .state('lists.upload', {
             url: "/lists_upload",
             templateUrl: "views/lists_upload.html",
-            data: { pageTitle: 'Upload list (file)' },
+            data: { pageTitle: 'Upload list (file)' }
         })
         .state('messages', {
             abstract: true,
             url: "/messages",
-            templateUrl: "views/common/content.html",
+            templateUrl: "views/common/content.html"
         })
         .state('messages.inbox', {
             url: "/messages_inbox",
@@ -112,7 +112,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                             insertBefore: '#loadBefore',
                             name: 'localytics.directives',
                             files: ['css/plugins/chosen/chosen.css','js/plugins/chosen/chosen.jquery.js','js/plugins/chosen/chosen.js']
-                        },
+                        }
                     ]);
                 }
             }
@@ -125,7 +125,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         .state('messages.scheduled', {
             url: "/messages_scheduled",
             templateUrl: "views/messages_scheduled.html",
-            data: { pageTitle: 'Scheduled' },
+            data: { pageTitle: 'Scheduled' }
         })
         .state('messages.sent', {
             url: "/messages_sent",
@@ -157,6 +157,9 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             templateUrl: "views/support.html",
             data: { pageTitle: 'Support' }
         });
+
+	//Setting defaults for http requests
+	$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
         
 }
 angular
@@ -165,3 +168,9 @@ angular
     .run(function($rootScope, $state) {
         $rootScope.$state = $state;
     });
+
+//Some global variables
+var inspiniaNS = {};
+inspiniaNS.wsUrl = "http://tlsionweb01.excel.com/mercury/cmp/";
+//inspiniaNS.wsUrl = "http://impacttext.localhost.rs/ajax.php?todo=";
+//inspiniaNS.wsUrl = "ajax.php?todo=";
