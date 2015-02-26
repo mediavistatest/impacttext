@@ -22,11 +22,8 @@
 		<label class="col-sm-2 control-label">From:</label>
 
 	    <div class="col-sm-10">
-		    <select class="form-control m-b" name="FromNumber" ng-model="FromNumber">
-		        <option value="default">+111 111 1111</option>
-		        <option value="+222 222 2222">+222 222 2222</option>
-		        <option value="+333 333 3333">+333 333 3333</option>
-		        <option value="+444 444 4444">+444 444 4444</option>
+		    <select class="form-control m-b" name="FromNumber" ng-model="FromNumber"
+						ng-options="fromNumber.DID for fromNumber in fromNumbers track by fromNumber.DIDID">
 		    </select>
 		</div>
 	</div>
@@ -46,7 +43,7 @@
     		<div class="form-group" ng-show="!list">
 
 			<select chosen data-placeholder="Select from an existing list(s)..." class="chosen-select" multiple tabindex="4" ng-model="ToList"
-					  ng-options="contactList.contactListName for contactList in contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists" >
+					  ng-options="contactList.contactListName for contactList in contactLists track by contactList.contactListID" >
 			</select>
 			</div>
 

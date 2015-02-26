@@ -3085,7 +3085,8 @@ function FormSendCtrl($scope, $cookieStore, $http) {
     $scope.SetDate = "";
       $scope.SetTime = "";
 	$scope.contactLists = [];
-    
+	$scope.fromNumbers = [];
+
     
   //reset send form  
     $scope.reset = function(){
@@ -3101,9 +3102,10 @@ function FormSendCtrl($scope, $cookieStore, $http) {
       $scope.SetDate = '';
       $scope.SetTime = '';
 		 $scope.contactLists = [];
+		 $scope.fromNumbers = [];
     };
 
-	//Read the data from the remote server. First read the contact lists
+	//Read the data from the remote server. First read the contact lists.
 	$http.post(
 		inspiniaNS.wsUrl + "contactlist_get",
 		$.param({ apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
@@ -3126,7 +3128,32 @@ function FormSendCtrl($scope, $cookieStore, $http) {
 		function(data, status, headers, config) {
 			alert('Unexpected error occurred when trying to fetch contact lists!');
 		}
-	)
+	);
+
+	//now read DIDs
+	$http.post(
+		inspiniaNS.wsUrl + "did_get",
+		$.param({ apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+	).success(
+		//Successful request to the server
+		function(data, status, headers, config) {
+			if (data == null || typeof data.apicode == 'undefined') {
+				//This should never happen
+				$scope.fromNumbers = [];
+			}
+			if (data.apicode == 0) {
+				//Reading contact lists
+				$scope.fromNumbers = data.apidata;
+			} else {
+				$scope.fromNumbers = [];
+			}
+		}
+	).error(
+		//An error occurred with this request
+		function(data, status, headers, config) {
+			alert('Unexpected error occurred when trying to fetch DIDs!');
+		}
+	);
 
 }
 
