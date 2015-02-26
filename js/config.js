@@ -67,7 +67,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         .state('lists.add', {
             url: "/lists_add",
             templateUrl: "views/lists_add.html",
-            data: { pageTitle: 'Add List' }
+            data: { pageTitle: 'Add List' }             
         })
         .state('lists.add_contact', {
             url: "/lists_add_contact",
@@ -112,7 +112,16 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                             insertBefore: '#loadBefore',
                             name: 'localytics.directives',
                             files: ['css/plugins/chosen/chosen.css','js/plugins/chosen/chosen.jquery.js','js/plugins/chosen/chosen.js']
+                        },
+                        {
+                            name: 'datePicker',
+                            files: ['css/plugins/datapicker/angular-datapicker.css','js/plugins/datapicker/datePicker.js']
+                        },
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
                         }
+                        
                     ]);
                 }
             }
@@ -158,9 +167,9 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             data: { pageTitle: 'Support' }
         });
 
-	//Setting defaults for http requests
-	$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
-        
+   //Setting defaults for http requests
+   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';    
+
 }
 angular
     .module('inspinia')

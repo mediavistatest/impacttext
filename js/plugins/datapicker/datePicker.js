@@ -8,7 +8,7 @@
         template: 'templates/datepicker.html',
         view: 'month',
         views: ['year', 'month', 'date', 'hours', 'minutes'],
-        step: 5
+        step: 15
     });
 
     Module.filter('time',function () {
@@ -382,7 +382,7 @@
                 (attrs.partial ? 'partial="' + attrs.partial + '" ' : '') +
                 'class="dropdown-menu"></div>';
         },
-        format: 'yyyy-MM-dd HH:mm',
+        format: 'MM-dd-yyyy HH:mm',
         views: ['date', 'year', 'month', 'hours', 'minutes'],
         dismiss: false,
         position: 'relative'

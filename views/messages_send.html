@@ -1,15 +1,19 @@
 <h1>Send</h1>
-<form>
-<div class="col-md-12 content-holder">
+
+<div class="col-md-12 content-holder animated fadeInRight">
 
 <h2 class="section-title">Compose Message</h2>
 
+<form ng-controller="FormSendCtrl">
 	<div class="form-group clearfix">
 
 		<label class="col-sm-2 control-label message-type">Message Type:</label>
 
 	    <div class="col-sm-10">
-	        <div class="radio"><label> <input icheck type="radio" name="messageType" ng-model="main.check8" checked> SMS </label> <label> <input icheck type="radio" name="messageType" ng-model="main.checkFour"> MMS </label></div>   
+	        <div class="radio">
+	        <label> <input icheck type="radio" name="MessageType" ng-model="MessageType" value="SMS"> SMS </label>
+	        <label> <input icheck type="radio" name="MessageType" ng-model="MessageType" value="MMS"> MMS </label>
+	        </div>   
 	    </div>
 	</div>
 
@@ -18,11 +22,11 @@
 		<label class="col-sm-2 control-label">From:</label>
 
 	    <div class="col-sm-10">
-		    <select class="form-control m-b" name="account">
-		        <option>+111 111 1111</option>
-		        <option>+222 222 2222</option>
-		        <option>+333 333 3333</option>
-		        <option>+444 444 4444</option>
+		    <select class="form-control m-b" name="FromNumber" ng-model="FromNumber">
+		        <option value="default">+111 111 1111</option>
+		        <option value="+222 222 2222">+222 222 2222</option>
+		        <option value="+333 333 3333">+333 333 3333</option>
+		        <option value="+444 444 4444">+444 444 4444</option>
 		    </select>
 		</div>
 	</div>
@@ -31,7 +35,7 @@
 		<label class="col-sm-2 control-label">From Name:</label>
 
     	<div class="col-sm-10">
-    		<input type="text" name="from" placeholder="e.g. Nestle chocolate" class="form-control">
+    		<input type="text" name="FromName" placeholder="e.g. Nestle chocolate" ng-model="FromName" class="form-control">
     	</div>
 	</div>
 
@@ -39,9 +43,9 @@
 		<label class="col-sm-2 control-label">To:</label>
 
     	<div class="col-sm-10">
-    		<div class="form-group" ng-show="!patient.archived">
-			<select chosen data-placeholder="Select from an existing list(s)..." class="chosen-select" multiple tabindex="4" >
-			<option value="Nestle">Nestle</option>
+    		<div class="form-group" ng-show="!list">
+			<select chosen data-placeholder="Select from an existing list(s)..." class="chosen-select" multiple tabindex="4" ng-model="ToList" >
+			<option value=""></option>
 			<option value="Nestle">Nestle</option>
 			<option value="BMW">BMW</option>
 			<option value="Mercedes">Mercedes</option>
@@ -49,10 +53,10 @@
 			</select>
 			</div>
 
-			<div class="form-group" ng-show="patient.archived">
-    		<input type="text" name="to" placeholder="Insert phone numbers separated by comma ..." class="form-control" >
+			<div class="form-group" ng-show="list">
+    		<input type="text" name="to" placeholder="Insert phone numbers separated by comma ..." class="form-control" ng-model="ToNumber" >
     		</div>
-    		<a ng-app class="" ng-class="{true: 'addBtn', false: 'addBtn'}[!patient.archived]" ng-click="patient.archived = !patient.archived">{{!patient.archived && 'Or add numbers manually' || 'Or select from an existing list'}}</a>
+    		<a ng-app class="" ng-class="{true: 'addBtn', false: 'addBtn'}[!list]" ng-click="list = !list">{{!list && 'Or add numbers manually' || 'Or select from an existing list'}}</a>
     	</div>
 	</div>
 
@@ -62,13 +66,13 @@
 
 	    <div class="col-sm-10">
 	        <div class="radio">
-	        <label> <input icheck type="radio" name="optOut" value="standard" ng-model="main.checkOne"> Standard </label>
-	        <label> <input icheck type="radio" name="optOut" value="custom" ng-model="main.checkOne"> Customized </label>
-	        <label> <input icheck type="radio" name="optOut" value="write" ng-model="main.checkOne"> Write opt-out message </label></div>
+	        <label> <input icheck type="radio" name="OptOutMsg" value="standard" ng-model="OptOutMsg"> Standard </label>
+	        <label> <input icheck type="radio" name="OptOutMsg" value="custom" ng-model="OptOutMsg"> Customized </label>
+	        <label> <input icheck type="radio" name="OptOutMsg" value="write" ng-model="OptOutMsg"> Write opt-out message </label></div>
 	        
-	        <textarea ng-show="main.checkOne == 'standard'" name="message" class="form-control" rows="2" ng-model="optCounter1" ng-init="optCounter1='This is standard'" disabled></textarea>
-	        <textarea ng-show="main.checkOne == 'custom'" name="message" class="form-control" rows="2" ng-model="optCounter2" ng-init="optCounter2='This is custom'" disabled></textarea>
-	        <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="main.checkOne == 'write'" name="message" class="form-control" rows="2" ng-model="optCounter3" maxlength="160"></textarea>   
+	        <textarea ng-show="OptOutMsg == 'standard'" name="message" class="form-control" rows="2" ng-model="OptOutTxt1" ng-init="OptOutTxt1='This is standard'" disabled></textarea>
+	        <textarea ng-show="OptOutMsg == 'custom'" name="message" class="form-control" rows="2" ng-model="OptOutTxt2" ng-init="OptOutTxt2='This is custom'" disabled></textarea>
+	        <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>   
 	    </div>
 	</div>
 
@@ -76,19 +80,68 @@
 		<label class="col-sm-2 control-label">Message text:</label>
 
     	<div class="col-sm-10">
-    		<textarea name="message" class="form-control" rows="3" ng-model="textCounter" ng-trim="false" maxlength="160"></textarea>
-    		<div class="text-counter">{{160 - optCounter3.length - textCounter.length}} characters left</div>
+    		<textarea name="MessageTxt" class="form-control" rows="3" ng-model="MessageTxt" ng-trim="false" maxlength="160"></textarea>
+    		<div class="text-counter">{{0 + FromName.length + OptOutTxt3.length + MessageTxt.length}} characters (1 message is max. 160 characters)</div>
     	</div>
 	</div>
 
+	 <div class="form-group clearfix">
+	    <label class="col-sm-10 col-sm-offset-2 checkbox">
+	      <input icheck type="checkbox" value="schedule" ng-model="ScheduleCheck"> Schedule for later
+	    </label>
+	  </div>
+
+	<div class="form-group clearfix" value="standard" ng-show="ScheduleCheck">
+            <label class="col-sm-2 control-label">Schedule:</label>
+
+            <div class="col-sm-5"> 
+            <div class="input-group date">
+                <input type="datetime" placeholder="Set date" class="form-control" date-time ng-model="SetDate" view="month" min-view="date" format="MM/dd/yyyy">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+            </div>
+
+            <div class="col-sm-5"> 
+            <div class="input-group date">
+                <input type="datetime" placeholder="Set time" class="form-control" date-time ng-model="SetTime" view="hours" max-view="hours" min-view="minutes" format="HH:mm">
+                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+            </div>
+            </div>
+        </div>
+
+			<!--<div class="form-group" id="data_3">
+
+            <div class="input-group date">
+                <input type="datetime" class="form-control" date-time ng-model="sampleDate" view="hours" max-view="hours" min-view="minutes" format="HH:mm">
+                <span class="input-group-addon"><i class="fa fa-clock"></i></span>
+            </div>-->
+
+            
+        
+
 <br><br><br>
-<div class="col-sm-10 col-sm-offset-2">
+<div class="col-sm-10 col-sm-offset-2" ng-controller="notifyCtrl">
 
-<a class="btn"><i class="fa fa-pencil"></i> Save as draft</a>
-<a class="btn"><i class="fa fa-clock-o"></i> Schedule for later</a>
-<a class="btn btn-discard"><i class="fa fa-times"></i> Discard</a>
-<a class="btn btn-send right" ng-click=""><i class="fa fa-paper-plane"></i> Send</a>
+<a class="btn" ng-click="SavedDraftMsg()"><i class="fa fa-pencil"></i> Save as draft</a>
 
+<div class="btn-group dropup discard-btn">
+<a data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false"><i class="fa fa-times"></i> Discard</a>
+<ul class="dropdown-menu dropdown-alerts">
+    <li>Are you sure you want to discard the message?</li>
+    <li>&nbsp;</li>
+    <li><span ng-click="reset(); ResetMsg()" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown"><strong>No</strong></span></li>
+</ul>
+</div>
+
+
+
+<a class="btn btn-send right" ng-click="reset(); SentMsg()" ng-hide="ScheduleCheck">
+	<span><i class="fa fa-paper-plane"></i> Send now</span>
+</a>
+
+<a class="btn btn-send right" ng-click="reset(); ScheduledMsg()" ng-show="ScheduleCheck">
+	<span><i class="fa fa-clock-o"></i> Schedule</span>
+</a>
 
 </div>
 </form>

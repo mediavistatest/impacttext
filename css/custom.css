@@ -33,11 +33,11 @@ border: 1px solid #878787;
 }
 
 .theme-config {
-	display: none;
+  display: none;
 }
 
 .main-logo {
-	margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 nav.navbar-default.navbar-static-side {
@@ -68,19 +68,19 @@ padding-top: 7px;
 
 /*PROFILE PAGE*/
 .box-header h2 {
-	font-size: 15px;
-	font-weight: 700;
-	padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 20px;
 }
 
 .blue {
-	background: #005eaa;
-	color:#93daff;
+  background: #005eaa;
+  color:#93daff;
 }
 
 .green {
-	background: #007d32;
-	color:#a9e3c0;
+  background: #007d32;
+  color:#a9e3c0;
 }
 
 body {
@@ -136,7 +136,7 @@ body {
 }
 
 .profile-element a {
-	color:white;
+  color:white;
 }
 
 .profile-element.open>.dropdown-menu {
@@ -347,7 +347,83 @@ float: right;
 font-size: 12px;
 }
 
+.now {
+color: #ffffff;
+text-shadow: none !important;
+background-color: lightgrey !important;
+background: lightgrey !important;
+border-radius:0 !important;
+}
 
+.now:hover,
+.now:active,
+.now.active,
+.now.disabled,
+.now[disabled] {
+    color: #ffffff;
+    background-color:lightgrey !important;
+    background: lightgrey;
+}
+
+
+.active.active {
+    background-color: #005eaa !important;
+    background: #005eaa !important;
+    border-radius:0 !important;
+}
+
+[date-picker] span {
+  border-radius:0 !important;
+}
+
+label.checkbox {
+    font-weight: 400;
+    margin-top: 0;
+}
+
+.iradio_square-green, .icheckbox_square-green {
+    margin-right: 3px !important;
+}
+
+.icheckbox_square-green {
+    margin-right: 3px !important;
+}
+
+.cg-notify-message.alert-success {
+  position: fixed;
+  left: 50%;
+  top: 0;
+  z-index: 9999;
+  max-width: 400px;
+  text-align: center;
+  background-color: #007d32;
+  color: white;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 4px;
+  -webkit-transition: top .5s ease-out, opacity .2s ease-out;
+  -moz-transition: top .5s ease-out, opacity .2s ease-out;
+  -o-transition: top .5s ease-out, opacity .2s ease-out;
+  transition: top .5s ease-out, opacity .2s ease-out;
+  visibility: hidden;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+  background: rgba(0,124,51,.7);
+}
+
+.dropup.discard-btn .dropdown-menu {
+  margin-bottom: 5px;
+  /* width: 250px; */
+  text-align: center;
+  margin-left: -50px;
+  padding: 15px;
+  width: 180px;
+}
+
+.discard-cancel:hover {
+  color:#005eaa;
+  cursor: pointer;
+}
 
 @media all and (max-width:990px) {
   .welcome-msg {display:none;}

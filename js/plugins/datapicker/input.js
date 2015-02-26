@@ -20,7 +20,8 @@ Module.constant('dateTimeConfig', {
     format: 'yyyy-MM-dd HH:mm',
     views: ['date', 'year', 'month', 'hours', 'minutes'],
     dismiss: false,
-    position: 'relative'
+    position: 'relative',
+    step: 15
 });
 
 Module.directive('dateTimeAppend', function () {

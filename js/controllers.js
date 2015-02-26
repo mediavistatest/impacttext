@@ -2253,7 +2253,7 @@ function widgetFlotChart() {
                     }, {
                         opacity: 1
                     }]
-                }
+                },
             },
             points: {
                 width: 0.1,
@@ -2327,14 +2327,14 @@ function widgetFlotChart() {
             points: {
                 width: 0.1,
                 show: false
-            }
+            },
         },
         grid: {
             show: false,
             borderWidth: 0
         },
         legend: {
-            show: false
+            show: false,
         }
     };
 
@@ -2836,7 +2836,7 @@ function chartJsCtrl() {
         pointHitDetectionRadius : 20,
         datasetStroke : true,
         datasetStrokeWidth : 2,
-        datasetFill : true
+        datasetFill : true,
     };
 
 
@@ -2940,7 +2940,7 @@ function nestableCtrl($scope) {
                 "title": "node2.2",
                 "nodes": []
             }
-        ]
+        ],
     }, {
         "id": 3,
         "title": "node3",
@@ -3008,6 +3008,7 @@ function notifyCtrl($scope, notify) {
             message: $scope.msg,
             classes: $scope.classes,
             templateUrl: $scope.template
+
         });
     };
     $scope.closeAll = function () {
@@ -3026,6 +3027,18 @@ function notifyCtrl($scope, notify) {
     }
     $scope.inspiniaDemo4 = function(){
         notify({ message: 'Danger - This is a Inspinia danger notification', classes: 'alert-danger', templateUrl: $scope.inspiniaTemplate});
+    }
+    $scope.SavedDraftMsg = function(){
+        notify({ message: 'Your message has been saved to drafts!', classes: 'alert-success'});
+    }
+    $scope.ResetMsg = function(){
+        notify({ message: 'Your message has been discarded!', classes: 'alert-success'});
+    }
+    $scope.SentMsg = function(){
+        notify({ message: 'Your message has been sent!', classes: 'alert-success'});
+    }
+    $scope.ScheduledMsg = function(){
+        notify({ message: 'Your message has been scheduled!', classes: 'alert-success'});
     }
 }
 
@@ -3058,69 +3071,91 @@ function imageCrop($scope) {
 
 }
 
-function FormCtrl($scope) {
-$scope.option = { selected:'none'};
-$scope.OptOutMessage = [
-  { 'snippet' : 'One' },
-  { 'snippet' : 'Two' },
-  { 'snippet' : 'Write your own',
-    'extraField' : true }
-];
+function FormSendCtrl($scope) {
+
+
+
+//send form initial states
+    $scope.initial = "";
+
+    $scope.MessageType = "SMS";
+    $scope.FromNumber = "default";
+    $scope.OptOutMsg = "";
+    $scope.ScheduleCheck = "";
+    $scope.SetDate = "";
+      $scope.SetTime = "";
+    
+    
+  //reset send form  
+    $scope.reset = function(){
+      $scope.FromName = $scope.initial; 
+      $scope.MessageType = 'SMS';
+      $scope.FromNumber = 'default';
+      $scope.ToList = $scope.initial;
+      $scope.ToNumber = $scope.initial;
+      $scope.OptOutMsg = '';
+      $scope.OptOutTxt3 = $scope.initial;
+      $scope.MessageTxt = $scope.initial;
+      $scope.ScheduleCheck = '';
+      $scope.SetDate = '';
+      $scope.SetTime = '';
+    } 
+    
 }
 
 /**
  * Controller for the login functionality.
  *
- * @param $scope	angular js scope
+ * @param $scope   angular js scope
  */
 function loginCtrl($scope, $cookieStore, $http, $window) {
-	$scope.invalidCredentials = false;
-	//Reset authentication token
-	$cookieStore.put('auth-token', '');
+   $scope.invalidCredentials = false;
+   //Reset authentication token
+   $cookieStore.put('auth-token', '');
 
-	//Login function
-	$scope.login = function() {
-		$scope.invalidCredentials = false;
-		//Checking if username and password are provided
-		if (typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
-			return;
-		}
-		if (typeof $scope.password == 'undefined' || $scope.password == null || $scope.password == '') {
-			return;
-		}
-		//Calling rest service to sign in
-		$http.post(
-			inspiniaNS.wsUrl + "login",
-			$.param({
-				username: $scope.username,
-				password: $scope.password
-			})
-		).success(
-			//Successful request to the server
-			function(data, status, headers, config) {
-				if (data == null || typeof data.apicode == 'undefined') {
-					//This should never happen
-					alert("Unknown error occurred when trying to sign in! Please try again.");
-					return;
-				}
-				if (data.apicode == 0) {
-					//User signed in successfully
-					$cookieStore.put('auth-token', data.apikey);
-					$window.location.href = "/#/dashboard";
-				} else if (data.apicode == 2) {
-					//Invalid credentials
-					$scope.invalidCredentials = true;
-				} else {
-					alert ("An error occurred when trying to sign in. Error code: " + data.apicode);
-				}
-			}
-		).error(
-			//An error occurred with this request
-			function(data, status, headers, config) {
-				alert("Failed to sign in! Please try again.")
-			}
-		)
-	}
+   //Login function
+   $scope.login = function() {
+       $scope.invalidCredentials = false;
+       //Checking if username and password are provided
+       if (typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
+           return;
+       }
+       if (typeof $scope.password == 'undefined' || $scope.password == null || $scope.password == '') {
+           return;
+       }
+       //Calling rest service to sign in
+       $http.post(
+           inspiniaNS.wsUrl + "login",
+           $.param({
+               username: $scope.username,
+               password: $scope.password
+           })
+       ).success(
+           //Successful request to the server
+           function(data, status, headers, config) {
+               if (data == null || typeof data.apicode == 'undefined') {
+                   //This should never happen
+                   alert("Unknown error occurred when trying to sign in! Please try again.");
+                   return;
+               }
+               if (data.apicode == 0) {
+                   //User signed in successfully
+                   $cookieStore.put('auth-token', data.apikey);
+                   $window.location.href = "/#/dashboard";
+               } else if (data.apicode == 2) {
+                   //Invalid credentials
+                   $scope.invalidCredentials = true;
+               } else {
+                   alert ("An error occurred when trying to sign in. Error code: " + data.apicode);
+               }
+           }
+       ).error(
+           //An error occurred with this request
+           function(data, status, headers, config) {
+               alert("Failed to sign in! Please try again.")
+           }
+       )
+   }
 }
 /**
  *
@@ -3148,5 +3183,5 @@ angular
     .controller('notifyCtrl', notifyCtrl)
     .controller('translateCtrl', translateCtrl)
     .controller('imageCrop', imageCrop)
-    .controller('FormCtrl' , FormCtrl)
+    .controller('FormSendCtrl' , FormSendCtrl)
     .controller('loginCtrl' , ['$scope', '$cookieStore', '$http', '$window', loginCtrl]);
