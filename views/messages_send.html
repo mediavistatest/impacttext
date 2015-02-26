@@ -44,12 +44,9 @@
 
     	<div class="col-sm-10">
     		<div class="form-group" ng-show="!list">
-			<select chosen data-placeholder="Select from an existing list(s)..." class="chosen-select" multiple tabindex="4" ng-model="ToList" >
-			<option value=""></option>
-			<option value="Nestle">Nestle</option>
-			<option value="BMW">BMW</option>
-			<option value="Mercedes">Mercedes</option>
-			<option value="Land Rover">Land Rover</option>
+
+			<select chosen data-placeholder="Select from an existing list(s)..." class="chosen-select" multiple tabindex="4" ng-model="ToList"
+					  ng-options="contactList.contactListName for contactList in contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists" >
 			</select>
 			</div>
 

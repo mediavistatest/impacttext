@@ -290,6 +290,30 @@ function dropZone() {
 }
 
 /**
+ * When source of "chosen" element is changed, refresh search list in the element.
+ *
+ * @param $timeout	angular timeout object
+ */
+function updateChosen($timeout) {
+	var linker = function($scope, element, attr) {
+		$scope.$watch('contactLists', function() {
+			$timeout(function() {
+				element.trigger('chosen:updated');
+			}, 0, false);
+		}, true);
+
+		$timeout(function() {
+			element.chosen();
+		}, 0, false);
+	};
+
+	return {
+		restrict: 'A',
+		link: linker
+	};
+}
+
+/**
  *
  * Pass all functions into module
  */
@@ -305,3 +329,4 @@ angular
     .directive('ionRangeSlider', ionRangeSlider)
     .directive('dropZone', dropZone)
     .directive('responsiveVideo', responsiveVideo)
+	.directive('chosen', updateChosen);
