@@ -129,11 +129,11 @@
 
 
 
-<a class="btn btn-send right" ng-click="reset(); SentMsg()" ng-hide="ScheduleCheck">
+<a class="btn btn-send right" ng-click="sendMessage(false)" ng-hide="ScheduleCheck">
 	<span><i class="fa fa-paper-plane"></i> Send now</span>
 </a>
 
-<a class="btn btn-send right" ng-click="reset(); ScheduledMsg()" ng-show="ScheduleCheck">
+<a class="btn btn-send right" ng-click="sendMessage(true)" ng-show="ScheduleCheck">
 	<span><i class="fa fa-clock-o"></i> Schedule</span>
 </a>
 

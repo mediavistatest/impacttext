@@ -3115,6 +3115,7 @@ function FormSendCtrl($scope, $cookieStore, $http) {
 			if (data == null || typeof data.apicode == 'undefined') {
 				//This should never happen
 				$scope.contactLists = [];
+				return;
 			}
 			if (data.apicode == 0) {
 				//Reading contact lists
@@ -3140,6 +3141,7 @@ function FormSendCtrl($scope, $cookieStore, $http) {
 			if (data == null || typeof data.apicode == 'undefined') {
 				//This should never happen
 				$scope.fromNumbers = [];
+				return;
 			}
 			if (data.apicode == 0) {
 				//Reading contact lists
@@ -3155,6 +3157,103 @@ function FormSendCtrl($scope, $cookieStore, $http) {
 		}
 	);
 
+
+	//Create a function for sending messages
+	$scope.sendMessage = function(scheduled) {
+		if ((typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0)
+			&& (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == '')
+		) {
+			return;
+		}
+		if (typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
+			return;
+		}
+		if (scheduled && (typeof $scope.SetDate == 'undefined' || $scope.SetDate == null || $scope.SetDate == '')) {
+			return;
+		}
+		//If time is not set and scheduled message sending is invoked, set time to midnight
+		if (scheduled && (typeof $scope.SetTime == 'undefined' || $scope.SetTime == null || $scope.SetTime == '')) {
+			$scope.SetTime = "00:00:00";
+		}
+
+		//Checking the type of opt out message
+		var optOutMessage = '';
+		if ($scope.OptOutMsg == 'standard') {
+			//todo: check how to receive standard opt out message
+		} else if ($scope.OptOutMsg == 'custom') {
+			//todo: check how to receive custom opt out message for the account
+		} else if ($scope.OptOutMsg == 'write') {
+			optOutMessage = $scope.OptOutTxt3;
+		}
+
+		//Generate a message text
+		var messageText = '';
+		if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
+			messageText += $.trim($scope.FromName);
+			if (messageText.length > 0) {
+				messageText += '\r\n';
+			}
+		}
+		messageText += $scope.MessageTxt;
+		if (optOutMessage != '') {
+			messageText += '\r\n' + optOutMessage;
+		}
+
+		//Creating a api request data object
+		var requestData = {
+			message: messageText,
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			accountID: $cookieStore.get('inspinia_account_id')
+		};
+
+		if (typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && $scope.ToList.length > 0) {
+			//Sending message to contact lists
+			requestData.contactListID = $scope.ToList[0].contactListID;
+			for (var i = 1; i < $scope.ToList.length; i++) {
+				requestData.contactListID += "," + $scope.ToList[i].contactListID;
+			}
+		} else if (typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
+			//Sending message to numbers
+			requestData.ANI = $scope.ToNumber;
+		}
+
+		//Adding schedule date if one is specified
+		if (scheduled) {
+			//todo: add scheduledDate to the request
+		}
+
+		//Send request to the server
+		$http.post(
+			inspiniaNS.wsUrl + "message_send",
+			$.param(requestData)
+		).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unidentified error occurred when sending your message!");
+					return;
+				}
+				if (data.apicode == 0) {
+					//Reset form and inform user about success
+					$scope.reset();
+					if (scheduled) {
+						$scope.ScheduledMsg();
+					} else {
+						$scope.SentMsg();
+					}
+				} else {
+					alert("An error occurred when sending your message! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				alert('Unexpected error occurred when trying to send message!');
+			}
+		);
+	};
 }
 
 /**
