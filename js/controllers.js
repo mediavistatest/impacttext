@@ -3040,6 +3040,15 @@ function notifyCtrl($scope, notify) {
     $scope.ScheduledMsg = function(){
         notify({ message: 'Your message has been scheduled!', classes: 'alert-success'});
     };
+
+	//If SendingMessageSucceeded event is triggered, show related message
+	$scope.$on('SendingMessageSucceeded', function(event, args) {
+		$scope.SentMsg();
+	});
+	//If SchedulingMessageSucceeded event is triggered, show related message
+	$scope.$on('SchedulingMessageSucceeded', function(event, args) {
+		$scope.ScheduledMsg();
+	});
 }
 
 
@@ -3101,8 +3110,6 @@ function FormSendCtrl($scope, $cookieStore, $http) {
       $scope.ScheduleCheck = '';
       $scope.SetDate = '';
       $scope.SetTime = '';
-		 $scope.contactLists = [];
-		 $scope.fromNumbers = [];
     };
 
 	//Read the data from the remote server. First read the contact lists.
@@ -3201,16 +3208,22 @@ function FormSendCtrl($scope, $cookieStore, $http) {
 
 		//Creating a api request data object
 		var requestData = {
+			DID: $scope.FromNumber.DID,
 			message: messageText,
 			apikey: $cookieStore.get('inspinia_auth_token'),
 			accountID: $cookieStore.get('inspinia_account_id')
 		};
 
-		if (typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && $scope.ToList.length > 0) {
-			//Sending message to contact lists
-			requestData.contactListID = $scope.ToList[0].contactListID;
-			for (var i = 1; i < $scope.ToList.length; i++) {
-				requestData.contactListID += "," + $scope.ToList[i].contactListID;
+		if (typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
+			if ($scope.ToList.constructor === Array) {
+				//Sending message to contact lists
+				requestData.contactListID = $scope.ToList[0].contactListID;
+				for (var i = 1; i < $scope.ToList.length; i++) {
+					requestData.contactListID += "," + $scope.ToList[i].contactListID;
+				}
+			} else {
+				//Sending message to a single contact list
+				requestData.contactListID = $scope.ToList.contactListID;
 			}
 		} else if (typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
 			//Sending message to numbers
@@ -3219,7 +3232,26 @@ function FormSendCtrl($scope, $cookieStore, $http) {
 
 		//Adding schedule date if one is specified
 		if (scheduled) {
-			//todo: add scheduledDate to the request
+			//Date is in format MM/dd/yyyy
+			var dateParts = $scope.SetDate.split("/");
+			if (dateParts.length != 3) {
+				alert("Invalid date format!");
+				return;
+			}
+			//Fix year
+			if (dateParts[2].length <= 2) {
+				dateParts[2] = "20" + dateParts[2];
+			}
+			//Fix month
+			if (dateParts[0].length < 2) {
+				dateParts[0] = "0" + dateParts[0];
+			}
+			//Fix day
+			if (dateParts[1].length < 2) {
+				dateParts[1] = "0" + dateParts[1];
+			}
+			var date = new Date();
+			requestData.scheduledDate = dateParts[2] + "-" + dateParts[0]  + "-" + dateParts[1] + " " + $scope.SetTime;
 		}
 
 		//Send request to the server
@@ -3237,10 +3269,11 @@ function FormSendCtrl($scope, $cookieStore, $http) {
 				if (data.apicode == 0) {
 					//Reset form and inform user about success
 					$scope.reset();
+					//Trigger event which will cause other controllers to do some work, such as showing some messages etc.
 					if (scheduled) {
-						$scope.ScheduledMsg();
+						$scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
 					} else {
-						$scope.SentMsg();
+						$scope.$broadcast("SendingMessageSucceeded", data.apidata);
 					}
 				} else {
 					alert("An error occurred when sending your message! Error code: " + data.apicode);
