@@ -3025,7 +3025,7 @@ function codeEditorCtrl($scope) {
 /**
  * CONTRILLER FOR LIST VIEW TABLE
  */
-function ngGridCtrl($scope, $http) {
+function ngGridCtrl($scope, $http, $cookieStore) {
     //   $scope.ngData = [
     //       {Name: "Moroni", Age: 50, Position: 'PR Menager', Status: 'active', Date: '12.12.2014'},
     //       {Name: "Teancum", Age: 43, Position: 'CEO/CFO', Status: 'deactive', Date: '10.10.2014'},
@@ -3068,29 +3068,56 @@ function ngGridCtrl($scope, $http) {
 
 
 //GET DATA
-    $scope.getPagedDataAsync = function (pageSize, page, searchText) {
-        setTimeout(function () {
-            var data;
-            if (searchText) {
-                var ft = searchText.toLowerCase();
-                $http.get('views/datasets/ngData.json').success(function (largeLoad) {		
-                    data = largeLoad.filter(function(item) {
-                        return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
-                    });
-                    $scope.setPagingData(data,page,pageSize);
-                });            
-            } else {
-                $http.get('views/datasets/ngData.json').success(function (largeLoad) {
-                    $scope.setPagingData(largeLoad,page,pageSize);
-                });
-            }
-        }, 100);
-    };
+	$scope.getPagedDataAsync = function (pageSize, page, searchText) {
+		if (typeof page == 'undefined' || page == null || page == '') {
+			page = 0;
+		}
+		setTimeout(function () {
+			var data;
+			if (searchText) {
+				var ft = searchText.toLowerCase();
+				$http.post(
+					inspiniaNS.wsUrl + "contactlist_get",
+					$.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+				).success(function (largeLoad) {
+					data = largeLoad.apidata.filter(function(item) {
+						return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
+					});
+					$scope.setPagingData(data, page, pageSize);
+				}).error(
+					//An error occurred with this request
+					function(data, status, headers, config) {
+						alert('Unexpected error occurred when trying to fetch contact lists!');
+					}
+				);
+			} else {
+				$http.post(
+					inspiniaNS.wsUrl + "contactlist_get",
+					$.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), limit: pageSize, offset: (page - 1) * pageSize})
+				).success(function (data) {
+					$scope.setPagingDataSliced(data.apidata, data.apicount);
+				}).error(
+					//An error occurred with this request
+					function(data, status, headers, config) {
+						alert('Unexpected error occurred when trying to fetch contact lists!');
+					}
+				);
+			}
+		}, 100);
+	};
 
-    $scope.setPagingData = function(data, page, pageSize){	
+	$scope.setPagingData = function(data, page, pageSize){
         var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
         $scope.ngData = pagedData;
         $scope.totalServerItems = data.length;
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    };
+
+	$scope.setPagingDataSliced = function(data, totalResultsCount){
+        $scope.ngData = data;
+        $scope.totalServerItems = totalResultsCount;
         if (!$scope.$$phase) {
             $scope.$apply();
         }
@@ -3246,28 +3273,28 @@ $scope.$watch('pagingOptions', function () {
        //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
            },{
           
-          field: 'ListName', 
+          field: 'contactListName',
           displayName: 'List Name',
           cellTemplate: 'views/table/ListNameTemplate.html'
           
         },{
           
-          field:'DateCreated', 
+          field:'createdDate',
           displayName:'Created'
           
         }, {
           
-          field:'Members', 
-          displayName:'Members'
+          field:'status',
+          displayName:'Status'
           
         }, {
           
-          field:'OptOuts', 
-          displayName:'Opt Outs'
+          field:'messagesSent',
+          displayName:'Sent Messages'
           
         },{
           
-          field:'LastSent', 
+          field:'lastMessageSent',
           displayName:'Last Sent'
           
         },{
@@ -3506,94 +3533,6 @@ function AddListsCtrl($scope, $http) {
 
   // other methods
 }
-
-
-
-//DATE TIME CTRL
-function DateTimePickerCtrl($scope, $timeout) {
-//	$scope.dateTimeNow = function() {
-//    $scope.date = new Date();
-//  };
-//  $scope.dateTimeNow();
-//  
-//  $scope.toggleMinDate = function() {
-//    $scope.minDate = $scope.minDate ? null : new Date();
-//  };
-//   
-//  $scope.maxDate = new Date('2014-06-22');
-//  $scope.toggleMinDate();
-//
-//  $scope.dateOptions = {
-//    startingDay: 1,
-//    showWeeks: false
-//  };
-//
-//  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-//  $scope.format = $scope.formats[0];
-//  
-//  //$scope.$watch('date', function () {
-//  //   alert('changed');
-//  //});
-//  
-//  // Disable weekend selection
-//  //$scope.disabled = function(calendarDate, mode) {
-//  //  return mode === 'day' && ( calendarDate.getDay() === 0 || calendarDate.getDay() === 6 );
-//  //};
-//  
-//  $scope.hourStep = 1;
-//  $scope.minuteStep = 15;
-//
-//  $scope.timeOptions = {
-//    hourStep: [1, 2, 3],
-//    minuteStep: [1, 5, 10, 15, 25, 30]
-//  };
-//
-//  $scope.showMeridian = true;
-//  $scope.timeToggleMode = function() {
-//    $scope.showMeridian = !$scope.showMeridian;
-//  };
-
-$scope.today = function() {
-    $scope.SetDate = new Date();
-  };
-  
-  $scope.today();
-
-  $scope.clear = function () {
-    $scope.SetDate = null;
-  };
-
-
-  // Disable weekend selection
-  //$scope.disabled = function(date, mode) {
-  //  return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-  //};
-
-  $scope.toggleMin = function() {
-    $scope.minDate = $scope.minDate ? null : new Date();
-  };
-  $scope.toggleMin();
-
-  $scope.open = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-
-    $scope.opened = true;
-  };
-
-  $scope.dateOptions = {
-    formatYear: 'yy',
-    startingDay: 1,
-    showWeeks: 'false',
-    initDate: 'false'
-  };
-
-  $scope.formats = ['MM/dd/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  $scope.format = $scope.formats[0];
-
-}
-
-
 
 
 //NOTIFY CTRL
@@ -4001,12 +3940,11 @@ angular
     .controller('CalendarCtrl', CalendarCtrl)
     .controller('chartJsCtrl', chartJsCtrl)
     .controller('GoogleMaps', GoogleMaps)
-    .controller('ngGridCtrl', ['$scope', '$http', ngGridCtrl])
+    .controller('ngGridCtrl', ['$scope', '$http', '$cookieStore', ngGridCtrl])
     .controller('ngContactListCtrl', ['$scope', '$http', ngContactListCtrl])
     .controller('AddListsCtrl', ['$scope', '$http', AddListsCtrl])
     .controller('codeEditorCtrl', codeEditorCtrl)
     .controller('nestableCtrl', nestableCtrl)
-    .controller('DateTimePickerCtrl', ['$scope', '$timeout', DateTimePickerCtrl])
     .controller('notifyCtrl', notifyCtrl)
     .controller('translateCtrl', translateCtrl)
     .controller('imageCrop', imageCrop)

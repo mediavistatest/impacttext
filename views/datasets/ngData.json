@@ -1,42 +1,42 @@
 [
       {
-            "Id": 1,
-            "ListName": "BMW",
-            "DateCreated": "Feb 15, 2015.",
-            "Members": "10200",
-            "OptOuts": "125",
-            "LastSent": "Feb 20 1:56 PM"
+            "contactListID": 1,
+            "contactListName": "BMW",
+            "createdDate": "Feb 15, 2015.",
+            "status": "10200",
+            "messagesSent": "125",
+            "lastMessageSent": "Feb 20 1:56 PM"
         },
         {
-            "Id": 2,
-            "ListName": "Mercedes",
-            "DateCreated": "Feb 19, 2015.",
-            "Members": "8400",
-            "OptOuts": "15",
-            "LastSent": "Feb 20 8:43 PM"
+            "contactListID": 2,
+            "contactListName": "Mercedes",
+            "createdDate": "Feb 19, 2015.",
+            "status": "8400",
+            "messagesSent": "15",
+            "lastMessageSent": "Feb 20 8:43 PM"
         },
         {
-            "Id": 3,
-            "ListName": "Nestle",
-            "DateCreated": "Feb 11, 2015.",
-            "Members": "2600",
-            "OptOuts": "11",
-            "LastSent": "Feb 22 2:56 PM"
+            "contactListID": 3,
+            "contactListName": "Nestle",
+            "createdDate": "Feb 11, 2015.",
+            "status": "2600",
+            "messagesSent": "11",
+            "lastMessageSent": "Feb 22 2:56 PM"
         },
         {
-            "Id": 4,
-            "ListName": "Private",
-            "DateCreated": "Feb 1, 2015.",
-            "Members": "23",
-            "OptOuts": "0",
-            "LastSent": "Feb 25 3:59 PM"
+            "contactListID": 4,
+            "contactListName": "Private",
+            "createdDate": "Feb 1, 2015.",
+            "status": "23",
+            "messagesSent": "0",
+            "lastMessageSent": "Feb 25 3:59 PM"
         },
         {
-            "Id": 5,
-            "ListName": "Audi",
-            "DateCreated": "Feb 6, 2015.",
-            "Members": "987",
-            "OptOuts": "88",
-            "LastSent": "Feb 9 9:00 AM"
+            "contactListID": 5,
+            "contactListName": "Audi",
+            "createdDate": "Feb 6, 2015.",
+            "status": "987",
+            "messagesSent": "88",
+            "lastMessageSent": "Feb 9 9:00 AM"
         }
       ]
