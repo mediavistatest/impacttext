@@ -2302,7 +2302,7 @@ function widgetFlotChart() {
                     }, {
                         opacity: 1
                     }]
-                },
+                }
             },
             points: {
                 width: 0.1,
@@ -2376,14 +2376,14 @@ function widgetFlotChart() {
             points: {
                 width: 0.1,
                 show: false
-            },
+            }
         },
         grid: {
             show: false,
             borderWidth: 0
         },
         legend: {
-            show: false,
+            show: false
         }
     };
 
@@ -2885,7 +2885,7 @@ function chartJsCtrl() {
         pointHitDetectionRadius : 20,
         datasetStroke : true,
         datasetStrokeWidth : 2,
-        datasetFill : true,
+        datasetFill : true
     };
 
 
@@ -2989,7 +2989,7 @@ function nestableCtrl($scope) {
                 "title": "node2.2",
                 "nodes": []
             }
-        ],
+        ]
     }, {
         "id": 3,
         "title": "node3",
@@ -3242,7 +3242,7 @@ $scope.$watch('pagingOptions', function () {
         columnDefs: [
        {
                field: '',
-               width: 30,
+               width: 30
        //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
            },{
           
@@ -3426,7 +3426,7 @@ $scope.$watch('pagingOptions', function () {
         columnDefs: [
        {
                field: '',
-               width: 30,
+               width: 30
        //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
            },{
           
@@ -3614,28 +3614,28 @@ function notifyCtrl($scope, notify) {
     $scope.inspiniaTemplate = 'views/common/notify.html';
     $scope.inspiniaDemo1 = function(){
         notify({ message: 'Info - This is a Inspinia info notification', classes: 'alert-info', templateUrl: $scope.inspiniaTemplate});
-    }
+    };
     $scope.inspiniaDemo2 = function(){
         notify({ message: 'Success - This is a Inspinia success notification', classes: 'alert-success', templateUrl: $scope.inspiniaTemplate});
-    }
+    };
     $scope.inspiniaDemo3 = function(){
         notify({ message: 'Warning - This is a Inspinia warning notification', classes: 'alert-warning', templateUrl: $scope.inspiniaTemplate});
-    }
+    };
     $scope.inspiniaDemo4 = function(){
         notify({ message: 'Danger - This is a Inspinia danger notification', classes: 'alert-danger', templateUrl: $scope.inspiniaTemplate});
-    }
+    };
     $scope.SavedDraftMsg = function(){
         notify({ message: 'Your message has been saved to drafts!', classes: 'alert-success'});
-    }
+    };
     $scope.ResetMsg = function(){
         notify({ message: 'Your message has been discarded!', classes: 'alert-success'});
-    }
+    };
     $scope.SentMsg = function(){
         notify({ message: 'Your message has been sent!', classes: 'alert-success'});
-    }
+    };
     $scope.ScheduledMsg = function(){
         notify({ message: 'Your message has been scheduled!', classes: 'alert-success'});
-    }
+    };
     //If SendingMessageSucceeded event is triggered, show related message
 	$scope.$on('SendingMessageSucceeded', function(event, args) {
 		$scope.SentMsg();
@@ -3686,8 +3686,48 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.OptOutMsg = "";
     $scope.ScheduleCheck = "";
     $scope.SetDate = "";
-    $scope.SetTime = "";
-    
+    $scope.SetTimeHour = "";
+    $scope.SetTimeMinute = "";
+    $scope.contactLists = [];
+
+	//Date/time control
+	$scope.today = function() {
+		$scope.SetDate = new Date();
+	};
+
+	$scope.today();
+
+	$scope.clear = function () {
+		$scope.SetDate = null;
+	};
+
+
+	// Disable weekend selection
+	//$scope.disabled = function(date, mode) {
+	//  return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+	//};
+
+	$scope.toggleMin = function() {
+		$scope.minDate = $scope.minDate ? null : new Date();
+	};
+	$scope.toggleMin();
+
+	$scope.open = function($event) {
+		$event.preventDefault();
+		$event.stopPropagation();
+
+		$scope.opened = true;
+	};
+
+	$scope.dateOptions = {
+		formatYear: 'yy',
+		startingDay: 1,
+		showWeeks: 'false',
+		initDate: 'false'
+	};
+
+	$scope.formats = ['MM/dd/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+	$scope.format = $scope.formats[0];
     
     
   //reset send form  
@@ -3702,8 +3742,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
       $scope.MessageTxt = $scope.initial;
       $scope.ScheduleCheck = '';
       $scope.SetDate = '';
-      $scope.SetTime = '';
-      $scope.contactLists = [];
+      $scope.SetTimeHour = '';
+      $scope.SetTimeMinute = '';
     };
 
 //Read the data from the remote server. First read the contact lists.
@@ -3762,128 +3802,126 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     //Create a function for sending messages
     $scope.sendMessage = function(scheduled) {
 
-        // Trigger validation flag.
-        //$scope.submitted = true;
+		 // Trigger validation flag.
+		 //$scope.submitted = true;
 
-        if ((typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0)
-            && (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == '')
-        ) {
-            return;
-        }
-        if (typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
-            return;
-        }
-        if (scheduled && (typeof $scope.SetDate == 'undefined' || $scope.SetDate == null || $scope.SetDate == '')) {
-            return;
-        }
-        //If time is not set and scheduled message sending is invoked, set time to midnight
-        if (scheduled && (typeof $scope.SetTime == 'undefined' || $scope.SetTime == null || $scope.SetTime == '')) {
-            $scope.SetTime = "00:00:00";
-        }
+		 if ((typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0)
+			 && (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == '')
+			 ) {
+			 return;
+		 }
+		 if (typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
+			 return;
+		 }
+		 if (scheduled && (typeof $scope.SetDate == 'undefined' || $scope.SetDate == null || $scope.SetDate == '')) {
+			 return;
+		 }
+		 //If time is not set and scheduled message sending is invoked, set time to midnight
+		 if (scheduled && (typeof $scope.SetTimeHour == 'undefined' || $scope.SetTimeHour == null || $scope.SetTimeHour == '')) {
+			 $scope.SetTimeHour = "00";
+		 }
+		 if (scheduled && (typeof $scope.SetTimeMinute == 'undefined' || $scope.SetTimeMinute == null || $scope.SetTimeMinute == '')) {
+			 $scope.SetTimeMinute = "00";
+		 }
 
-        //Checking the type of opt out message
-        var optOutMessage = '';
-        if ($scope.OptOutMsg == 'standard') {
-            //todo: check how to receive standard opt out message
-        } else if ($scope.OptOutMsg == 'custom') {
-            //todo: check how to receive custom opt out message for the account
-        } else if ($scope.OptOutMsg == 'write') {
-            optOutMessage = $scope.OptOutTxt3;
-        }
+		 //Checking the type of opt out message
+		 var optOutMessage = '';
+		 if ($scope.OptOutMsg == 'standard') {
+			 //todo: check how to receive standard opt out message
+		 } else if ($scope.OptOutMsg == 'custom') {
+			 //todo: check how to receive custom opt out message for the account
+		 } else if ($scope.OptOutMsg == 'write') {
+			 optOutMessage = $scope.OptOutTxt3;
+		 }
 
-        //Generate a message text
-        var messageText = '';
-        if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
-            messageText += $.trim($scope.FromName);
-            if (messageText.length > 0) {
-                messageText += '\r\n';
-            }
-        }
-        messageText += $scope.MessageTxt;
-        if (optOutMessage != '') {
-            messageText += '\r\n' + optOutMessage;
-        }
+		 //Generate a message text
+		 var messageText = '';
+		 if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
+			 messageText += $.trim($scope.FromName);
+			 if (messageText.length > 0) {
+				 messageText += '\r\n';
+			 }
+		 }
+		 messageText += $scope.MessageTxt;
+		 if (optOutMessage != '') {
+			 messageText += '\r\n' + optOutMessage;
+		 }
 
-        //Creating a api request data object
-        var requestData = {
-        	DID: $scope.FromNumber.DID,
-            message: messageText,
-            apikey: $cookieStore.get('inspinia_auth_token'),
-            accountID: $cookieStore.get('inspinia_account_id')
-        };
+		 //Creating a api request data object
+		 var requestData = {
+			 DID: $scope.FromNumber.DID,
+			 message: messageText,
+			 apikey: $cookieStore.get('inspinia_auth_token'),
+			 accountID: $cookieStore.get('inspinia_account_id')
+		 };
 
-        if (typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
-			if ($scope.ToList.constructor === Array) {
-				//Sending message to contact lists
-				requestData.contactListID = $scope.ToList[0].contactListID;
-				for (var i = 1; i < $scope.ToList.length; i++) {
-					requestData.contactListID += "," + $scope.ToList[i].contactListID;
-				}
-			} else {
-				//Sending message to a single contact list
-				requestData.contactListID = $scope.ToList.contactListID;
-            }
-        } else if (typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
-            //Sending message to numbers
-            requestData.ANI = $scope.ToNumber;
-        }
+		 if (typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
+			 if ($scope.ToList.constructor === Array) {
+				 //Sending message to contact lists
+				 requestData.contactListID = $scope.ToList[0].contactListID;
+				 for (var i = 1; i < $scope.ToList.length; i++) {
+					 requestData.contactListID += "," + $scope.ToList[i].contactListID;
+				 }
+			 } else {
+				 //Sending message to a single contact list
+				 requestData.contactListID = $scope.ToList.contactListID;
+			 }
+		 } else if (typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
+			 //Sending message to numbers
+			 requestData.ANI = $scope.ToNumber;
+		 }
 
-        //Adding schedule date if one is specified
-        if (scheduled) {
-            //Date is in format MM/dd/yyyy
-			var dateParts = $scope.SetDate.split("/");
-			if (dateParts.length != 3) {
-				alert("Invalid date format!");
-				return;
-			}
-			//Fix year
-			if (dateParts[2].length <= 2) {
-				dateParts[2] = "20" + dateParts[2];
-			}
-			//Fix month
-			if (dateParts[0].length < 2) {
-				dateParts[0] = "0" + dateParts[0];
-			}
-			//Fix day
-			if (dateParts[1].length < 2) {
-				dateParts[1] = "0" + dateParts[1];
-			}
-			var date = new Date();
-			requestData.scheduledDate = dateParts[2] + "-" + dateParts[0]  + "-" + dateParts[1] + " " + $scope.SetTime;
-        }
+		 //Adding schedule date if one is specified
+		 if (scheduled) {
+			 //Date is in format MM/dd/yyyy
+			 var dateParts = [];
+			 dateParts[0] = $scope.SetDate.getFullYear();
+			 dateParts[1] = "" + $scope.SetDate.getMonth();
+			 dateParts[2] = "" + $scope.SetDate.getDate();
 
-        //Send request to the server
-        $http.post(
-            inspiniaNS.wsUrl + "message_send",
-            $.param(requestData)
-        ).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    alert("Unidentified error occurred when sending your message!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    //Reset form and inform user about success
-                    $scope.reset();
-                    if (scheduled) {
-                        $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
-                    } else {
-                        $scope.$broadcast("SendingMessageSucceeded", data.apidata);
-                    }
-                } else {
-                    alert("An error occurred when sending your message! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
-                }
-            }
-        ).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                alert('Unexpected error occurred when trying to send message!');
-            }
-        );
-    };
+			 //Fix month
+			 if (dateParts[1].length < 2) {
+				 dateParts[1] = "0" + dateParts[1];
+			 }
+			 //Fix day
+			 if (dateParts[2].length < 2) {
+				 dateParts[2] = "0" + dateParts[2];
+			 }
+			 requestData.scheduledDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + $scope.SetTimeHour + ":" + $scope.SetTimeMinute;
+		 }
+
+		 //Send request to the server
+		 $http.post(
+			 inspiniaNS.wsUrl + "message_send",
+			 $.param(requestData)
+		 ).success(
+			 //Successful request to the server
+			 function(data, status, headers, config) {
+				 if (data == null || typeof data.apicode == 'undefined') {
+					 //This should never happen
+					 alert("Unidentified error occurred when sending your message!");
+					 return;
+				 }
+				 if (data.apicode == 0) {
+					 //Reset form and inform user about success
+					 $scope.reset();
+					 if (scheduled) {
+						 $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
+					 } else {
+						 $scope.$broadcast("SendingMessageSucceeded", data.apidata);
+					 }
+				 } else {
+					 alert("An error occurred when sending your message! Error code: " + data.apicode);
+					 alert(JSON.stringify(data));
+				 }
+			 }
+		 ).error(
+			 //An error occurred with this request
+			 function(data, status, headers, config) {
+				 alert('Unexpected error occurred when trying to send message!');
+			 }
+		 );
+	 };
 }
 
 
