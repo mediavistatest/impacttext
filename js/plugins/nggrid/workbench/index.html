@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -9,6 +10,8 @@
     <script type="text/javascript" src="../lib/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="../lib/jquery-ui-1.9.1.custom.min.js"></script>
     <script type="text/javascript" src="../lib/angular.js"></script>
+    <script type="text/javascript" src="../lib/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="../lib/jquery-ui-1.9.1.custom.min.js"></script>
     <script type="text/javascript" src="../lib/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="../build/ng-grid.debug.js"></script>
     <script type="text/javascript" src="main.js"></script>
@@ -33,7 +36,7 @@
 </head>
     <body ng-app="myApp" ng-controller="userController" >
         <div id="parent" style="position: absolute; top: 0; bottom: 0; left:0; right: 0;">
-            <div style="width: 1600px; height: 600px;"  ng-grid="gridOptions">
+            <div style="width: 1600px; height: 600px;" class="table"  ng-grid="gridOptions">
             </div>    
         </div>
         <div>{{mySelections | json}}</div>

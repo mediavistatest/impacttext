@@ -1,4 +1,4 @@
-﻿ngGridServices.factory('$utilityService', ['$parse', function ($parse) {
+﻿angular.module('ngGrid.services').factory('$utilityService', ['$parse', function ($parse) {
     var funcNameRegex = /function (.{1,})\(/;
     var utils = {
         visualLength: function(node) {
@@ -9,9 +9,14 @@
                 elem.style.visibility = "hidden";
                 document.body.appendChild(elem);
             }
-            $(elem).css('font', $(node).css('font'));
-            elem.innerHTML = $(node).text();
-            return elem.offsetWidth;
+            var $node = $(node);
+            $(elem).css({'font': $node.css('font'),
+                        'font-size': $node.css('font-size'),
+                        'font-family': $node.css('font-family')});
+            elem.innerHTML = $node.text();
+            var width = elem.offsetWidth;
+            document.body.removeChild(elem);
+            return width;
         },
         forIn: function(obj, action) {
             for (var prop in obj) {
@@ -20,11 +25,8 @@
                 }
             }
         },
-        evalProperty: function (entity, path) {
-            return $parse(path)(entity);
-        },
         endsWith: function(str, suffix) {
-            if (!str || !suffix || typeof str != "string") {
+            if (!str || !suffix || typeof str !== "string") {
                 return false;
             }
             return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -36,16 +38,21 @@
             return false;
         },
         getElementsByClassName: function(cl) {
-            var retnode = [];
-            var myclass = new RegExp('\\b' + cl + '\\b');
-            var elem = document.getElementsByTagName('*');
-            for (var i = 0; i < elem.length; i++) {
-                var classes = elem[i].className;
-                if (myclass.test(classes)) {
-                    retnode.push(elem[i]);
-                }
+            if (document.getElementsByClassName) {
+                return document.getElementsByClassName(cl);
             }
-            return retnode;
+            else {
+                var retnode = [];
+                var myclass = new RegExp('\\b' + cl + '\\b');
+                var elem = document.getElementsByTagName('*');
+                for (var i = 0; i < elem.length; i++) {
+                    var classes = elem[i].className;
+                    if (myclass.test(classes)) {
+                        retnode.push(elem[i]);
+                    }
+                }
+                return retnode;    
+            }
         },
         newId: (function() {
             var seedId = new Date().getTime();
@@ -61,23 +68,38 @@
         },
         getInstanceType: function (o) {
             var results = (funcNameRegex).exec(o.constructor.toString());
-            return (results && results.length > 1) ? results[1] : "";
+            if (results && results.length > 1) {
+                var instanceType = results[1].replace(/^\s+|\s+$/g, ""); // Trim surrounding whitespace; IE appears to add a space at the end
+                return instanceType;
+            }
+            else {
+                return "";
+            }
         },
-        // we copy KO's ie detection here bc it isn't exported in the min versions of KO
-        // Detect IE versions for workarounds (uses IE conditionals, not UA string, for robustness) 
-        ieVersion: (function() {
-            var version = 3, div = document.createElement('div'), iElems = div.getElementsByTagName('i');
-            // Keep constructing conditional HTML blocks until we hit one that resolves to an empty fragment
-            while (div.innerHTML = '<!--[if gt IE ' + (++version) + ']><i></i><![endif]-->',
-            iElems[0]) ;
-            return version > 4 ? version : undefined;
-        })()
-    };
+        init: function () {
+            function preEval(path) {
+                var m = BRACKET_REGEXP.exec(path);
+                if (m) {
+                    return (m[1] ? preEval(m[1]) : m[1]) + m[2] + (m[3] ? preEval(m[3]) : m[3]);
+                } else {
+                    path = path.replace(APOS_REGEXP, '\\\'');
+                    var parts = path.split(DOT_REGEXP);
+                    var preparsed = [parts.shift()];    // first item must be var notation, thus skip
+                    angular.forEach(parts, function (part) {
+                        preparsed.push(part.replace(FUNC_REGEXP, '\']$1'));
+                    });
+                    return preparsed.join('[\'');
+                }
+            }
 
-    $.extend(utils, {
-        isIe: (function() {
-            return utils.ieVersion !== undefined;
-        })()
-    });
+            this.preEval = preEval;
+            this.evalProperty = function (entity, path) {
+                return $parse(preEval('entity.' + path))({ entity: entity });
+            };
+            delete this.init;
+            return this;
+        }
+    }.init();
+
     return utils;
 }]);

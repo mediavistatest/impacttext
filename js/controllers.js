@@ -38,6 +38,9 @@
 function MainCtrl() {
 
 
+	
+
+	
 
     /**
      * slideInterval - Interval for bootstrap Carousel, in milliseconds:
@@ -107,8 +110,8 @@ function MainCtrl() {
     this.persons = [
         {
             id: '1',
-            firstName: 'Monica',
-            lastName: 'Smith'
+            firstName: 'Impact',
+            lastName: 'Telecom'
         },
         {
             id: '2',
@@ -129,6 +132,52 @@ function MainCtrl() {
             id: '5',
             firstName: 'Kim',
             lastName: 'Rosowski'
+        }
+    ];
+
+    /**
+     * Lists - Data used in Tables view for Data Tables plugin
+     */
+    this.Lists = [
+        {
+            Id: '1',
+            ListName: 'BMW',
+            DateCreated: 'Feb 15, 2015.',
+            Members: '10200',
+            OptOuts: '125',
+            LastSent: 'Feb 20 1:56 PM'
+        },
+        {
+            Id: '2',
+            ListName: 'Mercedes',
+            DateCreated: 'Feb 19, 2015.',
+            Members: '8400',
+            OptOuts: '15',
+            LastSent: 'Feb 20 8:43 PM'
+        },
+        {
+            Id: '3',
+            ListName: 'Nestle',
+            DateCreated: 'Feb 11, 2015.',
+            Members: '2600',
+            OptOuts: '11',
+            LastSent: 'Feb 22 2:56 PM'
+        },
+        {
+            Id: '4',
+            ListName: 'Private',
+            DateCreated: 'Feb 1, 2015.',
+            Members: '23',
+            OptOuts: '0',
+            LastSent: 'Feb 25 3:59 PM'
+        },
+        {
+            Id: '5',
+            ListName: 'Audi',
+            DateCreated: 'Feb 6, 2015.',
+            Members: '987',
+            OptOuts: '88',
+            LastSent: 'Feb 9 9:00 AM'
         }
     ];
 
@@ -2253,7 +2302,7 @@ function widgetFlotChart() {
                     }, {
                         opacity: 1
                     }]
-                }
+                },
             },
             points: {
                 width: 0.1,
@@ -2327,14 +2376,14 @@ function widgetFlotChart() {
             points: {
                 width: 0.1,
                 show: false
-            }
+            },
         },
         grid: {
             show: false,
             borderWidth: 0
         },
         legend: {
-            show: false
+            show: false,
         }
     };
 
@@ -2836,7 +2885,7 @@ function chartJsCtrl() {
         pointHitDetectionRadius : 20,
         datasetStroke : true,
         datasetStrokeWidth : 2,
-        datasetFill : true
+        datasetFill : true,
     };
 
 
@@ -2940,7 +2989,7 @@ function nestableCtrl($scope) {
                 "title": "node2.2",
                 "nodes": []
             }
-        ]
+        ],
     }, {
         "id": 3,
         "title": "node3",
@@ -2974,33 +3023,580 @@ function codeEditorCtrl($scope) {
 }
 
 /**
- * ngGridCtrl - Controller for code ngGrid
+ * CONTRILLER FOR LIST VIEW TABLE
  */
-function ngGridCtrl($scope) {
-    $scope.ngData = [
-        {Name: "Moroni", Age: 50, Position: 'PR Menager', Status: 'active', Date: '12.12.2014'},
-        {Name: "Teancum", Age: 43, Position: 'CEO/CFO', Status: 'deactive', Date: '10.10.2014'},
-        {Name: "Jacob", Age: 27, Position: 'UI Designer', Status: 'active', Date: '09.11.2013'},
-        {Name: "Nephi", Age: 29, Position: 'Java programmer', Status: 'deactive', Date: '22.10.2014'},
-        {Name: "Joseph", Age: 22, Position: 'Marketing manager', Status: 'active', Date: '24.08.2013'},
-        {Name: "Monica", Age: 43, Position: 'President', Status: 'active', Date: '11.12.2014'},
-        {Name: "Arnold", Age: 12, Position: 'CEO', Status: 'active', Date: '07.10.2013'},
-        {Name: "Mark", Age: 54, Position: 'Analyst', Status: 'deactive', Date: '03.03.2014'},
-        {Name: "Amelia", Age: 33, Position: 'Sales manager', Status: 'deactive', Date: '26.09.2013'},
-        {Name: "Jesica", Age: 41, Position: 'Ruby programmer', Status: 'active', Date: '22.12.2013'},
-        {Name: "John", Age: 48, Position: 'Marketing manager', Status: 'deactive', Date: '09.10.2014'},
-        {Name: "Berg", Age: 19, Position: 'UI/UX Designer', Status: 'active', Date: '12.11.2013'}
-    ];
+function ngGridCtrl($scope, $http) {
+    //   $scope.ngData = [
+    //       {Name: "Moroni", Age: 50, Position: 'PR Menager', Status: 'active', Date: '12.12.2014'},
+    //       {Name: "Teancum", Age: 43, Position: 'CEO/CFO', Status: 'deactive', Date: '10.10.2014'},
+    //       {Name: "Jacob", Age: 27, Position: 'UI Designer', Status: 'active', Date: '09.11.2013'},
+    //       {Name: "Nephi", Age: 29, Position: 'Java programmer', Status: 'deactive', Date: '22.10.2014'},
+    //       {Name: "Joseph", Age: 22, Position: 'Marketing manager', Status: 'active', Date: '24.08.2013'},
+    //       {Name: "Monica", Age: 43, Position: 'President', Status: 'active', Date: '11.12.2014'},
+    //       {Name: "Arnold", Age: 12, Position: 'CEO', Status: 'active', Date: '07.10.2013'},
+    //       {Name: "Mark", Age: 54, Position: 'Analyst', Status: 'deactive', Date: '03.03.2014'},
+    //       {Name: "Amelia", Age: 33, Position: 'Sales manager', Status: 'deactive', Date: '26.09.2013'},
+    //       {Name: "Jesica", Age: 41, Position: 'Ruby programmer', Status: 'active', Date: '22.12.2013'},
+    //       {Name: "John", Age: 48, Position: 'Marketing manager', Status: 'deactive', Date: '09.10.2014'},
+    //       {Name: "Berg", Age: 19, Position: 'UI/UX Designer', Status: 'active', Date: '12.11.2013'}
+    //   ];
 
-    $scope.ngOptions = { data: 'ngData' };
-    $scope.ngOptions2 = {
-        data: 'ngData',
-        showGroupPanel: true,
-        jqueryUIDraggable: true
+  $scope.mySelections = [];
+
+
+
+  $scope.filterOptions = {
+        filterText: "",
+        externalFilter: 'searchText',
+        useExternalFilter: true
+    }; 
+
+    $scope.totalServerItems = 0;
+
+    $scope.pagingOptions = {
+        pageSizes: [2, 5, 10],
+        pageSize: 5,
+        currentPage: 1
+    };	
+
+    // sort
+    $scope.sortOptions = {
+        fields: ['ListName'],
+        directions: ['ASC'],
+        useExternalSorting: true
     };
+
+
+//GET DATA
+    $scope.getPagedDataAsync = function (pageSize, page, searchText) {
+        setTimeout(function () {
+            var data;
+            if (searchText) {
+                var ft = searchText.toLowerCase();
+                $http.get('views/datasets/ngData.json').success(function (largeLoad) {		
+                    data = largeLoad.filter(function(item) {
+                        return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
+                    });
+                    $scope.setPagingData(data,page,pageSize);
+                });            
+            } else {
+                $http.get('views/datasets/ngData.json').success(function (largeLoad) {
+                    $scope.setPagingData(largeLoad,page,pageSize);
+                });
+            }
+        }, 100);
+    };
+
+    $scope.setPagingData = function(data, page, pageSize){	
+        var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+        $scope.ngData = pagedData;
+        $scope.totalServerItems = data.length;
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    };
+    
+
+   // ////FILTER BY LIST NAME
+   // $scope.filterName = function() {
+//
+   //     var filterText = 'ListName:' + $scope.nameFilter;
+   //     if (filterText !== 'ListName:') {
+//
+   //       $scope.filterOptions.filterText = filterText;
+   //     } else {
+   //       $scope.filterOptions.filterText = '';
+   //     }
+//
+   // };
+
+
+	
+//WHATCH
+$scope.$watch('pagingOptions', function () {
+        if (!self.poInit || self.gettingData) {
+            self.poInit = true;
+            return;
+        } 
+        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+    }, true);
+
+    $scope.$watch('filterOptions', function () {
+        if (!self.foInit || self.gettingData) {
+            self.foInit = true;
+            return;
+        }
+        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+    }, true);
+
+    $scope.$watch('sortOptions', function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+  }
+    }, true);
+
+    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+    
+
+
+    
+    
+    
+
+
+ //    $scope.filterOptions = {
+ //           filterText: '',
+ //           useExternalFilter: true
+ //    };
+//
+//
+//
+//
+ //   // Set up initial paging options
+ //   $scope.pagingOptions = {
+ //       pageSizes: [2, 5, 10],
+ //       pageSize: 2,
+ //       totalServerItems: 0,
+ //       currentPage: 1
+ //   };
+//
+ //   $scope.setPagingData = function(data, page, pageSize) {
+ //   var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+ //   $scope.ngData = pagedData;
+ //   $scope.pagingOptions.totalServerItems = data.length;
+ //   if (!$scope.$$phase) {
+ //     $scope.$apply();
+ //   }
+ // };
+//
+ // $scope.getPagedDataAsync = function(data, pageSize, page) {
+ //   setTimeout(function() {      
+ //       $http.get('views/datasets/ngData.json').success(function(largeLoad) {
+ //         $scope.setPagingData(largeLoad, page, pageSize);
+ //       });
+ //   }, 100);
+ // };
+
+ // $scope.$watch('pagingOptions', function() {
+ //   $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+ // }, true);
+//$scope.$watch('pagingOptions', function (newVal, oldVal) {
+//    if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+//          $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+//    }
+//}, true);
+
+
+//  $scope.$watch("pagingOptions", function (newVal, oldVal) {
+//  if (newVal !== oldVal) {
+//    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+//  }
+//}, true);
+//
+//$scope.$watch("filterOptions", function (newVal, oldVal) {
+//  if (newVal !== oldVal) {
+//    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+//  }
+//}, true);
+    
+    // Watch for page and page size changes, re-fill the grid using the new options when they change
+   //$scope.$watch(
+   //    function () {
+   //        return {
+   //            currentPage: $scope.pagingOptions.currentPage,
+   //            pageSize: $scope.pagingOptions.pageSize
+   //        };
+   //    },
+   //    function (newVal, oldVal) {
+   //        // Reset to page 1 when the page size changes
+   //        if (newVal.pageSize !== oldVal.pageSize) {
+   //            $scope.pagingOptions.currentPage = 1;
+   //        }
+   //
+   //        $scope.getPagedDataAsync($scope.pagingOptions.currentPage, $scope.pagingOptions.pageSize);
+   //    },
+   //true);
+
+
+
+
+
+
+
+    //TABLE OPTIONS
+    $scope.ngOptions = { 
+        data: 'ngData',
+        enableSorting: true,
+        sortInfo: $scope.sortOptions,
+        rowHeight: 60,
+        selectedItems: $scope.mySelections,
+        showSelectionCheckbox: true,
+        multiSelect: true,
+        selectWithCheckboxOnly: true,
+        enablePaging: true,
+        showFooter: true,
+        //plugins: [new ngGridCsvExportPlugin()],
+        totalServerItems: 'totalServerItems',
+        pagingOptions: $scope.pagingOptions,
+        filterOptions: $scope.filterOptions,
+        columnDefs: [
+       {
+               field: '',
+               width: 30,
+       //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
+           },{
+          
+          field: 'ListName', 
+          displayName: 'List Name',
+          cellTemplate: 'views/table/ListNameTemplate.html'
+          
+        },{
+          
+          field:'DateCreated', 
+          displayName:'Created'
+          
+        }, {
+          
+          field:'Members', 
+          displayName:'Members'
+          
+        }, {
+          
+          field:'OptOuts', 
+          displayName:'Opt Outs'
+          
+        },{
+          
+          field:'LastSent', 
+          displayName:'Last Sent'
+          
+        },{
+          
+          cellTemplate: 'views/table/ManageListTemplateCol.html'
+          
+        }
+        
+        ] 
+
+    };
+
+    
+
+}
+
+/**
+ * CONTRILLER FOR LIST VIEW TABLE
+ */
+function ngContactListCtrl($scope, $http) {
+    //   $scope.ngData = [
+    //       {Name: "Moroni", Age: 50, Position: 'PR Menager', Status: 'active', Date: '12.12.2014'},
+    //       {Name: "Teancum", Age: 43, Position: 'CEO/CFO', Status: 'deactive', Date: '10.10.2014'},
+    //       {Name: "Jacob", Age: 27, Position: 'UI Designer', Status: 'active', Date: '09.11.2013'},
+    //       {Name: "Nephi", Age: 29, Position: 'Java programmer', Status: 'deactive', Date: '22.10.2014'},
+    //       {Name: "Joseph", Age: 22, Position: 'Marketing manager', Status: 'active', Date: '24.08.2013'},
+    //       {Name: "Monica", Age: 43, Position: 'President', Status: 'active', Date: '11.12.2014'},
+    //       {Name: "Arnold", Age: 12, Position: 'CEO', Status: 'active', Date: '07.10.2013'},
+    //       {Name: "Mark", Age: 54, Position: 'Analyst', Status: 'deactive', Date: '03.03.2014'},
+    //       {Name: "Amelia", Age: 33, Position: 'Sales manager', Status: 'deactive', Date: '26.09.2013'},
+    //       {Name: "Jesica", Age: 41, Position: 'Ruby programmer', Status: 'active', Date: '22.12.2013'},
+    //       {Name: "John", Age: 48, Position: 'Marketing manager', Status: 'deactive', Date: '09.10.2014'},
+    //       {Name: "Berg", Age: 19, Position: 'UI/UX Designer', Status: 'active', Date: '12.11.2013'}
+    //   ];
+
+  $scope.mySelections = [];
+
+
+
+  $scope.filterOptions = {
+        filterText: ''
+        //filterText2: '',
+        //externalFilter: '',
+        //useExternalFilter: true
+    }; 
+
+
+
+
+
+
+
+
+
+    $scope.totalServerItems = 0;
+
+    $scope.pagingOptions = {
+        pageSizes: [2, 5, 10],
+        pageSize: 5,
+        currentPage: 1
+    };  
+
+    // sort
+    //$scope.sortOptions = {
+    //    fields: ['ListName'],
+    //    directions: ['ASC'],
+    //    useExternalSorting: true
+    //};
+
+    //$scope.filterStatusO = function() {
+    //var filterText = "Status:O";
+    //if ($scope.filterOptions.filterText === '') {
+    //  $scope.filterOptions.filterText = filterText;
+    //}
+    //else if ($scope.filterOptions.filterText === filterText) {
+    //  $scope.filterOptions.filterText = '';
+    //}
+    //};
+
+
+//GET DATA
+    
+     $scope.setPagingData = function(data, page, pageSize){  
+        var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+        $scope.ngData = pagedData;
+        $scope.totalServerItems = data.length;
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    };
+
+    $scope.getPagedDataAsync = function (pageSize, page, searchText) {
+        setTimeout(function () {
+            var data;
+            if (searchText) {
+                var ft = searchText.toLowerCase();
+                $http.get('views/datasets/ngDataContacts.json').success(function (largeLoad) {      
+                    data = largeLoad.filter(function(item) {
+                        return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
+                    });
+                    $scope.setPagingData(data,page,pageSize);
+                });            
+            } else {
+                $http.get('views/datasets/ngDataContacts.json').success(function (largeLoad) {
+                    $scope.setPagingData(largeLoad,page,pageSize);
+                });
+            }
+        }, 100);
+    };
+
+   
+    
+    
+//WHATCH
+$scope.$watch('pagingOptions', function () {
+        if (!self.poInit || self.gettingData) {
+            self.poInit = true;
+            return;
+        } 
+        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+    }, true);
+
+    $scope.$watch('filterOptions', function () {
+        if (!self.foInit || self.gettingData) {
+            self.foInit = true;
+            return;
+        }
+        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+    }, true);
+
+   // $scope.$watch('sortOptions', function (newVal, oldVal) {
+   //   if (newVal !== oldVal) {
+   // $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+   // }
+   // }, true);
+
+    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+    
+
+    //TABLE OPTIONS
+    $scope.ngOptions = { 
+        data: 'ngData',
+        enableSorting: true,
+        sortInfo: $scope.sortOptions,
+        rowHeight: 60,
+        selectedItems: $scope.mySelections,
+        showSelectionCheckbox: true,
+        multiSelect: true,
+        selectWithCheckboxOnly: true,
+        enablePaging: true,
+        showFooter: true,
+        //plugins: [new ngGridCsvExportPlugin()],
+        totalServerItems: 'totalServerItems',
+        pagingOptions: $scope.pagingOptions,
+        filterOptions: $scope.filterOptions,
+        columnDefs: [
+       {
+               field: '',
+               width: 30,
+       //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
+           },{
+          
+          field: 'ContactNumber', 
+          displayName: 'List Name'
+          //cellTemplate: 'views/table/ListNameTemplate.html'
+          
+        },{
+          
+          field:'ContactFirstName', 
+          displayName:'Name',
+          cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">{{row.getProperty(col.field)}} {{row.entity.ContactLastName}}</div>'
+          
+        }, {
+          
+          field:'ContactEmail', 
+          displayName:'Email'
+          
+        }, {
+          
+          field:'CustomField1',
+          displayName:'Field 1'
+          
+        },{
+          
+          field:'CustomField2', 
+          displayName:'Field 2'
+          
+        },{
+          
+          field:'CustomField3', 
+          displayName:'Field 3'
+          
+        },{
+          
+          field:'ContactStatus', 
+          displayName:'Status',
+          cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
+          
+        },{
+          
+          cellTemplate: 'views/table/ManageListTemplateCol.html'
+          
+        }
+        
+        ] 
+
+    };
+
+
+
+
+
 }
 
 
+//ADD LISTS
+function AddListsCtrl($scope, $http) {
+  $scope.lists = {};
+  $scope.lists.names = [];
+  $http({
+    method: 'GET',
+    url: 'views/datasets/ngData.json'
+  }).success(function(data, status, headers, config) {
+      console.log('views/datasets/ngData.json succeeded. - ' + data.length);
+      $scope.lists.names = data;
+
+      // this will show you the count that you expect
+      console.log($scope.lists.names.length);
+    }).error(function(data, status, headers, config) {
+      console.log('views/datasets/ngData.json failed.');
+    });
+
+  // this will always print 0 to console
+  // since categories has not been assigned yet
+  console.log($scope.lists.names.length);
+
+  // other methods
+}
+
+
+
+//DATE TIME CTRL
+function DateTimePickerCtrl($scope, $timeout) {
+//	$scope.dateTimeNow = function() {
+//    $scope.date = new Date();
+//  };
+//  $scope.dateTimeNow();
+//  
+//  $scope.toggleMinDate = function() {
+//    $scope.minDate = $scope.minDate ? null : new Date();
+//  };
+//   
+//  $scope.maxDate = new Date('2014-06-22');
+//  $scope.toggleMinDate();
+//
+//  $scope.dateOptions = {
+//    startingDay: 1,
+//    showWeeks: false
+//  };
+//
+//  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+//  $scope.format = $scope.formats[0];
+//  
+//  //$scope.$watch('date', function () {
+//  //   alert('changed');
+//  //});
+//  
+//  // Disable weekend selection
+//  //$scope.disabled = function(calendarDate, mode) {
+//  //  return mode === 'day' && ( calendarDate.getDay() === 0 || calendarDate.getDay() === 6 );
+//  //};
+//  
+//  $scope.hourStep = 1;
+//  $scope.minuteStep = 15;
+//
+//  $scope.timeOptions = {
+//    hourStep: [1, 2, 3],
+//    minuteStep: [1, 5, 10, 15, 25, 30]
+//  };
+//
+//  $scope.showMeridian = true;
+//  $scope.timeToggleMode = function() {
+//    $scope.showMeridian = !$scope.showMeridian;
+//  };
+
+$scope.today = function() {
+    $scope.SetDate = new Date();
+  };
+  
+  $scope.today();
+
+  $scope.clear = function () {
+    $scope.SetDate = null;
+  };
+
+
+  // Disable weekend selection
+  //$scope.disabled = function(date, mode) {
+  //  return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+  //};
+
+  $scope.toggleMin = function() {
+    $scope.minDate = $scope.minDate ? null : new Date();
+  };
+  $scope.toggleMin();
+
+  $scope.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    $scope.opened = true;
+  };
+
+  $scope.dateOptions = {
+    formatYear: 'yy',
+    startingDay: 1,
+    showWeeks: 'false',
+    initDate: 'false'
+  };
+
+  $scope.formats = ['MM/dd/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[0];
+
+}
+
+
+
+
+//NOTIFY CTRL
 function notifyCtrl($scope, notify) {
     $scope.msg = 'Hello! This is a sample message!';
     $scope.demo = function () {
@@ -3018,30 +3614,29 @@ function notifyCtrl($scope, notify) {
     $scope.inspiniaTemplate = 'views/common/notify.html';
     $scope.inspiniaDemo1 = function(){
         notify({ message: 'Info - This is a Inspinia info notification', classes: 'alert-info', templateUrl: $scope.inspiniaTemplate});
-    };
+    }
     $scope.inspiniaDemo2 = function(){
         notify({ message: 'Success - This is a Inspinia success notification', classes: 'alert-success', templateUrl: $scope.inspiniaTemplate});
-    };
+    }
     $scope.inspiniaDemo3 = function(){
         notify({ message: 'Warning - This is a Inspinia warning notification', classes: 'alert-warning', templateUrl: $scope.inspiniaTemplate});
-    };
+    }
     $scope.inspiniaDemo4 = function(){
         notify({ message: 'Danger - This is a Inspinia danger notification', classes: 'alert-danger', templateUrl: $scope.inspiniaTemplate});
-    };
+    }
     $scope.SavedDraftMsg = function(){
         notify({ message: 'Your message has been saved to drafts!', classes: 'alert-success'});
-    };
+    }
     $scope.ResetMsg = function(){
         notify({ message: 'Your message has been discarded!', classes: 'alert-success'});
-    };
+    }
     $scope.SentMsg = function(){
         notify({ message: 'Your message has been sent!', classes: 'alert-success'});
-    };
+    }
     $scope.ScheduledMsg = function(){
         notify({ message: 'Your message has been scheduled!', classes: 'alert-success'});
-    };
-
-	//If SendingMessageSucceeded event is triggered, show related message
+    }
+    //If SendingMessageSucceeded event is triggered, show related message
 	$scope.$on('SendingMessageSucceeded', function(event, args) {
 		$scope.SentMsg();
 	});
@@ -3080,8 +3675,7 @@ function imageCrop($scope) {
 
 }
 
-function FormSendCtrl($scope, $cookieStore, $http) {
-
+function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracker) {
 
 
 //send form initial states
@@ -3092,10 +3686,9 @@ function FormSendCtrl($scope, $cookieStore, $http) {
     $scope.OptOutMsg = "";
     $scope.ScheduleCheck = "";
     $scope.SetDate = "";
-      $scope.SetTime = "";
-	$scope.contactLists = [];
-	$scope.fromNumbers = [];
-
+    $scope.SetTime = "";
+    
+    
     
   //reset send form  
     $scope.reset = function(){
@@ -3110,111 +3703,116 @@ function FormSendCtrl($scope, $cookieStore, $http) {
       $scope.ScheduleCheck = '';
       $scope.SetDate = '';
       $scope.SetTime = '';
+      $scope.contactLists = [];
     };
 
-	//Read the data from the remote server. First read the contact lists.
-	$http.post(
-		inspiniaNS.wsUrl + "contactlist_get",
-		$.param({ apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
-	).success(
-		//Successful request to the server
-		function(data, status, headers, config) {
-			if (data == null || typeof data.apicode == 'undefined') {
-				//This should never happen
-				$scope.contactLists = [];
-				return;
-			}
-			if (data.apicode == 0) {
-				//Reading contact lists
-				$scope.contactLists = data.apidata;
-			} else {
-				$scope.contactLists = [];
-			}
-		}
-	).error(
-		//An error occurred with this request
-		function(data, status, headers, config) {
-			alert('Unexpected error occurred when trying to fetch contact lists!');
-		}
-	);
+//Read the data from the remote server. First read the contact lists.
+    $http.post(
+        inspiniaNS.wsUrl + "contactlist_get",
+        $.param({ apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+    ).success(
+        //Successful request to the server
+        function(data, status, headers, config) {
+            if (data == null || typeof data.apicode == 'undefined') {
+                //This should never happen
+                $scope.contactLists = [];
+                return;
+            }
+            if (data.apicode == 0) {
+                //Reading contact lists
+                $scope.contactLists = data.apidata;
+            } else {
+                $scope.contactLists = [];
+            }
+        }
+    ).error(
+        //An error occurred with this request
+        function(data, status, headers, config) {
+            alert('Unexpected error occurred when trying to fetch contact lists!');
+        }
+    );
 
-	//now read DIDs
-	$http.post(
-		inspiniaNS.wsUrl + "did_get",
-		$.param({ apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
-	).success(
-		//Successful request to the server
-		function(data, status, headers, config) {
-			if (data == null || typeof data.apicode == 'undefined') {
-				//This should never happen
-				$scope.fromNumbers = [];
-				return;
-			}
-			if (data.apicode == 0) {
-				//Reading contact lists
-				$scope.fromNumbers = data.apidata;
-			} else {
-				$scope.fromNumbers = [];
-			}
-		}
-	).error(
-		//An error occurred with this request
-		function(data, status, headers, config) {
-			alert('Unexpected error occurred when trying to fetch DIDs!');
-		}
-	);
+    //now read DIDs
+    $http.post(
+        inspiniaNS.wsUrl + "did_get",
+        $.param({ apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+    ).success(
+        //Successful request to the server
+        function(data, status, headers, config) {
+            if (data == null || typeof data.apicode == 'undefined') {
+                //This should never happen
+                $scope.fromNumbers = [];
+                return;
+            }
+            if (data.apicode == 0) {
+                //Reading contact lists
+                $scope.fromNumbers = data.apidata;
+            } else {
+                $scope.fromNumbers = [];
+            }
+        }
+    ).error(
+        //An error occurred with this request
+        function(data, status, headers, config) {
+            alert('Unexpected error occurred when trying to fetch DIDs!');
+        }
+    );
 
 
-	//Create a function for sending messages
-	$scope.sendMessage = function(scheduled) {
-		if ((typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0)
-			&& (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == '')
-		) {
-			return;
-		}
-		if (typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
-			return;
-		}
-		if (scheduled && (typeof $scope.SetDate == 'undefined' || $scope.SetDate == null || $scope.SetDate == '')) {
-			return;
-		}
-		//If time is not set and scheduled message sending is invoked, set time to midnight
-		if (scheduled && (typeof $scope.SetTime == 'undefined' || $scope.SetTime == null || $scope.SetTime == '')) {
-			$scope.SetTime = "00:00:00";
-		}
+    //Create a function for sending messages
+    $scope.sendMessage = function(scheduled) {
 
-		//Checking the type of opt out message
-		var optOutMessage = '';
-		if ($scope.OptOutMsg == 'standard') {
-			//todo: check how to receive standard opt out message
-		} else if ($scope.OptOutMsg == 'custom') {
-			//todo: check how to receive custom opt out message for the account
-		} else if ($scope.OptOutMsg == 'write') {
-			optOutMessage = $scope.OptOutTxt3;
-		}
+        // Trigger validation flag.
+        //$scope.submitted = true;
 
-		//Generate a message text
-		var messageText = '';
-		if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
-			messageText += $.trim($scope.FromName);
-			if (messageText.length > 0) {
-				messageText += '\r\n';
-			}
-		}
-		messageText += $scope.MessageTxt;
-		if (optOutMessage != '') {
-			messageText += '\r\n' + optOutMessage;
-		}
+        if ((typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0)
+            && (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == '')
+        ) {
+            return;
+        }
+        if (typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
+            return;
+        }
+        if (scheduled && (typeof $scope.SetDate == 'undefined' || $scope.SetDate == null || $scope.SetDate == '')) {
+            return;
+        }
+        //If time is not set and scheduled message sending is invoked, set time to midnight
+        if (scheduled && (typeof $scope.SetTime == 'undefined' || $scope.SetTime == null || $scope.SetTime == '')) {
+            $scope.SetTime = "00:00:00";
+        }
 
-		//Creating a api request data object
-		var requestData = {
-			DID: $scope.FromNumber.DID,
-			message: messageText,
-			apikey: $cookieStore.get('inspinia_auth_token'),
-			accountID: $cookieStore.get('inspinia_account_id')
-		};
+        //Checking the type of opt out message
+        var optOutMessage = '';
+        if ($scope.OptOutMsg == 'standard') {
+            //todo: check how to receive standard opt out message
+        } else if ($scope.OptOutMsg == 'custom') {
+            //todo: check how to receive custom opt out message for the account
+        } else if ($scope.OptOutMsg == 'write') {
+            optOutMessage = $scope.OptOutTxt3;
+        }
 
-		if (typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
+        //Generate a message text
+        var messageText = '';
+        if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
+            messageText += $.trim($scope.FromName);
+            if (messageText.length > 0) {
+                messageText += '\r\n';
+            }
+        }
+        messageText += $scope.MessageTxt;
+        if (optOutMessage != '') {
+            messageText += '\r\n' + optOutMessage;
+        }
+
+        //Creating a api request data object
+        var requestData = {
+        	DID: $scope.FromNumber.DID,
+            message: messageText,
+            apikey: $cookieStore.get('inspinia_auth_token'),
+            accountID: $cookieStore.get('inspinia_account_id')
+        };
+
+        if (typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
 			if ($scope.ToList.constructor === Array) {
 				//Sending message to contact lists
 				requestData.contactListID = $scope.ToList[0].contactListID;
@@ -3224,15 +3822,15 @@ function FormSendCtrl($scope, $cookieStore, $http) {
 			} else {
 				//Sending message to a single contact list
 				requestData.contactListID = $scope.ToList.contactListID;
-			}
-		} else if (typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
-			//Sending message to numbers
-			requestData.ANI = $scope.ToNumber;
-		}
+            }
+        } else if (typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
+            //Sending message to numbers
+            requestData.ANI = $scope.ToNumber;
+        }
 
-		//Adding schedule date if one is specified
-		if (scheduled) {
-			//Date is in format MM/dd/yyyy
+        //Adding schedule date if one is specified
+        if (scheduled) {
+            //Date is in format MM/dd/yyyy
 			var dateParts = $scope.SetDate.split("/");
 			if (dateParts.length != 3) {
 				alert("Invalid date format!");
@@ -3252,42 +3850,42 @@ function FormSendCtrl($scope, $cookieStore, $http) {
 			}
 			var date = new Date();
 			requestData.scheduledDate = dateParts[2] + "-" + dateParts[0]  + "-" + dateParts[1] + " " + $scope.SetTime;
-		}
+        }
 
-		//Send request to the server
-		$http.post(
-			inspiniaNS.wsUrl + "message_send",
-			$.param(requestData)
-		).success(
-			//Successful request to the server
-			function(data, status, headers, config) {
-				if (data == null || typeof data.apicode == 'undefined') {
-					//This should never happen
-					alert("Unidentified error occurred when sending your message!");
-					return;
-				}
-				if (data.apicode == 0) {
-					//Reset form and inform user about success
-					$scope.reset();
-					//Trigger event which will cause other controllers to do some work, such as showing some messages etc.
-					if (scheduled) {
-						$scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
-					} else {
-						$scope.$broadcast("SendingMessageSucceeded", data.apidata);
-					}
-				} else {
-					alert("An error occurred when sending your message! Error code: " + data.apicode);
-					alert(JSON.stringify(data));
-				}
-			}
-		).error(
-			//An error occurred with this request
-			function(data, status, headers, config) {
-				alert('Unexpected error occurred when trying to send message!');
-			}
-		);
-	};
+        //Send request to the server
+        $http.post(
+            inspiniaNS.wsUrl + "message_send",
+            $.param(requestData)
+        ).success(
+            //Successful request to the server
+            function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    alert("Unidentified error occurred when sending your message!");
+                    return;
+                }
+                if (data.apicode == 0) {
+                    //Reset form and inform user about success
+                    $scope.reset();
+                    if (scheduled) {
+                        $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
+                    } else {
+                        $scope.$broadcast("SendingMessageSucceeded", data.apidata);
+                    }
+                } else {
+                    alert("An error occurred when sending your message! Error code: " + data.apicode);
+                    alert(JSON.stringify(data));
+                }
+            }
+        ).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                alert('Unexpected error occurred when trying to send message!');
+            }
+        );
+    };
 }
+
 
 /**
  * Controller for the login functionality.
@@ -3295,55 +3893,55 @@ function FormSendCtrl($scope, $cookieStore, $http) {
  * @param $scope   angular js scope
  */
 function loginCtrl($scope, $cookieStore, $http, $window) {
-	$scope.invalidCredentials = false;
-	//Reset authentication token
-	$cookieStore.put('inspinia_auth_token', '');
-	$cookieStore.put('inspinia_account_id', '');
+    $scope.invalidCredentials = false;
+    //Reset authentication token
+    $cookieStore.put('inspinia_auth_token', '');
+    $cookieStore.put('inspinia_account_id', '');
 
-	//Login function
-	$scope.login = function() {
-		$scope.invalidCredentials = false;
-		//Checking if username and password are provided
-		if (typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
-			return;
-		}
-		if (typeof $scope.password == 'undefined' || $scope.password == null || $scope.password == '') {
-			return;
-		}
-		//Calling rest service to sign in
-		$http.post(
-			inspiniaNS.wsUrl + "login",
-			$.param({
-				username: $scope.username,
-				password: $scope.password
-			})
-		).success(
-			//Successful request to the server
-			function(data, status, headers, config) {
-				if (data == null || typeof data.apicode == 'undefined') {
-					//This should never happen
-					alert("Unknown error occurred when trying to sign in! Please try again.");
-					return;
-				}
-				if (data.apicode == 0) {
-					//User signed in successfully
-					$cookieStore.put('inspinia_auth_token', data.apikey);
-					$cookieStore.put('inspinia_account_id', data.apidata.accountID);
-					$window.location.href = "/#/dashboard";
-				} else if (data.apicode == 2) {
-					//Invalid credentials
-					$scope.invalidCredentials = true;
-				} else {
-					alert("An error occurred when trying to sign in. Error code: " + data.apicode);
-				}
-			}
-		).error(
-			//An error occurred with this request
-			function(data, status, headers, config) {
-				alert("Failed to sign in! Please try again.")
-			}
-		)
-	}
+    //Login function
+    $scope.login = function() {
+        $scope.invalidCredentials = false;
+        //Checking if username and password are provided
+        if (typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
+            return;
+        }
+        if (typeof $scope.password == 'undefined' || $scope.password == null || $scope.password == '') {
+            return;
+        }
+        //Calling rest service to sign in
+        $http.post(
+            inspiniaNS.wsUrl + "login",
+            $.param({
+                username: $scope.username,
+                password: $scope.password
+            })
+        ).success(
+            //Successful request to the server
+            function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    alert("Unknown error occurred when trying to sign in! Please try again.");
+                    return;
+                }
+                if (data.apicode == 0) {
+                    //User signed in successfully
+                    $cookieStore.put('inspinia_auth_token', data.apikey);
+                    $cookieStore.put('inspinia_account_id', data.apidata.accountID);
+                    $window.location.href = "/#/dashboard";
+                } else if (data.apicode == 2) {
+                    //Invalid credentials
+                    $scope.invalidCredentials = true;
+                } else {
+                    alert("An error occurred when trying to sign in. Error code: " + data.apicode);
+                }
+            }
+        ).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                alert("Failed to sign in! Please try again.")
+            }
+        )
+    }
 }
 /**
  *
@@ -3365,9 +3963,12 @@ angular
     .controller('CalendarCtrl', CalendarCtrl)
     .controller('chartJsCtrl', chartJsCtrl)
     .controller('GoogleMaps', GoogleMaps)
-    .controller('ngGridCtrl', ngGridCtrl)
+    .controller('ngGridCtrl', ['$scope', '$http', ngGridCtrl])
+    .controller('ngContactListCtrl', ['$scope', '$http', ngContactListCtrl])
+    .controller('AddListsCtrl', ['$scope', '$http', AddListsCtrl])
     .controller('codeEditorCtrl', codeEditorCtrl)
     .controller('nestableCtrl', nestableCtrl)
+    .controller('DateTimePickerCtrl', ['$scope', '$timeout', DateTimePickerCtrl])
     .controller('notifyCtrl', notifyCtrl)
     .controller('translateCtrl', translateCtrl)
     .controller('imageCrop', imageCrop)

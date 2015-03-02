@@ -1,1 +1,65 @@
-<h1>Manage List</h1>
+<h1>Contacts / Lists </h1>
+
+<div class="col-md-12 content-holder animated fadeInRight manage-list" ng-class="animation" ng-controller="ngContactListCtrl">
+
+<h2 class="section-title">Manage List
+<span>BMW</span>
+</h2>
+
+<div class="top-buttons">
+<a href="#/lists/lists_add" class="btn btn-add"><i class="fa fa-plus"></i> Create list</a>&nbsp; <a href="/lists/lists_add_contact" class="btn btn-add"><i class="fa fa-plus"></i> Add contact(s)</a>&nbsp; <a href="#/lists/lists_view" class="btn btn-back"><i class="fa fa-undo"></i> Back to Lists</a>
+</div>
+<div>
+
+<!--<button class="btn btn-success" data-toggle="button" ng-click="filterStatusO()">Opted out</button>-->
+<!--<input class="search-input" placeholder="Search by list name" type="text" ng-model="nameFilter" ng-change="filterName()" >-->
+<input class="search-input" placeholder="Search by contact number, name, email or custom field" type="text" ng-model="filterOptions.filterText">
+
+<div class="page-select-wrapper">
+<strong>Show:</strong>&nbsp; <select class="page-select" ng-model="pagingOptions.pageSize">
+	<option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
+</select>
+</div>
+
+</div>
+      <br>
+
+
+
+<!--START TABLE-->
+<div class="gridStyle" ng-grid="ngOptions"></div>
+
+<!--<div class="selectedItems">{{mySelections}}</div>-->
+
+
+<!--Bottom Actions -->
+<div class="row">
+<div class="col-sm-2 ng-scope bottom-buttons">
+<a class="btn"><i class="fa fa fa-plus"></i> Add to other list</a>
+</div>
+
+<div class="col-sm-10 ng-scope bottom-buttons">
+
+<a class="btn"><i class="fa fa-file-excel-o"></i> Export</a>
+<a class="btn"><i class="fa fa-ban"></i> Block/Unblock</a>
+<a class="btn"><i class="fa fa-chain-broken"></i> Opt Out</a>
+<a class="btn"><i class="fa fa-check-square-o"></i> Opt In</a>
+
+<div class="btn-group dropup discard-btn">
+<a data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false"><i class="fa fa-trash-o"></i> Delete</a>
+<ul class="dropdown-menu dropdown-alerts">
+    <li>Are you sure you want to delete the list?</li>
+    <li>&nbsp;</li>
+    <li><span class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+</div>
+</div>
+
+</div>

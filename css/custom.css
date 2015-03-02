@@ -257,24 +257,24 @@ body {
 .content-holder {
   background: white;
   border: 1px solid lightgrey;
-  padding: 0 15px 40px 15px;
+  padding: 0 30px 40px 30px;
   max-width: 1140px;
 }
 
 h1 {
 font-size: 24px;
 font-weight: 600;
-margin:15px;
+margin:15px 30px;
 }
 
 h2.section-title {
-    border-bottom: 1px solid lightgrey;
+    /*border-bottom: 1px solid lightgrey;*/
     margin: 20px -15px;
     padding: 0 15px 20px 15px;
 }
 
 .btn {
-  padding:7px 10px;
+  padding:6px 10px;
   border-radius:3px;
   font-size: 12px;
   color:#5c5e60;
@@ -291,6 +291,21 @@ h2.section-title {
   color:white;
 }
 
+
+
+.btn-add {
+  color: white;
+  background: #005eaa;
+  border: none;
+  font-size: 13px;
+}
+
+.btn-add:hover, .btn-add:active {
+  color:white;
+  background: #015598;
+  border:none;
+}
+
 .btn-send {
   color:white;
   background: #007d32;
@@ -301,6 +316,7 @@ h2.section-title {
 .btn-send:hover {
   color:white;
 }
+
 
 .right {
   float:right;
@@ -423,6 +439,934 @@ label.checkbox {
 .discard-cancel:hover {
   color:#005eaa;
   cursor: pointer;
+}
+
+ul.alert.alert-danger {
+margin-left: 0;
+padding-left: 15px;
+list-style: none;
+}
+
+
+
+
+
+
+/****DATETIMEPICKER****/
+/**
+ * @license angular-bootstrap-datetimepicker  version: 0.3.8
+ * (c) 2013-2014 Knight Rider Consulting, Inc. http://www.knightrider.com
+ * License: MIT
+ 
+
+.datetimepicker {
+    padding: 4px;
+    margin-top: 1px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    direction: ltr;
+    width: 320px;
+}
+
+.datetimepicker.datetimepicker-rtl {
+    direction: rtl;
+}
+
+.datetimepicker.datetimepicker-rtl table tr td span {
+    float: right;
+}
+
+.datetimepicker-dropdown, .datetimepicker-dropdown-left {
+    top: 0;
+    left: 0;
+}
+
+[class*=" datetimepicker-dropdown"]:before {
+    content: '';
+    display: inline-block;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #ccc;
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+    position: absolute;
+}
+
+[class*=" datetimepicker-dropdown"]:after {
+    content: '';
+    display: inline-block;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #ffffff;
+    position: absolute;
+}
+
+[class*=" datetimepicker-dropdown-top"]:before {
+    content: '';
+    display: inline-block;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid #ccc;
+    border-top-color: rgba(0, 0, 0, 0.2);
+    border-bottom: 0;
+}
+
+[class*=" datetimepicker-dropdown-top"]:after {
+    content: '';
+    display: inline-block;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #ffffff;
+    border-bottom: 0;
+}
+
+.datetimepicker-dropdown-bottom-left:before {
+    top: -7px;
+    right: 6px;
+}
+
+.datetimepicker-dropdown-bottom-left:after {
+    top: -6px;
+    right: 7px;
+}
+
+.datetimepicker-dropdown-bottom-right:before {
+    top: -7px;
+    left: 6px;
+}
+
+.datetimepicker-dropdown-bottom-right:after {
+    top: -6px;
+    left: 7px;
+}
+
+.datetimepicker-dropdown-top-left:before {
+    bottom: -7px;
+    right: 6px;
+}
+
+.datetimepicker-dropdown-top-left:after {
+    bottom: -6px;
+    right: 7px;
+}
+
+.datetimepicker-dropdown-top-right:before {
+    bottom: -7px;
+    left: 6px;
+}
+
+.datetimepicker-dropdown-top-right:after {
+    bottom: -6px;
+    left: 7px;
+}
+
+.datetimepicker > div {
+    display: none;
+}
+
+.datetimepicker.minutes div.datetimepicker-minutes {
+    display: block;
+}
+
+.datetimepicker.hours div.datetimepicker-hours {
+    display: block;
+}
+
+.datetimepicker.days div.datetimepicker-days {
+    display: block;
+}
+
+.datetimepicker.months div.datetimepicker-months {
+    display: block;
+}
+
+.datetimepicker.years div.datetimepicker-years {
+    display: block;
+}
+
+.datetimepicker table {
+    margin: 0;
+}
+
+.datetimepicker .table td,
+.datetimepicker .table th {
+    text-align: center;
+    width: 14.6%;
+    height: 20px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: none;
+}
+.datetimepicker .table-striped > tbody > tr:nth-child(odd) > td, .datetimepicker .table-striped > tbody > tr:nth-child(odd) > td,
+.datetimepicker .table-striped > tbody > tr:nth-child(odd) > td, .datetimepicker .table-striped > tbody > tr:nth-child(odd) > th,
+.datetimepicker .table-striped > tbody > tr:nth-child(odd) {
+  background-color: transparent;
+}
+.datetimepicker table tr td.minute:hover {
+    background: #eeeeee;
+    cursor: pointer;
+}
+
+.datetimepicker table tr td.hour:hover {
+    background: #eeeeee;
+    cursor: pointer;
+}
+
+.datetimepicker table tr td.day:hover {
+    background: #eeeeee;
+    cursor: pointer;
+}
+
+.datetimepicker table tr td.past,
+.datetimepicker table tr td.future {
+    color: #999999;
+}
+
+.datetimepicker table tr td.disabled,
+.datetimepicker table tr td.disabled:hover {
+    background: none;
+    color: #999999;
+    cursor: default;
+}
+
+.datetimepicker table tr td.today,
+.datetimepicker table tr td.today:hover,
+.datetimepicker table tr td.today.disabled,
+.datetimepicker table tr td.today.disabled:hover {
+    background-color: #fde19a;
+    background-image: -moz-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: -ms-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
+    background-image: -webkit-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: -o-linear-gradient(top, #fdd49a, #fdf59a);
+    background-image: linear-gradient(top, #fdd49a, #fdf59a);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+    border-color: #fdf59a #fdf59a #fbed50;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.datetimepicker table tr td.today:hover,
+.datetimepicker table tr td.today:hover:hover,
+.datetimepicker table tr td.today.disabled:hover,
+.datetimepicker table tr td.today.disabled:hover:hover,
+.datetimepicker table tr td.today:active,
+.datetimepicker table tr td.today:hover:active,
+.datetimepicker table tr td.today.disabled:active,
+.datetimepicker table tr td.today.disabled:hover:active,
+.datetimepicker table tr td.today.active,
+.datetimepicker table tr td.today:hover.active,
+.datetimepicker table tr td.today.disabled.active,
+.datetimepicker table tr td.today.disabled:hover.active,
+.datetimepicker table tr td.today.disabled,
+.datetimepicker table tr td.today:hover.disabled,
+.datetimepicker table tr td.today.disabled.disabled,
+.datetimepicker table tr td.today.disabled:hover.disabled,
+.datetimepicker table tr td.today[disabled],
+.datetimepicker table tr td.today:hover[disabled],
+.datetimepicker table tr td.today.disabled[disabled],
+.datetimepicker table tr td.today.disabled:hover[disabled] {
+    background-color: #fdf59a;
+}
+
+.datetimepicker table tr td.today:active,
+.datetimepicker table tr td.today:hover:active,
+.datetimepicker table tr td.today.disabled:active,
+.datetimepicker table tr td.today.disabled:hover:active,
+.datetimepicker table tr td.today.active,
+.datetimepicker table tr td.today:hover.active,
+.datetimepicker table tr td.today.disabled.active,
+.datetimepicker table tr td.today.disabled:hover.active {
+    background-color: #fbf069 \9;
+}
+
+.datetimepicker table tr td.active,
+.datetimepicker table tr td.active:hover,
+.datetimepicker table tr td.active.disabled,
+.datetimepicker table tr td.active.disabled:hover {
+    background-color: #006dcc;
+    background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -ms-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+    background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+    background-image: linear-gradient(top, #0088cc, #0044cc);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+    border-color: #0044cc #0044cc #002a80;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.datetimepicker table tr td.active:hover,
+.datetimepicker table tr td.active:hover:hover,
+.datetimepicker table tr td.active.disabled:hover,
+.datetimepicker table tr td.active.disabled:hover:hover,
+.datetimepicker table tr td.active:active,
+.datetimepicker table tr td.active:hover:active,
+.datetimepicker table tr td.active.disabled:active,
+.datetimepicker table tr td.active.disabled:hover:active,
+.datetimepicker table tr td.active.active,
+.datetimepicker table tr td.active:hover.active,
+.datetimepicker table tr td.active.disabled.active,
+.datetimepicker table tr td.active.disabled:hover.active,
+.datetimepicker table tr td.active.disabled,
+.datetimepicker table tr td.active:hover.disabled,
+.datetimepicker table tr td.active.disabled.disabled,
+.datetimepicker table tr td.active.disabled:hover.disabled,
+.datetimepicker table tr td.active[disabled],
+.datetimepicker table tr td.active:hover[disabled],
+.datetimepicker table tr td.active.disabled[disabled],
+.datetimepicker table tr td.active.disabled:hover[disabled] {
+    background-color: #0044cc;
+}
+
+.datetimepicker table tr td.active:active,
+.datetimepicker table tr td.active:hover:active,
+.datetimepicker table tr td.active.disabled:active,
+.datetimepicker table tr td.active.disabled:hover:active,
+.datetimepicker table tr td.active.active,
+.datetimepicker table tr td.active:hover.active,
+.datetimepicker table tr td.active.disabled.active,
+.datetimepicker table tr td.active.disabled:hover.active {
+    background-color: #003399 \9;
+}
+
+.datetimepicker table tr td span {
+    display: block;
+    width: 23%;
+    height: 54px;
+    line-height: 54px;
+    float: left;
+    margin: 1%;
+    cursor: pointer;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.datetimepicker span.hour {
+    height: 26px;
+    line-height: 26px;
+}
+
+.datetimepicker span.minute {
+    height: 26px;
+    line-height: 26px;
+}
+
+.datetimepicker table tr td span:hover {
+    background: #eeeeee;
+}
+
+.datetimepicker table tr td span.disabled,
+.datetimepicker table tr td span.disabled:hover {
+    background: none;
+    color: #999999;
+    cursor: default;
+}
+
+.datetimepicker table tr td span.active,
+.datetimepicker table tr td span.active:hover,
+.datetimepicker table tr td span.active.disabled,
+.datetimepicker table tr td span.active.disabled:hover {
+    background-color: #006dcc;
+    background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -ms-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+    background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+    background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+    background-image: linear-gradient(top, #0088cc, #0044cc);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc', endColorstr='#0044cc', GradientType=0);
+    border-color: #0044cc #0044cc #002a80;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.datetimepicker table tr td span.active:hover,
+.datetimepicker table tr td span.active:hover:hover,
+.datetimepicker table tr td span.active.disabled:hover,
+.datetimepicker table tr td span.active.disabled:hover:hover,
+.datetimepicker table tr td span.active:active,
+.datetimepicker table tr td span.active:hover:active,
+.datetimepicker table tr td span.active.disabled:active,
+.datetimepicker table tr td span.active.disabled:hover:active,
+.datetimepicker table tr td span.active.active,
+.datetimepicker table tr td span.active:hover.active,
+.datetimepicker table tr td span.active.disabled.active,
+.datetimepicker table tr td span.active.disabled:hover.active,
+.datetimepicker table tr td span.active.disabled,
+.datetimepicker table tr td span.active:hover.disabled,
+.datetimepicker table tr td span.active.disabled.disabled,
+.datetimepicker table tr td span.active.disabled:hover.disabled,
+.datetimepicker table tr td span.active[disabled],
+.datetimepicker table tr td span.active:hover[disabled],
+.datetimepicker table tr td span.active.disabled[disabled],
+.datetimepicker table tr td span.active.disabled:hover[disabled] {
+    background-color: #0044cc;
+}
+
+.datetimepicker table tr td span.active:active,
+.datetimepicker table tr td span.active:hover:active,
+.datetimepicker table tr td span.active.disabled:active,
+.datetimepicker table tr td span.active.disabled:hover:active,
+.datetimepicker table tr td span.active.active,
+.datetimepicker table tr td span.active:hover.active,
+.datetimepicker table tr td span.active.disabled.active,
+.datetimepicker table tr td span.active.disabled:hover.active {
+    background-color: #003399 \9;
+}
+
+.datetimepicker table tr td span.past,
+.datetimepicker table tr td span.future {
+    color: #999999;
+}
+
+
+
+.datetimepicker thead tr:first-child th,
+.datetimepicker tfoot tr:first-child th {
+    cursor: pointer;
+}
+
+.datetimepicker thead tr:first-child th:hover,
+.datetimepicker tfoot tr:first-child th:hover {
+    background: #eeeeee;
+}
+
+END DATETIME******/
+
+
+
+.ngViewport {
+  overflow: auto;
+  min-height: 20px;
+  height: auto !important;
+  text-align: center;
+}
+
+.gridStyle {
+  border: none;
+  width: 100%;
+  height: auto;
+}
+
+.ngHeaderScroller {
+  background: white;
+  border: none;
+  color: #005eaa;
+  text-align: center;
+}
+
+.ngVerticalBarVisible {
+  width: 1px;
+  background-color: transparent;
+}
+
+.ngRow.even, .ngRow.odd {
+  background: white;
+}
+
+.colt1 {
+  text-align: left;
+}
+
+.ngSelectionCell {
+  text-align: center;
+}
+
+.ngViewport {
+  overflow: auto;
+  min-height: 20px;
+  height: auto !important;
+  text-align: center;
+  background: white;
+  border-top:1px solid #d6ebf9;
+  margin-top: 10px;
+}
+
+.ngHeaderScroller {
+  background: white;
+  border: none;
+  color: #005eaa;
+  text-align: center;
+ 
+}
+
+.ngHeaderContainer {
+  position: relative;
+  overflow: hidden;
+  font-weight: bold;
+  background-color: inherit;
+
+}
+
+.ngVerticalBarVisible {
+  width: 1px;
+  background-color: transparent;
+ 
+}
+
+.ngCellText {
+  vertical-align: middle;
+  display: table-cell;
+}
+
+.ngSelectionCell {
+  margin-top: 23px;
+  margin-left: 0;
+}
+
+.ngCellText.ng-scope.col2.colt2 {
+  text-align: left;
+}
+
+.ngHeaderText.ng-binding.colt2 {
+  text-align: left;
+}
+
+.ngGrid {
+background-color: white;
+}
+
+input.search-input {
+padding: 5px 12px;
+width: 40%;
+margin-bottom: 20px;
+border: 1px solid lightgrey;
+}
+
+.ngSortButtonDown {
+position: absolute;
+top: 11px;
+left: initial;
+right: 0;
+margin-left: auto;
+margin-right: auto;
+border-color: gray transparent;
+border-style: solid;
+border-width: 0 5px 5px 5px;
+height: 0;
+width: 0;
+}
+
+.ngSortButtonUp {
+position: absolute;
+top: 11px;
+left: initial;
+right: 0;
+margin-left: auto;
+margin-right: auto;
+border-color: gray transparent;
+border-style: solid;
+border-width: 5px 5px 0 5px;
+height: 0;
+width: 0;
+}
+
+.ngCellText a {
+  color:black;
+  font-weight:600;
+}
+
+.ngCellText a.btn {
+  color: grey;
+  font-weight: 600;
+}
+
+.ngCellText {
+  border-bottom: 1px solid lightgrey;
+}
+
+.ngCell {
+  border-bottom: 1px solid lightgrey;
+}
+
+.ngCellText.col7 {
+  text-align: right;
+  padding-right: 0;
+}
+
+.ngTotalSelectContainer {
+  float: left;
+  margin: 5px;
+  margin-top: 7px;
+  display: none;
+}
+
+.datetimepicker-wrapper {
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.datetimepicker-wrapper > input {
+  margin-bottom: 0 !important;
+  width: 130px;
+}
+
+.datetimepicker-wrapper [ng-model=hours], [ng-model=minutes] {
+  width: 46px !important;
+}
+
+.datetimepicker-wrapper .btn {
+  padding: 7px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: black;
+  border: none;
+  background: none;
+  outline: none !important;
+}
+
+.datetimepicker-wrapper .btn:hover {
+  background: lightgrey;
+}
+
+.datetimepicker-wrapper .btn:active {
+  background: #005eaa;
+}
+
+.datetimepicker-wrapper .btn-default[disabled] {
+  color:lightgrey;
+}
+
+.datetimepicker-wrapper .active.active {
+  background-color: #005eaa !important;
+  background: #005eaa !important;
+  border-radius: 0 !important;
+  color: white !important;
+  box-shadow: none;
+}
+
+.datetimepicker-wrapper .dropdown-menu .ng-isolate-scope {
+  outline: none;
+  border: none;
+  padding: 5px;
+}
+
+.datetimepicker-wrapper table {
+  outline: none;
+  border: none;
+}
+
+
+.ngFooterPanel {
+  background-color: white;
+  padding: 0;
+  border-top: none;
+  position: relative;
+}
+
+.ngPagerLastTriangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 0 5px 8.7px;
+  border-color: transparent transparent transparent #005eaa;
+  margin-left: -1px;
+}
+
+.ngPagerLastTriangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 0 5px 8.7px;
+  border-color: transparent transparent transparent #005eaa;
+  margin-left: -1px;
+}
+
+.ngPagerLastBar {
+  width: 10px;
+  border-left: 2px solid #005eaa;
+  margin-top: -6px;
+  height: 12px;
+  margin-left: 1px;
+}
+
+.ngPagerFirstTriangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 8.7px 5px 0;
+  border-color: transparent #005eaa transparent transparent;
+  margin-left: 2px;
+}
+
+.ngPagerFirstBar {
+  width: 10px;
+  border-left: 2px solid #005eaa;
+  margin-top: -6px;
+  height: 12px;
+  margin-left: -3px;
+}
+
+.ngGridMaxPagesNumber {
+  vertical-align: top;
+  margin-top: 1px;
+  display: inline-block;
+}
+
+
+
+button.ngPagerButton {
+  border: none;
+  background: white;
+  color: #005eaa;
+}
+
+button:disabled .ngPagerFirstBar {
+  width: 10px;
+  border-left: 2px solid #d6ebf9;
+  margin-top: -6px;
+  height: 12px;
+  margin-left: -3px;
+}
+
+button:disabled .ngPagerFirstTriangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 8.7px 5px 0;
+  border-color: transparent #d6ebf9 transparent transparent;
+  margin-left: 2px;
+}
+
+.ngPagerContainer {
+  margin-top: 20px !important;
+}
+
+.ngPagerContainer input {
+width: auto !important;
+  height: auto !important;
+  margin-top: 0px !important;
+  padding: 0px 0 0 3px !important;
+  border: 1px solid lightgrey !important;
+}
+
+.ngPagerContainer .ngRowCountPicker {
+  display: none;
+}
+
+.top-buttons {
+  text-align: right;
+  margin-bottom: 20px;
+  margin-top: -50px;
+}
+
+.manage-list .top-buttons {
+  text-align: right;
+  margin-bottom: 68px;
+  margin-top: -78px;
+}
+
+select.page-select {
+  padding: 4px 0 4px 20px;
+  width: 115px;
+  border: 1px solid lightgrey;
+}
+
+.page-select-wrapper {
+  float:right;
+}
+
+strong {
+  font-weight: 600;
+}
+
+.btn i {
+  margin-right: 4px;
+}
+.bottom-buttons {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.col-sm-2.bottom-buttons {
+  text-align: left;
+  margin-top: 20px;
+  margin-left: 0; 
+}
+
+.btn-back {
+  color:#005eaa;
+  border-color: #005eaa;
+}
+
+.btn-back:hover, .btn-back:active {
+  color:#005eaa;
+  border-color: #005eaa;
+  background: whitesmoke;
+}
+
+.bottom-buttons .btn, .bottom-buttons .discard-btn {
+  margin-left:5px;
+}
+
+.col-sm-2.bottom-buttons .btn {
+  margin-left:0;
+}
+
+ ul.dropdown-menu.time-pick a {
+  display: inline-block;
+  padding: 3px 7px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+}
+
+ ul.dropdown-menu.time-pick a:hover {
+  background: lightgray;
+}
+
+ul.dropdown-menu.time-pick span {
+  display: block;
+  text-align: center;
+  font-weight: 600;
+  color: black;
+  margin-top: 5px;
+}
+
+
+.form-control:focus, .single-line:focus {
+  border-color: #d6ebf9;
+}
+
+.timing .form-control[readonly] {
+  cursor: pointer;
+  background-color: transparent;
+  opacity: 1;
+}
+
+.timing input {
+  width:
+  50px;
+}
+
+.label-icon {
+  margin-right:5px;
+  color:grey;
+  vertical-align: middle;
+  font-size: 16px;
+}
+
+.section-title span {
+  font-weight: 700;
+  display: block;
+}
+
+.manage-list .ngCellText.col7 {
+  text-align: center;
+  padding-right: 5px;
+}
+
+.manage-list .ngCellText.col2 {
+  color:black;
+  font-weight:700;
+}
+
+.manage-list .ngCellText.col9 {
+  text-align: right;
+  padding-right: 0;
+}
+
+span.O {
+  background: #ef5352;
+  color: white;
+  width: 23px;
+  display: block;
+  height: 23px;
+  line-height: 23px;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+span.B {
+  background: #efac59;
+  color: white;
+  width: 23px;
+  display: block;
+  height: 23px;
+  line-height: 23px;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.ngCellText a.linkclass {
+  color: #676a6c;
+  font-weight: 400;
+}
+
+.list-box {
+  border: 1px solid lightgrey;
+  max-width: 250px;
+  padding: 15px;
+  margin-top: 30px;
+}
+
+.list-box ul li {
+  display: block;
+  padding: 5px 0;
+  font-weight: 700;
+  color:#464646;
+}
+
+.list-box p {
+  border-bottom: 1px solid lightgrey;
+  margin: -15px -15px 10px -15px;
+  padding: 10px;
+}
+
+.list-box a {
+  font-weight: 700;
+  color:#464646;
+}
+
+.btn-send.smaller {
+  color: white;
+  background: #007d32;
+  width: 110px;
+  border: none;
+}
+
+.form-control, .single-line {
+  border-color: lightgrey;
+}
+
+.form-control.inline {
+  max-width: 250px;
+}
+
+ .add-list-contact .control-label {
+  text-align: left;
+  height: 34px;
+  line-height: 34px;
+  color: black;
+  min-width: 110px;
+}
+
+.add-list-contact .list-box {
+  max-width: 360px;
+}
+
+.add-list-contact .radio label {
+  font-weight: 600;
+}
+
+.upload-holder {
+  max-width: 500px;
+}
+
+body {
+  color:#363636;
 }
 
 @media all and (max-width:990px) {

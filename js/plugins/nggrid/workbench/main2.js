@@ -17,9 +17,10 @@ function userController($scope, $timeout) {
         data: 'myData',
         selectedItems: $scope.selections,
 		enableRowSelection: true,
-		multiSelect: false,
+		multiSelect: true,
         enableRowReordering: false,
 		enableCellSelection: true,
+		enableCellEdit: true,
         showGroupPanel: true,
         columnDefs: 'myDefs'
     };
@@ -35,11 +36,11 @@ function userController($scope, $timeout) {
 	};
 	
 	$scope.changeDefs = function(){
-		$scope.myDefs = [{ field: 'Sku', displayName: 'My Sku' },
-			{ field: 'Vendor', displayName: 'Supplier' },
+		$scope.myDefs = [{ field: 'Sku', displayName: 'My Sku', width: '40%' },
+			{ field: 'Vendor', displayName: 'Supplier', editableCellTemplate: '<select><option>hello</option><option>test</option></select>' },
 			{ field: 'SeasonCode.test', displayName: 'My SeasonCode', cellTemplate: '<input style="width:100%;height:100%;" class="ui-widget input" type="text" ng-readonly="!row.selected" ng-model="COL_FIELD"/>' },
-			{ field: 'Mfg_Id', displayName: 'Manufacturer ID' },
-			{ field: 'UPC', displayName: 'Bar Code' }];
+			{ field: 'Mfg_Id', displayName: 'Manufacturer ID', width:'100px' },
+			{ field: 'UPC', displayName: 'Bar Code', width:200 }];
 	};
 	
 	$scope.callMethod();

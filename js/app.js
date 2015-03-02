@@ -9,7 +9,10 @@
         'ui.router',                    // Routing
         'oc.lazyLoad',                  // ocLazyLoad
         'ui.bootstrap',                 // Ui Bootstrap
-        'pascalprecht.translate'        // Angular Translate
+        'pascalprecht.translate',        // Angular Translate
+        'ui.bootstrap.datetimepicker',        // Datetimepicker
+        'ajoslin.promise-tracker',			//promise tracker
+        //'angular-momentjs'					//momentjs
     ])
 })();
 

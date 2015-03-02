@@ -1,4 +1,4 @@
-ngGridLayoutPlugin = function() {
+function ngGridLayoutPlugin () {
     var self = this;
     this.grid = null;
     this.scope = null;
@@ -9,8 +9,8 @@ ngGridLayoutPlugin = function() {
     };
 
     this.updateGridLayout = function () {
-        self.scope.$apply(function(){
-            self.domUtilityService.RebuildGrid(self.scope, self.grid);
-        });
+        self.scope.$evalAsync(function(){
+			self.domUtilityService.RebuildGrid(self.scope, self.grid);
+		});
     };
 }

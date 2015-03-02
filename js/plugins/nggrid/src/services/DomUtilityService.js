@@ -1,4 +1,4 @@
-﻿ngGridServices.factory('$domUtilityService',['$utilityService', function($utils) {
+﻿angular.module('ngGrid.services').factory('$domUtilityService',['$utilityService', '$window', function($utils, $window) {
     var domUtilityService = {};
     var regexCache = {};
     var getWidths = function() {
@@ -35,12 +35,31 @@
         grid.$canvas = grid.$viewport.find(".ngCanvas");
         //Footers
         grid.$footerPanel = grid.$root.find(".ngFooterPanel");
-        
-        $scope.$watch(function () {
+
+        var scopeDereg = $scope.$watch(function () {
             return grid.$viewport.scrollLeft();
         }, function (newLeft) {
             return grid.$headerContainer.scrollLeft(newLeft);
         });
+
+        $scope.$on('$destroy', function() {
+            // Remove all references to DOM elements, otherwise we get memory leaks
+            if(grid.$root) {
+                $(grid.$root.parent()).off('resize.nggrid');
+
+                grid.$root = null;
+                grid.$topPanel = null;
+                // grid.$groupPanel = null;
+                grid.$headerContainer = null;
+                // grid.$headerScroller = null;
+                grid.$headers = null;
+                grid.$canvas = null;
+                grid.$footerPanel = null;
+            }
+
+            scopeDereg();
+        });
+
         domUtilityService.UpdateGridLayout($scope, grid);
     };
     domUtilityService.getRealWidth = function (obj) {
@@ -53,6 +72,9 @@
         return width;
     };
     domUtilityService.UpdateGridLayout = function($scope, grid) {
+        if (!grid.$root){
+            return;
+        }
         //catch this so we can return the viewer to their original scroll after the resize!
         var scrollTop = grid.$viewport.scrollTop();
         grid.elementDims.rootMaxW = grid.$root.width();
@@ -65,72 +87,80 @@
         $scope.adjustScrollTop(scrollTop, true); //ensure that the user stays scrolled where they were
     };
     domUtilityService.numberOfGrids = 0;
+    domUtilityService.setStyleText = function(grid, css) {
+        var style = grid.styleSheet,
+            gridId = grid.gridId,
+            doc = $window.document;
+
+        if (!style) {
+            style = doc.getElementById(gridId);
+        }
+        if (!style) {
+            style = doc.createElement('style');
+            style.type = 'text/css';
+            style.id = gridId;
+            (doc.head || doc.getElementsByTagName('head')[0]).appendChild(style);
+        }
+
+        if (style.styleSheet && !style.sheet) {
+            style.styleSheet.cssText = css;
+        } else {
+            style.innerHTML = css;
+        }
+        grid.styleSheet = style;
+        grid.styleText = css;
+    };
     domUtilityService.BuildStyles = function($scope, grid, digest) {
         var rowHeight = grid.config.rowHeight,
-            $style = grid.$styleSheet,
             gridId = grid.gridId,
             css,
             cols = $scope.columns,
             sumWidth = 0;
 
-        if (!$style) {
-            $style = $('#' + gridId);
-            if (!$style[0]) {
-                $style = $("<style id='" + gridId + "' type='text/css' rel='stylesheet' />").appendTo(grid.$root);
-            }
-        }
-        $style.empty();
         var trw = $scope.totalRowWidth();
         css = "." + gridId + " .ngCanvas { width: " + trw + "px; }" +
             "." + gridId + " .ngRow { width: " + trw + "px; }" +
             "." + gridId + " .ngCanvas { width: " + trw + "px; }" +
-            "." + gridId + " .ngHeaderScroller { width: " + (trw + domUtilityService.ScrollH + 2) + "px}";
+            "." + gridId + " .ngHeaderScroller { width: " + (trw + domUtilityService.ScrollH) + "px}";
+
         for (var i = 0; i < cols.length; i++) {
             var col = cols[i];
             if (col.visible !== false) {
-                var colLeft = col.pinned ? grid.$viewport.scrollLeft() + sumWidth : sumWidth;
-                css += "." + gridId + " .col" + i + " { width: " + col.width + "px; left: " + colLeft + "px; height: " + rowHeight + "px }" +
-                    "." + gridId + " .colt" + i + " { width: " + col.width + "px; }";
+                var rightPad = 0;
+                if ((i === cols.length - 1) && (sumWidth + col.width < grid.elementDims.rootMaxW)) {
+                    rightPad = grid.elementDims.rootMaxW - sumWidth - col.width;
+                }
+                css += "." + gridId + " .col" + i + " { width: " + (col.width + rightPad) + "px; left: " + sumWidth + "px; height: " + rowHeight + "px }" +
+                    "." + gridId + " .colt" + i + " { width: " + (col.width + rightPad) + "px; }";
                 sumWidth += col.width;
             }
-        };
-        if ($utils.isIe) { // IE
-            $style[0].styleSheet.cssText = css;
-        } else {
-            $style[0].appendChild(document.createTextNode(css));
         }
-        grid.$styleSheet = $style;
+        domUtilityService.setStyleText(grid, css);
+
+        $scope.adjustScrollLeft(grid.$viewport.scrollLeft());
         if (digest) {
-            $scope.adjustScrollLeft(grid.$viewport.scrollLeft());
             domUtilityService.digest($scope);
         }
     };
     domUtilityService.setColLeft = function(col, colLeft, grid) {
-        if (grid.$styleSheet) {
+        if (grid.styleText) {
             var regex = regexCache[col.index];
             if (!regex) {
-                regex = regexCache[col.index] = new RegExp("\.col" + col.index + " \{ width: [0-9]+px; left: [0-9]+px");
+                regex = regexCache[col.index] = new RegExp(".col" + col.index + " { width: [0-9]+px; left: [0-9]+px");
             }
-			var str = grid.$styleSheet.html();
-			var newStr = str.replace(regex, "\.col" + col.index + " \{ width: " + col.width + "px; left: " + colLeft + "px");
-			if ($utils.isIe) { // IE
-			    setTimeout(function() {
-			        grid.$styleSheet.html(newStr);
-			    });
-			} else {
-			    grid.$styleSheet.html(newStr);
-			}
-		}
+            var css = grid.styleText.replace(regex, ".col" + col.index + " { width: " + col.width + "px; left: " + colLeft + "px");
+            domUtilityService.setStyleText(grid, css);
+        }
     };
     domUtilityService.setColLeft.immediate = 1;
-	domUtilityService.RebuildGrid = function($scope, grid){
-		domUtilityService.UpdateGridLayout($scope, grid);
-		if (grid.config.maintainColumnRatios) {
-			grid.configureColumnWidths();
-		}
-		$scope.adjustScrollLeft(grid.$viewport.scrollLeft());
-		domUtilityService.BuildStyles($scope, grid, true);
-	};
+    domUtilityService.RebuildGrid = function($scope, grid){
+        domUtilityService.UpdateGridLayout($scope, grid);
+        if (grid.config.maintainColumnRatios == null || grid.config.maintainColumnRatios) {
+            grid.configureColumnWidths();
+        }
+        $scope.adjustScrollLeft(grid.$viewport.scrollLeft());
+        domUtilityService.BuildStyles($scope, grid, true);
+    };
 
     domUtilityService.digest = function($scope) {
         if (!$scope.$root.$$phase) {

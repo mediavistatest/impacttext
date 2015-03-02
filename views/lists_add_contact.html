@@ -1,1 +1,112 @@
-<h1>Add Contact</h1>
+<h1>Contacts / Lists</h1>
+
+<div class="col-md-12 content-holder animated fadeInRight add-list-contact" ng-class="animation" ng-controller="AddListsCtrl">
+<h2 class="section-title">Create List</h2>
+<div class="top-buttons">
+<a href="#/lists/lists_view" class="btn btn-back"><i class="fa fa-undo"></i> Back to Lists</a>
+</div>
+<div>
+<br>
+
+<form>
+
+<div class="form-group clearfix">
+
+	    <div class="col-sm-20">
+	        <div class="radio">
+	        <label> <input icheck type="radio" name="UploadType" ng-model="UploadType" value="upload"> Upload a list </label>
+	        <label> <input icheck type="radio" name="UploadType" ng-model="UploadType" value="single"> Add single contact </label>
+	        </div>   
+	    </div>
+	</div>
+
+	<!--SINGLE CONTACT -->
+	<div class="single-holder" ng-show="UploadType == 'single'">
+
+	<div class="form-group clearfix">
+
+		<label class="control-label">Phone number:</label>
+		<input type="text" name="PhoneNumber" placeholder="e.g. 1111111111" ng-model="PhoneNumber" class="form-control inline">
+		
+	</div>
+
+	<div class="form-group clearfix">
+
+		<label class="control-label">First name:</label>
+		<input type="text" name="FirstNmae" placeholder="John" ng-model="FirstName" class="form-control inline">
+
+	</div>
+
+	<div class="form-group clearfix">
+
+		<label class="control-label">Last Name:</label>
+		<input type="text" name="LastName" placeholder="Doe" ng-model="LastName" class="form-control inline">
+
+	</div>
+
+	<div class="form-group clearfix">
+
+		<label class="control-label">Email address:</label>
+		<input type="text" name="Email" placeholder="name@domain.com" ng-model="Email" class="form-control inline">
+		
+	</div>
+
+	<div class="form-group clearfix">
+
+		<label class="control-label">Custom field 1:</label>
+		<input type="text" name="CustomField1" placeholder="Custom text" ng-model="CustomField1" class="form-control inline">
+		
+	</div>
+
+	<div class="form-group clearfix">
+
+		<label class="control-label">Custom field 2:</label>
+		<input type="text" name="CustomField2" placeholder="Custom text" ng-model="CustomField2" class="form-control inline">
+		
+	</div>
+
+	<div class="form-group clearfix">
+
+		<label class="control-label">Custom field 3:</label>
+		<input type="text" name="CustomField3" placeholder="Custom text" ng-model="CustomField3" class="form-control inline">
+		
+	</div>
+
+</div><!-- END SINGLE -->
+
+<!-- UPLOAD CONTACT-->
+<div class="upload-holder" ng-show="UploadType == 'upload'">
+	<div class="form-group clearfix">
+
+		<input type="file" name="ListUpload" placeholder="Supported formats: CSV, XLS(X), TXT" ng-model="ListUpload" class="form-control">
+		<small>Supported formats: CSV, XLS(X), TXT.</small>
+	</div>
+
+	<br>
+	<p><strong>INSERT LIST MANUALLY</strong></p>
+
+	<p><em>Paste data into a text box with data separated by commas <br>(telephone number, name).</em></p>
+
+	<br>
+
+	<textarea name="MessageTxt" placeholder="e.g. Name, Surname, 555-555-5555, email@email.com" class="form-control" rows="5" ng-model="MessageTxt" ng-trim="false"></textarea>
+
+</div>		    
+<!-- END UPLOAD -->
+
+<div class="list-box">
+<p>SELECT LISTS:</p>
+<ul class="list-inline">
+    <li ng-repeat="name in lists.names"> <input icheck type="checkbox" value="{{ name.ListName }}" ng-model="SelectList"> {{ name.ListName }} </li>
+  </ul>
+</div>
+	
+	<br>
+<a class="btn btn-send smaller">
+<span><i class="fa fa-floppy-o"></i> Save</span>
+</a>
+
+</form>
+
+
+</div>

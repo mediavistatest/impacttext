@@ -1,1 +1,34 @@
-<h1>Add List</h1>
+<h1>Contacts / Lists</h1>
+
+<div class="col-md-12 content-holder animated fadeInRight add-list" ng-class="animation" ng-controller="AddListsCtrl">
+<h2 class="section-title">Create List</h2>
+<div class="top-buttons">
+<a href="#/lists/lists_view" class="btn btn-back"><i class="fa fa-undo"></i> Back to Lists</a>
+</div>
+<div>
+<br>
+
+<form>
+<div class="row form-group">
+	    <div class="col-sm-4">
+	    
+	    	<label class="control-label">List Name:</label>
+
+		    <input type="text" name="ListName" placeholder="30 characters max, without special characters" ng-model="ListName" class="form-control">
+
+		    <br>
+		    <a class="btn btn-send smaller">
+			<span>Add</span>
+			</a>
+		
+		</div>
+	</div>
+</form>
+
+<div class="list-box">
+<p>LISTS:</p>
+<ul class="list-inline">
+    <li ng-repeat="name in lists.names"> <a href="#/lists/lists_manage">{{ name.ListName }}</a> </li>
+  </ul>
+</div>
+</div>

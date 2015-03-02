@@ -36,7 +36,7 @@
         var agg = self.aggCache[aggEntity.aggIndex]; // first check to see if we've already built it 
         if (!agg) {
             // build the row
-            agg = new ngAggregate(aggEntity, self, self.rowConfig.rowHeight);
+            agg = new ngAggregate(aggEntity, self, self.rowConfig.rowHeight, grid.config.groupsCollapsedByDefault);
             self.aggCache[aggEntity.aggIndex] = agg;
         }
         agg.rowIndex = rowIndex;
@@ -132,7 +132,7 @@
         } else {
             for (var prop in g) {
                 // exclude the meta properties.
-                if (prop == NG_FIELD || prop == NG_DEPTH || prop == NG_COLUMN) {
+                if (prop === NG_FIELD || prop === NG_DEPTH || prop === NG_COLUMN) {
                     continue;
                 } else if (g.hasOwnProperty(prop)) {
                     //build the aggregate row
@@ -175,18 +175,27 @@
             maxDepth = groups.length,
             cols = $scope.columns;
 
-        for (var x = 0; x < rows.length; x++){
+        function filterCols(cols, group) {
+            return cols.filter(function(c) {
+                return c.field === group;
+            });
+        }
+
+        for (var x = 0; x < rows.length; x++) {
             var model = rows[x].entity;
-            if (!model) return;
-            rows[x][NG_HIDDEN] = true;
+            if (!model) {
+                return;
+            }
+            rows[x][NG_HIDDEN] = grid.config.groupsCollapsedByDefault;
             var ptr = self.groupedData;
+
             for (var y = 0; y < groups.length; y++) {
                 var group = groups[y];
-                var col = cols.filter(function(c) {
-                    return c.field == group;
-                })[0];
+
+                var col = filterCols(cols, group)[0];
+
                 var val = $utils.evalProperty(model, group);
-                val = val ? val.toString() : 'null';
+                val = (val === '' || val === null) ? 'null' : val.toString();
                 if (!ptr[val]) {
                     ptr[val] = {};
                 }
@@ -205,29 +214,32 @@
                 ptr.values = [];
             }
             ptr.values.push(rows[x]);
-        };
+        }
+
         //moved out of above loops due to if no data initially, but has initial grouping, columns won't be added
-        for (var z = 0; z < groups.length; z++) {
-            if (!cols[z].isAggCol && z <= maxDepth) {
-                cols.splice(0, 0, new ngColumn({
-                    colDef: {
-                        field: '',
-                        width: 25,
-                        sortable: false,
-                        resizable: false,
-                        headerCellTemplate: '<div class="ngAggHeader"></div>',
-                        pinned: grid.config.pinSelectionCheckbox
+        if(cols.length > 0) {
+            for (var z = 0; z < groups.length; z++) {
+                if (!cols[z].isAggCol && z <= maxDepth) {
+                    cols.splice(0, 0, new ngColumn({
+                        colDef: {
+                            field: '',
+                            width: 25,
+                            sortable: false,
+                            resizable: false,
+                            headerCellTemplate: '<div class="ngAggHeader"></div>',
+                            pinned: grid.config.pinSelectionCheckbox
+                            
+                        },
+                        enablePinning: grid.config.enablePinning,
+                        isAggCol: true,
+                        headerRowHeight: grid.config.headerRowHeight
                         
-                    },
-                    enablePinning: grid.config.enablePinning,
-                    isAggCol: true,
-                    headerRowHeight: grid.config.headerRowHeight,
-                    
-                }, $scope, grid, domUtilityService, $templateCache, $utils));
+                    }, $scope, grid, domUtilityService, $templateCache, $utils));
+                }
             }
         }
-        domUtilityService.BuildStyles($scope, grid, true);
-		grid.fixColumnIndexes();
+
+        grid.fixColumnIndexes();
         $scope.adjustScrollLeft(0);
         self.parsedData.length = 0;
         self.parseGroupData(self.groupedData);

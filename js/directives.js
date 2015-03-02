@@ -292,25 +292,37 @@ function dropZone() {
 /**
  * When source of "chosen" element is changed, refresh search list in the element.
  *
- * @param $timeout	angular timeout object
+ * @param $timeout angular timeout object
  */
 function updateChosen($timeout) {
-	var linker = function($scope, element, attr) {
-		$scope.$watch('contactLists', function() {
-			$timeout(function() {
-				element.trigger('chosen:updated');
-			}, 0, false);
-		}, true);
+   var linker = function($scope, element, attr) {
+       $scope.$watch('contactLists', function() {
+           $timeout(function() {
+               element.trigger('chosen:updated');
+           }, 0, false);
+       }, true);
 
-		$timeout(function() {
-			element.chosen();
-		}, 0, false);
-	};
+       $timeout(function() {
+           element.chosen();
+       }, 0, false);
+   };
 
-	return {
-		restrict: 'A',
-		link: linker
-	};
+   return {
+       restrict: 'A',
+       link: linker
+   };
+}
+
+// DATE UPDATE:
+function datepickerPopup(){
+  return {
+    restrict: 'EAC',
+    require: 'ngModel',
+    link: function(scope, element, attr, controller) {
+      //remove the default formatter from the input directive to prevent conflict
+      controller.$formatters.shift();
+    }
+  }
 }
 
 /**
@@ -329,4 +341,5 @@ angular
     .directive('ionRangeSlider', ionRangeSlider)
     .directive('dropZone', dropZone)
     .directive('responsiveVideo', responsiveVideo)
-	.directive('chosen', updateChosen);
+    .directive('datepickerPopup', datepickerPopup)
+    .directive('chosen', updateChosen);

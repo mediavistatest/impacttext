@@ -1,0 +1,57 @@
+[
+      {
+            "Id": 1,
+            "ContactNumber": "2025550183",
+            "ContactFirstName": "Bill",
+            "ContactLastName": "Andrews",
+            "ContactEmail": "ba@gmail.com",
+            "CustomField1": "Woman",
+            "CustomField2": "Clothes",
+            "CustomField3": "Man",
+            "ContactStatus": "O"
+        },
+        {
+            "Id": 2,
+            "ContactNumber": "2025550158",
+            "ContactFirstName": "Bob",
+            "ContactLastName": "Jones",
+            "ContactEmail": "bj@gmail.com",
+            "CustomField1": "Woman",
+            "CustomField2": "Man",
+            "CustomField3": "Sport",
+            "ContactStatus": ""
+        },
+        {
+            "Id": 3,
+            "ContactNumber": "1025550333",
+            "ContactFirstName": "John",
+            "ContactLastName": "Doe",
+            "ContactEmail": "jd@gmail.com",
+            "CustomField1": "Sport",
+            "CustomField2": "Moto",
+            "CustomField3": "Technology",
+            "ContactStatus": ""
+        },
+        {
+            "Id": 4,
+            "ContactNumber": "2595550183",
+            "ContactFirstName": "Jane",
+            "ContactLastName": "Doe",
+            "ContactEmail": "dj@gmail.com",
+            "CustomField1": "Man",
+            "CustomField2": "Clothes",
+            "CustomField3": "Woman",
+            "ContactStatus": "O"
+        },
+        {
+            "Id": 5,
+            "ContactNumber": "202555800",
+            "ContactFirstName": "Mickey",
+            "ContactLastName": "Mouse",
+            "ContactEmail": "mm@gmail.com",
+            "CustomField1": "Man",
+            "CustomField2": "Cars",
+            "CustomField3": "Sport",
+            "ContactStatus": "B"
+        }
+      ]

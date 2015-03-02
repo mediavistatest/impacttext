@@ -1,4 +1,8 @@
 ﻿module.exports = function (grunt) {
+    // * Read command-line switches
+    // - Read in --browsers CLI option; split it on commas into an array if it's a string, otherwise ignore it
+    var browsers = typeof grunt.option('browsers') == 'string' ? grunt.option('browsers').split(',') : undefined;
+
     var stripBanner = function (src, options) {
 
         if (!options) { options = {}; }
@@ -87,10 +91,68 @@
             'src/i18n/*.js',
             '<%= ngtemplates.ngGrid.dest %>'
         ],
+        testFiles: { //unit & e2e goes here
+            karmaUnit: 'config/karma.conf.js',
+            //unit: ['test/unit/*.js']
+        },
+        karma: {
+            unit: {
+                options: {
+                    configFile: '<%= testFiles.karmaUnit %>',
+                    autoWatch: false,
+                    singleRun: true,
+                    browsers: browsers || ['Chrome']
+                },
+            },
+            watch: {
+                options: {
+                    configFile: '<%= testFiles.karmaUnit %>',
+                    autoWatch: false,
+                    browsers: browsers || ['Chrome']
+                },
+                background: true
+            },
+            e2e: {
+                configFile: 'config/karma-e2e.conf.js',
+                autoWatch: false,
+                singleRun: true,
+                browsers: browsers || ['Chrome']
+            },
+            midway: {
+                configFile: 'config/karma-midway.conf.js',
+                autoWatch: false,
+                singleRun: true,
+                browsers: browsers || ['Chrome']
+            },
+            ci: {
+                options: {
+                    configFile: '<%= testFiles.karmaUnit %>',
+                    autoWatch: false,
+                    singleRun: true,
+                    browsers: browsers || ['PhantomJS']
+                },
+            }
+        },
+        watch: {
+            // Run unit test with karma
+            karma: {
+                files: ['build/ng-grid.debug.js', 'test/unit/**/*.js', 'plugins/*.js'],
+                tasks: ['karma:watch:run']
+            },
+            // Auto-build ng-grid.debug.js when source files change
+            debug: {
+                files: ['<%= srcFiles %>'],
+                tasks: ['debug']
+            },
+            less: {
+                files: ['src/less/**/*.less'],
+                tasks: ['less']
+            }
+        },
         ngtemplates: {
             ngGrid: {
-                options: { base: 'src/templates' },
-                src: ['src/templates/**.html'],
+                cwd: 'src/templates',
+                src: '*.html',
                 dest: 'build/templates.js'
             }
         },
@@ -139,19 +201,111 @@
             templates: {
                 src: ["<%= ngtemplates.ngGrid.dest %>"]
             }
+        },
+        less: {
+            build: {
+                options: {
+                    // yuicompress: true
+                },
+                files: {
+                    "ng-grid.css": ["src/less/global.less"]
+                }
+            },
+            prod: {
+                options: {
+                    yuicompress: true
+                },
+                files: {
+                    "ng-grid.min.css": ["src/less/global.less"]
+                }
+            }
+        },
+        jshint: {
+            options: {
+                boss: true,
+                browser: true,
+                camelcase: true,
+                curly: true,
+                eqeqeq: true,
+                eqnull: true,
+                // forin: true,
+                immed: true,
+                // indent: 4,
+                latedef: true,
+                // newcap: true,
+                noarg: true,
+                sub: true,
+                // undef: true,
+                // unused: true,
+                globals: {
+                    angular: false,
+                    $: false
+                }
+            },
+            src: [ 'src/**/*.js', 'plugins/**/*.js' ],
+            spec: {
+                options: {
+                    camelcase: false,
+                    globals: {
+                        $: false,
+                        angular: false,
+                        beforeEach: false,
+                        browser: false,
+                        browserTrigger: false,
+                        describe: false,
+                        expect: false,
+                        inject: false,
+                        input: false,
+                        it: false,
+                        module: false,
+                        repeater: false,
+                        runs: false,
+                        spyOn: false,
+                        waits: false,
+                        waitsFor: false,
+
+                        ngGridWYSIWYGPlugin: false,
+                        ngMidwayTester: false
+                    }
+                },
+                files: {
+                    spec: ['test/**/*.js', '!test/lib/**/*.js']
+                },
+            }
         }
     });
 
+    // Load grunt-karma task plugin
+    grunt.loadNpmTasks('grunt-karma');
+    // Load the grunt-contrib-watch plugin for doing file watches
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+
+    grunt.registerTask('test', ['jshint', 'karma:unit']);
+
+    // Task for development; auto-build ng-grid.debug.js on source file changes, auto-test on ng-grid.debug.js or unit test changes
+    grunt.registerTask('testwatch', ['jshint', 'karma:watch', 'watch']);
+
+    grunt.registerTask('test-ci', ['jshint', 'debug', 'karma:ci']);
+
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-less');
     //grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-jsdoc');
     grunt.loadNpmTasks('grunt-angular-templates');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    // Default task(s).
-    grunt.registerTask('default', ['ngtemplates', 'concat', 'uglify', 'clean']);
-    grunt.registerTask('debug', ['ngtemplates', 'concat:debug', 'clean']);
-    grunt.registerTask('prod', ['ngtemplates', 'concat:prod', 'uglify', 'clean']);
-    grunt.registerTask('version', ['ngtemplates', 'concat:version', 'uglify:version', 'clean']);
 
+    // Old default task
+    grunt.registerTask('build', ['less', 'ngtemplates', 'concat', 'uglify', 'clean']);
+
+    // Default task(s).
+    grunt.registerTask('default', 'No default task', function() {
+        grunt.log.write('The old default task has been moved to "build" to prevent accidental triggering');
+    });
+
+    grunt.registerTask('debug', ['less', 'ngtemplates', 'concat:debug', 'clean']);
+    grunt.registerTask('prod', ['less', 'ngtemplates', 'concat:prod', 'uglify', 'clean']);
+    grunt.registerTask('version', ['ngtemplates', 'concat:version', 'uglify:version', 'clean']);
 };

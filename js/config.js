@@ -25,19 +25,62 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         .state('lists', {
             abstract: true,
             url: "/lists",
-            templateUrl: "views/common/content.html"
+            templateUrl: "views/common/content.html",
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'ngGrid',
+                            files: ['js/plugins/nggrid/ng-grid-2.0.14.min.js']
+                        },
+                        {
+                            insertBefore: '#loadBefore',
+                            files: ['js/plugins/nggrid/ng-grid.css']
+                        },
+                        {
+                            files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                        },
+                        {
+                            files: ['js/plugins/nggrid/plugins/ng-grid-csv-export.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('lists.view', {
             url: "/lists_view",
             templateUrl: "views/lists_view.html",
-            data: { pageTitle: 'Lists' }
+            data: { pageTitle: 'Lists' },
             //resolve: {
             //    loadPlugin: function ($ocLazyLoad) {
             //        return $ocLazyLoad.load([
             //            {
-            //                serie: true,
-            //                name: 'angular-flot',
-            //                files: [ 'js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
+            //                seria: true,
+            //                files: ['css/plugins/dataTables/dataTables.bootstrap.css','js/plugins/dataTables/jquery.dataTables.js','js/plugins/dataTables/dataTables.bootstrap.js']
+            //            },
+            //            {
+            //                name: 'datatables',
+            //                files: ['js/plugins/dataTables/angular-datatables.min.js']
+            //            }
+            //        ]);
+            //    }
+            //}
+            //resolve: {
+            //    loadPlugin: function ($ocLazyLoad) {
+            //        return $ocLazyLoad.load([
+            //            {
+            //                name: 'ngGrid',
+            //                files: ['js/plugins/nggrid/ng-grid-2.0.14.min.js']
+            //            },
+            //            {
+            //                insertBefore: '#loadBefore',
+            //                files: ['js/plugins/nggrid/ng-grid.css']
+            //            },
+            //            {
+            //                files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+            //            },
+            //            {
+            //                files: ['js/plugins/nggrid/plugins/ng-grid-csv-export.js']
             //            }
             //        ]);
             //    }
@@ -113,15 +156,14 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                             name: 'localytics.directives',
                             files: ['css/plugins/chosen/chosen.css','js/plugins/chosen/chosen.jquery.js','js/plugins/chosen/chosen.js']
                         },
-                        {
-                            name: 'datePicker',
-                            files: ['css/plugins/datapicker/angular-datapicker.css','js/plugins/datapicker/datePicker.js']
-                        },
+                      //  {
+                      //      name: 'datePicker',
+                      //      files: ['css/plugins/datapicker/angular-datapicker.css','js/plugins/datapicker/datePicker.js']
+                      //  },
                         {
                             name: 'cgNotify',
                             files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
-                        }
-                        
+                        }                       
                     ]);
                 }
             }

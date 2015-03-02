@@ -7,7 +7,7 @@ function userController($scope) {
     $scope.myData = [];
     $scope.filterOptions = {
         filterText: "",
-        useExternalFilter: false,
+        useExternalFilter: false
     };
     $scope.pagingOptions = {
         pageSizes: [250, 500, 1000], //page Sizes
@@ -56,18 +56,19 @@ function userController($scope) {
         self.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
     }, true);
     self.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
-    $scope.myDefs = [{ field: 'name', displayName: 'Very Long Name Title', headerClass: 'foo', editableCellTemplate: '<div ng-click="doStuff($event)" style="width:100%;height:100%;" ><select  style="width:100%;height:100%;" class="ui-widget input" type="text" ng-model="row.entity.name"><option ng-repeat="opt in dropDownOpts">{{opt}}</option></select></div>' },
-        { field: 'allowance', aggLabelFilter: 'currency' },
-        { field: 'birthday', cellFilter: "date:'yyyy-MM-dd HH:mm:ss'", resizable: false },
-        { field: 'paid', cellFilter: 'checkmark', },
-        { field: 'sdaf', displayName: 'sadfasdfasdfasd', headerClass: 'foo', visible: false },
-        { field: 'asdf', aggLabelFilter: 'currency', },
-        { field: 'asdgasg', cellFilter: 'date', resizable: false, visible: false },
-        { field: 'asgdasga', cellFilter: 'checkmark' },
-        { field: 'asgasgadf', displayName: 'asgasgadf', headerClass: 'foo', visible: false },
-        { field: 'asdgasgasgagsd', aggLabelFilter: 'currency', visible: false },
-        { field: 'asdasdgasdg', cellFilter: 'date', resizable: false, visible: false },
-        { field: 'sadfasdfasdfasd', cellFilter: 'checkmark', }];
+    $scope.myDefs = [
+        { field: 'name', displayName: 'Very Long Name Title', width: 300 },
+        { field: 'allowance', aggLabelFilter: 'currency', width: 300 },
+        { field: 'birthday', cellFilter: "date:'yyyy-MM-dd HH:mm:ss'", width: 300 },
+        { field: 'paid', cellFilter: 'checkmark', width: 300 },
+        { field: 'sdaf', displayName: 'sadfasdfasdfasd', headerClass: 'foo', width: 300 },
+        { field: 'asdf', aggLabelFilter: 'currency', width: 300 },
+        { field: 'asdgasg', cellFilter: 'date', resizable: false, width: 300 },
+        { field: 'asgdasga', cellFilter: 'checkmark', width: 300 },
+        { field: 'asgasgadf', displayName: 'asgasgadf', headerClass: 'foo', width: 300 },
+        { field: 'asdgasgasgagsd', aggLabelFilter: 'currency', width: 300 },
+        { field: 'asdasdgasdg', cellFilter: 'date', width: 300 },
+        { field: 'sadfasdfasdfasd', cellFilter: 'checkmark', width: 300 }];
     var myplugin = {
         init: function(scope, grid) {
             myplugin.scope = scope;
@@ -86,7 +87,7 @@ function userController($scope) {
             });
         },
         scope: undefined,
-        grid: undefined,
+        grid: undefined
     };
 
     $scope.myDefs2 = [{ field: 'Sku', displayName: 'My Sku', enableCellEdit: true },
@@ -113,15 +114,13 @@ function userController($scope) {
 		showGroupPanel: true,
 		showFooter: false,
 		showFilter: true,
-		enableCellEdit: true,
+        enableCellEdit: true,
         enableCellSelection: true,
-		showSelectionCheckbox: true,
-        selectWithCheckboxOnly: true,
         showColumnMenu: true,
         maintainColumnRatios: true,
         columnDefs: 'myDefs',
         primaryKey: 'id',
-        sortInfo: {fields:['name'], directions:['asc'] },
+        sortInfo: {fields:['name'], directions:['asc'] }
     };
     $scope.doStuff = function (evt) {
         var elm = angular.element(evt.currentTarget.parentNode);
@@ -144,11 +143,11 @@ function userController($scope) {
         data: 'myData2',
         selectedItems: $scope.mySelections2,
         beforeSelectionChange: self.selectionchanging,
-        showGroupPanel: true,
         showFilter: true,
         multiSelect: true,
         columnDefs: 'myDefs2',
         enablePinning: true,
+        groupsCollapsedByDefault: false
     };
     $scope.changeData = function () {
         $scope.myData2.pop();

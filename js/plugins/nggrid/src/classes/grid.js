@@ -1,7 +1,7 @@
 ﻿/// <reference path="footer.js" />
 /// <reference path="../services/SortService.js" />
 /// <reference path="../../lib/jquery-1.8.2.min" />
-var ngGrid = function ($scope, options, sortService, domUtilityService, $filter, $templateCache, $utils, $timeout, $parse) {
+var ngGrid = function ($scope, options, sortService, domUtilityService, $filter, $templateCache, $utils, $timeout, $parse, $http, $q) {
     var defaults = {
         //Define an aggregate template to customize the rows when grouped. See github wiki for more details.
         aggregateTemplate: undefined,
@@ -36,7 +36,10 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
 
         //Enables cell editing.
         enableCellEdit: false,
-		
+
+        //Enables cell editing on focus
+        enableCellEditOnFocus: false,
+        
         //Enables cell selection.
         enableCellSelection: false,
 
@@ -54,9 +57,6 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
 
         //Enable column pinning
         enablePinning: false,
-        
-        //Enable drag and drop row reordering. Only works in HTML5 compliant browsers.
-        enableRowReordering: false,
         
         //To be able to have selectable rows in grid.
         enableRowSelection: true,
@@ -85,9 +85,16 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         // the template for the column menu and filter, including the button.
         footerTemplate: undefined,
 
+        // Enables a trade off between refreshing the contents of the grid continuously while scrolling (behaviour when true) 
+        // and keeping the scroll bar button responsive at the expense of refreshing grid contents (behaviour when false)
+        forceSyncScrolling: true,
+
         //Initial fields to group data by. Array of field names, not displayName.
         groups: [],
-
+        
+        // set the initial state of aggreagate grouping. "true" means they will be collapsed when grouping changes, "false" means they will be expanded by default.
+        groupsCollapsedByDefault: true,
+        
         //The height of the header row in pixels.
         headerRowHeight: 30,
 
@@ -115,14 +122,11 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         multiSelect: true,
 
         // pagingOptions -
-
         pagingOptions: {
             // pageSizes: list of available page sizes.
             pageSizes: [250, 500, 1000], 
             //pageSize: currently selected page size. 
             pageSize: 250,
-            //totalServerItems: Total items are on the server. 
-            totalServerItems: 0,
             //currentPage: the uhm... current page.
             currentPage: 1
         },
@@ -145,6 +149,9 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         //all of the items selected in the grid. In single select mode there will only be one item in the array.
         selectedItems: [],
         
+        //Width of row selection checkbox column
+        selectionCheckboxColumnWidth: 25,
+
         //Disable row selections by clicking on the row and only when the checkbox is clicked.
         selectWithCheckboxOnly: false,
         
@@ -172,6 +179,10 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
 
         //Set the tab index of the Vieport.
         tabIndex: -1,
+        
+        //totalServerItems: Total items are on the server. 
+        totalServerItems: 0,
+            
         /*Prevents the internal sorting from executing. 
         The sortInfo object will be updated with the sorting information so you can handle sorting (see sortInfo)*/
         useExternalSorting: false,
@@ -180,7 +191,10 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         i18n: 'en',
         
         //the threshold in rows to force virtualization on
-        virtualizationThreshold: 50
+        virtualizationThreshold: 50,
+
+	// Don't handle tabs, so they can be used to navigate between controls.
+	noTabInterference: false
     },
         self = this;
     self.maxCanvasHt = 0;
@@ -193,7 +207,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
     self.config.selectWithCheckboxOnly = (self.config.selectWithCheckboxOnly && self.config.showSelectionCheckbox !== false);
     self.config.pinSelectionCheckbox = self.config.enablePinning;
 
-    if (typeof options.columnDefs == "string") {
+    if (typeof options.columnDefs === "string") {
         self.config.columnDefs = $scope.$eval(options.columnDefs);
     }
     self.rowCache = [];
@@ -211,46 +225,66 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
     self.data = [];
     self.lateBindColumns = false;
     self.filteredRows = [];
+
+    self.initTemplates = function() {
+        var templates = ['rowTemplate', 'aggregateTemplate', 'headerRowTemplate', 'checkboxCellTemplate', 'checkboxHeaderTemplate', 'menuTemplate', 'footerTemplate'];
+
+        var promises = [];
+        angular.forEach(templates, function(template) {
+            promises.push( self.getTemplate(template) );
+        });
+
+        return $q.all(promises);
+    };
     
     //Templates
     // test templates for urls and get the tempaltes via synchronous ajax calls
-    var getTemplate = function (key) {
+    self.getTemplate = function (key) {
         var t = self.config[key];
         var uKey = self.gridId + key + ".html";
+        var p = $q.defer();
         if (t && !TEMPLATE_REGEXP.test(t)) {
-            $templateCache.put(uKey, $.ajax({
-                type: "GET",
-                url: t,
-                async: false
-            }).responseText);
+            $http.get(t, {
+                cache: $templateCache
+            })
+            .success(function(data){
+                $templateCache.put(uKey, data);
+                p.resolve();
+            })
+            .error(function(err){
+                p.reject("Could not load template: " + t);
+            });
         } else if (t) {
             $templateCache.put(uKey, t);
+            p.resolve();
         } else {
             var dKey = key + ".html";
             $templateCache.put(uKey, $templateCache.get(dKey));
+            p.resolve();
         }
-    };
-    getTemplate('rowTemplate');
-    getTemplate('aggregateTemplate');
-    getTemplate('headerRowTemplate');
-    getTemplate('checkboxCellTemplate');
-    getTemplate('checkboxHeaderTemplate');
-    getTemplate('menuTemplate');
-    getTemplate('footerTemplate');
 
-    if (typeof self.config.data == "object") {
+        return p.promise;
+    };
+
+    if (typeof self.config.data === "object") {
         self.data = self.config.data; // we cannot watch for updates if you don't pass the string name
     }
     self.calcMaxCanvasHeight = function() {
-        return (self.config.groups.length > 0) ? (self.rowFactory.parsedData.filter(function(e) {
-            return !e[NG_HIDDEN];
-        }).length * self.config.rowHeight) : (self.filteredRows.length * self.config.rowHeight);
+        var calculatedHeight;
+        if(self.config.groups.length > 0){
+            calculatedHeight = self.rowFactory.parsedData.filter(function(e) {
+                return !e[NG_HIDDEN];
+            }).length * self.config.rowHeight;
+        } else {
+            calculatedHeight = self.filteredRows.length * self.config.rowHeight;
+        }
+        return calculatedHeight;
     };
     self.elementDims = {
         scrollW: 0,
         scrollH: 0,
-        rowIndexCellW: 25,
-        rowSelectedCellW: 25,
+        rowIndexCellW: self.config.selectionCheckboxColumnWidth,
+        rowSelectedCellW: self.config.selectionCheckboxColumnWidth,
         rootMaxW: 0,
         rootMaxH: 0
     };
@@ -269,7 +303,8 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
             }
             $scope.renderedRows[i].rowIndex = newRows[i].rowIndex;
             $scope.renderedRows[i].offsetTop = newRows[i].offsetTop;
-			newRows[i].renderedRowIndex = i;
+            $scope.renderedRows[i].selected = newRows[i].selected;
+            newRows[i].renderedRowIndex = i;
         }
         self.refreshDomSizes();
         $scope.$emit('ngGridEventRows', newRows);
@@ -293,7 +328,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
             return;
         }
         $utils.forIn(item, function (prop, propName) {
-            if (self.config.excludeProperties.indexOf(propName) == -1) {
+            if (self.config.excludeProperties.indexOf(propName) === -1) {
                 self.config.columnDefs.push({
                     field: propName
                 });
@@ -324,27 +359,31 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
                 sortCallback: self.sortData,
                 resizeOnDataCallback: self.resizeOnData,
                 enableResize: self.config.enableColumnResize,
-                enableSort: self.config.enableSorting
+                enableSort: self.config.enableSorting,
+                enablePinning: self.config.enablePinning
             }, $scope, self, domUtilityService, $templateCache, $utils));
         }
         if (columnDefs.length > 0) {
-            var indexOffset = self.config.showSelectionCheckbox ? self.config.groups.length + 1 : self.config.groups.length;
+            var checkboxOffset = self.config.showSelectionCheckbox ? 1 : 0;
+            var groupOffset = $scope.configGroups.length;
             $scope.configGroups.length = 0;
             angular.forEach(columnDefs, function(colDef, i) {
-                i += indexOffset;
+                i += checkboxOffset;
                 var column = new ngColumn({
                     colDef: colDef,
-                    index: i,
+                    index: i + groupOffset,
+                    originalIndex: i,
                     headerRowHeight: self.config.headerRowHeight,
                     sortCallback: self.sortData,
                     resizeOnDataCallback: self.resizeOnData,
                     enableResize: self.config.enableColumnResize,
                     enableSort: self.config.enableSorting,
                     enablePinning: self.config.enablePinning,
-                    enableCellEdit: self.config.enableCellEdit 
+                    enableCellEdit: self.config.enableCellEdit || self.config.enableCellEditOnFocus,
+                    cellEditableCondition: self.config.cellEditableCondition
                 }, $scope, self, domUtilityService, $templateCache, $utils);
                 var indx = self.config.groups.indexOf(colDef.field);
-                if (indx != -1) {
+                if (indx !== -1) {
                     column.isGroupedBy = true;
                     $scope.configGroups.splice(indx, 0, column);
                     column.groupIndex = $scope.configGroups.length;
@@ -352,122 +391,210 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
                 cols.push(column);
             });
             $scope.columns = cols;
+            if (self.config.groups.length > 0) {
+                self.rowFactory.getGrouping(self.config.groups);
+            }
         }
     };
     self.configureColumnWidths = function() {
-        var cols = self.config.columnDefs;
-        var indexOffset = self.config.showSelectionCheckbox ? $scope.configGroups.length + 1 : $scope.configGroups.length;
-        var numOfCols = cols.length + indexOffset,
-            asterisksArray = [],
+        var asterisksArray = [],
             percentArray = [],
             asteriskNum = 0,
             totalWidth = 0;
-        totalWidth += self.config.showSelectionCheckbox ? 25 : 0;
-        angular.forEach(cols, function(col, i) {
-                i += indexOffset;
-                var isPercent = false, t = undefined;
-                //if width is not defined, set it to a single star
-                if ($utils.isNullOrUndefined(col.width)) {
-                    col.width = "*";
-                } else { // get column width
-                    isPercent = isNaN(col.width) ? $utils.endsWith(col.width, "%") : false;
-                    t = isPercent ? col.width : parseInt(col.width, 10);
+
+        // When rearranging columns, their index in $scope.columns will no longer match the original column order from columnDefs causing
+        // their width config to be out of sync. We can use "originalIndex" on the ngColumns to get hold of the correct setup from columnDefs, but to
+        // avoid O(n) lookups in $scope.columns per column we setup a map.
+        var indexMap = {};
+        // Build a map of columnDefs column indices -> ngColumn indices (via the "originalIndex" property on ngColumns).
+        angular.forEach($scope.columns, function(ngCol, i) {
+            // Disregard columns created by grouping (the grouping columns don't match a column from columnDefs)
+            if (!$utils.isNullOrUndefined(ngCol.originalIndex)) {
+                var origIndex = ngCol.originalIndex;
+                if (self.config.showSelectionCheckbox) {
+                    //if visible, takes up 25 pixels
+                    if(ngCol.originalIndex === 0 && ngCol.visible){
+                        totalWidth += self.config.selectionCheckboxColumnWidth;
+                    }
+                    // The originalIndex will be offset 1 when including the selection column
+                    origIndex--;
                 }
-                // check if it is a number
+                indexMap[origIndex] = i;
+            } else if (ngCol.isAggCol && ngCol.visible){ // aggregate columns are 25px in length. 
+                totalWidth+=25;
+            }
+        });
+
+        angular.forEach(self.config.columnDefs, function(colDef, i) {
+                // Get the ngColumn that matches the current column from columnDefs
+            var ngColumn = $scope.columns[indexMap[i]];
+
+            colDef.index = i;
+
+            var isPercent = false, t;
+            //if width is not defined, set it to a single star
+            if ($utils.isNullOrUndefined(colDef.width)) {
+                colDef.width = "*";
+            } else { // get column width
+                isPercent = isNaN(colDef.width) ? $utils.endsWith(colDef.width, "%") : false;
+                t = isPercent ? colDef.width : parseInt(colDef.width, 10);
+            }
+
+             // has bug for resize event causing NaN for all column width after another http.get
+             // if (isNaN(t) && !$scope.hasUserChangedGridColumnWidths) {
+             // check if it is a number
             if (isNaN(t)) {
-                t = col.width;
+                t = colDef.width;
                 // figure out if the width is defined or if we need to calculate it
-                if (t == 'auto') { // set it for now until we have data and subscribe when it changes so we can set the width.
-                    $scope.columns[i].width = col.minWidth;
-                    totalWidth += $scope.columns[i].width;
-                    var temp = $scope.columns[i];
-                    $timeout(function () {
-                        self.resizeOnData(temp, true);
-                    });
+                if (t === 'auto') { // set it for now until we have data and subscribe when it changes so we can set the width.
+                    ngColumn.width = ngColumn.minWidth;
+                    totalWidth += ngColumn.width;
+                    var temp = ngColumn;
+
+                    $scope.$on('$destroy', $scope.$on("ngGridEventData", function () {
+                        self.resizeOnData(temp);
+                    }));
+
                     return;
-                } else if (t.indexOf("*") != -1) { //  we need to save it until the end to do the calulations on the remaining width.
-                    if (col.visible !== false) {
+                } else if (t.indexOf("*") !== -1) { //  we need to save it until the end to do the calulations on the remaining width.
+                    if (ngColumn.visible !== false) {
                         asteriskNum += t.length;
                     }
-                    col.index = i;
-                    asterisksArray.push(col);
+                    asterisksArray.push(colDef);
                     return;
                 } else if (isPercent) { // If the width is a percentage, save it until the very last.
-                    col.index = i;
-                    percentArray.push(col);
+                    percentArray.push(colDef);
                     return;
                 } else { // we can't parse the width so lets throw an error.
                     throw "unable to parse column width, use percentage (\"10%\",\"20%\", etc...) or \"*\" to use remaining width of grid";
                 }
-            } else if (col.visible !== false) {
-                totalWidth += $scope.columns[i].width = parseInt(col.width, 10);
+            } else if (ngColumn.visible !== false) {
+                totalWidth += ngColumn.width = parseInt(ngColumn.width, 10);
             }
         });
-        // check if we saved any asterisk columns for calculating later
-        if (asterisksArray.length > 0) {
-            self.config.maintainColumnRatios === false ? angular.noop() : self.config.maintainColumnRatios = true;
-            // get the remaining width
-            var remainigWidth = self.rootDim.outerWidth - totalWidth;
-            // calculate the weight of each asterisk rounded down
-            var asteriskVal = Math.floor(remainigWidth / asteriskNum);
-            // set the width of each column based on the number of stars
-            angular.forEach(asterisksArray, function(col) {
-                var t = col.width.length;
-                $scope.columns[col.index].width = asteriskVal * t;
-                //check if we are on the last column
-                if (col.index + 1 == numOfCols) {
-                    var offset = 2; //We're going to remove 2 px so we won't overlflow the viwport by default
-                    // are we overflowing?
-                    if (self.maxCanvasHt > $scope.viewportDimHeight()) {
-                        //compensate for scrollbar
-                        offset += domUtilityService.ScrollW;
-                    }
-                    $scope.columns[col.index].width -= offset;
-                }
-                if (col.visible !== false) {
-                    totalWidth += $scope.columns[col.index].width;
-                }
-            });
-        }
+        
         // Now we check if we saved any percentage columns for calculating last
         if (percentArray.length > 0) {
+            //If they specificy for maintain column ratios to be false in grid config, then it will remain false. If not specifiied or true, will be true.
+            self.config.maintainColumnRatios = self.config.maintainColumnRatios !== false; 
+            // If any columns with % widths have been hidden, then let other % based columns use their width
+            var percentWidth = 0; // The total % value for all columns setting their width using % (will e.g. be 40 for 2 columns with 20% each)
+            var hiddenPercent = 0; // The total % value for all columns setting their width using %, but which have been hidden
+            angular.forEach(percentArray, function(colDef) {
+                // Get the ngColumn that matches the current column from columnDefs
+                var ngColumn = $scope.columns[indexMap[colDef.index]];
+                var percent = parseFloat(colDef.width) / 100;
+                percentWidth += percent;
+
+                if (!ngColumn.visible) {
+                    hiddenPercent += percent;
+                }
+            });
+            var percentWidthUsed = percentWidth - hiddenPercent;
+
             // do the math
-            angular.forEach(percentArray, function(col) {
-                var t = col.width;
-                $scope.columns[col.index].width = Math.floor(self.rootDim.outerWidth * (parseInt(t.slice(0, -1), 10) / 100));
+            angular.forEach(percentArray, function(colDef) {
+                // Get the ngColumn that matches the current column from columnDefs
+                var ngColumn = $scope.columns[indexMap[colDef.index]];
+                
+                // Calc the % relative to the amount of % reserved for the visible columns (that use % based widths)
+                var percent = parseFloat(colDef.width) / 100;
+                if (hiddenPercent > 0) {
+                    percent = percent / percentWidthUsed;
+                }
+                else {
+                    percent = percent / percentWidth;
+                }
+
+                var pixelsForPercentBasedWidth = self.rootDim.outerWidth * percentWidth;
+                ngColumn.width = pixelsForPercentBasedWidth * percent;
+                totalWidth += ngColumn.width;
+            });
+        }
+
+        // check if we saved any asterisk columns for calculating later
+        if (asterisksArray.length > 0) {
+            //If they specificy for maintain column ratios to be false in grid config, then it will remain false. If not specifiied or true, will be true.
+            self.config.maintainColumnRatios = self.config.maintainColumnRatios !== false; 
+            // get the remaining width
+            var remainingWidth = self.rootDim.outerWidth - totalWidth;
+            // are we overflowing vertically?
+            if (self.maxCanvasHt > $scope.viewportDimHeight()) {
+                //compensate for scrollbar
+                remainingWidth -= domUtilityService.ScrollW;
+            }
+            // calculate the weight of each asterisk rounded down
+            var asteriskVal = Math.floor(remainingWidth / asteriskNum);
+
+            // set the width of each column based on the number of stars
+            angular.forEach(asterisksArray, function(colDef, i) {
+                // Get the ngColumn that matches the current column from columnDefs
+                var ngColumn = $scope.columns[indexMap[colDef.index]];                
+                ngColumn.width = asteriskVal * colDef.width.length;
+                if (ngColumn.width < ngColumn.minWidth) {
+                    ngColumn.width = ngColumn.minWidth;
+                }
+                if (ngColumn.visible !== false) {
+                    totalWidth += ngColumn.width;
+                }
+
+                var isLast = (i === (asterisksArray.length - 1));
+                //if last asterisk and doesn't fill width of grid, add the difference
+                if(isLast && totalWidth < self.rootDim.outerWidth){
+                    var gridWidthDifference = self.rootDim.outerWidth - totalWidth;
+                    if(self.maxCanvasHt > $scope.viewportDimHeight()){
+                        gridWidthDifference -= domUtilityService.ScrollW;
+                    }
+                    ngColumn.width += gridWidthDifference;
+                }
             });
         }
     };
     self.init = function() {
-        //factories and services
-        $scope.selectionProvider = new ngSelectionProvider(self, $scope, $parse);
-        $scope.domAccessProvider = new ngDomAccessProvider(self);
-		self.rowFactory = new ngRowFactory(self, $scope, domUtilityService, $templateCache, $utils);
-        self.searchProvider = new ngSearchProvider($scope, self, $filter);
-        self.styleProvider = new ngStyleProvider($scope, self, domUtilityService);
-        $scope.$watch('configGroups', function(a) {
-          var tempArr = [];
-          angular.forEach(a, function(item) {
-            tempArr.push(item.field || item);
-          });
-          self.config.groups = tempArr;
-          self.rowFactory.filteredRowsChanged();
-          $scope.$emit('ngGridEventGroups', a);
-        }, true);
-        $scope.$watch('columns', function (a) {
-            domUtilityService.BuildStyles($scope, self, true);
-            $scope.$emit('ngGridEventColumns', a);
-        }, true);
-        $scope.$watch(function() {
-            return options.i18n;
-        }, function(newLang) {
-            $utils.seti18n($scope, newLang);
+        return self.initTemplates().then(function(){
+            //factories and services
+            $scope.selectionProvider = new ngSelectionProvider(self, $scope, $parse, $utils);
+            $scope.domAccessProvider = new ngDomAccessProvider(self);
+            self.rowFactory = new ngRowFactory(self, $scope, domUtilityService, $templateCache, $utils);
+            self.searchProvider = new ngSearchProvider($scope, self, $filter, $utils);
+            self.styleProvider = new ngStyleProvider($scope, self);
+            $scope.$on('$destroy', $scope.$watch('configGroups', function(a) {
+              var tempArr = [];
+              angular.forEach(a, function(item) {
+                tempArr.push(item.field || item);
+              });
+              self.config.groups = tempArr;
+              self.rowFactory.filteredRowsChanged();
+              $scope.$emit('ngGridEventGroups', a);
+            }, true));
+             $scope.$on('$destroy', $scope.$watch('columns', function (a) {
+                if(!$scope.isColumnResizing){
+                    domUtilityService.RebuildGrid($scope, self);
+                }
+                $scope.$emit('ngGridEventColumns', a);
+            }, true));
+             $scope.$on('$destroy', $scope.$watch(function() {
+                return options.i18n;
+            }, function(newLang) {
+                $utils.seti18n($scope, newLang);
+            }));
+            self.maxCanvasHt = self.calcMaxCanvasHeight();
+
+            if (self.config.sortInfo.fields && self.config.sortInfo.fields.length > 0) {
+                $scope.$on('$destroy', $scope.$watch(function() {
+                    return self.config.sortInfo;
+                }, function(sortInfo){
+                    if (!sortService.isSorting) {
+                        self.sortColumnsInit();
+                        $scope.$emit('ngGridEventSorted', self.config.sortInfo);
+                    }
+                }, true));
+            }
         });
-        self.maxCanvasHt = self.calcMaxCanvasHeight();
-        if (self.config.sortInfo.fields && self.config.sortInfo.fields.length > 0) {
-            self.getColsFromFields();
-            self.sortActual();
-        }
+
+        // var p = $q.defer();
+        // p.resolve();
+        // return p.promise;
     };
    
     self.resizeOnData = function(col) {
@@ -491,19 +618,11 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         domUtilityService.BuildStyles($scope, self, true);
     };
     self.lastSortedColumns = [];
-    self.changeRowOrder = function(prevRow, targetRow) {
-        // Splice the Rows via the actual datasource
-        var i = self.rowCache.indexOf(prevRow);
-        var j = self.rowCache.indexOf(targetRow);
-        self.rowCache.splice(i, 1);
-        self.rowCache.splice(j, 0, prevRow);
-        $scope.$emit('ngGridEventChangeOrder', self.rowCache);
-    };
     self.sortData = function(col, evt) {
-        if (evt.shiftKey && self.config.sortInfo) {
+        if (evt && evt.shiftKey && self.config.sortInfo) {
             var indx = self.config.sortInfo.columns.indexOf(col);
             if (indx === -1) {
-                if (self.config.sortInfo.columns.length == 1) {
+                if (self.config.sortInfo.columns.length === 1) {
                     self.config.sortInfo.columns[0].sortPriority = 1;
                 }
                 self.config.sortInfo.columns.push(col);
@@ -514,7 +633,8 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
             } else {
                 self.config.sortInfo.directions[indx] = col.sortDirection;
             }
-        } else {
+            $scope.$emit('ngGridEventSorted', self.config.sortInfo);
+        } else if (!self.config.useExternalSorting || (self.config.useExternalSorting && self.config.sortInfo )) {
             var isArr = $.isArray(col);
             self.config.sortInfo.columns.length = 0;
             self.config.sortInfo.fields.length = 0;
@@ -526,7 +646,6 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
                 self.lastSortedColumns.push(c);
             };
             if (isArr) {
-                self.clearSortingData();
                 angular.forEach(col, function (c, i) {
                     c.sortPriority = i + 1;
                     push(c);
@@ -536,32 +655,46 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
                 col.sortPriority = undefined;
                 push(col);
             }
+
+            self.sortActual();
+            self.searchProvider.evalFilter();
+            $scope.$emit('ngGridEventSorted', self.config.sortInfo);
         }
-        self.sortActual();
-        self.searchProvider.evalFilter();
-        $scope.$emit('ngGridEventSorted', self.config.sortInfo);
     };
-    self.getColsFromFields = function() {
+    self.sortColumnsInit = function() {
         if (self.config.sortInfo.columns) {
             self.config.sortInfo.columns.length = 0;
         } else {
             self.config.sortInfo.columns = [];
         }
+
+        var cols = [];
         angular.forEach($scope.columns, function(c) {
             var i = self.config.sortInfo.fields.indexOf(c.field);
-            if (i != -1) {
+            if (i !== -1) {
                 c.sortDirection = self.config.sortInfo.directions[i] || 'asc';
-                self.config.sortInfo.columns.push(c);
+                cols[i] = c;
             }
-            return false;
         });
+
+        if(cols.length === 1){
+            self.sortData(cols[0]);
+        }else{
+            self.sortData(cols);
+        }
     };
     self.sortActual = function() {
         if (!self.config.useExternalSorting) {
             var tempData = self.data.slice(0);
             angular.forEach(tempData, function(item, i) {
-                item.preSortSelected = self.rowCache[self.rowMap[i]].selected;
-                item.preSortIndex = i;
+                var e = self.rowMap[i];
+                if (e !== undefined) {
+                    var v = self.rowCache[e];
+                    if (v !== undefined) {
+                        item.preSortSelected = v.selected;
+                        item.preSortIndex = i;
+                    }
+                }
             });
             sortService.Sort(self.config.sortInfo, tempData);
             angular.forEach(tempData, function(item, i) {
@@ -579,25 +712,25 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
             angular.forEach(self.lastSortedColumns, function (c) {
                 c.sortDirection = "";
                 c.sortPriority = null;
+                c.gotUserSortDirection = false;
             });
             self.lastSortedColumns = [];
         } else {
             angular.forEach(self.lastSortedColumns, function (c) {
-                if (col.index != c.index) {
+                if (col.index !== c.index) {
                     c.sortDirection = "";
                     c.sortPriority = null;
+                    c.gotUserSortDirection = false;
                 }
             });
             self.lastSortedColumns[0] = col;
             self.lastSortedColumns.length = 1;
-        };
+        }
     };
     self.fixColumnIndexes = function() {
         //fix column indexes
         for (var i = 0; i < $scope.columns.length; i++) {
-            if ($scope.columns[i].visible !== false) {
-                $scope.columns[i].index = i;
-            }
+            $scope.columns[i].index = i;
         }
     };
     self.fixGroupIndexes = function() {
@@ -615,12 +748,14 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
     $scope.jqueryUITheme = self.config.jqueryUITheme;
     $scope.showSelectionCheckbox = self.config.showSelectionCheckbox;
     $scope.enableCellSelection = self.config.enableCellSelection;
+    $scope.enableCellEditOnFocus = self.config.enableCellEditOnFocus;
     $scope.footer = null;
     $scope.selectedItems = self.config.selectedItems;
     $scope.multiSelect = self.config.multiSelect;
     $scope.showFooter = self.config.showFooter;
     $scope.footerRowHeight = $scope.showFooter ? self.config.footerRowHeight : 0;
     $scope.showColumnMenu = self.config.showColumnMenu;
+    $scope.forceSyncScrolling = self.config.forceSyncScrolling;
     $scope.showMenu = false;
     $scope.configGroups = [];
     $scope.gridId = self.gridId;
@@ -683,32 +818,32 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
             $scope.$emit('ngGridEventScroll');
         }
         var rowIndex = Math.floor(scrollTop / self.config.rowHeight);
-	    var newRange;
-	    if (self.filteredRows.length > self.config.virtualizationThreshold) {
-	        // Have we hit the threshold going down?
-	        if (self.prevScrollTop < scrollTop && rowIndex < self.prevScrollIndex + SCROLL_THRESHOLD) {
-	            return;
-	        }
-	        //Have we hit the threshold going up?
-	        if (self.prevScrollTop > scrollTop && rowIndex > self.prevScrollIndex - SCROLL_THRESHOLD) {
-	            return;
-	        }
-	        newRange = new ngRange(Math.max(0, rowIndex - EXCESS_ROWS), rowIndex + self.minRowsToRender() + EXCESS_ROWS);
-	    } else {
-	        var maxLen = $scope.configGroups.length > 0 ? self.rowFactory.parsedData.length : self.data.length;
-	        newRange = new ngRange(0, Math.max(maxLen, self.minRowsToRender() + EXCESS_ROWS));
-	    }
-	    self.prevScrollTop = scrollTop;
-	    self.rowFactory.UpdateViewableRange(newRange);
-	    self.prevScrollIndex = rowIndex;
+        var newRange;
+        if (self.filteredRows.length > self.config.virtualizationThreshold) {
+            // Have we hit the threshold going down?
+            if (self.prevScrollTop < scrollTop && rowIndex < self.prevScrollIndex + SCROLL_THRESHOLD) {
+                return;
+            }
+            //Have we hit the threshold going up?
+            if (self.prevScrollTop > scrollTop && rowIndex > self.prevScrollIndex - SCROLL_THRESHOLD) {
+                return;
+            }
+            newRange = new ngRange(Math.max(0, rowIndex - EXCESS_ROWS), rowIndex + self.minRowsToRender() + EXCESS_ROWS);
+        } else {
+            var maxLen = $scope.configGroups.length > 0 ? self.rowFactory.parsedData.length : self.filteredRows.length;
+            newRange = new ngRange(0, Math.max(maxLen, self.minRowsToRender() + EXCESS_ROWS));
+        }
+        self.prevScrollTop = scrollTop;
+        self.rowFactory.UpdateViewableRange(newRange);
+        self.prevScrollIndex = rowIndex;
     };
 
     //scope funcs
     $scope.toggleShowMenu = function() {
         $scope.showMenu = !$scope.showMenu;
     };
-    $scope.toggleSelectAll = function(a) {
-        $scope.selectionProvider.toggleSelectAll(a);
+    $scope.toggleSelectAll = function(state, selectOnlyVisible) {
+        $scope.selectionProvider.toggleSelectAll(state, false, selectOnlyVisible);
     };
     $scope.totalFilteredItemsLength = function() {
         return self.filteredRows.length;
@@ -728,10 +863,12 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
             return;
         }
         //first sort the column
-        if (!col.sortDirection) col.sort({ shiftKey: false });
+        if (!col.sortDirection) {
+            col.sort({ shiftKey: $scope.configGroups.length > 0 ? true : false });
+        }
 
         var indx = $scope.configGroups.indexOf(col);
-        if (indx == -1) {
+        if (indx === -1) {
             col.isGroupedBy = true;
             $scope.configGroups.push(col);
             col.groupIndex = $scope.configGroups.length;
@@ -743,7 +880,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
     };
     $scope.removeGroup = function(index) {
         var col = $scope.columns.filter(function(item) {
-            return item.groupIndex == (index + 1);
+            return item.groupIndex === (index + 1);
         })[0];
         col.isGroupedBy = false;
         col.groupIndex = 0;
@@ -804,6 +941,4 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
         }
         return newDim;
     };
-    //call init
-    self.init();
 };
