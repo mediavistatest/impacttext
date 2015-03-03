@@ -46,7 +46,7 @@ background: #005faa;
 
 .nav > li.active {
 border-left: 0;
-background: #0570c5;
+background: #0570c5 !important;
 }
 
 .navbar-default .nav > li > a:hover,
@@ -279,12 +279,14 @@ h2.section-title {
   font-size: 12px;
   color:#5c5e60;
   border: 1px solid lightgrey;
+  background: none;
 }
 
 .btn-discard {
   color:white;
   background: #acacac;
   border:none;
+  border: 1px solid #acacac;
 }
 
 .btn-discard:hover {
@@ -1143,7 +1145,7 @@ button:disabled .ngPagerFirstTriangle {
 }
 
 .ngPagerContainer input {
-width: auto !important;
+width: 50 !important;
   height: auto !important;
   margin-top: 0px !important;
   padding: 0px 0 0 3px !important;
@@ -1278,7 +1280,7 @@ ul.dropdown-menu.time-pick span {
   padding-right: 0;
 }
 
-span.O {
+span.O, span.I {
   background: #ef5352;
   color: white;
   width: 23px;
@@ -1299,6 +1301,19 @@ span.B {
   border-radius: 50%;
   margin: 0 auto;
 }
+
+span.A {
+  background: #39b96a;
+  color: white;
+  width: 23px;
+  display: block;
+  height: 23px;
+  line-height: 23px;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+
 
 .ngCellText a.linkclass {
   color: #676a6c;
@@ -1367,6 +1382,73 @@ span.B {
 
 body {
   color:#363636;
+}
+
+.messages .top-buttons {
+  text-align: left;
+  margin-bottom: 20px;
+  margin-top: -10px;
+}
+
+.messages .ngCellText.col7 {
+  text-align: center;
+  padding-right: 0;
+}
+
+.messages .ngFooterPanel {
+    background-color: #FFF;
+    padding: 0px;
+    border-top: medium none;
+    position: absolute;
+    top: 110px;
+    right: 10px;
+    display: inline-block;
+    width: auto !important;
+}
+
+.ngRow:last-child .ngCell, .ngRow:last-child .ngCellText, .ngRow:last-child{
+    border: 0;
+}
+
+.messages .open > .dropdown-menu {
+    display: block;
+    text-align: center;
+}
+
+.btn.tab-style {
+padding:5px 20px;
+margin-right: 5px;
+border-bottom-left-radius: 0 !important;
+border-bottom-right-radius: 0 !important;
+border: none;
+background: #dcdbe1;
+color: #5f6364;
+font-size: 12px;
+}
+
+.btn.tab-style.active {
+  border-radius: 3px !important;
+  border-bottom-left-radius: 0 !important;
+border-bottom-right-radius: 0 !important;
+border:1px solid lightgrey;
+background: white !important;
+color:#005eaa;
+box-shadow: none;
+border-bottom: none;
+position: relative;
+z-index: 10;
+font-size: 14px;
+margin-top:-3px;
+}
+
+.tab-navigation {
+position: relative;
+top: 1px;
+z-index: 1000;
+}
+
+.opt-out {
+  margin-top:15px;
 }
 
 @media all and (max-width:990px) {

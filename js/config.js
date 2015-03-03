@@ -125,7 +125,27 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         .state('messages', {
             abstract: true,
             url: "/messages",
-            templateUrl: "views/common/content.html"
+            templateUrl: "views/common/content.html",
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'ngGrid',
+                            files: ['js/plugins/nggrid/ng-grid-2.0.14.min.js']
+                        },
+                        {
+                            insertBefore: '#loadBefore',
+                            files: ['js/plugins/nggrid/ng-grid.css']
+                        },
+                        {
+                            files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                        },
+                        {
+                            files: ['js/plugins/nggrid/plugins/ng-grid-csv-export.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('messages.inbox', {
             url: "/messages_inbox",

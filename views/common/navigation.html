@@ -33,7 +33,7 @@
             <li ng-class="{active: $state.includes('dashboard')}">
                 <a ui-sref="dashboard"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span> </a>
             </li>
-            <li ng-class="{active: $state.includes('lists')}">
+            <!--<li ng-class="{active: $state.includes('lists')}">
                 <a href=""><i class="fa fa-user"></i> <span class="nav-label">Contacts/Lists</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('lists')}">
                     <li ui-sref-active="active"><a ui-sref="lists.view">Lists</a></li>
@@ -41,15 +41,24 @@
                     <li ui-sref-active="active"><a ui-sref="lists.add_contact">Add Contact</a></li>
                     <li ui-sref-active="active"><a ui-sref="lists.upload">Upload list (file)</a></li>
                 </ul>
+            </li>-->
+            <li ng-class="{active: $state.includes('lists')}">
+                <a ui-sref="lists.view"><i class="fa fa-user"></i> <span class="nav-label">Contacts/Lists</span><!--<span class="fa arrow"></span>--></a>
+                <!--<ul class="nav nav-second-level" ng-class="{in: $state.includes('lists')}">
+                    <li ui-sref-active="active"><a ui-sref="lists.view">Lists</a></li>
+                    <li ui-sref-active="active"><a ui-sref="lists.add">Add list</a></li>
+                    <li ui-sref-active="active"><a ui-sref="lists.add_contact">Add Contact</a></li>
+                    <li ui-sref-active="active"><a ui-sref="lists.upload">Upload list (file)</a></li>
+                </ul>-->
             </li>
             <li ng-class="{active: $state.includes('messages')}">
                 <a href=""><i class="fa fa-envelope"></i> <span class="nav-label">Messages </span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('messages')}">
                     <li ui-sref-active="active"><a ui-sref="messages.inbox">Inbox</a></li>
-                    <li ui-sref-active="active"><a ui-sref="messages.scheduled">Scheduled</a></li>
                     <li ui-sref-active="active"><a ui-sref="messages.sent">Sent</a></li>
+                    <li ui-sref-active="active"><a ui-sref="messages.scheduled">Scheduled</a></li>
                     <li ui-sref-active="active"><a ui-sref="messages.drafts">Drafts</a></li>
-                    <li ui-sref-active="active"><a ui-sref="messages.trash">Thrash</a></li>
+                    <li ui-sref-active="active"><a ui-sref="messages.trash">Trash</a></li>
                 </ul>
             </li>
             <li ui-sref-active="active">
