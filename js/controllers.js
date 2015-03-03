@@ -30,6 +30,14 @@
  */
 
 
+function setPagingDataSliced($scope, data, totalResultsCount) {
+	$scope.ngData = data;
+	$scope.totalServerItems = totalResultsCount;
+	if (!$scope.$$phase) {
+		$scope.$apply();
+	}
+}
+
 /**
  * MainCtrl - controller
  * Contains severals global data used in diferent view
@@ -3095,7 +3103,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 					inspiniaNS.wsUrl + "contactlist_get",
 					$.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), limit: pageSize, offset: (page - 1) * pageSize})
 				).success(function (data) {
-					$scope.setPagingDataSliced(data.apidata, data.apicount);
+					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
 				}).error(
 					//An error occurred with this request
 					function(data, status, headers, config) {
@@ -3115,13 +3123,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
         }
     };
 
-	$scope.setPagingDataSliced = function(data, totalResultsCount){
-        $scope.ngData = data;
-        $scope.totalServerItems = totalResultsCount;
-        if (!$scope.$$phase) {
-            $scope.$apply();
-        }
-    };
+	$scope.setPagingDataSliced = setPagingDataSliced;
     
 
    // ////FILTER BY LIST NAME
@@ -3314,7 +3316,7 @@ $scope.$watch('pagingOptions', function () {
 /**
  * CONTRILLER FOR LIST VIEW TABLE
  */
-function ngContactListCtrl($scope, $http) {
+function ngContactListCtrl($scope, $http, $cookieStore) {
     //   $scope.ngData = [
     //       {Name: "Moroni", Age: 50, Position: 'PR Menager', Status: 'active', Date: '12.12.2014'},
     //       {Name: "Teancum", Age: 43, Position: 'CEO/CFO', Status: 'deactive', Date: '10.10.2014'},
@@ -3385,22 +3387,42 @@ function ngContactListCtrl($scope, $http) {
             $scope.$apply();
         }
     };
+	
+	$scope.setPagingDataSliced = setPagingDataSliced;
 
     $scope.getPagedDataAsync = function (pageSize, page, searchText) {
         setTimeout(function () {
             var data;
             if (searchText) {
                 var ft = searchText.toLowerCase();
-                $http.get('views/datasets/ngDataContacts.json').success(function (largeLoad) {      
-                    data = largeLoad.filter(function(item) {
+					$http.post(
+						inspiniaNS.wsUrl + "contact_get",
+						$.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+					).success(
+						function (largeLoad) {
+							data = largeLoad.apidata.filter(function(item) {
                         return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
                     });
                     $scope.setPagingData(data,page,pageSize);
-                });            
+						}).error(
+						//An error occurred with this request
+						function(data, status, headers, config) {
+							alert('Unexpected error occurred when trying to fetch contact lists!');
+						}
+					);
             } else {
-                $http.get('views/datasets/ngDataContacts.json').success(function (largeLoad) {
-                    $scope.setPagingData(largeLoad,page,pageSize);
-                });
+					$http.post(
+						inspiniaNS.wsUrl + "contact_get",
+						$.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), limit: pageSize, offset: (page - 1) * pageSize})
+					).success(
+						function (data) {
+							$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+						}).error(
+						//An error occurred with this request
+						function(data, status, headers, config) {
+							alert('Unexpected error occurred when trying to fetch contact lists!');
+						}
+					);
             }
         }, 100);
     };
@@ -3455,9 +3477,9 @@ $scope.$watch('pagingOptions', function () {
                field: '',
                width: 30
        //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
-           },{
+        },{
           
-          field: 'ContactNumber', 
+          field: 'ANI',
           displayName: 'List Name'
           //cellTemplate: 'views/table/ListNameTemplate.html'
           
@@ -3465,31 +3487,31 @@ $scope.$watch('pagingOptions', function () {
           
           field:'ContactFirstName', 
           displayName:'Name',
-          cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">{{row.getProperty(col.field)}} {{row.entity.ContactLastName}}</div>'
+          cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">{{row.getProperty(col.field)}} {{row.entity.lastName}} {{row.entity.firstName}}</div>'
           
         }, {
           
-          field:'ContactEmail', 
+          field:'emailAddress',
           displayName:'Email'
           
         }, {
           
-          field:'CustomField1',
+          field:'custom1',
           displayName:'Field 1'
           
         },{
           
-          field:'CustomField2', 
+          field:'custom2',
           displayName:'Field 2'
           
         },{
           
-          field:'CustomField3', 
+          field:'custom3',
           displayName:'Field 3'
           
         },{
           
-          field:'ContactStatus', 
+          field:'status',
           displayName:'Status',
           cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
           
@@ -3941,7 +3963,7 @@ angular
     .controller('chartJsCtrl', chartJsCtrl)
     .controller('GoogleMaps', GoogleMaps)
     .controller('ngGridCtrl', ['$scope', '$http', '$cookieStore', ngGridCtrl])
-    .controller('ngContactListCtrl', ['$scope', '$http', ngContactListCtrl])
+    .controller('ngContactListCtrl', ['$scope', '$http', '$cookieStore', ngContactListCtrl])
     .controller('AddListsCtrl', ['$scope', '$http', AddListsCtrl])
     .controller('codeEditorCtrl', codeEditorCtrl)
     .controller('nestableCtrl', nestableCtrl)

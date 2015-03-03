@@ -50,7 +50,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         .state('lists.view', {
             url: "/lists_view",
             templateUrl: "views/lists_view.html",
-            data: { pageTitle: 'Lists' },
+            data: { pageTitle: 'Lists' }
             //resolve: {
             //    loadPlugin: function ($ocLazyLoad) {
             //        return $ocLazyLoad.load([
