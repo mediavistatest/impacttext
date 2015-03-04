@@ -13,14 +13,14 @@ var ngInbox = {
             }
         },
         Methods : {
-            SetPagingData : function(data, page, pageSize, $scope) {
-                var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-                $scope.ngData = pagedData;
-                $scope.totalServerItems = data.length;
-                if (!$scope.$$phase) {
-                    $scope.$apply();
-                }
-            },
+            // SetPagingData : function(data, page, pageSize, $scope) {
+            // var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+            // $scope.ngData = pagedData;
+            // $scope.totalServerItems = data.length;
+            // if (!$scope.$$phase) {
+            // $scope.$apply();
+            // }
+            // },
             SetPagingDataSliced : function($scope, data, totalResultsCount) {
                 $scope.ngData = data;
                 $scope.totalServerItems = totalResultsCount;
@@ -43,7 +43,7 @@ var ngInbox = {
                             return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
                         });
                         //console.log(data)
-                        $scope.setPagingData(data, page, pageSize, $scope);
+                        $scope.setPagingDataSliced($scope, data, data.lenght);
                     }).error(
                     //An error occurred with this request
                     function(data, status, headers, config) {
@@ -78,7 +78,6 @@ var ngInbox = {
             $scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
 
             //GET DATA
-            $scope.setPagingData = ngInbox._internal.Methods.SetPagingData;
             $scope.setPagingDataSliced = ngInbox._internal.Methods.SetPagingDataSliced;
             $scope.getPagedDataAsync = ngInbox._internal.Methods.GetPagedDataAsync;
 
@@ -137,7 +136,6 @@ var ngInbox = {
             $scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
 
             //GET DATA
-            $scope.setPagingData = ngInbox._internal.Methods.SetPagingData;
             $scope.setPagingDataSliced = ngInbox._internal.Methods.SetPagingDataSliced;
             $scope.getPagedDataAsync = ngInbox._internal.Methods.GetPagedDataAsync;
 
