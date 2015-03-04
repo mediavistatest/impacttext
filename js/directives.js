@@ -39,7 +39,7 @@ function pageTitle($rootScope, $timeout) {
             };
             $rootScope.$on('$stateChangeStart', listener);
         }
-    }
+    };
 };
 
 /**
@@ -70,7 +70,7 @@ function responsiveVideo() {
             video
                 .attr('data-aspectRatio', video.height() / video.width())
                 .removeAttr('height')
-                .removeAttr('width')
+                .removeAttr('width');
 
             //We can use $watch on $window.innerWidth also.
             $(window).resize(function() {
@@ -80,7 +80,7 @@ function responsiveVideo() {
                     .height(newWidth * video.attr('data-aspectRatio'));
             }).resize();
         }
-    }
+    };
 }
 
 /**
@@ -110,7 +110,7 @@ function iboxTools($timeout) {
                 $scope.closebox = function () {
                     var ibox = $element.closest('div.ibox');
                     ibox.remove();
-                }
+                };
         }
     };
 };
@@ -143,7 +143,7 @@ function minimalizaSidebar($timeout) {
                     // Remove all inline style from jquery fadeIn function to reset menu state
                     $('#side-menu').removeAttr('style');
                 }
-            }
+            };
         }
     };
 };
@@ -181,7 +181,7 @@ function vectorMap() {
                 },
             });
         }
-    }
+    };
 }
 
 
@@ -206,7 +206,7 @@ function sparkline() {
                 $(element).sparkline(scope.sparkData, scope.sparkOptions);
             };
         }
-    }
+    };
 };
 
 /**
@@ -223,7 +223,7 @@ function icheck($timeout) {
 
                 $scope.$watch($attrs['ngModel'], function(newValue){
                     $(element).iCheck('update');
-                })
+                });
 
                 return $(element).iCheck({
                     checkboxClass: 'icheckbox_square-green',
@@ -258,7 +258,7 @@ function ionRangeSlider() {
         link: function (scope, elem, attrs) {
             elem.ionRangeSlider(scope.rangeOptions);
         }
-    }
+    };
 }
 
 /**
@@ -286,7 +286,7 @@ function dropZone() {
                 });
             }
         });
-    }
+    };
 }
 
 /**
@@ -322,7 +322,7 @@ function datepickerPopup(){
       //remove the default formatter from the input directive to prevent conflict
       controller.$formatters.shift();
     }
-  }
+  };
 }
 
 /**

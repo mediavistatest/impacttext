@@ -17,7 +17,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
 
     $stateProvider
 
-        
+
         .state('dashboard', {
             url: "/dashboard",
             templateUrl: "views/dashboard.html"
@@ -110,7 +110,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         .state('lists.add', {
             url: "/lists_add",
             templateUrl: "views/lists_add.html",
-            data: { pageTitle: 'Add List' }             
+            data: { pageTitle: 'Add List' }
         })
         .state('lists.add_contact', {
             url: "/lists_add_contact",
@@ -183,7 +183,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                         {
                             name: 'cgNotify',
                             files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
-                        }                       
+                        }
                     ]);
                 }
             }
@@ -230,7 +230,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         });
 
    //Setting defaults for http requests
-   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';    
+   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
 
 }
 angular

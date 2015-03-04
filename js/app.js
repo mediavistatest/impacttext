@@ -13,7 +13,7 @@
         'ui.bootstrap.datetimepicker',        // Datetimepicker
         'ajoslin.promise-tracker',			//promise tracker
         //'angular-momentjs'					//momentjs
-    ])
+    ]);
 })();
 
 // Other libraries are loaded dynamically in the config.js file using the library ocLazyLoad

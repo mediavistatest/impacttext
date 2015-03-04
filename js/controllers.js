@@ -46,9 +46,9 @@ function setPagingDataSliced($scope, data, totalResultsCount) {
 function MainCtrl() {
 
 
-	
 
-	
+
+
 
     /**
      * slideInterval - Interval for bootstrap Carousel, in milliseconds:
@@ -3057,7 +3057,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
         filterText: "",
         externalFilter: 'searchText',
         useExternalFilter: true
-    }; 
+    };
 
     $scope.totalServerItems = 0;
 
@@ -3065,7 +3065,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
         pageSizes: [2, 5, 10],
         pageSize: 5,
         currentPage: 1
-    };	
+    };
 
     // sort
     $scope.sortOptions = {
@@ -3123,7 +3123,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
         }
     };
     $scope.setPagingDataSliced = setPagingDataSliced;
-    
+
 
    // ////FILTER BY LIST NAME
    // $scope.filterName = function() {
@@ -3139,13 +3139,13 @@ function ngGridCtrl($scope, $http, $cookieStore) {
    // };
 
 
-	
+
 //WHATCH
 $scope.$watch('pagingOptions', function () {
         if (!self.poInit || self.gettingData) {
             self.poInit = true;
             return;
-        } 
+        }
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
     }, true);
 
@@ -3164,12 +3164,12 @@ $scope.$watch('pagingOptions', function () {
     }, true);
 
     $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
-    
 
 
-    
-    
-    
+
+
+
+
 
 
  //    $scope.filterOptions = {
@@ -3198,7 +3198,7 @@ $scope.$watch('pagingOptions', function () {
  // };
 //
  // $scope.getPagedDataAsync = function(data, pageSize, page) {
- //   setTimeout(function() {      
+ //   setTimeout(function() {
  //       $http.get('views/datasets/ngData.json').success(function(largeLoad) {
  //         $scope.setPagingData(largeLoad, page, pageSize);
  //       });
@@ -3226,7 +3226,7 @@ $scope.$watch('pagingOptions', function () {
 //    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
 //  }
 //}, true);
-    
+
     // Watch for page and page size changes, re-fill the grid using the new options when they change
    //$scope.$watch(
    //    function () {
@@ -3252,7 +3252,7 @@ $scope.$watch('pagingOptions', function () {
 
 
     //TABLE OPTIONS
-    $scope.ngOptions = { 
+    $scope.ngOptions = {
         data: 'ngData',
         enableSorting: true,
         sortInfo: $scope.sortOptions,
@@ -3273,43 +3273,43 @@ $scope.$watch('pagingOptions', function () {
                width: 30
        //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
            },{
-          
+
           field: 'contactListName',
           displayName: 'List Name',
           cellTemplate: 'views/table/ListNameTemplate.html'
-          
+
         },{
-          
+
           field:'createdDate',
           displayName:'Created'
-          
+
         }, {
-          
+
           field:'status',
           displayName:'Status',
           cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
-          
+
         }, {
-          
+
           field:'messagesSent',
           displayName:'Sent Messages'
-          
+
         },{
-          
+
           field:'lastMessageSent',
           displayName:'Last Sent'
-          
+
         },{
-          
+
           cellTemplate: 'views/table/ManageListTemplateCol.html'
-          
+
         }
-        
-        ] 
+
+        ]
 
     };
 
-    
+
 
 }
 
@@ -3341,7 +3341,7 @@ function ngContactListCtrl($scope, $http, $cookieStore) {
         //filterText2: '',
         //externalFilter: '',
         //useExternalFilter: true
-    }; 
+    };
 
 
 
@@ -3357,7 +3357,7 @@ function ngContactListCtrl($scope, $http, $cookieStore) {
         pageSizes: [2, 5, 10],
         pageSize: 5,
         currentPage: 1
-    };  
+    };
 
     // sort
     //$scope.sortOptions = {
@@ -3378,8 +3378,8 @@ function ngContactListCtrl($scope, $http, $cookieStore) {
 
 
 //GET DATA
-    
-     $scope.setPagingData = function(data, page, pageSize){  
+
+     $scope.setPagingData = function(data, page, pageSize){
         var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
         $scope.ngData = pagedData;
         $scope.totalServerItems = data.length;
@@ -3409,7 +3409,7 @@ function ngContactListCtrl($scope, $http, $cookieStore) {
                         function(data, status, headers, config) {
                             alert('Unexpected error occurred when trying to fetch contact lists!');
                         }
-                    );            
+                    );
             } else {
                 $http.post(
                         inspiniaNS.wsUrl + "contact_get",
@@ -3427,15 +3427,15 @@ function ngContactListCtrl($scope, $http, $cookieStore) {
         }, 100);
     };
 
-   
-    
-    
+
+
+
 //WHATCH
 $scope.$watch('pagingOptions', function () {
         if (!self.poInit || self.gettingData) {
             self.poInit = true;
             return;
-        } 
+        }
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
     }, true);
 
@@ -3454,10 +3454,10 @@ $scope.$watch('pagingOptions', function () {
    // }, true);
 
     $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-    
+
 
     //TABLE OPTIONS
-    $scope.ngOptions = { 
+    $scope.ngOptions = {
         data: 'ngData',
         enableSorting: true,
         sortInfo: $scope.sortOptions,
@@ -3479,50 +3479,50 @@ $scope.$watch('pagingOptions', function () {
                width: 30
        //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
         },{
-          
-          field: 'ANI', 
+
+          field: 'ANI',
           displayName: 'List Name'
           //cellTemplate: 'views/table/ListNameTemplate.html'
-          
+
         },{
-          
-          field:'ContactFirstName', 
+
+          field:'ContactFirstName',
           displayName:'Name',
           cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">{{row.getProperty(col.field)}} {{row.entity.lastName}} {{row.entity.firstName}}</div>'
-          
+
         }, {
-          
-          field:'emailAddress', 
+
+          field:'emailAddress',
           displayName:'Email'
-          
+
         }, {
-          
+
           field:'custom1',
           displayName:'Field 1'
-          
+
         },{
-          
-          field:'custom2', 
+
+          field:'custom2',
           displayName:'Field 2'
-          
+
         },{
-          
-          field:'custom3', 
+
+          field:'custom3',
           displayName:'Field 3'
-          
+
         },{
-          
-          field:'status', 
+
+          field:'status',
           displayName:'Status',
           cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
-          
+
         },{
-          
+
           cellTemplate: 'views/table/ManageListTemplateCol.html'
-          
+
         }
-        
-        ] 
+
+        ]
 
     };
 
@@ -3561,9 +3561,9 @@ function AddListsCtrl($scope, $http, $cookieStore) {
 //                    inspiniaNS.wsUrl + "contactlist_get",
 //                    $.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), limit: pageSize, offset: (page - 1) * pageSize})
 //                ).success(function(data, status, headers, config) {
-//                    
+//
 //                $scope.lists.names = data;
-//                    
+//
 //
 //                }).error(
 //                    //An error occurred with this request
@@ -3730,11 +3730,11 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 	$scope.formats = ['MM/dd/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
 	$scope.format = $scope.formats[0];
-    
-    
-  //reset send form  
+
+
+  //reset send form
     $scope.reset = function(){
-      $scope.FromName = $scope.initial; 
+      $scope.FromName = $scope.initial;
       $scope.MessageType = 'SMS';
       $scope.FromNumber = 'default';
       $scope.ToList = $scope.initial;
@@ -3978,11 +3978,17 @@ function loginCtrl($scope, $cookieStore, $http, $window) {
         ).error(
             //An error occurred with this request
             function(data, status, headers, config) {
-                alert("Failed to sign in! Please try again.")
+                alert("Failed to sign in! Please try again.");
             }
-        )
-    }
+        );
+    };
 }
+
+/**
+ *
+ * Inbox
+ */
+
 /**
  *
  * Pass all functions into module
@@ -4005,6 +4011,7 @@ angular
     .controller('GoogleMaps', GoogleMaps)
     .controller('ngGridCtrl', ['$scope', '$http', '$cookieStore', ngGridCtrl])
     .controller('ngContactListCtrl', ['$scope', '$http', '$cookieStore', ngContactListCtrl])
+    .controller('ngInboxListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.InboxList])
     .controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', AddListsCtrl])
     .controller('codeEditorCtrl', codeEditorCtrl)
     .controller('nestableCtrl', nestableCtrl)
