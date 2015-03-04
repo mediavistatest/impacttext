@@ -30,7 +30,7 @@ var ngInbox = {
         $scope.setPagingDataSliced = setPagingDataSliced;
 
         $scope.getPagedDataAsync = function(pageSize, page, searchText) {
-            setTimeout(function() {
+            //setTimeout(function() {
                 var data;
 
                 $http.post(inspiniaNS.wsUrl + "messages_inbound", $.param({
@@ -53,7 +53,7 @@ var ngInbox = {
                 function(data, status, headers, config) {
                     alert('Unexpected error occurred when trying to fetch contact lists!');
                 });
-            }, 100);
+            //}, 100);
         };
 
         //WHATCH
