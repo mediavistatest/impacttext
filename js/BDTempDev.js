@@ -1,5 +1,6 @@
 var ngInbox = {
     _internal : {
+        ErrorMsg : '',
         DataConstructors : {
             PageOptions : function() {
                 var self = this;
@@ -47,7 +48,7 @@ var ngInbox = {
                     }).error(
                     //An error occurred with this request
                     function(data, status, headers, config) {
-                        alert('Unexpected error occurred when trying to fetch inbox messages list!');
+                        alert(ngInbox._internal.ErrorMsg);
                     });
                 } else {
                     $http.post(inspiniaNS.wsUrl + action, $.param({
@@ -56,12 +57,12 @@ var ngInbox = {
                         limit : pageSize,
                         offset : (page - 1) * pageSize
                     })).success(function(data) {
-                        //console.log(data.apidata)
+                        console.log(data.apidata)
                         $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
                     }).error(
                     //An error occurred with this request
                     function(data, status, headers, config) {
-                        alert('Unexpected error occurred when trying to fetch inbox messages list!');
+                        alert(ngInbox._internal.ErrorMsg);
                     });
                 }
             }
@@ -71,7 +72,8 @@ var ngInbox = {
         Action : 'messages_inbound',
         Controller : function($scope, $http, $cookieStore) {
             var inboxList = this;
-
+            ngInbox._internal.ErrorMsg = 'Unexpected error occurred when trying to fetch inbox messages list!'; 
+            
             $scope.mySelections = [];
             $scope.totalServerItems = 0;
             $scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
@@ -127,9 +129,11 @@ var ngInbox = {
     },
     SentList : {
         Action : 'messages_outbound',
+        ErrorMsg : 'Unexpected error occurred when trying to fetch sent messages list!',
         Controller : function($scope, $http, $cookieStore) {
             var inboxList = this;
-
+            ngInbox._internal.ErrorMsg = 'Unexpected error occurred when trying to fetch sent messages list!';
+             
             $scope.mySelections = [];
             $scope.totalServerItems = 0;
             $scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
@@ -169,16 +173,13 @@ var ngInbox = {
                 filterOptions : $scope.filterOptions,
                 columnDefs : [{
                     field : 'sourceANI',
-                    displayName : 'Contact'
+                    displayName : 'Contact/List'
                 }, {
                     field : 'message',
                     displayName : 'Message'
                 }, {
                     field : 'createdDate',
                     displayName : 'Date',
-                }, {
-                    field : '',
-                    displayName : 'List'
                 }]
             };
         }
