@@ -1,109 +1,198 @@
 var ngInbox = {
-    InboxList : function($scope, $http, $cookieStore) {
-        var inboxList = this;
-
-        $scope.mySelections = [];
-
-        $scope.filterOptions = {
-            filterText : ''
-        };
-
-        $scope.totalServerItems = 0;
-
-        $scope.pagingOptions = {
-            pageSizes : [2, 5, 10],
-            pageSize : 5,
-            currentPage : 1
-        };
-
-        //GET DATA
-
-        $scope.setPagingData = function(data, page, pageSize) {
-            var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-            $scope.ngData = pagedData;
-            $scope.totalServerItems = data.length;
-            if (!$scope.$$phase) {
-                $scope.$apply();
+    _internal : {
+        DataConstructors : {
+            PageOptions : function() {
+                var self = this;
+                self.pageSizes = [2, 5, 10];
+                self.pageSize = 5;
+                self.currentPage = 1;
+            },
+            FilterOptions : function() {
+                var self = this;
+                self.filterText = '';
             }
-        };
-
-        $scope.setPagingDataSliced = setPagingDataSliced;
-
-        $scope.getPagedDataAsync = function(pageSize, page, searchText) {
-            //setTimeout(function() {
+        },
+        Methods : {
+            SetPagingData : function(data, page, pageSize, $scope) {
+                var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+                $scope.ngData = pagedData;
+                $scope.totalServerItems = data.length;
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            },
+            SetPagingDataSliced : function($scope, data, totalResultsCount) {
+                $scope.ngData = data;
+                $scope.totalServerItems = totalResultsCount;
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            },
+            GetPagedDataAsync : function(action, $scope, $http, $cookieStore) {
                 var data;
-
-                $http.post(inspiniaNS.wsUrl + "messages_inbound", $.param({
-                    apikey : $cookieStore.get('inspinia_auth_token'),
-                    accountID : $cookieStore.get('inspinia_account_id')
-                })).success(function(largeLoad) {
-                    if (searchText) {
-                        var ft = searchText.toLowerCase();
+                var pageSize = $scope.pagingOptions.pageSize;
+                var page = $scope.pagingOptions.currentPage;
+                var searchText = $scope.filterOptions.filterText;
+                if (searchText) {
+                    var ft = searchText.toLowerCase();
+                    $http.post(inspiniaNS.wsUrl + action, $.param({
+                        apikey : $cookieStore.get('inspinia_auth_token'),
+                        accountID : $cookieStore.get('inspinia_account_id')
+                    })).success(function(largeLoad) {
                         data = largeLoad.apidata.filter(function(item) {
                             return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
                         });
-                        $scope.setPagingData(data, page, pageSize);
-                    } else{
-                        data = largeLoad;
+                        //console.log(data)
+                        $scope.setPagingData(data, page, pageSize, $scope);
+                    }).error(
+                    //An error occurred with this request
+                    function(data, status, headers, config) {
+                        alert('Unexpected error occurred when trying to fetch inbox messages list!');
+                    });
+                } else {
+                    $http.post(inspiniaNS.wsUrl + action, $.param({
+                        apikey : $cookieStore.get('inspinia_auth_token'),
+                        accountID : $cookieStore.get('inspinia_account_id'),
+                        limit : pageSize,
+                        offset : (page - 1) * pageSize
+                    })).success(function(data) {
+                        //console.log(data.apidata)
                         $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-                    }
-                    console.log(data.apidata)
-                }).error(
-                //An error occurred with this request
-                function(data, status, headers, config) {
-                    alert('Unexpected error occurred when trying to fetch contact lists!');
-                });
-            //}, 100);
-        };
-
-        //WHATCH
-        $scope.$watch('pagingOptions', function() {
-            if (!self.poInit || self.gettingData) {
-                self.poInit = true;
-                return;
+                    }).error(
+                    //An error occurred with this request
+                    function(data, status, headers, config) {
+                        alert('Unexpected error occurred when trying to fetch inbox messages list!');
+                    });
+                }
             }
-            $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-        }, true);
+        }
+    },
+    InboxList : {
+        Action : 'messages_inbound',
+        Controller : function($scope, $http, $cookieStore) {
+            var inboxList = this;
 
-        $scope.$watch('filterOptions', function() {
-            if (!self.foInit || self.gettingData) {
-                self.foInit = true;
-                return;
-            }
-            $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-        }, true);
+            $scope.mySelections = [];
+            $scope.totalServerItems = 0;
+            $scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
+            $scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
 
-        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+            //GET DATA
+            $scope.setPagingData = ngInbox._internal.Methods.SetPagingData;
+            $scope.setPagingDataSliced = ngInbox._internal.Methods.SetPagingDataSliced;
+            $scope.getPagedDataAsync = ngInbox._internal.Methods.GetPagedDataAsync;
 
-        //TABLE OPTIONS
-        $scope.ngOptions = {
-            data : 'ngData',
-            enableSorting : true,
-            sortInfo : $scope.sortOptions,
-            rowHeight : 60,
-            selectedItems : $scope.mySelections,
-            showSelectionCheckbox : true,
-            multiSelect : true,
-            selectWithCheckboxOnly : true,
-            enablePaging : true,
-            showFooter : true,
-            footerTemplate : 'views/table/footerTemplate.html',
-            totalServerItems : 'totalServerItems',
-            pagingOptions : $scope.pagingOptions,
-            filterOptions : $scope.filterOptions,
-            columnDefs : [{
-                field : 'createdBy',
-                displayName : 'Contact'
-            }, {
-                field : 'message',
-                displayName : 'Message'
-            }, {
-                field : 'createdDate',
-                displayName : 'Date',
-            }, {
-                field : '',
-                displayName : 'List'
-            }]
-        };
+            //WHATCH
+            $scope.$watch('pagingOptions', function() {
+                $scope.getPagedDataAsync(ngInbox.InboxList.Action, $scope, $http, $cookieStore);
+            }, true);
+
+            $scope.$watch('filterOptions', function() {
+                $scope.getPagedDataAsync(ngInbox.InboxList.Action, $scope, $http, $cookieStore);
+            }, true);
+
+            //INITIAL GET DATA
+            $scope.getPagedDataAsync(ngInbox.InboxList.Action, $scope, $http, $cookieStore);
+
+            //TABLE OPTIONS
+            $scope.ngOptions = {
+                data : 'ngData',
+                enableSorting : true,
+                sortInfo : $scope.sortOptions,
+                rowHeight : 60,
+                selectedItems : $scope.mySelections,
+                showSelectionCheckbox : true,
+                multiSelect : true,
+                selectWithCheckboxOnly : true,
+                enablePaging : true,
+                showFooter : true,
+                footerTemplate : 'views/table/footerTemplate.html',
+                totalServerItems : 'totalServerItems',
+                pagingOptions : $scope.pagingOptions,
+                filterOptions : $scope.filterOptions,
+                columnDefs : [{
+                    field : 'sourceANI',
+                    displayName : 'Contact'
+                }, {
+                    field : 'message',
+                    displayName : 'Message'
+                }, {
+                    field : 'createdDate',
+                    displayName : 'Date',
+                }, {
+                    field : '',
+                    displayName : 'List'
+                }]
+            };
+        }
+    },
+    SentList : {
+        Action : 'messages_outbound',
+        Controller : function($scope, $http, $cookieStore) {
+            var inboxList = this;
+
+            $scope.mySelections = [];
+            $scope.totalServerItems = 0;
+            $scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
+            $scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
+
+            //GET DATA
+            $scope.setPagingData = ngInbox._internal.Methods.SetPagingData;
+            $scope.setPagingDataSliced = ngInbox._internal.Methods.SetPagingDataSliced;
+            $scope.getPagedDataAsync = ngInbox._internal.Methods.GetPagedDataAsync;
+
+            //WHATCH
+            $scope.$watch('pagingOptions', function() {
+                $scope.getPagedDataAsync(ngInbox.SentList.Action, $scope, $http, $cookieStore);
+            }, true);
+
+            $scope.$watch('filterOptions', function() {
+                $scope.getPagedDataAsync(ngInbox.SentList.Action, $scope, $http, $cookieStore);
+            }, true);
+
+            //INITIAL GET DATA
+            $scope.getPagedDataAsync(ngInbox.SentList.Action, $scope, $http, $cookieStore);
+
+            //TABLE OPTIONS
+            $scope.ngOptions = {
+                data : 'ngData',
+                enableSorting : true,
+                sortInfo : $scope.sortOptions,
+                rowHeight : 60,
+                selectedItems : $scope.mySelections,
+                showSelectionCheckbox : true,
+                multiSelect : true,
+                selectWithCheckboxOnly : true,
+                enablePaging : true,
+                showFooter : true,
+                footerTemplate : 'views/table/footerTemplate.html',
+                totalServerItems : 'totalServerItems',
+                pagingOptions : $scope.pagingOptions,
+                filterOptions : $scope.filterOptions,
+                columnDefs : [{
+                    field : 'sourceANI',
+                    displayName : 'Contact'
+                }, {
+                    field : 'message',
+                    displayName : 'Message'
+                }, {
+                    field : 'createdDate',
+                    displayName : 'Date',
+                }, {
+                    field : '',
+                    displayName : 'List'
+                }]
+            };
+        }
+    },
+    ScheduledList : {
+
+    },
+    DraftsList : {
+
+    },
+    TrashList : {
+
     }
 };
+
