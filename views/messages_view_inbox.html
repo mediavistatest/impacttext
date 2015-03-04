@@ -13,9 +13,6 @@
 
         <button class="btn"><i class="fa fa-reply"></i> Reply</button> <!-- only inbox -->
         <button class="btn"><i class="fa fa-share"></i> Forward</button> <!-- inbox, sent -->
-        <button class="btn"><i class="fa fa-retweet"></i> Resend</button> <!-- only send -->
-        <button class="btn"><i class="fa fa-undo"></i> Restore</button> <!-- only trash -->
-        <button class="btn"><i class="fa fa-pencil"></i> Manage</button> <!-- draft, scheduled -->
         <button class="btn"><i class="fa fa-check-square-o"></i> Opt In Sender</button> <!-- only inbox -->
         <button class="btn"><i class="fa fa-chain-broken"></i> Opt Out Sender</button> <!-- only inbox -->
         <button class="btn"><i class="fa fa-ban"></i> Block/unblock a contact</button> <!-- only inbox -->
@@ -53,6 +50,6 @@
         </div>
        
        	<div class="bottom-buttons left">
-       		<button class="btn back-btn"><i class="fa fa-undo"></i> Back to Inbox</button>
+       		<a ui-sref="messages.inbox" class="btn back-btn"><i class="fa fa-undo"></i> Back to Inbox</a>
        	</div>
 </div>

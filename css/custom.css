@@ -1451,6 +1451,77 @@ z-index: 1000;
   margin-top:15px;
 }
 
+.messages-view .top-buttons {
+text-align: left;
+margin-bottom: 20px;
+margin-top: 30px;
+}
+
+.view-from-number {
+  font-size: 18px;
+  color:#005eaa;
+}
+
+.view-from-number span {
+  font-weight: 700;
+  color:#363636;
+}
+
+.view-info-box {
+  margin-top:-15px;
+  color: #363636;
+}
+
+.message-box {
+border-top: 1px solid lightgrey;
+padding-top: 25px;
+margin-top: 30px;
+margin-bottom: 50px;
+}
+
+.bottom-buttons.left {
+  text-align: left;
+}
+
+.bottom-buttons.left .btn, .bottom-buttons.left .discard-btn {
+margin-left: 0;
+}
+
+a.back-btn {
+border: none;
+color: #005eaa;
+}
+
+.messages .open > .dropdown-menu.dropdown-list {
+display: block;
+text-align: left;
+}
+
+.messages .open > .dropdown-menu.dropdown-list {
+padding:;
+}
+
+.dropdown-list li {
+margin-bottom: 4px;
+}
+
+.list-holder {
+  max-height: 150px;
+  overflow: auto;
+}
+
+.list-holder div {
+  margin-bottom:4px;
+}
+
+.dropdown-list .btn-send.smaller {
+color: white;
+background: #007d32;
+width: 100%;
+border: none;
+margin-top: 10px;
+}
+
 @media all and (max-width:990px) {
   .welcome-msg {display:none;}
   .navbar-header {display: block;}

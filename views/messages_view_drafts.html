@@ -1,0 +1,37 @@
+<h1>Messages </h1>
+
+<div class="col-md-12 content-holder animated fadeInRight messages messages-view" ng-class="animation">
+
+    <h2 class="section-title">View Draft</h2>
+    
+    <div class="view-info-box">	
+	    <div class="view-from-number">To: <span>1585897458</span></div>
+	    <div class="view-date">Date saved: February 2, 2015, 10:15 AM</div>
+    </div>
+
+    	<div class="top-buttons">
+
+        <button class="btn"><i class="fa fa-pencil"></i> Manage</button> <!-- draft, scheduled -->
+
+        <div class="btn-group dropdown discard-btn"> <!-- all -->
+            <button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">Delete message</button>
+            <ul class="dropdown-menu dropdown-alerts">
+                <li>Are you sure you want to delete the message(s)?</li>
+                <li>&nbsp;</li>
+                <li><span class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+            </ul>
+        </div>
+
+        
+        </div><!-- end top button -->
+        
+        <div class="message-box">
+        	
+        	<div class="message-txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+
+        </div>
+       
+       	<div class="bottom-buttons left">
+       		<a ui-sref="messages.drafts" class="btn back-btn"><i class="fa fa-undo"></i> Back to Drafts</a>
+       	</div>
+</div>
