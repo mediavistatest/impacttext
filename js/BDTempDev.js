@@ -179,6 +179,8 @@ var ngInbox = {
                 }, {
                     field : 'sendEndDate',
                     displayName : 'Date sent',
+                }, {
+                    cellTemplate : 'views/table/ManageTemplateCol.html'
                 }]
             };
         }
@@ -200,15 +202,15 @@ var ngInbox = {
 
             //WHATCH
             $scope.$watch('pagingOptions', function() {
-                $scope.getPagedDataAsync(ngInbox.SentList.Action, $scope, $http, $cookieStore);
+                $scope.getPagedDataAsync(ngInbox.ScheduledList.Action, $scope, $http, $cookieStore);
             }, true);
 
             $scope.$watch('filterOptions', function() {
-                $scope.getPagedDataAsync(ngInbox.SentList.Action, $scope, $http, $cookieStore);
+                $scope.getPagedDataAsync(ngInbox.ScheduledList.Action, $scope, $http, $cookieStore);
             }, true);
 
             //INITIAL GET DATA
-            $scope.getPagedDataAsync(ngInbox.SentList.Action, $scope, $http, $cookieStore);
+            $scope.getPagedDataAsync(ngInbox.ScheduledList.Action, $scope, $http, $cookieStore);
 
             //TABLE OPTIONS
             $scope.ngOptions = {
@@ -238,15 +240,125 @@ var ngInbox = {
                 }, {
                     field : 'scheduledDate',
                     displayName : 'Date scheduled',
+                }, {
+                    cellTemplate : 'views/table/ManageTemplateCol.html'
                 }]
             };
         }
     },
     DraftsList : {
+        Action : 'messages_outbound', //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!promeniti
+        Controller : function($scope, $http, $cookieStore) {
+            var inboxList = this;
+            ngInbox._internal.ErrorMsg = 'Unexpected error occurred when trying to fetch draft messages list!';
 
+            $scope.mySelections = [];
+            $scope.totalServerItems = 0;
+            $scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
+            $scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
+
+            //GET DATA
+            $scope.setPagingDataSliced = ngInbox._internal.Methods.SetPagingDataSliced;
+            $scope.getPagedDataAsync = ngInbox._internal.Methods.GetPagedDataAsync;
+
+            //WHATCH
+            $scope.$watch('pagingOptions', function() {
+                $scope.getPagedDataAsync(ngInbox.DraftsList.Action, $scope, $http, $cookieStore);
+            }, true);
+
+            $scope.$watch('filterOptions', function() {
+                $scope.getPagedDataAsync(ngInbox.DraftsList.Action, $scope, $http, $cookieStore);
+            }, true);
+
+            //INITIAL GET DATA
+            $scope.getPagedDataAsync(ngInbox.DraftsList.Action, $scope, $http, $cookieStore);
+
+            //TABLE OPTIONS
+            $scope.ngOptions = {
+                data : 'ngData',
+                enableSorting : true,
+                sortInfo : $scope.sortOptions,
+                rowHeight : 60,
+                selectedItems : $scope.mySelections,
+                showSelectionCheckbox : true,
+                multiSelect : true,
+                selectWithCheckboxOnly : true,
+                enablePaging : true,
+                showFooter : true,
+                footerTemplate : 'views/table/footerTemplate.html',
+                totalServerItems : 'totalServerItems',
+                pagingOptions : $scope.pagingOptions,
+                filterOptions : $scope.filterOptions,
+                columnDefs : [{
+                    field : 'sourceANI',
+                    displayName : 'Contact/List'
+                }, {
+                    field : 'message',
+                    displayName : 'Message'
+                }, {
+                    field : 'createdDate',
+                    displayName : 'Date & Time Saved'
+                }, {
+                    cellTemplate : 'views/table/ManageTemplateCol.html'
+                }]
+            };
+        }
     },
     TrashList : {
+        Action : 'messages_outbound', //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!promeniti
+        Controller : function($scope, $http, $cookieStore) {
+            var inboxList = this;
+            ngInbox._internal.ErrorMsg = 'Unexpected error occurred when trying to fetch trash messages list!';
 
+            $scope.mySelections = [];
+            $scope.totalServerItems = 0;
+            $scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
+            $scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
+
+            //GET DATA
+            $scope.setPagingDataSliced = ngInbox._internal.Methods.SetPagingDataSliced;
+            $scope.getPagedDataAsync = ngInbox._internal.Methods.GetPagedDataAsync;
+
+            //WHATCH
+            $scope.$watch('pagingOptions', function() {
+                $scope.getPagedDataAsync(ngInbox.TrashList.Action, $scope, $http, $cookieStore);
+            }, true);
+
+            $scope.$watch('filterOptions', function() {
+                $scope.getPagedDataAsync(ngInbox.TrashList.Action, $scope, $http, $cookieStore);
+            }, true);
+
+            //INITIAL GET DATA
+            $scope.getPagedDataAsync(ngInbox.TrashList.Action, $scope, $http, $cookieStore);
+
+            //TABLE OPTIONS
+            $scope.ngOptions = {
+                data : 'ngData',
+                enableSorting : true,
+                sortInfo : $scope.sortOptions,
+                rowHeight : 60,
+                selectedItems : $scope.mySelections,
+                showSelectionCheckbox : true,
+                multiSelect : true,
+                selectWithCheckboxOnly : true,
+                enablePaging : true,
+                showFooter : true,
+                footerTemplate : 'views/table/footerTemplate.html',
+                totalServerItems : 'totalServerItems',
+                pagingOptions : $scope.pagingOptions,
+                filterOptions : $scope.filterOptions,
+                columnDefs : [{
+                    field : 'sourceANI',
+                    displayName : 'Contact/List'
+                }, {
+                    field : 'message',
+                    displayName : 'Message'
+                }, {
+                    field : 'createdDate',
+                    displayName : 'Date & Time Deleted'
+                }]
+            };
+        }
     }
 };
 
