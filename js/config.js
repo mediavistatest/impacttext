@@ -87,7 +87,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             //}
         })
         .state('lists.manage', {
-            url: "/lists_manage",
+            url: "/lists_manage/:id",
             templateUrl: "views/lists_manage.html",
             data: { pageTitle: 'Manage List' }
             //resolve: {

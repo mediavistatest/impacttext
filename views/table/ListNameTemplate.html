@@ -1,1 +1,1 @@
-<div class="ngCellText" ng-class="col.colIndex()"><a href="#/lists/lists_manage">{{row.getProperty(col.field)}}</a></div>
+<div class="ngCellText" ng-class="col.colIndex()"><a ui-sref="lists.manage({id:row.getProperty('contactListID')})">{{row.getProperty(col.field)}}</a></div>

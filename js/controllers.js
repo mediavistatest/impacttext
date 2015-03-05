@@ -3076,10 +3076,17 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 
 
 //GET DATA
-	$scope.getPagedDataAsync = function (pageSize, page, searchText) {
+	$scope.getPagedDataAsync = function (pageSize, page, searchText, sortFields, sortOrders) {
 		if (typeof page == 'undefined' || page == null || page == '') {
 			page = 0;
 		}
+		if (typeof sortFields == 'undefined' || sortFields == null) {
+			sortFields = [];
+		}
+		if (typeof sortOrders == 'undefined' || sortOrders == null) {
+			sortOrders = [];
+		}
+		
 		setTimeout(function () {
 			var data;
 			if (searchText) {
@@ -3158,10 +3165,10 @@ $scope.$watch('pagingOptions', function () {
     }, true);
 
     $scope.$watch('sortOptions', function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
-  }
-    }, true);
+		 if (newVal !== oldVal) {
+			 $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+		 }
+	 }, true);
 
     $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
 
@@ -3316,7 +3323,7 @@ $scope.$watch('pagingOptions', function () {
 /**
  * CONTROLLER FOR CONTACT VIEW TABLE
  */
-function ngContactListCtrl($scope, $http, $cookieStore) {
+function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     //   $scope.ngData = [
     //       {Name: "Moroni", Age: 50, Position: 'PR Menager', Status: 'active', Date: '12.12.2014'},
     //       {Name: "Teancum", Age: 43, Position: 'CEO/CFO', Status: 'deactive', Date: '10.10.2014'},
@@ -3360,11 +3367,11 @@ function ngContactListCtrl($scope, $http, $cookieStore) {
     };
 
     // sort
-    //$scope.sortOptions = {
-    //    fields: ['ListName'],
-    //    directions: ['ASC'],
-    //    useExternalSorting: true
-    //};
+    $scope.sortOptions = {
+        fields: ['ListName'],
+        directions: ['ASC'],
+        useExternalSorting: true
+    };
 
     //$scope.filterStatusO = function() {
     //var filterText = "Status:O";
@@ -3390,42 +3397,70 @@ function ngContactListCtrl($scope, $http, $cookieStore) {
 
     $scope.setPagingDataSliced = setPagingDataSliced;
 
-    $scope.getPagedDataAsync = function (pageSize, page, searchText) {
-        setTimeout(function () {
-            var data;
-            if (searchText) {
-                var ft = searchText.toLowerCase();
-                $http.post(
-                        inspiniaNS.wsUrl + "contact_get",
-                        $.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
-                    ).success(
-                        function (largeLoad) {
-                            data = largeLoad.apidata.filter(function(item) {
-                        return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
-                    });
-                    $scope.setPagingData(data,page,pageSize);
-                }).error(
-                        //An error occurred with this request
-                        function(data, status, headers, config) {
-                            alert('Unexpected error occurred when trying to fetch contact lists!');
-                        }
-                    );
-            } else {
-                $http.post(
-                        inspiniaNS.wsUrl + "contact_get",
-                        $.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), limit: pageSize, offset: (page - 1) * pageSize})
-                    ).success(
-                        function (data) {
-                            $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-                        }).error(
-                        //An error occurred with this request
-                        function(data, status, headers, config) {
-                            alert('Unexpected error occurred when trying to fetch contact lists!');
-                        }
-                    );
-            }
-        }, 100);
-    };
+    $scope.getPagedDataAsync = function (pageSize, page, searchText, sortFields, sortOrders) {
+		 if (typeof page == 'undefined' || page == null || page == '') {
+			 page = 0;
+		 }
+		 if (typeof sortFields == 'undefined' || sortFields == null) {
+			 sortFields = [];
+		 }
+		 if (typeof sortOrders == 'undefined' || sortOrders == null) {
+			 sortOrders = [];
+		 }
+
+		 //Creating a sort options string
+		 var orderBy = '';
+		 for (var i in sortFields) {
+			 if (sortFields[i] == '') {
+				 continue;
+			 }
+			 var sortOrder = typeof sortOrders[i] == 'undefined' || sortOrders[i] == null ? 'asc' : sortOrders[i].toLowerCase();
+			 if (orderBy != '') {
+				 orderBy += ',';
+			 }
+			 orderBy += sortFields[i].toLowerCase() + " " + sortOrder;
+		 }
+		 if (orderBy == '') {
+			 orderBy = 'lastname asc';
+		 }
+
+		 setTimeout(function () {
+			 var data;
+			 if (searchText) {
+				 var ft = searchText.toLowerCase();
+				 $http.post(
+					 inspiniaNS.wsUrl + "contact_get",
+					 $.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), contactListID: $state.params.id })
+				 ).success(
+					 function (largeLoad) {
+						 data = largeLoad.apidata.filter(function(item) {
+							 return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
+						 });
+						 $scope.setPagingData(data, page, pageSize);
+					 }).error(
+					 //An error occurred with this request
+					 function(data, status, headers, config) {
+						 alert('Unexpected error occurred when trying to fetch contact lists!');
+					 }
+				 );
+			 } else {
+				 $http.post(
+					 inspiniaNS.wsUrl + "contact_get",
+					 $.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), contactListID: $state.params.id,
+						 limit: pageSize, offset: (page - 1) * pageSize, orderby: orderBy
+					 })
+				 ).success(
+					 function (data) {
+						 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+					 }).error(
+					 //An error occurred with this request
+					 function(data, status, headers, config) {
+						 alert('Unexpected error occurred when trying to fetch contact lists!');
+					 }
+				 );
+			 }
+		 }, 100);
+	 };
 
 
 
@@ -3447,11 +3482,12 @@ $scope.$watch('pagingOptions', function () {
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
     }, true);
 
-   // $scope.$watch('sortOptions', function (newVal, oldVal) {
-   //   if (newVal !== oldVal) {
-   // $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
-   // }
-   // }, true);
+    $scope.$watch('sortOptions', function (newVal, oldVal) {
+		 //alert($scope.sortOptions.fields);
+		 if (newVal !== oldVal) {
+			 $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+		 }
+	 }, true);
 
     $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
 
@@ -4010,7 +4046,7 @@ angular
     .controller('chartJsCtrl', chartJsCtrl)
     .controller('GoogleMaps', GoogleMaps)
     .controller('ngGridCtrl', ['$scope', '$http', '$cookieStore', ngGridCtrl])
-    .controller('ngContactListCtrl', ['$scope', '$http', '$cookieStore', ngContactListCtrl])
+    .controller('ngContactListCtrl', ['$scope', '$http', '$cookieStore','$state', ngContactListCtrl])
     .controller('ngInboxListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.InboxList.Controller])
     .controller('ngSentListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.SentList.Controller])
     .controller('ngScheduledListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.ScheduledList.Controller])    
