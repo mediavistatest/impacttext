@@ -35,7 +35,7 @@ var ngInbox = {
                     status : controller.Status
                 };
 
-                if (searchText){
+                if (searchText) {
                     params.search = searchText.toLowerCase();
                 }
 
@@ -168,6 +168,8 @@ var ngInbox = {
                 }, {
                     field : 'sendEndDate',
                     displayName : 'Date sent',
+                }, {
+                    cellTemplate : 'views/table/ManageTemplateCol.html'
                 }]
             };
         }
@@ -190,15 +192,15 @@ var ngInbox = {
 
             //WHATCH
             $scope.$watch('pagingOptions', function() {
-                $scope.getPagedDataAsync(ngInbox.SentList, $scope, $http, $cookieStore);
+                $scope.getPagedDataAsync(ngInbox.ScheduledList, $scope, $http, $cookieStore);
             }, true);
 
             $scope.$watch('filterOptions', function() {
-                $scope.getPagedDataAsync(ngInbox.SentList, $scope, $http, $cookieStore);
+                $scope.getPagedDataAsync(ngInbox.ScheduledList, $scope, $http, $cookieStore);
             }, true);
 
             //INITIAL GET DATA
-            $scope.getPagedDataAsync(ngInbox.SentList, $scope, $http, $cookieStore);
+            $scope.getPagedDataAsync(ngInbox.ScheduledList, $scope, $http, $cookieStore);
 
             //TABLE OPTIONS
             $scope.ngOptions = {
@@ -228,6 +230,8 @@ var ngInbox = {
                 }, {
                     field : 'scheduledDate',
                     displayName : 'Date scheduled',
+                }, {
+                    cellTemplate : 'views/table/ManageTemplateCol.html'
                 }]
             };
         }
@@ -258,7 +262,7 @@ var ngInbox = {
             }, true);
 
             //INITIAL GET DATA
-            $scope.getPagedDataAsync(ngInbox.SentList, $scope, $http, $cookieStore);
+            $scope.getPagedDataAsync(ngInbox.DraftsList, $scope, $http, $cookieStore);
 
             //TABLE OPTIONS
             $scope.ngOptions = {
@@ -285,6 +289,8 @@ var ngInbox = {
                 }, {
                     field : 'statusDate',
                     displayName : 'Date & Time Saved',
+                }, {
+                    cellTemplate : 'views/table/ManageTemplateCol.html'
                 }]
             };
         }
@@ -315,7 +321,7 @@ var ngInbox = {
             }, true);
 
             //INITIAL GET DATA
-            $scope.getPagedDataAsync(ngInbox.SentList, $scope, $http, $cookieStore);
+            $scope.getPagedDataAsync(ngInbox.TrashList, $scope, $http, $cookieStore);
 
             //TABLE OPTIONS
             $scope.ngOptions = {
