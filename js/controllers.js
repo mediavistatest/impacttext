@@ -4013,6 +4013,7 @@ angular
     .controller('ngContactListCtrl', ['$scope', '$http', '$cookieStore', ngContactListCtrl])
     .controller('ngInboxListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.InboxList.Controller])
     .controller('ngSentListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.SentList.Controller])
+    .controller('ngScheduledListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.ScheduledList.Controller])    
     .controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', AddListsCtrl])
     .controller('codeEditorCtrl', codeEditorCtrl)
     .controller('nestableCtrl', nestableCtrl)

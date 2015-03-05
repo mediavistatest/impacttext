@@ -72,8 +72,8 @@ var ngInbox = {
         Action : 'messages_inbound',
         Controller : function($scope, $http, $cookieStore) {
             var inboxList = this;
-            ngInbox._internal.ErrorMsg = 'Unexpected error occurred when trying to fetch inbox messages list!'; 
-            
+            ngInbox._internal.ErrorMsg = 'Unexpected error occurred when trying to fetch inbox messages list!';
+
             $scope.mySelections = [];
             $scope.totalServerItems = 0;
             $scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
@@ -129,11 +129,66 @@ var ngInbox = {
     },
     SentList : {
         Action : 'messages_outbound',
-        ErrorMsg : 'Unexpected error occurred when trying to fetch sent messages list!',
         Controller : function($scope, $http, $cookieStore) {
             var inboxList = this;
             ngInbox._internal.ErrorMsg = 'Unexpected error occurred when trying to fetch sent messages list!';
-             
+
+            $scope.mySelections = [];
+            $scope.totalServerItems = 0;
+            $scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
+            $scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
+
+            //GET DATA
+            $scope.setPagingDataSliced = ngInbox._internal.Methods.SetPagingDataSliced;
+            $scope.getPagedDataAsync = ngInbox._internal.Methods.GetPagedDataAsync;
+
+            //WHATCH
+            $scope.$watch('pagingOptions', function() {
+                $scope.getPagedDataAsync(ngInbox.SentList.Action, $scope, $http, $cookieStore);
+            }, true);
+
+            $scope.$watch('filterOptions', function() {
+                $scope.getPagedDataAsync(ngInbox.SentList.Action, $scope, $http, $cookieStore);
+            }, true);
+
+            //INITIAL GET DATA
+            $scope.getPagedDataAsync(ngInbox.SentList.Action, $scope, $http, $cookieStore);
+
+            //TABLE OPTIONS
+            $scope.ngOptions = {
+                data : 'ngData',
+                enableSorting : true,
+                sortInfo : $scope.sortOptions,
+                rowHeight : 60,
+                selectedItems : $scope.mySelections,
+                showSelectionCheckbox : true,
+                multiSelect : true,
+                selectWithCheckboxOnly : true,
+                enablePaging : true,
+                showFooter : true,
+                footerTemplate : 'views/table/footerTemplate.html',
+                totalServerItems : 'totalServerItems',
+                pagingOptions : $scope.pagingOptions,
+                filterOptions : $scope.filterOptions,
+                columnDefs : [{
+                    field : 'sourceANI',
+                    displayName : 'Contact/List'
+                }, {
+                    field : 'message',
+                    displayName : 'Message'
+                }, {
+                    field : 'sendEndDate',
+                    displayName : 'Date sent',
+                }]
+            };
+        }
+    },
+    ScheduledList : {
+        Action : 'messages_outbound',
+        Controller : function($scope, $http, $cookieStore) {
+            var inboxList = this;
+            ngInbox._internal.ErrorMsg = 'Unexpected error occurred when trying to fetch scheduled messages list!';
+
             $scope.mySelections = [];
             $scope.totalServerItems = 0;
             $scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
@@ -179,13 +234,13 @@ var ngInbox = {
                     displayName : 'Message'
                 }, {
                     field : 'createdDate',
-                    displayName : 'Date',
+                    displayName : 'Date created',
+                }, {
+                    field : 'scheduledDate',
+                    displayName : 'Date scheduled',
                 }]
             };
         }
-    },
-    ScheduledList : {
-
     },
     DraftsList : {
 
