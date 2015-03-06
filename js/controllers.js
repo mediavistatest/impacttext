@@ -3103,11 +3103,10 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 		if (typeof page == 'undefined' || page == null || page == '') {
 			page = 0;
 		}
-		if (typeof sortFields == 'undefined' || sortFields == null) {
-			sortFields = [];
-		}
-		if (typeof sortOrders == 'undefined' || sortOrders == null) {
-			sortOrders = [];
+
+		var orderBy = generateOrderByField(sortFields, sortOrders);
+		if (orderBy == '') {
+			orderBy = "contactlistname";
 		}
 		
 		setTimeout(function () {
@@ -3131,7 +3130,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 			} else {
 				$http.post(
 					inspiniaNS.wsUrl + "contactlist_get",
-					$.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), limit: pageSize, offset: (page - 1) * pageSize})
+					$.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize})
 				).success(function (data) {
 					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
 				}).error(
@@ -3285,6 +3284,7 @@ $scope.$watch('pagingOptions', function () {
     $scope.ngOptions = {
         data: 'ngData',
         enableSorting: true,
+        useExternalSorting: true,
         sortInfo: $scope.sortOptions,
         rowHeight: 60,
         selectedItems: $scope.mySelections,
