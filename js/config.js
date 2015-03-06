@@ -154,7 +154,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         })
         .state('send', {
             url: "/messages_send",
-            templateUrl: "views/messages_send_container.html",
+            templateUrl: "views/messages_send.html",
             data: { pageTitle: 'Compose Message' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {

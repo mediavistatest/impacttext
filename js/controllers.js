@@ -3478,7 +3478,7 @@ $scope.$watch('pagingOptions', function () {
             self.poInit = true;
             return;
         }
-        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
     }, true);
 
     $scope.$watch('filterOptions', function () {
@@ -3486,7 +3486,7 @@ $scope.$watch('pagingOptions', function () {
             self.foInit = true;
             return;
         }
-        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
     }, true);
 
     $scope.$watch('sortOptions', function (newVal, oldVal) {
@@ -3503,7 +3503,7 @@ $scope.$watch('pagingOptions', function () {
     $scope.ngOptions = {
         data: 'ngData',
         enableSorting: true,
-		 useExternalSorting: true,
+        useExternalSorting: true,
         sortInfo: $scope.sortOptions,
         rowHeight: 60,
         selectedItems: $scope.mySelections,
@@ -3682,13 +3682,17 @@ function notifyCtrl($scope, notify) {
     $scope.ScheduledMsg = function(){
         notify({ message: 'Your message has been scheduled!', classes: 'alert-success'});
     };
-    //If SendingMessageSucceeded event is triggered, show related message
+	//If SendingMessageSucceeded event is triggered, show related message
 	$scope.$on('SendingMessageSucceeded', function(event, args) {
 		$scope.SentMsg();
 	});
 	//If SchedulingMessageSucceeded event is triggered, show related message
 	$scope.$on('SchedulingMessageSucceeded', function(event, args) {
 		$scope.ScheduledMsg();
+	});
+	//If SaveDraftSucceeded event is triggered, show related message
+	$scope.$on('SaveDraftSucceeded', function(event, args) {
+		$scope.SavedDraftMsg();
 	});
 }
 
@@ -3845,144 +3849,197 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     );
 
 
-    //Create a function for sending messages
-    $scope.sendMessage = function(scheduled) {
+	//helper function for generating message text
+	$scope.generateMessageText = function() {
+		//Checking the type of opt out message
+		var optOutMessage = '';
+		if ($scope.OptOutMsg == 'standard') {
+			//todo: check how to receive standard opt out message
+			optOutMessage = $scope.OptOutTxt1;
+		} else if ($scope.OptOutMsg == 'custom') {
+			//todo: check how to receive custom opt out message for the account
+			optOutMessage = $scope.OptOutTxt2;
+		} else if ($scope.OptOutMsg == 'write') {
+			optOutMessage = $scope.OptOutTxt3;
+		}
 
-		 // Trigger validation flag.
-		 //$scope.submitted = true;
+		//Generate a message text
+		var messageText = '';
+		if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
+			messageText += $.trim($scope.FromName);
+			if (messageText.length > 0) {
+				messageText += ': ';
+			}
+		}
+		messageText += $scope.MessageTxt;
+		if (optOutMessage != '') {
+			messageText += '\r\n' + optOutMessage;
+		}
 
-		 if ((typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0)
-			 && (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == '')
-			 ) {
-			 return;
-		 }
-		 if (typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
-			 return;
-		 }
-		 if (scheduled && (typeof $scope.SetDate == 'undefined' || $scope.SetDate == null || $scope.SetDate == '')) {
-			 return;
-		 }
-		 //If time is not set and scheduled message sending is invoked, set time to midnight
-		 if (scheduled && (typeof $scope.SetTimeHour == 'undefined' || $scope.SetTimeHour == null || $scope.SetTimeHour == '')) {
-			 $scope.SetTimeHour = "00";
-		 }
-		 if (scheduled && (typeof $scope.SetTimeMinute == 'undefined' || $scope.SetTimeMinute == null || $scope.SetTimeMinute == '')) {
-			 $scope.SetTimeMinute = "00";
-		 }
+		return messageText;
+	};
 
-		 //Checking the type of opt out message
-		 var optOutMessage = '';
-		 if ($scope.OptOutMsg == 'standard') {
-			 //todo: check how to receive standard opt out message
-			 optOutMessage = $scope.OptOutTxt1;
-		 } else if ($scope.OptOutMsg == 'custom') {
-			 //todo: check how to receive custom opt out message for the account
-			 optOutMessage = $scope.OptOutTxt2;
-		 } else if ($scope.OptOutMsg == 'write') {
-			 optOutMessage = $scope.OptOutTxt3;
-		 }
+	//Create a function for sending messages
+	$scope.sendMessage = function(scheduled) {
 
-		 //Generate a message text
-		 var messageText = '';
-		 if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
-			 messageText += $.trim($scope.FromName);
-			 if (messageText.length > 0) {
-				 messageText += ': ';
-			 }
-		 }
-		 messageText += $scope.MessageTxt;
-		 if (optOutMessage != '') {
-			 messageText += '\r\n' + optOutMessage;
-		 }
+		// Trigger validation flag.
+		//$scope.submitted = true;
 
-		 //Creating a api request data object
-		 var requestData = {
-			 DID: $scope.FromNumber.DID,
-			 message: messageText,
-			 apikey: $cookieStore.get('inspinia_auth_token'),
-			 accountID: $cookieStore.get('inspinia_account_id')
-		 };
+		if ((typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0)
+			&& (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == '')
+			) {
+			return;
+		}
+		if (typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
+			return;
+		}
+		if (scheduled && (typeof $scope.SetDate == 'undefined' || $scope.SetDate == null || $scope.SetDate == '')) {
+			return;
+		}
+		//If time is not set and scheduled message sending is invoked, set time to midnight
+		if (scheduled && (typeof $scope.SetTimeHour == 'undefined' || $scope.SetTimeHour == null || $scope.SetTimeHour == '')) {
+			$scope.SetTimeHour = "00";
+		}
+		if (scheduled && (typeof $scope.SetTimeMinute == 'undefined' || $scope.SetTimeMinute == null || $scope.SetTimeMinute == '')) {
+			$scope.SetTimeMinute = "00";
+		}
 
-		 if (typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
-			 if ($scope.ToList.constructor === Array) {
-				 //Sending message to contact lists
-				 requestData.contactListID = $scope.ToList[0].contactListID;
-				 for (var i = 1; i < $scope.ToList.length; i++) {
-					 requestData.contactListID += "," + $scope.ToList[i].contactListID;
-				 }
-			 } else {
-				 //Sending message to a single contact list
-				 requestData.contactListID = $scope.ToList.contactListID;
-			 }
-		 } else if (typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
-			 //Sending message to numbers
-			 requestData.ANI = $scope.ToNumber;
-		 }
+		//Generate message text
+		var messageText = $scope.generateMessageText();
 
-		 //Adding schedule date if one is specified
-		 if (scheduled) {
-			 var timezoneOffsetMinutes = new Date().getTimezoneOffset();
-			 var selectedDate = new Date($scope.SetDate.getFullYear(), $scope.SetDate.getMonth(), $scope.SetDate.getDate());
-			 var scheduledTime = new Date(selectedDate.getTime() + 3600000 * parseInt($scope.SetTimeHour) + 60000 * (parseInt($scope.SetTimeMinute) + timezoneOffsetMinutes));
-			 //Date is in format MM/dd/yyyy
-			 var dateParts = [];
-			 dateParts[0] = scheduledTime.getFullYear();
-			 dateParts[1] = "" + scheduledTime.getMonth();
-			 dateParts[2] = "" + scheduledTime.getDate();
-			 dateParts[3] = "" + scheduledTime.getHours();
-			 dateParts[4] = "" + scheduledTime.getMinutes();
+		//Creating a api request data object
+		var requestData = {
+			DID: $scope.FromNumber.DID,
+			message: messageText,
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			accountID: $cookieStore.get('inspinia_account_id')
+		};
 
-			 //Fix month
-			 if (dateParts[1].length < 2) {
-				 dateParts[1] = "0" + dateParts[1];
-			 }
-			 //Fix day
-			 if (dateParts[2].length < 2) {
-				 dateParts[2] = "0" + dateParts[2];
-			 }
-			 //Fix hours
-			 if (dateParts[3].length < 2) {
-				 dateParts[3] = "0" + dateParts[3];
-			 }
-			 //Fix minutes
-			 if (dateParts[4].length < 2) {
-				 dateParts[4] = "0" + dateParts[4];
-			 }
-			 requestData.scheduledDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
-		 }
+		if (typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
+			if ($scope.ToList.constructor === Array) {
+				//Sending message to contact lists
+				requestData.contactListID = $scope.ToList[0].contactListID;
+				for (var i = 1; i < $scope.ToList.length; i++) {
+					requestData.contactListID += "," + $scope.ToList[i].contactListID;
+				}
+			} else {
+				//Sending message to a single contact list
+				requestData.contactListID = $scope.ToList.contactListID;
+			}
+		} else if (typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
+			//Sending message to numbers
+			requestData.ANI = $scope.ToNumber;
+		}
 
-		 //Send request to the server
-		 $http.post(
-			 inspiniaNS.wsUrl + "message_send",
-			 $.param(requestData)
-		 ).success(
-			 //Successful request to the server
-			 function(data, status, headers, config) {
-				 if (data == null || typeof data.apicode == 'undefined') {
-					 //This should never happen
-					 alert("Unidentified error occurred when sending your message!");
-					 return;
-				 }
-				 if (data.apicode == 0) {
-					 //Reset form and inform user about success
-					 $scope.reset();
-					 if (scheduled) {
-						 $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
-					 } else {
-						 $scope.$broadcast("SendingMessageSucceeded", data.apidata);
-					 }
-				 } else {
-					 alert("An error occurred when sending your message! Error code: " + data.apicode);
-					 alert(JSON.stringify(data));
-				 }
-			 }
-		 ).error(
-			 //An error occurred with this request
-			 function(data, status, headers, config) {
-				 alert('Unexpected error occurred when trying to send message!');
-			 }
-		 );
-	 };
+		//Adding schedule date if one is specified
+		if (scheduled) {
+			var timezoneOffsetMinutes = new Date().getTimezoneOffset();
+			var selectedDate = new Date($scope.SetDate.getFullYear(), $scope.SetDate.getMonth(), $scope.SetDate.getDate());
+			var scheduledTime = new Date(selectedDate.getTime() + 3600000 * parseInt($scope.SetTimeHour) + 60000 * (parseInt($scope.SetTimeMinute) + timezoneOffsetMinutes));
+			//Date is in format MM/dd/yyyy
+			var dateParts = [];
+			dateParts[0] = scheduledTime.getFullYear();
+			dateParts[1] = "" + (scheduledTime.getMonth() + 1);
+			dateParts[2] = "" + scheduledTime.getDate();
+			dateParts[3] = "" + scheduledTime.getHours();
+			dateParts[4] = "" + scheduledTime.getMinutes();
+
+			//Fix month
+			if (dateParts[1].length < 2) {
+				dateParts[1] = "0" + dateParts[1];
+			}
+			//Fix day
+			if (dateParts[2].length < 2) {
+				dateParts[2] = "0" + dateParts[2];
+			}
+			//Fix hours
+			if (dateParts[3].length < 2) {
+				dateParts[3] = "0" + dateParts[3];
+			}
+			//Fix minutes
+			if (dateParts[4].length < 2) {
+				dateParts[4] = "0" + dateParts[4];
+			}
+			requestData.scheduledDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
+		}
+
+		//Send request to the server
+		$http.post(
+			inspiniaNS.wsUrl + "message_send",
+			$.param(requestData)
+		).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unidentified error occurred when sending your message!");
+					return;
+				}
+				if (data.apicode == 0) {
+					//Reset form and inform user about success
+					$scope.reset();
+					if (scheduled) {
+						$scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
+					} else {
+						$scope.$broadcast("SendingMessageSucceeded", data.apidata);
+					}
+				} else {
+					alert("An error occurred when sending your message! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				alert('Unexpected error occurred when trying to send message!');
+			}
+		);
+	};
+
+
+	//Create a function for saving drafts
+	$scope.saveDraft = function() {
+		//Generate message text
+		var messageText = $scope.generateMessageText();
+
+		//Creating a api request data object
+		var requestData = {
+			didid: $scope.FromNumber.DIDID,
+			message: messageText,
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			accountID: $cookieStore.get('inspinia_account_id'),
+			companyID: $cookieStore.get('inspinia_company_id')
+		};
+
+		//Send request to the server
+		$http.post(
+			inspiniaNS.wsUrl + "draft_add",
+			$.param(requestData)
+		).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unidentified error occurred when saving your message!");
+					return;
+				}
+				if (data.apicode == 0) {
+					//Reset form and inform user about success
+					$scope.reset();
+					$scope.$broadcast("SaveDraftSucceeded", data.apidata);
+				} else {
+					alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				alert('Unexpected error occurred when trying to send message!');
+			}
+		);
+	};
+
 }
 
 
@@ -3996,6 +4053,7 @@ function loginCtrl($scope, $cookieStore, $http, $window) {
     //Reset authentication token
     $cookieStore.put('inspinia_auth_token', '');
     $cookieStore.put('inspinia_account_id', '');
+    $cookieStore.put('inspinia_company_id', '');
 
     //Login function
     $scope.login = function() {
@@ -4026,6 +4084,7 @@ function loginCtrl($scope, $cookieStore, $http, $window) {
                     //User signed in successfully
                     $cookieStore.put('inspinia_auth_token', data.apikey);
                     $cookieStore.put('inspinia_account_id', data.apidata.accountID);
+                    $cookieStore.put('inspinia_company_id', data.apidata.companyID);
                     $window.location.href = "/#/dashboard";
                 } else if (data.apicode == 2) {
                     //Invalid credentials
