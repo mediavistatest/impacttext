@@ -38,6 +38,29 @@ function setPagingDataSliced($scope, data, totalResultsCount) {
     }
 }
 
+function generateOrderByField(sortFields, sortOrders) {
+
+	if (typeof sortFields == 'undefined' || sortFields == null) {
+		sortFields = [];
+	}
+	if (typeof sortOrders == 'undefined' || sortOrders == null) {
+		sortOrders = [];
+	}
+	var orderBy = '';
+	for (var i in sortFields) {
+		if (sortFields[i] == '') {
+			continue;
+		}
+		var sortOrder = typeof sortOrders[i] == 'undefined' || sortOrders[i] == null ? 'asc' : sortOrders[i].toLowerCase();
+		if (orderBy != '') {
+			orderBy += ', ';
+		}
+		orderBy += sortFields[i].toLowerCase() + " " + sortOrder;
+	}
+
+	return orderBy;
+}
+
 /**
  * MainCtrl - controller
  * Contains severals global data used in diferent view
@@ -3368,7 +3391,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
     // sort
     $scope.sortOptions = {
-        fields: ['ListName'],
+        fields: ['lastName'],
         directions: ['ASC'],
         useExternalSorting: true
     };
@@ -3401,25 +3424,9 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 		 if (typeof page == 'undefined' || page == null || page == '') {
 			 page = 0;
 		 }
-		 if (typeof sortFields == 'undefined' || sortFields == null) {
-			 sortFields = [];
-		 }
-		 if (typeof sortOrders == 'undefined' || sortOrders == null) {
-			 sortOrders = [];
-		 }
 
 		 //Creating a sort options string
-		 var orderBy = '';
-		 for (var i in sortFields) {
-			 if (sortFields[i] == '') {
-				 continue;
-			 }
-			 var sortOrder = typeof sortOrders[i] == 'undefined' || sortOrders[i] == null ? 'asc' : sortOrders[i].toLowerCase();
-			 if (orderBy != '') {
-				 orderBy += ',';
-			 }
-			 orderBy += sortFields[i].toLowerCase() + " " + sortOrder;
-		 }
+		 var orderBy = generateOrderByField(sortFields, sortOrders)
 		 if (orderBy == '') {
 			 orderBy = 'lastname asc';
 		 }
@@ -3496,6 +3503,7 @@ $scope.$watch('pagingOptions', function () {
     $scope.ngOptions = {
         data: 'ngData',
         enableSorting: true,
+		 useExternalSorting: true,
         sortInfo: $scope.sortOptions,
         rowHeight: 60,
         selectedItems: $scope.mySelections,
@@ -3517,12 +3525,12 @@ $scope.$watch('pagingOptions', function () {
         },{
 
           field: 'ANI',
-          displayName: 'List Name'
+          displayName: 'ANI'
           //cellTemplate: 'views/table/ListNameTemplate.html'
 
         },{
 
-          field:'ContactFirstName',
+          field:'lastName',
           displayName:'Name',
           cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">{{row.getProperty(col.field)}} {{row.entity.lastName}} {{row.entity.firstName}}</div>'
 
