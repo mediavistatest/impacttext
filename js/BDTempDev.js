@@ -105,18 +105,17 @@ var ngInbox = {
                     columnDefs : controllerParent.columnDefs
                 };
 
-                // HASH
-                controllerParent.$scope.hashUrlviewMessage = controllerParent.hashUrlviewMessage;
+                controllerParent.$scope.controllerParent = controllerParent;
             }
         }
     },
     InboxList : {
-        test : 'aha',
         Action : 'messages_inbound',
         Status : 'U',
         columnDefs : [{
             field : 'sourceANI',
-            displayName : 'Contact'
+            displayName : 'Contact',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             field : 'message',
             displayName : 'Message',
@@ -129,14 +128,20 @@ var ngInbox = {
             displayName : 'List'
         }],
         errorMessage : 'Unexpected error occurred when trying to fetch inbox messages list!',
-        hashUrlviewMessage : '#/messages/messages_view_inbox',
+        hashUrlviewMessage : 'messages.view_inbox',
         $scope : null,
         $http : null,
         $cookieStore : null,
+        clickedMessage : {
+            message : 'trt'
+        },
+        list : true,
         Events : {
-            Message_onClick : function(nesto) {
-                console.log('stiglo nesto')
-                console.log(nesto)
+            Message_onClick : function(inParent, row) {
+                inParent.clickedMessage = row.entity;
+                inParent.list = false;
+                //console.log(row,controllerParent.clickedMessage)
+                console.log(inParent.$scope.controllerParent.clickedMessage)
             },
             InitialiseEvents : function(controllerParent) {
             }
@@ -158,7 +163,8 @@ var ngInbox = {
         Status : 'C',
         columnDefs : [{
             field : 'con_lis',
-            displayName : 'Contact/List'
+            displayName : 'Contact/List',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             field : 'message',
             displayName : 'Message',
@@ -196,7 +202,8 @@ var ngInbox = {
         Status : 'S',
         columnDefs : [{
             field : 'con_lis',
-            displayName : 'Contact/List'
+            displayName : 'Contact/List',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             field : 'message',
             displayName : 'Message',
@@ -237,7 +244,8 @@ var ngInbox = {
         Status : 'D',
         columnDefs : [{
             field : 'con_lis',
-            displayName : 'Contact/List'
+            displayName : 'Contact/List',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             field : 'message',
             displayName : 'Message',
@@ -275,7 +283,8 @@ var ngInbox = {
         Status : 'D',
         columnDefs : [{
             field : 'con_lis',
-            displayName : 'Contact/List'
+            displayName : 'Contact/List',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             field : 'message',
             displayName : 'Message',

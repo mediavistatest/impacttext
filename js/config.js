@@ -149,7 +149,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         })
         .state('messages.inbox', {
             url: "/messages_inbox",
-            templateUrl: "views/messages_inbox.html",
+            templateUrl: "views/messages_inbox_container.html",
             data: { pageTitle: 'Inbox' }
         })
         .state('send', {
