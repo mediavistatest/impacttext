@@ -104,10 +104,14 @@ var ngInbox = {
                     filterOptions : controllerParent.$scope.filterOptions,
                     columnDefs : controllerParent.columnDefs
                 };
+
+                // HASH
+                controllerParent.$scope.hashUrlviewMessage = controllerParent.hashUrlviewMessage;
             }
         }
     },
     InboxList : {
+        test : 'aha',
         Action : 'messages_inbound',
         Status : 'U',
         columnDefs : [{
@@ -115,7 +119,8 @@ var ngInbox = {
             displayName : 'Contact'
         }, {
             field : 'message',
-            displayName : 'Message'
+            displayName : 'Message',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             field : 'createdDate',
             displayName : 'Date',
@@ -124,9 +129,18 @@ var ngInbox = {
             displayName : 'List'
         }],
         errorMessage : 'Unexpected error occurred when trying to fetch inbox messages list!',
+        hashUrlviewMessage : '#/messages/messages_view_inbox',
         $scope : null,
         $http : null,
         $cookieStore : null,
+        Events : {
+            Message_onClick : function(nesto) {
+                console.log('stiglo nesto')
+                console.log(nesto)
+            },
+            InitialiseEvents : function(controllerParent) {
+            }
+        },
         Controller : function($scope, $http, $cookieStore) {
             //Controler parrent setting !!!!
             var controllerParent = ngInbox.InboxList;
@@ -136,6 +150,7 @@ var ngInbox = {
             controllerParent.$cookieStore = $cookieStore;
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
+            controllerParent.Events.InitialiseEvents(controllerParent);
         }
     },
     SentList : {
@@ -146,7 +161,8 @@ var ngInbox = {
             displayName : 'Contact/List'
         }, {
             field : 'message',
-            displayName : 'Message'
+            displayName : 'Message',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             field : 'sendEndDate',
             displayName : 'Date sent',
@@ -154,9 +170,15 @@ var ngInbox = {
             cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
         errorMessage : 'Unexpected error occurred when trying to fetch sent messages list!',
+        hashUrlviewMessage : '#/messages/messages_view_sent',
         $scope : null,
         $http : null,
         $cookieStore : null,
+        Events : {
+
+            InitialiseEvents : function(controllerParent) {
+            }
+        },
         Controller : function($scope, $http, $cookieStore) {
             //Controler parrent setting !!!!
             var controllerParent = ngInbox.SentList;
@@ -166,6 +188,7 @@ var ngInbox = {
             controllerParent.$cookieStore = $cookieStore;
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
+            controllerParent.Events.InitialiseEvents(controllerParent);
         }
     },
     ScheduledList : {
@@ -176,7 +199,8 @@ var ngInbox = {
             displayName : 'Contact/List'
         }, {
             field : 'message',
-            displayName : 'Message'
+            displayName : 'Message',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             field : 'createdDate',
             displayName : 'Date created',
@@ -187,9 +211,15 @@ var ngInbox = {
             cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
         errorMessage : 'Unexpected error occurred when trying to fetch scheduled messages list!',
+        hashUrlviewMessage : '#/messages/messages_view_scheduled',
         $scope : null,
         $http : null,
         $cookieStore : null,
+        Events : {
+
+            InitialiseEvents : function(controllerParent) {
+            }
+        },
         Controller : function($scope, $http, $cookieStore) {
             //Controler parrent setting !!!!
             var controllerParent = ngInbox.ScheduledList;
@@ -199,6 +229,7 @@ var ngInbox = {
             controllerParent.$cookieStore = $cookieStore;
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
+            controllerParent.Events.InitialiseEvents(controllerParent);
         }
     },
     DraftsList : {
@@ -209,7 +240,8 @@ var ngInbox = {
             displayName : 'Contact/List'
         }, {
             field : 'message',
-            displayName : 'Message'
+            displayName : 'Message',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             field : 'statusDate',
             displayName : 'Date & Time Saved',
@@ -217,9 +249,15 @@ var ngInbox = {
             cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
         errorMessage : 'Unexpected error occurred when trying to fetch draft messages list!',
+        hashUrlviewMessage : '#/messages/messages_view_drafts',
         $scope : null,
         $http : null,
         $cookieStore : null,
+        Events : {
+
+            InitialiseEvents : function(controllerParent) {
+            }
+        },
         Controller : function($scope, $http, $cookieStore) {
             //Controler parrent setting !!!!
             var controllerParent = ngInbox.DraftsList;
@@ -229,6 +267,7 @@ var ngInbox = {
             controllerParent.$cookieStore = $cookieStore;
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
+            controllerParent.Events.InitialiseEvents(controllerParent);
         }
     },
     TrashList : {
@@ -239,15 +278,22 @@ var ngInbox = {
             displayName : 'Contact/List'
         }, {
             field : 'message',
-            displayName : 'Message'
+            displayName : 'Message',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             field : 'statusDate',
             displayName : 'Date & Time Deleted',
         }],
-        errorMessage : 'Unexpected error occurred when trying to fetch scheduled messages list!',
+        errorMessage : 'Unexpected error occurred when trying to fetch trash messages list!',
+        hashUrlviewMessage : '#/messages/messages_view_trash',
         $scope : null,
         $http : null,
         $cookieStore : null,
+        Events : {
+
+            InitialiseEvents : function(controllerParent) {
+            }
+        },
         Controller : function($scope, $http, $cookieStore) {
             //Controler parrent setting !!!!
             var controllerParent = ngInbox.TrashList;
@@ -257,6 +303,7 @@ var ngInbox = {
             controllerParent.$cookieStore = $cookieStore;
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
+            controllerParent.Events.InitialiseEvents(controllerParent);
         }
     }
 };
