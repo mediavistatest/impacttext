@@ -90,6 +90,7 @@ var ngInbox = {
                 controllerParent.$scope.ngOptions = {
                     data : 'ngData',
                     enableSorting : true,
+                    useExternalSorting: true,
                     sortInfo : controllerParent.$scope.sortOptions,
                     rowHeight : 60,
                     selectedItems : controllerParent.$scope.mySelections,
@@ -102,7 +103,7 @@ var ngInbox = {
                     totalServerItems : 'totalServerItems',
                     pagingOptions : controllerParent.$scope.pagingOptions,
                     filterOptions : controllerParent.$scope.filterOptions,
-                    columnDefs : controllerParent.columnDefs
+                    columnDefs : controllerParent.columnDefs,
                 };
 
                 controllerParent.$scope.controllerParent = controllerParent;
