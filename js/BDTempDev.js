@@ -132,9 +132,7 @@ var ngInbox = {
         $scope : null,
         $http : null,
         $cookieStore : null,
-        clickedMessage : {
-            message : 'trt'
-        },
+        clickedMessage : null,
         list : true,
         Events : {
             Message_onClick : function(inParent, row) {
@@ -176,12 +174,19 @@ var ngInbox = {
             cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
         errorMessage : 'Unexpected error occurred when trying to fetch sent messages list!',
-        hashUrlviewMessage : '#/messages/messages_view_sent',
+        hashUrlviewMessage : 'messages.view_sent',
         $scope : null,
         $http : null,
         $cookieStore : null,
+        clickedMessage : null,
+        list : true,
         Events : {
-
+            Message_onClick : function(inParent, row) {
+                inParent.clickedMessage = row.entity;
+                inParent.list = false;
+                //console.log(row,controllerParent.clickedMessage)
+                console.log(inParent.$scope.controllerParent.clickedMessage)
+            },
             InitialiseEvents : function(controllerParent) {
             }
         },
@@ -197,6 +202,45 @@ var ngInbox = {
             controllerParent.Events.InitialiseEvents(controllerParent);
         }
     },
+    // SentList : {
+    // Action : 'messages_outbound',
+    // Status : 'C',
+    // columnDefs : [{
+    // field : 'con_lis',
+    // displayName : 'Contact/List',
+    // cellTemplate : 'views/table/MessageTableTemplate.html'
+    // }, {
+    // field : 'message',
+    // displayName : 'Message',
+    // cellTemplate : 'views/table/MessageTableTemplate.html'
+    // }, {
+    // field : 'sendEndDate',
+    // displayName : 'Date sent',
+    // }, {
+    // cellTemplate : 'views/table/ManageTemplateCol.html'
+    // }],
+    // errorMessage : 'Unexpected error occurred when trying to fetch sent messages list!',
+    // hashUrlviewMessage : '#/messages/messages_view_sent',
+    // $scope : null,
+    // $http : null,
+    // $cookieStore : null,
+    // Events : {
+    //
+    // InitialiseEvents : function(controllerParent) {
+    // }
+    // },
+    // Controller : function($scope, $http, $cookieStore) {
+    // //Controler parrent setting !!!!
+    // var controllerParent = ngInbox.SentList;
+    //
+    // controllerParent.$scope = $scope;
+    // controllerParent.$http = $http;
+    // controllerParent.$cookieStore = $cookieStore;
+    //
+    // ngInbox._internal.Methods.PopulateScope(controllerParent);
+    // controllerParent.Events.InitialiseEvents(controllerParent);
+    // }
+    // },
     ScheduledList : {
         Action : 'messages_outbound',
         Status : 'S',
@@ -218,12 +262,19 @@ var ngInbox = {
             cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
         errorMessage : 'Unexpected error occurred when trying to fetch scheduled messages list!',
-        hashUrlviewMessage : '#/messages/messages_view_scheduled',
+        hashUrlviewMessage : 'messages.view_scheduled',
         $scope : null,
         $http : null,
         $cookieStore : null,
+        clickedMessage : null,
+        list : true,
         Events : {
-
+            Message_onClick : function(inParent, row) {
+                inParent.clickedMessage = row.entity;
+                inParent.list = false;
+                //console.log(row,controllerParent.clickedMessage)
+                console.log(inParent.$scope.controllerParent.clickedMessage)
+            },
             InitialiseEvents : function(controllerParent) {
             }
         },
@@ -239,6 +290,48 @@ var ngInbox = {
             controllerParent.Events.InitialiseEvents(controllerParent);
         }
     },
+    // ScheduledList : {
+    // Action : 'messages_outbound',
+    // Status : 'S',
+    // columnDefs : [{
+    // field : 'con_lis',
+    // displayName : 'Contact/List',
+    // cellTemplate : 'views/table/MessageTableTemplate.html'
+    // }, {
+    // field : 'message',
+    // displayName : 'Message',
+    // cellTemplate : 'views/table/MessageTableTemplate.html'
+    // }, {
+    // field : 'createdDate',
+    // displayName : 'Date created',
+    // }, {
+    // field : 'scheduledDate',
+    // displayName : 'Date scheduled',
+    // }, {
+    // cellTemplate : 'views/table/ManageTemplateCol.html'
+    // }],
+    // errorMessage : 'Unexpected error occurred when trying to fetch scheduled messages list!',
+    // hashUrlviewMessage : '#/messages/messages_view_scheduled',
+    // $scope : null,
+    // $http : null,
+    // $cookieStore : null,
+    // Events : {
+    //
+    // InitialiseEvents : function(controllerParent) {
+    // }
+    // },
+    // Controller : function($scope, $http, $cookieStore) {
+    // //Controler parrent setting !!!!
+    // var controllerParent = ngInbox.ScheduledList;
+    //
+    // controllerParent.$scope = $scope;
+    // controllerParent.$http = $http;
+    // controllerParent.$cookieStore = $cookieStore;
+    //
+    // ngInbox._internal.Methods.PopulateScope(controllerParent);
+    // controllerParent.Events.InitialiseEvents(controllerParent);
+    // }
+    // },
     DraftsList : {
         Action : 'messages_outbound',
         Status : 'D',
@@ -257,12 +350,19 @@ var ngInbox = {
             cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
         errorMessage : 'Unexpected error occurred when trying to fetch draft messages list!',
-        hashUrlviewMessage : '#/messages/messages_view_drafts',
+        hashUrlviewMessage : 'messages.view_drafts',
         $scope : null,
         $http : null,
         $cookieStore : null,
+        clickedMessage : null,
+        list : true,
         Events : {
-
+            Message_onClick : function(inParent, row) {
+                inParent.clickedMessage = row.entity;
+                inParent.list = false;
+                //console.log(row,controllerParent.clickedMessage)
+                console.log(inParent.$scope.controllerParent.clickedMessage)
+            },
             InitialiseEvents : function(controllerParent) {
             }
         },
@@ -278,6 +378,45 @@ var ngInbox = {
             controllerParent.Events.InitialiseEvents(controllerParent);
         }
     },
+    // DraftsList : {
+    // Action : 'messages_outbound',
+    // Status : 'D',
+    // columnDefs : [{
+    // field : 'con_lis',
+    // displayName : 'Contact/List',
+    // cellTemplate : 'views/table/MessageTableTemplate.html'
+    // }, {
+    // field : 'message',
+    // displayName : 'Message',
+    // cellTemplate : 'views/table/MessageTableTemplate.html'
+    // }, {
+    // field : 'statusDate',
+    // displayName : 'Date & Time Saved',
+    // }, {
+    // cellTemplate : 'views/table/ManageTemplateCol.html'
+    // }],
+    // errorMessage : 'Unexpected error occurred when trying to fetch draft messages list!',
+    // hashUrlviewMessage : '#/messages/messages_view_drafts',
+    // $scope : null,
+    // $http : null,
+    // $cookieStore : null,
+    // Events : {
+    //
+    // InitialiseEvents : function(controllerParent) {
+    // }
+    // },
+    // Controller : function($scope, $http, $cookieStore) {
+    // //Controler parrent setting !!!!
+    // var controllerParent = ngInbox.DraftsList;
+    //
+    // controllerParent.$scope = $scope;
+    // controllerParent.$http = $http;
+    // controllerParent.$cookieStore = $cookieStore;
+    //
+    // ngInbox._internal.Methods.PopulateScope(controllerParent);
+    // controllerParent.Events.InitialiseEvents(controllerParent);
+    // }
+    // },
     TrashList : {
         Action : 'messages_inbound',
         Status : 'D',
@@ -294,18 +433,25 @@ var ngInbox = {
             displayName : 'Date & Time Deleted',
         }],
         errorMessage : 'Unexpected error occurred when trying to fetch trash messages list!',
-        hashUrlviewMessage : '#/messages/messages_view_trash',
+        hashUrlviewMessage : 'messages.view_trash',
         $scope : null,
         $http : null,
         $cookieStore : null,
+        clickedMessage : null,
+        list : true,
         Events : {
-
+            Message_onClick : function(inParent, row) {
+                inParent.clickedMessage = row.entity;
+                inParent.list = false;
+                //console.log(row,controllerParent.clickedMessage)
+                console.log(inParent.$scope.controllerParent.clickedMessage)
+            },
             InitialiseEvents : function(controllerParent) {
             }
         },
         Controller : function($scope, $http, $cookieStore) {
             //Controler parrent setting !!!!
-            var controllerParent = ngInbox.TrashList;
+            var controllerParent = ngInbox.DraftsList;
 
             controllerParent.$scope = $scope;
             controllerParent.$http = $http;
@@ -315,5 +461,42 @@ var ngInbox = {
             controllerParent.Events.InitialiseEvents(controllerParent);
         }
     }
+    // TrashList : {
+    // Action : 'messages_inbound',
+    // Status : 'D',
+    // columnDefs : [{
+    // field : 'con_lis',
+    // displayName : 'Contact/List',
+    // cellTemplate : 'views/table/MessageTableTemplate.html'
+    // }, {
+    // field : 'message',
+    // displayName : 'Message',
+    // cellTemplate : 'views/table/MessageTableTemplate.html'
+    // }, {
+    // field : 'statusDate',
+    // displayName : 'Date & Time Deleted',
+    // }],
+    // errorMessage : 'Unexpected error occurred when trying to fetch trash messages list!',
+    // hashUrlviewMessage : '#/messages/messages_view_trash',
+    // $scope : null,
+    // $http : null,
+    // $cookieStore : null,
+    // Events : {
+    //
+    // InitialiseEvents : function(controllerParent) {
+    // }
+    // },
+    // Controller : function($scope, $http, $cookieStore) {
+    // //Controler parrent setting !!!!
+    // var controllerParent = ngInbox.TrashList;
+    //
+    // controllerParent.$scope = $scope;
+    // controllerParent.$http = $http;
+    // controllerParent.$cookieStore = $cookieStore;
+    //
+    // ngInbox._internal.Methods.PopulateScope(controllerParent);
+    // controllerParent.Events.InitialiseEvents(controllerParent);
+    // }
+    // }
 };
 
