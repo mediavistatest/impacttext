@@ -3,10 +3,10 @@
 <div class="col-md-12 content-holder animated fadeInRight messages messages-view" ng-class="animation">
 
     <h2 class="section-title">View message</h2>
-    
-    <div class="view-info-box">	
-	    <div class="view-from-number">To: <span>1585897458</span></div>
-	    <div class="view-date">Date sent: February 2, 2015, 10:15 AM</div>
+
+    <div class="view-info-box">
+	    <div class="view-from-number">To: <span>{{controllerParent.clickedMessage.con_lis}}</span></div>
+	    <div class="view-date">Date sent: {{controllerParent.clickedMessage.sendEndDate}}</div>
     </div>
 
     	<div class="top-buttons">
@@ -23,16 +23,16 @@
             </ul>
         </div>
 
-        
+
         </div><!-- end top button -->
-        
+
         <div class="message-box">
-        	
-        	<div class="message-txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+
+        	<div class="message-txt">{{controllerParent.clickedMessage.message}}</div>
 
         </div>
-       
+
        	<div class="bottom-buttons left">
-       		<a ui-sref="messages.sent" class="btn back-btn"><i class="fa fa-undo"></i> Back to Sent</a>
+       		<a ng-click="controllerParent.list = true;" class="btn back-btn"><i class="fa fa-undo"></i> Back to Sent</a>
        	</div>
 </div>

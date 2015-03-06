@@ -149,12 +149,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         })
         .state('messages.inbox', {
             url: "/messages_inbox",
-            templateUrl: "views/messages_inbox.html",
+            templateUrl: "views/messages_inbox_container.html",
             data: { pageTitle: 'Inbox' }
         })
         .state('send', {
             url: "/messages_send",
-            templateUrl: "views/messages_send.html",
+            templateUrl: "views/messages_send_container.html",
             data: { pageTitle: 'Compose Message' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
@@ -211,22 +211,22 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         })
         .state('messages.scheduled', {
             url: "/messages_scheduled",
-            templateUrl: "views/messages_scheduled.html",
+            templateUrl: "views/messages_scheduled_container.html",
             data: { pageTitle: 'Scheduled' }
         })
         .state('messages.sent', {
             url: "/messages_sent",
-            templateUrl: "views/messages_sent.html",
+            templateUrl: "views/messages_sent_container.html",
             data: { pageTitle: 'Sent Messages' }
         })
         .state('messages.drafts', {
             url: "/messages_drafts",
-            templateUrl: "views/messages_drafts.html",
+            templateUrl: "views/messages_drafts_container.html",
             data: { pageTitle: 'Draft Messages' }
         })
         .state('messages.trash', {
             url: "/messages_trash",
-            templateUrl: "views/messages_trash.html",
+            templateUrl: "views/messages_trash_container.html",
             data: { pageTitle: 'Trash' }
         })
         .state('tools', {
