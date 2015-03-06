@@ -3787,7 +3787,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 //Read the data from the remote server. First read the contact lists.
     $http.post(
         inspiniaNS.wsUrl + "contactlist_get",
-        $.param({ apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+        $.param({ apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A'})
     ).success(
         //Successful request to the server
         function(data, status, headers, config) {
@@ -3866,8 +3866,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 		 var optOutMessage = '';
 		 if ($scope.OptOutMsg == 'standard') {
 			 //todo: check how to receive standard opt out message
+			 optOutMessage = $scope.OptOutTxt1;
 		 } else if ($scope.OptOutMsg == 'custom') {
 			 //todo: check how to receive custom opt out message for the account
+			 optOutMessage = $scope.OptOutTxt2;
 		 } else if ($scope.OptOutMsg == 'write') {
 			 optOutMessage = $scope.OptOutTxt3;
 		 }
@@ -3877,7 +3879,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 		 if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
 			 messageText += $.trim($scope.FromName);
 			 if (messageText.length > 0) {
-				 messageText += '\r\n';
+				 messageText += ': ';
 			 }
 		 }
 		 messageText += $scope.MessageTxt;
@@ -3911,11 +3913,16 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 		 //Adding schedule date if one is specified
 		 if (scheduled) {
+			 var timezoneOffsetMinutes = new Date().getTimezoneOffset();
+			 var selectedDate = new Date($scope.SetDate.getFullYear(), $scope.SetDate.getMonth(), $scope.SetDate.getDate());
+			 var scheduledTime = new Date(selectedDate.getTime() + 3600000 * parseInt($scope.SetTimeHour) + 60000 * (parseInt($scope.SetTimeMinute) + timezoneOffsetMinutes));
 			 //Date is in format MM/dd/yyyy
 			 var dateParts = [];
-			 dateParts[0] = $scope.SetDate.getFullYear();
-			 dateParts[1] = "" + $scope.SetDate.getMonth();
-			 dateParts[2] = "" + $scope.SetDate.getDate();
+			 dateParts[0] = scheduledTime.getFullYear();
+			 dateParts[1] = "" + scheduledTime.getMonth();
+			 dateParts[2] = "" + scheduledTime.getDate();
+			 dateParts[3] = "" + scheduledTime.getHours();
+			 dateParts[4] = "" + scheduledTime.getMinutes();
 
 			 //Fix month
 			 if (dateParts[1].length < 2) {
@@ -3925,7 +3932,15 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 			 if (dateParts[2].length < 2) {
 				 dateParts[2] = "0" + dateParts[2];
 			 }
-			 requestData.scheduledDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + $scope.SetTimeHour + ":" + $scope.SetTimeMinute;
+			 //Fix hours
+			 if (dateParts[3].length < 2) {
+				 dateParts[3] = "0" + dateParts[3];
+			 }
+			 //Fix minutes
+			 if (dateParts[4].length < 2) {
+				 dateParts[4] = "0" + dateParts[4];
+			 }
+			 requestData.scheduledDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
 		 }
 
 		 //Send request to the server
