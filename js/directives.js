@@ -295,22 +295,58 @@ function dropZone() {
  * @param $timeout angular timeout object
  */
 function updateChosen($timeout) {
+
    var linker = function($scope, element, attr) {
+
        $scope.$watch('contactLists', function() {
+
            $timeout(function() {
+
                element.trigger('chosen:updated');
+
            }, 0, false);
+
        }, true);
 
+       $scope.$watch('fromNumbers', function() {
+
+           $timeout(function() {
+
+               element.trigger('chosen:updated');
+
+           }, 0, false);
+
+       }, true);
+
+       //FOR ERROR UNDEFINED SELECTED
+       $scope.$watch(function(){
+            return element[0].length; 
+        }, function(newvalue, oldvalue){
+            if (newvalue !== oldvalue) {
+                element.trigger("chosen:updated");
+            }
+        });
+
+
+
        $timeout(function() {
+
            element.chosen();
+
        }, 0, false);
+
    };
 
+
+
    return {
+
        restrict: 'A',
+
        link: linker
+
    };
+
 }
 
 // DATE UPDATE:

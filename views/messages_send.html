@@ -1,235 +1,470 @@
 <h1>Send</h1>
 
+
+
 <div class="col-md-12 content-holder animated fadeInRight" ng-class="animation" ng-controller="FormSendCtrl" >
+
+
 
 <h2 class="section-title">Compose Message</h2>
 
+
+
 <form name="SendForm" novalidate role="form">
 
+
+
 <!-- MESSAGES -->
+
 <div id="messages" class="alert alert-success" ng-show="messages" ng-bind="messages"></div>
 
+
+
 <ul class="col-sm-12 alert alert-danger" ng-show="submitted && SendForm.$error.required">
+
 <li><span class="red" ng-show="SendForm.ToList.$error.required">List Required!</span></li> 
+
 <li><span class="red" ng-show="SendForm.MessageTxt.$error.required">Message text is required!</span></li>
+
 </ul>
+
 <!-- END MESSAGES -->
 
+
+
 	<div class="form-group clearfix">
+
+
 
 		<label class="col-sm-2 control-label message-type">Message Type:</label>
 
-	    <div class="col-sm-10">
+
+
+	    <div class="col-sm-6">
+
 	        <div class="radio">
+
 	        <label> <input icheck type="radio" name="MessageType" ng-model="MessageType" value="SMS"> SMS </label>
+
 	        <label> <input icheck type="radio" name="MessageType" ng-model="MessageType" value="MMS"> MMS </label>
+
 	        </div>   
+
 	    </div>
+
 	</div>
 
+
+
 	<div class="form-group clearfix">
+
+
 
 		<label class="col-sm-2 control-label">From:</label>
 
-	    <div class="col-sm-10">
-		    <select class="form-control m-b" name="FromNumber" ng-model="FromNumber" ng-options="fromNumber.DID for fromNumber in fromNumbers track by fromNumber.DIDID">
+
+
+	    <div class="col-sm-6">
+
+		    <select chosen data-placeholder="Select your number..." disable-search="true"  class="form-control m-b" name="FromNumber" ng-model="FromNumber" ng-options="fromNumber.DID for fromNumber in fromNumbers track by fromNumber.DIDID">
+
 		    </select>
+
 		</div>
+
 	</div>
 
+
+
 	<div class="form-group clearfix">
+
 		<label class="col-sm-2 control-label">From Name:</label>
 
-    	<div class="col-sm-10">
+
+
+    	<div class="col-sm-6">
+
     		<input type="text" name="FromName" placeholder="e.g. Nestle chocolate" ng-model="FromName" class="form-control">
+
     	</div>
+
 	</div>
 
+
+
 	<div class="form-group clearfix">
+
 		<label class="col-sm-2 control-label">To:</label>
 
-    	<div class="col-sm-10">
+
+
+    	<div class="col-sm-6">
+
     		<div class="form-group" ng-show="!list">
-			<select name="ToList" data-placeholder="Select from an existing list(s)..." class="chosen-select form-control" tabindex="4" ng-model="ToList" ng-options="contactList.contactListName for contactList in contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists">
+
+			<select  chosen name="ToList" data-placeholder="Select from an existing list(s)..." class="chosen-select form-control" tabindex="4" ng-model="ToList" ng-options="contactList.contactListName for contactList in contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists">
+
 			</select>
+
 			</div>
 
+
+
 			<div class="form-group" ng-show="list">
+
     		<input type="text" name="to" placeholder="Insert phone numbers separated by comma ..." class="form-control" ng-model="ToNumber" >
+
     		</div>
-    		<a ng-app class="" ng-class="{true: 'addBtn', false: 'addBtn'}[!list]" ng-click="list = !list">{{!list && 'Or add numbers manually' || 'Or select from an existing list'}}</a>
+
+    		<a ng-app class="" ng-class="{true: 'addBtn', false: 'addBtn'}[!list]" ng-click="list = !list">{{!list && 'Or click here to add numbers manually' || 'Or select from an existing list'}}</a>
+
     	</div>
+
 	</div>
+
+
+
 
 
 	<div class="form-group clearfix">
+
 		<label class="col-sm-2 control-label">Message text:</label>
 
-    	<div class="col-sm-10">
+
+
+    	<div class="col-sm-6">
+
     		<textarea name="MessageTxt" class="form-control" rows="3" ng-model="MessageTxt" ng-trim="false" required></textarea>
-    		<div class="text-counter">{{0 + FromName.length + OptOutTxt3.length + MessageTxt.length}} characters (1 message is max. 160 characters)</div>
+
+    		<div class="text-counter">{{160 - FromName.length - OptOutTxt3.length - MessageTxt.length}} characters left.</div>
+
     	</div>
+
 	</div>
+
+
 
     <div class="form-group clearfix">
 
+
+
         <label class="col-sm-2 control-label">Opt-out Message:</label>
 
-        <div class="col-sm-10">
+
+
+        <div class="col-sm-6">
+
         
+
             <!--<div class="radio">
+
             <!--<label> <input icheck type="radio" name="OptOutMsg" value="standard" ng-model="OptOutMsg"> Standard </label>
+
             <label> <input icheck type="radio" name="OptOutMsg" value="custom" ng-model="OptOutMsg"> Customized </label>
+
             <label> <input icheck type="radio" name="OptOutMsg" value="write" ng-model="OptOutMsg"> Write opt-out message </label></div>
 
+
+
              <textarea ng-show="OptOutMsg == 'standard'" name="message" class="form-control" rows="2" ng-model="OptOutTxt1" ng-init="OptOutTxt1='This is standard'" disabled></textarea>
+
             <textarea ng-show="OptOutMsg == 'custom'" name="message" class="form-control" rows="2" ng-model="OptOutTxt2" ng-init="OptOutTxt2='This is custom'" disabled></textarea>
+
             <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>   
+
             </div>-->
+
         
 
-            <select class="form-control m-b" name="OptOutMsg" ng-model="OptOutMsg">
+
+
+            <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="OptOutMsg">
+                
+
                 <option value="standard">Standard</option>
+
                 <option value="custom">Custom</option>
+
                 <option value="write">Write opt-out message</option>
+
             </select>
+
             
 
-            <textarea ng-show="OptOutMsg == 'standard'" name="message" class="form-control opt-out" rows="2" ng-model="OptOutTxt1" ng-init="OptOutTxt1='This is standard'" disabled></textarea>
+
+
+            <textarea ng-show="OptOutMsg == 'standard'" name="message" class="form-control opt-out" rows="2" ng-model="OptOutTxt1" ng-init="OptOutTxt1='Reply STOP to end msgs. '" disabled></textarea>
+
             <textarea ng-show="OptOutMsg == 'custom'" name="message" class="form-control opt-out" rows="2" ng-model="OptOutTxt2" ng-init="OptOutTxt2='This is custom'" disabled></textarea>
+
             <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control opt-out" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>   
+
         </div>
+
     
+
     </div>
+
+
+
+
 
 
 
 	 <div class="form-group clearfix">
-	    <label class="col-sm-10 col-sm-offset-2 checkbox">
+
+	    <label class="col-sm-6 col-sm-offset-2 checkbox">
+
 	      <input icheck type="checkbox" value="schedule" ng-model="ScheduleCheck"> Schedule for later
+
 	    </label>
+
 	  </div>
 
+
+
 	<div class="form-group clearfix" value="standard" ng-show="ScheduleCheck">
+
             <label class="col-sm-2 control-label">Schedule:</label>
 
+
+
 <!-- OLD PLANE WORKING SCHEDULE WITHOUT PICKER 
-            <div class="col-sm-5"> 
-            <div class="input-group date">
-                <input type="datetime" placeholder="Set date" class="form-control" ng-model="SetDate" view="month" min-view="date" format="MM/dd/yyyy" dismiss="true">
-                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-            </div>
-            </div>
 
             <div class="col-sm-5"> 
+
             <div class="input-group date">
-                <input date-time type="datetime" placeholder="Set time" class="form-control" ng-model="SetTime" view="hours" max-view="hours" min-view="minutes" format="HH:mm" dismiss="true">
-                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+
+                <input type="datetime" placeholder="Set date" class="form-control" ng-model="SetDate" view="month" min-view="date" format="MM/dd/yyyy" dismiss="true">
+
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+
             </div>
+
+            </div>
+
+
+
+            <div class="col-sm-5"> 
+
+            <div class="input-group date">
+
+                <input date-time type="datetime" placeholder="Set time" class="form-control" ng-model="SetTime" view="hours" max-view="hours" min-view="minutes" format="HH:mm" dismiss="true">
+
+                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+
+            </div>
+
             </div>-->
 
+
+
             <div class="col-md-10">
+
             	<span class="label-icon"><i class="fa fa-calendar"></i></span> <div class="btn-group datetimepicker-wrapper" >
+
 <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="SetDate" is-open="opened" min-date="minDate" show-weeks="false" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+
 </div>
+
+
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
+
+
 <span class="label-icon"><i class="fa fa-clock-o"></i></span>
+
  <!-- Single button -->
+
     <div class="btn-group timing" dropdown is-open="status.isopenHour">
+
       <input type="text" name="SetTimeHour" placeholder="Hour" class="form-control" dropdown-toggle ng-init="SetTimeHour='00'" ng-model='SetTimeHour' readonly>
+
       <ul class="dropdown-menu time-pick" role="menu">
+
       	<li><span>Set hours</span></li>
+
         <li><a ng-click='SetTimeHour = "00"'>00</a> <a ng-click='SetTimeHour = "01"'>01</a> <a ng-click='SetTimeHour = "02"'>02</a> <a ng-click='SetTimeHour = "03"'>03</a></li>
+
         <li><a ng-click='SetTimeHour = "04"'>04</a> <a ng-click='SetTimeHour = "05"'>05</a> <a ng-click='SetTimeHour = "06"'>06</a> <a ng-click='SetTimeHour = "07"'>07</a></li>
+
         <li><a ng-click='SetTimeHour = "08"'>08</a> <a ng-click='SetTimeHour = "09"'>09</a> <a ng-click='SetTimeHour = "10"'>10</a> <a ng-click='SetTimeHour = "11"'>11</a></li>
+
         <li><a ng-click='SetTimeHour = "12"'>12</a> <a ng-click='SetTimeHour = "13"'>13</a> <a ng-click='SetTimeHour = "14"'>14</a> <a ng-click='SetTimeHour = "15"'>15</a></li>
+
         <li><a ng-click='SetTimeHour = "16"'>16</a> <a ng-click='SetTimeHour = "17"'>17</a> <a ng-click='SetTimeHour = "18"'>18</a> <a ng-click='SetTimeHour = "19"'>19</a></li>
+
         <li><a ng-click='SetTimeHour = "20"'>20</a> <a ng-click='SetTimeHour = "21"'>21</a> <a ng-click='SetTimeHour = "22"'>22</a> <a ng-click='SetTimeHour = "23"'>23</a></li>
+
         
+
       </ul>
+
     </div>
+
     &nbsp;:&nbsp;
+
     <!-- Single button -->
+
     <div class="btn-group timing" dropdown is-open="status.isopenMinute">
+
       <input type="text" name="SetTimeMinute" placeholder="Minute" class="form-control" dropdown-toggle ng-init="SetTimeMinute='00'" ng-model='SetTimeMinute' readonly>
+
       <ul class="dropdown-menu time-pick" role="menu">
+
       	<li><span>Set minutes</span></li>
+
         <li><a ng-click='SetTimeMinute = "00"'>00</a> <a ng-click='SetTimeMinute = "15"'>15</a> <a ng-click='SetTimeMinute = "30"'>30</a> <a ng-click='SetTimeMinute = "45"'>45</a></li>
+
       </ul>
+
     </div>
+
             </div>
 
 
+
+
+
         </div>
+
+
 
 			<!--<div class="form-group" id="data_3">
 
+
+
             <div class="input-group date">
+
                 <input type="datetime" class="form-control" date-time ng-model="sampleDate" view="hours" max-view="hours" min-view="minutes" format="HH:mm">
+
                 <span class="input-group-addon"><i class="fa fa-clock"></i></span>
+
             </div>-->
 
+
+
             
+
        <!-- <div class="dropdown">
+
     <a class="dropdown-toggle my-toggle-select" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
+
         <div class="input-append"><input type="text" class="input-large" data-ng-model="data.date"><span class="add-on"><i
+
                 class="icon-calendar"></i></span>
+
         </div>
+
     </a>
+
     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+
         <datetimepicker data-ng-model="data.date"
+
                         data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+
     </ul>
+
 </div>-->
 
+
+
 <!--<div class="dropdown">
+
   <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" >
+
     <div class="input-group"><input type="text" class="form-control" data-ng-model="data.dateDropDownInput"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+
     </div>
+
   </a>
+
   <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+
     <datetimepicker data-ng-model="data.dateDropDownInput" data-datetimepicker-config="{ dropdownSelector: '#dropdown2', startView: 'year' }"/>
+
   </ul>
+
 </div>-->
+
+
 
 <!--<datetimepicker data-ng-model="data.date"></datetimepicker>-->
 
 
 
 
+
+
+
+
+
 <!--<div ng-controller="DateTimePickerCtrl">
+
 <datetimepicker min-date="minDate" show-weeks="showWeeks" hour-step="hourStep" minute-step="minuteStep" ng-model="date" show-meridian="showMeridian" date-format="mm/dd/yyyy" date-options="dateOptions" date-disabled="disabled(date, mode)" readonly-time="false"></datetimepicker>
+
+
 
 </div>-->
 
 
+
+
+
 <br><br><br>
-<div class="col-sm-10 col-sm-offset-2" ng-controller="notifyCtrl">
+
+<div class="col-sm-6 col-sm-offset-2" ng-controller="notifyCtrl">
+
+
 
 <a class="btn" ng-click="saveDraft()"><i class="fa fa-pencil"></i> Save as draft</a>
 
+
+
 <div class="btn-group dropup discard-btn">
+
 <a data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false"><i class="fa fa-times"></i> Discard</a>
+
 <ul class="dropdown-menu dropdown-alerts">
+
     <li>Are you sure you want to discard the message?</li>
+
     <li>&nbsp;</li>
+
     <li><span ng-click="reset(); ResetMsg()" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+
 </ul>
+
 </div>
 
 
 
+
+
+
+
 <a class="btn btn-send right" ng-disabled="progress.active()" ng-click="sendMessage(false)" ng-hide="ScheduleCheck">
+
 	<span><i class="fa fa-paper-plane"></i> Send now</span>
+
 </a>
 
+
+
 <a class="btn btn-send right" ng-click="sendMessage(true)" ng-show="ScheduleCheck">
+
 	<span><i class="fa fa-clock-o"></i> Schedule</span>
+
 </a>
+
+
+
+
 
 
 
 </form>
+
 </div>
