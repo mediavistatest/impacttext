@@ -336,7 +336,7 @@ var ngInbox = {
         },
         Controller : function($scope, $http, $cookieStore) {
             //Controler parrent setting !!!!
-            var controllerParent = ngInbox.DraftsList;
+            var controllerParent = ngInbox.TrashList;
             controllerParent.list = true;
 
             controllerParent.$scope = $scope;
