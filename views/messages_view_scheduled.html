@@ -2,36 +2,54 @@
 
 <div class="col-md-12 content-holder animated fadeInRight messages messages-view" ng-class="animation">
 
-    <h2 class="section-title">View Scheduled</h2>
+	<h2 class="section-title">View Scheduled</h2>
 
-    <div class="view-info-box">
-	    <div class="view-from-number">To: <span>{{controllerParent.clickedMessage.con_lis}}</span></div>
-	    <div class="view-date">Schedule for: {{controllerParent.clickedMessage.scheduledDate}}</div>
-    </div>
+	<div class="view-info-box">
+		<div class="view-from-number">
+			To: <span>
+				{{controllerParent.clickedMessage.con_lis}}</span>
+		</div>
+		<div class="view-date">
+			Schedule for: {{controllerParent.clickedMessage.scheduledDate}}
+		</div>
+	</div>
 
-    	<div class="top-buttons">
+	<div class="top-buttons">
 
-        <button class="btn"><i class="fa fa-pencil"></i> Manage</button> <!-- draft, scheduled -->
+		<button class="btn" ng-click="controllerParent.Events.ChangeSchedule_onClick(controllerParent)">
+			<i class="fa fa-pencil"></i> Change schedule
+		</button>
+		<!-- draft, scheduled -->
 
-        <div class="btn-group dropdown discard-btn"> <!-- all -->
-            <button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">Delete message</button>
-            <ul class="dropdown-menu dropdown-alerts">
-                <li>Are you sure you want to delete the message(s)?</li>
-                <li>&nbsp;</li>
-                <li><span class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
-            </ul>
-        </div>
+		<div class="btn-group dropdown discard-btn">
+			<!-- all -->
+			<button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">
+				Delete message
+			</button>
+			<ul class="dropdown-menu dropdown-alerts">
+				<li>
+					Are you sure you want to delete the message(s)?
+				</li>
+				<li>
+					&nbsp;
+				</li>
+				<li>
+					<span class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span>
+					&nbsp;&nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span>
+				</li>
+			</ul>
+		</div>
+	</div><!-- end top button -->
 
+	<div class="message-box">
 
-        </div><!-- end top button -->
+		<div class="message-txt">
+			{{controllerParent.clickedMessage.message}}
+		</div>
 
-        <div class="message-box">
+	</div>
 
-        	<div class="message-txt">{{controllerParent.clickedMessage.message}}</div>
-
-        </div>
-
-       	<div class="bottom-buttons left">
-       		<a ng-click="controllerParent.list = true;" class="btn back-btn"><i class="fa fa-undo"></i> Back to Scheduled</a>
-       	</div>
+	<div class="bottom-buttons left">
+		<a ng-click="controllerParent.list = true;" class="btn back-btn"><i class="fa fa-undo"></i> Back to Scheduled</a>
+	</div>
 </div>

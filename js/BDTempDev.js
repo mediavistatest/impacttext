@@ -256,8 +256,6 @@ var ngInbox = {
         }, {
             field : 'sendEndDate',
             displayName : 'Date sent',
-        }, {
-            cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
         sortOptions : {
             fields : ['sendEndDate'],
@@ -313,8 +311,6 @@ var ngInbox = {
         }, {
             field : 'scheduledDate',
             displayName : 'Date scheduled',
-        }, {
-            cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
         sortOptions : {
             fields : ['scheduledDate'],
@@ -329,12 +325,21 @@ var ngInbox = {
         $cookieStore : null,
         clickedMessage : null,
         list : true,
+        view : true,
+        changeSchedule : false,
         Events : {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
                 inParent.list = false;
+                inParent.view = true;
+                inParent.changeSchedule = false;
                 //console.log(row,controllerParent.clickedMessage)
                 console.log(inParent.$scope.controllerParent.clickedMessage)
+            },
+            ChangeSchedule_onClick : function(inParent) {
+                inParent.list = false;
+                inParent.view = false;
+                inParent.changeSchedule = true;
             },
             InitialiseEvents : function(controllerParent) {
             }
@@ -343,6 +348,8 @@ var ngInbox = {
             //Controler parrent setting !!!!
             var controllerParent = ngInbox.ScheduledList;
             controllerParent.list = true;
+            controllerParent.view = false;
+            controllerParent.changeSchedule = false;
 
             controllerParent.$scope = $scope;
             controllerParent.$http = $http;
@@ -357,10 +364,6 @@ var ngInbox = {
         getListStatus : 'D',
         statusChangeAction : 'message_changeoutboundstatus',
         columnDefs : [{
-            field : 'con_lis',
-            displayName : 'Contact/List',
-            cellTemplate : 'views/table/MessageTableTemplate.html'
-        }, {
             field : 'message',
             displayName : 'Message',
             cellTemplate : 'views/table/MessageTableTemplate.html'

@@ -1,5 +1,6 @@
 <div ng-controller="ngScheduledListCtrl">
 	<div ng-show = "controllerParent.list" ng-include="'views/messages_scheduled.html'"></div>
-	<div ng-hide = "controllerParent.list"ng-include="'views/messages_view_scheduled.html'"></div>
+	<div ng-show = "controllerParent.view"ng-include="'views/messages_view_scheduled.html'"></div>
+	<div ng-show = "controllerParent.changeSchedule"ng-include="'views/messages_send.html'"></div>
 </div>
 
