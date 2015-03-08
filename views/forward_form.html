@@ -1,0 +1,63 @@
+<div class="reply-box-inner col-sm-6" ng-controller="FormSendCtrl">
+
+
+
+    <div class="row">
+
+    <div class="form-group clearfix">
+
+        <div class="col-sm-12">
+
+          <label class="control-label">Forward to:</label>
+
+          <input type="text" name="to" placeholder="Insert phone numbers separated by comma ..." class="form-control" ng-model="ToNumber">
+
+        </div>
+
+      </div>
+
+      
+
+      <div class="form-group clearfix">
+
+      <div class="col-sm-12">
+
+        <label class="control-label">Forward from:</label>
+
+        
+
+          <select data-placeholder="Select your number..." class="form-control m-b" name="FromNumber" ng-model="FromNumber" ng-options="fromNumber.DID for fromNumber in fromNumbers track by fromNumber.DIDID">
+
+          </select>
+
+        </div>
+
+      </div>
+
+      
+
+      <div class="form-group clearfix">
+
+        <div class="col-sm-12">
+
+          <label class="control-label">Message Text:</label>
+
+          <textarea name="MessageTxt" class="form-control" rows="3" ng-model="MessageTxt" ng-trim="false" ng-value="MessageTxt=controllerParent.clickedMessage.message" readonly></textarea>
+
+          <!--<div class="text-counter">{{160 - MessageTxt.length}} characters left.</div>-->
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- end row --> 
+
+    
+
+    <a ng-controller="notifyCtrl" class="btn btn-send" ng-disabled="progress.active()" ng-click="sendMessage(false)"> <span><i class="fa fa-share"></i> Forward</span> </a> 
+
+
+
+    </div><!-- end reply box inner-->

@@ -142,6 +142,13 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                         },
                         {
                             files: ['js/plugins/nggrid/plugins/ng-grid-csv-export.js']
+                        },
+                        {
+
+                            name: 'cgNotify',
+
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+
                         }
                     ]);
                 }

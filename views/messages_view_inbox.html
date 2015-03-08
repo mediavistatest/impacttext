@@ -1,55 +1,66 @@
 <h1>Messages </h1>
-
 <div class="col-md-12 content-holder animated fadeInRight messages messages-view" ng-class="animation">
-
-    <h2 class="section-title">View message</h2>
-
-    <div class="view-info-box">
-	    <div class="view-from-number">From: <span >{{controllerParent.clickedMessage.sourceANI}}</span></div>
-	    <div class="view-date" >{{controllerParent.clickedMessage.messageDate}}</div>
+  <h2 class="section-title">View message</h2>
+  <div class="view-info-box">
+    <div class="view-from-number">From: <span >{{controllerParent.clickedMessage.sourceANI}}</span></div>
+    <div class="view-date" >{{controllerParent.clickedMessage.messageDate}}</div>
+  </div>
+  <div class="top-buttons">
+    <button class="btn form-btn" ng-model="radioModel" btn-radio="'reply'" uncheckable><i class="fa fa-reply"></i> Reply</button>
+    <!-- only inbox -->
+    
+    <button class="btn form-btn" ng-model="radioModel" btn-radio="'forward'" uncheckable><i class="fa fa-share"></i> Forward</button>
+    <!-- inbox, sent -->
+    
+    <button class="btn"><i class="fa fa-check-square-o"></i> Opt In Sender</button>
+    <!-- only inbox -->
+    
+    <button class="btn"><i class="fa fa-chain-broken"></i> Opt Out Sender</button>
+    <!-- only inbox -->
+    
+    <button class="btn"><i class="fa fa-ban"></i> Block/unblock a contact</button>
+    <!-- only inbox -->
+    
+    <div class="btn-group dropdown discard-btn"> <!-- only inbox -->
+      
+      <button data-toggle="dropdown" class="btn dropdown-toggle" aria-expanded="false"><i class="fa fa-plus"></i> Add sender to list</button>
+      <div class="dropdown-menu dropdown-list dropdown-alerts">
+        <div class="list-holder">
+          <div>
+            <input icheck type="checkbox" value="" ng-model="AddToListBMW">
+            BMW</div>
+          <div>
+            <input icheck type="checkbox" value="" ng-model="AddToListOPEL">
+            OPEL</div>
+          <div>
+            <input icheck type="checkbox" value="" ng-model="AddToListMERCEDES">
+            MERCEDES</div>
+        </div>
+        <button class="btn btn-send smaller">Add to list</button>
+      </div>
     </div>
-
-    	<div class="top-buttons">
-
-        <button class="btn"><i class="fa fa-reply"></i> Reply</button> <!-- only inbox -->
-        <button class="btn"><i class="fa fa-share"></i> Forward</button> <!-- inbox, sent -->
-        <button class="btn"><i class="fa fa-check-square-o"></i> Opt In Sender</button> <!-- only inbox -->
-        <button class="btn"><i class="fa fa-chain-broken"></i> Opt Out Sender</button> <!-- only inbox -->
-        <button class="btn"><i class="fa fa-ban"></i> Block/unblock a contact</button> <!-- only inbox -->
-
-        <div class="btn-group dropdown discard-btn"> <!-- only inbox -->
-            <button data-toggle="dropdown" class="btn dropdown-toggle" aria-expanded="false"><i class="fa fa-plus"></i> Add sender to list</button>
-            <div class="dropdown-menu dropdown-list dropdown-alerts">
-
-            	<div class="list-holder">
-                <div><input icheck type="checkbox" value="" ng-model="AddToListBMW"> BMW</div>
-                <div><input icheck type="checkbox" value="" ng-model="AddToListOPEL"> OPEL</div>
-                <div><input icheck type="checkbox" value="" ng-model="AddToListMERCEDES"> MERCEDES</div>
-                </div>
-                <button class="btn btn-send smaller">Add to list</button>
-
-            </div>
-        </div>
-
-        <div class="btn-group dropdown discard-btn"> <!-- all -->
-            <button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">Delete message</button>
-            <ul class="dropdown-menu dropdown-alerts">
-                <li>Are you sure you want to delete the message(s)?</li>
-                <li>&nbsp;</li>
-                <li><span class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
-            </ul>
-        </div>
+    <div class="btn-group dropdown discard-btn"> <!-- all -->
+      
+      <button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">Delete message</button>
+      <ul class="dropdown-menu dropdown-alerts">
+        <li>Are you sure you want to delete the message(s)?</li>
+        <li>&nbsp;</li>
+        <li><span class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+      </ul>
+    </div>
+  </div>
+  <!-- end top button -->
+  
+  <!-- reply & forward -->
+  <div ng-show="radioModel == 'reply'" class="reply-box clearfix" ng-include src="'views/reply_form.html'"></div>
+  <div ng-show="radioModel == 'forward'" class="reply-box clearfix" ng-include src="'views/forward_form.html'"></div>
 
 
-        </div><!-- end top button -->
 
-        <div class="message-box">
-
-        	<div class="message-txt">{{controllerParent.clickedMessage.message}}</div>
-
-        </div>
-
-       	<div class="bottom-buttons left">
-       		<a ng-click="controllerParent.list = true;" class="btn back-btn"><i class="fa fa-undo"></i> Back to Inbox</a>
-       	</div>
+  <!-- end reply box-->
+  
+  <div class="message-box">
+    <div class="message-txt">{{controllerParent.clickedMessage.message}}</div>
+  </div>
+  <div class="bottom-buttons left"> <a ng-click="controllerParent.list = true;" class="btn back-btn"><i class="fa fa-undo"></i> Back to Inbox</a> </div>
 </div>

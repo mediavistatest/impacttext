@@ -2908,7 +2908,7 @@ z-index: 1000;
 
 text-align: left;
 
-margin-bottom: 20px;
+margin-bottom: 0;
 
 margin-top: 30px;
 
@@ -3044,7 +3044,39 @@ margin-top: 10px;
 
 }
 
+.reply-box .control-label {
+  text-align: right;
+  height: 14px;
+  line-height: 14px;
+  color: black;
+}
 
+.reply-box-inner {
+  padding:15px;
+  background: whitesmoke;
+  margin-top:20px;
+}
+
+.activebtn, .activebtn:focus, .activebtn:active {
+  border-color: lightgrey;
+  color: #005eaa;
+  background: whitesmoke;
+  outline:none;
+}
+
+.form-control[readonly] {
+  cursor: not-allowed;
+  background-color: whitesmoke;
+  opacity: 1;
+}
+
+.form-btn.active.active {
+  background-color: whitesmoke !important;
+  background: whitesmoke !important;
+  border-radius: 3px !important;
+  color: #005eaa;
+  box-shadow: none;
+}
 
 @media all and (max-width:990px) {
 
