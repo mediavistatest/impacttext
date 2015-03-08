@@ -920,7 +920,7 @@ list-style: none;
 
  * License: MIT
 
- 
+
 
 
 
@@ -1800,7 +1800,7 @@ END DATETIME******/
 
   text-align: center;
 
- 
+
 
 }
 
@@ -1828,7 +1828,7 @@ END DATETIME******/
 
   background-color: transparent;
 
- 
+
 
 }
 
@@ -2388,7 +2388,7 @@ strong {
 
   margin-top: 20px;
 
-  margin-left: 0; 
+  margin-left: 0;
 
 }
 
@@ -2792,7 +2792,7 @@ body {
 
 
 
-.messages .ngFooterPanel {
+.messages .itTopPager {
 
     background-color: #FFF;
 
