@@ -20,7 +20,7 @@
 
 	<div class="top-buttons">
 
-		<button class="btn">
+		<button class="btn" ng-click="MarkAsReadMessages(controllerParent)">
 
 			<i class="fa fa-eye"></i> Mark as read
 
@@ -50,7 +50,7 @@
 
 				<li>
 
-					<span class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span>
+					<span class="discard-cancel" data-toggle="dropdown"><strong ng-click="DeleteMessages(controllerParent)">Yes</strong></span>
 
 					&nbsp;&nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span>
 
