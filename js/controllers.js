@@ -3682,6 +3682,10 @@ function notifyCtrl($scope, notify) {
     $scope.ScheduledMsg = function(){
         notify({ message: 'Your message has been scheduled!', classes: 'alert-success'});
     };
+    $scope.DeleteMsg = function(){
+        console.log(111111)
+        notify({ message: 'Your message has been deleted!', classes: 'alert-success'});
+    };    
 	//If SendingMessageSucceeded event is triggered, show related message
 	$scope.$on('SendingMessageSucceeded', function(event, args) {
 		$scope.SentMsg();
@@ -3694,6 +3698,9 @@ function notifyCtrl($scope, notify) {
 	$scope.$on('SaveDraftSucceeded', function(event, args) {
 		$scope.SavedDraftMsg();
 	});
+    $scope.$on('DeleteMessageSucceeded', function(event, args) {
+        $scope.DeleteMsg();
+    });	
 }
 
 
