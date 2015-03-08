@@ -88,13 +88,14 @@ var ngInbox = {
                 });
             },
             PopulateScope : function(controllerParent) {
+                console.log('populate')
                 ngInbox._internal.ErrorMsg = controllerParent.errorMessage;
 
                 controllerParent.$scope.mySelections = [];
                 controllerParent.$scope.totalServerItems = 0;
+                controllerParent.$scope.sortOptions = controllerParent.sortOptions;
                 controllerParent.$scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
                 controllerParent.$scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
-                controllerParent.$scope.sortOptions = controllerParent.sortOptions;
 
                 //GET DATA
                 controllerParent.$scope.setPagingDataSliced = ngInbox._internal.Methods.SetPagingDataSliced;
@@ -110,12 +111,12 @@ var ngInbox = {
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
                 }, true);
 
-                controllerParent.$scope.$watch('sortOptions', function(newVal, oldVal) {
+                controllerParent.$scope.$watch('sortOptions', function() {
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
                 }, true);
 
                 //INITIAL GET DATA
-                controllerParent.$scope.getPagedDataAsync(controllerParent);
+                // controllerParent.$scope.getPagedDataAsync(controllerParent);
 
                 //TABLE OPTIONS
                 controllerParent.$scope.ngOptions = {
@@ -139,7 +140,7 @@ var ngInbox = {
 
                 controllerParent.$scope.controllerParent = controllerParent;
             },
-            StatusChange : function(controllerParent, changeToStatus) {
+            StatusChange : function(controllerParent, changeToStatus, callback) {
                 console.log(controllerParent)
 
                 var params = {
@@ -165,7 +166,7 @@ var ngInbox = {
                 // success function
                 .success(function(result) {
                     console.log('success status change ' + controllerParent.statusChangeAction)
-                    controllerParent.$scope.$broadcast("DeleteMessageSucceeded");
+                    callback();
                 })
                 // error function
                 .error(function(data, status, headers, config) {
@@ -174,7 +175,11 @@ var ngInbox = {
             },
             DeleteMessage : function(controllerParent) {
                 ngInbox._internal.ErrorMsg = 'Delete message failed!';
-                ngInbox._internal.Methods.StatusChange(controllerParent, controllerParent.deleteMessageStatus);
+                var callback = function() {
+                    controllerParent.$scope.$broadcast("DeleteMessageSucceeded");
+                    controllerParent.list = true;
+                };
+                ngInbox._internal.Methods.StatusChange(controllerParent, controllerParent.deleteMessageStatus, callback);
             },
         }
     },

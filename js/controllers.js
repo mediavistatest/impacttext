@@ -3108,7 +3108,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 		if (orderBy == '') {
 			orderBy = "contactlistname";
 		}
-		
+
 		setTimeout(function () {
 			var data;
 			if (searchText) {
@@ -3685,7 +3685,7 @@ function notifyCtrl($scope, notify) {
     $scope.DeleteMsg = function(){
         console.log(111111)
         notify({ message: 'Your message has been deleted!', classes: 'alert-success'});
-    };    
+    };
 	//If SendingMessageSucceeded event is triggered, show related message
 	$scope.$on('SendingMessageSucceeded', function(event, args) {
 		$scope.SentMsg();
@@ -3699,8 +3699,9 @@ function notifyCtrl($scope, notify) {
 		$scope.SavedDraftMsg();
 	});
     $scope.$on('DeleteMessageSucceeded', function(event, args) {
+        console.log('uhvacen')
         $scope.DeleteMsg();
-    });	
+    });
 }
 
 
