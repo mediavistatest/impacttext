@@ -14,6 +14,30 @@ var ngInbox = {
             }
         },
         Methods : {
+            GenerateOrderByField : function(controllerParent) {
+                var orderBy = '';
+                for (var i in controllerParent.$scope.sortOptions.fields) {
+                    if (controllerParent.$scope.sortOptions.fields[i] == '') {
+                        continue;
+                    }
+                    var sortOrder = typeof controllerParent.$scope.sortOptions.directions[i] == 'undefined' || controllerParent.$scope.sortOptions.directions[i] == null ? 'asc' : controllerParent.$scope.sortOptions.directions[i].toLowerCase();
+                    if (orderBy != '') {
+                        orderBy += ', ';
+                    }
+                    if (controllerParent.$scope.sortOptions.fields[i].toLowerCase() == 'con_lis') {
+                        //TODO srediti ovo kad api bude podrzavao vise kolona u sortu
+                        //orderBy += 'ani,';
+                        orderBy += 'contactlistname' + " " + sortOrder;
+                    } else {
+                        orderBy += controllerParent.$scope.sortOptions.fields[i].toLowerCase() + " " + sortOrder;
+                    }
+                }
+                if (orderBy == '') {
+                    orderBy = controllerParent.defaultSortField;
+                }
+
+                return orderBy;
+            },
             SetPagingDataSliced : function($scope, data, totalResultsCount) {
                 $scope.ngData = data;
                 $scope.totalServerItems = totalResultsCount;
@@ -21,45 +45,7 @@ var ngInbox = {
                     $scope.$apply();
                 }
             },
-            StatusChange : function(controllerParent, changeToStatus) {
-                console.log(controllerParent)
-
-                var params = {
-                    apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
-                    accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
-                    status : changeToStatus
-                };
-
-                switch (controllerParent.getListAction) {
-                case 'messages_inbound' :
-                    params.inboundMessageId = controllerParent.inboundMessageID;
-                    break;
-                case 'messages_outbound' :
-                    // NOT DEFINED YET
-                    // params.outboundMessageID = controllerParent.outboundMessageID;
-                    break;
-                }
-                
-                var $param = $.param(params);
-
-                //POST
-                controllerParent.$http.post(inspiniaNS.wsUrl + controllerParent.statusChangeAction, $param)
-                // success function
-                .success(function(result) {
-                    console.log('success status change ' + controllerParent.statusChangeAction)
-                    controllerParent.$scope.$broadcast("DeleteMessageSucceeded");
-                })
-                // error function
-                .error(function(data, status, headers, config) {
-                    alert(ngInbox._internal.ErrorMsg);
-                });
-            },
-            DeleteMessage : function(controllerParent) {
-                ngInbox._internal.ErrorMsg = 'Delete message failed!';
-                ngInbox._internal.Methods.StatusChange(controllerParent, controllerParent.deleteMessageStatus);
-            },
             GetPagedDataAsync : function(controllerParent) {
-                console.log(controllerParent.getListStatus)
                 var pageSize = controllerParent.$scope.pagingOptions.pageSize;
                 var page = controllerParent.$scope.pagingOptions.currentPage;
 
@@ -69,7 +55,8 @@ var ngInbox = {
                     accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
                     limit : pageSize,
                     offset : (page - 1) * pageSize,
-                    status : controllerParent.getListStatus
+                    status : controllerParent.getListStatus,
+                    orderby : ngInbox._internal.Methods.GenerateOrderByField(controllerParent)
                 };
 
                 if (searchText) {
@@ -77,6 +64,7 @@ var ngInbox = {
                 }
 
                 var $param = $.param(params);
+                console.log($param)
 
                 //POST
                 controllerParent.$http.post(inspiniaNS.wsUrl + controllerParent.getListAction, $param)
@@ -106,6 +94,7 @@ var ngInbox = {
                 controllerParent.$scope.totalServerItems = 0;
                 controllerParent.$scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
                 controllerParent.$scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
+                controllerParent.$scope.sortOptions = controllerParent.sortOptions;
 
                 //GET DATA
                 controllerParent.$scope.setPagingDataSliced = ngInbox._internal.Methods.SetPagingDataSliced;
@@ -121,6 +110,10 @@ var ngInbox = {
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
                 }, true);
 
+                controllerParent.$scope.$watch('sortOptions', function(newVal, oldVal) {
+                    controllerParent.$scope.getPagedDataAsync(controllerParent);
+                }, true);
+
                 //INITIAL GET DATA
                 controllerParent.$scope.getPagedDataAsync(controllerParent);
 
@@ -130,7 +123,7 @@ var ngInbox = {
                     enableSorting : true,
                     useExternalSorting : true,
                     sortInfo : controllerParent.$scope.sortOptions,
-                    rowHeight : 60,
+                    rowHeight : 45,
                     selectedItems : controllerParent.$scope.mySelections,
                     showSelectionCheckbox : true,
                     multiSelect : true,
@@ -146,34 +139,43 @@ var ngInbox = {
 
                 controllerParent.$scope.controllerParent = controllerParent;
             },
-            // DeleteMessage :
-            //
-            // // Change Status of Message
-            // // Set the status of an inbound SMS message
-            // // Action name: message_changeinboundstatus
-            // // Required Parameters:
-            // // inboundMessageId
-            // // status
-            // // Return values:
-            // // none
-            //
-            // Action : 'message_changeinboundstatus',
-            // Status : null,
-            //
-            // function(controllerParent, action) {
-            // var status_;
-            // switch (action) {
-            // case 'messages_inbound' :
-            // status_ = 'D';
-            // break;
-            // case 'messages_outbound' :
-            // status_ = 'X';
-            // break;
-            //
-            // }
-            //
-            //
-            // }
+            StatusChange : function(controllerParent, changeToStatus) {
+                console.log(controllerParent)
+
+                var params = {
+                    apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
+                    accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
+                    status : changeToStatus
+                };
+
+                switch (controllerParent.getListAction) {
+                case 'messages_inbound' :
+                    params.inboundMessageId = controllerParent.inboundMessageID;
+                    break;
+                case 'messages_outbound' :
+                    // NOT DEFINED YET
+                    // params.outboundMessageID = controllerParent.outboundMessageID;
+                    break;
+                }
+
+                var $param = $.param(params);
+
+                //POST
+                controllerParent.$http.post(inspiniaNS.wsUrl + controllerParent.statusChangeAction, $param)
+                // success function
+                .success(function(result) {
+                    console.log('success status change ' + controllerParent.statusChangeAction)
+                    controllerParent.$scope.$broadcast("DeleteMessageSucceeded");
+                })
+                // error function
+                .error(function(data, status, headers, config) {
+                    alert(ngInbox._internal.ErrorMsg);
+                });
+            },
+            DeleteMessage : function(controllerParent) {
+                ngInbox._internal.ErrorMsg = 'Delete message failed!';
+                ngInbox._internal.Methods.StatusChange(controllerParent, controllerParent.deleteMessageStatus);
+            },
         }
     },
     InboxList : {
@@ -198,6 +200,12 @@ var ngInbox = {
         // displayName : 'List'
         // }
         ],
+        sortOptions : {
+            fields : ['createdDate'],
+            directions : ['ASC'],
+            useExternalSorting : true
+        },
+        defaultSortField : 'createdDate',
         errorMessage : 'Unexpected error occurred when trying to fetch inbox messages list!',
         hashUrlviewMessage : 'messages.view_inbox',
         $scope : null,
@@ -209,7 +217,7 @@ var ngInbox = {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
                 inParent.list = false;
-                // console.log(row,controllerParent.clickedMessage)
+                //console.log(row,controllerParent.clickedMessage)
                 console.log(inParent.$scope.controllerParent.clickedMessage)
             },
             InitialiseEvents : function(controllerParent) {
@@ -246,6 +254,12 @@ var ngInbox = {
         }, {
             cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
+        sortOptions : {
+            fields : ['sendEndDate'],
+            directions : ['ASC'],
+            useExternalSorting : true
+        },
+        defaultSortField : 'sendEndDate',
         errorMessage : 'Unexpected error occurred when trying to fetch sent messages list!',
         hashUrlviewMessage : 'messages.view_sent',
         $scope : null,
@@ -297,6 +311,12 @@ var ngInbox = {
         }, {
             cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
+        sortOptions : {
+            fields : ['scheduledDate'],
+            directions : ['ASC'],
+            useExternalSorting : true
+        },
+        defaultSortField : 'scheduledDate',
         errorMessage : 'Unexpected error occurred when trying to fetch scheduled messages list!',
         hashUrlviewMessage : 'messages.view_scheduled',
         $scope : null,
@@ -345,6 +365,12 @@ var ngInbox = {
         }, {
             cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
+        sortOptions : {
+            fields : ['statusDate'],
+            directions : ['ASC'],
+            useExternalSorting : true
+        },
+        defaultSortField : 'statusDate',
         errorMessage : 'Unexpected error occurred when trying to fetch draft messages list!',
         hashUrlviewMessage : 'messages.view_drafts',
         $scope : null,
@@ -391,6 +417,12 @@ var ngInbox = {
             field : 'statusDate',
             displayName : 'Date & Time Deleted',
         }],
+        sortOptions : {
+            fields : ['statusDate'],
+            directions : ['ASC'],
+            useExternalSorting : true
+        },
+        defaultSortField : 'statusDate',
         errorMessage : 'Unexpected error occurred when trying to fetch trash messages list!',
         hashUrlviewMessage : 'messages.view_trash',
         $scope : null,
