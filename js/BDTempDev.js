@@ -64,7 +64,6 @@ var ngInbox = {
                 }
 
                 var $param = $.param(params);
-                console.log($param)
 
                 //POST
                 controllerParent.$http.post(inspiniaNS.wsUrl + controllerParent.getListAction, $param)
@@ -101,6 +100,9 @@ var ngInbox = {
                 controllerParent.$scope.setPagingDataSliced = ngInbox._internal.Methods.SetPagingDataSliced;
                 controllerParent.$scope.getPagedDataAsync = ngInbox._internal.Methods.GetPagedDataAsync;
                 controllerParent.$scope.DeleteMessage = ngInbox._internal.Methods.DeleteMessage;
+                controllerParent.$scope.DeleteMessages = ngInbox._internal.Methods.DeleteMessages;
+                controllerParent.$scope.MarkAsReadMessage = ngInbox._internal.Methods.MarkAsReadMessage;
+                controllerParent.$scope.MarkAsReadMessages = ngInbox._internal.Methods.MarkAsReadMessages;                
 
                 //WHATCH
                 controllerParent.$scope.$watch('pagingOptions', function() {
@@ -140,47 +142,77 @@ var ngInbox = {
 
                 controllerParent.$scope.controllerParent = controllerParent;
             },
-            StatusChange : function(controllerParent, changeToStatus, callback) {
-                console.log(controllerParent)
+            StatusChange : function(controllerParent, messageToChangeStatusArray, changeToStatus, callback) {
+                console.log(messageToChangeStatusArray)
 
                 var params = {
                     apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
                     accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
                     status : changeToStatus
                 };
+                var successfullRequestsCount_ = 0;
+                var totalNumberOfMessages_ = messageToChangeStatusArray.length;
+                for (var j = 0; j < messageToChangeStatusArray.length; j++) {
+                    switch (controllerParent.getListAction) {
+                    case 'messages_inbound' :
+                        params.inboundMessageId = messageToChangeStatusArray[j].inboundMessageID;
+                        break;
+                    case 'messages_outbound' :
+                        // NOT DEFINED YET
+                        params.outboundMessageID = messageToChangeStatusArray[j].outboundMessageID;
+                        break;
+                    }
+                    var $param = $.param(params);
 
-                switch (controllerParent.getListAction) {
-                case 'messages_inbound' :
-                    params.inboundMessageId = controllerParent.inboundMessageID;
-                    break;
-                case 'messages_outbound' :
-                    // NOT DEFINED YET
-                    // params.outboundMessageID = controllerParent.outboundMessageID;
-                    break;
+                    //POST
+                    controllerParent.$http.post(inspiniaNS.wsUrl + controllerParent.statusChangeAction, $param)
+                    // success function
+                    .success(function(result) {
+                        successfullRequestsCount_++;
+                        if (totalNumberOfMessages_ == successfullRequestsCount_) {
+                            callback();
+                        }
+                    })
+                    // error function
+                    .error(function(data, status, headers, config) {
+                        alert(ngInbox._internal.ErrorMsg);
+                    });
                 }
-
-                var $param = $.param(params);
-
-                //POST
-                controllerParent.$http.post(inspiniaNS.wsUrl + controllerParent.statusChangeAction, $param)
-                // success function
-                .success(function(result) {
-                    console.log('success status change ' + controllerParent.statusChangeAction)
-                    callback();
-                })
-                // error function
-                .error(function(data, status, headers, config) {
-                    alert(ngInbox._internal.ErrorMsg);
-                });
             },
-            DeleteMessage : function(controllerParent) {
+            DeleteMessage : function(controllerParent, messageList) {
                 ngInbox._internal.ErrorMsg = 'Delete message failed!';
                 var callback = function() {
+                    console.log('callback function on delete')
                     controllerParent.$scope.$broadcast("DeleteMessageSucceeded");
+                    controllerParent.$scope.getPagedDataAsync(controllerParent);
                     controllerParent.list = true;
                 };
-                ngInbox._internal.Methods.StatusChange(controllerParent, controllerParent.deleteMessageStatus, callback);
+                if (!messageList) {
+                    messageList = [controllerParent.clickedMessage];
+                }
+
+                ngInbox._internal.Methods.StatusChange(controllerParent, messageList, controllerParent.deleteMessageStatus, callback);
             },
+            DeleteMessages : function(controllerParent) {
+                ngInbox._internal.Methods.DeleteMessage(controllerParent, controllerParent.$scope.mySelections);
+            },
+            MarkAsReadMessage : function(controllerParent, messageList) {
+                ngInbox._internal.ErrorMsg = 'Mark as read message failed!';
+                var callback = function() {
+                    console.log('callback function on mark as read')
+                    controllerParent.$scope.$broadcast("MarkAsReadMessageSucceeded");
+                    controllerParent.$scope.getPagedDataAsync(controllerParent);
+                    controllerParent.list = true;
+                };
+                if (!messageList) {
+                    messageList = [controllerParent.clickedMessage];
+                }
+
+                ngInbox._internal.Methods.StatusChange(controllerParent, messageList, controllerParent.markAsReadMessageStatus, callback);
+            },
+            MarkAsReadMessages : function(controllerParent) {
+                ngInbox._internal.Methods.MarkAsReadMessage(controllerParent, controllerParent.$scope.mySelections);
+            }            
         }
     },
     InboxList : {
@@ -188,6 +220,7 @@ var ngInbox = {
         getListStatus : 'U',
         statusChangeAction : 'message_changeinboundstatus',
         deleteMessageStatus : 'D',
+        markAsReadMessageStatus : 'R',        
         columnDefs : [{
             field : 'sourceANI',
             displayName : 'Contact',
@@ -296,7 +329,7 @@ var ngInbox = {
     ScheduledList : {
         getListAction : 'messages_outbound',
         getListStatus : 'S',
-        statusChangeAction : 'message_changeoutboundstatus',
+        statusChangeAction : null, //'message_changeoutboundstatus',
         columnDefs : [{
             field : 'con_lis',
             displayName : 'Contact/List',
@@ -362,7 +395,7 @@ var ngInbox = {
     DraftsList : {
         getListAction : 'messages_outbound',
         getListStatus : 'D',
-        statusChangeAction : 'message_changeoutboundstatus',
+        statusChangeAction : null, //'message_changeoutboundstatus',
         columnDefs : [{
             field : 'message',
             displayName : 'Message',
@@ -413,6 +446,8 @@ var ngInbox = {
         getListAction : 'messages_inbound',
         getListStatus : 'D',
         statusChangeAction : 'message_changeinboundstatus',
+        deleteMessageStatus : null,
+        restoreMessageStatus : null,
         columnDefs : [{
             field : 'con_lis',
             displayName : 'Contact/List',

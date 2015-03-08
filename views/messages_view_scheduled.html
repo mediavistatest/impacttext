@@ -21,25 +21,14 @@
 		</button>
 		<!-- draft, scheduled -->
 
-		<div class="btn-group dropdown discard-btn">
-			<!-- all -->
-			<button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">
-				Delete message
-			</button>
-			<ul class="dropdown-menu dropdown-alerts">
-				<li>
-					Are you sure you want to delete the message(s)?
-				</li>
-				<li>
-					&nbsp;
-				</li>
-				<li>
-					<span class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span>
-					&nbsp;&nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span>
-				</li>
-			</ul>
-		</div>
-	</div><!-- end top button -->
+        <div class="btn-group dropdown discard-btn"> <!-- all -->
+            <button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">Delete message</button>
+            <ul class="dropdown-menu dropdown-alerts">
+                <li>Are you sure you want to delete the message(s)?</li>
+                <li>&nbsp;</li>
+                <li><span class="discard-cancel" data-toggle="dropdown"><strong ng-click="DeleteMessage(controllerParent)">Yes</strong></span> &nbsp;&nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+            </ul>
+        </div>
 
 	<div class="message-box">
 

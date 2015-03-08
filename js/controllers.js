@@ -3684,8 +3684,12 @@ function notifyCtrl($scope, notify) {
     };
     $scope.DeleteMsg = function(){
         console.log(111111)
-        notify({ message: 'Your message has been deleted!', classes: 'alert-success'});
+        notify({ message: 'Your message(s) has been deleted!', classes: 'alert-success'});
     };
+     $scope.MarkAsReadMsg = function(){
+        console.log(222222)
+        notify({ message: 'Your message(s) has been mark as read!', classes: 'alert-success'});
+    };  
 	//If SendingMessageSucceeded event is triggered, show related message
 	$scope.$on('SendingMessageSucceeded', function(event, args) {
 		$scope.SentMsg();
@@ -3699,9 +3703,13 @@ function notifyCtrl($scope, notify) {
 		$scope.SavedDraftMsg();
 	});
     $scope.$on('DeleteMessageSucceeded', function(event, args) {
-        console.log('uhvacen')
+        console.log('DeleteMessageSucceeded uhvacen')
         $scope.DeleteMsg();
     });
+    $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
+        console.log('MarkAsReadMessageSucceeded uhvacen')
+        $scope.MarkAsReadMsg();
+    });    
 }
 
 
