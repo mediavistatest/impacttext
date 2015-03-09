@@ -3,7 +3,7 @@
 <div class="col-md-12 content-holder animated fadeInRight manage-list" ng-class="animation" ng-controller="ngContactListCtrl">
 
 <h2 class="section-title">Manage List
-<span>BMW</span>
+<span ng-repeat="name in ngData | limitTo:1"> {{ name.contactListName }}</span>
 </h2>
 
 <div class="top-buttons">
