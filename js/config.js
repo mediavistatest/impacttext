@@ -254,14 +254,33 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
 
    //Setting defaults for http requests
    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
-
 }
 angular
-    .module('inspinia')
-    .config(config)
-    .run(function($rootScope, $state) {
-        $rootScope.$state = $state;
-    });
+	.module('inspinia')
+	.config(config)
+	.factory('authInterceptor', ['$rootScope', '$q', '$window', function($rootScope, $q, $window) {
+		return {
+			response: function(response) {
+				if(response.status == 401) {
+					$window.location.href = "/login.html";
+				}
+				return response || $q.when(response);
+			},
+			responseError: function (response) {
+				if (response.status === 401) {
+					$window.location.href = "/login.html";
+				}
+				return $q.reject(response);
+			}
+		};
+	}])
+	.config(['$httpProvider',function($httpProvider) {
+		//Http Intercpetor to check auth failures for xhr requests
+		$httpProvider.interceptors.push('authInterceptor');
+	}])
+	.run(function($rootScope, $state) {
+		$rootScope.$state = $state;
+	});
 
 //Some global variables
 var inspiniaNS = {};

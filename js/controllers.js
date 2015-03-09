@@ -3115,7 +3115,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 				var ft = searchText.toLowerCase();
 				$http.post(
 					inspiniaNS.wsUrl + "contactlist_get",
-					$.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+					$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
 				).success(function (largeLoad) {
 					data = largeLoad.apidata.filter(function(item) {
 						return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
@@ -3124,19 +3124,19 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 				}).error(
 					//An error occurred with this request
 					function(data, status, headers, config) {
-						alert('Unexpected error occurred when trying to fetch contact lists!');
+						//alert('Unexpected error occurred when trying to fetch contact lists!');
 					}
 				);
 			} else {
 				$http.post(
 					inspiniaNS.wsUrl + "contactlist_get",
-					$.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize})
+					$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize})
 				).success(function (data) {
 					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
 				}).error(
 					//An error occurred with this request
 					function(data, status, headers, config) {
-						alert('Unexpected error occurred when trying to fetch contact lists!');
+						//alert('Unexpected error occurred when trying to fetch contact lists!');
 					}
 				);
 			}
@@ -3437,7 +3437,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 				 var ft = searchText.toLowerCase();
 				 $http.post(
 					 inspiniaNS.wsUrl + "contact_get",
-					 $.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), contactListID: $state.params.id })
+					 $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), contactListID: $state.params.id })
 				 ).success(
 					 function (largeLoad) {
 						 data = largeLoad.apidata.filter(function(item) {
@@ -3447,13 +3447,13 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 					 }).error(
 					 //An error occurred with this request
 					 function(data, status, headers, config) {
-						 alert('Unexpected error occurred when trying to fetch contact lists!');
+						 //alert('Unexpected error occurred when trying to fetch contact lists!');
 					 }
 				 );
 			 } else {
 				 $http.post(
 					 inspiniaNS.wsUrl + "contact_get",
-					 $.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), contactListID: $state.params.id,
+					 $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), contactListID: $state.params.id,
 						 limit: pageSize, offset: (page - 1) * pageSize, orderby: orderBy
 					 })
 				 ).success(
@@ -3462,7 +3462,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 					 }).error(
 					 //An error occurred with this request
 					 function(data, status, headers, config) {
-						 alert('Unexpected error occurred when trying to fetch contact lists!');
+						 //alert('Unexpected error occurred when trying to fetch contact lists!');
 					 }
 				 );
 			 }
@@ -3618,7 +3618,7 @@ function AddListsCtrl($scope, $http, $cookieStore) {
 
 $http.post(
         inspiniaNS.wsUrl + "contactlist_get",
-        $.param({ apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+        $.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
     ).success(
         //Successful request to the server
         function(data, status, headers, config) {
@@ -3637,7 +3637,7 @@ $http.post(
     ).error(
         //An error occurred with this request
         function(data, status, headers, config) {
-            alert('Unexpected error occurred when trying to fetch contact lists!');
+            //alert('Unexpected error occurred when trying to fetch contact lists!');
         }
     );
 }
@@ -3815,7 +3815,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 //Read the data from the remote server. First read the contact lists.
     $http.post(
         inspiniaNS.wsUrl + "contactlist_get",
-        $.param({ apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A'})
+        $.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A'})
     ).success(
         //Successful request to the server
         function(data, status, headers, config) {
@@ -3834,14 +3834,14 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     ).error(
         //An error occurred with this request
         function(data, status, headers, config) {
-            alert('Unexpected error occurred when trying to fetch contact lists!');
+            //alert('Unexpected error occurred when trying to fetch contact lists!');
         }
     );
 
     //now read DIDs
     $http.post(
         inspiniaNS.wsUrl + "did_get",
-        $.param({ apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+        $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
     ).success(
         //Successful request to the server
         function(data, status, headers, config) {
@@ -3860,7 +3860,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     ).error(
         //An error occurred with this request
         function(data, status, headers, config) {
-            alert('Unexpected error occurred when trying to fetch DIDs!');
+            //alert('Unexpected error occurred when trying to fetch DIDs!');
         }
     );
 
@@ -3876,7 +3876,9 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 			//todo: check how to receive custom opt out message for the account
 			optOutMessage = $scope.OptOutTxt2;
 		} else if ($scope.OptOutMsg == 'write') {
-			optOutMessage = $scope.OptOutTxt3;
+			if (typeof $scope.OptOutTxt3 != 'undefined' && $scope.OptOutTxt3 != null) {
+				optOutMessage = $scope.OptOutTxt3;
+			}
 		}
 
 		//Generate a message text
@@ -3925,6 +3927,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 		//Creating a api request data object
 		var requestData = {
+			sethttp: 1, 
 			DID: $scope.FromNumber.DID,
 			message: messageText,
 			apikey: $cookieStore.get('inspinia_auth_token'),
@@ -4007,7 +4010,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 		).error(
 			//An error occurred with this request
 			function(data, status, headers, config) {
-				alert('Unexpected error occurred when trying to send message!');
+				//alert('Unexpected error occurred when trying to send message!');
 			}
 		);
 	};
@@ -4020,6 +4023,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 		//Creating a api request data object
 		var requestData = {
+			sethttp: 1, 
 			didid: $scope.FromNumber.DIDID,
 			message: messageText,
 			apikey: $cookieStore.get('inspinia_auth_token'),
@@ -4051,7 +4055,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 		).error(
 			//An error occurred with this request
 			function(data, status, headers, config) {
-				alert('Unexpected error occurred when trying to send message!');
+				//alert('Unexpected error occurred when trying to send message!');
 			}
 		);
 	};
