@@ -7,13 +7,7 @@
 </h2>
 
 <div class="top-buttons">
-<a href="#/lists/lists_add" class="btn btn-add"><i class="fa fa-plus"></i> Create list</a>&nbsp; <a href="/lists/lists_add_contact" class="btn btn-add"><i class="fa fa-plus"></i> Add contact(s)</a>&nbsp; <a href="#/lists/lists_view" class="btn btn-back"><i class="fa fa-undo"></i> Back to Lists</a>
-</div>
-<div>
-
-<!--<button class="btn btn-success" data-toggle="button" ng-click="filterStatusO()">Opted out</button>-->
-<!--<input class="search-input" placeholder="Search by list name" type="text" ng-model="nameFilter" ng-change="filterName()" >-->
-<input class="search-input" placeholder="Search by contact number, name, email or custom field" type="text" ng-model="filterOptions.filterText">
+<a href="#/lists/lists_add" class="btn btn-add"><i class="fa fa-plus"></i> Create list</a>&nbsp; <a href="#/lists/lists_add_contact" class="btn btn-add"><i class="fa fa-plus"></i> Add contact(s)</a>&nbsp; <a href="#/lists/lists_view" class="btn btn-back"><i class="fa fa-undo"></i> Back to Lists</a>
 
 <div class="page-select-wrapper">
 <strong>Show:</strong>&nbsp; <select class="page-select" ng-model="pagingOptions.pageSize">
@@ -22,6 +16,29 @@
 </div>
 
 </div>
+
+<div>
+
+<!--<button class="btn btn-success" data-toggle="button" ng-click="filterStatusO()">Opted out</button>-->
+<!--<input class="search-input" placeholder="Search by list name" type="text" ng-model="nameFilter" ng-change="filterName()" >-->
+
+<!-- Search by -->
+<input class="search-input" placeholder="Search term" type="text" ng-model="filterOptions.filterText">
+<select chosen data-placeholder="search by" disable-search="true">
+	<option></option>
+	<option>ANI</option>
+	<option>First Name</option>
+	<option>Last Name</option>
+	<option>Email</option>
+	<option>Field 1</option>
+	<option>Field 2</option>
+	<option>Field 3</option>
+</select>
+<button class="btn btn-search"><i class="fa fa-search"></i></button>
+
+</div>
+<!-- end search by -->
+
       <br>
 
 
@@ -48,7 +65,7 @@
 <div class="btn-group dropup discard-btn">
 <a data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false"><i class="fa fa-trash-o"></i> Delete</a>
 <ul class="dropdown-menu dropdown-alerts">
-    <li>Are you sure you want to delete the list?</li>
+    <li>Are you sure you want to delete the contact(s)?</li>
     <li>&nbsp;</li>
     <li><span class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
 </ul>

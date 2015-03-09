@@ -1,12 +1,4 @@
-/**
- * INSPINIA - Responsive Admin Theme
- * Copyright 2015 Webapplayers.com
- *
- * Inspinia theme use AngularUI Router to manage routing and views
- * Each view are defined as state.
- * Initial there are written state for all view in theme.
- *
- */
+
 function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpProvider) {
     $urlRouterProvider.otherwise("/dashboard");
 
@@ -42,6 +34,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                         },
                         {
                             files: ['js/plugins/nggrid/plugins/ng-grid-csv-export.js']
+                        },
+                        {
+                            insertBefore: '#loadBefore',
+                            name: 'localytics.directives',
+                            files: ['css/plugins/chosen/chosen.css','js/plugins/chosen/chosen.jquery.js','js/plugins/chosen/chosen.js']
                         }
                     ]);
                 }
@@ -110,7 +107,18 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         .state('lists.add', {
             url: "/lists_add",
             templateUrl: "views/lists_add.html",
-            data: { pageTitle: 'Add List' }
+            data: { pageTitle: 'Add List' },
+			   resolve: {
+				 loadPlugin: function ($ocLazyLoad) {
+					 return $ocLazyLoad.load([
+						 {
+							 name: 'cgNotify',
+							 files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+
+						 }
+					 ]);
+				 }
+			 }
         })
         .state('lists.add_contact', {
             url: "/lists_add_contact",
@@ -254,14 +262,36 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
 
    //Setting defaults for http requests
    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
-
 }
 var app = angular
-    .module('inspinia')
-    .config(config)
-    .run(function($rootScope, $state) {
-        $rootScope.$state = $state;
-    });
+	.module('inspinia')
+	.config(config)
+	.factory('authInterceptor', ['$rootScope', '$q', '$window', function($rootScope, $q, $window) {
+		return {
+			request: function(request) {
+				return request;
+			},
+			response: function(response) {
+				if(response.status == 401) {
+					$window.location.href = "/login.html";
+				}
+				return response || $q.when(response);
+			},
+			responseError: function (response) {
+				if (response.status === 401) {
+					$window.location.href = "/login.html";
+				}
+				return $q.reject(response);
+			}
+		};
+	}])
+	.config(['$httpProvider',function($httpProvider) {
+		//Http Intercpetor to check auth failures for xhr requests
+		$httpProvider.interceptors.push('authInterceptor');
+	}])
+	.run(function($rootScope, $state) {
+		$rootScope.$state = $state;
+	});
 
 //Some global variables
 var inspiniaNS = {};
