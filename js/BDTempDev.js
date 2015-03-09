@@ -274,7 +274,7 @@ var ngInbox = {
                 var params = {
                     apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
                     accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
-                    ANI :  messages[i].sourceANI
+                    ANI : messages[i].sourceANI
                 };
 
                 var $param = $.param(params);
@@ -389,18 +389,26 @@ var ngInbox = {
         clickedMessage : null,
         list : true,
         view : true,
-        changeSchedule : false,
+        send : false,
         Events : {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
+                inParent.Events.ShowView(inParent);
+            },
+            ShowList : function(inParent) {
+                inParent.list = true;
+                inParent.view = false;
+                inParent.send = false;
+            },
+            ShowView : function(inParent) {
                 inParent.list = false;
                 inParent.view = true;
-                inParent.changeSchedule = false;
+                inParent.send = false;
             },
-            ChangeSchedule_onClick : function(inParent) {
+            ShowSend : function(inParent) {
                 inParent.list = false;
                 inParent.view = false;
-                inParent.changeSchedule = true;
+                inParent.send = true;
             },
             InitialiseEvents : function(controllerParent) {
             }
@@ -408,9 +416,7 @@ var ngInbox = {
         Controller : function($scope, $http, $cookieStore) {
             //Controler parrent setting !!!!
             var controllerParent = ngInbox.ScheduledList;
-            controllerParent.list = true;
-            controllerParent.view = false;
-            controllerParent.changeSchedule = false;
+            controllerParent.Events.ShowList(controllerParent);
 
             controllerParent.$scope = $scope;
             controllerParent.$http = $http;
@@ -453,8 +459,6 @@ var ngInbox = {
         }, {
             field : 'statusDate',
             displayName : 'Date & Time Saved',
-        }, {
-            cellTemplate : 'views/table/ManageTemplateCol.html'
         }],
         sortOptions : {
             fields : ['statusDate'],
@@ -469,10 +473,27 @@ var ngInbox = {
         $cookieStore : null,
         clickedMessage : null,
         list : true,
+        view : true,
+        send : false,
         Events : {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
+                inParent.Events.ShowView(inParent);
+            },
+            ShowList : function(inParent) {
+                inParent.list = true;
+                inParent.view = false;
+                inParent.send = false;
+            },
+            ShowView : function(inParent) {
                 inParent.list = false;
+                inParent.view = true;
+                inParent.send = false;
+            },
+            ShowSend : function(inParent) {
+                inParent.list = false;
+                inParent.view = false;
+                inParent.send = true;
             },
             InitialiseEvents : function(controllerParent) {
             }
@@ -480,7 +501,7 @@ var ngInbox = {
         Controller : function($scope, $http, $cookieStore) {
             //Controler parrent setting !!!!
             var controllerParent = ngInbox.DraftsList;
-            controllerParent.list = true;
+            controllerParent.Events.ShowList(controllerParent);
 
             controllerParent.$scope = $scope;
             controllerParent.$http = $http;
@@ -488,6 +509,25 @@ var ngInbox = {
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
+        },
+        PopulateSend : function($sendScope) {
+            try {
+                $sendScope.FromName = $sendScope.initial;
+                $sendScope.MessageType = 'SMS';
+                $sendScope.FromNumber = $sendScope.controllerParent.clickedMessage.DID;
+                $sendScope.ToList = $sendScope.controllerParent.clickedMessage.contactListName;
+                $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
+                $sendScope.OptOutMsg = '';
+                $sendScope.OptOutTxt3 = $sendScope.initial;
+                $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
+                $sendScope.ScheduleCheck = false;
+                $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
+                $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+            } catch(e) {
+                //TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
+            }
+
         },
         PostSuccess : function(controllerParent, result) {
             ngInbox._internal.Methods.PostSuccess(controllerParent, result);
