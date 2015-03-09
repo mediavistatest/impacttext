@@ -69,25 +69,14 @@ var ngInbox = {
                 controllerParent.$http.post(inspiniaNS.wsUrl + controllerParent.getListAction, $param)
                 // success function
                 .success(function(result) {
-                    console.log(result)
-                    // Contact/List repack
-                    for (var i in result.apidata) {
-                        var message = result.apidata[i];
-                        if (message.contactListID == '0') {
-                            message.con_lis = message.ANI;
-                        } else {
-                            message.con_lis = message.contactListName;
-                        }
-                    }
-                    controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, result.apidata, result.apicount);
+                    controllerParent.PostSuccess(controllerParent, result);
                 })
                 // error function
                 .error(function(data, status, headers, config) {
-                    alert(ngInbox._internal.ErrorMsg);
+                    console.log(ngInbox._internal.ErrorMsg);
                 });
             },
             PopulateScope : function(controllerParent) {
-                console.log('populate')
                 ngInbox._internal.ErrorMsg = controllerParent.errorMessage;
 
                 controllerParent.$scope.mySelections = [];
@@ -143,8 +132,6 @@ var ngInbox = {
                 controllerParent.$scope.controllerParent = controllerParent;
             },
             StatusChange : function(controllerParent, messageToChangeStatusArray, changeToStatus, callback) {
-                console.log(messageToChangeStatusArray)
-
                 var params = {
                     apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
                     accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
@@ -182,7 +169,6 @@ var ngInbox = {
             DeleteMessage : function(controllerParent, messageList) {
                 ngInbox._internal.ErrorMsg = 'Delete message failed!';
                 var callback = function() {
-                    console.log('callback function on delete')
                     controllerParent.$scope.$broadcast("DeleteMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
                     controllerParent.list = true;
@@ -199,7 +185,6 @@ var ngInbox = {
             MarkAsReadMessage : function(controllerParent, messageList) {
                 ngInbox._internal.ErrorMsg = 'Mark as read message failed!';
                 var callback = function() {
-                    console.log('callback function on mark as read')
                     controllerParent.$scope.$broadcast("MarkAsReadMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
                     controllerParent.list = true;
@@ -212,6 +197,18 @@ var ngInbox = {
             },
             MarkAsReadMessages : function(controllerParent) {
                 ngInbox._internal.Methods.MarkAsReadMessage(controllerParent, controllerParent.$scope.mySelections);
+            },
+            PostSuccess : function(controllerParent, result) {
+                // Contact/List repack
+                for (var i in result.apidata) {
+                    var message = result.apidata[i];
+                    if (message.contactListID == '0') {
+                        message.con_lis = message.ANI;
+                    } else {
+                        message.con_lis = message.contactListName;
+                    }
+                }
+                controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, result.apidata, result.apicount);
             }
         }
     },
@@ -232,12 +229,10 @@ var ngInbox = {
         }, {
             field : 'createdDate',
             displayName : 'Date',
-        }
-        // ,{
-        // field : '',
-        // displayName : 'List'
-        // }
-        ],
+        }, {
+            field : 'lists',
+            displayName : 'List'
+        }],
         sortOptions : {
             fields : ['createdDate'],
             directions : ['ASC'],
@@ -255,8 +250,6 @@ var ngInbox = {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
                 inParent.list = false;
-                //console.log(row,controllerParent.clickedMessage)
-                console.log(inParent.$scope.controllerParent.clickedMessage)
             },
             InitialiseEvents : function(controllerParent) {
             }
@@ -272,6 +265,42 @@ var ngInbox = {
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
+        },
+        PostSuccess : function(controllerParent, result) {
+            var nListsReturned = 0;
+            var messages = result.apidata;
+
+            for (var i in messages) {
+                var params = {
+                    apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
+                    accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
+                    ANI :  messages[i].sourceANI
+                };
+
+                var $param = $.param(params);
+                var success = function(cnt) {
+                    var lists = '';
+                    for (var j in cnt.apidata) {
+                        lists += cnt.apidata[j].contactListName;
+                        if (j < cnt.apidata.length - 1) {
+                            lists += ', ';
+                        }
+                    }
+                    messages[nListsReturned].lists = lists;
+                    nListsReturned++;
+                };
+                //POST
+                controllerParent.$http.post(inspiniaNS.wsUrl + 'contact_get', $param)
+                // success function
+                .success(function(contacts) {
+                    success(contacts);
+                })
+                // error function
+                .error(function(data, status, headers, config) {
+                    nListsReturned++;
+                });
+                controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, messages, result.apicount);
+            }
         }
     },
     SentList : {
@@ -307,8 +336,6 @@ var ngInbox = {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
                 inParent.list = false;
-                //console.log(row,controllerParent.clickedMessage)
-                console.log(inParent.$scope.controllerParent.clickedMessage)
             },
             InitialiseEvents : function(controllerParent) {
             }
@@ -324,6 +351,9 @@ var ngInbox = {
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
+        },
+        PostSuccess : function(controllerParent, result) {
+            ngInbox._internal.Methods.PostSuccess(controllerParent, result);
         }
     },
     ScheduledList : {
@@ -366,8 +396,6 @@ var ngInbox = {
                 inParent.list = false;
                 inParent.view = true;
                 inParent.changeSchedule = false;
-                //console.log(row,controllerParent.clickedMessage)
-                console.log(inParent.$scope.controllerParent.clickedMessage)
             },
             ChangeSchedule_onClick : function(inParent) {
                 inParent.list = false;
@@ -392,18 +420,26 @@ var ngInbox = {
             controllerParent.Events.InitialiseEvents(controllerParent);
         },
         PopulateSend : function($sendScope) {
-            $sendScope.FromName = $sendScope.initial;
-            $sendScope.MessageType = 'SMS';
-            $sendScope.FromNumber = $sendScope.controllerParent.clickedMessage.DID;
-            $sendScope.ToList = $sendScope.controllerParent.clickedMessage.contactListName;
-            $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
-            $sendScope.OptOutMsg = '';
-            $sendScope.OptOutTxt3 = $sendScope.initial;
-            $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
-            $sendScope.ScheduleCheck = true;
-            $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0,4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5,7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8,10));
-            $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11,13);
-            $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14,16);
+            try {
+                $sendScope.FromName = $sendScope.initial;
+                $sendScope.MessageType = 'SMS';
+                $sendScope.FromNumber = $sendScope.controllerParent.clickedMessage.DID;
+                $sendScope.ToList = $sendScope.controllerParent.clickedMessage.contactListName;
+                $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
+                $sendScope.OptOutMsg = '';
+                $sendScope.OptOutTxt3 = $sendScope.initial;
+                $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
+                $sendScope.ScheduleCheck = true;
+                $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
+                $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+            } catch(e) {
+                //TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
+            }
+
+        },
+        PostSuccess : function(controllerParent, result) {
+            ngInbox._internal.Methods.PostSuccess(controllerParent, result);
         }
     },
     DraftsList : {
@@ -437,8 +473,6 @@ var ngInbox = {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
                 inParent.list = false;
-                //console.log(row,controllerParent.clickedMessage)
-                console.log(inParent.$scope.controllerParent.clickedMessage)
             },
             InitialiseEvents : function(controllerParent) {
             }
@@ -454,17 +488,22 @@ var ngInbox = {
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
+        },
+        PostSuccess : function(controllerParent, result) {
+            ngInbox._internal.Methods.PostSuccess(controllerParent, result);
         }
     },
     TrashList : {
         getListAction : 'messages_inbound',
         getListStatus : 'D',
+        // getListAction : 'messages_outbound',
+        // getListStatus : 'X',
         statusChangeAction : 'message_changeinboundstatus',
         deleteMessageStatus : null,
         restoreMessageStatus : null,
         columnDefs : [{
-            field : 'con_lis',
-            displayName : 'Contact/List',
+            field : 'sourceANI',
+            displayName : 'Contact',
             cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             field : 'message',
@@ -491,8 +530,6 @@ var ngInbox = {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
                 inParent.list = false;
-                //console.log(row,controllerParent.clickedMessage)
-                console.log(inParent.$scope.controllerParent.clickedMessage)
             },
             InitialiseEvents : function(controllerParent) {
             }
@@ -508,6 +545,9 @@ var ngInbox = {
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
+        },
+        PostSuccess : function(controllerParent, result) {
+            ngInbox._internal.Methods.PostSuccess(controllerParent, result);
         }
     }
 };
