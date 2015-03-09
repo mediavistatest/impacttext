@@ -3770,6 +3770,12 @@ function imageCrop($scope) {
 
 function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracker) {
 
+    if ($scope.controllerParent) {
+        $scope.$watch('controllerParent.clickedMessage', function() {
+            $scope.controllerParent.PopulateSend($scope);
+        }, true);
+    }
+
 
 //send form initial states
     $scope.initial = "";
