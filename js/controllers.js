@@ -3115,7 +3115,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 				var ft = searchText.toLowerCase();
 				$http.post(
 					inspiniaNS.wsUrl + "contactlist_get",
-					$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A'})
+					$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
 				).success(function (largeLoad) {
 					data = largeLoad.apidata.filter(function(item) {
 						return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
@@ -3134,7 +3134,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 			} else {
 				$http.post(
 					inspiniaNS.wsUrl + "contactlist_get",
-					$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A', orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize})
+					$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize})
 				).success(function (data) {
 					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
 				}).error(
@@ -3336,6 +3336,11 @@ $scope.$watch('pagingOptions', function () {
 
           field:'lastMessageSent',
           displayName:'Last Sent'
+
+        },{
+
+          field:'contactCount',
+          displayName:'Contacts'
 
         },{
 
