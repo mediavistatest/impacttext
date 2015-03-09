@@ -3689,7 +3689,7 @@ function notifyCtrl($scope, notify) {
      $scope.MarkAsReadMsg = function(){
         console.log(222222)
         notify({ message: 'Your message(s) has been mark as read!', classes: 'alert-success'});
-    };  
+    };
 	//If SendingMessageSucceeded event is triggered, show related message
 	$scope.$on('SendingMessageSucceeded', function(event, args) {
 		$scope.SentMsg();
@@ -3709,7 +3709,7 @@ function notifyCtrl($scope, notify) {
     $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
         console.log('MarkAsReadMessageSucceeded uhvacen')
         $scope.MarkAsReadMsg();
-    });    
+    });
 }
 
 
@@ -3742,6 +3742,12 @@ function imageCrop($scope) {
 }
 
 function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracker) {
+
+    if ($scope.controllerParent) {
+        $scope.$watch('controllerParent.clickedMessage', function() {
+            $scope.controllerParent.PopulateSend($scope);
+        }, true);
+    }
 
 
 //send form initial states

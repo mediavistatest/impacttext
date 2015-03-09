@@ -22,7 +22,7 @@
 
 <ul class="col-sm-12 alert alert-danger" ng-show="submitted && SendForm.$error.required">
 
-<li><span class="red" ng-show="SendForm.ToList.$error.required">List Required!</span></li> 
+<li><span class="red" ng-show="SendForm.ToList.$error.required">List Required!</span></li>
 
 <li><span class="red" ng-show="SendForm.MessageTxt.$error.required">Message text is required!</span></li>
 
@@ -48,7 +48,7 @@
 
 	        <label> <input icheck type="radio" name="MessageType" ng-model="MessageType" value="MMS"> MMS </label>
 
-	        </div>   
+	        </div>
 
 	    </div>
 
@@ -154,7 +154,7 @@
 
         <div class="col-sm-6">
 
-        
+
 
             <!--<div class="radio">
 
@@ -170,16 +170,16 @@
 
             <textarea ng-show="OptOutMsg == 'custom'" name="message" class="form-control" rows="2" ng-model="OptOutTxt2" ng-init="OptOutTxt2='This is custom'" disabled></textarea>
 
-            <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>   
+            <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>
 
             </div>-->
 
-        
+
 
 
 
             <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="OptOutMsg">
-                
+
 
                 <option value="standard">Standard</option>
 
@@ -189,7 +189,7 @@
 
             </select>
 
-            
+
 
 
 
@@ -197,11 +197,11 @@
 
             <textarea ng-show="OptOutMsg == 'custom'" name="message" class="form-control opt-out" rows="2" ng-model="OptOutTxt2" ng-init="OptOutTxt2='This is custom'" disabled></textarea>
 
-            <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control opt-out" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>   
+            <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control opt-out" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>
 
         </div>
 
-    
+
 
     </div>
 
@@ -229,9 +229,9 @@
 
 
 
-<!-- OLD PLANE WORKING SCHEDULE WITHOUT PICKER 
+<!-- OLD PLANE WORKING SCHEDULE WITHOUT PICKER
 
-            <div class="col-sm-5"> 
+            <div class="col-sm-5">
 
             <div class="input-group date">
 
@@ -245,7 +245,7 @@
 
 
 
-            <div class="col-sm-5"> 
+            <div class="col-sm-5">
 
             <div class="input-group date">
 
@@ -297,7 +297,7 @@
 
         <li><a ng-click='SetTimeHour = "20"'>20</a> <a ng-click='SetTimeHour = "21"'>21</a> <a ng-click='SetTimeHour = "22"'>22</a> <a ng-click='SetTimeHour = "23"'>23</a></li>
 
-        
+
 
       </ul>
 
@@ -345,7 +345,7 @@
 
 
 
-            
+
 
        <!-- <div class="dropdown">
 

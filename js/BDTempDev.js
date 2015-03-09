@@ -390,6 +390,20 @@ var ngInbox = {
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
+        },
+        PopulateSend : function($sendScope) {
+            $sendScope.FromName = $sendScope.initial;
+            $sendScope.MessageType = 'SMS';
+            $sendScope.FromNumber = $sendScope.controllerParent.clickedMessage.DID;
+            $sendScope.ToList = $sendScope.controllerParent.clickedMessage.contactListName;
+            $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
+            $sendScope.OptOutMsg = '';
+            $sendScope.OptOutTxt3 = $sendScope.initial;
+            $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
+            $sendScope.ScheduleCheck = true;
+            $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0,4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5,7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8,10));
+            $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11,13);
+            $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14,16);
         }
     },
     DraftsList : {
