@@ -3115,12 +3115,9 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 				var ft = searchText.toLowerCase();
 				$http.post(
 					inspiniaNS.wsUrl + "contactlist_get",
-					$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
-				).success(function (largeLoad) {
-					data = largeLoad.apidata.filter(function(item) {
-						return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
-					});
-					$scope.setPagingData(data, page, pageSize);
+					$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'),contactListName: ft, orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize})
+				).success(function (data) {
+					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
 				}).error(
 					//An error occurred with this request
 					function(data, status, headers, config) {
