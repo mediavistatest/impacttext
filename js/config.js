@@ -256,7 +256,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
 
 }
-angular
+var app = angular
     .module('inspinia')
     .config(config)
     .run(function($rootScope, $state) {
