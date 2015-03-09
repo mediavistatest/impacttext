@@ -1861,6 +1861,8 @@ END DATETIME******/
   margin-top: -2px;
 }
 
+
+
 .ngCellText.ng-scope.col2.colt2 {
 
   text-align: left;
@@ -3084,6 +3086,116 @@ margin-top: 10px;
   color: #005eaa;
   box-shadow: none;
 }
+
+.btn.btn-primary {
+background-color: #e36f1e;
+border-color: #e36f1e;
+color: #FFFFFF;
+}
+
+.manage-list .chosen-container {
+position: relative;
+/* display: inline-block; */
+vertical-align: middle;
+font-size: 13px;
+zoom: 1;
+-webkit-user-select: none;
+-moz-user-select: none;
+user-select: none;
+width: 120px !important;
+/* height: 30px; */
+padding: 0;
+top: -2px;
+border-radius: 0;
+}
+
+.manage-list .chosen-container-single .chosen-single {
+background: #ffffff;
+box-shadow: none;
+-moz-box-sizing: border-box;
+background-color: #FFFFFF;
+border: 1px solid lightgrey;
+border-radius: 0;
+cursor: text;
+height: auto !important;
+margin: 0;
+min-height: 30px;
+overflow: hidden;
+padding: 1px 12px;
+position: relative;
+width: 100%;
+}
+
+.manage-list input.search-input {
+padding: 5px 12px;
+width: 30%;
+margin-bottom: 20px;
+border: 1px solid lightgrey;
+}
+
+.manage-list .chosen-container-single .chosen-drop {
+margin-top: -1px;
+border-radius: 0 0 4px 4px;
+background-clip: padding-box;
+border: 1px solid lightgrey;
+border-top: none;
+}
+
+button.btn.btn-search {
+padding: 0;
+position: relative;
+top: -2px;
+font-size: 20px;
+border: none;
+color: #005eaa;
+margin-left: 5px;
+}
+
+button.btn.btn-search:hover {
+color: #0570c5;
+}
+
+button.btn.btn-search:active {
+box-shadow: none;
+outline: none;
+color: #005eaa;
+top: -1px;
+}
+
+button.btn.btn-search:focus {
+box-shadow: none;
+outline: none;
+color: #005eaa;
+}
+
+.manage-list .itTopPager {
+background-color: #FFF;
+padding: 0px;
+border-top: medium none;
+position: absolute;
+top: 115px;
+right: 10px;
+display: inline-block;
+width: auto !important;
+height: 0 !important;
+}
+
+
+.ngPagerControl {
+margin-right: -10px !important;
+}
+
+.itTopPager .ngPagerControl {
+margin-right: 10px !important;
+}
+
+.manage-list .page-select-wrapper {
+position: absolute;
+top: 0;
+right: 30px;
+top: 90px;
+}
+
 
 @media all and (max-width:990px) {
 
