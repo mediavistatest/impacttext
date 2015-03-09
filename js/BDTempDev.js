@@ -102,7 +102,7 @@ var ngInbox = {
                 controllerParent.$scope.DeleteMessage = ngInbox._internal.Methods.DeleteMessage;
                 controllerParent.$scope.DeleteMessages = ngInbox._internal.Methods.DeleteMessages;
                 controllerParent.$scope.MarkAsReadMessage = ngInbox._internal.Methods.MarkAsReadMessage;
-                controllerParent.$scope.MarkAsReadMessages = ngInbox._internal.Methods.MarkAsReadMessages;                
+                controllerParent.$scope.MarkAsReadMessages = ngInbox._internal.Methods.MarkAsReadMessages;
 
                 //WHATCH
                 controllerParent.$scope.$watch('pagingOptions', function() {
@@ -212,7 +212,7 @@ var ngInbox = {
             },
             MarkAsReadMessages : function(controllerParent) {
                 ngInbox._internal.Methods.MarkAsReadMessage(controllerParent, controllerParent.$scope.mySelections);
-            }            
+            }
         }
     },
     InboxList : {
@@ -220,7 +220,7 @@ var ngInbox = {
         getListStatus : 'U',
         statusChangeAction : 'message_changeinboundstatus',
         deleteMessageStatus : 'D',
-        markAsReadMessageStatus : 'R',        
+        markAsReadMessageStatus : 'R',
         columnDefs : [{
             field : 'sourceANI',
             displayName : 'Contact',

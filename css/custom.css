@@ -1852,7 +1852,14 @@ END DATETIME******/
 
 }
 
+.messages .ngSelectionCell {
+  margin-top: 16px;
+  margin-left: 0;
+}
 
+.messages input.ngSelectionHeader {
+  margin-top: -2px;
+}
 
 .ngCellText.ng-scope.col2.colt2 {
 

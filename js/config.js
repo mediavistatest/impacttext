@@ -255,7 +255,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
    //Setting defaults for http requests
    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
 }
-angular
+var app = angular
 	.module('inspinia')
 	.config(config)
 	.factory('authInterceptor', ['$rootScope', '$q', '$window', function($rootScope, $q, $window) {
