@@ -260,6 +260,9 @@ angular
 	.config(config)
 	.factory('authInterceptor', ['$rootScope', '$q', '$window', function($rootScope, $q, $window) {
 		return {
+			request: function(request) {
+				return request;
+			},
 			response: function(response) {
 				if(response.status == 401) {
 					$window.location.href = "/login.html";
