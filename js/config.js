@@ -110,7 +110,18 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         .state('lists.add', {
             url: "/lists_add",
             templateUrl: "views/lists_add.html",
-            data: { pageTitle: 'Add List' }
+            data: { pageTitle: 'Add List' },
+			   resolve: {
+				 loadPlugin: function ($ocLazyLoad) {
+					 return $ocLazyLoad.load([
+						 {
+							 name: 'cgNotify',
+							 files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+
+						 }
+					 ]);
+				 }
+			 }
         })
         .state('lists.add_contact', {
             url: "/lists_add_contact",
