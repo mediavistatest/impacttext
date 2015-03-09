@@ -3125,6 +3125,10 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 					//An error occurred with this request
 					function(data, status, headers, config) {
 						//alert('Unexpected error occurred when trying to fetch contact lists!');
+						if (status == 400) {
+							alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+							alert(JSON.stringify(data));
+						}
 					}
 				);
 			} else {
@@ -3137,6 +3141,10 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 					//An error occurred with this request
 					function(data, status, headers, config) {
 						//alert('Unexpected error occurred when trying to fetch contact lists!');
+						if (status == 400) {
+							alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+							alert(JSON.stringify(data));
+						}
 					}
 				);
 			}
@@ -3448,6 +3456,10 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 					 //An error occurred with this request
 					 function(data, status, headers, config) {
 						 //alert('Unexpected error occurred when trying to fetch contact lists!');
+						 if (status == 400) {
+							 alert("An error occurred when getting contacts! Error code: " + data.apicode);
+							 alert(JSON.stringify(data));
+						 }
 					 }
 				 );
 			 } else {
@@ -3463,6 +3475,10 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 					 //An error occurred with this request
 					 function(data, status, headers, config) {
 						 //alert('Unexpected error occurred when trying to fetch contact lists!');
+						 if (status == 400) {
+							 alert("An error occurred when getting contacts! Error code: " + data.apicode);
+							 alert(JSON.stringify(data));
+						 }
 					 }
 				 );
 			 }
@@ -3638,6 +3654,10 @@ $http.post(
         //An error occurred with this request
         function(data, status, headers, config) {
             //alert('Unexpected error occurred when trying to fetch contact lists!');
+			  if (status == 400) {
+					alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
         }
     );
 }
@@ -3689,7 +3709,10 @@ function notifyCtrl($scope, notify) {
      $scope.MarkAsReadMsg = function(){
         console.log(222222)
         notify({ message: 'Your message(s) has been mark as read!', classes: 'alert-success'});
-    };  
+    };
+    $scope.AniOptedOutMsg = function(){
+        notify({ message: 'ANI that you are trying to send message to is opted-out!', classes: 'alert-danger', templateUrl: $scope.inspiniaTemplate});
+    };
 	//If SendingMessageSucceeded event is triggered, show related message
 	$scope.$on('SendingMessageSucceeded', function(event, args) {
 		$scope.SentMsg();
@@ -3702,6 +3725,10 @@ function notifyCtrl($scope, notify) {
 	$scope.$on('SaveDraftSucceeded', function(event, args) {
 		$scope.SavedDraftMsg();
 	});
+	//If AniOptedOut event is triggered, show related message
+	$scope.$on('AniOptedOut', function(event, args) {
+		$scope.AniOptedOutMsg();
+	});
     $scope.$on('DeleteMessageSucceeded', function(event, args) {
         console.log('DeleteMessageSucceeded uhvacen')
         $scope.DeleteMsg();
@@ -3709,7 +3736,7 @@ function notifyCtrl($scope, notify) {
     $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
         console.log('MarkAsReadMessageSucceeded uhvacen')
         $scope.MarkAsReadMsg();
-    });    
+    });
 }
 
 
@@ -3755,6 +3782,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.SetTimeHour = "";
     $scope.SetTimeMinute = "";
     $scope.contactLists = [];
+	$scope.SendToList = true;
 
 	//Date/time control
 	$scope.today = function() {
@@ -3810,6 +3838,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
       $scope.SetDate = '';
       $scope.SetTimeHour = '';
       $scope.SetTimeMinute = '';
+      $scope.SendToList = true;
     };
 
 //Read the data from the remote server. First read the contact lists.
@@ -3835,6 +3864,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         //An error occurred with this request
         function(data, status, headers, config) {
             //alert('Unexpected error occurred when trying to fetch contact lists!');
+			  if (status == 400) {
+					alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
         }
     );
 
@@ -3861,6 +3894,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         //An error occurred with this request
         function(data, status, headers, config) {
             //alert('Unexpected error occurred when trying to fetch DIDs!');
+			  if (status == 400) {
+					alert("An error occurred when getting DID! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
         }
     );
 
@@ -3903,8 +3940,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 		// Trigger validation flag.
 		//$scope.submitted = true;
 
-		if ((typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0)
-			&& (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == '')
+		if (($scope.SendToList && (typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0))
+			&& (!$scope.SendToList && (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == ''))
 			) {
 			return;
 		}
@@ -3934,7 +3971,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 			accountID: $cookieStore.get('inspinia_account_id')
 		};
 
-		if (typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
+		if ($scope.SendToList && typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
 			if ($scope.ToList.constructor === Array) {
 				//Sending message to contact lists
 				requestData.contactListID = $scope.ToList[0].contactListID;
@@ -3945,7 +3982,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 				//Sending message to a single contact list
 				requestData.contactListID = $scope.ToList.contactListID;
 			}
-		} else if (typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
+		} else if (!$scope.SendToList && typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
 			//Sending message to numbers
 			requestData.ANI = $scope.ToNumber;
 		}
@@ -4011,6 +4048,14 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 			//An error occurred with this request
 			function(data, status, headers, config) {
 				//alert('Unexpected error occurred when trying to send message!');
+				if (status == 400) {
+					if (data.apicode == 1) {
+						$scope.$broadcast("AniOptedOut", data.apidata);
+					} else {
+						alert("An error occurred when sending your message! Error code: " + data.apicode);
+						alert(JSON.stringify(data));
+					}
+				}
 			}
 		);
 	};
@@ -4056,6 +4101,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 			//An error occurred with this request
 			function(data, status, headers, config) {
 				//alert('Unexpected error occurred when trying to send message!');
+				if (status == 400) {
+					alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
 			}
 		);
 	};
