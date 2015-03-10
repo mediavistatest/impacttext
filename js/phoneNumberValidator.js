@@ -28,38 +28,35 @@ var PhoneNumberArrayValidator = {
     },
     validatePhoneNumber : function(phoneNumber) {
         if (phoneNumber) {
-            if (phoneNumber == phoneNumber.replace(/\D/g, '')) {
-                if (phoneNumber.length == 10) {
-                    if (2 <= phoneNumber.substring(1, 2) <= 9) {
-                        if (2 <= phoneNumber.substring(4, 5) <= 9) {
-                            //PASSED all validations , VALID PHONE NUMBER
-                            return true;
-                        } else {
-                            var msg = 'Error: ' + phoneNumber + ' fifth digit is not in range (2-9)!';
-                            PhoneNumberArrayValidator.setError(phoneNumber, msg);
-                            return false;
-                        }
-                    } else {
-                        var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
-                        PhoneNumberArrayValidator.setError(phoneNumber, msg);
-                        return false;
-                    }
-                } else {
-                    if (phoneNumber.length < 10) {
-                        var msg = 'Error: ' + phoneNumber + ' is less then 10 digits number (lenght=' + phoneNumber.length + ')!';
-                        PhoneNumberArrayValidator.setError(phoneNumber, msg);
-                        return false;
-                    } else {
-                        var msg = 'Error: ' + phoneNumber + ' is greater then 10 digits number (lenght=' + phoneNumber.length + ')!';
-                        PhoneNumberArrayValidator.setError(phoneNumber, msg);
-                        return false;
-                    }
-                }
-            } else {
+            if (!(phoneNumber == phoneNumber.replace(/\D/g, ''))) {
                 var msg = 'Error: ' + phoneNumber + ' is not digits only!';
                 PhoneNumberArrayValidator.setError(phoneNumber, msg);
                 return false;
             }
+            if (phoneNumber.length < 10) {
+                var msg = 'Error: ' + phoneNumber + ' is less then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                return false;
+            }
+
+            if (phoneNumber.length > 10) {
+                var msg = 'Error: ' + phoneNumber + ' is greater then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                return false;
+            }
+
+            if (!(2 <= phoneNumber.substring(1, 2) <= 9)) {
+                var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
+                PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                return false;
+            }
+            if (!(2 <= phoneNumber.substring(4, 5) <= 9)) {
+                var msg = 'Error: ' + phoneNumber + ' fifth digit is not in range (2-9)!';
+                PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                return false;
+            }
+            //PASSED all validations , VALID PHONE NUMBER
+            return true;
         }
     },
     ParseAndValidateNumbers : function(numbersString) {
@@ -80,17 +77,17 @@ var PhoneNumberArrayValidator = {
 
         return PhoneNumberArrayValidator.PhoneNumbers;
     }
-}
+};
 
 // var testString = '01-23456789, 111.111.1111, 222-2222.222, 00115-678.910, 9999996666, 0987654321, 123456uio9, 11122233345'
 // var testString = '01-23456789, 111.111.1111, 222-2222.222, 00115-678.91, 9999996666, 0987654321, 123456uio9, 11122233345'
 //var testString = '1234567890, 01-23456789, 111.111.1111, 222-2222.222, 00115-678.91, 9999996666, 0987654321,      1122233345'
 //var testString = '01-23456789, 111.111.1111, 222-2222.222, 00115-678.91,           99999  8 96666          , 0987654321,      1122233345'
 
-var testString = '01-234563789'
+var testString = '01-234563789';
 
-console.log(testString)
-PhoneNumberArrayValidator.ParseAndValidateNumbers(testString)
+console.log(testString);
+PhoneNumberArrayValidator.ParseAndValidateNumbers(testString);
 
 //*************************************************************************************
 //druga cifrea 2-9, peta cifra 2-9
