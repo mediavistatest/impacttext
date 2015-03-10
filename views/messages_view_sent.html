@@ -2,37 +2,52 @@
 
 <div class="col-md-12 content-holder animated fadeInRight messages messages-view" ng-class="animation">
 
-    <h2 class="section-title">View message</h2>
+	<h2 class="section-title">View message</h2>
 
-    <div class="view-info-box">
-	    <div class="view-from-number">To: <span>{{controllerParent.clickedMessage.con_lis}}</span></div>
-	    <div class="view-date">Date sent: {{controllerParent.clickedMessage.sendEndDate}}</div>
-    </div>
+	<div class="view-info-box">
+		<div class="view-from-number">
+			To: <span>
+				{{controllerParent.clickedMessage.con_lis}}</span>
+		</div>
+		<div class="view-date">
+			Date sent: {{controllerParent.clickedMessage.sendEndDate}}
+		</div>
+	</div>
 
-    	<div class="top-buttons">
+	<div class="top-buttons">
 
-        <button class="btn"><i class="fa fa-retweet"></i> Resend</button> <!-- only send -->
-        <button class="btn"><i class="fa fa-share"></i> Forward</button> <!-- inbox, sent -->
+		<button class="btn">
+			<i class="fa fa-retweet"></i> Resend
+		</button>
+		<!-- only send -->
+		<button class="btn" ng-model="controllerParent.radioModel" btn-radio="'forward'" uncheckable>
+			<i class="fa fa-share"></i> Forward
+		</button>{{radioModel}}
+		<!-- inbox, sent -->
 
-        <!-- <div class="btn-group dropdown discard-btn">
-            <button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">Delete message</button>
-            <ul class="dropdown-menu dropdown-alerts">
-                <li>Are you sure you want to delete the message(s)?</li>
-                <li>&nbsp;</li>
-                <li><span class="discard-cancel" data-toggle="dropdown"><strong ng-click="DeleteMessage(controllerParent)">Yes</strong></span> &nbsp;&nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
-            </ul>
-        </div> -->
+		<!-- <div class="btn-group dropdown discard-btn">
+		<button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">Delete message</button>
+		<ul class="dropdown-menu dropdown-alerts">
+		<li>Are you sure you want to delete the message(s)?</li>
+		<li>&nbsp;</li>
+		<li><span class="discard-cancel" data-toggle="dropdown"><strong ng-click="DeleteMessage(controllerParent)">Yes</strong></span> &nbsp;&nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+		</ul>
+		</div> -->
 
+	</div><!-- end top button -->
+	<!-- reply & forward -->
+	<div ng-show="controllerParent.radioModel == 'forward'" class="reply-box clearfix" ng-include src="'views/forward_form.html'"></div>
 
-        </div><!-- end top button -->
+	<!-- end reply box-->
+	<div class="message-box">
 
-        <div class="message-box">
+		<div class="message-txt">
+			{{controllerParent.clickedMessage.message}}
+		</div>
 
-        	<div class="message-txt">{{controllerParent.clickedMessage.message}}</div>
+	</div>
 
-        </div>
-
-       	<div class="bottom-buttons left">
-       		<a ng-click="controllerParent.list = true;" class="btn back-btn"><i class="fa fa-undo"></i> Back to Sent</a>
-       	</div>
+	<div class="bottom-buttons left">
+		<a ng-click="controllerParent.radioModel='';controllerParent.list = true;" class="btn back-btn"><i class="fa fa-undo"></i> Back to Sent</a>
+	</div>
 </div>

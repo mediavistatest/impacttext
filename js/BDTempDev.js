@@ -314,10 +314,16 @@ var ngInbox = {
         $cookieStore : null,
         clickedMessage : null,
         list : true,
+        radioModel : '',
         Events : {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
                 inParent.list = false;
+            },
+            Send_onClick : function(inScope) {
+                // delete clicked message
+                inScope.controllerParent.list = true;
+                inScope.controllerParent.radioModel='';
             },
             InitialiseEvents : function(controllerParent) {
             }
@@ -401,10 +407,16 @@ var ngInbox = {
         $cookieStore : null,
         clickedMessage : null,
         list : true,
+        radioModel : '',
         Events : {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
                 inParent.list = false;
+            },
+            Send_onClick : function(inScope) {
+                // delete clicked message
+                inScope.controllerParent.list = true;
+                inScope.controllerParent.radioModel='';
             },
             InitialiseEvents : function(controllerParent) {
             }
@@ -464,9 +476,9 @@ var ngInbox = {
                 inParent.clickedMessage = row.entity;
                 inParent.Events.ShowView(inParent);
             },
-            Send_onClick : function(inParent) {
+            Send_onClick : function(inScope) {
                 // delete clicked message
-                inParent.Events.ShowList(inParent);
+                inScope.controllerParent.Events.ShowList(inParent);
             },
             ShowList : function(inParent) {
                 inParent.list = true;
@@ -557,9 +569,9 @@ var ngInbox = {
                 inParent.clickedMessage = row.entity;
                 inParent.Events.ShowView(inParent);
             },
-            Send_onClick : function(inParent) {
+            Send_onClick : function(inScope) {
                 // delete clicked message
-                inParent.Events.ShowList(inParent);
+                inScope.controllerParent.Events.ShowList(inParent);
             },
             ShowList : function(inParent) {
                 inParent.list = true;
@@ -655,6 +667,10 @@ var ngInbox = {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
                 inParent.list = false;
+            },
+            Send_onClick : function(inScope) {
+                // delete clicked message
+                inScope.controllerParent.list = true;
             },
             InitialiseEvents : function(controllerParent) {
             }

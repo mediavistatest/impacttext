@@ -4183,7 +4183,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
   //reset send form
     $scope.reset = function(){
       if ($scope.controllerParent) {
-          $scope.controllerParent.Events.Send_onClick($scope.controllerParent);
+          $scope.controllerParent.Events.Send_onClick($scope);
       }
 
       $scope.FromName = $scope.initial;
@@ -4297,7 +4297,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 	//Create a function for sending messages
 	$scope.sendMessage = function(scheduled) {
         if ($scope.controllerParent) {
-            $scope.controllerParent.Events.Send_onClick($scope.controllerParent);
+            $scope.controllerParent.Events.Send_onClick($scope);
         }
 
 		// Trigger validation flag.
@@ -4427,7 +4427,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 	//Create a function for saving drafts
 	$scope.saveDraft = function() {
 	    if ($scope.controllerParent) {
-	        $scope.controllerParent.Events.Send_onClick($scope.controllerParent);
+	        $scope.controllerParent.Events.Send_onClick($scope);
 	    }
 		//Generate message text
 		var messageText = $scope.generateMessageText();
