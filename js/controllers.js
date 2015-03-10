@@ -4325,7 +4325,7 @@ angular
     .controller('codeEditorCtrl', codeEditorCtrl)
     .controller('nestableCtrl', nestableCtrl)
     .controller('notifyCtrl', notifyCtrl)
-    .controller('ngInboxNotifyCtrl', ['$scope',ngInbox._internal.ngInboxNotifyCtrl])
+    .controller('ngInboxNotifyCtrl', ngInbox._internal.ngInboxNotifyCtrl)
     .controller('translateCtrl', translateCtrl)
     .controller('imageCrop', imageCrop)
     .controller('FormSendCtrl' , ['$scope', '$cookieStore', '$http', FormSendCtrl])

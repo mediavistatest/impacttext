@@ -232,7 +232,6 @@ var ngInbox = {
             }
         },
         ngInboxNotifyCtrl : function($scope, notify) {
-            console.log('notify')
             $scope.DeleteMsg = function() {
                 notify({
                     message : 'Your message(s) has been deleted!',
