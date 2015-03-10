@@ -3092,7 +3092,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 
     // sort
     $scope.sortOptions = {
-        fields: ['ListName'],
+        fields: ['contactListName'],
         directions: ['ASC'],
         useExternalSorting: true
     };
@@ -3596,7 +3596,7 @@ $scope.$watch('pagingOptions', function () {
 
 
 //ADD LISTS
-function AddListsCtrl($scope, $http, $cookieStore) {
+function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
   $scope.lists = {};
   $scope.lists.names = [];
 //$http({
@@ -3638,9 +3638,16 @@ function AddListsCtrl($scope, $http, $cookieStore) {
 
 	$scope.reset = function() {
 		$scope.ListName = '';
+		$scope.PhoneNumber = '';
+		$scope.FirstName = '';
+		$scope.LastName = '';
+		$scope.Email = '';
+		$scope.CustomField1 = '';
+		$scope.CustomField2 = '';
+		$scope.CustomField3 = '';
 	};
 
-	$scope.refreshLists = function() {
+	$scope.refreshLists = function(withCheckboxes) {
 		$http.post(
 			inspiniaNS.wsUrl + "contactlist_get",
 			$.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A'})
@@ -3655,6 +3662,9 @@ function AddListsCtrl($scope, $http, $cookieStore) {
 				if (data.apicode == 0) {
 					//Reading contact lists
 					$scope.lists.names = data.apidata;
+					for(var i in $scope.lists.names) {
+						$scope.lists.names[i].selected = false;
+					}
 				} else {
 					$scope.lists.names = [];
 				}
@@ -3712,6 +3722,93 @@ function AddListsCtrl($scope, $http, $cookieStore) {
 				}
 			}
 		);
+	};
+
+	// helper method to get selected lists
+	$scope.selectedLists = function selectedLists() {
+		return filterFilter($scope.lists.names, { selected: true });
+	};
+
+	$scope.addContact = function() {
+		//Fetch selected lists and check if user selected any of them
+		var selectedLists = $scope.selectedLists();
+		if (selectedLists.length <= 0) {
+			return;
+		}
+		//Checking if all required parameters are there
+		if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber) == '') {
+			return;
+		}
+		var request = {
+			sethttp: 1,
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			accountID: $cookieStore.get('inspinia_account_id'),
+			companyID: $cookieStore.get('inspinia_company_id'),
+			ANI: $scope.PhoneNumber,
+			firstName: typeof $scope.FirstName == 'undefined' || $scope.FirstName == null ? '' : $.trim($scope.FirstName),
+			lastName: typeof $scope.LastName == 'undefined' || $scope.LastName == null ? '' : $.trim($scope.LastName),
+			emailAddress: typeof $scope.Email == 'undefined' || $scope.Email == null ? '' : $.trim($scope.Email),
+			custom1: typeof $scope.CustomField1 == 'undefined' || $scope.CustomField1 == null ? '' : $.trim($scope.CustomField1),
+			custom2: typeof $scope.CustomField2 == 'undefined' || $scope.CustomField2 == null ? '' : $.trim($scope.CustomField2),
+			custom3: typeof $scope.CustomField3 == 'undefined' || $scope.CustomField3 == null ? '' : $.trim($scope.CustomField3)
+		};
+
+		var remainingListsCount = selectedLists.length;
+		var successfullyAddedToListsCount = 0;
+		var failedToAddToListsCount = 0;
+		for (var i in selectedLists) {
+			//Send request to the server
+			$http.post(
+				inspiniaNS.wsUrl + "contact_add",
+				$.param($.extend(request, {contactListID: selectedLists[i].contactListID}))
+			).success(
+				//Successful request to the server
+				function(data, status, headers, config) {
+					if (data == null || typeof data.apicode == 'undefined') {
+						//This should never happen
+						remainingListsCount--;
+						failedToAddToListsCount++;
+						alert("Unidentified error occurred when sending your message!");
+						return;
+					}
+					if (data.apicode == 0) {
+						remainingListsCount--;
+						successfullyAddedToListsCount++;
+					} else {
+						remainingListsCount--;
+						failedToAddToListsCount++;
+						alert("An error occurred when adding contact list! Error code: " + data.apicode);
+						alert(JSON.stringify(data));
+					}
+					if (remainingListsCount == 0) {
+						alert("Successfully added: " + successfullyAddedToListsCount + ", failed to add: " + failedToAddToListsCount);
+						//Reset form and inform user about success
+						$scope.reset();
+						//$scope.$broadcast("ContactListCreated", data.apidata);
+						$scope.refreshLists();
+					}
+				}
+			).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					//alert('Unexpected error occurred when trying to send message!');
+					if (status == 400) {
+						/*if (data.apicode == 1) {
+							$scope.$broadcast("DuplicateContactListName", data.apidata);
+						} else */{
+							remainingListsCount--;
+							failedToAddToListsCount++;
+							alert("An error occurred when sending your message! Error code: " + data.apicode);
+							alert(JSON.stringify(data));
+							if (remainingListsCount == 0) {
+								alert("Successfully added: " + successfullyAddedToListsCount + ", failed to add: " + failedToAddToListsCount);
+							}
+						}
+					}
+				}
+			);
+		}
+
 	};
 
 	$scope.refreshLists();
@@ -4274,7 +4371,7 @@ angular
     .controller('ngScheduledListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.ScheduledList.Controller])
     .controller('ngDraftsListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.DraftsList.Controller])
     .controller('ngTrashListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.TrashList.Controller])
-    .controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', AddListsCtrl])
+    .controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', 'filterFilter', AddListsCtrl])
     .controller('codeEditorCtrl', codeEditorCtrl)
     .controller('nestableCtrl', nestableCtrl)
     .controller('notifyCtrl', notifyCtrl)

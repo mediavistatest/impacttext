@@ -97,16 +97,17 @@
 <div class="list-box">
 <p>SELECT LISTS:</p>
 <ul class="list-inline">
-    <li ng-repeat="name in lists.names"> <input icheck type="checkbox" value="{{ name.contactListName }}" ng-model="SelectList"> {{ name.contactListName }} </li>
+    <li ng-repeat="name in lists.names"> <input icheck type="checkbox" value="{{name.contactListID}}" ng-model="name.selected"> {{ name.contactListName }} </li>
   </ul>
 </div>
 	
 	<br>
-<a class="btn btn-send smaller">
+<a class="btn btn-send smaller" ng-click="addContact()">
 <span><i class="fa fa-floppy-o"></i> Save</span>
 </a>
 
 </form>
 
 
+</div>
 </div>
