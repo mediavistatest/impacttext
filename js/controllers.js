@@ -3763,6 +3763,9 @@ function notifyCtrl($scope, notify) {
      $scope.MarkAsReadMsg = function(){
         notify({ message: 'Your message(s) has been mark as read!', classes: 'alert-success'});
     };
+     $scope.RestoreToInboxMsg = function(){
+        notify({ message: 'Your message(s) has been restored to inbox!', classes: 'alert-success'});
+    };    
     $scope.AniOptedOutMsg = function(){
         notify({ message: 'ANI that you are trying to send message to is opted-out!', classes: 'alert-danger', templateUrl: $scope.inspiniaTemplate});
     };
@@ -3802,6 +3805,10 @@ function notifyCtrl($scope, notify) {
     $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
         $scope.MarkAsReadMsg();
     });
+    $scope.$on('RestoreToInboxMessageSucceeded', function(event, args) {
+        console.log('brodacast catch')
+        $scope.RestoreToInboxMsg();
+    });    
 }
 
 
