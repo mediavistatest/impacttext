@@ -66,27 +66,8 @@ function generateOrderByField(sortFields, sortOrders) {
  * Contains severals global data used in diferent view
  *
  */
-function MainCtrl($scope) {
-
-    // $scope.DeleteMsg = function(){
-        // notify({ message: 'Your message(s) has been deleted!', classes: 'alert-success'});
-    // };
-     // $scope.MarkAsReadMsg = function(){
-        // notify({ message: 'Your message(s) has been mark as read!', classes: 'alert-success'});
-    // };
-     // $scope.RestoreToInboxMsg = function(){
-        // notify({ message: 'Your message(s) has been restored to inbox!', classes: 'alert-success'});
-    // };    
-//     
-    // $scope.$on('DeleteMessageSucceeded', function(event, args) {
-        // $scope.DeleteMsg();
-    // });
-    // $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
-        // $scope.MarkAsReadMsg();
-    // });
-    // $scope.$on('RestoreToInboxMessageSucceeded', function(event, args) {
-        // $scope.RestoreToInboxMsg();
-    // });      
+function MainCtrl() {
+ 
     
 
 
@@ -3851,9 +3832,6 @@ function notifyCtrl($scope, notify) {
         $scope.$on('ContactListCreated', function(event, args) {
             $scope.ContactListCreatedMsg();
         });
-
-
-        console.log('test')
 
         $scope.DeleteMsg = function() {
             notify({

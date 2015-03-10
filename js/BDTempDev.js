@@ -171,7 +171,7 @@ var ngInbox = {
                 }
             },
             DeleteMessage : function(controllerParent, messageList) {
-                ngInbox._internal.ErrorMsg = 'Delete message failed!';
+                ngInbox._internal.ErrorMsg = 'Delete message(s) failed!';
                 var callback = function() {
                     controllerParent.$scope.$broadcast("DeleteMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
@@ -187,7 +187,7 @@ var ngInbox = {
                 ngInbox._internal.Methods.DeleteMessage(controllerParent, controllerParent.$scope.mySelections);
             },
             MarkAsReadMessage : function(controllerParent, messageList) {
-                ngInbox._internal.ErrorMsg = 'Mark as read message failed!';
+                ngInbox._internal.ErrorMsg = 'Mark as read message(s) failed!';
                 var callback = function() {
                     controllerParent.$scope.$broadcast("MarkAsReadMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
@@ -203,7 +203,7 @@ var ngInbox = {
                 ngInbox._internal.Methods.MarkAsReadMessage(controllerParent, controllerParent.$scope.mySelections);
             },
             RestoreToInboxMessage : function(controllerParent, messageList) {
-                ngInbox._internal.ErrorMsg = 'Restoring message from trash failed!';
+                ngInbox._internal.ErrorMsg = 'Restoring message(s) from trash failed!';
                 var callback = function() {
                     controllerParent.$scope.$broadcast("RestoreToInboxMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
@@ -218,6 +218,22 @@ var ngInbox = {
             RestoreToInboxMessages : function(controllerParent) {
                 ngInbox._internal.Methods.RestoreToInboxMessage(controllerParent, controllerParent.$scope.mySelections);
             },
+            ResendMessage : function(controllerParent, messageList) {
+                ngInbox._internal.ErrorMsg = 'Resending message(s) failed!';
+                var callback = function() {
+                    controllerParent.$scope.$broadcast("RestoreToInboxMessageSucceeded");
+                    controllerParent.$scope.getPagedDataAsync(controllerParent);
+                    controllerParent.list = true;
+                };
+                if (!messageList) {
+                    messageList = [controllerParent.clickedMessage];
+                }
+
+                ngInbox._internal.Methods.StatusChange(controllerParent, messageList, controllerParent.restoreMessageStatus, callback);
+            },
+            ResendMessages : function(controllerParent) {
+                ngInbox._internal.Methods.RestoreToInboxMessage(controllerParent, controllerParent.$scope.mySelections);
+            },            
             PostSuccess : function(controllerParent, result) {
                 // Contact/List repack
                 for (var i in result.apidata) {
