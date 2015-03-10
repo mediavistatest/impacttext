@@ -56,7 +56,8 @@ var ngInbox = {
                     limit : pageSize,
                     offset : (page - 1) * pageSize,
                     status : controllerParent.getListStatus,
-                    orderby : ngInbox._internal.Methods.GenerateOrderByField(controllerParent)
+                    orderby : ngInbox._internal.Methods.GenerateOrderByField(controllerParent),
+                    sethttp : 1
                 };
 
                 if (searchText) {
@@ -137,7 +138,8 @@ var ngInbox = {
                 var params = {
                     apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
                     accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
-                    status : changeToStatus
+                    status : changeToStatus,
+                    sethttp : 1
                 };
                 var successfullRequestsCount_ = 0;
                 var totalNumberOfMessages_ = messageToChangeStatusArray.length;
@@ -292,7 +294,8 @@ var ngInbox = {
                 var params = {
                     apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
                     accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
-                    ANI : messages[i].sourceANI
+                    ANI : messages[i].sourceANI,
+                    sethttp : 1
                 };
 
                 var $param = $.param(params);
@@ -447,8 +450,12 @@ var ngInbox = {
             try {
                 $sendScope.FromName = $sendScope.initial;
                 $sendScope.MessageType = 'SMS';
-                $sendScope.FromNumber = $sendScope.controllerParent.clickedMessage.DID;
-                $sendScope.ToList = $sendScope.controllerParent.clickedMessage.contactListName;
+                $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
+                    return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+                })[0];
+                $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                    return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                })[0];
                 $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
                 $sendScope.OptOutMsg = '';
                 $sendScope.OptOutTxt3 = $sendScope.initial;
@@ -530,10 +537,16 @@ var ngInbox = {
         },
         PopulateSend : function($sendScope) {
             try {
+                console.log()
+
                 $sendScope.FromName = $sendScope.initial;
                 $sendScope.MessageType = 'SMS';
-                $sendScope.FromNumber = $sendScope.controllerParent.clickedMessage.DID;
-                $sendScope.ToList = $sendScope.controllerParent.clickedMessage.contactListName;
+                $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
+                    return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+                })[0];
+                $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                    return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                })[0];
                 $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
                 $sendScope.OptOutMsg = '';
                 $sendScope.OptOutTxt3 = $sendScope.initial;

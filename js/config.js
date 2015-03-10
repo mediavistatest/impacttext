@@ -125,6 +125,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             templateUrl: "views/lists_add_contact.html",
             data: { pageTitle: 'Add Contact' }
         })
+        .state('lists.manage_contact', {
+            url: "/lists_manage_contact",
+            templateUrl: "views/lists_manage_contact.html",
+            data: { pageTitle: 'Manage Contact' }
+        })
         .state('lists.upload', {
             url: "/lists_upload",
             templateUrl: "views/lists_upload.html",
@@ -292,6 +297,12 @@ var app = angular
 	.run(function($rootScope, $state) {
 		$rootScope.$state = $state;
 	});
+
+app.filter('iif', function () {
+   return function(input, trueValue, falseValue) {
+        return input ? trueValue : falseValue;
+   };
+});
 
 //Some global variables
 var inspiniaNS = {};
