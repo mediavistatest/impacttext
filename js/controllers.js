@@ -67,8 +67,8 @@ function generateOrderByField(sortFields, sortOrders) {
  *
  */
 function MainCtrl() {
- 
-    
+
+
 
 
 
@@ -3970,7 +3970,7 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 		);
 	};
 
-	
+
 	$scope.refresh();
 }
 
@@ -4182,6 +4182,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
   //reset send form
     $scope.reset = function(){
+      if ($scope.controllerParent) {
+          $scope.controllerParent.Events.Send_onClick($scope.controllerParent);
+      }
+
       $scope.FromName = $scope.initial;
       $scope.MessageType = 'SMS';
       $scope.FromNumber = 'default';
@@ -4292,6 +4296,9 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 	//Create a function for sending messages
 	$scope.sendMessage = function(scheduled) {
+        if ($scope.controllerParent) {
+            $scope.controllerParent.Events.Send_onClick($scope.controllerParent);
+        }
 
 		// Trigger validation flag.
 		//$scope.submitted = true;
@@ -4419,6 +4426,9 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 	//Create a function for saving drafts
 	$scope.saveDraft = function() {
+	    if ($scope.controllerParent) {
+	        $scope.controllerParent.Events.Send_onClick($scope.controllerParent);
+	    }
 		//Generate message text
 		var messageText = $scope.generateMessageText();
 

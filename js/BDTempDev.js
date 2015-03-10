@@ -233,7 +233,7 @@ var ngInbox = {
             },
             ResendMessages : function(controllerParent) {
                 ngInbox._internal.Methods.RestoreToInboxMessage(controllerParent, controllerParent.$scope.mySelections);
-            },            
+            },
             PostSuccess : function(controllerParent, result) {
                 // Contact/List repack
                 for (var i in result.apidata) {
@@ -464,6 +464,10 @@ var ngInbox = {
                 inParent.clickedMessage = row.entity;
                 inParent.Events.ShowView(inParent);
             },
+            Send_onClick : function(inParent) {
+                // delete clicked message
+                inParent.Events.ShowList(inParent);
+            },
             ShowList : function(inParent) {
                 inParent.list = true;
                 inParent.view = false;
@@ -552,6 +556,10 @@ var ngInbox = {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
                 inParent.Events.ShowView(inParent);
+            },
+            Send_onClick : function(inParent) {
+                // delete clicked message
+                inParent.Events.ShowList(inParent);
             },
             ShowList : function(inParent) {
                 inParent.list = true;
