@@ -246,6 +246,39 @@ var ngInbox = {
                 }
                 controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, result.apidata, result.apicount);
             }
+        },
+        ngInboxNotifyCtrl : function($scope, notify) {
+            console.log('notify')
+            $scope.DeleteMsg = function() {
+                notify({
+                    message : 'Your message(s) has been deleted!',
+                    classes : 'alert-success'
+                });
+            };
+
+            $scope.MarkAsReadMsg = function() {
+                notify({
+                    message : 'Your message(s) has been mark as read!',
+                    classes : 'alert-success'
+                });
+            };
+
+            $scope.RestoreToInboxMsg = function() {
+                notify({
+                    message : 'Your message(s) has been restored to inbox!',
+                    classes : 'alert-success'
+                });
+            };
+
+            $scope.$on('DeleteMessageSucceeded', function(event, args) {
+                $scope.DeleteMsg();
+            });
+            $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
+                $scope.MarkAsReadMsg();
+            });
+            $scope.$on('RestoreToInboxMessageSucceeded', function(event, args) {
+                $scope.RestoreToInboxMsg();
+            });
         }
     },
     InboxList : {
@@ -467,10 +500,10 @@ var ngInbox = {
                 $sendScope.FromName = $sendScope.initial;
                 $sendScope.MessageType = 'SMS';
                 $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
-                    return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+                return member.DID == $sendScope.controllerParent.clickedMessage.DID;
                 })[0];
                 $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
-                    return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
                 })[0];
                 $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
                 $sendScope.OptOutMsg = '';
@@ -553,15 +586,13 @@ var ngInbox = {
         },
         PopulateSend : function($sendScope) {
             try {
-                console.log()
-
                 $sendScope.FromName = $sendScope.initial;
                 $sendScope.MessageType = 'SMS';
                 $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
-                    return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+                return member.DID == $sendScope.controllerParent.clickedMessage.DID;
                 })[0];
                 $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
-                    return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
                 })[0];
                 $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
                 $sendScope.OptOutMsg = '';
@@ -632,7 +663,7 @@ var ngInbox = {
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
-            
+
         },
         PostSuccess : function(controllerParent, result) {
             ngInbox._internal.Methods.PostSuccess(controllerParent, result);
