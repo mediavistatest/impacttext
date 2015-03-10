@@ -126,7 +126,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             data: { pageTitle: 'Add Contact' }
         })
         .state('lists.manage_contact', {
-            url: "/lists_manage_contact",
+            url: "/lists_manage_contact/:id",
             templateUrl: "views/lists_manage_contact.html",
             data: { pageTitle: 'Manage Contact' }
         })

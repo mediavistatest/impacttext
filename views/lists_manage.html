@@ -24,17 +24,17 @@
 
 <!-- Search by -->
 <input class="search-input" placeholder="Search term" type="text" ng-model="filterOptions.filterText">
-<select chosen data-placeholder="search by" disable-search="true">
+<select chosen data-placeholder="search by" disable-search="true" ng-model="filterOptions.filterBy">
 	<option></option>
-	<option>ANI</option>
-	<option>First Name</option>
-	<option>Last Name</option>
-	<option>Email</option>
-	<option>Field 1</option>
-	<option>Field 2</option>
-	<option>Field 3</option>
+	<option value="ANI">ANI</option>
+	<option value="firstName">First Name</option>
+	<option value="lastName">Last Name</option>
+	<!--<option value="emailAddress">Email</option>-->
+	<option value="custom1">Field 1</option>
+	<option value="custom2">Field 2</option>
+	<option value="custom3">Field 3</option>
 </select>
-<button class="btn btn-search"><i class="fa fa-search"></i></button>
+<button class="btn btn-search" ng-click="refresh()"><i class="fa fa-search"></i></button>
 
 </div>
 <!-- end search by -->

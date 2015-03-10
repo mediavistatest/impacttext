@@ -1,6 +1,6 @@
 <h1>Contacts / Lists</h1>
 
-<div class="col-md-12 content-holder animated fadeInRight add-list-contact" ng-class="animation" ng-controller="AddListsCtrl">
+<div class="col-md-12 content-holder animated fadeInRight add-list-contact" ng-class="animation" ng-controller="EditContactCtrl">
 <h2 class="section-title">Manage Contact</h2>
 <div class="top-buttons">
 <a href="#/lists/lists_view" class="btn btn-back"><i class="fa fa-undo"></i> Back to Lists</a>
@@ -69,12 +69,14 @@
 
 	
 	<br>
-<a class="btn btn-send smaller">
+<a class="btn btn-send smaller" ng-click="saveContact()">
 <span><i class="fa fa-floppy-o"></i> Save</span>
 </a>
 
 
 </form>
 
+
+</div>
 
 </div>
