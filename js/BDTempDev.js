@@ -93,6 +93,8 @@ var ngInbox = {
                 controllerParent.$scope.DeleteMessages = ngInbox._internal.Methods.DeleteMessages;
                 controllerParent.$scope.MarkAsReadMessage = ngInbox._internal.Methods.MarkAsReadMessage;
                 controllerParent.$scope.MarkAsReadMessages = ngInbox._internal.Methods.MarkAsReadMessages;
+                controllerParent.$scope.RestoreToInboxMessage = ngInbox._internal.Methods.RestoreToInboxMessage;
+                controllerParent.$scope.RestoreToInboxMessages = ngInbox._internal.Methods.RestoreToInboxMessages;
 
                 //WHATCH
                 controllerParent.$scope.$watch('pagingOptions', function() {
@@ -199,6 +201,22 @@ var ngInbox = {
             },
             MarkAsReadMessages : function(controllerParent) {
                 ngInbox._internal.Methods.MarkAsReadMessage(controllerParent, controllerParent.$scope.mySelections);
+            },
+            RestoreToInboxMessage : function(controllerParent, messageList) {
+                ngInbox._internal.ErrorMsg = 'Restoring message from trash failed!';
+                var callback = function() {
+                    controllerParent.$scope.$broadcast("RestoreToInboxMessageSucceeded");
+                    controllerParent.$scope.getPagedDataAsync(controllerParent);
+                    controllerParent.list = true;
+                };
+                if (!messageList) {
+                    messageList = [controllerParent.clickedMessage];
+                }
+
+                ngInbox._internal.Methods.StatusChange(controllerParent, messageList, controllerParent.restoreMessageStatus, callback);
+            },
+            RestoreToInboxMessages : function(controllerParent) {
+                ngInbox._internal.Methods.RestoreToInboxMessage(controllerParent, controllerParent.$scope.mySelections);
             },
             PostSuccess : function(controllerParent, result) {
                 // Contact/List repack
@@ -553,7 +571,7 @@ var ngInbox = {
         // getListStatus : 'X',
         statusChangeAction : 'message_changeinboundstatus',
         deleteMessageStatus : null,
-        restoreMessageStatus : null,
+        restoreMessageStatus : 'U',
         columnDefs : [{
             field : 'sourceANI',
             displayName : 'Contact',
@@ -598,6 +616,7 @@ var ngInbox = {
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
+            
         },
         PostSuccess : function(controllerParent, result) {
             ngInbox._internal.Methods.PostSuccess(controllerParent, result);
