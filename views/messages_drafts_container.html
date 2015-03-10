@@ -1,6 +1,8 @@
 <div ng-controller="ngDraftsListCtrl">
-	<div ng-show = "controllerParent.list" ng-include="'views/messages_drafts.html'"></div>
-	<div ng-show = "controllerParent.view"ng-include="'views/messages_view_drafts.html'"></div>
-	<div ng-show = "controllerParent.send"ng-include="'views/messages_send.html'"></div>
+    <div ng-controller="notifyCtrl">
+        <div ng-show = "controllerParent.list" ng-include="'views/messages_drafts.html'"></div>
+        <div ng-show = "controllerParent.view"ng-include="'views/messages_view_drafts.html'"></div>
+        <div ng-show = "controllerParent.send"ng-include="'views/messages_send.html'"></div>
+    </div>
 </div>
 
