@@ -298,6 +298,12 @@ var app = angular
 		$rootScope.$state = $state;
 	});
 
+app.filter('iif', function () {
+   return function(input, trueValue, falseValue) {
+        return input ? trueValue : falseValue;
+   };
+});
+
 //Some global variables
 var inspiniaNS = {};
 inspiniaNS.wsUrl = "http://tlsionweb01.excel.com/mercury/cmp/";

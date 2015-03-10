@@ -1,5 +1,6 @@
 <div ng-controller="ngInboxListCtrl as ctrl">
-	<div ng-show = "controllerParent.list" ng-include="'views/messages_inbox.html'"></div>
-	<div ng-hide = "controllerParent.list"ng-include="'views/messages_view_inbox.html'"></div>
+    <div ng-controller="ngInboxNotifyCtrl">
+        <div ng-show = "controllerParent.list" ng-include="'views/messages_inbox.html'"></div>
+        <div ng-hide = "controllerParent.list"ng-include="'views/messages_view_inbox.html'"></div>
+    </div>
 </div>
-

@@ -56,7 +56,8 @@ var ngInbox = {
                     limit : pageSize,
                     offset : (page - 1) * pageSize,
                     status : controllerParent.getListStatus,
-                    orderby : ngInbox._internal.Methods.GenerateOrderByField(controllerParent)
+                    orderby : ngInbox._internal.Methods.GenerateOrderByField(controllerParent),
+                    sethttp : 1
                 };
 
                 if (searchText) {
@@ -92,6 +93,8 @@ var ngInbox = {
                 controllerParent.$scope.DeleteMessages = ngInbox._internal.Methods.DeleteMessages;
                 controllerParent.$scope.MarkAsReadMessage = ngInbox._internal.Methods.MarkAsReadMessage;
                 controllerParent.$scope.MarkAsReadMessages = ngInbox._internal.Methods.MarkAsReadMessages;
+                controllerParent.$scope.RestoreToInboxMessage = ngInbox._internal.Methods.RestoreToInboxMessage;
+                controllerParent.$scope.RestoreToInboxMessages = ngInbox._internal.Methods.RestoreToInboxMessages;
 
                 //WHATCH
                 controllerParent.$scope.$watch('pagingOptions', function() {
@@ -135,7 +138,8 @@ var ngInbox = {
                 var params = {
                     apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
                     accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
-                    status : changeToStatus
+                    status : changeToStatus,
+                    sethttp : 1
                 };
                 var successfullRequestsCount_ = 0;
                 var totalNumberOfMessages_ = messageToChangeStatusArray.length;
@@ -167,7 +171,7 @@ var ngInbox = {
                 }
             },
             DeleteMessage : function(controllerParent, messageList) {
-                ngInbox._internal.ErrorMsg = 'Delete message failed!';
+                ngInbox._internal.ErrorMsg = 'Delete message(s) failed!';
                 var callback = function() {
                     controllerParent.$scope.$broadcast("DeleteMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
@@ -183,7 +187,7 @@ var ngInbox = {
                 ngInbox._internal.Methods.DeleteMessage(controllerParent, controllerParent.$scope.mySelections);
             },
             MarkAsReadMessage : function(controllerParent, messageList) {
-                ngInbox._internal.ErrorMsg = 'Mark as read message failed!';
+                ngInbox._internal.ErrorMsg = 'Mark as read message(s) failed!';
                 var callback = function() {
                     controllerParent.$scope.$broadcast("MarkAsReadMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
@@ -198,6 +202,38 @@ var ngInbox = {
             MarkAsReadMessages : function(controllerParent) {
                 ngInbox._internal.Methods.MarkAsReadMessage(controllerParent, controllerParent.$scope.mySelections);
             },
+            RestoreToInboxMessage : function(controllerParent, messageList) {
+                ngInbox._internal.ErrorMsg = 'Restoring message(s) from trash failed!';
+                var callback = function() {
+                    controllerParent.$scope.$broadcast("RestoreToInboxMessageSucceeded");
+                    controllerParent.$scope.getPagedDataAsync(controllerParent);
+                    controllerParent.list = true;
+                };
+                if (!messageList) {
+                    messageList = [controllerParent.clickedMessage];
+                }
+
+                ngInbox._internal.Methods.StatusChange(controllerParent, messageList, controllerParent.restoreMessageStatus, callback);
+            },
+            RestoreToInboxMessages : function(controllerParent) {
+                ngInbox._internal.Methods.RestoreToInboxMessage(controllerParent, controllerParent.$scope.mySelections);
+            },
+            ResendMessage : function(controllerParent, messageList) {
+                ngInbox._internal.ErrorMsg = 'Resending message(s) failed!';
+                var callback = function() {
+                    controllerParent.$scope.$broadcast("RestoreToInboxMessageSucceeded");
+                    controllerParent.$scope.getPagedDataAsync(controllerParent);
+                    controllerParent.list = true;
+                };
+                if (!messageList) {
+                    messageList = [controllerParent.clickedMessage];
+                }
+
+                ngInbox._internal.Methods.StatusChange(controllerParent, messageList, controllerParent.restoreMessageStatus, callback);
+            },
+            ResendMessages : function(controllerParent) {
+                ngInbox._internal.Methods.RestoreToInboxMessage(controllerParent, controllerParent.$scope.mySelections);
+            },            
             PostSuccess : function(controllerParent, result) {
                 // Contact/List repack
                 for (var i in result.apidata) {
@@ -210,6 +246,39 @@ var ngInbox = {
                 }
                 controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, result.apidata, result.apicount);
             }
+        },
+        ngInboxNotifyCtrl : function($scope, notify) {
+            console.log('notify')
+            $scope.DeleteMsg = function() {
+                notify({
+                    message : 'Your message(s) has been deleted!',
+                    classes : 'alert-success'
+                });
+            };
+
+            $scope.MarkAsReadMsg = function() {
+                notify({
+                    message : 'Your message(s) has been mark as read!',
+                    classes : 'alert-success'
+                });
+            };
+
+            $scope.RestoreToInboxMsg = function() {
+                notify({
+                    message : 'Your message(s) has been restored to inbox!',
+                    classes : 'alert-success'
+                });
+            };
+
+            $scope.$on('DeleteMessageSucceeded', function(event, args) {
+                $scope.DeleteMsg();
+            });
+            $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
+                $scope.MarkAsReadMsg();
+            });
+            $scope.$on('RestoreToInboxMessageSucceeded', function(event, args) {
+                $scope.RestoreToInboxMsg();
+            });
         }
     },
     InboxList : {
@@ -274,7 +343,8 @@ var ngInbox = {
                 var params = {
                     apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
                     accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
-                    ANI : messages[i].sourceANI
+                    ANI : messages[i].sourceANI,
+                    sethttp : 1
                 };
 
                 var $param = $.param(params);
@@ -429,8 +499,12 @@ var ngInbox = {
             try {
                 $sendScope.FromName = $sendScope.initial;
                 $sendScope.MessageType = 'SMS';
-                $sendScope.FromNumber = $sendScope.controllerParent.clickedMessage.DID;
-                $sendScope.ToList = $sendScope.controllerParent.clickedMessage.contactListName;
+                $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
+                return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+                })[0];
+                $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                })[0];
                 $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
                 $sendScope.OptOutMsg = '';
                 $sendScope.OptOutTxt3 = $sendScope.initial;
@@ -514,8 +588,12 @@ var ngInbox = {
             try {
                 $sendScope.FromName = $sendScope.initial;
                 $sendScope.MessageType = 'SMS';
-                $sendScope.FromNumber = $sendScope.controllerParent.clickedMessage.DID;
-                $sendScope.ToList = $sendScope.controllerParent.clickedMessage.contactListName;
+                $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
+                return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+                })[0];
+                $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                })[0];
                 $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
                 $sendScope.OptOutMsg = '';
                 $sendScope.OptOutTxt3 = $sendScope.initial;
@@ -540,7 +618,7 @@ var ngInbox = {
         // getListStatus : 'X',
         statusChangeAction : 'message_changeinboundstatus',
         deleteMessageStatus : null,
-        restoreMessageStatus : null,
+        restoreMessageStatus : 'U',
         columnDefs : [{
             field : 'sourceANI',
             displayName : 'Contact',
@@ -585,6 +663,7 @@ var ngInbox = {
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
+
         },
         PostSuccess : function(controllerParent, result) {
             ngInbox._internal.Methods.PostSuccess(controllerParent, result);

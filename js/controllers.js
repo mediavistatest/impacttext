@@ -67,7 +67,8 @@ function generateOrderByField(sortFields, sortOrders) {
  *
  */
 function MainCtrl() {
-
+ 
+    
 
 
 
@@ -3976,89 +3977,117 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 //NOTIFY CTRL
 function notifyCtrl($scope, notify) {
     $scope.msg = 'Hello! This is a sample message!';
-    $scope.demo = function () {
+    $scope.demo = function() {
         notify({
-            message: $scope.msg,
-            classes: $scope.classes,
-            templateUrl: $scope.template
+            message : $scope.msg,
+            classes : $scope.classes,
+            templateUrl : $scope.template
 
         });
     };
-    $scope.closeAll = function () {
+    $scope.closeAll = function() {
         notify.closeAll();
     };
 
     $scope.inspiniaTemplate = 'views/common/notify.html';
-    $scope.inspiniaDemo1 = function(){
-        notify({ message: 'Info - This is a Inspinia info notification', classes: 'alert-info', templateUrl: $scope.inspiniaTemplate});
+    $scope.inspiniaDemo1 = function() {
+        notify({
+            message : 'Info - This is a Inspinia info notification',
+            classes : 'alert-info',
+            templateUrl : $scope.inspiniaTemplate
+        });
     };
-    $scope.inspiniaDemo2 = function(){
-        notify({ message: 'Success - This is a Inspinia success notification', classes: 'alert-success', templateUrl: $scope.inspiniaTemplate});
+    $scope.inspiniaDemo2 = function() {
+        notify({
+            message : 'Success - This is a Inspinia success notification',
+            classes : 'alert-success',
+            templateUrl : $scope.inspiniaTemplate
+        });
     };
-    $scope.inspiniaDemo3 = function(){
-        notify({ message: 'Warning - This is a Inspinia warning notification', classes: 'alert-warning', templateUrl: $scope.inspiniaTemplate});
+    $scope.inspiniaDemo3 = function() {
+        notify({
+            message : 'Warning - This is a Inspinia warning notification',
+            classes : 'alert-warning',
+            templateUrl : $scope.inspiniaTemplate
+        });
     };
-    $scope.inspiniaDemo4 = function(){
-        notify({ message: 'Danger - This is a Inspinia danger notification', classes: 'alert-danger', templateUrl: $scope.inspiniaTemplate});
+    $scope.inspiniaDemo4 = function() {
+        notify({
+            message : 'Danger - This is a Inspinia danger notification',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
     };
-    $scope.SavedDraftMsg = function(){
-        notify({ message: 'Your message has been saved to drafts!', classes: 'alert-success'});
+    $scope.SavedDraftMsg = function() {
+        notify({
+            message : 'Your message has been saved to drafts!',
+            classes : 'alert-success'
+        });
     };
-    $scope.ResetMsg = function(){
-        notify({ message: 'Your message has been discarded!', classes: 'alert-success'});
+    $scope.ResetMsg = function() {
+        notify({
+            message : 'Your message has been discarded!',
+            classes : 'alert-success'
+        });
     };
-    $scope.SentMsg = function(){
-        notify({ message: 'Your message has been sent!', classes: 'alert-success'});
+    $scope.SentMsg = function() {
+        notify({
+            message : 'Your message has been sent!',
+            classes : 'alert-success'
+        });
     };
-    $scope.ScheduledMsg = function(){
-        notify({ message: 'Your message has been scheduled!', classes: 'alert-success'});
+    $scope.ScheduledMsg = function() {
+        notify({
+            message : 'Your message has been scheduled!',
+            classes : 'alert-success'
+        });
     };
-    $scope.DeleteMsg = function(){
-        notify({ message: 'Your message(s) has been deleted!', classes: 'alert-success'});
+    $scope.AniOptedOutMsg = function() {
+        notify({
+            message : 'ANI that you are trying to send message to is opted-out!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
     };
-     $scope.MarkAsReadMsg = function(){
-        notify({ message: 'Your message(s) has been mark as read!', classes: 'alert-success'});
+    $scope.DuplicateContactListNameMsg = function() {
+        notify({
+            message : 'Contact list with specified name already exists!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
     };
-    $scope.AniOptedOutMsg = function(){
-        notify({ message: 'ANI that you are trying to send message to is opted-out!', classes: 'alert-danger', templateUrl: $scope.inspiniaTemplate});
+    $scope.ContactListCreatedMsg = function() {
+        notify({
+            message : 'Contact list is successfully created!',
+            classes : 'alert-success'
+        });
     };
-    $scope.DuplicateContactListNameMsg = function(){
-        notify({ message: 'Contact list with specified name already exists!', classes: 'alert-danger', templateUrl: $scope.inspiniaTemplate});
-    };
-    $scope.ContactListCreatedMsg = function(){
-        notify({ message: 'Contact list is successfully created!', classes: 'alert-success'});
-    };
-	//If SendingMessageSucceeded event is triggered, show related message
-	$scope.$on('SendingMessageSucceeded', function(event, args) {
-		$scope.SentMsg();
-	});
-	//If SchedulingMessageSucceeded event is triggered, show related message
-	$scope.$on('SchedulingMessageSucceeded', function(event, args) {
-		$scope.ScheduledMsg();
-	});
-	//If SaveDraftSucceeded event is triggered, show related message
-	$scope.$on('SaveDraftSucceeded', function(event, args) {
-		$scope.SavedDraftMsg();
-	});
-	//If AniOptedOut event is triggered, show related message
-	$scope.$on('AniOptedOut', function(event, args) {
-		$scope.AniOptedOutMsg();
-	});
-	//If DuplicateContactListName event is triggered, show related message
-	$scope.$on('DuplicateContactListName', function(event, args) {
-		$scope.DuplicateContactListNameMsg();
-	});
-	//If ContactListCreated event is triggered, show related message
-	$scope.$on('ContactListCreated', function(event, args) {
-		$scope.ContactListCreatedMsg();
-	});
-    $scope.$on('DeleteMessageSucceeded', function(event, args) {
-        $scope.DeleteMsg();
+    //If SendingMessageSucceeded event is triggered, show related message
+    $scope.$on('SendingMessageSucceeded', function(event, args) {
+        $scope.SentMsg();
     });
-    $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
-        $scope.MarkAsReadMsg();
+    //If SchedulingMessageSucceeded event is triggered, show related message
+    $scope.$on('SchedulingMessageSucceeded', function(event, args) {
+        $scope.ScheduledMsg();
+    });
+    //If SaveDraftSucceeded event is triggered, show related message
+    $scope.$on('SaveDraftSucceeded', function(event, args) {
+        $scope.SavedDraftMsg();
+    });
+    //If AniOptedOut event is triggered, show related message
+    $scope.$on('AniOptedOut', function(event, args) {
+        $scope.AniOptedOutMsg();
+    });
+    //If DuplicateContactListName event is triggered, show related message
+    $scope.$on('DuplicateContactListName', function(event, args) {
+        $scope.DuplicateContactListNameMsg();
+    });
+    //If ContactListCreated event is triggered, show related message
+    $scope.$on('ContactListCreated', function(event, args) {
+        $scope.ContactListCreatedMsg();
     });
 }
+
 
 
 function translateCtrl($translate, $scope) {
@@ -4291,7 +4320,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 		//Creating a api request data object
 		var requestData = {
-			sethttp: 1, 
+			sethttp: 1,
 			DID: $scope.FromNumber.DID,
 			message: messageText,
 			apikey: $cookieStore.get('inspinia_auth_token'),
@@ -4395,7 +4424,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 		//Creating a api request data object
 		var requestData = {
-			sethttp: 1, 
+			sethttp: 1,
 			didid: $scope.FromNumber.DIDID,
 			message: messageText,
 			apikey: $cookieStore.get('inspinia_auth_token'),
@@ -4535,6 +4564,7 @@ angular
     .controller('codeEditorCtrl', codeEditorCtrl)
     .controller('nestableCtrl', nestableCtrl)
     .controller('notifyCtrl', notifyCtrl)
+    .controller('ngInboxNotifyCtrl', ['$scope',ngInbox._internal.ngInboxNotifyCtrl])
     .controller('translateCtrl', translateCtrl)
     .controller('imageCrop', imageCrop)
     .controller('FormSendCtrl' , ['$scope', '$cookieStore', '$http', FormSendCtrl])
