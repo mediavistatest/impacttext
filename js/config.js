@@ -125,6 +125,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             templateUrl: "views/lists_add_contact.html",
             data: { pageTitle: 'Add Contact' }
         })
+        .state('lists.manage_contact', {
+            url: "/lists_manage_contact",
+            templateUrl: "views/lists_manage_contact.html",
+            data: { pageTitle: 'Manage Contact' }
+        })
         .state('lists.upload', {
             url: "/lists_upload",
             templateUrl: "views/lists_upload.html",
