@@ -12,7 +12,10 @@
     	<div class="top-buttons">
 
         <button class="btn"><i class="fa fa-retweet"></i> Resend</button> <!-- only send -->
-        <button class="btn"><i class="fa fa-share"></i> Forward</button> <!-- inbox, sent -->
+        <!-- <button class="btn"><i class="fa fa-share"></i> Forward</button> --> <!-- inbox, sent -->
+        <button class="btn form-btn ng-valid active ng-dirty ng-valid-parse ng-touched" ng-model="radioModel" btn-radio="'forward'" uncheckable="">
+            <i class="fa fa-share"></i> Forward
+        </button>
 
         <!-- <div class="btn-group dropdown discard-btn">
             <button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">Delete message</button>
@@ -35,4 +38,7 @@
        	<div class="bottom-buttons left">
        		<a ng-click="controllerParent.list = true;" class="btn back-btn"><i class="fa fa-undo"></i> Back to Sent</a>
        	</div>
+      
+      
+       	    <div ng-show="radioModel == 'forward'" class="reply-box clearfix" ng-include src="'views/forward_form.html'"></div>
 </div>
