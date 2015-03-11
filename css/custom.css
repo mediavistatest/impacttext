@@ -3196,11 +3196,21 @@ right: 30px;
 top: 90px;
 }
 
+.disabled[disabled] {
+background: none;
+border: none;
+height: 0;
+padding: 0;
+}
+
 .lists-view .ngCellText.col7 {
 text-align: center;
 padding-right: 0;
 }
 
+.error.red {
+  color: #a94442;
+}
 
 @media all and (max-width:990px) {
 

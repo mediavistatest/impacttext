@@ -22,9 +22,15 @@
 
 <ul class="col-sm-12 alert alert-danger" ng-show="submitted && SendForm.$error.required">
 
-<li><span class="red" ng-show="SendForm.ToList.$error.required">List Required!</span></li>
+<li><span class="red" ng-show="SendForm.ToList.$error.required">List Required!</span></li> 
 
 <li><span class="red" ng-show="SendForm.MessageTxt.$error.required">Message text is required!</span></li>
+
+</ul>
+
+<ul class="col-sm-12 alert alert-danger" ng-show="SendForm.$error.maxlength">
+
+<li><span class="red" ng-show="SendForm.MessageTxt.$error.maxlength">SMS limit reached, please reduce your character count!</span></li> 
 
 </ul>
 
@@ -48,7 +54,7 @@
 
 	        <label> <input icheck type="radio" name="MessageType" ng-model="MessageType" value="MMS"> MMS </label>
 
-	        </div>
+	        </div>   
 
 	    </div>
 
@@ -84,7 +90,7 @@
 
     	<div class="col-sm-6">
 
-    		<input type="text" name="FromName" placeholder="e.g. Nestle chocolate" ng-model="FromName" class="form-control">
+    		<input type="text" name="FromName" placeholder="e.g. Nestle chocolate" ng-model="FromName" class="form-control"  ng-trim="false">
 
     	</div>
 
@@ -100,7 +106,7 @@
 
     	<div class="col-sm-6">
 
-    		<div class="form-group" ng-show="SendToList">
+    		<div class="form-group" ng-show="!list">
 
 			<select  chosen name="ToList" data-placeholder="Select from an existing list(s)..." class="chosen-select form-control" tabindex="4" ng-model="ToList" ng-options="contactList.contactListName for contactList in contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists">
 
@@ -110,13 +116,13 @@
 
 
 
-			<div class="form-group" ng-show="!SendToList">
+			<div class="form-group" ng-show="list">
 
     		<input type="text" name="to" placeholder="Insert phone numbers separated by comma ..." class="form-control" ng-model="ToNumber" >
 
     		</div>
 
-    		<a ng-app class="" ng-class="{true: 'addBtn', false: 'addBtn'}[SendToList]" ng-click="SendToList = !SendToList">{{SendToList && 'Or click here to add numbers manually' || 'Or select from an existing list'}}</a>
+    		<a ng-app class="" ng-class="{true: 'addBtn', false: 'addBtn'}[!list]" ng-click="list = !list">{{!list && 'Or click here to add numbers manually' || 'Or select from an existing list'}}</a>
 
     	</div>
 
@@ -134,9 +140,14 @@
 
     	<div class="col-sm-6">
 
-    		<textarea name="MessageTxt" class="form-control" rows="3" ng-model="MessageTxt" ng-trim="false" required></textarea>
+    		<textarea name="MessageTxt" class="form-control" ng-maxlength="{{ maxLength }}" rows="3" ng-model="MessageTxt" ng-trim="false"></textarea>
 
-    		<div class="text-counter">{{160 - FromName.length - OptOutTxt3.length - MessageTxt.length}} characters left.</div>
+    		<div ng-hide="SendForm.$error.maxlength" class="text-counter"><!--{{ 160 - (MessageTxt.length + FromName.length + optFields.OptOutTxt1.length + optFields.OptOutTxt3.length) - (FromName.length>0|iif:2:0) - (optFields.OptOutTxt1.length|iif:2:0) - (optFields.OptOutTxt3.length|iif:2:0)}}--> {{ 160 - ((FromName.length > 0 && FromName.length + 2 || FromName.length) + MessageTxt.length + (optFields.OptOutTxt1.length > 0 && optFields.OptOutTxt1.length + 2 || optFields.OptOutTxt1.length) + (optFields.OptOutTxt3.length > 0 && optFields.OptOutTxt3.length + 2 || optFields.OptOutTxt3.length)) }} characters left.</div>
+
+
+            <div ng-show="SendForm.$error.maxlength" class="text-counter error">
+                 Limit reached!
+            </div>
 
     	</div>
 
@@ -154,7 +165,7 @@
 
         <div class="col-sm-6">
 
-
+        
 
             <!--<div class="radio">
 
@@ -170,38 +181,41 @@
 
             <textarea ng-show="OptOutMsg == 'custom'" name="message" class="form-control" rows="2" ng-model="OptOutTxt2" ng-init="OptOutTxt2='This is custom'" disabled></textarea>
 
-            <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>
+            <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>   
 
             </div>-->
 
-
+        
 
 
 
             <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="OptOutMsg">
-
+                
 
                 <option value="standard">Standard</option>
 
-                <option value="custom">Custom</option>
+                <option value="custom">No opt-out message</option>
 
                 <option value="write">Write opt-out message</option>
 
             </select>
 
+            
 
+            <div class="animate-switch-container" ng-switch on="OptOutMsg">
+            
+            <textarea ng-switch-when="standard" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt1" ng-init="optFields.OptOutTxt1='Reply STOP to end msgs.'; optFields.OptOutTxt3=''" ng-trim="false" readonly></textarea>
 
+            <textarea ng-switch-when="custom" name="message" class="form-control opt-out disabled" rows="2" ng-model="optFields.OptOutTxt2" ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt3=''; optFields.OptOutTxt2=''" disabled></textarea>
+            
+            <textarea ng-switch-when="write" placeholder="Write your opt-out message" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt3"  ng-init="optFields.OptOutTxt1=''"  ng-trim="false" ></textarea>   
+            
+            </div>
 
-
-            <textarea ng-show="OptOutMsg == 'standard'" name="message" class="form-control opt-out" rows="2" ng-model="OptOutTxt1" ng-init="OptOutTxt1='Reply STOP to end msgs. '" disabled></textarea>
-
-            <textarea ng-show="OptOutMsg == 'custom'" name="message" class="form-control opt-out" rows="2" ng-model="OptOutTxt2" ng-init="OptOutTxt2='This is custom'" disabled></textarea>
-
-            <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control opt-out" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>
-
+           
         </div>
 
-
+    
 
     </div>
 
@@ -229,9 +243,9 @@
 
 
 
-<!-- OLD PLANE WORKING SCHEDULE WITHOUT PICKER
+<!-- OLD PLANE WORKING SCHEDULE WITHOUT PICKER 
 
-            <div class="col-sm-5">
+            <div class="col-sm-5"> 
 
             <div class="input-group date">
 
@@ -245,7 +259,7 @@
 
 
 
-            <div class="col-sm-5">
+            <div class="col-sm-5"> 
 
             <div class="input-group date">
 
@@ -297,7 +311,7 @@
 
         <li><a ng-click='SetTimeHour = "20"'>20</a> <a ng-click='SetTimeHour = "21"'>21</a> <a ng-click='SetTimeHour = "22"'>22</a> <a ng-click='SetTimeHour = "23"'>23</a></li>
 
-
+        
 
       </ul>
 
@@ -345,7 +359,7 @@
 
 
 
-
+            
 
        <!-- <div class="dropdown">
 
@@ -433,7 +447,7 @@
 
     <li>&nbsp;</li>
 
-    <li><span ng-click="reset(); ResetMsg();" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+    <li><span ng-click="reset(); ResetMsg()" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
 
 </ul>
 
@@ -445,7 +459,7 @@
 
 
 
-<a class="btn btn-send right" ng-disabled="progress.active()" ng-click="sendMessage(false);" ng-hide="ScheduleCheck">
+<a class="btn btn-send right" ng-disabled="progress.active()" ng-click="sendMessage(false)" ng-hide="ScheduleCheck">
 
 	<span><i class="fa fa-paper-plane"></i> Send now</span>
 
@@ -453,7 +467,7 @@
 
 
 
-<a class="btn btn-send right" ng-click="sendMessage(true);" ng-show="ScheduleCheck">
+<a class="btn btn-send right" ng-click="sendMessage(true)" ng-show="ScheduleCheck">
 
 	<span><i class="fa fa-clock-o"></i> Schedule</span>
 
@@ -461,11 +475,9 @@
 
 
 
-<div class="bottom-buttons left">
-		<a ng-show="controllerParent" ng-click="controllerParent.Events.ShowView(controllerParent)" class="btn back-btn"><i class="fa fa-undo"></i> Back</a>
-	</div>
 
-</div>
+
+
 
 </form>
 
