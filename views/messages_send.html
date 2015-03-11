@@ -108,7 +108,7 @@
 
     	<div class="col-sm-6">
 
-    		<div class="form-group" ng-show="!list">
+    		<div class="form-group" ng-show="SendToList">
 
 			<select  chosen name="ToList" data-placeholder="Select from an existing list(s)..." class="chosen-select form-control" tabindex="4" ng-model="ToList" ng-options="contactList.contactListName for contactList in contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists">
 
@@ -118,17 +118,17 @@
 
 
 
-			<div class="form-group" ng-show="list">
+			<div class="form-group" ng-show="!SendToList">
 
     		<input type="text" name="to" placeholder="Insert phone numbers separated by comma ..." class="form-control" ng-model="ToNumber" >
 
     		</div>
 
-    		<a ng-app class="" ng-class="{true: 'addBtn', false: 'addBtn'}[!list]" ng-click="list = !list">{{!list && 'Or click here to add numbers manually' || 'Or select from an existing list'}}</a>
+    		<a ng-app class="" ng-class="{true: 'addBtn', false: 'addBtn'}[SendToList]" ng-click="SendToList = !SendToList">{{SendToList && 'Or click here to add numbers manually' || 'Or select from an existing list'}}</a>
 
     	</div>
 
-    	<div ng-show="PhoneNumberArrayValidator.PhoneNumbers.errorMessage && list" class="text-counter error">
+    	<div ng-show="PhoneNumberArrayValidator.PhoneNumbers.errorMessage && !SendToList" class="text-counter error">
                  {{PhoneNumberArrayValidator.PhoneNumbers.errorMessage}}
             </div>
 

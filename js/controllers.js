@@ -8682,13 +8682,13 @@ $scope.optFields = {
 
 			//todo: check how to receive standard opt out message
 
-			optOutMessage = $scope.OptOutTxt1;
+			optOutMessage = $scope.optFields.OptOutTxt1;
 
 		} else if ($scope.OptOutMsg == 'custom') {
 
 			//todo: check how to receive custom opt out message for the account
 
-			optOutMessage = $scope.OptOutTxt2;
+			optOutMessage = $scope.optFields.OptOutTxt2;
 
 		} else if ($scope.OptOutMsg == 'write') {
 
@@ -8838,9 +8838,20 @@ $scope.optFields = {
 
 		} else if (!$scope.SendToList && typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
 
-			//Sending message to numbers
-
-			requestData.ANI = $scope.ToNumber;
+			//Sending message to numbers. Add leading 1 to all numbers
+			var numberArray = $scope.ToNumber.split(',');
+			var toNumbers = '';
+			for(var idx in numberArray) {
+				var number = $.trim(numberArray[idx]);
+				if (number.length < 11) {
+					number = '1' + number;
+				}
+				if (toNumbers != '') {
+					toNumbers +=',';
+				}
+				toNumbers += number;
+			}
+			requestData.ANI = toNumbers;
 
 		}
 
