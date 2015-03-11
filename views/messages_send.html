@@ -8,7 +8,9 @@
 
 <h2 class="section-title">Compose Message</h2>
 
-
+<div class="top-buttons">
+<a ng-show="controllerParent" class="btn btn-back" ng-click="controllerParent.Events.ShowView(controllerParent)"><i class="fa fa-undo"></i>Back</a>
+</div>
 
 <form name="SendForm" novalidate role="form">
 
@@ -22,7 +24,7 @@
 
 <ul class="col-sm-12 alert alert-danger" ng-show="submitted && SendForm.$error.required">
 
-<li><span class="red" ng-show="SendForm.ToList.$error.required">List Required!</span></li> 
+<li><span class="red" ng-show="SendForm.ToList.$error.required">List Required!</span></li>
 
 <li><span class="red" ng-show="SendForm.MessageTxt.$error.required">Message text is required!</span></li>
 
@@ -30,7 +32,7 @@
 
 <ul class="col-sm-12 alert alert-danger" ng-show="SendForm.$error.maxlength">
 
-<li><span class="red" ng-show="SendForm.MessageTxt.$error.maxlength">SMS limit reached, please reduce your character count!</span></li> 
+<li><span class="red" ng-show="SendForm.MessageTxt.$error.maxlength">SMS limit reached, please reduce your character count!</span></li>
 
 </ul>
 
@@ -54,7 +56,7 @@
 
 	        <label> <input icheck type="radio" name="MessageType" ng-model="MessageType" value="MMS"> MMS </label>
 
-	        </div>   
+	        </div>
 
 	    </div>
 
@@ -165,7 +167,7 @@
 
         <div class="col-sm-6">
 
-        
+
 
             <!--<div class="radio">
 
@@ -181,16 +183,16 @@
 
             <textarea ng-show="OptOutMsg == 'custom'" name="message" class="form-control" rows="2" ng-model="OptOutTxt2" ng-init="OptOutTxt2='This is custom'" disabled></textarea>
 
-            <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>   
+            <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>
 
             </div>-->
 
-        
+
 
 
 
             <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="OptOutMsg">
-                
+
 
                 <option value="standard">Standard</option>
 
@@ -200,22 +202,22 @@
 
             </select>
 
-            
+
 
             <div class="animate-switch-container" ng-switch on="OptOutMsg">
-            
+
             <textarea ng-switch-when="standard" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt1" ng-init="optFields.OptOutTxt1='Reply STOP to end msgs.'; optFields.OptOutTxt3=''" ng-trim="false" readonly></textarea>
 
             <textarea ng-switch-when="custom" name="message" class="form-control opt-out disabled" rows="2" ng-model="optFields.OptOutTxt2" ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt3=''; optFields.OptOutTxt2=''" disabled></textarea>
-            
-            <textarea ng-switch-when="write" placeholder="Write your opt-out message" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt3"  ng-init="optFields.OptOutTxt1=''"  ng-trim="false" ></textarea>   
-            
+
+            <textarea ng-switch-when="write" placeholder="Write your opt-out message" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt3"  ng-init="optFields.OptOutTxt1=''"  ng-trim="false" ></textarea>
+
             </div>
 
-           
+
         </div>
 
-    
+
 
     </div>
 
@@ -243,9 +245,9 @@
 
 
 
-<!-- OLD PLANE WORKING SCHEDULE WITHOUT PICKER 
+<!-- OLD PLANE WORKING SCHEDULE WITHOUT PICKER
 
-            <div class="col-sm-5"> 
+            <div class="col-sm-5">
 
             <div class="input-group date">
 
@@ -259,7 +261,7 @@
 
 
 
-            <div class="col-sm-5"> 
+            <div class="col-sm-5">
 
             <div class="input-group date">
 
@@ -311,7 +313,7 @@
 
         <li><a ng-click='SetTimeHour = "20"'>20</a> <a ng-click='SetTimeHour = "21"'>21</a> <a ng-click='SetTimeHour = "22"'>22</a> <a ng-click='SetTimeHour = "23"'>23</a></li>
 
-        
+
 
       </ul>
 
@@ -359,7 +361,7 @@
 
 
 
-            
+
 
        <!-- <div class="dropdown">
 

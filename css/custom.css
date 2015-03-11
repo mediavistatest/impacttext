@@ -3212,6 +3212,30 @@ padding-right: 0;
   color: #a94442;
 }
 
+.messages-inbox .top-buttons .chosen-container.chosen-container-single {
+  /* width: auto !important; */
+  height: 31px;
+  width: 165px !important;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.messages-inbox .top-buttons .chosen-container-single .chosen-drop {
+  margin-top: -3px;
+  border-radius: 0 0 4px 4px;
+  background-clip: padding-box;
+}
+
+.messages-inbox .top-buttons .chosen-container-single .chosen-single {
+  border-radius: 3px;
+  padding: 2px 12px 3px 12px;
+  cursor: pointer;
+}
+
+.messages-inbox .top-buttons .chosen-container-single .chosen-single div b {
+  background-position: 0px 5px;
+}
+
 @media all and (max-width:990px) {
 
   .welcome-msg {display:none;}

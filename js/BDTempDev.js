@@ -228,7 +228,7 @@ var ngInbox = {
                 var callback = function() {
                     controllerParent.$scope.$broadcast("DeleteMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
-                    controllerParent.list = true;
+                    controllerParent.Events.ShowList(controllerParent);
                 };
                 if (!messageList) {
                     messageList = [controllerParent.clickedMessage];
@@ -244,7 +244,7 @@ var ngInbox = {
                 var callback = function() {
                     controllerParent.$scope.$broadcast("MarkAsReadMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
-                    controllerParent.list = true;
+                    controllerParent.Events.ShowList(controllerParent);
                 };
                 if (!messageList) {
                     messageList = [controllerParent.clickedMessage];
@@ -260,7 +260,7 @@ var ngInbox = {
                 var callback = function() {
                     controllerParent.$scope.$broadcast("RestoreToInboxMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
-                    controllerParent.list = true;
+                    controllerParent.Events.ShowList(controllerParent);
                 };
                 if (!messageList) {
                     messageList = [controllerParent.clickedMessage];
@@ -276,7 +276,7 @@ var ngInbox = {
                 var callback = function() {
                     controllerParent.$scope.$broadcast("ResendMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
-                    controllerParent.list = true;
+                    controllerParent.Events.ShowList(controllerParent);
                 };
                 if (!messageList) {
                     messageList = [controllerParent.clickedMessage];
@@ -383,24 +383,47 @@ var ngInbox = {
         $cookieStore : null,
         clickedMessage : null,
         list : true,
+        view : false,
+        add : false,
         radioModel : '',
         Events : {
             Message_onClick : function(inParent, row) {
                 inParent.clickedMessage = row.entity;
-                inParent.list = false;
+                inParent.Events.ShowView(inParent);
+            },
+            Add_onClick : function(inScope) {
+                inScope.controllerParent.Events.ShowView(inScope.controllerParent);
             },
             Send_onClick : function(inScope) {
                 // delete clicked message
-                inScope.controllerParent.list = true;
+                inScope.controllerParent.Events.ShowList(inScope.controllerParent);
                 inScope.controllerParent.radioModel = '';
             },
-            InitialiseEvents : function(controllerParent) {
+            ShowList : function(inParent) {
+                inParent.list = true;
+                inParent.view = false;
+                inParent.add = false;
+            },
+            ShowView : function(inParent) {
+                inParent.list = false;
+                inParent.view = true;
+                inParent.add = false;
+            },
+            ShowAdd : function(inParent) {
+                inParent.list = false;
+                inParent.view = false;
+                inParent.add = true;
+            },
+            InitialiseEvents : function(inParent) {
+                inParent.$scope.$watch('controllerParent.getListStatus', function() {
+                    inParent.$scope.getPagedDataAsync(inParent);
+                }, true);
             }
         },
         Controller : function($scope, $http, $cookieStore) {
             //Controler parrent setting !!!!
             var controllerParent = ngInbox.InboxList;
-            controllerParent.list = true;
+            controllerParent.Events.ShowList(controllerParent);
 
             controllerParent.$scope = $scope;
             controllerParent.$http = $http;
@@ -408,6 +431,10 @@ var ngInbox = {
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
+        },
+        PopulateAdd : function($addScope) {
+            $addScope.UploadType = 'single';
+            $addScope.PhoneNumber = $addScope.controllerParent.clickedMessage.sourceANI;
         },
         PostSuccess : function(controllerParent, result) {
             var nListsReturned = 0;
@@ -570,7 +597,7 @@ var ngInbox = {
             },
             Send_onClick : function(inScope) {
                 // delete clicked message
-                inScope.controllerParent.Events.ShowList(inParent);
+                inScope.controllerParent.Events.ShowList(inScope.controllerParent);
             },
             ShowList : function(inParent) {
                 inParent.list = true;
@@ -663,7 +690,7 @@ var ngInbox = {
             },
             Send_onClick : function(inScope) {
                 // delete clicked message
-                inScope.controllerParent.Events.ShowList(inParent);
+                inScope.controllerParent.Events.ShowList(inScope.controllerParent);
             },
             ShowList : function(inParent) {
                 inParent.list = true;
