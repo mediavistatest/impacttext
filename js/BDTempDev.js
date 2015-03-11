@@ -98,8 +98,7 @@ var ngInbox = {
                 controllerParent.$scope.ResendMessage = ngInbox._internal.Methods.ResendMessage;
                 controllerParent.$scope.ResendMessages = ngInbox._internal.Methods.ResendMessages;
                 controllerParent.$scope.MarkAsUnreadMessage = ngInbox._internal.Methods.MarkAsUnreadMessage;
-                controllerParent.$scope.MarkAsUnreadMessages = ngInbox._internal.Methods.MarkAsUnreadMessages;                
-                
+                controllerParent.$scope.MarkAsUnreadMessages = ngInbox._internal.Methods.MarkAsUnreadMessages;
 
                 //WHATCH
                 controllerParent.$scope.$watch('pagingOptions', function() {
@@ -273,7 +272,7 @@ var ngInbox = {
             },
             MarkAsUnreadMessages : function(controllerParent) {
                 ngInbox._internal.Methods.MarkAsUnreadMessage(controllerParent, controllerParent.$scope.mySelections);
-            },            
+            },
             RestoreToInboxMessage : function(controllerParent, messageList) {
                 ngInbox._internal.ErrorMsg = 'Restoring message(s) from trash failed!';
                 var callback = function() {
@@ -331,12 +330,12 @@ var ngInbox = {
                     classes : 'alert-success'
                 });
             };
-             $scope.MarkAsUnreadMsg = function() {
+            $scope.MarkAsUnreadMsg = function() {
                 notify({
                     message : 'Your message(s) has been marked as unread!',
                     classes : 'alert-success'
                 });
-            };           
+            };
             $scope.RestoreToInboxMsg = function() {
                 notify({
                     message : 'Your message(s) has been restored to inbox!',
@@ -363,26 +362,20 @@ var ngInbox = {
             $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
                 $scope.MarkAsReadMsg();
             });
-              $scope.$on('MarkAsUnreadMessageSucceeded', function(event, args) {
+            $scope.$on('MarkAsUnreadMessageSucceeded', function(event, args) {
                 $scope.MarkAsUnreadMsg();
-            });               
+            });
             $scope.$on('RestoreToInboxMessageSucceeded', function(event, args) {
                 $scope.RestoreToInboxMsg();
             });
             $scope.$on('ResendMessageSucceeded', function(event, args) {
                 $scope.ResendMsg();
             });
-         
-            
-            
+
             $scope.$on('ErrorOnMessages', function(event, args) {
                 $scope.ErrorOnMsg(args);
             });
 
-                      
-            
-            
-            
         }
     },
     InboxList : {
@@ -409,7 +402,7 @@ var ngInbox = {
         }],
         sortOptions : {
             fields : ['createdDate'],
-            directions : ['ASC'],
+            directions : ['DESC'],
             useExternalSorting : true
         },
         defaultSortField : 'createdDate',
@@ -470,8 +463,12 @@ var ngInbox = {
             controllerParent.Events.InitialiseEvents(controllerParent);
         },
         PopulateAdd : function($addScope) {
-            $addScope.UploadType = 'single';
-            $addScope.PhoneNumber = $addScope.controllerParent.clickedMessage.sourceANI;
+            try {
+                $addScope.UploadType = 'single';
+                $addScope.PhoneNumber = $addScope.controllerParent.clickedMessage.sourceANI;
+            } catch(e) {
+                //TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
+            }
         },
         PostSuccess : function(controllerParent, result) {
             var nListsReturned = 0;
@@ -529,7 +526,7 @@ var ngInbox = {
         }],
         sortOptions : {
             fields : ['sendEndDate'],
-            directions : ['ASC'],
+            directions : ['DESC'],
             useExternalSorting : true
         },
         defaultSortField : 'sendEndDate',
@@ -617,7 +614,7 @@ var ngInbox = {
         }],
         sortOptions : {
             fields : ['scheduledDate'],
-            directions : ['ASC'],
+            directions : ['DESC'],
             useExternalSorting : true
         },
         defaultSortField : 'scheduledDate',
@@ -710,7 +707,7 @@ var ngInbox = {
         }],
         sortOptions : {
             fields : ['statusDate'],
-            directions : ['ASC'],
+            directions : ['DESC'],
             useExternalSorting : true
         },
         defaultSortField : 'statusDate',
@@ -811,7 +808,7 @@ var ngInbox = {
         }],
         sortOptions : {
             fields : ['statusDate'],
-            directions : ['ASC'],
+            directions : ['DESC'],
             useExternalSorting : true
         },
         defaultSortField : 'statusDate',
