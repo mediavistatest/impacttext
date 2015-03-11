@@ -345,7 +345,10 @@ var ngInbox = {
                 inParent.view = false;
                 inParent.add = true;
             },
-            InitialiseEvents : function(controllerParent) {
+            InitialiseEvents : function(inParent) {
+                inParent.$scope.$watch('controllerParent.getListStatus', function() {
+                    inParent.$scope.getPagedDataAsync(inParent);
+                }, true);
             }
         },
         Controller : function($scope, $http, $cookieStore) {
@@ -361,7 +364,6 @@ var ngInbox = {
             controllerParent.Events.InitialiseEvents(controllerParent);
         },
         PopulateAdd : function($addScope) {
-            console.log($addScope.controllerParent.clickedMessage)
             $addScope.UploadType = 'single';
             $addScope.PhoneNumber = $addScope.controllerParent.clickedMessage.sourceANI;
         },
