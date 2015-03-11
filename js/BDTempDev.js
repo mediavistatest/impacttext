@@ -514,6 +514,9 @@ var ngInbox = {
                 inScope.controllerParent.list = true;
                 inScope.controllerParent.radioModel = '';
             },
+            ShowList : function(inParent) {
+                inParent.list = true;
+            },
             InitialiseEvents : function(controllerParent) {
             }
         },
