@@ -97,6 +97,9 @@ var ngInbox = {
                 controllerParent.$scope.RestoreToInboxMessages = ngInbox._internal.Methods.RestoreToInboxMessages;
                 controllerParent.$scope.ResendMessage = ngInbox._internal.Methods.ResendMessage;
                 controllerParent.$scope.ResendMessages = ngInbox._internal.Methods.ResendMessages;
+                controllerParent.$scope.MarkAsUnreadMessage = ngInbox._internal.Methods.MarkAsUnreadMessage;
+                controllerParent.$scope.MarkAsUnreadMessages = ngInbox._internal.Methods.MarkAsUnreadMessages;                
+                
 
                 //WHATCH
                 controllerParent.$scope.$watch('pagingOptions', function() {
@@ -255,6 +258,22 @@ var ngInbox = {
             MarkAsReadMessages : function(controllerParent) {
                 ngInbox._internal.Methods.MarkAsReadMessage(controllerParent, controllerParent.$scope.mySelections);
             },
+            MarkAsUnreadMessage : function(controllerParent, messageList) {
+                ngInbox._internal.ErrorMsg = 'Mark as unread message(s) failed!';
+                var callback = function() {
+                    controllerParent.$scope.$broadcast("MarkAsUnreadMessageSucceeded");
+                    controllerParent.$scope.getPagedDataAsync(controllerParent);
+                    controllerParent.Events.ShowList(controllerParent);
+                };
+                if (!messageList) {
+                    messageList = [controllerParent.clickedMessage];
+                }
+
+                ngInbox._internal.Methods.StatusChange(controllerParent, messageList, controllerParent.markAsUnreadMessageStatus, callback);
+            },
+            MarkAsUnreadMessages : function(controllerParent) {
+                ngInbox._internal.Methods.MarkAsUnreadMessage(controllerParent, controllerParent.$scope.mySelections);
+            },            
             RestoreToInboxMessage : function(controllerParent, messageList) {
                 ngInbox._internal.ErrorMsg = 'Restoring message(s) from trash failed!';
                 var callback = function() {
@@ -308,10 +327,16 @@ var ngInbox = {
             };
             $scope.MarkAsReadMsg = function() {
                 notify({
-                    message : 'Your message(s) has been mark as read!',
+                    message : 'Your message(s) has been marked as read!',
                     classes : 'alert-success'
                 });
             };
+             $scope.MarkAsUnreadMsg = function() {
+                notify({
+                    message : 'Your message(s) has been marked as unread!',
+                    classes : 'alert-success'
+                });
+            };           
             $scope.RestoreToInboxMsg = function() {
                 notify({
                     message : 'Your message(s) has been restored to inbox!',
@@ -338,15 +363,26 @@ var ngInbox = {
             $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
                 $scope.MarkAsReadMsg();
             });
+              $scope.$on('MarkAsUnreadMessageSucceeded', function(event, args) {
+                $scope.MarkAsUnreadMsg();
+            });               
             $scope.$on('RestoreToInboxMessageSucceeded', function(event, args) {
                 $scope.RestoreToInboxMsg();
             });
             $scope.$on('ResendMessageSucceeded', function(event, args) {
                 $scope.ResendMsg();
             });
+         
+            
+            
             $scope.$on('ErrorOnMessages', function(event, args) {
                 $scope.ErrorOnMsg(args);
             });
+
+                      
+            
+            
+            
         }
     },
     InboxList : {
@@ -355,6 +391,7 @@ var ngInbox = {
         statusChangeAction : 'message_changeinboundstatus',
         deleteMessageStatus : 'D',
         markAsReadMessageStatus : 'R',
+        markAsUnreadMessageStatus : 'U',
         columnDefs : [{
             field : 'sourceANI',
             displayName : 'Contact',
