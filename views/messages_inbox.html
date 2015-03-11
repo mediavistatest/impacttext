@@ -27,7 +27,7 @@
 		</select>
 
 
-		<button class="btn" ng-click="MarkAsReadMessages(controllerParent)">
+		<button class="btn" ng-click="MarkAsReadMessages(controllerParent)" ng-show="controllerParent.getListStatus=='U'">
 
 			<i class="fa fa-eye"></i> Mark as read
 
