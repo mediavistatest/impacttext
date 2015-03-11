@@ -95,6 +95,10 @@ var ngInbox = {
                 controllerParent.$scope.MarkAsReadMessages = ngInbox._internal.Methods.MarkAsReadMessages;
                 controllerParent.$scope.RestoreToInboxMessage = ngInbox._internal.Methods.RestoreToInboxMessage;
                 controllerParent.$scope.RestoreToInboxMessages = ngInbox._internal.Methods.RestoreToInboxMessages;
+                controllerParent.$scope.ResendMessage = ngInbox._internal.Methods.ResendMessage;
+                controllerParent.$scope.ResendMessages = ngInbox._internal.Methods.ResendMessages;
+                controllerParent.$scope.MarkAsUnreadMessage = ngInbox._internal.Methods.MarkAsUnreadMessage;
+                controllerParent.$scope.MarkAsUnreadMessages = ngInbox._internal.Methods.MarkAsUnreadMessages;
 
                 //WHATCH
                 controllerParent.$scope.$watch('pagingOptions', function() {
@@ -166,7 +170,58 @@ var ngInbox = {
                     })
                     // error function
                     .error(function(data, status, headers, config) {
-                        alert(ngInbox._internal.ErrorMsg);
+                        controllerParent.$scope.$broadcast("ErrorOnMessages", ngInbox._internal.ErrorMsg);
+                    });
+                }
+            },
+            SendMessage : function(controllerParent, messageToSendArray, changeToStatus, callback) {
+                var params = {
+                    apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
+                    accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
+                    sethttp : 1
+                };
+
+                var successfullRequestsCount_ = 0;
+                var totalNumberOfMessages_ = messageToSendArray.length;
+                for (var j = 0; j < messageToSendArray.length; j++) {
+                    params.message = messageToSendArray[j].message;
+                    params.contactListID == messageToSendArray[j].contactListID;
+                    params.ANI = messageToSendArray[j].ANI;
+                    params.DID = messageToSendArray[j].DID;
+
+                    //Send request to the server
+                    controllerParent.$http.post(inspiniaNS.wsUrl + "message_send", $.param(params))
+                    //Successful request to the server
+                    .success(function(data, status, headers, config) {
+                        if (data == null || typeof data.apicode == 'undefined') {
+                            //This should never happen
+                            controllerParent.$scope.$broadcast("ErrorOnMessages", 'Unidentified error occurred when sending your message!');
+                            return;
+                        }
+                        if (data.apicode == 0) {
+                            //Reset form and inform user about success
+                            // controllerParent.$scope.$broadcast("SendingMessageSucceeded", data.apidata);
+                        } else {
+                            controllerParent.$scope.$broadcast("ErrorOnMessages", 'An error occurred when sending your message! Error code: ' + data.apicode);
+                            console.log(JSON.stringify(data));
+                        }
+                        successfullRequestsCount_++;
+
+                        if (totalNumberOfMessages_ == successfullRequestsCount_) {
+                            callback();
+
+                        }
+                    }).error(
+                    //An error occurred with this request
+                    function(data, status, headers, config) {
+                        if (status == 400) {
+                            if (data.apicode == 1) {
+                                controllerParent.$scope.$broadcast("ErrorOnMessages", 'ANI that you are trying to send message to is opted-out!');
+                            } else {
+                                //Just non handled errors by optout are counted
+                                controllerParent.$scope.$broadcast("ErrorOnMessages", ngInbox._internal.ErrorMsg);
+                            }
+                        }
                     });
                 }
             },
@@ -202,6 +257,22 @@ var ngInbox = {
             MarkAsReadMessages : function(controllerParent) {
                 ngInbox._internal.Methods.MarkAsReadMessage(controllerParent, controllerParent.$scope.mySelections);
             },
+            MarkAsUnreadMessage : function(controllerParent, messageList) {
+                ngInbox._internal.ErrorMsg = 'Mark as unread message(s) failed!';
+                var callback = function() {
+                    controllerParent.$scope.$broadcast("MarkAsUnreadMessageSucceeded");
+                    controllerParent.$scope.getPagedDataAsync(controllerParent);
+                    controllerParent.Events.ShowList(controllerParent);
+                };
+                if (!messageList) {
+                    messageList = [controllerParent.clickedMessage];
+                }
+
+                ngInbox._internal.Methods.StatusChange(controllerParent, messageList, controllerParent.markAsUnreadMessageStatus, callback);
+            },
+            MarkAsUnreadMessages : function(controllerParent) {
+                ngInbox._internal.Methods.MarkAsUnreadMessage(controllerParent, controllerParent.$scope.mySelections);
+            },
             RestoreToInboxMessage : function(controllerParent, messageList) {
                 ngInbox._internal.ErrorMsg = 'Restoring message(s) from trash failed!';
                 var callback = function() {
@@ -221,18 +292,17 @@ var ngInbox = {
             ResendMessage : function(controllerParent, messageList) {
                 ngInbox._internal.ErrorMsg = 'Resending message(s) failed!';
                 var callback = function() {
-                    controllerParent.$scope.$broadcast("RestoreToInboxMessageSucceeded");
+                    controllerParent.$scope.$broadcast("ResendMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
                     controllerParent.Events.ShowList(controllerParent);
                 };
                 if (!messageList) {
                     messageList = [controllerParent.clickedMessage];
                 }
-
-                ngInbox._internal.Methods.StatusChange(controllerParent, messageList, controllerParent.restoreMessageStatus, callback);
+                ngInbox._internal.Methods.SendMessage(controllerParent, messageList, controllerParent.restoreMessageStatus, callback);
             },
             ResendMessages : function(controllerParent) {
-                ngInbox._internal.Methods.RestoreToInboxMessage(controllerParent, controllerParent.$scope.mySelections);
+                ngInbox._internal.Methods.ResendMessage(controllerParent, controllerParent.$scope.mySelections);
             },
             PostSuccess : function(controllerParent, result) {
                 // Contact/List repack
@@ -254,18 +324,35 @@ var ngInbox = {
                     classes : 'alert-success'
                 });
             };
-
             $scope.MarkAsReadMsg = function() {
                 notify({
-                    message : 'Your message(s) has been mark as read!',
+                    message : 'Your message(s) has been marked as read!',
                     classes : 'alert-success'
                 });
             };
-
+            $scope.MarkAsUnreadMsg = function() {
+                notify({
+                    message : 'Your message(s) has been marked as unread!',
+                    classes : 'alert-success'
+                });
+            };
             $scope.RestoreToInboxMsg = function() {
                 notify({
                     message : 'Your message(s) has been restored to inbox!',
                     classes : 'alert-success'
+                });
+            };
+            $scope.ResendMsg = function() {
+                notify({
+                    message : 'Your message(s) has been resent!',
+                    classes : 'alert-success'
+                });
+            };
+            $scope.ErrorOnMsg = function(errorText) {
+                notify({
+                    message : errorText,
+                    classes : 'alert-danger',
+                    templateUrl : 'views/common/notify.html'
                 });
             };
 
@@ -275,9 +362,20 @@ var ngInbox = {
             $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
                 $scope.MarkAsReadMsg();
             });
+            $scope.$on('MarkAsUnreadMessageSucceeded', function(event, args) {
+                $scope.MarkAsUnreadMsg();
+            });
             $scope.$on('RestoreToInboxMessageSucceeded', function(event, args) {
                 $scope.RestoreToInboxMsg();
             });
+            $scope.$on('ResendMessageSucceeded', function(event, args) {
+                $scope.ResendMsg();
+            });
+
+            $scope.$on('ErrorOnMessages', function(event, args) {
+                $scope.ErrorOnMsg(args);
+            });
+
         }
     },
     InboxList : {
@@ -286,6 +384,7 @@ var ngInbox = {
         statusChangeAction : 'message_changeinboundstatus',
         deleteMessageStatus : 'D',
         markAsReadMessageStatus : 'R',
+        markAsUnreadMessageStatus : 'U',
         columnDefs : [{
             field : 'sourceANI',
             displayName : 'Contact',
@@ -303,7 +402,7 @@ var ngInbox = {
         }],
         sortOptions : {
             fields : ['createdDate'],
-            directions : ['ASC'],
+            directions : ['DESC'],
             useExternalSorting : true
         },
         defaultSortField : 'createdDate',
@@ -364,8 +463,12 @@ var ngInbox = {
             controllerParent.Events.InitialiseEvents(controllerParent);
         },
         PopulateAdd : function($addScope) {
-            $addScope.UploadType = 'single';
-            $addScope.PhoneNumber = $addScope.controllerParent.clickedMessage.sourceANI;
+            try {
+                $addScope.UploadType = 'single';
+                $addScope.PhoneNumber = $addScope.controllerParent.clickedMessage.sourceANI;
+            } catch(e) {
+                //TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
+            }
         },
         PostSuccess : function(controllerParent, result) {
             var nListsReturned = 0;
@@ -423,7 +526,7 @@ var ngInbox = {
         }],
         sortOptions : {
             fields : ['sendEndDate'],
-            directions : ['ASC'],
+            directions : ['DESC'],
             useExternalSorting : true
         },
         defaultSortField : 'sendEndDate',
@@ -445,6 +548,9 @@ var ngInbox = {
                 inScope.controllerParent.list = true;
                 inScope.controllerParent.radioModel = '';
             },
+            ShowList : function(inParent) {
+                inParent.list = true;
+            },
             InitialiseEvents : function(controllerParent) {
             }
         },
@@ -459,6 +565,29 @@ var ngInbox = {
 
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
+        },
+        PopulateSend : function($sendScope) {
+            try {
+                $sendScope.FromName = $sendScope.initial;
+                $sendScope.MessageType = 'SMS';
+                $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
+                return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+                })[0];
+                $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                })[0];
+                $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
+                $sendScope.OptOutMsg = '';
+                $sendScope.OptOutTxt3 = $sendScope.initial;
+                $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
+                $sendScope.ScheduleCheck = false;
+                $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
+                $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+            } catch(e) {
+                //TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
+            }
+
         },
         PostSuccess : function(controllerParent, result) {
             ngInbox._internal.Methods.PostSuccess(controllerParent, result);
@@ -485,7 +614,7 @@ var ngInbox = {
         }],
         sortOptions : {
             fields : ['scheduledDate'],
-            directions : ['ASC'],
+            directions : ['DESC'],
             useExternalSorting : true
         },
         defaultSortField : 'scheduledDate',
@@ -578,7 +707,7 @@ var ngInbox = {
         }],
         sortOptions : {
             fields : ['statusDate'],
-            directions : ['ASC'],
+            directions : ['DESC'],
             useExternalSorting : true
         },
         defaultSortField : 'statusDate',
@@ -679,7 +808,7 @@ var ngInbox = {
         }],
         sortOptions : {
             fields : ['statusDate'],
-            directions : ['ASC'],
+            directions : ['DESC'],
             useExternalSorting : true
         },
         defaultSortField : 'statusDate',
