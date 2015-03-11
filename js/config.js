@@ -162,6 +162,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
 
                             files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
 
+                        },
+                        {
+                            insertBefore: '#loadBefore',
+                            name: 'localytics.directives',
+                            files: ['css/plugins/chosen/chosen.css','js/plugins/chosen/chosen.jquery.js','js/plugins/chosen/chosen.js']
                         }
                     ]);
                 }
