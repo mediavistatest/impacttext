@@ -14,6 +14,10 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             url: "/dashboard",
             templateUrl: "views/dashboard.html"
         })
+        .state('profile', {
+            url: "/profile",
+            templateUrl: "views/profile.html"
+        })
         .state('lists', {
             abstract: true,
             url: "/lists",

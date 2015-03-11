@@ -8360,7 +8360,7 @@ $scope.maxLength = 160;
 $scope.MessageTxt='';
 $scope.FromName='';
 var maxLengthCalc = function () {
-    $scope.maxLength = 160 - ($scope.FromName.length + $scope.optFields.OptOutTxt1.length + $scope.optFields.OptOutTxt3.length) - ($scope.FromName.length>0 ? 2:0) - ($scope.optFields.OptOutTxt1.length>0 ? 2:0) - ($scope.optFields.OptOutTxt3.length>0 ? 2:0);
+    $scope.maxLength = 160 - ($scope.FromName.length + $scope.optFields.OptOutTxt1.length + $scope.optFields.OptOutTxt3.length) - ($scope.FromName.length>0 ? 2:0) - ($scope.optFields.OptOutTxt1.length>0 ? 1:0) - ($scope.optFields.OptOutTxt3.length>0 ? 1:0);
 };
 
 

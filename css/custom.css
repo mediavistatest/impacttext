@@ -3271,6 +3271,38 @@ button.read-unread {
   margin-right: 10px;
 }
 
+.content-box {
+  background: white;
+  border: 1px solid lightgrey;
+  margin-bottom: 25px;
+}
+
+.content-box h2 {
+  margin-top: 0;
+  padding: 10px 25px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.content-box ul {
+  list-style: none;
+  padding:0 25px;
+  margin: 35px 0;
+  font-size: 14px;
+}
+
+.content-box ul li {
+  margin-bottom:20px;
+}
+
+span.li-label {
+  color: #8c8c8c;
+}
+
+.blue-txt {
+  color:#005eaa;
+}
+
 
 @media all and (max-width:990px) {
 
