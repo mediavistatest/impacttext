@@ -221,7 +221,7 @@ var ngInbox = {
             ResendMessage : function(controllerParent, messageList) {
                 ngInbox._internal.ErrorMsg = 'Resending message(s) failed!';
                 var callback = function() {
-                    controllerParent.$scope.$broadcast("RestoreToInboxMessageSucceeded");
+                    controllerParent.$scope.$broadcast("ResendMessageSucceeded");
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
                     controllerParent.list = true;
                 };
@@ -433,6 +433,29 @@ var ngInbox = {
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
         },
+        PopulateSend : function($sendScope) {
+            try {
+                $sendScope.FromName = $sendScope.initial;
+                $sendScope.MessageType = 'SMS';
+                $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
+                return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+                })[0];
+                $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                })[0];
+                $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
+                $sendScope.OptOutMsg = '';
+                $sendScope.OptOutTxt3 = $sendScope.initial;
+                $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
+                $sendScope.ScheduleCheck = false;
+                $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
+                $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+            } catch(e) {
+                //TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
+            }
+
+        },        
         PostSuccess : function(controllerParent, result) {
             ngInbox._internal.Methods.PostSuccess(controllerParent, result);
         }

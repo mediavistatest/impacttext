@@ -4119,8 +4119,10 @@ function imageCrop($scope) {
 }
 
 function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracker) {
+    console.log('FormSendCtrl')
 
     if ($scope.controllerParent && $scope.controllerParent.PopulateSend) {
+        $scope.controllerParent.$sendScope = $scope;
         $scope.$watch('controllerParent.clickedMessage', function() {
             $scope.controllerParent.PopulateSend($scope);
         }, true);
