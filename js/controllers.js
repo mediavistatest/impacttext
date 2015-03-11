@@ -3826,10 +3826,9 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
 						alert(JSON.stringify(data));
 					}
 					if (remainingListsCount == 0) {
-						alert("Successfully added: " + successfullyAddedToListsCount + ", failed to add: " + failedToAddToListsCount);
 						//Reset form and inform user about success
 						$scope.reset();
-						//$scope.$broadcast("ContactListCreated", data.apidata);
+						$scope.$broadcast("ContactCreated", data.apidata);
 						$scope.refreshLists();
 					}
 				}
@@ -3843,11 +3842,12 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
 						} else */{
 							remainingListsCount--;
 							failedToAddToListsCount++;
-							alert("An error occurred when adding contact! Error code: " + data.apicode);
-							alert(JSON.stringify(data));
-							if (remainingListsCount == 0) {
-								alert("Successfully added: " + successfullyAddedToListsCount + ", failed to add: " + failedToAddToListsCount);
-							}
+							//alert("An error occurred when adding contact! Error code: " + data.apicode);
+							//alert(JSON.stringify(data));
+							//if (remainingListsCount == 0) {
+							//	alert("Successfully added: " + successfullyAddedToListsCount + ", failed to add: " + failedToAddToListsCount);
+							//}
+							$scope.$broadcast("CreateContactFailed");
 						}
 					}
 				}
@@ -4062,6 +4062,18 @@ function notifyCtrl($scope, notify) {
             classes : 'alert-success'
         });
     };
+    $scope.ContactCreatedMsg = function() {
+        notify({
+            message : 'Contact is successfully created!',
+            classes : 'alert-success'
+        });
+    };
+    $scope.CreateContactFailedMsg = function() {
+        notify({
+            message : 'An error occurred when adding new contact to the contact list!',
+            classes : 'alert-success'
+        });
+    };
     //If SendingMessageSucceeded event is triggered, show related message
     $scope.$on('SendingMessageSucceeded', function(event, args) {
         $scope.SentMsg();
@@ -4085,6 +4097,14 @@ function notifyCtrl($scope, notify) {
     //If ContactListCreated event is triggered, show related message
     $scope.$on('ContactListCreated', function(event, args) {
         $scope.ContactListCreatedMsg();
+    });
+    //If ContactCreated event is triggered, show related message
+    $scope.$on('ContactCreated', function(event, args) {
+        $scope.ContactCreatedMsg();
+    });
+    //If CreateContactFailed event is triggered, show related message
+    $scope.$on('CreateContactFailed', function(event, args) {
+        $scope.CreateContactFailedMsg();
     });
 }
 
