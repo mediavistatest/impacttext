@@ -82,43 +82,43 @@ function generateOrderByField(sortFields, sortOrders) {
 
 
 
-    if (typeof sortFields == 'undefined' || sortFields == null) {
+	if (typeof sortFields == 'undefined' || sortFields == null) {
 
-        sortFields = [];
+		sortFields = [];
 
-    }
+	}
 
-    if (typeof sortOrders == 'undefined' || sortOrders == null) {
+	if (typeof sortOrders == 'undefined' || sortOrders == null) {
 
-        sortOrders = [];
+		sortOrders = [];
 
-    }
+	}
 
-    var orderBy = '';
+	var orderBy = '';
 
-    for (var i in sortFields) {
+	for (var i in sortFields) {
 
-        if (sortFields[i] == '') {
+		if (sortFields[i] == '') {
 
-            continue;
+			continue;
 
-        }
+		}
 
-        var sortOrder = typeof sortOrders[i] == 'undefined' || sortOrders[i] == null ? 'asc' : sortOrders[i].toLowerCase();
+		var sortOrder = typeof sortOrders[i] == 'undefined' || sortOrders[i] == null ? 'asc' : sortOrders[i].toLowerCase();
 
-        if (orderBy != '') {
+		if (orderBy != '') {
 
-            orderBy += ', ';
+			orderBy += ', ';
 
-        }
+		}
 
-        orderBy += sortFields[i].toLowerCase() + " " + sortOrder;
+		orderBy += sortFields[i].toLowerCase() + " " + sortOrder;
 
-    }
+	}
 
 
 
-    return orderBy;
+	return orderBy;
 
 }
 
@@ -6202,105 +6202,105 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 
 //GET DATA
 
-    $scope.getPagedDataAsync = function (pageSize, page, searchText, sortFields, sortOrders) {
+	$scope.getPagedDataAsync = function (pageSize, page, searchText, sortFields, sortOrders) {
 
-        if (typeof page == 'undefined' || page == null || page == '') {
+		if (typeof page == 'undefined' || page == null || page == '') {
 
-            page = 0;
+			page = 0;
 
-        }
-
-
-
-        var orderBy = generateOrderByField(sortFields, sortOrders);
-
-        if (orderBy == '') {
-
-            orderBy = "contactlistname";
-
-        }
+		}
 
 
 
-        setTimeout(function () {
+		var orderBy = generateOrderByField(sortFields, sortOrders);
 
-            var data;
+		if (orderBy == '') {
 
-            if (searchText) {
+			orderBy = "contactlistname";
 
-                var ft = searchText.toLowerCase();
-
-                $http.post(
-
-                    inspiniaNS.wsUrl + "contactlist_get",
-
-                    $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'),contactListName: ft, orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize})
-
-                ).success(function (data) {
-
-                    $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-
-                }).error(
-
-                    //An error occurred with this request
-
-                    function(data, status, headers, config) {
-
-                        //alert('Unexpected error occurred when trying to fetch contact lists!');
-
-                        if (status == 400) {
-
-                            alert("An error occurred when getting contact lists! Error code: " + data.apicode);
-
-                            alert(JSON.stringify(data));
-
-                        }
-
-                    }
-
-                );
-
-            } else {
-
-                $http.post(
-
-                    inspiniaNS.wsUrl + "contactlist_get",
-
-                    $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize})
-
-                ).success(function (data) {
-
-                    $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-
-                }).error(
-
-                    //An error occurred with this request
-
-                    function(data, status, headers, config) {
-
-                        //alert('Unexpected error occurred when trying to fetch contact lists!');
-
-                        if (status == 400) {
-
-                            alert("An error occurred when getting contact lists! Error code: " + data.apicode);
-
-                            alert(JSON.stringify(data));
-
-                        }
-
-                    }
-
-                );
-
-            }
-
-        }, 100);
-
-    };
+		}
 
 
 
-    $scope.setPagingData = function(data, page, pageSize){
+		setTimeout(function () {
+
+			var data;
+
+			if (searchText) {
+
+				var ft = searchText.toLowerCase();
+
+				$http.post(
+
+					inspiniaNS.wsUrl + "contactlist_get",
+
+					$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'),contactListName: ft, orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize})
+
+				).success(function (data) {
+
+					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+
+				}).error(
+
+					//An error occurred with this request
+
+					function(data, status, headers, config) {
+
+						//alert('Unexpected error occurred when trying to fetch contact lists!');
+
+						if (status == 400) {
+
+							alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+
+							alert(JSON.stringify(data));
+
+						}
+
+					}
+
+				);
+
+			} else {
+
+				$http.post(
+
+					inspiniaNS.wsUrl + "contactlist_get",
+
+					$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize})
+
+				).success(function (data) {
+
+					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+
+				}).error(
+
+					//An error occurred with this request
+
+					function(data, status, headers, config) {
+
+						//alert('Unexpected error occurred when trying to fetch contact lists!');
+
+						if (status == 400) {
+
+							alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+
+							alert(JSON.stringify(data));
+
+						}
+
+					}
+
+				);
+
+			}
+
+		}, 100);
+
+	};
+
+
+
+	$scope.setPagingData = function(data, page, pageSize){
 
         var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
 
@@ -6388,13 +6388,13 @@ $scope.$watch('pagingOptions', function () {
 
     $scope.$watch('sortOptions', function (newVal, oldVal) {
 
-         if (newVal !== oldVal) {
+		 if (newVal !== oldVal) {
 
-             $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+			 $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
 
-         }
+		 }
 
-     }, true);
+	 }, true);
 
 
 
@@ -6753,19 +6753,19 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
 
 
-    $scope.filterOptions = {
+	$scope.filterOptions = {
 
-        filterText: '',
+		filterText: '',
 
-        filterBy: ''
+		filterBy: ''
 
-        //filterText2: '',
+		//filterText2: '',
 
-        //externalFilter: '',
+		//externalFilter: '',
 
-        //useExternalFilter: true
+		//useExternalFilter: true
 
-    };
+	};
 
 
 
@@ -6865,179 +6865,179 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
     $scope.getPagedDataAsync = function (pageSize, page, searchText, filterBy, sortFields, sortOrders) {
 
-         if (typeof page == 'undefined' || page == null || page == '') {
+		 if (typeof page == 'undefined' || page == null || page == '') {
 
-             page = 0;
+			 page = 0;
 
-         }
+		 }
 
 
 
-         //Creating a sort options string
+		 //Creating a sort options string
 
-         var orderBy = generateOrderByField(sortFields, sortOrders);
+		 var orderBy = generateOrderByField(sortFields, sortOrders);
 
-         if (orderBy == '') {
+		 if (orderBy == '') {
 
-             orderBy = 'lastname asc';
+			 orderBy = 'lastname asc';
 
-         }
+		 }
 
 
 
 
 
-         var data;
+		 var data;
 
-         if (searchText) {
+		 if (searchText) {
 
-             if (filterBy) {
+			 if (filterBy) {
 
-                 var request = {
+				 var request = {
 
-                     sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'),
+					 sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'),
 
-                     contactListID: $state.params.id,
+					 contactListID: $state.params.id,
 
-                     limit: pageSize, offset: (page - 1) * pageSize,
+					 limit: pageSize, offset: (page - 1) * pageSize,
 
-                     orderby: orderBy
+					 orderby: orderBy
 
-                 };
+				 };
 
-                 switch(filterBy) {
+				 switch(filterBy) {
 
-                     case "ANI":
+					 case "ANI":
 
-                         request.ANI = searchText;
+						 request.ANI = searchText;
 
-                         break;
+						 break;
 
-                     case "firstName":
+					 case "firstName":
 
-                         request.firstName = searchText;
+						 request.firstName = searchText;
 
-                         break;
+						 break;
 
-                     case "lastName":
+					 case "lastName":
 
-                         request.lastName = searchText;
+						 request.lastName = searchText;
 
-                         break;
+						 break;
 
-                     case "emailAddress":
+					 case "emailAddress":
 
-                         request.emailAddress = searchText;
+						 request.emailAddress = searchText;
 
-                         break;
+						 break;
 
-                     case "custom1":
+					 case "custom1":
 
-                         request.custom1 = searchText;
+						 request.custom1 = searchText;
 
-                         break;
+						 break;
 
-                     case "custom2":
+					 case "custom2":
 
-                         request.custom2 = searchText;
+						 request.custom2 = searchText;
 
-                         break;
+						 break;
 
-                     case "custom3":
+					 case "custom3":
 
-                         request.custom3 = searchText;
+						 request.custom3 = searchText;
 
-                         break;
+						 break;
 
-                 }
+				 }
 
 
 
-                 $http.post(
+				 $http.post(
 
-                     inspiniaNS.wsUrl + "contact_get",
+					 inspiniaNS.wsUrl + "contact_get",
 
-                     $.param(request)
+					 $.param(request)
 
-                 ).success(
+				 ).success(
 
-                     function (data) {
+					 function (data) {
 
-                         $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+						 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
 
-                     }).error(
+					 }).error(
 
-                     //An error occurred with this request
+					 //An error occurred with this request
 
-                     function(data, status, headers, config) {
+					 function(data, status, headers, config) {
 
-                         //alert('Unexpected error occurred when trying to fetch contact lists!');
+						 //alert('Unexpected error occurred when trying to fetch contact lists!');
 
-                         if (status == 400) {
+						 if (status == 400) {
 
-                             if (data.apicode == 4) {
+							 if (data.apicode == 4) {
 
-                                 //This is some invalid search field case
+								 //This is some invalid search field case
 
-                                 $scope.setPagingDataSliced($scope, [], 0);
+								 $scope.setPagingDataSliced($scope, [], 0);
 
-                             } else {
+							 } else {
 
-                                 alert("An error occurred when getting contacts! Error code: " + data.apicode);
+								 alert("An error occurred when getting contacts! Error code: " + data.apicode);
 
-                                 alert(JSON.stringify(data));
+								 alert(JSON.stringify(data));
 
-                             }
+							 }
 
-                         }
+						 }
 
-                     }
+					 }
 
-                 );
+				 );
 
-             }
+			 }
 
-         } else {
+		 } else {
 
-             $http.post(
+			 $http.post(
 
-                 inspiniaNS.wsUrl + "contact_get",
+				 inspiniaNS.wsUrl + "contact_get",
 
-                 $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), contactListID: $state.params.id,
+				 $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), contactListID: $state.params.id,
 
-                     limit: pageSize, offset: (page - 1) * pageSize, orderby: orderBy
+					 limit: pageSize, offset: (page - 1) * pageSize, orderby: orderBy
 
-                 })
+				 })
 
-             ).success(
+			 ).success(
 
-                 function (data) {
+				 function (data) {
 
-                     $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+					 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
 
-                 }).error(
+				 }).error(
 
-                 //An error occurred with this request
+				 //An error occurred with this request
 
-                 function(data, status, headers, config) {
+				 function(data, status, headers, config) {
 
-                     //alert('Unexpected error occurred when trying to fetch contact lists!');
+					 //alert('Unexpected error occurred when trying to fetch contact lists!');
 
-                     if (status == 400) {
+					 if (status == 400) {
 
-                         alert("An error occurred when getting contacts! Error code: " + data.apicode);
+						 alert("An error occurred when getting contacts! Error code: " + data.apicode);
 
-                         alert(JSON.stringify(data));
+						 alert(JSON.stringify(data));
 
-                     }
+					 }
 
-                 }
+				 }
 
-             );
+			 );
 
-         }
+		 }
 
-     };
+	 };
 
 
 
@@ -7083,15 +7083,15 @@ $scope.$watch('pagingOptions', function () {
 
     $scope.$watch('sortOptions', function (newVal, oldVal) {
 
-         //alert($scope.sortOptions.fields);
+		 //alert($scope.sortOptions.fields);
 
-         if (newVal !== oldVal) {
+		 if (newVal !== oldVal) {
 
-             $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
+			 $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
 
-         }
+		 }
 
-     }, true);
+	 }, true);
 
 
 
@@ -7243,11 +7243,11 @@ $scope.$watch('pagingOptions', function () {
 
 
 
-    $scope.refresh = function() {
+	$scope.refresh = function() {
 
-        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
+		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
 
-    }
+	}
 
 }
 
@@ -7343,388 +7343,381 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
 
 
 
-    $scope.reset = function() {
+	$scope.reset = function() {
 
-        $scope.ListName = '';
+		$scope.ListName = '';
 
-        $scope.PhoneNumber = '';
+		$scope.PhoneNumber = '';
 
-        $scope.FirstName = '';
+		$scope.FirstName = '';
 
-        $scope.LastName = '';
+		$scope.LastName = '';
 
-        $scope.Email = '';
+		$scope.Email = '';
 
-        $scope.CustomField1 = '';
+		$scope.CustomField1 = '';
 
-        $scope.CustomField2 = '';
+		$scope.CustomField2 = '';
 
-        $scope.CustomField3 = '';
+		$scope.CustomField3 = '';
 
-    };
+	};
 
 
 
-    $scope.refreshLists = function(withCheckboxes) {
+	$scope.refreshLists = function(withCheckboxes) {
 
-        $http.post(
+		$http.post(
 
-            inspiniaNS.wsUrl + "contactlist_get",
+			inspiniaNS.wsUrl + "contactlist_get",
 
-            $.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A'})
+			$.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A'})
 
-        ).success(
+		).success(
 
-            //Successful request to the server
+			//Successful request to the server
 
-            function(data, status, headers, config) {
+			function(data, status, headers, config) {
 
-                if (data == null || typeof data.apicode == 'undefined') {
+				if (data == null || typeof data.apicode == 'undefined') {
 
-                    //This should never happen
+					//This should never happen
 
-                    $scope.lists.names = data;
+					$scope.lists.names = data;
 
-                    return;
+					return;
 
-                }
+				}
 
-                if (data.apicode == 0) {
+				if (data.apicode == 0) {
 
-                    //Reading contact lists
+					//Reading contact lists
 
-                    $scope.lists.names = data.apidata;
+					$scope.lists.names = data.apidata;
 
-                    for(var i in $scope.lists.names) {
+					for(var i in $scope.lists.names) {
 
-                        $scope.lists.names[i].selected = false;
+						$scope.lists.names[i].selected = false;
 
-                    }
+					}
 
-                } else {
+				} else {
 
-                    $scope.lists.names = [];
+					$scope.lists.names = [];
 
-                }
+				}
 
-            }
+			}
 
-        ).error(
+		).error(
 
-            //An error occurred with this request
+			//An error occurred with this request
 
-            function(data, status, headers, config) {
+			function(data, status, headers, config) {
 
-                //alert('Unexpected error occurred when trying to fetch contact lists!');
+				//alert('Unexpected error occurred when trying to fetch contact lists!');
 
-                if (status == 400) {
+				if (status == 400) {
 
-                    alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+					alert("An error occurred when getting contact lists! Error code: " + data.apicode);
 
-                    alert(JSON.stringify(data));
+					alert(JSON.stringify(data));
 
-                }
+				}
 
-            }
+			}
 
-        );
+		);
 
-    };
+	};
 
 
 
-    $scope.addList = function() {
+	$scope.addList = function() {
 
-        //Checking input parameters
+		//Checking input parameters
 
-        if (typeof $scope.ListName == 'undefined' || $scope.ListName == null || $.trim($scope.ListName) == '') {
+		if (typeof $scope.ListName == 'undefined' || $scope.ListName == null || $.trim($scope.ListName) == '') {
 
-            return;
+			return;
 
-        }
+		}
 
-        //Send request to the server
+		//Send request to the server
 
-        $http.post(
+		$http.post(
 
-            inspiniaNS.wsUrl + "contactlist_add",
+			inspiniaNS.wsUrl + "contactlist_add",
 
-            $.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), companyID: $cookieStore.get('inspinia_company_id'), contactListName: $scope.ListName})
+			$.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), companyID: $cookieStore.get('inspinia_company_id'), contactListName: $scope.ListName})
 
-        ).success(
+		).success(
 
-            //Successful request to the server
+			//Successful request to the server
 
-            function(data, status, headers, config) {
+			function(data, status, headers, config) {
 
-                if (data == null || typeof data.apicode == 'undefined') {
+				if (data == null || typeof data.apicode == 'undefined') {
 
-                    //This should never happen
+					//This should never happen
 
-                    alert("Unidentified error occurred when sending your message!");
+					alert("Unidentified error occurred when sending your message!");
 
-                    return;
+					return;
 
-                }
+				}
 
-                if (data.apicode == 0) {
+				if (data.apicode == 0) {
 
-                    //Reset form and inform user about success
+					//Reset form and inform user about success
 
-                    $scope.reset();
+					$scope.reset();
 
-                    $scope.$broadcast("ContactListCreated", data.apidata);
+					$scope.$broadcast("ContactListCreated", data.apidata);
 
-                    $scope.refreshLists();
+					$scope.refreshLists();
 
-                } else {
+				} else {
 
-                    alert("An error occurred when adding contact list! Error code: " + data.apicode);
+					alert("An error occurred when adding contact list! Error code: " + data.apicode);
 
-                    alert(JSON.stringify(data));
+					alert(JSON.stringify(data));
 
-                }
+				}
 
-            }
+			}
 
-        ).error(
+		).error(
 
-            //An error occurred with this request
+			//An error occurred with this request
 
-            function(data, status, headers, config) {
+			function(data, status, headers, config) {
 
-                //alert('Unexpected error occurred when trying to send message!');
+				//alert('Unexpected error occurred when trying to send message!');
 
-                if (status == 400) {
+				if (status == 400) {
 
-                    if (data.apicode == 1) {
+					if (data.apicode == 1) {
 
-                        $scope.$broadcast("DuplicateContactListName", data.apidata);
+						$scope.$broadcast("DuplicateContactListName", data.apidata);
 
-                    } else {
+					} else {
 
-                        alert("An error occurred when sending your message! Error code: " + data.apicode);
+						alert("An error occurred when sending your message! Error code: " + data.apicode);
 
-                        alert(JSON.stringify(data));
+						alert(JSON.stringify(data));
 
-                    }
+					}
 
-                }
+				}
 
-            }
+			}
 
-        );
+		);
 
-    };
+	};
 
 
 
-    // helper method to get selected lists
+	// helper method to get selected lists
 
-    $scope.selectedLists = function selectedLists() {
+	$scope.selectedLists = function selectedLists() {
 
-        return filterFilter($scope.lists.names, { selected: true });
+		return filterFilter($scope.lists.names, { selected: true });
 
-    };
+	};
 
 
 
-    $scope.addContact = function() {
-        if ($scope.controllerParent) {
+	$scope.addContact = function() {
+	    if ($scope.controllerParent) {
             $scope.controllerParent.Events.Add_onClick($scope);
         }
 
-        //Fetch selected lists and check if user selected any of them
+		//Fetch selected lists and check if user selected any of them
 
-        var selectedLists = $scope.selectedLists();
+		var selectedLists = $scope.selectedLists();
 
-        if (selectedLists.length <= 0) {
+		if (selectedLists.length <= 0) {
 
-            return;
+			return;
 
-        }
+		}
 
-        //Checking if all required parameters are there
+		//Checking if all required parameters are there
 
-        if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber) == '') {
+		if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber) == '') {
 
-            return;
+			return;
 
-        }
+		}
 
-        var request = {
+		var request = {
 
-            sethttp: 1,
+			sethttp: 1,
 
-            apikey: $cookieStore.get('inspinia_auth_token'),
+			apikey: $cookieStore.get('inspinia_auth_token'),
 
-            accountID: $cookieStore.get('inspinia_account_id'),
+			accountID: $cookieStore.get('inspinia_account_id'),
 
-            companyID: $cookieStore.get('inspinia_company_id'),
+			companyID: $cookieStore.get('inspinia_company_id'),
 
-            ANI: $scope.PhoneNumber,
+			ANI: $scope.PhoneNumber,
 
-            status: 'A'
+			status: 'A'
 
-        };
+		};
 
 
 
-        if (typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
+		if (typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
 
-            request.firstName = $.trim($scope.FirstName);
+			request.firstName = $.trim($scope.FirstName);
 
-        }
+		}
 
-        if (typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
+		if (typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
 
-            request.lastName = $.trim($scope.LastName);
+			request.lastName = $.trim($scope.LastName);
 
-        }
+		}
 
-        if (typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
+		if (typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
 
-            request.emailAddress = $.trim($scope.Email);
+			request.emailAddress = $.trim($scope.Email);
 
-        }
+		}
 
-        if (typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
+		if (typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
 
-            request.custom1 = $.trim($scope.CustomField1);
+			request.custom1 = $.trim($scope.CustomField1);
 
-        }
+		}
 
-        if (typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
+		if (typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
 
-            request.custom2 = $.trim($scope.CustomField2);
+			request.custom2 = $.trim($scope.CustomField2);
 
-        }
+		}
 
-        if (typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
+		if (typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
 
-            request.custom3 = $.trim($scope.CustomField3);
+			request.custom3 = $.trim($scope.CustomField3);
 
-        }
+		}
 
 
 
-        var remainingListsCount = selectedLists.length;
+		var remainingListsCount = selectedLists.length;
 
-        var successfullyAddedToListsCount = 0;
+		var successfullyAddedToListsCount = 0;
 
-        var failedToAddToListsCount = 0;
+		var failedToAddToListsCount = 0;
 
-        for (var i in selectedLists) {
+		for (var i in selectedLists) {
 
-            //Send request to the server
+			//Send request to the server
 
-            $http.post(
+			$http.post(
 
-                inspiniaNS.wsUrl + "contact_add",
+				inspiniaNS.wsUrl + "contact_add",
 
-                $.param($.extend(request, {contactListID: selectedLists[i].contactListID}))
+				$.param($.extend(request, {contactListID: selectedLists[i].contactListID}))
 
-            ).success(
+			).success(
 
-                //Successful request to the server
+				//Successful request to the server
 
-                function(data, status, headers, config) {
+				function(data, status, headers, config) {
 
-                    if (data == null || typeof data.apicode == 'undefined') {
+					if (data == null || typeof data.apicode == 'undefined') {
 
-                        //This should never happen
+						//This should never happen
 
-                        remainingListsCount--;
+						remainingListsCount--;
 
-                        failedToAddToListsCount++;
+						failedToAddToListsCount++;
 
-                        alert("Unidentified error occurred when adding new contact!");
+						alert("Unidentified error occurred when adding new contact!");
 
-                        return;
+						return;
 
-                    }
+					}
 
-                    if (data.apicode == 0) {
+					if (data.apicode == 0) {
 
-                        remainingListsCount--;
+						remainingListsCount--;
 
-                        successfullyAddedToListsCount++;
+						successfullyAddedToListsCount++;
 
-                    } else {
+					} else {
 
-                        remainingListsCount--;
+						remainingListsCount--;
 
-                        failedToAddToListsCount++;
+						failedToAddToListsCount++;
 
-                        alert("An error occurred when adding contact! Error code: " + data.apicode);
+						alert("An error occurred when adding contact! Error code: " + data.apicode);
 
-                        alert(JSON.stringify(data));
+						alert(JSON.stringify(data));
 
-                    }
+					}
 
-                    if (remainingListsCount == 0) {
+					if (remainingListsCount == 0) {
 
-                        alert("Successfully added: " + successfullyAddedToListsCount + ", failed to add: " + failedToAddToListsCount);
+						//Reset form and inform user about success
 
-                        //Reset form and inform user about success
+						$scope.reset();
+						$scope.$broadcast("ContactCreated", data.apidata);
 
-                        $scope.reset();
+						$scope.refreshLists();
 
-                        //$scope.$broadcast("ContactListCreated", data.apidata);
+					}
 
-                        $scope.refreshLists();
+				}
 
-                    }
+			).error(
 
-                }
+				//An error occurred with this request
 
-            ).error(
+				function(data, status, headers, config) {
 
-                //An error occurred with this request
+					//alert('Unexpected error occurred when trying to send message!');
 
-                function(data, status, headers, config) {
+					if (status == 400) {
 
-                    //alert('Unexpected error occurred when trying to send message!');
+						/*if (data.apicode == 1) {
 
-                    if (status == 400) {
+							$scope.$broadcast("DuplicateContactListName", data.apidata);
 
-                        /*if (data.apicode == 1) {
+						} else */{
 
-                            $scope.$broadcast("DuplicateContactListName", data.apidata);
+							remainingListsCount--;
 
-                        } else */{
+							failedToAddToListsCount++;
+							//alert("An error occurred when adding contact! Error code: " + data.apicode);
+							//alert(JSON.stringify(data));
+							//if (remainingListsCount == 0) {
+							//	alert("Successfully added: " + successfullyAddedToListsCount + ", failed to add: " + failedToAddToListsCount);
+							//}
+							$scope.$broadcast("CreateContactFailed");
 
-                            remainingListsCount--;
+						}
 
-                            failedToAddToListsCount++;
+					}
 
-                            alert("An error occurred when adding contact! Error code: " + data.apicode);
+				}
 
-                            alert(JSON.stringify(data));
+			);
 
-                            if (remainingListsCount == 0) {
+		}
 
-                                alert("Successfully added: " + successfullyAddedToListsCount + ", failed to add: " + failedToAddToListsCount);
 
-                            }
 
-                        }
+	};
 
-                    }
 
-                }
 
-            );
-
-        }
-
-
-
-    };
-
-
-
-    $scope.refreshLists();
+	$scope.refreshLists();
 
 }
 
@@ -7732,229 +7725,229 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
 
 function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 
-    //Fetch contact data
+	//Fetch contact data
 
-    $scope.refresh = function() {
+	$scope.refresh = function() {
 
-        $http.post(
+		$http.post(
 
-            inspiniaNS.wsUrl + "contact_get",
+			inspiniaNS.wsUrl + "contact_get",
 
-            $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), contactID: $state.params.id})
+			$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), contactID: $state.params.id})
 
-        ).success(
+		).success(
 
-            function (data) {
+			function (data) {
 
-                if (data == null || typeof data.apicode == 'undefined') {
+				if (data == null || typeof data.apicode == 'undefined') {
 
-                    alert("An unknown error occurred when getting contact info!");
+					alert("An unknown error occurred when getting contact info!");
 
-                    return;
+					return;
 
-                }
+				}
 
-                if (data.apicode != 0) {
+				if (data.apicode != 0) {
 
-                    alert("An error occurred when getting contact info! Error code: " + data.apicode);
+					alert("An error occurred when getting contact info! Error code: " + data.apicode);
 
-                    alert(JSON.stringify(data));
+					alert(JSON.stringify(data));
 
-                    return;
+					return;
 
-                }
+				}
 
 
 
-                if (typeof data.apidata != 'undefined' && data.apidata != null && data.apidata.length > 0) {
+				if (typeof data.apidata != 'undefined' && data.apidata != null && data.apidata.length > 0) {
 
-                    //Everything is fine, read contact data
+					//Everything is fine, read contact data
 
-                    $scope.PhoneNumber = data.apidata[0].ANI;
+					$scope.PhoneNumber = data.apidata[0].ANI;
 
-                    $scope.FirstName = data.apidata[0].firstName;
+					$scope.FirstName = data.apidata[0].firstName;
 
-                    $scope.LastName = data.apidata[0].lastName;
+					$scope.LastName = data.apidata[0].lastName;
 
-                    $scope.Email = data.apidata[0].emailAddress;
+					$scope.Email = data.apidata[0].emailAddress;
 
-                    $scope.CustomField1 = data.apidata[0].custom1;
+					$scope.CustomField1 = data.apidata[0].custom1;
 
-                    $scope.CustomField2 = data.apidata[0].custom2;
+					$scope.CustomField2 = data.apidata[0].custom2;
 
-                    $scope.CustomField3 = data.apidata[0].custom3;
+					$scope.CustomField3 = data.apidata[0].custom3;
 
-                    $scope.ContactListID = data.apidata[0].contactListID;
+					$scope.ContactListID = data.apidata[0].contactListID;
 
-                }
+				}
 
-            }).error(
+			}).error(
 
-            //An error occurred with this request
+			//An error occurred with this request
 
-            function(data, status, headers, config) {
+			function(data, status, headers, config) {
 
-                //alert('Unexpected error occurred when trying to fetch contact lists!');
+				//alert('Unexpected error occurred when trying to fetch contact lists!');
 
-                if (status == 400) {
+				if (status == 400) {
 
-                    alert("An error occurred when getting contact info! Error code: " + data.apicode);
+					alert("An error occurred when getting contact info! Error code: " + data.apicode);
 
-                    alert(JSON.stringify(data));
+					alert(JSON.stringify(data));
 
-                }
+				}
 
-            }
+			}
 
-        );
+		);
 
-    };
+	};
 
 
 
-    $scope.saveContact = function() {
+	$scope.saveContact = function() {
 
-        //Checking if all required parameters are there
+		//Checking if all required parameters are there
 
-        if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber) == '') {
+		if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber) == '') {
 
-            return;
+			return;
 
-        }
+		}
 
-        var request = {
+		var request = {
 
-            sethttp: 1,
+			sethttp: 1,
 
-            apikey: $cookieStore.get('inspinia_auth_token'),
+			apikey: $cookieStore.get('inspinia_auth_token'),
 
-            contactID: $state.params.id,
+			contactID: $state.params.id,
 
-            ANI: $scope.PhoneNumber
+			ANI: $scope.PhoneNumber
 
-        };
+		};
 
 
 
-        if (typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
+		if (typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
 
-            request.firstName = $.trim($scope.FirstName);
+			request.firstName = $.trim($scope.FirstName);
 
-        }
+		}
 
-        if (typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
+		if (typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
 
-            request.lastName = $.trim($scope.LastName);
+			request.lastName = $.trim($scope.LastName);
 
-        }
+		}
 
-        if (typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
+		if (typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
 
-            request.emailAddress = $.trim($scope.Email);
+			request.emailAddress = $.trim($scope.Email);
 
-        }
+		}
 
-        if (typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
+		if (typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
 
-            request.custom1 = $.trim($scope.CustomField1);
+			request.custom1 = $.trim($scope.CustomField1);
 
-        }
+		}
 
-        if (typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
+		if (typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
 
-            request.custom2 = $.trim($scope.CustomField2);
+			request.custom2 = $.trim($scope.CustomField2);
 
-        }
+		}
 
-        if (typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
+		if (typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
 
-            request.custom3 = $.trim($scope.CustomField3);
+			request.custom3 = $.trim($scope.CustomField3);
 
-        }
+		}
 
 
 
-        //Send request to the server
+		//Send request to the server
 
-        $http.post(
+		$http.post(
 
-            inspiniaNS.wsUrl + "contact_modify",
+			inspiniaNS.wsUrl + "contact_modify",
 
-            $.param(request)
+			$.param(request)
 
-        ).success(
+		).success(
 
-            //Successful request to the server
+			//Successful request to the server
 
-            function(data, status, headers, config) {
+			function(data, status, headers, config) {
 
-                if (data == null || typeof data.apicode == 'undefined') {
+				if (data == null || typeof data.apicode == 'undefined') {
 
-                    //This should never happen
+					//This should never happen
 
-                    alert("Unidentified error occurred when editing contact!");
+					alert("Unidentified error occurred when editing contact!");
 
-                    return;
+					return;
 
-                }
+				}
 
-                if (data.apicode == 0) {
+				if (data.apicode == 0) {
 
-                    $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+					$window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
 
-                } else if (data.apicode == 4) {
+				} else if (data.apicode == 4) {
 
-                    //This is an error saying there is nothing to change
+					//This is an error saying there is nothing to change
 
-                    $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+					$window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
 
-                } else {
+				} else {
 
-                    alert("An error occurred when adding contact list! Error code: " + data.apicode);
+					alert("An error occurred when adding contact list! Error code: " + data.apicode);
 
-                    alert(JSON.stringify(data));
+					alert(JSON.stringify(data));
 
-                }
+				}
 
-            }
+			}
 
-        ).error(
+		).error(
 
-            //An error occurred with this request
+			//An error occurred with this request
 
-            function(data, status, headers, config) {
+			function(data, status, headers, config) {
 
-                //alert('Unexpected error occurred when trying to send message!');
+				//alert('Unexpected error occurred when trying to send message!');
 
-                if (status == 400) {
+				if (status == 400) {
 
-                    if (data.apicode == 4) {
+					if (data.apicode == 4) {
 
-                        //This is an error saying there is nothing to change
+						//This is an error saying there is nothing to change
 
-                        $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+						$window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
 
-                    } else {
+					} else {
 
-                        alert("An error occurred when sending your message! Error code: " + data.apicode);
+						alert("An error occurred when sending your message! Error code: " + data.apicode);
 
-                        alert(JSON.stringify(data));
+						alert(JSON.stringify(data));
 
-                    }
+					}
 
-                }
+				}
 
-            }
+			}
 
-        );
+		);
 
-    };
+	};
 
 
 
 
 
-    $scope.refresh();
+	$scope.refresh();
 
 }
 
@@ -8135,7 +8128,18 @@ function notifyCtrl($scope, notify) {
         });
 
     };
-
+    $scope.ContactCreatedMsg = function() {
+        notify({
+            message : 'Contact is successfully created!',
+            classes : 'alert-success'
+        });
+    };
+    $scope.CreateContactFailedMsg = function() {
+        notify({
+            message : 'An error occurred when adding new contact to the contact list!',
+            classes : 'alert-success'
+        });
+    };
     //If SendingMessageSucceeded event is triggered, show related message
 
     $scope.$on('SendingMessageSucceeded', function(event, args) {
@@ -8183,7 +8187,14 @@ function notifyCtrl($scope, notify) {
         $scope.ContactListCreatedMsg();
 
     });
-
+    //If ContactCreated event is triggered, show related message
+    $scope.$on('ContactCreated', function(event, args) {
+        $scope.ContactCreatedMsg();
+    });
+    //If CreateContactFailed event is triggered, show related message
+    $scope.$on('CreateContactFailed', function(event, args) {
+        $scope.CreateContactFailedMsg();
+    });
 }
 
 
@@ -8322,85 +8333,85 @@ $scope.optFields = {
 
     $scope.contactLists = [];
 
-    $scope.SendToList = true;
+	$scope.SendToList = true;
 
 
 
-    //Date/time control
+	//Date/time control
 
-    $scope.today = function() {
+	$scope.today = function() {
 
-        $scope.SetDate = new Date();
+		$scope.SetDate = new Date();
 
-    };
-
-
-
-    $scope.today();
+	};
 
 
 
-    $scope.clear = function () {
-
-        $scope.SetDate = null;
-
-    };
+	$scope.today();
 
 
 
+	$scope.clear = function () {
 
+		$scope.SetDate = null;
 
-    // Disable weekend selection
-
-    //$scope.disabled = function(date, mode) {
-
-    //  return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-
-    //};
+	};
 
 
 
-    $scope.toggleMin = function() {
-
-        $scope.minDate = $scope.minDate ? null : new Date();
-
-    };
-
-    $scope.toggleMin();
 
 
+	// Disable weekend selection
 
-    $scope.open = function($event) {
+	//$scope.disabled = function(date, mode) {
 
-        $event.preventDefault();
+	//  return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
 
-        $event.stopPropagation();
+	//};
 
 
 
-        $scope.opened = true;
+	$scope.toggleMin = function() {
 
-    };
+		$scope.minDate = $scope.minDate ? null : new Date();
 
+	};
 
-
-    $scope.dateOptions = {
-
-        formatYear: 'yy',
-
-        startingDay: 1,
-
-        showWeeks: 'false',
-
-        initDate: 'false'
-
-    };
+	$scope.toggleMin();
 
 
 
-    $scope.formats = ['MM/dd/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+	$scope.open = function($event) {
 
-    $scope.format = $scope.formats[0];
+		$event.preventDefault();
+
+		$event.stopPropagation();
+
+
+
+		$scope.opened = true;
+
+	};
+
+
+
+	$scope.dateOptions = {
+
+		formatYear: 'yy',
+
+		startingDay: 1,
+
+		showWeeks: 'false',
+
+		initDate: 'false'
+
+	};
+
+
+
+	$scope.formats = ['MM/dd/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+
+	$scope.format = $scope.formats[0];
 
 
 
@@ -8494,13 +8505,13 @@ $scope.optFields = {
 
             //alert('Unexpected error occurred when trying to fetch contact lists!');
 
-              if (status == 400) {
+			  if (status == 400) {
 
-                    alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+					alert("An error occurred when getting contact lists! Error code: " + data.apicode);
 
-                    alert(JSON.stringify(data));
+					alert(JSON.stringify(data));
 
-                }
+				}
 
         }
 
@@ -8554,13 +8565,13 @@ $scope.optFields = {
 
             //alert('Unexpected error occurred when trying to fetch DIDs!');
 
-              if (status == 400) {
+			  if (status == 400) {
 
-                    alert("An error occurred when getting DID! Error code: " + data.apicode);
+					alert("An error occurred when getting DID! Error code: " + data.apicode);
 
-                    alert(JSON.stringify(data));
+					alert(JSON.stringify(data));
 
-                }
+				}
 
         }
 
@@ -8570,73 +8581,73 @@ $scope.optFields = {
 
 
 
-    //helper function for generating message text
+	//helper function for generating message text
 
-    $scope.generateMessageText = function() {
+	$scope.generateMessageText = function() {
 
-        //Checking the type of opt out message
+		//Checking the type of opt out message
 
-        var optOutMessage = '';
+		var optOutMessage = '';
 
-        if ($scope.OptOutMsg == 'standard') {
+		if ($scope.OptOutMsg == 'standard') {
 
-            //todo: check how to receive standard opt out message
+			//todo: check how to receive standard opt out message
 
-            optOutMessage = $scope.OptOutTxt1;
+			optOutMessage = $scope.OptOutTxt1;
 
-        } else if ($scope.OptOutMsg == 'custom') {
+		} else if ($scope.OptOutMsg == 'custom') {
 
-            //todo: check how to receive custom opt out message for the account
+			//todo: check how to receive custom opt out message for the account
 
-            optOutMessage = $scope.OptOutTxt2;
+			optOutMessage = $scope.OptOutTxt2;
 
-        } else if ($scope.OptOutMsg == 'write') {
+		} else if ($scope.OptOutMsg == 'write') {
 
-            if (typeof $scope.OptOutTxt3 != 'undefined' && $scope.OptOutTxt3 != null) {
+			if (typeof $scope.OptOutTxt3 != 'undefined' && $scope.OptOutTxt3 != null) {
 
-                optOutMessage = $scope.OptOutTxt3;
+				optOutMessage = $scope.OptOutTxt3;
 
-            }
+			}
 
-        }
-
-
-
-        //Generate a message text
-
-        var messageText = '';
-
-        if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
-
-            messageText += $.trim($scope.FromName);
-
-            if (messageText.length > 0) {
-
-                messageText += ': ';
-
-            }
-
-        }
-
-        messageText += $scope.MessageTxt;
-
-        if (optOutMessage != '') {
-
-            messageText += '\r\n' + optOutMessage;
-
-        }
+		}
 
 
 
-        return messageText;
+		//Generate a message text
 
-    };
+		var messageText = '';
+
+		if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
+
+			messageText += $.trim($scope.FromName);
+
+			if (messageText.length > 0) {
+
+				messageText += ': ';
+
+			}
+
+		}
+
+		messageText += $scope.MessageTxt;
+
+		if (optOutMessage != '') {
+
+			messageText += '\r\n' + optOutMessage;
+
+		}
 
 
 
-    //Create a function for sending messages
+		return messageText;
 
-    $scope.sendMessage = function(scheduled) {
+	};
+
+
+
+	//Create a function for sending messages
+
+	$scope.sendMessage = function(scheduled) {
 
         if ($scope.controllerParent) {
 
@@ -8646,353 +8657,353 @@ $scope.optFields = {
 
 
 
-        // Trigger validation flag.
+		// Trigger validation flag.
 
-        //$scope.submitted = true;
+		//$scope.submitted = true;
 
 
 
-        if (($scope.SendToList && (typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0))
+		if (($scope.SendToList && (typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0))
 
-            && (!$scope.SendToList && (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == ''))
+			&& (!$scope.SendToList && (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == ''))
 
-            ) {
+			) {
 
-            return;
+			return;
 
-        }
+		}
 
-        if (typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
+		if (typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
 
-            return;
+			return;
 
-        }
+		}
 
-        if (scheduled && (typeof $scope.SetDate == 'undefined' || $scope.SetDate == null || $scope.SetDate == '')) {
+		if (scheduled && (typeof $scope.SetDate == 'undefined' || $scope.SetDate == null || $scope.SetDate == '')) {
 
-            return;
+			return;
 
-        }
+		}
 
-        //If time is not set and scheduled message sending is invoked, set time to midnight
+		//If time is not set and scheduled message sending is invoked, set time to midnight
 
-        if (scheduled && (typeof $scope.SetTimeHour == 'undefined' || $scope.SetTimeHour == null || $scope.SetTimeHour == '')) {
+		if (scheduled && (typeof $scope.SetTimeHour == 'undefined' || $scope.SetTimeHour == null || $scope.SetTimeHour == '')) {
 
-            $scope.SetTimeHour = "00";
+			$scope.SetTimeHour = "00";
 
-        }
+		}
 
-        if (scheduled && (typeof $scope.SetTimeMinute == 'undefined' || $scope.SetTimeMinute == null || $scope.SetTimeMinute == '')) {
+		if (scheduled && (typeof $scope.SetTimeMinute == 'undefined' || $scope.SetTimeMinute == null || $scope.SetTimeMinute == '')) {
 
-            $scope.SetTimeMinute = "00";
+			$scope.SetTimeMinute = "00";
 
-        }
+		}
 
 
 
-        //Generate message text
+		//Generate message text
 
-        var messageText = $scope.generateMessageText();
+		var messageText = $scope.generateMessageText();
 
 
 
-        //Creating a api request data object
+		//Creating a api request data object
 
-        var requestData = {
+		var requestData = {
 
-            sethttp: 1,
+			sethttp: 1,
 
-            DID: $scope.FromNumber.DID,
+			DID: $scope.FromNumber.DID,
 
-            message: messageText,
+			message: messageText,
 
-            apikey: $cookieStore.get('inspinia_auth_token'),
+			apikey: $cookieStore.get('inspinia_auth_token'),
 
-            accountID: $cookieStore.get('inspinia_account_id')
+			accountID: $cookieStore.get('inspinia_account_id')
 
-        };
+		};
 
 
 
-        if ($scope.SendToList && typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
+		if ($scope.SendToList && typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
 
-            if ($scope.ToList.constructor === Array) {
+			if ($scope.ToList.constructor === Array) {
 
-                //Sending message to contact lists
+				//Sending message to contact lists
 
-                requestData.contactListID = $scope.ToList[0].contactListID;
+				requestData.contactListID = $scope.ToList[0].contactListID;
 
-                for (var i = 1; i < $scope.ToList.length; i++) {
+				for (var i = 1; i < $scope.ToList.length; i++) {
 
-                    requestData.contactListID += "," + $scope.ToList[i].contactListID;
+					requestData.contactListID += "," + $scope.ToList[i].contactListID;
 
-                }
+				}
 
-            } else {
+			} else {
 
-                //Sending message to a single contact list
+				//Sending message to a single contact list
 
-                requestData.contactListID = $scope.ToList.contactListID;
+				requestData.contactListID = $scope.ToList.contactListID;
 
-            }
+			}
 
-        } else if (!$scope.SendToList && typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
+		} else if (!$scope.SendToList && typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
 
-            //Sending message to numbers
+			//Sending message to numbers
 
-            requestData.ANI = $scope.ToNumber;
+			requestData.ANI = $scope.ToNumber;
 
-        }
+		}
 
 
 
-        //Adding schedule date if one is specified
+		//Adding schedule date if one is specified
 
-        if (scheduled) {
+		if (scheduled) {
 
-            var timezoneOffsetMinutes = new Date().getTimezoneOffset();
+			var timezoneOffsetMinutes = new Date().getTimezoneOffset();
 
-            var selectedDate = new Date($scope.SetDate.getFullYear(), $scope.SetDate.getMonth(), $scope.SetDate.getDate());
+			var selectedDate = new Date($scope.SetDate.getFullYear(), $scope.SetDate.getMonth(), $scope.SetDate.getDate());
 
-            var scheduledTime = new Date(selectedDate.getTime() + 3600000 * parseInt($scope.SetTimeHour) + 60000 * (parseInt($scope.SetTimeMinute) + timezoneOffsetMinutes));
+			var scheduledTime = new Date(selectedDate.getTime() + 3600000 * parseInt($scope.SetTimeHour) + 60000 * (parseInt($scope.SetTimeMinute) + timezoneOffsetMinutes));
 
-            //Date is in format MM/dd/yyyy
+			//Date is in format MM/dd/yyyy
 
-            var dateParts = [];
+			var dateParts = [];
 
-            dateParts[0] = scheduledTime.getFullYear();
+			dateParts[0] = scheduledTime.getFullYear();
 
-            dateParts[1] = "" + (scheduledTime.getMonth() + 1);
+			dateParts[1] = "" + (scheduledTime.getMonth() + 1);
 
-            dateParts[2] = "" + scheduledTime.getDate();
+			dateParts[2] = "" + scheduledTime.getDate();
 
-            dateParts[3] = "" + scheduledTime.getHours();
+			dateParts[3] = "" + scheduledTime.getHours();
 
-            dateParts[4] = "" + scheduledTime.getMinutes();
+			dateParts[4] = "" + scheduledTime.getMinutes();
 
 
 
-            //Fix month
+			//Fix month
 
-            if (dateParts[1].length < 2) {
+			if (dateParts[1].length < 2) {
 
-                dateParts[1] = "0" + dateParts[1];
+				dateParts[1] = "0" + dateParts[1];
 
-            }
+			}
 
-            //Fix day
+			//Fix day
 
-            if (dateParts[2].length < 2) {
+			if (dateParts[2].length < 2) {
 
-                dateParts[2] = "0" + dateParts[2];
+				dateParts[2] = "0" + dateParts[2];
 
-            }
+			}
 
-            //Fix hours
+			//Fix hours
 
-            if (dateParts[3].length < 2) {
+			if (dateParts[3].length < 2) {
 
-                dateParts[3] = "0" + dateParts[3];
+				dateParts[3] = "0" + dateParts[3];
 
-            }
+			}
 
-            //Fix minutes
+			//Fix minutes
 
-            if (dateParts[4].length < 2) {
+			if (dateParts[4].length < 2) {
 
-                dateParts[4] = "0" + dateParts[4];
+				dateParts[4] = "0" + dateParts[4];
 
-            }
+			}
 
-            requestData.scheduledDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
+			requestData.scheduledDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
 
-        }
+		}
 
 
 
-        //Send request to the server
+		//Send request to the server
 
-        $http.post(
+		$http.post(
 
-            inspiniaNS.wsUrl + "message_send",
+			inspiniaNS.wsUrl + "message_send",
 
-            $.param(requestData)
+			$.param(requestData)
 
-        ).success(
+		).success(
 
-            //Successful request to the server
+			//Successful request to the server
 
-            function(data, status, headers, config) {
+			function(data, status, headers, config) {
 
-                if (data == null || typeof data.apicode == 'undefined') {
+				if (data == null || typeof data.apicode == 'undefined') {
 
-                    //This should never happen
+					//This should never happen
 
-                    alert("Unidentified error occurred when sending your message!");
+					alert("Unidentified error occurred when sending your message!");
 
-                    return;
+					return;
 
-                }
+				}
 
-                if (data.apicode == 0) {
+				if (data.apicode == 0) {
 
-                    //Reset form and inform user about success
+					//Reset form and inform user about success
 
-                    $scope.reset();
+					$scope.reset();
 
-                    if (scheduled) {
+					if (scheduled) {
 
-                        $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
+						$scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
 
-                    } else {
+					} else {
 
-                        $scope.$broadcast("SendingMessageSucceeded", data.apidata);
+						$scope.$broadcast("SendingMessageSucceeded", data.apidata);
 
-                    }
+					}
 
-                } else {
+				} else {
 
-                    alert("An error occurred when sending your message! Error code: " + data.apicode);
+					alert("An error occurred when sending your message! Error code: " + data.apicode);
 
-                    alert(JSON.stringify(data));
+					alert(JSON.stringify(data));
 
-                }
+				}
 
-            }
+			}
 
-        ).error(
+		).error(
 
-            //An error occurred with this request
+			//An error occurred with this request
 
-            function(data, status, headers, config) {
+			function(data, status, headers, config) {
 
-                //alert('Unexpected error occurred when trying to send message!');
+				//alert('Unexpected error occurred when trying to send message!');
 
-                if (status == 400) {
+				if (status == 400) {
 
-                    if (data.apicode == 1) {
+					if (data.apicode == 1) {
 
-                        $scope.$broadcast("AniOptedOut", data.apidata);
+						$scope.$broadcast("AniOptedOut", data.apidata);
 
-                    } else {
+					} else {
 
-                        alert("An error occurred when sending your message! Error code: " + data.apicode);
+						alert("An error occurred when sending your message! Error code: " + data.apicode);
 
-                        alert(JSON.stringify(data));
+						alert(JSON.stringify(data));
 
-                    }
+					}
 
-                }
+				}
 
-            }
+			}
 
-        );
+		);
 
-    };
+	};
 
 
 
 
 
-    //Create a function for saving drafts
+	//Create a function for saving drafts
 
-    $scope.saveDraft = function() {
+	$scope.saveDraft = function() {
 
-        if ($scope.controllerParent) {
+	    if ($scope.controllerParent) {
 
-            $scope.controllerParent.Events.Send_onClick($scope);
+	        $scope.controllerParent.Events.Send_onClick($scope);
 
-        }
+	    }
 
-        //Generate message text
+		//Generate message text
 
-        var messageText = $scope.generateMessageText();
+		var messageText = $scope.generateMessageText();
 
 
 
-        //Creating a api request data object
+		//Creating a api request data object
 
-        var requestData = {
+		var requestData = {
 
-            sethttp: 1,
+			sethttp: 1,
 
-            didid: $scope.FromNumber.DIDID,
+			didid: $scope.FromNumber.DIDID,
 
-            message: messageText,
+			message: messageText,
 
-            apikey: $cookieStore.get('inspinia_auth_token'),
+			apikey: $cookieStore.get('inspinia_auth_token'),
 
-            accountID: $cookieStore.get('inspinia_account_id'),
+			accountID: $cookieStore.get('inspinia_account_id'),
 
-            companyID: $cookieStore.get('inspinia_company_id')
+			companyID: $cookieStore.get('inspinia_company_id')
 
-        };
+		};
 
 
 
-        //Send request to the server
+		//Send request to the server
 
-        $http.post(
+		$http.post(
 
-            inspiniaNS.wsUrl + "draft_add",
+			inspiniaNS.wsUrl + "draft_add",
 
-            $.param(requestData)
+			$.param(requestData)
 
-        ).success(
+		).success(
 
-            //Successful request to the server
+			//Successful request to the server
 
-            function(data, status, headers, config) {
+			function(data, status, headers, config) {
 
-                if (data == null || typeof data.apicode == 'undefined') {
+				if (data == null || typeof data.apicode == 'undefined') {
 
-                    //This should never happen
+					//This should never happen
 
-                    alert("Unidentified error occurred when saving your message!");
+					alert("Unidentified error occurred when saving your message!");
 
-                    return;
+					return;
 
-                }
+				}
 
-                if (data.apicode == 0) {
+				if (data.apicode == 0) {
 
-                    //Reset form and inform user about success
+					//Reset form and inform user about success
 
-                    $scope.reset();
+					$scope.reset();
 
-                    $scope.$broadcast("SaveDraftSucceeded", data.apidata);
+					$scope.$broadcast("SaveDraftSucceeded", data.apidata);
 
-                } else {
+				} else {
 
-                    alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
+					alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
 
-                    alert(JSON.stringify(data));
+					alert(JSON.stringify(data));
 
-                }
+				}
 
-            }
+			}
 
-        ).error(
+		).error(
 
-            //An error occurred with this request
+			//An error occurred with this request
 
-            function(data, status, headers, config) {
+			function(data, status, headers, config) {
 
-                //alert('Unexpected error occurred when trying to send message!');
+				//alert('Unexpected error occurred when trying to send message!');
 
-                if (status == 400) {
+				if (status == 400) {
 
-                    alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
+					alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
 
-                    alert(JSON.stringify(data));
+					alert(JSON.stringify(data));
 
-                }
+				}
 
-            }
+			}
 
-        );
+		);
 
-    };
+	};
 
 
 
