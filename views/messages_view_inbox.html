@@ -3,20 +3,22 @@
 	<h2 class="section-title">View message</h2>
 	<div class="view-info-box">
 		<div class="view-from-number">
-			From: <span >
-				{{controllerParent.clickedMessage.sourceANI}}</span>
+			From:
+			<span >
+				{{controllerParent.clickedMessage.sourceANI}}
+			</span>
 		</div>
 		<div class="view-date" >
 			{{controllerParent.clickedMessage.messageDate}}
 		</div>
 	</div>
 	<div class="top-buttons">
-		<button class="btn form-btn" ng-model="radioModel" btn-radio="'reply'" uncheckable>
+		<button class="btn form-btn" ng-model="controllerParent.radioModel" btn-radio="'reply'" uncheckable>
 			<i class="fa fa-reply"></i> Reply
 		</button>
 		<!-- only inbox -->
 
-		<button class="btn form-btn" ng-model="radioModel" btn-radio="'forward'" uncheckable>
+		<button class="btn form-btn" ng-model="controllerParent.radioModel" btn-radio="'forward'" uncheckable>
 			<i class="fa fa-share"></i> Forward
 		</button>
 		<!-- inbox, sent -->
@@ -36,32 +38,35 @@
 		</button>
 		<!-- only inbox -->
 
-		<div class="btn-group dropdown discard-btn">
-			<!-- only inbox -->
+		<button  class="btn" ng-click="controllerParent.Events.ShowAdd(controllerParent)">
+			<i class="fa fa-plus"></i> Add sender to list
+		</button>
 
-			<button data-toggle="dropdown" class="btn dropdown-toggle" aria-expanded="false">
-				<i class="fa fa-plus"></i> Add sender to list
-			</button>
-			<div class="dropdown-menu dropdown-list dropdown-alerts">
-				<div class="list-holder">
-					<div>
-						<input icheck type="checkbox" value="" ng-model="AddToListBMW">
-						BMW
-					</div>
-					<div>
-						<input icheck type="checkbox" value="" ng-model="AddToListOPEL">
-						OPEL
-					</div>
-					<div>
-						<input icheck type="checkbox" value="" ng-model="AddToListMERCEDES">
-						MERCEDES
-					</div>
-				</div>
-				<button class="btn btn-send smaller">
-					Add to list
-				</button>
-			</div>
+		<!-- <div class="btn-group dropdown discard-btn">
+
+		<button data-toggle="dropdown" class="btn dropdown-toggle" aria-expanded="false">
+		<i class="fa fa-plus"></i> Add sender to list
+		</button>
+		<div class="dropdown-menu dropdown-list dropdown-alerts">
+		<div class="list-holder">
+		<div>
+		<input icheck type="checkbox" value="" ng-model="AddToListBMW">
+		BMW
 		</div>
+		<div>
+		<input icheck type="checkbox" value="" ng-model="AddToListOPEL">
+		OPEL
+		</div>
+		<div>
+		<input icheck type="checkbox" value="" ng-model="AddToListMERCEDES">
+		MERCEDES
+		</div>
+		</div>
+		<button class="btn btn-send smaller">
+		Add to list
+		</button>
+		</div>
+		</div> -->
 		<div class="btn-group dropdown discard-btn">
 			<!-- all -->
 
@@ -85,8 +90,8 @@
 	<!-- end top button -->
 
 	<!-- reply & forward -->
-	<div ng-show="radioModel == 'reply'" class="reply-box clearfix" ng-include src="'views/reply_form.html'"></div>
-	<div ng-show="radioModel == 'forward'" class="reply-box clearfix" ng-include src="'views/forward_form.html'"></div>
+	<div ng-show="controllerParent.radioModel == 'reply'" class="reply-box clearfix" ng-include src="'views/reply_form.html'"></div>
+	<div ng-show="controllerParent.radioModel == 'forward'" class="reply-box clearfix" ng-include src="'views/forward_form.html'"></div>
 
 	<!-- end reply box-->
 
@@ -96,6 +101,6 @@
 		</div>
 	</div>
 	<div class="bottom-buttons left">
-		<a ng-click="controllerParent.list = true;" class="btn back-btn"><i class="fa fa-undo"></i> Back to Inbox</a>
+		<a ng-click="controllerParent.Events.ShowList(controllerParent)" class="btn back-btn"><i class="fa fa-undo"></i> Back to Inbox</a>
 	</div>
 </div>

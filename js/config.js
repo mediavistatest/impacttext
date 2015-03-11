@@ -162,6 +162,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
 
                             files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
 
+                        },
+                        {
+                            insertBefore: '#loadBefore',
+                            name: 'localytics.directives',
+                            files: ['css/plugins/chosen/chosen.css','js/plugins/chosen/chosen.jquery.js','js/plugins/chosen/chosen.js']
                         }
                     ]);
                 }
@@ -202,52 +207,152 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         .state('messages.view', {
             url: "/messages_view",
             templateUrl: "views/messages_view.html",
-            data: { pageTitle: 'View Message' }
+            data: { pageTitle: 'View Message' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('messages.view_inbox', {
             url: "/messages_view_inbox",
             templateUrl: "views/messages_view_inbox.html",
-            data: { pageTitle: 'View Message' }
+            data: { pageTitle: 'View Message' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('messages.view_sent', {
             url: "/messages_view_sent",
             templateUrl: "views/messages_view_sent.html",
-            data: { pageTitle: 'View Message' }
+            data: { pageTitle: 'View Message' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('messages.view_scheduled', {
             url: "/messages_view_scheduled",
             templateUrl: "views/messages_view_scheduled.html",
-            data: { pageTitle: 'View Message' }
+            data: { pageTitle: 'View Message' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('messages.view_drafts', {
             url: "/messages_view_drafts",
             templateUrl: "views/messages_view_drafts.html",
-            data: { pageTitle: 'View Message' }
+            data: { pageTitle: 'View Message' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('messages.view_trash', {
             url: "/messages_view_trash",
             templateUrl: "views/messages_view_trash.html",
-            data: { pageTitle: 'View Message' }
+            data: { pageTitle: 'View Message' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('messages.scheduled', {
             url: "/messages_scheduled",
             templateUrl: "views/messages_scheduled_container.html",
-            data: { pageTitle: 'Scheduled' }
+            data: { pageTitle: 'Scheduled' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('messages.sent', {
             url: "/messages_sent",
             templateUrl: "views/messages_sent_container.html",
-            data: { pageTitle: 'Sent Messages' }
+            data: { pageTitle: 'Sent Messages' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('messages.drafts', {
             url: "/messages_drafts",
             templateUrl: "views/messages_drafts_container.html",
-            data: { pageTitle: 'Draft Messages' }
+            data: { pageTitle: 'Draft Messages' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('messages.trash', {
             url: "/messages_trash",
             templateUrl: "views/messages_trash_container.html",
-            data: { pageTitle: 'Trash' }
+            data: { pageTitle: 'Trash' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('tools', {
             url: "/tools",

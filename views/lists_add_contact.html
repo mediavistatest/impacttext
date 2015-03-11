@@ -3,7 +3,8 @@
 <div class="col-md-12 content-holder animated fadeInRight add-list-contact" ng-class="animation" ng-controller="AddListsCtrl">
 <h2 class="section-title">Create List</h2>
 <div class="top-buttons">
-<a href="#/lists/lists_view" class="btn btn-back"><i class="fa fa-undo"></i> Back to Lists</a>
+<a ng-hide="controllerParent" href="#/lists/lists_view" class="btn btn-back"><i class="fa fa-undo"></i> Back to Lists</a>
+<a ng-show="controllerParent" class="btn btn-back" ng-click="controllerParent.Events.ShowView(controllerParent)"><i class="fa fa-undo"></i>Back</a>
 </div>
 <div>
 <br>
@@ -16,7 +17,7 @@
 	        <div class="radio">
 	        <label> <input icheck type="radio" name="UploadType" ng-model="UploadType" value="upload"> Upload a list </label>
 	        <label> <input icheck type="radio" name="UploadType" ng-model="UploadType" value="single"> Add single contact </label>
-	        </div>   
+	        </div>
 	    </div>
 	</div>
 
@@ -27,7 +28,7 @@
 
 		<label class="control-label">Phone number:</label>
 		<input type="text" name="PhoneNumber" placeholder="e.g. 1111111111" ng-model="PhoneNumber" class="form-control inline">
-		
+
 	</div>
 
 	<div class="form-group clearfix">
@@ -48,28 +49,28 @@
 
 		<label class="control-label">Email address:</label>
 		<input type="text" name="Email" placeholder="name@domain.com" ng-model="Email" class="form-control inline">
-		
+
 	</div>
 
 	<div class="form-group clearfix">
 
 		<label class="control-label">Custom field 1:</label>
 		<input type="text" name="CustomField1" placeholder="Custom text" ng-model="CustomField1" class="form-control inline">
-		
+
 	</div>
 
 	<div class="form-group clearfix">
 
 		<label class="control-label">Custom field 2:</label>
 		<input type="text" name="CustomField2" placeholder="Custom text" ng-model="CustomField2" class="form-control inline">
-		
+
 	</div>
 
 	<div class="form-group clearfix">
 
 		<label class="control-label">Custom field 3:</label>
 		<input type="text" name="CustomField3" placeholder="Custom text" ng-model="CustomField3" class="form-control inline">
-		
+
 	</div>
 
 </div><!-- END SINGLE -->
@@ -91,7 +92,7 @@
 
 	<textarea name="MessageTxt" placeholder="e.g. Name, Surname, 555-555-5555, email@email.com" class="form-control" rows="5" ng-model="MessageTxt" ng-trim="false"></textarea>
 
-</div>		    
+</div>
 <!-- END UPLOAD -->
 
 <div class="list-box">
@@ -100,7 +101,7 @@
     <li ng-repeat="name in lists.names"> <input icheck type="checkbox" value="{{name.contactListID}}" ng-model="name.selected"> {{ name.contactListName }} </li>
   </ul>
 </div>
-	
+
 	<br>
 <a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="addContact()">
 <span><i class="fa fa-floppy-o"></i> Save</span>
