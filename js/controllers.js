@@ -7258,6 +7258,12 @@ $scope.$watch('pagingOptions', function () {
 //ADD LISTS
 
 function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
+    if ($scope.controllerParent && $scope.controllerParent.PopulateAdd) {
+        $scope.controllerParent.$addScope = $scope;
+        $scope.$watch('controllerParent.clickedMessage', function() {
+            $scope.controllerParent.PopulateAdd($scope);
+        }, true);
+    }
 
   $scope.lists = {};
 
@@ -7524,6 +7530,9 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
 
 
 	$scope.addContact = function() {
+	    if ($scope.controllerParent) {
+            $scope.controllerParent.Events.Add_onClick($scope);
+        }
 
 		//Fetch selected lists and check if user selected any of them
 
@@ -8271,13 +8280,13 @@ var maxLengthCalc = function () {
 $scope.$watch('FromName', function() {
 
             maxLengthCalc();
-            
+
         }, true);
 
 $scope.$watch('optFields', function() {
 
             maxLengthCalc();
-            
+
         }, true);
 
 
