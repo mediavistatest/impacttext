@@ -9027,7 +9027,7 @@ $scope.optFields = {
 
 			sethttp: 1,
 
-			didid: $scope.FromNumber.DIDID,
+			//didid: $scope.FromNumber.DIDID,
 
 			message: messageText,
 
