@@ -8603,9 +8603,9 @@ $scope.optFields = {
 
 		} else if ($scope.OptOutMsg == 'write') {
 
-			if (typeof $scope.OptOutTxt3 != 'undefined' && $scope.OptOutTxt3 != null) {
+			if (typeof $scope.optFields.OptOutTxt3 != 'undefined' && $scope.optFields.OptOutTxt3 != null) {
 
-				optOutMessage = $scope.OptOutTxt3;
+				optOutMessage = $scope.optFields.OptOutTxt3;
 
 			}
 
@@ -8879,7 +8879,7 @@ $scope.optFields = {
 
 				//alert('Unexpected error occurred when trying to send message!');
 
-				if (status == 400) {
+				if (status == 500) {
 
 					if (data.apicode == 1) {
 
