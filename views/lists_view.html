@@ -1,55 +1,112 @@
 <h1>Contacts / Lists </h1>
 
-<div class="col-md-12 content-holder animated fadeInRight" ng-class="animation" ng-controller="ngGridCtrl">
+
+
+<div class="col-md-12 content-holder animated fadeInRight lists-view" ng-class="animation" ng-controller="ngGridCtrl">
+
+
 
 <h2 class="section-title">Lists</h2>
 
+
+
 <div class="top-buttons">
+
 <a href="#/lists/lists_add" class="btn btn-add"><i class="fa fa-plus"></i> Create list</a>&nbsp; <a href="#/lists/lists_add_contact" class="btn btn-add"><i class="fa fa-plus"></i> Add contact(s)</a>
+
 </div>
+
 <div>
+
 <!--<input class="search-input" placeholder="Search by list name" type="text" ng-model="nameFilter" ng-change="filterName()" >-->
+
 <input class="search-input" placeholder="Search by list name" type="text" ng-model="filterOptions.filterText">
 
+
+
 <div class="page-select-wrapper">
+
 <strong>Show:</strong>&nbsp; <select class="page-select" ng-model="pagingOptions.pageSize">
+
 	<option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
+
 </select>
-</div>
 
 </div>
+
+
+
+</div>
+
       <br>
 
 
 
+
+
+
+
 <!--START TABLE-->
+
 <div class="gridStyle" ng-grid="ngOptions"></div>
+
+
 
 <!--<div class="selectedItems">{{mySelections}}</div>-->
 
 
+
+
+
 <!--Bottom Actions -->
+
 <div class="row">
+
 <div class="col-sm-10 col-sm-offset-2 ng-scope bottom-buttons">
 
+
+
 <a class="btn"><i class="fa fa-file-excel-o"></i> Export List</a>
-<a class="btn"><i class="fa fa-files-o"></i> Copy List</a>
 
+<!--<a class="btn"><i class="fa fa-files-o"></i> Copy List</a>-->
+
+<a class="btn"><i class="fa fa-plus-square-o"></i> Activate List</a>
+<a class="btn btn-discard"><i class="fa fa-minus-square-o"></i> Deactivate List</a>
+
+
+<!--
 <div class="btn-group dropup discard-btn">
+
 <a data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false"><i class="fa fa-trash-o"></i> Delete</a>
+
 <ul class="dropdown-menu dropdown-alerts">
+
     <li>Are you sure you want to delete the list?</li>
+
     <li>&nbsp;</li>
+
     <li><span class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+
 </ul>
+
+</div>
+-->
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
 </div>
 
 
 
-
-
-
-</div>
 </div>
 
-</div>
