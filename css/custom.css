@@ -3196,6 +3196,11 @@ right: 30px;
 top: 90px;
 }
 
+.lists-view .ngCellText.col7 {
+text-align: center;
+padding-right: 0;
+}
+
 
 @media all and (max-width:990px) {
 
