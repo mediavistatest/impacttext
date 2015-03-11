@@ -20,11 +20,28 @@
 
     <div class="top-buttons">
 
-        <!-- Read/unread -->
+        <!-- Read/unread 
         <select class="read-unread" disable-search="true" ng-model="controllerParent.getListStatus" ng-init="controllerParent.getListStatus='U'">
             <option value = 'U'>Unread messages</option>
             <option value = 'R'>Read messages</option>
-        </select>
+        </select>-->
+
+        <div class="btn-group dropdown discard-btn">
+        <button data-toggle="dropdown" class="btn dropdown-toggle read-unread" aria-expanded="false">
+
+                 {{controllerParent.getListStatus=='U' && 'Unread messages' || controllerParent.getListStatus=='R' && 'Read Messages'}} <i class="fa fa-caret-down"></i>
+
+            </button>
+
+            <div class="dropdown-menu dropdown-list dropdown-alerts">
+
+             <button class="btn drop-btn" ng-click="controllerParent.getListStatus='U'">Unread messages</button>
+             <button class="btn drop-btn" ng-click="controllerParent.getListStatus='R'">Read messages</button>
+
+            </div>
+
+        </div><!-- end-read unread -->
+        
 
         <button class="btn" ng-click="MarkAsReadMessages(controllerParent)" ng-show="controllerParent.getListStatus=='U'">
 

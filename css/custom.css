@@ -3236,6 +3236,42 @@ padding-right: 0;
   background-position: 0px 5px;
 }
 
+.top-buttons {
+  min-height: 31px;
+}
+
+.right-side-message {
+  float: left;
+  font-size: 12px;
+}
+
+.error {
+  color:#a94442;
+}
+
+.drop-btn {
+  border: none;
+  padding-left: 0;
+}
+
+.drop-btn:hover {
+  color:#005eaa;
+}
+
+i.fa.fa-caret-down {
+  margin-left: 10px;
+  margin-right: 0;
+  float: right;
+  margin-top: 3px;
+}
+
+button.read-unread {
+  width: 141px;
+  text-align: left;
+  margin-right: 10px;
+}
+
+
 @media all and (max-width:990px) {
 
   .welcome-msg {display:none;}
