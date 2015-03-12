@@ -6895,22 +6895,6 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     $scope.totalServerItems = 0;
 
 
@@ -7146,17 +7130,11 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
                     if (status == 400) {
 
                         if (data.apicode == 4) {
-
                             //This is some invalid search field case
-
-                            $scope.setPagingDataSliced($scope, [], 0);
-
+                            $scope.$broadcast("SearchTextTooShort");
                         } else {
-
                             alert("An error occurred when getting contacts! Error code: " + data.apicode);
-
                             alert(JSON.stringify(data));
-
                         }
 
                     }
@@ -7960,6 +7938,13 @@ function notifyCtrl($scope, notify) {
             classes : 'alert-success'
         });
     };
+    $scope.SearchTextTooShortMsg = function() {
+        notify({
+            message : 'Search text is too short!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    };
     //If SendingMessageSucceeded event is triggered, show related message
 
     $scope.$on('SendingMessageSucceeded', function(event, args) {
@@ -8022,6 +8007,10 @@ function notifyCtrl($scope, notify) {
     //If ContactSaved event is triggered, show related message
     $scope.$on('ContactSaved', function(event, args) {
         $scope.ContactSavedMsg();
+    });
+    //If SearchTextTooShort event is triggered, show related message
+    $scope.$on('SearchTextTooShort', function(event, args) {
+        $scope.SearchTextTooShortMsg();
     });
 }
 

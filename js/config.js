@@ -101,7 +101,18 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         .state('lists.manage', {
             url: "/lists_manage/:id",
             templateUrl: "views/lists_manage.html",
-            data: { pageTitle: 'Manage List' }
+            data: { pageTitle: 'Manage List' },
+			   resolve: {
+				 loadPlugin: function ($ocLazyLoad) {
+					 return $ocLazyLoad.load([
+						 {
+							 name: 'cgNotify',
+							 files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+
+						 }
+					 ]);
+				 }
+				}
             //resolve: {
             //    loadPlugin: function ($ocLazyLoad) {
             //        return $ocLazyLoad.load([
