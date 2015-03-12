@@ -7802,6 +7802,32 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 		);
 
 	};
+	$scope.blockContact = function(inStatus) {
+	     $scope.changeContactStatus('I');
+	     $scope.refresh();
+	};
+    $scope.unblockContact = function(inStatus) {
+         $scope.changeContactStatus('A');
+         $scope.refresh();
+    };
+    $scope.optOutContact = function(inStatus) {
+         $scope.changeContactStatus('O');
+         $scope.refresh();
+    };
+        
+    $scope.changeContactStatus = function(inStatus) {
+        var request = {
+            sethttp : 1,
+            apikey : $cookieStore.get('inspinia_auth_token'),
+            contactID : $state.params.id,
+            ANI : $scope.PhoneNumber,
+            status : inStatus
+        };
+        $scope.contactModifyRequest(request);
+        
+        
+        console.log(request)
+    }; 
 
     $scope.contactModifyRequest = function(request){
         //Send request to the server
