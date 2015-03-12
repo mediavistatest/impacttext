@@ -225,6 +225,56 @@ var ngInbox = {
                     });
                 }
             },
+            ContactModify : function(controllerParent, messageList){
+                var params = {
+                    apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
+                    accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
+                    sethttp : 1
+                };
+
+                // var successfullRequestsCount_ = 0;
+                // var totalNumberOfMessages_ = messageToSendArray.length;
+                // for (var j = 0; j < messageToSendArray.length; j++) {
+                    // params.message = messageToSendArray[j].message;
+                    // params.contactListID == messageToSendArray[j].contactListID;
+                    // params.ANI = messageToSendArray[j].ANI;
+                    // params.DID = messageToSendArray[j].DID;
+// 
+                    // //Send request to the server
+                    // controllerParent.$http.post(inspiniaNS.wsUrl + "message_send", $.param(params))
+                    // //Successful request to the server
+                    // .success(function(data, status, headers, config) {
+                        // if (data == null || typeof data.apicode == 'undefined') {
+                            // //This should never happen
+                            // controllerParent.$scope.$broadcast("ErrorOnMessages", 'Unidentified error occurred when sending your message!');
+                            // return;
+                        // }
+                        // if (data.apicode == 0) {
+                            // //Reset form and inform user about success
+                            // // controllerParent.$scope.$broadcast("SendingMessageSucceeded", data.apidata);
+                        // } else {
+                            // controllerParent.$scope.$broadcast("ErrorOnMessages", 'An error occurred when sending your message! Error code: ' + data.apicode);
+                            // console.log(JSON.stringify(data));
+                        // }
+                        // successfullRequestsCount_++;
+// 
+                        // if (totalNumberOfMessages_ == successfullRequestsCount_) {
+                            // callback();
+// 
+                        // }
+                    // }).error(
+                    // //An error occurred with this request
+                    // function(data, status, headers, config) {
+                        // if (status == 400) {
+                            // if (data.apicode == 1) {
+                                // controllerParent.$scope.$broadcast("ErrorOnMessages", 'ANI that you are trying to send message to is opted-out!');
+                            // } else {
+                                // //Just non handled errors by optout are counted
+                                // controllerParent.$scope.$broadcast("ErrorOnMessages", ngInbox._internal.ErrorMsg);
+                            // }
+                        // }
+                    // });
+            },
             DeleteMessage : function(controllerParent, messageList) {
                 ngInbox._internal.ErrorMsg = 'Delete message(s) failed!';
                 var callback = function() {
