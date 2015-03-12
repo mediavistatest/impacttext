@@ -138,9 +138,7 @@ function MainCtrl($http, $cookieStore, $window) {
     var main = this;
     // getting account info
     main.accountInfo = {};
-    main.companyInfo = {
-        companyName : 'Small Bakery inc'
-    };
+    main.companyInfo = {};
     $http.post(inspiniaNS.wsUrl + "account_get", $.param({
         apikey : $cookieStore.get('inspinia_auth_token'),
         accountID : $cookieStore.get('inspinia_account_id'),
@@ -172,9 +170,9 @@ function MainCtrl($http, $cookieStore, $window) {
                     return;
                 }
                 if (data.apicode == 0) {
-                    main.companyInfo = data.apidata[0];
-                    // window.console.log('main.companyInfo')
-                    // window.console.log(main.companyInfo)
+                    main.companyInfo = data.apidata;
+                    window.console.log('main.companyInfo')
+                    window.console.log(data.apidata)
                     // geting company info
                 } else {
                     // alert("Error occured while getting account company info!");
@@ -231,6 +229,7 @@ function MainCtrl($http, $cookieStore, $window) {
             });
         },
         contactOptOutAddRequest : function(request, $inScope) {
+            window.console.log($.param(request))
             $http.post(inspiniaNS.wsUrl + "optout_add", $.param(request)).success(
             //Successful request to the server
             function(data, status, headers, config) {
