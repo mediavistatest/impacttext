@@ -7264,455 +7264,233 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
             $scope.controllerParent.PopulateAdd($scope);
         }, true);
     }
-
   $scope.lists = {};
-
   $scope.lists.names = [];
-
 //$http({
-
 //  method: 'GET',
-
 //  url: 'views/datasets/ngData.json'
-
 //}).success(function(data, status, headers, config) {
-
 //    console.log('views/datasets/ngData.json succeeded. - ' + data.length);
-
 //    $scope.lists.names = data;
-
-
-
 //    // this will show you the count that you expect
-
 //    console.log($scope.lists.names.length);
-
 //  }).error(function(data, status, headers, config) {
-
 //    console.log('views/datasets/ngData.json failed.');
-
 //  });
-
-
-
 //// this will always print 0 to console
-
 //// since categories has not been assigned yet
-
 //console.log($scope.lists.names.length);
-
-
-
 //// other methods
-
 //
-
-
-
 //$http.post(
-
 //                    inspiniaNS.wsUrl + "contactlist_get",
-
 //                    $.param({apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), limit: pageSize, offset: (page - 1) * pageSize})
-
 //                ).success(function(data, status, headers, config) {
-
 //
-
 //                $scope.lists.names = data;
-
 //
-
 //
-
 //                }).error(
-
 //                    //An error occurred with this request
-
 //                    function(data, status, headers, config) {
-
 //                        alert('Unexpected error occurred when trying to fetch contact lists!');
-
 //                    }
-
 //                );
 
-
-
-
-
-
-
 	$scope.reset = function() {
-
 		$scope.ListName = '';
-
 		$scope.PhoneNumber = '';
-
 		$scope.FirstName = '';
-
 		$scope.LastName = '';
-
 		$scope.Email = '';
-
 		$scope.CustomField1 = '';
-
 		$scope.CustomField2 = '';
-
 		$scope.CustomField3 = '';
-
 	};
-
-
 
 	$scope.refreshLists = function(withCheckboxes) {
-
 		$http.post(
-
 			inspiniaNS.wsUrl + "contactlist_get",
-
 			$.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A'})
-
 		).success(
-
 			//Successful request to the server
-
 			function(data, status, headers, config) {
-
 				if (data == null || typeof data.apicode == 'undefined') {
-
 					//This should never happen
-
 					$scope.lists.names = data;
-
 					return;
-
 				}
-
 				if (data.apicode == 0) {
-
 					//Reading contact lists
-
 					$scope.lists.names = data.apidata;
-
 					for(var i in $scope.lists.names) {
-
 						$scope.lists.names[i].selected = false;
-
 					}
-
 				} else {
-
 					$scope.lists.names = [];
-
 				}
-
 			}
-
 		).error(
-
 			//An error occurred with this request
-
 			function(data, status, headers, config) {
-
 				//alert('Unexpected error occurred when trying to fetch contact lists!');
-
 				if (status == 400) {
-
 					alert("An error occurred when getting contact lists! Error code: " + data.apicode);
-
 					alert(JSON.stringify(data));
-
 				}
-
 			}
-
 		);
-
 	};
 
-
-
 	$scope.addList = function() {
-
 		//Checking input parameters
-
 		if (typeof $scope.ListName == 'undefined' || $scope.ListName == null || $.trim($scope.ListName) == '') {
-
 			return;
-
 		}
 
 		//Send request to the server
-
 		$http.post(
-
 			inspiniaNS.wsUrl + "contactlist_add",
-
 			$.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), companyID: $cookieStore.get('inspinia_company_id'), contactListName: $scope.ListName})
-
 		).success(
-
 			//Successful request to the server
-
 			function(data, status, headers, config) {
-
 				if (data == null || typeof data.apicode == 'undefined') {
-
 					//This should never happen
-
 					alert("Unidentified error occurred when sending your message!");
-
 					return;
-
 				}
 
 				if (data.apicode == 0) {
-
 					//Reset form and inform user about success
-
 					$scope.reset();
-
 					$scope.$broadcast("ContactListCreated", data.apidata);
-
 					$scope.refreshLists();
-
 				} else {
-
 					alert("An error occurred when adding contact list! Error code: " + data.apicode);
-
 					alert(JSON.stringify(data));
-
 				}
-
 			}
-
 		).error(
-
 			//An error occurred with this request
-
 			function(data, status, headers, config) {
-
 				//alert('Unexpected error occurred when trying to send message!');
-
 				if (status == 400) {
-
 					if (data.apicode == 1) {
-
 						$scope.$broadcast("DuplicateContactListName", data.apidata);
-
 					} else {
-
 						alert("An error occurred when sending your message! Error code: " + data.apicode);
-
 						alert(JSON.stringify(data));
-
 					}
-
 				}
-
 			}
-
 		);
-
 	};
-
-
 
 	// helper method to get selected lists
-
 	$scope.selectedLists = function selectedLists() {
-
 		return filterFilter($scope.lists.names, { selected: true });
-
 	};
 
-
-
 	$scope.addContact = function() {
-	    if ($scope.controllerParent) {
-            $scope.controllerParent.Events.Add_onClick($scope);
-        }
+		if ($scope.controllerParent) {
+			$scope.controllerParent.Events.Add_onClick($scope);
+		}
 
 		//Fetch selected lists and check if user selected any of them
-
 		var selectedLists = $scope.selectedLists();
-
 		if (selectedLists.length <= 0) {
-
 			return;
-
 		}
 
 		//Checking if all required parameters are there
-
-		if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber) == '') {
-
+		if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
+			$scope.$broadcast("InvalidANI");
 			return;
-
+		}
+		var phoneNo = $.trim($scope.PhoneNumber);
+		if (phoneNo.length == 10) {
+			phoneNo = '1' + phoneNo;
 		}
 
 		var request = {
-
 			sethttp: 1,
-
 			apikey: $cookieStore.get('inspinia_auth_token'),
-
 			accountID: $cookieStore.get('inspinia_account_id'),
-
 			companyID: $cookieStore.get('inspinia_company_id'),
-
-			ANI: $scope.PhoneNumber,
-
+			ANI: phoneNo,
 			status: 'A'
-
 		};
 
-
-
 		if (typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
-
 			request.firstName = $.trim($scope.FirstName);
-
 		}
-
 		if (typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
-
 			request.lastName = $.trim($scope.LastName);
-
 		}
-
 		if (typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
-
 			request.emailAddress = $.trim($scope.Email);
-
 		}
-
 		if (typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
-
 			request.custom1 = $.trim($scope.CustomField1);
-
 		}
-
 		if (typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
-
 			request.custom2 = $.trim($scope.CustomField2);
-
 		}
-
 		if (typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
-
 			request.custom3 = $.trim($scope.CustomField3);
-
 		}
-
-
 
 		var remainingListsCount = selectedLists.length;
-
 		var successfullyAddedToListsCount = 0;
-
 		var failedToAddToListsCount = 0;
-
 		for (var i in selectedLists) {
-
 			//Send request to the server
-
 			$http.post(
-
 				inspiniaNS.wsUrl + "contact_add",
-
 				$.param($.extend(request, {contactListID: selectedLists[i].contactListID}))
-
 			).success(
-
 				//Successful request to the server
-
 				function(data, status, headers, config) {
-
 					if (data == null || typeof data.apicode == 'undefined') {
-
 						//This should never happen
-
 						remainingListsCount--;
-
 						failedToAddToListsCount++;
-
 						alert("Unidentified error occurred when adding new contact!");
-
 						return;
-
 					}
-
 					if (data.apicode == 0) {
-
 						remainingListsCount--;
-
 						successfullyAddedToListsCount++;
-
 					} else {
-
 						remainingListsCount--;
-
 						failedToAddToListsCount++;
-
 						alert("An error occurred when adding contact! Error code: " + data.apicode);
-
 						alert(JSON.stringify(data));
-
 					}
-
 					if (remainingListsCount == 0) {
-
 						//Reset form and inform user about success
-
 						$scope.reset();
 						$scope.$broadcast("ContactCreated", data.apidata);
-
 						$scope.refreshLists();
-
 					}
-
 				}
-
 			).error(
-
 				//An error occurred with this request
-
 				function(data, status, headers, config) {
-
 					//alert('Unexpected error occurred when trying to send message!');
-
+					remainingListsCount--;
+					failedToAddToListsCount++;
 					if (status == 400) {
-
-						/*if (data.apicode == 1) {
-
-							$scope.$broadcast("DuplicateContactListName", data.apidata);
-
-						} else */{
-
-							remainingListsCount--;
-
-							failedToAddToListsCount++;
-							//alert("An error occurred when adding contact! Error code: " + data.apicode);
-							//alert(JSON.stringify(data));
-							//if (remainingListsCount == 0) {
-							//	alert("Successfully added: " + successfullyAddedToListsCount + ", failed to add: " + failedToAddToListsCount);
-							//}
+						if (data.apicode == 4) {
+							$scope.$broadcast("InvalidANI", data.apidata);
+						} else {
 							$scope.$broadcast("CreateContactFailed");
-
 						}
-
 					}
-
 				}
-
 			);
-
 		}
-
-
-
 	};
 
 
@@ -7724,277 +7502,122 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
 
 
 function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
-
 	//Fetch contact data
-
 	$scope.refresh = function() {
-
 		$http.post(
-
 			inspiniaNS.wsUrl + "contact_get",
-
 			$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), contactID: $state.params.id})
-
 		).success(
-
 			function (data) {
-
 				if (data == null || typeof data.apicode == 'undefined') {
-
 					alert("An unknown error occurred when getting contact info!");
-
 					return;
-
 				}
-
 				if (data.apicode != 0) {
-
 					alert("An error occurred when getting contact info! Error code: " + data.apicode);
-
 					alert(JSON.stringify(data));
-
 					return;
-
 				}
-
-
 
 				if (typeof data.apidata != 'undefined' && data.apidata != null && data.apidata.length > 0) {
-
 					//Everything is fine, read contact data
-
 					$scope.PhoneNumber = data.apidata[0].ANI;
-
 					$scope.FirstName = data.apidata[0].firstName;
-
 					$scope.LastName = data.apidata[0].lastName;
-
 					$scope.Email = data.apidata[0].emailAddress;
-
 					$scope.CustomField1 = data.apidata[0].custom1;
-
 					$scope.CustomField2 = data.apidata[0].custom2;
-
 					$scope.CustomField3 = data.apidata[0].custom3;
-
 					$scope.ContactListID = data.apidata[0].contactListID;
-
 				}
-
 			}).error(
-
 			//An error occurred with this request
-
 			function(data, status, headers, config) {
-
 				//alert('Unexpected error occurred when trying to fetch contact lists!');
-
 				if (status == 400) {
-
 					alert("An error occurred when getting contact info! Error code: " + data.apicode);
-
 					alert(JSON.stringify(data));
-
 				}
-
 			}
-
 		);
-
 	};
 
-    $scope.contactModifyRequest = function(request){
-        //Send request to the server
-        $http.post(
-            inspiniaNS.wsUrl + "contact_modify",
-            $.param(request)
-        ).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    alert("Unidentified error occurred when editing contact!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-                } else if (data.apicode == 4) {
-                    //This is an error saying there is nothing to change
-                    $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-                } else {
-                    alert("An error occurred when adding contact list! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
-                };
-            }
-        ).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to send message!');
-
-                if (status == 400) {
-
-                    if (data.apicode == 4) {
-
-                        //This is an error saying there is nothing to change
-
-                        $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-
-                    } else {
-
-                        alert("An error occurred when sending your message! Error code: " + data.apicode);
-
-                        alert(JSON.stringify(data));
-
-                    }
-
-                }
-
-            }
-
-        );
-    };
+	$scope.contactModifyRequest = function(request) {
+		//Send request to the server
+		$http.post(
+			inspiniaNS.wsUrl + "contact_modify",
+			$.param(request)
+		).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unidentified error occurred when editing contact!");
+					return;
+				}
+				if (data.apicode == 0) {
+					$scope.$broadcast("ContactSaved");
+					$window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+				} else {
+					alert("An error occurred when adding contact list! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				//alert('Unexpected error occurred when trying to send message!');
+				if (status == 400) {
+					if (data.apicode == 4) {
+						$scope.$broadcast("InvalidANI");
+					} else {
+						alert("An error occurred when sending your message! Error code: " + data.apicode);
+						alert(JSON.stringify(data));
+					}
+				}
+			}
+		);
+	};
 
 	$scope.saveContact = function() {
-
 		//Checking if all required parameters are there
-
-		if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber) == '') {
-
+		if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
+			$scope.$broadcast("InvalidANI");
 			return;
-
 		}
-
+		var phoneNo = $.trim($scope.PhoneNumber);
+		if (phoneNo.length == 10) {
+			phoneNo = '1' + phoneNo;
+		}
 		var request = {
-
 			sethttp: 1,
-
 			apikey: $cookieStore.get('inspinia_auth_token'),
-
 			contactID: $state.params.id,
-
-			ANI: $scope.PhoneNumber
-
+			ANI: phoneNo
 		};
 
-
-
 		if (typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
-
 			request.firstName = $.trim($scope.FirstName);
-
 		}
-
 		if (typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
-
 			request.lastName = $.trim($scope.LastName);
-
 		}
-
 		if (typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
-
 			request.emailAddress = $.trim($scope.Email);
-
 		}
 
 		if (typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
-
 			request.custom1 = $.trim($scope.CustomField1);
-
 		}
-
 		if (typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
-
 			request.custom2 = $.trim($scope.CustomField2);
-
 		}
-
 		if (typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
-
 			request.custom3 = $.trim($scope.CustomField3);
-
 		}
-
-        $scope.contactModifyRequest(request);
-
-		//Send request to the server
-
-        // $http.post(
-// 
-            // inspiniaNS.wsUrl + "contact_modify",
-// 
-            // $.param(request)
-// 
-        // ).success(
-// 
-            // //Successful request to the server
-// 
-            // function(data, status, headers, config) {
-// 
-                // if (data == null || typeof data.apicode == 'undefined') {
-// 
-                    // //This should never happen
-// 
-                    // alert("Unidentified error occurred when editing contact!");
-// 
-                    // return;
-// 
-                // }
-// 
-                // if (data.apicode == 0) {
-// 
-                    // $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-// 
-                // } else if (data.apicode == 4) {
-// 
-                    // //This is an error saying there is nothing to change
-// 
-                    // $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-// 
-                // } else {
-// 
-                    // alert("An error occurred when adding contact list! Error code: " + data.apicode);
-// 
-                    // alert(JSON.stringify(data));
-// 
-                // }
-// 
-            // }
-// 
-        // ).error(
-// 
-            // //An error occurred with this request
-// 
-            // function(data, status, headers, config) {
-// 
-                // //alert('Unexpected error occurred when trying to send message!');
-// 
-                // if (status == 400) {
-// 
-                    // if (data.apicode == 4) {
-// 
-                        // //This is an error saying there is nothing to change
-// 
-                        // $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-// 
-                    // } else {
-// 
-                        // alert("An error occurred when sending your message! Error code: " + data.apicode);
-// 
-                        // alert(JSON.stringify(data));
-// 
-                    // }
-// 
-                // }
-// 
-            // }
-// 
-        // );
-
+		
+		$scope.contactModifyRequest(request);
 	};
-
-
-
-
 
 	$scope.refresh();
 
@@ -8189,6 +7812,19 @@ function notifyCtrl($scope, notify) {
             classes : 'alert-success'
         });
     };
+    $scope.InvalidANIMsg = function() {
+        notify({
+            message : 'Invalid phone number!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    };
+    $scope.ContactSavedMsg = function() {
+        notify({
+            message : 'Contact is successfully saved!',
+            classes : 'alert-success'
+        });
+    };
     //If SendingMessageSucceeded event is triggered, show related message
 
     $scope.$on('SendingMessageSucceeded', function(event, args) {
@@ -8243,6 +7879,14 @@ function notifyCtrl($scope, notify) {
     //If CreateContactFailed event is triggered, show related message
     $scope.$on('CreateContactFailed', function(event, args) {
         $scope.CreateContactFailedMsg();
+    });
+    //If InvalidANI event is triggered, show related message
+    $scope.$on('InvalidANI', function(event, args) {
+        $scope.InvalidANIMsg();
+    });
+    //If ContactSaved event is triggered, show related message
+    $scope.$on('ContactSaved', function(event, args) {
+        $scope.ContactSavedMsg();
     });
 }
 
@@ -8427,476 +8071,248 @@ $scope.$watch('ToNumber', function() {
 }, true);
 
 $scope.$watch('FromName', function() {
-
             maxLengthCalc();
-
         }, true);
 
 $scope.$watch('optFields', function() {
-
             maxLengthCalc();
-
         }, true);
-
-
 
 //OptOutFields
 $scope.optFields = {
     OptOutTxt1: '',
     OptOutTxt2: '',
     OptOutTxt3: ''
-  };
-
-
+};
 
 //send form initial states
-
-    $scope.initial = "";
-
-
-
-    $scope.MessageType = "SMS";
-
-    $scope.FromNumber = "default";
-
-    $scope.OptOutMsg = "";
-
-    $scope.ScheduleCheck = "";
-
-    $scope.SetDate = "";
-
-    $scope.SetTimeHour = "";
-
-    $scope.SetTimeMinute = "";
-
-    $scope.contactLists = [];
-
+   $scope.initial = "";
+	$scope.MessageType = "SMS";
+	$scope.FromNumber = "default";
+	$scope.OptOutMsg = "";
+	$scope.ScheduleCheck = "";
+	$scope.SetDate = "";
+	$scope.SetTimeHour = "";
+	$scope.SetTimeMinute = "";
+	$scope.contactLists = [];
 	$scope.SendToList = true;
 
-
-
 	//Date/time control
-
 	$scope.today = function() {
-
 		$scope.SetDate = new Date();
-
 	};
-
-
-
 	$scope.today();
 
-
-
 	$scope.clear = function () {
-
 		$scope.SetDate = null;
-
 	};
-
-
-
-
 
 	// Disable weekend selection
-
 	//$scope.disabled = function(date, mode) {
-
 	//  return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-
 	//};
 
-
-
 	$scope.toggleMin = function() {
-
 		$scope.minDate = $scope.minDate ? null : new Date();
-
 	};
-
 	$scope.toggleMin();
 
-
-
 	$scope.open = function($event) {
-
 		$event.preventDefault();
-
 		$event.stopPropagation();
-
-
-
 		$scope.opened = true;
-
 	};
-
-
 
 	$scope.dateOptions = {
-
 		formatYear: 'yy',
-
 		startingDay: 1,
-
 		showWeeks: 'false',
-
 		initDate: 'false'
-
 	};
-
-
 
 	$scope.formats = ['MM/dd/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-
 	$scope.format = $scope.formats[0];
 
-
-
-
-
   //reset send form
-
     $scope.reset = function(){
-
       if ($scope.controllerParent) {
-
           $scope.controllerParent.Events.Send_onClick($scope);
-
       }
 
-
-
       $scope.FromName = $scope.initial;
-
       $scope.MessageType = 'SMS';
-
       $scope.FromNumber = 'default';
-
       $scope.ToList = $scope.initial;
-
       $scope.ToNumber = $scope.initial;
-
       $scope.OptOutMsg = '';
-
       $scope.OptOutTxt3 = $scope.initial;
-
       $scope.MessageTxt = $scope.initial;
-
       $scope.ScheduleCheck = '';
-
       $scope.SetDate = '';
-
       $scope.SetTimeHour = '';
-
       $scope.SetTimeMinute = '';
-
       $scope.SendToList = true;
-
     };
 
-
-
 //Read the data from the remote server. First read the contact lists.
-
     $http.post(
+		 inspiniaNS.wsUrl + "contactlist_get",
+		 $.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A'})
+	 ).success(
+		 //Successful request to the server
+		 function(data, status, headers, config) {
+			 if (data == null || typeof data.apicode == 'undefined') {
+				 //This should never happen
+				 $scope.contactLists = [];
+				 return;
+			 }
 
-        inspiniaNS.wsUrl + "contactlist_get",
+			 if (data.apicode == 0) {
+				 //Reading contact lists
+				 $scope.contactLists = data.apidata;
+			 } else {
+				 $scope.contactLists = [];
+			 }
+		 }
+	 ).error(
+		 //An error occurred with this request
+		 function(data, status, headers, config) {
+			 //alert('Unexpected error occurred when trying to fetch contact lists!');
+			 if (status == 400) {
+				 alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+				 alert(JSON.stringify(data));
+			 }
+		 }
+	);
 
-        $.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A'})
+	//now read DIDs
+	$http.post(
+		inspiniaNS.wsUrl + "did_get",
+		$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+	).success(
+		//Successful request to the server
+		function(data, status, headers, config) {
+			if (data == null || typeof data.apicode == 'undefined') {
+				//This should never happen
+				$scope.fromNumbers = [];
+				return;
+			}
 
-    ).success(
-
-        //Successful request to the server
-
-        function(data, status, headers, config) {
-
-            if (data == null || typeof data.apicode == 'undefined') {
-
-                //This should never happen
-
-                $scope.contactLists = [];
-
-                return;
-
-            }
-
-            if (data.apicode == 0) {
-
-                //Reading contact lists
-
-                $scope.contactLists = data.apidata;
-
-            } else {
-
-                $scope.contactLists = [];
-
-            }
-
-        }
-
-    ).error(
-
-        //An error occurred with this request
-
-        function(data, status, headers, config) {
-
-            //alert('Unexpected error occurred when trying to fetch contact lists!');
-
-			  if (status == 400) {
-
-					alert("An error occurred when getting contact lists! Error code: " + data.apicode);
-
-					alert(JSON.stringify(data));
-
-				}
-
-        }
-
-    );
-
-
-
-    //now read DIDs
-
-    $http.post(
-
-        inspiniaNS.wsUrl + "did_get",
-
-        $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
-
-    ).success(
-
-        //Successful request to the server
-
-        function(data, status, headers, config) {
-
-            if (data == null || typeof data.apicode == 'undefined') {
-
-                //This should never happen
-
-                $scope.fromNumbers = [];
-
-                return;
-
-            }
-
-            if (data.apicode == 0) {
-
-                //Reading contact lists
-
-                $scope.fromNumbers = data.apidata;
-
-            } else {
-
-                $scope.fromNumbers = [];
-
-            }
-
-        }
-
-    ).error(
-
-        //An error occurred with this request
-
-        function(data, status, headers, config) {
-
-            //alert('Unexpected error occurred when trying to fetch DIDs!');
-
-			  if (status == 400) {
-
-					alert("An error occurred when getting DID! Error code: " + data.apicode);
-
-					alert(JSON.stringify(data));
-
-				}
-
-        }
-
-    );
-
-
-
-
+			if (data.apicode == 0) {
+				//Reading contact lists
+				$scope.fromNumbers = data.apidata;
+			} else {
+				$scope.fromNumbers = [];
+			}
+		}
+	).error(
+		//An error occurred with this request
+		function(data, status, headers, config) {
+			//alert('Unexpected error occurred when trying to fetch DIDs!');
+			if (status == 400) {
+				alert("An error occurred when getting DID! Error code: " + data.apicode);
+				alert(JSON.stringify(data));
+			}
+		}
+	);
 
 	//helper function for generating message text
-
 	$scope.generateMessageText = function() {
-
 		//Checking the type of opt out message
-
 		var optOutMessage = '';
-
 		if ($scope.OptOutMsg == 'standard') {
-
 			//todo: check how to receive standard opt out message
-
 			optOutMessage = $scope.optFields.OptOutTxt1;
-
 		} else if ($scope.OptOutMsg == 'custom') {
-
 			//todo: check how to receive custom opt out message for the account
-
 			optOutMessage = $scope.optFields.OptOutTxt2;
-
 		} else if ($scope.OptOutMsg == 'write') {
-
 			if (typeof $scope.optFields.OptOutTxt3 != 'undefined' && $scope.optFields.OptOutTxt3 != null) {
-
 				optOutMessage = $scope.optFields.OptOutTxt3;
-
 			}
-
 		}
-
-
 
 		//Generate a message text
-
 		var messageText = '';
-
 		if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
-
 			messageText += $.trim($scope.FromName);
-
 			if (messageText.length > 0) {
-
 				messageText += ': ';
-
 			}
-
 		}
-
 		messageText += $scope.MessageTxt;
-
 		if (optOutMessage != '') {
-
 			messageText += '\r\n' + optOutMessage;
-
 		}
-
-
 
 		return messageText;
-
 	};
-
 
 
 	//Create a function for sending messages
 
 	$scope.sendMessage = function(scheduled) {
-
-        if ($scope.controllerParent) {
-
-            $scope.controllerParent.Events.Send_onClick($scope);
-
-        }
-
-
+		if ($scope.controllerParent) {
+			$scope.controllerParent.Events.Send_onClick($scope);
+		}
 
 		// Trigger validation flag.
-
 		//$scope.submitted = true;
-
-
-
 		if (($scope.SendToList && (typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0))
-
 			&& (!$scope.SendToList && (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == ''))
-
 			) {
-
 			return;
-
 		}
 
 		if (typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
-
 			return;
-
 		}
 
 		if (scheduled && (typeof $scope.SetDate == 'undefined' || $scope.SetDate == null || $scope.SetDate == '')) {
-
 			return;
-
 		}
-
 		//If time is not set and scheduled message sending is invoked, set time to midnight
-
 		if (scheduled && (typeof $scope.SetTimeHour == 'undefined' || $scope.SetTimeHour == null || $scope.SetTimeHour == '')) {
-
 			$scope.SetTimeHour = "00";
-
 		}
-
 		if (scheduled && (typeof $scope.SetTimeMinute == 'undefined' || $scope.SetTimeMinute == null || $scope.SetTimeMinute == '')) {
-
 			$scope.SetTimeMinute = "00";
-
 		}
-
-
 
 		//Generate message text
-
 		var messageText = $scope.generateMessageText();
 
-
-
 		//Creating a api request data object
-
 		var requestData = {
-
 			sethttp: 1,
-
 			DID: $scope.FromNumber.DID,
-
 			message: messageText,
-
 			apikey: $cookieStore.get('inspinia_auth_token'),
-
 			accountID: $cookieStore.get('inspinia_account_id')
-
 		};
 
-
-
 		if ($scope.SendToList && typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
-
 			if ($scope.ToList.constructor === Array) {
-
 				//Sending message to contact lists
-
 				requestData.contactListID = $scope.ToList[0].contactListID;
-
 				for (var i = 1; i < $scope.ToList.length; i++) {
-
 					requestData.contactListID += "," + $scope.ToList[i].contactListID;
-
 				}
-
 			} else {
-
 				//Sending message to a single contact list
-
 				requestData.contactListID = $scope.ToList.contactListID;
-
 			}
-
 		} else if (!$scope.SendToList && typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
-
 			//Sending message to numbers. Add leading 1 to all numbers
 			var numberArray = $scope.ToNumber.split(',');
 			var toNumbers = '';
-			for(var idx in numberArray) {
+			for (var idx in numberArray) {
 				var number = $.trim(numberArray[idx]);
 				if (number.length < 11) {
 					number = '1' + number;
 				}
 				if (toNumbers != '') {
-					toNumbers +=',';
+					toNumbers += ',';
 				}
 				toNumbers += number;
 			}
@@ -8905,262 +8321,133 @@ $scope.optFields = {
 		}
 
 
-
 		//Adding schedule date if one is specified
-
 		if (scheduled) {
-
 			var timezoneOffsetMinutes = new Date().getTimezoneOffset();
-
 			var selectedDate = new Date($scope.SetDate.getFullYear(), $scope.SetDate.getMonth(), $scope.SetDate.getDate());
-
 			var scheduledTime = new Date(selectedDate.getTime() + 3600000 * parseInt($scope.SetTimeHour) + 60000 * (parseInt($scope.SetTimeMinute) + timezoneOffsetMinutes));
-
 			//Date is in format MM/dd/yyyy
-
 			var dateParts = [];
-
 			dateParts[0] = scheduledTime.getFullYear();
-
 			dateParts[1] = "" + (scheduledTime.getMonth() + 1);
-
 			dateParts[2] = "" + scheduledTime.getDate();
-
 			dateParts[3] = "" + scheduledTime.getHours();
-
 			dateParts[4] = "" + scheduledTime.getMinutes();
 
-
-
 			//Fix month
-
 			if (dateParts[1].length < 2) {
-
 				dateParts[1] = "0" + dateParts[1];
-
 			}
-
 			//Fix day
-
 			if (dateParts[2].length < 2) {
-
 				dateParts[2] = "0" + dateParts[2];
-
 			}
-
 			//Fix hours
-
 			if (dateParts[3].length < 2) {
-
 				dateParts[3] = "0" + dateParts[3];
-
 			}
-
 			//Fix minutes
-
 			if (dateParts[4].length < 2) {
-
 				dateParts[4] = "0" + dateParts[4];
-
 			}
 
 			requestData.scheduledDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
-
 		}
 
-
-
 		//Send request to the server
-
 		$http.post(
-
 			inspiniaNS.wsUrl + "message_send",
-
 			$.param(requestData)
-
 		).success(
-
 			//Successful request to the server
-
 			function(data, status, headers, config) {
-
 				if (data == null || typeof data.apicode == 'undefined') {
-
 					//This should never happen
-
 					alert("Unidentified error occurred when sending your message!");
-
 					return;
-
 				}
 
 				if (data.apicode == 0) {
-
 					//Reset form and inform user about success
-
 					$scope.reset();
-
 					if (scheduled) {
-
 						$scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
-
 					} else {
-
 						$scope.$broadcast("SendingMessageSucceeded", data.apidata);
-
 					}
-
 				} else {
-
 					alert("An error occurred when sending your message! Error code: " + data.apicode);
-
 					alert(JSON.stringify(data));
-
 				}
-
 			}
-
 		).error(
 
 			//An error occurred with this request
-
 			function(data, status, headers, config) {
-
 				//alert('Unexpected error occurred when trying to send message!');
-
 				if (status == 500) {
-
 					if (data.apicode == 1) {
-
 						$scope.$broadcast("AniOptedOut", data.apidata);
-
 					} else {
-
 						alert("An error occurred when sending your message! Error code: " + data.apicode);
-
 						alert(JSON.stringify(data));
-
 					}
-
 				}
-
 			}
-
 		);
-
 	};
-
-
-
 
 
 	//Create a function for saving drafts
-
 	$scope.saveDraft = function() {
-
-	    if ($scope.controllerParent) {
-
-	        $scope.controllerParent.Events.Send_onClick($scope);
-
-	    }
+		if ($scope.controllerParent) {
+			$scope.controllerParent.Events.Send_onClick($scope);
+		}
 
 		//Generate message text
-
 		var messageText = $scope.generateMessageText();
 
-
-
 		//Creating a api request data object
-
 		var requestData = {
-
 			sethttp: 1,
-
-			//didid: $scope.FromNumber.DIDID,
-
 			message: messageText,
-
-			apikey: $cookieStore.get('inspinia_auth_token'),
-
-			accountID: $cookieStore.get('inspinia_account_id'),
-
-			companyID: $cookieStore.get('inspinia_company_id')
-
+			apikey: $cookieStore.get('inspinia_auth_token')
 		};
 
-
-
 		//Send request to the server
-
 		$http.post(
-
 			inspiniaNS.wsUrl + "draft_add",
-
 			$.param(requestData)
-
 		).success(
-
 			//Successful request to the server
-
 			function(data, status, headers, config) {
-
 				if (data == null || typeof data.apicode == 'undefined') {
-
 					//This should never happen
-
 					alert("Unidentified error occurred when saving your message!");
-
 					return;
-
 				}
-
 				if (data.apicode == 0) {
-
 					//Reset form and inform user about success
-
 					$scope.reset();
-
 					$scope.$broadcast("SaveDraftSucceeded", data.apidata);
-
 				} else {
-
 					alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
-
 					alert(JSON.stringify(data));
-
 				}
-
 			}
-
 		).error(
-
 			//An error occurred with this request
-
 			function(data, status, headers, config) {
-
 				//alert('Unexpected error occurred when trying to send message!');
-
 				if (status == 400) {
-
 					alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
-
 					alert(JSON.stringify(data));
-
 				}
-
 			}
-
 		);
-
 	};
 
-
-
 }
-
-
-
-
 
 /**
 
