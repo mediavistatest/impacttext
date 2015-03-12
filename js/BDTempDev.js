@@ -576,7 +576,7 @@ var ngInbox = {
                 $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
                 return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
                 })[0];
-                $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
+                $sendScope.ToNumber = '';//$sendScope.controllerParent.clickedMessage.ANI;
                 $sendScope.OptOutMsg = '';
                 $sendScope.OptOutTxt3 = $sendScope.initial;
                 $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
@@ -677,6 +677,10 @@ var ngInbox = {
                 return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
                 })[0];
                 $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
+                $sendScope.ToNumber = $sendScope.ToNumber.replace(' ...', '');
+                if ($sendScope.ToNumber.length>10 && $sendScope.ToNumber[0]=='1'){
+                    $sendScope.ToNumber = $sendScope.ToNumber.substring(1);
+                }
                 $sendScope.OptOutMsg = '';
                 $sendScope.OptOutTxt3 = $sendScope.initial;
                 $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
