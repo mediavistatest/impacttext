@@ -7247,7 +7247,7 @@ $scope.$watch('pagingOptions', function () {
 
 		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
 
-	}
+	};
 
 }
 
@@ -7803,7 +7803,56 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 
 	};
 
+    $scope.contactModifyRequest = function(request){
+        //Send request to the server
+        $http.post(
+            inspiniaNS.wsUrl + "contact_modify",
+            $.param(request)
+        ).success(
+            //Successful request to the server
+            function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    alert("Unidentified error occurred when editing contact!");
+                    return;
+                }
+                if (data.apicode == 0) {
+                    $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+                } else if (data.apicode == 4) {
+                    //This is an error saying there is nothing to change
+                    $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+                } else {
+                    alert("An error occurred when adding contact list! Error code: " + data.apicode);
+                    alert(JSON.stringify(data));
+                };
+            }
+        ).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                //alert('Unexpected error occurred when trying to send message!');
 
+                if (status == 400) {
+
+                    if (data.apicode == 4) {
+
+                        //This is an error saying there is nothing to change
+
+                        $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+
+                    } else {
+
+                        alert("An error occurred when sending your message! Error code: " + data.apicode);
+
+                        alert(JSON.stringify(data));
+
+                    }
+
+                }
+
+            }
+
+        );
+    };
 
 	$scope.saveContact = function() {
 
@@ -7865,81 +7914,81 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 
 		}
 
-
+        $scope.contactModifyRequest(request);
 
 		//Send request to the server
 
-		$http.post(
-
-			inspiniaNS.wsUrl + "contact_modify",
-
-			$.param(request)
-
-		).success(
-
-			//Successful request to the server
-
-			function(data, status, headers, config) {
-
-				if (data == null || typeof data.apicode == 'undefined') {
-
-					//This should never happen
-
-					alert("Unidentified error occurred when editing contact!");
-
-					return;
-
-				}
-
-				if (data.apicode == 0) {
-
-					$window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-
-				} else if (data.apicode == 4) {
-
-					//This is an error saying there is nothing to change
-
-					$window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-
-				} else {
-
-					alert("An error occurred when adding contact list! Error code: " + data.apicode);
-
-					alert(JSON.stringify(data));
-
-				}
-
-			}
-
-		).error(
-
-			//An error occurred with this request
-
-			function(data, status, headers, config) {
-
-				//alert('Unexpected error occurred when trying to send message!');
-
-				if (status == 400) {
-
-					if (data.apicode == 4) {
-
-						//This is an error saying there is nothing to change
-
-						$window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-
-					} else {
-
-						alert("An error occurred when sending your message! Error code: " + data.apicode);
-
-						alert(JSON.stringify(data));
-
-					}
-
-				}
-
-			}
-
-		);
+        // $http.post(
+// 
+            // inspiniaNS.wsUrl + "contact_modify",
+// 
+            // $.param(request)
+// 
+        // ).success(
+// 
+            // //Successful request to the server
+// 
+            // function(data, status, headers, config) {
+// 
+                // if (data == null || typeof data.apicode == 'undefined') {
+// 
+                    // //This should never happen
+// 
+                    // alert("Unidentified error occurred when editing contact!");
+// 
+                    // return;
+// 
+                // }
+// 
+                // if (data.apicode == 0) {
+// 
+                    // $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+// 
+                // } else if (data.apicode == 4) {
+// 
+                    // //This is an error saying there is nothing to change
+// 
+                    // $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+// 
+                // } else {
+// 
+                    // alert("An error occurred when adding contact list! Error code: " + data.apicode);
+// 
+                    // alert(JSON.stringify(data));
+// 
+                // }
+// 
+            // }
+// 
+        // ).error(
+// 
+            // //An error occurred with this request
+// 
+            // function(data, status, headers, config) {
+// 
+                // //alert('Unexpected error occurred when trying to send message!');
+// 
+                // if (status == 400) {
+// 
+                    // if (data.apicode == 4) {
+// 
+                        // //This is an error saying there is nothing to change
+// 
+                        // $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+// 
+                    // } else {
+// 
+                        // alert("An error occurred when sending your message! Error code: " + data.apicode);
+// 
+                        // alert(JSON.stringify(data));
+// 
+                    // }
+// 
+                // }
+// 
+            // }
+// 
+        // );
 
 	};
 

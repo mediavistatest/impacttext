@@ -274,7 +274,6 @@ var ngInbox = {
                             // }
                         // }
                     // });
-                }
             },
             DeleteMessage : function(controllerParent, messageList) {
                 ngInbox._internal.ErrorMsg = 'Delete message(s) failed!';
