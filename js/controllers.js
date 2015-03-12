@@ -6174,9 +6174,9 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 
     $scope.pagingOptions = {
 
-        pageSizes: [2, 5, 10],
+        pageSizes: [2, 5, 10, 20],
 
-        pageSize: 5,
+        pageSize: 10,
 
         currentPage: 1
 
@@ -6586,7 +6586,7 @@ $scope.$watch('pagingOptions', function () {
 
         sortInfo: $scope.sortOptions,
 
-        rowHeight: 60,
+        rowHeight: 35,
 
         selectedItems: $scope.mySelections,
 
@@ -6791,9 +6791,9 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
     $scope.pagingOptions = {
 
-        pageSizes: [2, 5, 10],
+        pageSizes: [2, 5, 10, 20],
 
-        pageSize: 5,
+        pageSize: 10,
 
         currentPage: 1
 
@@ -7113,7 +7113,7 @@ $scope.$watch('pagingOptions', function () {
 
         sortInfo: $scope.sortOptions,
 
-        rowHeight: 60,
+        rowHeight: 35,
 
         selectedItems: $scope.mySelections,
 
