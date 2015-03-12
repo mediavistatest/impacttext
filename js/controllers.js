@@ -7208,7 +7208,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
 
 
-    $scope.$watch('filterOptions', function() {
+    /*$scope.$watch('filterOptions', function() {
 
         if (!self.foInit || self.gettingData) {
 
@@ -7220,7 +7220,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
 
-    }, true);
+    }, true);*/
 
 
 
@@ -7278,7 +7278,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
         pagingOptions : $scope.pagingOptions,
 
-        filterOptions : $scope.filterOptions,
+        //filterOptions : $scope.filterOptions,
 
         columnDefs: [
 
@@ -8008,11 +8008,6 @@ function notifyCtrl($scope, notify) {
         $scope.SearchTextTooShortMsg();
     });
 }
-
-
-
-
-
 
 
 function translateCtrl($translate, $scope) {
