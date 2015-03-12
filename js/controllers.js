@@ -8260,6 +8260,88 @@ function imageCrop($scope) {
 
 
 function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracker) {
+$scope.PhoneNumberArrayValidator = {
+    PhoneNumbers : {
+        inputNumberString : '',
+        outputNumberString : '',
+        errorNumber : '',
+        errorMessage : ''
+    },
+    setError : function(phoneNumber, message) {
+        $scope.PhoneNumberArrayValidator.PhoneNumbers.outputNumberString = '';
+        $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString = '';
+        $scope.PhoneNumberArrayValidator.PhoneNumbers.errorNumber = phoneNumber;
+        $scope.PhoneNumberArrayValidator.PhoneNumbers.errorMessage = message;
+    },
+    addPhoneToOutput : function(phoneNumber) {
+        var commaPosition_ = $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString.indexOf(',');
+        if ($scope.PhoneNumberArrayValidator.validatePhoneNumber(phoneNumber)) {
+            if ($scope.PhoneNumberArrayValidator.PhoneNumbers.outputNumberString.length > 0) {
+                $scope.PhoneNumberArrayValidator.PhoneNumbers.outputNumberString = $scope.PhoneNumberArrayValidator.PhoneNumbers.outputNumberString + ', ' + '1' + phoneNumber;
+            } else {
+                $scope.PhoneNumberArrayValidator.PhoneNumbers.outputNumberString = '1' + phoneNumber;
+            }
+            if (commaPosition_ > -1) {
+                $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString = ($scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString.substring(commaPosition_ + 1, 100000));
+            } else {
+                $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString = '';
+            }
+        }
+    },
+    validatePhoneNumber : function(phoneNumber) {
+        if (phoneNumber) {
+            if (!(phoneNumber == phoneNumber.replace(/\D/g, ''))) {
+                var msg = 'Error: ' + phoneNumber + ' is not digits only!';
+                $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                return false;
+            }
+            if (phoneNumber.length < 10) {
+                var msg = 'Error: ' + phoneNumber + ' is less then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                return false;
+            }
+
+            if (phoneNumber.length > 10) {
+                var msg = 'Error: ' + phoneNumber + ' is greater then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                return false;
+            }
+
+            if (!(2 <= phoneNumber.substring(1, 2) <= 9)) {
+                var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
+                $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                return false;
+            }
+            if (!(2 <= phoneNumber.substring(4, 5) <= 9)) {
+                var msg = 'Error: ' + phoneNumber + ' fifth digit is not in range (2-9)!';
+                $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                return false;
+            }
+            //PASSED all validations , VALID PHONE NUMBER
+            return true;
+        }
+    },
+    ParseAndValidateNumbers : function(numbersString) {
+        $scope.PhoneNumberArrayValidator.PhoneNumbers.errorNumber = '';
+        $scope.PhoneNumberArrayValidator.PhoneNumbers.errorMessage = '';
+        $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString = numbersString;
+
+        //Remove special chars
+        $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString = $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString.replace(/[&\/\\#+()$~%.'":*?<>{}-]/g, '');
+        //Remove blanks
+        $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString = $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString.replace(/\s+/g, '');
+
+        var currentPhoneNumber_ = '';
+        while ($scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString.indexOf(',') != -1) {
+            var currentPhoneNumber_ = $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString.substring(0, $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString.indexOf(','));
+            $scope.PhoneNumberArrayValidator.addPhoneToOutput(currentPhoneNumber_);
+        }
+        currentPhoneNumber_ = $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString;
+        $scope.PhoneNumberArrayValidator.addPhoneToOutput(currentPhoneNumber_);
+
+        return $scope.PhoneNumberArrayValidator.PhoneNumbers;
+    }
+};
 
 
 
@@ -8278,8 +8360,8 @@ $scope.maxLength = 160;
 $scope.MessageTxt='';
 $scope.FromName='';
 var maxLengthCalc = function () {
-    $scope.maxLength = 160 - ($scope.FromName.length + $scope.optFields.OptOutTxt1.length + $scope.optFields.OptOutTxt3.length) - ($scope.FromName.length>0 ? 2:0) - ($scope.optFields.OptOutTxt1.length>0 ? 2:0) - ($scope.optFields.OptOutTxt3.length>0 ? 2:0);
-}
+    $scope.maxLength = 160 - ($scope.FromName.length + $scope.optFields.OptOutTxt1.length + $scope.optFields.OptOutTxt3.length) - ($scope.FromName.length>0 ? 2:0) - ($scope.optFields.OptOutTxt1.length>0 ? 1:0) - ($scope.optFields.OptOutTxt3.length>0 ? 1:0);
+};
 
 
 //$scope.$watch('MessageTxt', function() {
@@ -8287,6 +8369,13 @@ var maxLengthCalc = function () {
 //            maxLengthCalc();
 //
 //        }, true);
+var phoneCheckInterval;
+$scope.$watch('ToNumber', function() {
+    // clearInterval(phoneCheckInterval);
+    // phoneCheckInterval = setTimeout(function(){
+        $scope.PhoneNumberArrayValidator.ParseAndValidateNumbers($scope.ToNumber);
+    // },2000);
+}, true);
 
 $scope.$watch('FromName', function() {
 
@@ -8593,19 +8682,19 @@ $scope.optFields = {
 
 			//todo: check how to receive standard opt out message
 
-			optOutMessage = $scope.OptOutTxt1;
+			optOutMessage = $scope.optFields.OptOutTxt1;
 
 		} else if ($scope.OptOutMsg == 'custom') {
 
 			//todo: check how to receive custom opt out message for the account
 
-			optOutMessage = $scope.OptOutTxt2;
+			optOutMessage = $scope.optFields.OptOutTxt2;
 
 		} else if ($scope.OptOutMsg == 'write') {
 
-			if (typeof $scope.OptOutTxt3 != 'undefined' && $scope.OptOutTxt3 != null) {
+			if (typeof $scope.optFields.OptOutTxt3 != 'undefined' && $scope.optFields.OptOutTxt3 != null) {
 
-				optOutMessage = $scope.OptOutTxt3;
+				optOutMessage = $scope.optFields.OptOutTxt3;
 
 			}
 
@@ -8749,9 +8838,20 @@ $scope.optFields = {
 
 		} else if (!$scope.SendToList && typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
 
-			//Sending message to numbers
-
-			requestData.ANI = $scope.ToNumber;
+			//Sending message to numbers. Add leading 1 to all numbers
+			var numberArray = $scope.ToNumber.split(',');
+			var toNumbers = '';
+			for(var idx in numberArray) {
+				var number = $.trim(numberArray[idx]);
+				if (number.length < 11) {
+					number = '1' + number;
+				}
+				if (toNumbers != '') {
+					toNumbers +=',';
+				}
+				toNumbers += number;
+			}
+			requestData.ANI = toNumbers;
 
 		}
 
@@ -8879,7 +8979,7 @@ $scope.optFields = {
 
 				//alert('Unexpected error occurred when trying to send message!');
 
-				if (status == 400) {
+				if (status == 500) {
 
 					if (data.apicode == 1) {
 
@@ -8927,7 +9027,7 @@ $scope.optFields = {
 
 			sethttp: 1,
 
-			didid: $scope.FromNumber.DIDID,
+			//didid: $scope.FromNumber.DIDID,
 
 			message: messageText,
 

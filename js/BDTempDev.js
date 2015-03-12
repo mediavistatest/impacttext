@@ -664,7 +664,7 @@ var ngInbox = {
             displayName : 'Date scheduled',
         }],
         sortOptions : {
-            fields : ['scheduledDate'],
+            fields : ['createdDate'],
             directions : ['DESC'],
             useExternalSorting : true
         },
