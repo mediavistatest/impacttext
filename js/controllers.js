@@ -122,7 +122,7 @@ function generateOrderByField(sortFields, sortOrders) {
 
  */
 
-function MainCtrl($http, $cookieStore) {
+function MainCtrl($http, $cookieStore, $window) {
     var main = this;
     // getting account info
     main.accountInfo = {};
@@ -179,7 +179,80 @@ function MainCtrl($http, $cookieStore) {
         alert("Error occured while getting account info!");
     });
 
-    main.ServerRequests = {};
+    //Server request logic here
+    main.ServerRequests = {
+        contactModifyRequest : function(request, $inScope) {
+            //Send request to the server
+            $http.post(inspiniaNS.wsUrl + "contact_modify", $.param(request)).success(
+            //Successful request to the server
+            function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    alert("Unidentified error occurred when editing contact!");
+                    return;
+                }
+                if (data.apicode == 0) {
+                    $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
+                } else if (data.apicode == 4) {
+                    //This is an error saying there is nothing to change
+                    $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
+                } else {
+                    alert("An error occurred when changing your contact Error code: " + data.apicode);
+                    console.log(JSON.stringify(data));
+                }
+            }).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                //alert('Unexpected error occurred when trying to send message!');
+                if (status == 400) {
+                    if (data.apicode == 4) {
+                        //This is an error saying there is nothing to change
+                        $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
+                    } else {
+                        alert("An error occurred when changing your contact! Error code: " + data.apicode);
+                        console.log(JSON.stringify(data));
+                    }
+                }
+                // }
+            });
+        },
+        contactOptOutAddRequest : function(request, $inScope) {
+            $http.post(inspiniaNS.wsUrl + "optout_add", $.param(request)).success(
+            //Successful request to the server
+            function(data, status, headers, config) {
+
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    alert("Unidentified error occurred when trying to opt out contact!");
+                    return;
+                }
+                if (data.apicode == 0) {
+                    $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
+                } else if (data.apicode == 4) {
+                    //This is an error saying there is nothing to change
+                    $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
+                } else {
+                    alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
+                    console.log(JSON.stringify(data));
+                }
+            }).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                //alert('Unexpected error occurred when trying to send message!');
+                if (status == 400) {
+                    if (data.apicode == 4) {
+                        //This is an error saying there is nothing to change
+                        $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
+                    } else {
+                        alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
+                        console.log(JSON.stringify(data));
+                    }
+                }
+                // }
+            });
+
+        }
+    };
 
     /**
 
@@ -444,8 +517,7 @@ function MainCtrl($http, $cookieStore) {
 
         var types = ['success', 'info', 'warning', 'danger'];
 
-        for (var i = 0,
-            n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+        for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
 
             var index = Math.floor((Math.random() * 4));
 
@@ -3542,67 +3614,41 @@ function ngGridCtrl($scope, $http, $cookieStore) {
     //   ];
 
     $scope.mySelections = [];
-
     $scope.filterOptions = {
-
         filterText : "",
-
         externalFilter : 'searchText',
-
         useExternalFilter : true
-
     };
 
     $scope.totalServerItems = 0;
-
     $scope.pagingOptions = {
-
         pageSizes : [2, 5, 10, 20],
-
         pageSize : 10,
-
         currentPage : 1
-
     };
 
     // sort
 
     $scope.sortOptions = {
-
         fields : ['contactListName'],
-
         directions : ['ASC'],
-
         useExternalSorting : true
-
     };
 
     //GET DATA
 
     $scope.getPagedDataAsync = function(pageSize, page, searchText, sortFields, sortOrders) {
-
         if ( typeof page == 'undefined' || page == null || page == '') {
-
             page = 0;
-
         }
-
         var orderBy = generateOrderByField(sortFields, sortOrders);
-
         if (orderBy == '') {
-
             orderBy = "contactlistname";
-
         }
-
         setTimeout(function() {
-
             var data;
-
             if (searchText) {
-
                 var ft = searchText.toLowerCase();
-
                 $http.post(inspiniaNS.wsUrl + "contactlist_get", $.param({
                     sethttp : 1,
                     apikey : $cookieStore.get('inspinia_auth_token'),
@@ -4026,43 +4072,59 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     //   ];
 
     $scope.mySelections = [];
-
     $scope.filterOptions = {
-
         filterText : '',
-
         filterBy : ''
-
         //filterText2: '',
-
         //externalFilter: '',
-
         //useExternalFilter: true
-
     };
-
     $scope.totalServerItems = 0;
-
     $scope.pagingOptions = {
-
         pageSizes : [2, 5, 10, 20],
-
         pageSize : 10,
-
         currentPage : 1
-
+    };
+    // sort
+    $scope.sortOptions = {
+        fields : ['lastName'],
+        directions : ['ASC'],
+        useExternalSorting : true
     };
 
-    // sort
+    $scope.blockContact = function() {
+        for (var i in $scope.mySelections) {
+            $scope.changeContactStatus('I', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
+        }
+        $scope.refresh();
+    };
+    $scope.unblockContact = function() {
+        for (var i in $scope.mySelections) {
+            $scope.changeContactStatus('A', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
+        }
+        $scope.refresh();
+    };
+    $scope.optOutContact = function() {
+        var request = {
+            // sethttp : 1,
+            apikey : $cookieStore.get('inspinia_auth_token')
+        };        
+        for (var i in $scope.mySelections) {
+            request.ANI = $scope.mySelections[i].ANI;
+            $scope.main.ServerRequests.contactOptOutAddRequest(request, $scope);
+        }
+        $scope.refresh();
+    };
 
-    $scope.sortOptions = {
-
-        fields : ['lastName'],
-
-        directions : ['ASC'],
-
-        useExternalSorting : true
-
+    $scope.changeContactStatus = function(inStatus, inContactId, inANI) {
+        var request = {
+            sethttp : 1,
+            apikey : $cookieStore.get('inspinia_auth_token'),
+            contactID : inContactId,
+            ANI : inANI,
+            status : inStatus
+        };
+        $scope.main.ServerRequests.contactModifyRequest(request, $scope);
     };
 
     //$scope.filterStatusO = function() {
@@ -4907,82 +4969,56 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 
     };
 
-				// if (status == 400) {
-// 
-					// alert("An error occurred when getting contact info! Error code: " + data.apicode);
-// 
-					// alert(JSON.stringify(data));
-// 
-				// }
-// 
-			// }
-// 
-		// );
-// 
-	// };
-	$scope.blockContact = function(inStatus) {
-	     $scope.changeContactStatus('I');
-	     $scope.refresh();
-	};
-    $scope.unblockContact = function(inStatus) {
-         $scope.changeContactStatus('A');
-         $scope.refresh();
-    };
-    $scope.optOutContact = function(inStatus) {
-         $scope.changeContactStatus('O');
-         $scope.refresh();
-    };
-        
-    $scope.changeContactStatus = function(inStatus) {
-        var request = {
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            contactID : $state.params.id,
-            ANI : $scope.PhoneNumber,
-            status : inStatus
-        };
-        $scope.contactModifyRequest(request);
-        
-        
-        console.log(request)
-    }; 
+    // if (status == 400) {
+    //
+    // alert("An error occurred when getting contact info! Error code: " + data.apicode);
+    //
+    // alert(JSON.stringify(data));
+    //
+    // }
+    //
+    // }
+    //
+    // );
+    //
+    // };
 
-    $scope.contactModifyRequest = function(request){
-        //Send request to the server
-        $http.post(inspiniaNS.wsUrl + "contact_modify", $.param(request)).success(
-        //Successful request to the server
-        function(data, status, headers, config) {
-            if (data == null || typeof data.apicode == 'undefined') {
-                //This should never happen
-                alert("Unidentified error occurred when editing contact!");
-                return;
-            }
-            if (data.apicode == 0) {
-                $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-            } else if (data.apicode == 4) {
-                //This is an error saying there is nothing to change
-                $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-            } else {
-                alert("An error occurred when adding contact list! Error code: " + data.apicode);
-                alert(JSON.stringify(data));
-            }
-            ;
-        }).error(
-        //An error occurred with this request
-        function(data, status, headers, config) {
-            //alert('Unexpected error occurred when trying to send message!');
-            if (status == 400) {
-                if (data.apicode == 4) {
-                    //This is an error saying there is nothing to change
-                    $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-                } else {
-                    alert("An error occurred when sending your message! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
-                    }
-                }
-            // }
-        });
-    };
+    // $scope.contactModifyRequest = function(request) {
+    // //Send request to the server
+    // $http.post(inspiniaNS.wsUrl + "contact_modify", $.param(request)).success(
+    // //Successful request to the server
+    // function(data, status, headers, config) {
+    // if (data == null || typeof data.apicode == 'undefined') {
+    // //This should never happen
+    // alert("Unidentified error occurred when editing contact!");
+    // return;
+    // }
+    // if (data.apicode == 0) {
+    // $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+    // } else if (data.apicode == 4) {
+    // //This is an error saying there is nothing to change
+    // $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+    // } else {
+    // alert("An error occurred when adding contact list! Error code: " + data.apicode);
+    // alert(JSON.stringify(data));
+    // }
+    // ;
+    // }).error(
+    // //An error occurred with this request
+    // function(data, status, headers, config) {
+    // //alert('Unexpected error occurred when trying to send message!');
+    // if (status == 400) {
+    // if (data.apicode == 4) {
+    // //This is an error saying there is nothing to change
+    // $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
+    // } else {
+    // alert("An error occurred when sending your message! Error code: " + data.apicode);
+    // alert(JSON.stringify(data));
+    // }
+    // }
+    // // }
+    // });
+    // };
 
     $scope.saveContact = function() {
 
@@ -5042,7 +5078,9 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 
         }
 
-        $scope.contactModifyRequest(request);
+        // console.log(main)
+        // console.log(MainCtrl.ServerRequests)
+        $scope.main.ServerRequests.contactModifyRequest(request, $scope);
 
         //Send request to the server
 
@@ -6223,7 +6261,7 @@ function loginCtrl($scope, $cookieStore, $http, $window) {
 
  */
 
-angular.module('inspinia').controller('MainCtrl', ['$http', '$cookieStore', MainCtrl]);
+angular.module('inspinia').controller('MainCtrl', ['$http', '$cookieStore', '$window', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
 angular.module('inspinia').controller('dashboardFlotTwo', dashboardFlotTwo);
 angular.module('inspinia').controller('dashboardMap', dashboardMap);
