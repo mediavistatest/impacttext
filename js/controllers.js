@@ -6921,7 +6921,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     };
     
     
-
+  
     $scope.blockContacts_ngContactListCtrl = function() {
         for (var i in $scope.mySelections) {
             $scope.main.CommonActions.blockContact($scope, $scope.mySelections[i]);
@@ -8082,6 +8082,7 @@ function imageCrop($scope) {
 
 
 function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracker) {
+
     $scope.PhoneNumberArrayValidator = {
         PhoneNumbers : {
             inputNumberString : '',
@@ -8143,7 +8144,11 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 return true;
             }
         },
+
         ParseAndValidateNumbers : function(numbersString) {
+            if (numbersString == null) {
+                numbersString = '';
+            }
             $scope.PhoneNumberArrayValidator.PhoneNumbers.errorNumber = '';
             $scope.PhoneNumberArrayValidator.PhoneNumbers.errorMessage = '';
             $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString = numbersString;
@@ -8163,7 +8168,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
             return $scope.PhoneNumberArrayValidator.PhoneNumbers;
         }
-    };
+    }; 
+
 
 
 
