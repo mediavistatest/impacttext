@@ -138,9 +138,7 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
     var main = this;
     // getting account info
     main.accountInfo = {};
-    main.companyInfo = {
-        companyName : 'Small Bakery inc'
-    };
+    main.companyInfo = {};
     $http.post(inspiniaNS.wsUrl + "account_get", $.param({
         apikey : $cookieStore.get('inspinia_auth_token'),
         accountID : $cookieStore.get('inspinia_account_id'),
@@ -172,9 +170,9 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                     return;
                 }
                 if (data.apicode == 0) {
-                    main.companyInfo = data.apidata[0];
-                    // window.console.log('main.companyInfo')
-                    // window.console.log(main.companyInfo)
+                    main.companyInfo = data.apidata;
+                    window.console.log('main.companyInfo')
+                    window.console.log(data.apidata)
                     // geting company info
                 } else {
                     // alert("Error occured while getting account company info!");
@@ -264,6 +262,49 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
         }
     };
 
+// main.CommonActions.optOutContact
+
+    main.CommonActions = {
+        blockContact : function(inScope, inContact) {
+            $scope.main.CommonActions.changeContactStatus('I', inContact.contactID, inContact.ANI, inScope);
+        },
+        unblockContact : function(inScope, inContact) {
+            $scope.main.CommonActions.changeContactStatus('A', inContact.contactID, inContact.ANI, inScope);
+        },
+        optOutContact : function(inScope, inANI) {
+            var request = {
+                // sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token')
+            };
+            request.ANI = inANI;
+            $scope.main.ServerRequests.contactOptOutAddRequest(request, inScope);
+        },
+        changeContactStatus : function(inStatus, inContactId, inANI, inScope) {
+            var request = {
+                sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                contactID : inContactId,
+                ANI : inANI,
+                status : inStatus
+            };
+            $scope.main.ServerRequests.contactModifyRequest(request, inScope);
+        }
+    };
+
+
+
+
+
+
+
+
+
+
+ 
+
+    
+
+
     /**
 
      * slideInterval - Interval for bootstrap Carousel, in milliseconds:
@@ -271,9 +312,6 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
      */
 
     this.slideInterval = 5000;
-
-
-
 
 
     /**
@@ -6889,41 +6927,63 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         directions : ['ASC'],
         useExternalSorting : true
     };
+    
+    
+  
+    $scope.blockContacts_ngContactListCtrl = function() {
+        for (var i in $scope.mySelections) {
+            $scope.main.CommonActions.blockContact($scope, $scope.mySelections[i]);
+        }
+        $scope.refresh();
+    };
+    $scope.unblockContacts_ngContactListCtrl = function() {
+        for (var i in $scope.mySelections) {
+            $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i]);
+        }
+        $scope.refresh();
+    };
+    $scope.optOutContacts_ngContactListCtrl = function() {
+        for (var i in $scope.mySelections) {
+            $scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI);
+        }
+        $scope.refresh();
+    }; 
 
-    $scope.blockContact = function() {
-        for (var i in $scope.mySelections) {
-            $scope.changeContactStatus('I', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
-        }
-        $scope.refresh();
-    };
-    $scope.unblockContact = function() {
-        for (var i in $scope.mySelections) {
-            $scope.changeContactStatus('A', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
-        }
-        $scope.refresh();
-    };
-    $scope.optOutContact = function() {
-        var request = {
+    
+    // $scope.blockContactsngContactListCtrl = function() {
+        // for (var i in $scope.mySelections) {
+            // $scope.changeContactStatus('I', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
+        // }
+        // $scope.refresh();
+    // };
+    // $scope.unblockContacts = function() {
+        // for (var i in $scope.mySelections) {
+            // $scope.changeContactStatus('A', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
+        // }
+        // $scope.refresh();
+    // };
+    // $scope.optOutContacts = function() {
+        // var request = {
+            // // sethttp : 1,
+            // apikey : $cookieStore.get('inspinia_auth_token')
+        // };
+        // for (var i in $scope.mySelections) {
+            // request.ANI = $scope.mySelections[i].ANI;
+            // $scope.main.ServerRequests.contactOptOutAddRequest(request, $scope);
+        // }
+        // $scope.refresh();
+    // };
+// 
+    // $scope.changeContactStatus = function(inStatus, inContactId, inANI) {
+        // var request = {
             // sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token')
-        };
-        for (var i in $scope.mySelections) {
-            request.ANI = $scope.mySelections[i].ANI;
-            $scope.main.ServerRequests.contactOptOutAddRequest(request, $scope);
-        }
-        $scope.refresh();
-    };
-
-    $scope.changeContactStatus = function(inStatus, inContactId, inANI) {
-        var request = {
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            contactID : inContactId,
-            ANI : inANI,
-            status : inStatus
-        };
-        $scope.main.ServerRequests.contactModifyRequest(request, $scope);
-    };
+            // apikey : $cookieStore.get('inspinia_auth_token'),
+            // contactID : inContactId,
+            // ANI : inANI,
+            // status : inStatus
+        // };
+        // $scope.main.ServerRequests.contactModifyRequest(request, $scope);
+    // };
 
     //$scope.filterStatusO = function() {
 
@@ -8028,6 +8088,7 @@ function imageCrop($scope) {
 
 
 function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracker) {
+
     $scope.PhoneNumberArrayValidator = {
         PhoneNumbers : {
             inputNumberString : '',
@@ -8089,7 +8150,11 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 return true;
             }
         },
+
         ParseAndValidateNumbers : function(numbersString) {
+            if (numbersString == null) {
+                numbersString = '';
+            }
             $scope.PhoneNumberArrayValidator.PhoneNumbers.errorNumber = '';
             $scope.PhoneNumberArrayValidator.PhoneNumbers.errorMessage = '';
             $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString = numbersString;
@@ -8109,7 +8174,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
             return $scope.PhoneNumberArrayValidator.PhoneNumbers;
         }
-    };
+    }; 
+
 
 
 
