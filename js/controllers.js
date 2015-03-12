@@ -134,7 +134,7 @@ function generateOrderByField(sortFields, sortOrders) {
 
  */
 
-function MainCtrl($http, $cookieStore, $window) {
+function MainCtrl($scope, $http, $cookieStore, $window) {
     var main = this;
     // getting account info
     main.accountInfo = {};
@@ -205,9 +205,6 @@ function MainCtrl($http, $cookieStore, $window) {
                 }
                 if (data.apicode == 0) {
                     $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
-                } else if (data.apicode == 4) {
-                    //This is an error saying there is nothing to change
-                    $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
                 } else {
                     alert("An error occurred when changing your contact Error code: " + data.apicode);
                     console.log(JSON.stringify(data));
@@ -218,8 +215,7 @@ function MainCtrl($http, $cookieStore, $window) {
                 //alert('Unexpected error occurred when trying to send message!');
                 if (status == 400) {
                     if (data.apicode == 4) {
-                        //This is an error saying there is nothing to change
-                        $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
+                        $scope.$broadcast("InvalidANI");
                     } else {
                         alert("An error occurred when changing your contact! Error code: " + data.apicode);
                         console.log(JSON.stringify(data));
@@ -7508,24 +7504,24 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
             return;
         }
 
-        //Checking if all required parameters are there
-		if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
-			$scope.$broadcast("InvalidANI");
-            return;
-        }
-		var phoneNo = $.trim($scope.PhoneNumber);
-		if (phoneNo.length == 10) {
-			phoneNo = '1' + phoneNo;
-		}
+		 //Checking if all required parameters are there
+		 if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
+			 $scope.$broadcast("InvalidANI");
+			 return;
+		 }
+		 var phoneNo = $.trim($scope.PhoneNumber);
+		 if (phoneNo.length == 10) {
+			 phoneNo = '1' + phoneNo;
+		 }
 
-        var request = {
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id'),
-            companyID : $cookieStore.get('inspinia_company_id'),
-			ANI: phoneNo,
-            status : 'A'
-        };
+		 var request = {
+			 sethttp : 1,
+			 apikey : $cookieStore.get('inspinia_auth_token'),
+			 accountID : $cookieStore.get('inspinia_account_id'),
+			 companyID : $cookieStore.get('inspinia_company_id'),
+			 ANI: phoneNo,
+			 status : 'A'
+		 };
 
         if ( typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
             request.firstName = $.trim($scope.FirstName);
@@ -8167,7 +8163,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.SetTimeHour = "";
     $scope.SetTimeMinute = "";
     $scope.contactLists = [];
-    $scope.SendToList = true;
+    $scope.SendToList = false;
 
     //Date/time control
     $scope.today = function() {
@@ -8223,7 +8219,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         $scope.SetDate = '';
         $scope.SetTimeHour = '';
         $scope.SetTimeMinute = '';
-        $scope.SendToList = true;
+        $scope.SendToList = false;
     };
 
     //Read the data from the remote server. First read the contact lists.
@@ -8464,7 +8460,14 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     alert("An error occurred when sending your message! Error code: " + data.apicode);
                     alert(JSON.stringify(data));
                 }
-            }
+            } if (status == 400) {
+				  if (data.apicode == 4) {
+                    $scope.$broadcast("InvalidANI", data.apidata);
+                } else {
+                    alert("An error occurred when sending your message! Error code: " + data.apicode);
+                    alert(JSON.stringify(data));
+                }
+			  }
 			}
 		);
 	};
@@ -8661,7 +8664,7 @@ angular
 
     .module('inspinia')
 
-    .controller('MainCtrl',['$http', '$cookieStore', '$window', MainCtrl])
+    .controller('MainCtrl',['$scope', '$http', '$cookieStore', '$window', MainCtrl])
 
     .controller('dashboardFlotOne', dashboardFlotOne)
 
