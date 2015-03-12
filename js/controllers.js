@@ -264,6 +264,49 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
         }
     };
 
+
+    main.CommonActions = {
+        blockContact : function(inScope, inContact) {
+            $scope.main.CommonActions.changeContactStatus('I', inContact.contactID, inContact.ANI, inScope);
+        },
+        unblockContact : function(inScope, inContact) {
+            $scope.main.CommonActions.changeContactStatus('A', inContact.contactID, inContact.ANI, inScope);
+        },
+        optOutContact : function(inScope, inContact) {
+            var request = {
+                // sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token')
+            };
+            for (var i in inScope.mySelections) {
+                request.ANI = inContact.ANI;
+                $scope.main.ServerRequests.contactOptOutAddRequest(request, inScope);
+            }
+        },
+        changeContactStatus : function(inStatus, inContactId, inANI, inScope) {
+            var request = {
+                sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                contactID : inContactId,
+                ANI : inANI,
+                status : inStatus
+            };
+            $scope.main.ServerRequests.contactModifyRequest(request, inScope);
+        }
+    }; 
+
+
+
+
+
+
+
+
+
+ 
+
+    
+
+
     /**
 
      * slideInterval - Interval for bootstrap Carousel, in milliseconds:
@@ -271,9 +314,6 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
      */
 
     this.slideInterval = 5000;
-
-
-
 
 
     /**
@@ -6881,41 +6921,63 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         directions : ['ASC'],
         useExternalSorting : true
     };
+    
+    
 
-    $scope.blockContact = function() {
+    $scope.blockContacts_ngContactListCtrl = function() {
         for (var i in $scope.mySelections) {
-            $scope.changeContactStatus('I', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
+            $scope.main.CommonActions.blockContact($scope, $scope.mySelections[i]);
         }
         $scope.refresh();
     };
-    $scope.unblockContact = function() {
+    $scope.unblockContacts_ngContactListCtrl = function() {
         for (var i in $scope.mySelections) {
-            $scope.changeContactStatus('A', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
+            $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i]);
         }
         $scope.refresh();
     };
-    $scope.optOutContact = function() {
-        var request = {
+    $scope.optOutContacts_ngContactListCtrl = function() {
+        for (var i in $scope.mySelections) {
+            $scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i]);
+        }
+        $scope.refresh();
+    }; 
+
+    
+    // $scope.blockContactsngContactListCtrl = function() {
+        // for (var i in $scope.mySelections) {
+            // $scope.changeContactStatus('I', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
+        // }
+        // $scope.refresh();
+    // };
+    // $scope.unblockContacts = function() {
+        // for (var i in $scope.mySelections) {
+            // $scope.changeContactStatus('A', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
+        // }
+        // $scope.refresh();
+    // };
+    // $scope.optOutContacts = function() {
+        // var request = {
+            // // sethttp : 1,
+            // apikey : $cookieStore.get('inspinia_auth_token')
+        // };
+        // for (var i in $scope.mySelections) {
+            // request.ANI = $scope.mySelections[i].ANI;
+            // $scope.main.ServerRequests.contactOptOutAddRequest(request, $scope);
+        // }
+        // $scope.refresh();
+    // };
+// 
+    // $scope.changeContactStatus = function(inStatus, inContactId, inANI) {
+        // var request = {
             // sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token')
-        };
-        for (var i in $scope.mySelections) {
-            request.ANI = $scope.mySelections[i].ANI;
-            $scope.main.ServerRequests.contactOptOutAddRequest(request, $scope);
-        }
-        $scope.refresh();
-    };
-
-    $scope.changeContactStatus = function(inStatus, inContactId, inANI) {
-        var request = {
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            contactID : inContactId,
-            ANI : inANI,
-            status : inStatus
-        };
-        $scope.main.ServerRequests.contactModifyRequest(request, $scope);
-    };
+            // apikey : $cookieStore.get('inspinia_auth_token'),
+            // contactID : inContactId,
+            // ANI : inANI,
+            // status : inStatus
+        // };
+        // $scope.main.ServerRequests.contactModifyRequest(request, $scope);
+    // };
 
     //$scope.filterStatusO = function() {
 
