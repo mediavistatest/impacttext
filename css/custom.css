@@ -3311,3 +3311,8 @@ span.li-label {
   .navbar-header {display: block;}
 
 }
+
+.ngSelectionCheckbox {
+    top: -12px;
+  position: relative;
+}

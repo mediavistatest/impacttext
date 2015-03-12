@@ -4,8 +4,8 @@ var ngInbox = {
         DataConstructors : {
             PageOptions : function() {
                 var self = this;
-                self.pageSizes = [2, 5, 10];
-                self.pageSize = 5;
+                self.pageSizes = [2, 5, 10, 20];
+                self.pageSize = 10;
                 self.currentPage = 1;
             },
             FilterOptions : function() {
@@ -122,7 +122,7 @@ var ngInbox = {
                     enableSorting : true,
                     useExternalSorting : true,
                     sortInfo : controllerParent.$scope.sortOptions,
-                    rowHeight : 45,
+                    rowHeight : 35,
                     selectedItems : controllerParent.$scope.mySelections,
                     showSelectionCheckbox : true,
                     multiSelect : true,
