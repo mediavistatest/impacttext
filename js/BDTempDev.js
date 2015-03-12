@@ -203,7 +203,7 @@ var ngInbox = {
                             // controllerParent.$scope.$broadcast("SendingMessageSucceeded", data.apidata);
                         } else {
                             controllerParent.$scope.$broadcast("ErrorOnMessages", 'An error occurred when sending your message! Error code: ' + data.apicode);
-                            console.log(JSON.stringify(data));
+                            //console.log(JSON.stringify(data));
                         }
                         successfullRequestsCount_++;
 
@@ -239,7 +239,7 @@ var ngInbox = {
                     // params.contactListID == messageToSendArray[j].contactListID;
                     // params.ANI = messageToSendArray[j].ANI;
                     // params.DID = messageToSendArray[j].DID;
-// 
+//
                     // //Send request to the server
                     // controllerParent.$http.post(inspiniaNS.wsUrl + "message_send", $.param(params))
                     // //Successful request to the server
@@ -257,10 +257,10 @@ var ngInbox = {
                             // console.log(JSON.stringify(data));
                         // }
                         // successfullRequestsCount_++;
-// 
+//
                         // if (totalNumberOfMessages_ == successfullRequestsCount_) {
                             // callback();
-// 
+//
                         // }
                     // }).error(
                     // //An error occurred with this request
