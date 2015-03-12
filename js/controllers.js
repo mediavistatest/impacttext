@@ -148,7 +148,7 @@ function MainCtrl($http, $cookieStore) {
             $http.post(inspiniaNS.wsUrl + "company_get", $.param({
                 apikey : $cookieStore.get('inspinia_auth_token'),
                 accountID : $cookieStore.get('inspinia_account_id'),
-                sethttp : 1
+                companyID : main.accountInfo.companyID
             }))
             //Successful request to the server
             .success(function(data, status, headers, config) {
