@@ -6519,23 +6519,9 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 
 
 
-    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	$scope.refresh = function() {
+		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+	};
 
     //    $scope.filterOptions = {
 
@@ -6822,17 +6808,75 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 
     };
 
-
-
-	// helper method to get selected lists
-    $scope.selectedLists = function selectedLists() {
-		return filterFilter($scope.lists.names, { selected: true });
-    };
-
 	$scope.changeSelectedListsStatus = function(newStatus) {
-		//Get selected lists
-		var selectedLists = $scope.selectedLists();
+		//Check selected items
+		if (typeof $scope.mySelections == 'undefined' || $scope.mySelections == null || $scope.mySelections.length <= 0) {
+			//Do nothing
+			return;
+		}
+		//Checking input parameters
+		if (typeof newStatus == 'undefined' || newStatus == null || newStatus == '') {
+			return;
+		}
 
+		var numberOfItemsToProccess = $scope.mySelections.length;
+		var successfullyProcessed = 0;
+		var failedToProcess = 0;
+		for (var i in $scope.mySelections) {
+			var contactListId = $scope.mySelections[i].contactListID;
+			var contactListName = $scope.mySelections[i].contactListName;
+			$http.post(inspiniaNS.wsUrl + "contactlist_modify", $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'),
+				contactListID: contactListId, contactListName: contactListName, status: newStatus})
+			).success(
+				//Successful request to the server
+				function(data, status, headers, config) {
+					numberOfItemsToProccess--;
+					if (data == null || typeof data.apicode == 'undefined') {
+						//This should never happen
+						failedToProcess++;
+						alert("Unidentified error occurred when editing contact!");
+						return;
+					}
+					if (data.apicode == 0) {
+						successfullyProcessed++;
+					} else {
+						failedToProcess++;
+						alert("An error occurred when changing your contact Error code: " + data.apicode);
+						console.log(JSON.stringify(data));
+					}
+					if (numberOfItemsToProccess == 0 && failedToProcess == 0) {
+						if (newStatus == 'A') {
+							$scope.$broadcast("ListsSuccessfullyActivated");
+						} else if (newStatus == 'I') {
+							$scope.$broadcast("ListsSuccessfullyDeactivated");
+						}
+					}
+					if (numberOfItemsToProccess == 0) {
+						$scope.refresh();
+					}
+				}).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					numberOfItemsToProccess--;
+					if (status == 400) {
+						/*if (data.apicode == 4) {
+							$scope.$broadcast("InvalidANI");
+						} else */{
+							failedToProcess++;
+							alert("An error occurred when changing your contact! Error code: " + data.apicode);
+							console.log(JSON.stringify(data));
+						}
+					}
+					if (newStatus == 'A') {
+						$scope.$broadcast("FailedToActivateList");
+					} else if (newStatus == 'I') {
+						$scope.$broadcast("FailedToDeactivateList");
+					}
+					if (numberOfItemsToProccess == 0) {
+						$scope.refresh();
+					}
+				});
+		}
 	};
 
 
@@ -7940,6 +7984,32 @@ function notifyCtrl($scope, notify) {
             templateUrl : $scope.inspiniaTemplate
         });
     };
+    $scope.ListsSuccessfullyActivatedMsg = function() {
+        notify({
+            message : 'All lists are successfully activated.',
+            classes : 'alert-success'
+        });
+    };
+    $scope.ListsSuccessfullyDeactivatedMsg = function() {
+        notify({
+            message : 'All lists are successfully deactivated.',
+            classes : 'alert-success'
+        });
+    };
+    $scope.FailedToActivateListMsg = function() {
+        notify({
+            message : 'Failed to activate list!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    };
+    $scope.FailedToDeactivateListMsg = function() {
+        notify({
+            message : 'Failed to deactivate list!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    };
     //If SendingMessageSucceeded event is triggered, show related message
 
     $scope.$on('SendingMessageSucceeded', function(event, args) {
@@ -8006,6 +8076,22 @@ function notifyCtrl($scope, notify) {
     //If SearchTextTooShort event is triggered, show related message
     $scope.$on('SearchTextTooShort', function(event, args) {
         $scope.SearchTextTooShortMsg();
+    });
+    //If ListsSuccessfullyActivated event is triggered, show related message
+    $scope.$on('ListsSuccessfullyActivated', function(event, args) {
+        $scope.ListsSuccessfullyActivatedMsg();
+    });
+    //If ListsSuccessfullyDeactivated event is triggered, show related message
+    $scope.$on('ListsSuccessfullyDeactivated', function(event, args) {
+        $scope.ListsSuccessfullyDeactivatedMsg();
+    });
+    //If FailedToActivateList event is triggered, show related message
+    $scope.$on('FailedToActivateList', function(event, args) {
+        $scope.FailedToActivateListMsg();
+    });
+    //If FailedToDeactivateList event is triggered, show related message
+    $scope.$on('FailedToDeactivateListList', function(event, args) {
+        $scope.FailedToDeactivateListMsg();
     });
 }
 
