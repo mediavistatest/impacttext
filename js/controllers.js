@@ -154,8 +154,6 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
         }
         if (data.apicode == 0) {
             main.accountInfo = data.apidata[0];
-            // window.console.log('main.accountInfo')
-            // window.console.log(main.accountInfo)
             // geting company info
             $http.post(inspiniaNS.wsUrl + "company_get", $.param({
                 apikey : $cookieStore.get('inspinia_auth_token'),
@@ -171,9 +169,6 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                 }
                 if (data.apicode == 0) {
                     main.companyInfo = data.apidata;
-                    window.console.log('main.companyInfo')
-                    window.console.log(data.apidata)
-                    // geting company info
                 } else {
                     // alert("Error occured while getting account company info!");
                 }
