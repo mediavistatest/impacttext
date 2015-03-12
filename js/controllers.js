@@ -6902,7 +6902,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         var request = {
             // sethttp : 1,
             apikey : $cookieStore.get('inspinia_auth_token')
-        };        
+        };
         for (var i in $scope.mySelections) {
             request.ANI = $scope.mySelections[i].ANI;
             $scope.main.ServerRequests.contactOptOutAddRequest(request, $scope);
@@ -7648,7 +7648,7 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
         );
     };
 
-    
+
 
     $scope.saveContact = function() {
         //Checking if all required parameters are there
@@ -8662,7 +8662,7 @@ angular
 
     .module('inspinia')
 
-    .controller('MainCtrl', MainCtrl)
+    .controller('MainCtrl',['$http', '$cookieStore', '$window', MainCtrl])
 
     .controller('dashboardFlotOne', dashboardFlotOne)
 
