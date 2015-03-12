@@ -127,12 +127,34 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         .state('lists.add_contact', {
             url: "/lists_add_contact",
             templateUrl: "views/lists_add_contact.html",
-            data: { pageTitle: 'Add Contact' }
+            data: { pageTitle: 'Add Contact' },
+			   resolve: {
+				 loadPlugin: function ($ocLazyLoad) {
+					 return $ocLazyLoad.load([
+						 {
+							 name: 'cgNotify',
+							 files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+
+						 }
+					 ]);
+				 }
+				}
         })
         .state('lists.manage_contact', {
             url: "/lists_manage_contact/:id",
             templateUrl: "views/lists_manage_contact.html",
-            data: { pageTitle: 'Manage Contact' }
+            data: { pageTitle: 'Manage Contact' },
+			   resolve: {
+				 loadPlugin: function ($ocLazyLoad) {
+					 return $ocLazyLoad.load([
+						 {
+							 name: 'cgNotify',
+							 files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+
+						 }
+					 ]);
+				 }
+				}
         })
         .state('lists.upload', {
             url: "/lists_upload",
