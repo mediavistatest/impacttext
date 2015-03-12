@@ -225,7 +225,6 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
             });
         },
         contactOptOutAddRequest : function(request, $inScope) {
-            window.console.log($.param(request))
             $http.post(inspiniaNS.wsUrl + "optout_add", $.param(request)).success(
             //Successful request to the server
             function(data, status, headers, config) {
@@ -263,6 +262,7 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
         }
     };
 
+// main.CommonActions.optOutContact
 
     main.CommonActions = {
         blockContact : function(inScope, inContact) {
@@ -271,15 +271,13 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
         unblockContact : function(inScope, inContact) {
             $scope.main.CommonActions.changeContactStatus('A', inContact.contactID, inContact.ANI, inScope);
         },
-        optOutContact : function(inScope, inContact) {
+        optOutContact : function(inScope, inANI) {
             var request = {
                 // sethttp : 1,
                 apikey : $cookieStore.get('inspinia_auth_token')
             };
-            for (var i in inScope.mySelections) {
-                request.ANI = inContact.ANI;
-                $scope.main.ServerRequests.contactOptOutAddRequest(request, inScope);
-            }
+            request.ANI = inANI;
+            $scope.main.ServerRequests.contactOptOutAddRequest(request, inScope);
         },
         changeContactStatus : function(inStatus, inContactId, inANI, inScope) {
             var request = {
@@ -291,7 +289,8 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
             };
             $scope.main.ServerRequests.contactModifyRequest(request, inScope);
         }
-    }; 
+    };
+
 
 
 
@@ -6937,7 +6936,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     };
     $scope.optOutContacts_ngContactListCtrl = function() {
         for (var i in $scope.mySelections) {
-            $scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i]);
+            $scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI);
         }
         $scope.refresh();
     }; 

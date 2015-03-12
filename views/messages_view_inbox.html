@@ -32,7 +32,7 @@
         <!-- inbox, sent -->
 
         <!--<button class="btn">
-            <i class="fa fa-check-square-o"></i> Opt In Sender
+        <i class="fa fa-check-square-o"></i> Opt In Sender
         </button>-->
         <!-- only inbox -->
 
@@ -45,7 +45,7 @@
         </button>
         <!-- only inbox -->
 
-        <button class="btn">
+        <button class="btn" ng-click="main.CommonActions.optOutContact(controllerParent.$scope, controllerParent.clickedMessage.sourceANI)">
             <i class="fa fa-chain-broken"></i> Opt Out
         </button>
         <!-- only inbox -->
