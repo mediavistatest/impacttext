@@ -126,7 +126,7 @@ function MainCtrl($http, $cookieStore) {
     var main = this;
     // getting account info
     main.accountInfo = {};
-    main.companyInfo = {};
+    main.companyInfo = {companyName : 'Small Bakery inc'};
     $http.post(inspiniaNS.wsUrl + "account_get", $.param({
         apikey : $cookieStore.get('inspinia_auth_token'),
         accountID : $cookieStore.get('inspinia_account_id'),
@@ -163,7 +163,7 @@ function MainCtrl($http, $cookieStore) {
                     window.console.log(main.companyInfo)
                     // geting company info
                 } else {
-                    alert("Error occured while getting account company info!");
+                    // alert("Error occured while getting account company info!");
                 }
             })
             //An error occurred with this request
