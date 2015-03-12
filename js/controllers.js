@@ -7830,27 +7830,16 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
             //An error occurred with this request
             function(data, status, headers, config) {
                 //alert('Unexpected error occurred when trying to send message!');
-
                 if (status == 400) {
-
                     if (data.apicode == 4) {
-
                         //This is an error saying there is nothing to change
-
                         $window.location.href = "/#/lists/lists_manage/" + $scope.ContactListID;
-
                     } else {
-
                         alert("An error occurred when sending your message! Error code: " + data.apicode);
-
                         alert(JSON.stringify(data));
-
                     }
-
                 }
-
             }
-
         );
     };
 
