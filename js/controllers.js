@@ -8164,7 +8164,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.SetTimeHour = "";
     $scope.SetTimeMinute = "";
     $scope.contactLists = [];
-    $scope.SendToList = true;
+    $scope.SendToList = false;
 
     //Date/time control
     $scope.today = function() {
@@ -8220,7 +8220,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         $scope.SetDate = '';
         $scope.SetTimeHour = '';
         $scope.SetTimeMinute = '';
-        $scope.SendToList = true;
+        $scope.SendToList = false;
     };
 
     //Read the data from the remote server. First read the contact lists.
@@ -8461,7 +8461,14 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     alert("An error occurred when sending your message! Error code: " + data.apicode);
                     alert(JSON.stringify(data));
                 }
-            }
+            } if (status == 400) {
+				  if (data.apicode == 4) {
+                    $scope.$broadcast("InvalidANI", data.apidata);
+                } else {
+                    alert("An error occurred when sending your message! Error code: " + data.apicode);
+                    alert(JSON.stringify(data));
+                }
+			  }
 			}
 		);
 	};
