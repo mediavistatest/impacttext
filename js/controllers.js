@@ -126,7 +126,9 @@ function MainCtrl($http, $cookieStore) {
     var main = this;
     // getting account info
     main.accountInfo = {};
-    main.companyInfo = {companyName : 'Small Bakery inc'};
+    main.companyInfo = {
+        companyName : 'Small Bakery inc'
+    };
     $http.post(inspiniaNS.wsUrl + "account_get", $.param({
         apikey : $cookieStore.get('inspinia_auth_token'),
         accountID : $cookieStore.get('inspinia_account_id'),
@@ -142,8 +144,8 @@ function MainCtrl($http, $cookieStore) {
         }
         if (data.apicode == 0) {
             main.accountInfo = data.apidata[0];
-            window.console.log('main.accountInfo')
-            window.console.log(main.accountInfo)
+            // window.console.log('main.accountInfo')
+            // window.console.log(main.accountInfo)
             // geting company info
             $http.post(inspiniaNS.wsUrl + "company_get", $.param({
                 apikey : $cookieStore.get('inspinia_auth_token'),
@@ -159,8 +161,8 @@ function MainCtrl($http, $cookieStore) {
                 }
                 if (data.apicode == 0) {
                     main.companyInfo = data.apidata[0];
-                    window.console.log('main.companyInfo')
-                    window.console.log(main.companyInfo)
+                    // window.console.log('main.companyInfo')
+                    // window.console.log(main.companyInfo)
                     // geting company info
                 } else {
                     // alert("Error occured while getting account company info!");
