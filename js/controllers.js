@@ -6791,8 +6791,16 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 
 
 
+	// helper method to get selected lists
+    $scope.selectedLists = function selectedLists() {
+		return filterFilter($scope.lists.names, { selected: true });
+    };
 
+	$scope.changeSelectedListsStatus = function(newStatus) {
+		//Get selected lists
+		var selectedLists = $scope.selectedLists();
 
+	};
 
 
 }
@@ -7594,8 +7602,6 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
 			);
 		}
 	};
-
-
 
     $scope.refreshLists();
 
