@@ -8599,7 +8599,9 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     alert(JSON.stringify(data));
                 }
             } if (status == 400) {
-				  if (data.apicode == 4) {
+				  	if (data.apicode == 1) {
+                    $scope.$broadcast("AniOptedOut", data.apidata);
+                } else if (data.apicode == 4) {
                     $scope.$broadcast("InvalidANI", data.apidata);
                 } else {
                     alert("An error occurred when sending your message! Error code: " + data.apicode);
