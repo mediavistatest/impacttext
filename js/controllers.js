@@ -8185,18 +8185,21 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         validatePhoneNumber : function(phoneNumber) {
             if (phoneNumber) {
                 if (!(phoneNumber == phoneNumber.replace(/\D/g, ''))) {
-                    var msg = 'Error: ' + phoneNumber + ' is not digits only!';
+                    //var msg = 'Error: ' + phoneNumber + ' is not digits only!';
+                    var msg = 'Please enter digits only.';
                     $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     return false;
                 }
                 if (phoneNumber.length < 10) {
-                    var msg = 'Error: ' + phoneNumber + ' is less then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                    //var msg = 'Error: ' + phoneNumber + ' is less then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                    var msg = 'Please enter 10 digits number.';
                     $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     return false;
                 }
 
                 if (phoneNumber.length > 10) {
-                    var msg = 'Error: ' + phoneNumber + ' is greater then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                    //var msg = 'Error: ' + phoneNumber + ' is greater then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                    var msg = 'Please enter 10 digits number.';
                     $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     return false;
                 }
