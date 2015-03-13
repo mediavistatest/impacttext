@@ -199,7 +199,7 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                     return;
                 }
                 if (data.apicode == 0) {
-                    $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
+                    $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
                 } else {
                     alert("An error occurred when changing your contact Error code: " + data.apicode);
                     console.log(JSON.stringify(data));
@@ -230,10 +230,10 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                     return;
                 }
                 if (data.apicode == 0) {
-                    $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
+                    $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
                 } else if (data.apicode == 4) {
                     //This is an error saying there is nothing to change
-                    $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
+                    $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
                 } else {
                     alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
                     console.log(JSON.stringify(data));
@@ -245,7 +245,7 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                 if (status == 400) {
                     if (data.apicode == 4) {
                         //This is an error saying there is nothing to change
-                        $window.location.href = "/#/lists/lists_manage/" + $inScope.ContactListID;
+                        $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
                     } else {
                         alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
                         console.log(JSON.stringify(data));
@@ -6920,7 +6920,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
     //   ];
 
-
+	$scope.main.contactListID = $state.params.id;
 
     $scope.mySelections = [];
 
@@ -8185,18 +8185,21 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         validatePhoneNumber : function(phoneNumber) {
             if (phoneNumber) {
                 if (!(phoneNumber == phoneNumber.replace(/\D/g, ''))) {
-                    var msg = 'Error: ' + phoneNumber + ' is not digits only!';
+                    //var msg = 'Error: ' + phoneNumber + ' is not digits only!';
+                    var msg = 'Please enter digits only.';
                     $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     return false;
                 }
                 if (phoneNumber.length < 10) {
-                    var msg = 'Error: ' + phoneNumber + ' is less then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                    //var msg = 'Error: ' + phoneNumber + ' is less then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                    var msg = 'Please enter 10 digits number.';
                     $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     return false;
                 }
 
                 if (phoneNumber.length > 10) {
-                    var msg = 'Error: ' + phoneNumber + ' is greater then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                    //var msg = 'Error: ' + phoneNumber + ' is greater then 10 digits number (lenght=' + phoneNumber.length + ')!';
+                    var msg = 'Please enter 10 digits number.';
                     $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     return false;
                 }

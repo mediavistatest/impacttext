@@ -78,7 +78,10 @@
 
 		    </select>
 
+            
+
 		</div>
+
 
 	</div>
 
@@ -95,6 +98,10 @@
     		<input type="text" name="FromName" placeholder="e.g. Nestle chocolate" ng-model="FromName" class="form-control"  ng-trim="false">
 
     	</div>
+
+        <div class="col-sm-4">
+        <i class="fa fa-info-circle" tooltip='This will count in your character limit.'></i>
+        </div>
 
 	</div>
 
@@ -129,6 +136,9 @@
     	</div>
 
         <div class="col-md-4 col-sm-3">
+
+        <i ng-show="!SendToList" class="fa fa-info-circle" tooltip='Enter a phone number starting with the area code. Separate multiple numbers with a comma.'></i>
+        
     	<div ng-show="PhoneNumberArrayValidator.PhoneNumbers.errorMessage && !SendToList" class="right-side-message error">
                  {{PhoneNumberArrayValidator.PhoneNumbers.errorMessage}}
             </div>
@@ -223,6 +233,9 @@
 
         </div>
 
+        <div class="col-sm-4">
+        <i class="fa fa-info-circle" tooltip='This will count in your character limit.'></i>
+        </div>
 
 
     </div>
