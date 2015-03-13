@@ -6,7 +6,7 @@
 
 
 
-<h2 class="section-title">Manage List
+<h2 class="section-title">View list contacts
 
 <span ng-repeat="name in ngData | limitTo:1"> {{ name.contactListName }}</span>
 
@@ -30,14 +30,13 @@
 
 </div>
 
-
+<!--<p class="col-sm-6">Here are all the contacts belonging to <span ng-repeat="name in ngData | limitTo:1"> {{ name.contactListName }}</span>. Select the checkbox next to a list member to manage the contact. To manage several contacts at the same time select multiple checkboxes.</p>-->
 
 </div>
 
 
 
 <div>
-
 
 
 <!--<button class="btn btn-success" data-toggle="button" ng-click="filterStatusO()">Opted out</button>-->
@@ -120,7 +119,7 @@
 
 <a class="btn" ng-click="unblockContacts_ngContactListCtrl()"><i class="fa fa-check-square-o"></i> Unblock</a>
 
-<a class="btn" ng-click="blockContacts_ngContactListCtrl()">><i class="fa fa-ban"></i> Block</a>
+<a class="btn" ng-click="blockContacts_ngContactListCtrl()"><i class="fa fa-ban"></i> Block</a>
 
 <a class="btn"  ng-click="optOutContacts_ngContactListCtrl()"><i class="fa fa-chain-broken"></i> Opt Out</a>
 

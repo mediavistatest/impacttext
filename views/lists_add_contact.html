@@ -15,14 +15,16 @@
 
 	    <div class="col-sm-20">
 	        <div class="radio">
-	        <label> <input icheck type="radio" name="UploadType" ng-model="UploadType" value="upload"> Upload a list </label>
-	        <label> <input icheck type="radio" name="UploadType" ng-model="UploadType" value="single"> Add single contact </label>
+	        <label> <input icheck type="radio" name="UploadType" ng-model="UploadType" value="upload"> Upload a list of contacts</label>
+	        <label> <input icheck type="radio" name="UploadType" ng-model="UploadType" value="single"> Add a single contact </label>
 	        </div>
 	    </div>
 	</div>
 
 	<!--SINGLE CONTACT -->
 	<div class="single-holder" ng-show="UploadType == 'single'">
+
+	<p>Add a single contact to this contact list. Please enter the contact information below.</p><br>
 
 	<div class="form-group clearfix">
 
@@ -77,26 +79,30 @@
 
 <!-- UPLOAD CONTACT-->
 <div class="upload-holder" ng-show="UploadType == 'upload'">
+
+<p>Upload a CSV or Excel file with phone numbers you wish to add to this contact list. 10 digit phone numbers must begin with a 1 followed by the area code. The following formats are accepted: .csv, .xls and .txt files up to 10MB in size. Duplicate numbers will automatically be removed.</p><br>
 	<div class="form-group clearfix">
 
 		<input type="file" name="ListUpload" placeholder="Supported formats: CSV, XLS(X), TXT" ng-model="ListUpload" class="form-control">
-		<small>Supported formats: CSV, XLS(X), TXT.</small>
+		<small><br>Your list must be in a specific format beginning with the phone number in column A and no headers. The following fields are optional: first name, last name, email, custom field 1, custom field 2, custom field 3. You can use custom fields to collect information about each contact’s preferences, or to segment lists for campaigns.
+
+If you are having trouble formatting your import list, view an example here.</small>
 	</div>
 
 	<br>
-	<p><strong>INSERT LIST MANUALLY</strong></p>
+	<p><strong>PASTE LIST</strong></p>
 
-	<p><em>Paste data into a text box with data separated by commas <br>(telephone number, name).</em></p>
+	<p>Copy and paste a list of phone numbers in to the box below. Enter one number per line. 10 digit phone numbers must begin with area code. Duplicates will automatically be removed.</p>
 
 	<br>
 
-	<textarea name="MessageTxt" placeholder="e.g. Name, Surname, 555-555-5555, email@email.com" class="form-control" rows="5" ng-model="MessageTxt" ng-trim="false"></textarea>
+	<textarea name="MessageTxt" placeholder="e.g. 1111111111, Name, Surname, email@email.com" class="form-control" rows="5" ng-model="MessageTxt" ng-trim="false"></textarea>
 
 </div>
 <!-- END UPLOAD -->
 
 <div class="list-box">
-<p>SELECT LISTS:</p>
+<p>Choose list:</p>
 <ul class="list-inline">
     <li ng-repeat="name in lists.names"> <input icheck type="checkbox" value="{{name.contactListID}}" ng-model="name.selected"> {{ name.contactListName }} </li>
   </ul>
@@ -104,7 +110,7 @@
 
 	<br>
 <a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="addContact()">
-<span><i class="fa fa-floppy-o"></i> Save</span>
+<span><i class="fa fa-floppy-o"></i> Save contact</span>
 </a>
 
 </form>

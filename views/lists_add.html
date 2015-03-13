@@ -1,12 +1,15 @@
 <h1>Contacts / Lists</h1>
 
 <div class="col-md-12 content-holder animated fadeInRight add-list" ng-class="animation" ng-controller="AddListsCtrl">
-<h2 class="section-title">Create List</h2>
+<h2 class="section-title">Create a contact list</h2>
 <div class="top-buttons">
 <a href="#/lists/lists_view" class="btn btn-back"><i class="fa fa-undo"></i> Back to Lists</a>
 </div>
 <div>
 <br>
+
+<p>To create a new contact list, please enter a name for your new list below. List names cannot exceed 30 characters. No special characters are allowed.
+</p>
 
 <form>
 <div class="row form-group">
@@ -18,7 +21,7 @@
 
 		    <br>
 		    <a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="addList()">
-			<span>Add</span>
+			<span>Save list</span>
 			</a>
 		
 		</div>
@@ -26,7 +29,7 @@
 </form>
 
 <div class="list-box">
-<p>LISTS:</p>
+<p>My lists:</p>
 <ul class="list-inline">
     <li ng-repeat="name in lists.names"> <a href="#/lists/lists_manage">{{ name.contactListName }}</a> </li>
   </ul>
