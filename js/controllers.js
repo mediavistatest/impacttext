@@ -8227,7 +8227,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 
 				if (parseInt(phoneNumber.substring(0, 1)) <2){
-                    var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
+                    //var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
+                    var msg = 'Please enter phone number without leading 1';
                     $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     return false;
                 }
@@ -8237,7 +8238,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     // return false;
                 // }
 				if (parseInt(phoneNumber.substring(4, 5)) <2){
-                    var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
+                    //var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
+                    var msg = 'Please enter phone number without leading 1';
                     $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     return false;
                 }                
