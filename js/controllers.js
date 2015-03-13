@@ -8224,6 +8224,29 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         },
         validatePhoneNumber : function(phoneNumber) {
             if (phoneNumber) {
+
+
+				if (parseInt(phoneNumber.substring(0, 1)) <2){
+                    var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
+                    $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                    return false;
+                }
+                // if (!(2 <= parseInt(phoneNumber.substring(0, 1)) <= 9)) {
+                    // var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
+                    // $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                    // return false;
+                // }
+				if (parseInt(phoneNumber.substring(4, 5)) <2){
+                    var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
+                    $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                    return false;
+                }                
+                
+                // if (!(2 <= parseInt(phoneNumber.substring(4, 5)) <= 9)) {
+                    // var msg = 'Error: ' + phoneNumber + ' fifth digit is not in range (2-9)!';
+                    // $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
+                    // return false;
+                // }            	
                 if (!(phoneNumber == phoneNumber.replace(/\D/g, ''))) {
                     //var msg = 'Error: ' + phoneNumber + ' is not digits only!';
                     var msg = 'Please enter digits only.';
@@ -8244,16 +8267,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     return false;
                 }
 
-                if (!(2 <= phoneNumber.substring(1, 2) <= 9)) {
-                    var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
-                    $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
-                    return false;
-                }
-                if (!(2 <= phoneNumber.substring(4, 5) <= 9)) {
-                    var msg = 'Error: ' + phoneNumber + ' fifth digit is not in range (2-9)!';
-                    $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
-                    return false;
-                }
                 //PASSED all validations , VALID PHONE NUMBER
                 return true;
             }
