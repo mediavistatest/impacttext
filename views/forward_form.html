@@ -10,13 +10,15 @@
 
           <label class="control-label">Forward to:</label>
 
-          <input type="text" name="to" placeholder="Insert phone numbers separated by comma ..." class="form-control" ng-model="ToNumber">
+          <input ng-show="!SendToList" type="text" name="to" placeholder="Insert phone numbers separated by comma ..." class="form-control" ng-model="ToNumber">
 
         </div>
 
       </div>
 
-      
+      <div ng-show="PhoneNumberArrayValidator.PhoneNumbers.errorMessage && !SendToList" class="right-side-message error">
+                 {{PhoneNumberArrayValidator.PhoneNumbers.errorMessage}}
+            </div>
 
       <div class="form-group clearfix">
 
@@ -43,6 +45,7 @@
           <label class="control-label">Message Text:</label>
 
           <textarea name="MessageTxt" class="form-control" rows="3" ng-model="MessageTxt" ng-trim="false" ng-value="MessageTxt=controllerParent.clickedMessage.message" readonly></textarea>
+
 
           <!--<div class="text-counter">{{160 - MessageTxt.length}} characters left.</div>-->
 
