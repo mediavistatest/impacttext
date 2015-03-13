@@ -57,9 +57,7 @@
 
     <!-- end row --> 
 
-    
-
-    <a ng-controller="notifyCtrl" class="btn btn-send" ng-disabled="progress.active()" ng-click="!(PhoneNumberArrayValidator.PhoneNumbers.errorMessage && !SendToList) && sendMessage(false)"> <span><i class="fa fa-share"></i> Forward</span> </a> 
+    <a ng-controller="notifyCtrl" class="btn btn-send" ng-disabled="progress.active()" ng-click="!(PhoneNumberArrayValidator.PhoneNumbers.errorMessage && !SendToList) && ToNumber && sendMessage(false)"> <span><i class="fa fa-share"></i> Forward</span> </a> 
 
 
 
