@@ -185,6 +185,46 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
     .error(function(data, status, headers, config) {
         alert("Error occured while getting account info!");
     });
+    
+    main.fromNumbersString = '';
+    
+    //now read DIDs
+	$http.post(
+		inspiniaNS.wsUrl + "did_get",
+		$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+	).success(
+    //Successful request to the server
+    function(data, status, headers, config) {
+        if (data == null || typeof data.apicode == 'undefined') {
+            //This should never happen
+            main.fromNumbers = [];
+            return;
+        }
+
+        if (data.apicode == 0) {
+            //Reading contact lists
+            main.fromNumbers = data.apidata;
+        } else {
+            main.fromNumbers = [];
+        }
+        window.console.log(main.fromNumbers)
+        for (var j in main.fromNumbers) {
+                        main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();
+                        if (j < main.fromNumbers.length - 1) {
+                            main.fromNumbersString += ',';
+                        }
+                    }
+		}
+	).error(
+    //An error occurred with this request
+    function(data, status, headers, config) {
+        //alert('Unexpected error occurred when trying to fetch DIDs!');
+        if (status == 400) {
+            alert("An error occurred when getting DID! Error code: " + data.apicode);
+            alert(JSON.stringify(data));
+        }
+		}
+	);
 
     //Server request logic here
     main.ServerRequests = {
@@ -8394,36 +8434,38 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 		 }
 	);
 
-    //now read DIDs
-	$http.post(
-		inspiniaNS.wsUrl + "did_get",
-		$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
-	).success(
-    //Successful request to the server
-    function(data, status, headers, config) {
-        if (data == null || typeof data.apicode == 'undefined') {
-            //This should never happen
-            $scope.fromNumbers = [];
-            return;
-        }
+    // //now read DIDs
+	// $http.post(
+		// inspiniaNS.wsUrl + "did_get",
+		// $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+	// ).success(
+    // //Successful request to the server
+    // function(data, status, headers, config) {
+        // if (data == null || typeof data.apicode == 'undefined') {
+            // //This should never happen
+            // $scope.fromNumbers = [];
+            // return;
+        // }
+// 
+        // if (data.apicode == 0) {
+            // //Reading contact lists
+            // $scope.fromNumbers = data.apidata;
+        // } else {
+            // $scope.fromNumbers = [];
+        // }
+		// }
+	// ).error(
+    // //An error occurred with this request
+    // function(data, status, headers, config) {
+        // //alert('Unexpected error occurred when trying to fetch DIDs!');
+        // if (status == 400) {
+            // alert("An error occurred when getting DID! Error code: " + data.apicode);
+            // alert(JSON.stringify(data));
+        // }
+		// }
+	// );
 
-        if (data.apicode == 0) {
-            //Reading contact lists
-            $scope.fromNumbers = data.apidata;
-        } else {
-            $scope.fromNumbers = [];
-        }
-		}
-	).error(
-    //An error occurred with this request
-    function(data, status, headers, config) {
-        //alert('Unexpected error occurred when trying to fetch DIDs!');
-        if (status == 400) {
-            alert("An error occurred when getting DID! Error code: " + data.apicode);
-            alert(JSON.stringify(data));
-        }
-		}
-	);
+$scope.fromNumbers = $scope.main.fromNumbers;
 
     //helper function for generating message text
     $scope.generateMessageText = function() {
