@@ -228,7 +228,7 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
 
     //Server request logic here
     main.ServerRequests = {
-        contactModifyRequest : function(request, $inScope) {
+        contactModifyRequest : function(request, $inScope, refresh, callback) {
             //Send request to the server
             $http.post(inspiniaNS.wsUrl + "contact_modify", $.param(request)).success(
             //Successful request to the server
@@ -239,8 +239,14 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                     return;
                 }
                 if (data.apicode == 0) {
-                    //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                    $window.location.reload();
+                	if (refresh){
+                		$window.location.href = "/impacttext/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                		//$inScope.mySelections = [];
+                		if (callback){
+                			callback();
+                		}
+                	}
+                    //$window.location.reload();
                 } else {
                     alert("An error occurred when changing your contact Error code: " + data.apicode);
                     console.log(JSON.stringify(data));
@@ -252,7 +258,7 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                 if (status == 400) {
                     if (data.apicode == 4) {
                         $scope.$broadcast("InvalidANI");
-                        $window.location.reload();
+                        //$window.location.reload();
                     } else {
                         alert("An error occurred when changing your contact! Error code: " + data.apicode);
                         console.log(JSON.stringify(data));
@@ -305,11 +311,11 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
 // main.CommonActions.optOutContact
 
     main.CommonActions = {
-        blockContact : function(inScope, inContact) {
-            $scope.main.CommonActions.changeContactStatus('I', inContact.contactID, inContact.ANI, inScope);
+        blockContact : function(inScope, inContact, refresh, callback) {
+            $scope.main.CommonActions.changeContactStatus('I', inContact.contactID, inContact.ANI, inScope, refresh, callback);
         },
-        unblockContact : function(inScope, inContact) {
-            $scope.main.CommonActions.changeContactStatus('A', inContact.contactID, inContact.ANI, inScope);
+        unblockContact : function(inScope, inContact, refresh, callback) {
+            $scope.main.CommonActions.changeContactStatus('A', inContact.contactID, inContact.ANI, inScope, refresh, callback);
         },
         optOutContact : function(inScope, inANI) {
             var request = {
@@ -319,7 +325,7 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
             request.ANI = inANI;
             $scope.main.ServerRequests.contactOptOutAddRequest(request, inScope);
         },
-        changeContactStatus : function(inStatus, inContactId, inANI, inScope) {
+        changeContactStatus : function(inStatus, inContactId, inANI, inScope, refresh, callback) {
             var request = {
                 sethttp : 1,
                 apikey : $cookieStore.get('inspinia_auth_token'),
@@ -327,7 +333,7 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                 ANI : inANI,
                 status : inStatus
             };
-            $scope.main.ServerRequests.contactModifyRequest(request, inScope);
+            $scope.main.ServerRequests.contactModifyRequest(request, inScope, refresh, callback);
         }
     };
 
@@ -7000,15 +7006,23 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
   
     $scope.blockContacts_ngContactListCtrl = function() {
         for (var i in $scope.mySelections) {
-            $scope.main.CommonActions.blockContact($scope, $scope.mySelections[i]);
+        	var refresh = false;
+        	if (i==$scope.mySelections.length-1){
+        		refresh = true;
+        	}
+            $scope.main.CommonActions.blockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
         }
-        $scope.refresh();
+        //$scope.refresh();
     };
     $scope.unblockContacts_ngContactListCtrl = function() {
         for (var i in $scope.mySelections) {
-            $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i]);
+        	var refresh = false;
+        	if (i==$scope.mySelections.length-1){
+        		refresh = true;
+        	}
+            $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
         }
-        $scope.refresh();
+        //$scope.refresh();
     };
     $scope.optOutContacts_ngContactListCtrl = function() {
         for (var i in $scope.mySelections) {
@@ -7813,7 +7827,7 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 
         // console.log(main)
         // console.log(MainCtrl.ServerRequests)
-        $scope.main.ServerRequests.contactModifyRequest(request, $scope);
+        $scope.main.ServerRequests.contactModifyRequest(request, $scope, true);
     };
 
     $scope.refresh();
@@ -8454,38 +8468,38 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 		 }
 	);
 
-    // //now read DIDs
-	// $http.post(
-		// inspiniaNS.wsUrl + "did_get",
-		// $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
-	// ).success(
-    // //Successful request to the server
-    // function(data, status, headers, config) {
-        // if (data == null || typeof data.apicode == 'undefined') {
-            // //This should never happen
-            // $scope.fromNumbers = [];
-            // return;
-        // }
-// 
-        // if (data.apicode == 0) {
-            // //Reading contact lists
-            // $scope.fromNumbers = data.apidata;
-        // } else {
-            // $scope.fromNumbers = [];
-        // }
-		// }
-	// ).error(
-    // //An error occurred with this request
-    // function(data, status, headers, config) {
-        // //alert('Unexpected error occurred when trying to fetch DIDs!');
-        // if (status == 400) {
-            // alert("An error occurred when getting DID! Error code: " + data.apicode);
-            // alert(JSON.stringify(data));
-        // }
-		// }
-	// );
+    //now read DIDs
+	$http.post(
+		inspiniaNS.wsUrl + "did_get",
+		$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
+	).success(
+    //Successful request to the server
+    function(data, status, headers, config) {
+        if (data == null || typeof data.apicode == 'undefined') {
+            //This should never happen
+            $scope.fromNumbers = [];
+            return;
+        }
 
-$scope.fromNumbers = $scope.main.fromNumbers;
+        if (data.apicode == 0) {
+            //Reading contact lists
+            $scope.fromNumbers = data.apidata;
+        } else {
+            $scope.fromNumbers = [];
+        }
+		}
+	).error(
+    //An error occurred with this request
+    function(data, status, headers, config) {
+        //alert('Unexpected error occurred when trying to fetch DIDs!');
+        if (status == 400) {
+            alert("An error occurred when getting DID! Error code: " + data.apicode);
+            alert(JSON.stringify(data));
+        }
+		}
+	);
+
+	//$scope.fromNumbers = $scope.main.fromNumbers;
 
     //helper function for generating message text
     $scope.generateMessageText = function() {
