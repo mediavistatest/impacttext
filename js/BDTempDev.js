@@ -134,6 +134,7 @@ var ngInbox = {
                     pagingOptions : controllerParent.$scope.pagingOptions,
                     filterOptions : controllerParent.$scope.filterOptions,
                     columnDefs : controllerParent.columnDefs,
+                    primaryKey : controllerParent.primaryKey
                 };
 
                 controllerParent.$scope.controllerParent = controllerParent;
@@ -385,6 +386,7 @@ var ngInbox = {
         deleteMessageStatus : 'D',
         markAsReadMessageStatus : 'R',
         markAsUnreadMessageStatus : 'U',
+        primaryKey : 'inboundMessageID',
         columnDefs : [{
             field : 'sourceANI',
             displayName : 'Contact',
@@ -534,6 +536,7 @@ var ngInbox = {
         getListAction : 'messages_outbound',
         getListStatus : 'C',
         statusChangeAction : 'message_changeoutboundstatus',
+        primaryKey : 'outboundMessageID',
         columnDefs : [{
             field : 'con_lis',
             displayName : 'Contact/List',
@@ -619,6 +622,7 @@ var ngInbox = {
         getListAction : 'messages_outbound',
         getListStatus : 'S',
         statusChangeAction : null, //'message_changeoutboundstatus',
+        primaryKey : 'outboundMessageID',
         columnDefs : [{
             field : 'con_lis',
             displayName : 'Contact/List',
@@ -723,6 +727,7 @@ var ngInbox = {
         getListAction : 'messages_outbound',
         getListStatus : 'D',
         statusChangeAction : null, //'message_changeoutboundstatus',
+        primaryKey : 'outboundMessageID',
         columnDefs : [{
             field : 'message',
             displayName : 'Message',
@@ -820,6 +825,7 @@ var ngInbox = {
         statusChangeAction : 'message_changeinboundstatus',
         deleteMessageStatus : null,
         restoreMessageStatus : 'U',
+        primaryKey : 'inboundMessageID',
         columnDefs : [{
             field : 'sourceANI',
             displayName : 'Contact',
