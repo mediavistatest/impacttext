@@ -7013,36 +7013,49 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     
     
   
-    $scope.blockContacts_ngContactListCtrl = function() {
-        for (var i in $scope.mySelections) {
-        	var refresh = false;
-        	if (i==$scope.mySelections.length-1){
-        		refresh = true;
-        	}
-            $scope.main.CommonActions.blockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
-        }
-        //$scope.refresh();
-    };
-    $scope.unblockContacts_ngContactListCtrl = function() {
-        for (var i in $scope.mySelections) {
-        	var refresh = false;
-        	if (i==$scope.mySelections.length-1){
-        		refresh = true;
-        	}
-            $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
-        }
-        //$scope.refresh();
-    };
-    $scope.optOutContacts_ngContactListCtrl = function() {
-        for (var i in $scope.mySelections) {
-        	var refresh = false;
-        	if (i==$scope.mySelections.length-1){
-        		refresh = true;
-        	}
-            $scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI, refresh, $scope.refresh);
-        }
-        $scope.refresh();
-    }; 
+  
+
+	$scope.blockContacts_ngContactListCtrl = function() {
+		for (var i in $scope.mySelections) {
+			var refresh = false;
+			if (i == $scope.mySelections.length - 1) {
+				refresh = true;
+			}
+
+			if ($scope.mySelections[i].status == 'A') {
+				$scope.main.CommonActions.blockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
+			}
+
+		}
+		//$scope.refresh();
+	};
+	$scope.unblockContacts_ngContactListCtrl = function() {
+		for (var i in $scope.mySelections) {
+			var refresh = false;
+			if (i == $scope.mySelections.length - 1) {
+				refresh = true;
+			}
+			if ($scope.mySelections[i].status == 'I') {
+				$scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
+			}
+		}
+		//$scope.refresh();
+	};
+	$scope.optOutContacts_ngContactListCtrl = function() {
+		for (var i in $scope.mySelections) {
+			var refresh = false;
+			if (i == $scope.mySelections.length - 1) {
+				refresh = true;
+			}
+			if ($scope.mySelections[i].status != 'O') {
+				$scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI, refresh, $scope.refresh);
+			}
+
+		}
+		// $scope.refresh();
+	}; 
+
+
 
     
     // $scope.blockContactsngContactListCtrl = function() {
