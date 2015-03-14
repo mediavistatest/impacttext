@@ -6997,21 +6997,18 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         for (var i in $scope.mySelections) {
             $scope.main.CommonActions.blockContact($scope, $scope.mySelections[i]);
         }
-        $scope.mySelections = [];
         $scope.refresh();
     };
     $scope.unblockContacts_ngContactListCtrl = function() {
         for (var i in $scope.mySelections) {
             $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i]);
         }
-        $scope.mySelections = [];
         $scope.refresh();
     };
     $scope.optOutContacts_ngContactListCtrl = function() {
         for (var i in $scope.mySelections) {
             $scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI);
         }
-        $scope.mySelections = [];
         $scope.refresh();
     }; 
 
