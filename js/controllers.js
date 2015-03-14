@@ -73,7 +73,7 @@ function setPagingDataSliced($scope, data, totalResultsCount) {
         $scope.$apply();
 
     }
-
+	$scope.ngOptions.selectAll(false);
 }
 
 
@@ -207,7 +207,6 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
         } else {
             main.fromNumbers = [];
         }
-        window.console.log(main.fromNumbers)
         for (var j in main.fromNumbers) {
                         main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();
                         if (j < main.fromNumbers.length - 1) {
@@ -239,18 +238,15 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                     return;
                 }
                 if (data.apicode == 0) {
-                	if (refresh){
-                		$window.location.href = "/impacttext/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                		//$inScope.mySelections = [];
-                		if (callback){
-                			callback();
-                		}
-                	}
-                    //$window.location.reload();
                 } else {
                     alert("An error occurred when changing your contact Error code: " + data.apicode);
                     console.log(JSON.stringify(data));
                 }
+                if (refresh){
+                		if (callback){
+                				callback();
+                		}
+                	}
             }).error(
             //An error occurred with this request
             function(data, status, headers, config) {
@@ -258,7 +254,6 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                 if (status == 400) {
                     if (data.apicode == 4) {
                         $scope.$broadcast("InvalidANI");
-                        //$window.location.reload();
                     } else {
                         alert("An error occurred when changing your contact! Error code: " + data.apicode);
                         console.log(JSON.stringify(data));
@@ -267,7 +262,7 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                 // }
             });
         },
-        contactOptOutAddRequest : function(request, $inScope) {
+        contactOptOutAddRequest : function(request, $inScope, refresh, callback) {
             $http.post(inspiniaNS.wsUrl + "optout_add", $.param(request)).success(
             //Successful request to the server
             function(data, status, headers, config) {
@@ -278,16 +273,16 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                     return;
                 }
                 if (data.apicode == 0) {
-                    //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                    $window.location.reload();
                 } else if (data.apicode == 4) {
-                    //This is an error saying there is nothing to change
-                    //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                    $window.location.reload();
                 } else {
                     alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
                     console.log(JSON.stringify(data));
                 }
+                if (refresh){
+                		if (callback){
+                				callback();
+                		}
+                	}
             }).error(
             //An error occurred with this request
             function(data, status, headers, config) {
@@ -317,13 +312,13 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
         unblockContact : function(inScope, inContact, refresh, callback) {
             $scope.main.CommonActions.changeContactStatus('A', inContact.contactID, inContact.ANI, inScope, refresh, callback);
         },
-        optOutContact : function(inScope, inANI) {
+        optOutContact : function(inScope, inANI, refresh, callback) {
             var request = {
                 // sethttp : 1,
                 apikey : $cookieStore.get('inspinia_auth_token')
             };
             request.ANI = inANI;
-            $scope.main.ServerRequests.contactOptOutAddRequest(request, inScope);
+            $scope.main.ServerRequests.contactOptOutAddRequest(request, inScope, refresh, callback);
         },
         changeContactStatus : function(inStatus, inContactId, inANI, inScope, refresh, callback) {
             var request = {
@@ -7026,7 +7021,11 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     };
     $scope.optOutContacts_ngContactListCtrl = function() {
         for (var i in $scope.mySelections) {
-            $scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI);
+        	var refresh = false;
+        	if (i==$scope.mySelections.length-1){
+        		refresh = true;
+        	}
+            $scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI, refresh, $scope.refresh);
         }
         $scope.refresh();
     }; 
@@ -7116,7 +7115,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
 
     $scope.getPagedDataAsync = function(pageSize, page, searchText, filterBy, sortFields, sortOrders) {
-
+		
         if ( typeof page == 'undefined' || page == null || page == '') {
 
             page = 0;

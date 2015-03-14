@@ -44,6 +44,7 @@ var ngInbox = {
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
+                $scope.ngOptions.selectAll(false);
             },
             GetPagedDataAsync : function(controllerParent) {
                 var pageSize = controllerParent.$scope.pagingOptions.pageSize;
