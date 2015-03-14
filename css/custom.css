@@ -2593,6 +2593,28 @@ span.O, span.I {
 
 }
 
+span.I {
+
+  background: #e46f1f;
+
+  color: white;
+
+  width: 20px;
+
+  display: block;
+
+  height: 20px;
+
+  line-height: 20px;
+
+  border-radius: 50%;
+
+  margin: 0 auto;
+
+  font-size: 11px;
+
+}
+
 
 
 span.B {
@@ -3513,6 +3535,71 @@ i.fa.fa-caret-down {
   padding-right: 15px;
 }
 
+.settings .control-label {
+  margin-bottom: 0;
+}
+
+.settings h2.section-title {
+  /* border-bottom: 1px solid lightgrey; */
+  margin: 20px -15px;
+  padding: 0 15px;
+}
+
+.number-of {
+  font-size: 36px;
+  font-weight: 300;
+  padding-left: 30px;
+  margin-bottom: 0;
+}
+
+.number-of-what {
+  font-size: 15px;
+  padding-left: 30px;
+}
+
+.animated.dashboard, .animated.support, .animated.reports {
+	max-width: 1400px;
+}
+
+.table-holder {
+  position: relative;
+}
+
+.manage-list .page-select-wrapper {
+  position: absolute;
+  right: 0;
+  top: -40px;
+}
+
+.manage-list .itTopPager {
+  background-color: #FFF;
+  padding: 0px;
+  border-top: medium none;
+  position: absolute;
+  top: -18px;
+  right: -20px;
+  display: inline-block;
+  width: auto !important;
+  height: 0 !important;
+}
+
+.manage-list .top-buttons {
+  text-align: right;
+  margin-bottom: 48px;
+  margin-top: -78px;
+}
+
+.manage-list-txt {
+	margin-bottom: 50px;
+}
+
+.add-list-contact .list-inline {
+  padding-left: 0;
+  margin-left: -5px;
+  list-style: none;
+  max-height: 300px;
+  overflow: auto;
+}
 
 @media all and (max-width:990px) {
 
