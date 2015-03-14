@@ -63,7 +63,7 @@
 
 <div class="row">
 
-<div class="col-sm-10 col-sm-offset-2 ng-scope bottom-buttons">
+<div class="col-sm-10 col-sm-offset-2 ng-scope bottom-buttons" ng-controller="notifyCtrl">
 
 
 
@@ -71,8 +71,8 @@
 
 <!--<a class="btn"><i class="fa fa-files-o"></i> Copy List</a>-->
 
-<a class="btn" ng-click="changeSelectedListsStatus('A')" ng-controller="notifyCtrl"><i class="fa fa-plus-square-o"></i> Activate List</a>
-<a class="btn btn-discard" ng-click="changeSelectedListsStatus('I')" ng-controller="notifyCtrl"><i class="fa fa-minus-square-o"></i> Deactivate List</a>
+<a class="btn" ng-click="changeSelectedListsStatus('A')"><i class="fa fa-plus-square-o"></i> Activate List</a>
+<a class="btn btn-discard" ng-click="changeSelectedListsStatus('I')"><i class="fa fa-minus-square-o"></i> Deactivate List</a>
 
 
 <!--

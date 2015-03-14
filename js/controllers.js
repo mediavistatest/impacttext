@@ -6607,6 +6607,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 
 	$scope.refresh = function() {
 		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+		$scope.mySelections.length = 0;
 	};
 
     //    $scope.filterOptions = {
@@ -6800,6 +6801,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
         pagingOptions : $scope.pagingOptions,
 
         filterOptions : $scope.filterOptions,
+        primaryKey : 'contactListID',
 
         columnDefs: [
 
@@ -6945,9 +6947,21 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 				function(data, status, headers, config) {
 					numberOfItemsToProccess--;
 					if (status == 400) {
-						/*if (data.apicode == 4) {
-							$scope.$broadcast("InvalidANI");
-						} else */{
+						if (data.apicode == 4 && data.apitext == "No data to change") {
+							//This is idiotically regular situation! Can you imagine?!
+							successfullyProcessed++;
+							if (numberOfItemsToProccess == 0 && failedToProcess == 0) {
+								if (newStatus == 'A') {
+									$scope.$broadcast("ListsSuccessfullyActivated");
+								} else if (newStatus == 'I') {
+									$scope.$broadcast("ListsSuccessfullyDeactivated");
+								}
+							}
+							if (numberOfItemsToProccess == 0) {
+								$scope.refresh();
+							}
+							return;
+						} else {
 							failedToProcess++;
 							alert("An error occurred when changing your contact! Error code: " + data.apicode);
 							console.log(JSON.stringify(data));
@@ -7464,6 +7478,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         pagingOptions : $scope.pagingOptions,
 
         //filterOptions : $scope.filterOptions,
+        primaryKey : 'contactID',
 
         columnDefs: [
 
