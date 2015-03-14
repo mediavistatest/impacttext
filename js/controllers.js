@@ -239,7 +239,8 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                     return;
                 }
                 if (data.apicode == 0) {
-                    $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                    //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                    $window.location.reload();
                 } else {
                     alert("An error occurred when changing your contact Error code: " + data.apicode);
                     console.log(JSON.stringify(data));
@@ -251,6 +252,7 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                 if (status == 400) {
                     if (data.apicode == 4) {
                         $scope.$broadcast("InvalidANI");
+                        $window.location.reload();
                     } else {
                         alert("An error occurred when changing your contact! Error code: " + data.apicode);
                         console.log(JSON.stringify(data));
@@ -270,10 +272,12 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                     return;
                 }
                 if (data.apicode == 0) {
-                    $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                    //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                    $window.location.reload();
                 } else if (data.apicode == 4) {
                     //This is an error saying there is nothing to change
-                    $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                    //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                    $window.location.reload();
                 } else {
                     alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
                     console.log(JSON.stringify(data));
@@ -285,7 +289,8 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                 if (status == 400) {
                     if (data.apicode == 4) {
                         //This is an error saying there is nothing to change
-                        $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                        //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                        $window.location.reload();
                     } else {
                         alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
                         console.log(JSON.stringify(data));
