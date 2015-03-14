@@ -227,75 +227,121 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
 	);
 
     //Server request logic here
-    main.ServerRequests = {
-        contactModifyRequest : function(request, $inScope) {
-            //Send request to the server
-            $http.post(inspiniaNS.wsUrl + "contact_modify", $.param(request)).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    alert("Unidentified error occurred when editing contact!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                } else {
-                    alert("An error occurred when changing your contact Error code: " + data.apicode);
-                    console.log(JSON.stringify(data));
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to send message!');
-                if (status == 400) {
-                    if (data.apicode == 4) {
-                        $scope.$broadcast("InvalidANI");
-                    } else {
-                        alert("An error occurred when changing your contact! Error code: " + data.apicode);
-                        console.log(JSON.stringify(data));
-                    }
-                }
-                // }
-            });
-        },
-        contactOptOutAddRequest : function(request, $inScope) {
-            $http.post(inspiniaNS.wsUrl + "optout_add", $.param(request)).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
+   
+	main.ServerRequests = {
+		numberOfSuccesfullContactModifyRequest : 0,
+		numberOfRequestsFinished : 0,
+		numberOfRequests : 0,
+		contactModifyRequest : function(request, $inScope) {
 
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    alert("Unidentified error occurred when trying to opt out contact!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                } else if (data.apicode == 4) {
-                    //This is an error saying there is nothing to change
-                    $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                } else {
-                    alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
-                    console.log(JSON.stringify(data));
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to send message!');
-                if (status == 400) {
-                    if (data.apicode == 4) {
-                        //This is an error saying there is nothing to change
-                        $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                    } else {
-                        alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
-                        console.log(JSON.stringify(data));
-                    }
-                }
-                // }
-            });
+			//Send request to the server
+			$http.post(inspiniaNS.wsUrl + "contact_modify", $.param(request)).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				console.log('DOBAR ')
 
-        }
-    };
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unidentified error occurred when editing contact!");
+					return;
+				}
+				if (data.apicode == 0) {
+					// $window.location.href = "/impacttext/#/lists/lists_manage/" + $scope.main.contactListID;
+					$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;
+					//$inScope.contactListID;
+				} else {
+					alert("An error occurred when changing your contact Error code: " + data.apicode);
+					console.log(JSON.stringify(data));
+				}
+				if ($scope.main.ServerRequests.numberOfRequests == $scope.main.ServerRequests.numberOfSuccesfullContactModifyRequest) {
+					console.log('SVI DOBRI contactModifyRequest!!!!!!!!!!!!!!')
+				}
+				$scope.main.ServerRequests.numberOfSuccesfullContactModifyRequest++;
+				$scope.main.ServerRequests.numberOfRequestsFinished++;				
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				console.log('GRESKA')
+
+				//alert('Unexpected error occurred when trying to send message!');
+
+				console.log('GRESKAAAAAAAAAAAAAAA contactModifyRequest!!!!!!!!!!!!!!')
+
+				if (status == 400) {
+					if (data.apicode == 4) {
+						$scope.$broadcast("InvalidANI");
+					} else {
+						alert("An error occurred when changing your contact! Error code: " + data.apicode);
+						console.log(JSON.stringify(data));
+					}
+				}
+								$scope.main.ServerRequests.numberOfRequestsFinished++;
+				// }
+			});
+		},
+
+		contactOptOutAddRequest : function(request, $inScope) {
+			$http.post(inspiniaNS.wsUrl + "optout_add", $.param(request)).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				console.log('DOBAR ')
+
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unidentified error occurred when trying to opt out contact!");
+					return;
+				}
+				if (data.apicode == 0) {
+					// $window.location.href = "/impacttext//#/lists/lists_manage/" + $scope.main.contactListID;
+					$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;
+					//$inScope.contactListID;
+				} else if (data.apicode == 4) {
+					//This is an error saying there is nothing to change
+					$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;
+					//$inScope.contactListID;
+				} else {
+					alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
+					console.log(JSON.stringify(data));
+				}
+
+				if ($scope.main.ServerRequests.numberOfRequests == $scope.main.ServerRequests.numberOfSuccesfullContactModifyRequest) {
+					console.log('SVI DOBRI contactOptOutAddRequest!!!!!!!!!!!!!!')
+				}
+
+
+				$scope.main.ServerRequests.numberOfSuccesfullContactModifyRequest++;
+				$scope.main.ServerRequests.numberOfRequestsFinished++;
+				// if ($scope.main.ServerRequests.numberOfRequests== main.ServerRequests.numberOfSuccesfullContactModifyRequest){
+				// main.ServerRequests.numberOfSuccesfullContactModifyRequest =0;
+				// $scope.main.ServerRequests.numberOfRequests =0;
+				// $inScope.refresh();
+				// $inScope.mySelection = [];
+				// }
+
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				console.log('GRESKA')
+
+				//alert('Unexpected error occurred when trying to send message!');
+				if (status == 400) {
+					if (data.apicode == 4) {
+						//This is an error saying there is nothing to change
+						$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;
+						//$inScope.contactListID;
+					} else {
+						alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
+						console.log(JSON.stringify(data));
+					}
+				}
+								console.log('GRESKAAAAAAAAAAAAAAA contactOptOutAddRequest!!!!!!!!!!!!!!')
+												$scope.main.ServerRequests.numberOfRequestsFinished++;
+				// }
+			});
+
+		}
+	}; 
+
 
 // main.CommonActions.optOutContact
 
@@ -6993,24 +7039,78 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     
     
   
-    $scope.blockContacts_ngContactListCtrl = function() {
-        for (var i in $scope.mySelections) {
-            $scope.main.CommonActions.blockContact($scope, $scope.mySelections[i]);
-        }
-        $scope.refresh();
-    };
-    $scope.unblockContacts_ngContactListCtrl = function() {
-        for (var i in $scope.mySelections) {
-            $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i]);
-        }
-        $scope.refresh();
-    };
-    $scope.optOutContacts_ngContactListCtrl = function() {
-        for (var i in $scope.mySelections) {
-            $scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI);
-        }
-        $scope.refresh();
-    }; 
+
+
+
+	$scope.refreshInterval = null;
+	$scope.refreshCounters = function() {
+		var returnVal_ = ($scope.main.ServerRequests.numberOfRequests>0 && $scope.main.ServerRequests.numberOfRequests == $scope.main.ServerRequests.numberOfRequestsFinished);
+		if (returnVal_) {
+			console.log('refresh SVE GOTOVO')
+			$scope.main.ServerRequests.numberOfSuccesfullContactModifyRequest = 0;
+			$scope.main.ServerRequests.numberOfRequests = 0;
+			$scope.main.ServerRequests.numberOfRequestsFinished=0;
+
+			$scope.mySelections.length =0;
+			
+			
+						$scope.refresh();
+			console.log($scope.mySelections)
+			
+		}
+
+		console.log('returnVal_=' + returnVal_ + ' - numberOfRequests, numberOfSuccesfullContactModifyRequest, numberOfRequestsFinished' + $scope.main.ServerRequests.numberOfRequests + ', ' + $scope.main.ServerRequests.numberOfSuccesfullContactModifyRequest+ ', ' + $scope.main.ServerRequests.numberOfRequestsFinished)
+		return (returnVal_);
+	};
+
+	$scope.blockContacts_ngContactListCtrl = function() {
+		
+			$scope.main.ServerRequests.numberOfRequests = $scope.mySelections.length;
+		for (var i in $scope.mySelections) {
+			$scope.main.CommonActions.blockContact($scope, $scope.mySelections[i], $scope.mySelections.length);
+		}
+		var i = 0;
+		while (!$scope.refreshCounters() && i<100) {
+			i++;
+			$scope.refreshInterval = setTimeout(function() {
+				clearInterval($scope.refreshInterval);
+				$scope.refreshCounters();
+			}, 500);
+		}
+		// $scope.refresh();
+	};
+
+	$scope.unblockContacts_ngContactListCtrl = function() {
+		$scope.main.ServerRequests.numberOfRequests = $scope.mySelections.length;
+		for (var i in $scope.mySelections) {
+			$scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i], $scope.mySelections.length);
+		}
+		var i = 0;
+		while (!$scope.refreshCounters() && i<100) {
+			i++;
+			$scope.refreshInterval = setTimeout(function() {
+				clearInterval($scope.refreshInterval);
+				$scope.refreshCounters();
+			}, 500);
+		}
+
+	};
+	$scope.optOutContacts_ngContactListCtrl = function() {
+		$scope.main.ServerRequests.numberOfRequests = $scope.mySelections.length;
+		for (var i in $scope.mySelections) {
+			$scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI, $scope.mySelections.length);
+		}
+		var i = 0;
+		while (!$scope.refreshCounters() && i<100) {
+			i++;
+			$scope.refreshInterval = setTimeout(function() {
+				clearInterval($scope.refreshInterval);
+				$scope.refreshCounters();
+			}, 500);
+		}
+	};
+
+
 
     
     // $scope.blockContactsngContactListCtrl = function() {
