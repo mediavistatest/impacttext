@@ -7024,8 +7024,11 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
 			if ($scope.mySelections[i].status == 'A') {
 				$scope.main.CommonActions.blockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
+			}else{
+				if (refresh){
+					$scope.refresh();
+				}
 			}
-
 		}
 		//$scope.refresh();
 	};
@@ -7037,6 +7040,10 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 			}
 			if ($scope.mySelections[i].status == 'I') {
 				$scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
+			}else{
+				if (refresh){
+					$scope.refresh();
+				}
 			}
 		}
 		//$scope.refresh();
@@ -7049,8 +7056,11 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 			}
 			if ($scope.mySelections[i].status != 'O') {
 				$scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI, refresh, $scope.refresh);
+			}else{
+				if (refresh){
+					$scope.refresh();
+				}
 			}
-
 		}
 		// $scope.refresh();
 	}; 
