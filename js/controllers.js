@@ -246,8 +246,8 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
 					return;
 				}
 				if (data.apicode == 0) {
-					// $window.location.href = "/impacttext/#/lists/lists_manage/" + $scope.main.contactListID;
-					$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;
+					$window.location.href = "/impacttext/#/lists/lists_manage/" + $scope.main.contactListID;
+					// $window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;
 					//$inScope.contactListID;
 				} else {
 					alert("An error occurred when changing your contact Error code: " + data.apicode);
@@ -7042,35 +7042,35 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
 
 
+	
 	$scope.refreshInterval = null;
 	$scope.refreshCounters = function() {
-		var returnVal_ = ($scope.main.ServerRequests.numberOfRequests>0 && $scope.main.ServerRequests.numberOfRequests == $scope.main.ServerRequests.numberOfRequestsFinished);
+		var returnVal_ = ($scope.main.ServerRequests.numberOfRequests > 0 && $scope.main.ServerRequests.numberOfRequests == $scope.main.ServerRequests.numberOfRequestsFinished);
 		if (returnVal_) {
 			console.log('refresh SVE GOTOVO')
 			$scope.main.ServerRequests.numberOfSuccesfullContactModifyRequest = 0;
 			$scope.main.ServerRequests.numberOfRequests = 0;
-			$scope.main.ServerRequests.numberOfRequestsFinished=0;
+			$scope.main.ServerRequests.numberOfRequestsFinished = 0;
 
-			$scope.mySelections.length =0;
-			
-			
-						$scope.refresh();
+			$scope.mySelections.length = 0;
+
+			$scope.refresh();
 			console.log($scope.mySelections)
-			
+
 		}
 
-		console.log('returnVal_=' + returnVal_ + ' - numberOfRequests, numberOfSuccesfullContactModifyRequest, numberOfRequestsFinished' + $scope.main.ServerRequests.numberOfRequests + ', ' + $scope.main.ServerRequests.numberOfSuccesfullContactModifyRequest+ ', ' + $scope.main.ServerRequests.numberOfRequestsFinished)
+		console.log('returnVal_=' + returnVal_ + ' - numberOfRequests, numberOfSuccesfullContactModifyRequest, numberOfRequestsFinished' + $scope.main.ServerRequests.numberOfRequests + ', ' + $scope.main.ServerRequests.numberOfSuccesfullContactModifyRequest + ', ' + $scope.main.ServerRequests.numberOfRequestsFinished)
 		return (returnVal_);
 	};
 
 	$scope.blockContacts_ngContactListCtrl = function() {
-		
-			$scope.main.ServerRequests.numberOfRequests = $scope.mySelections.length;
+
+		$scope.main.ServerRequests.numberOfRequests = $scope.mySelections.length;
 		for (var i in $scope.mySelections) {
 			$scope.main.CommonActions.blockContact($scope, $scope.mySelections[i], $scope.mySelections.length);
 		}
 		var i = 0;
-		while (!$scope.refreshCounters() && i<100) {
+		while (!$scope.refreshCounters() && i < 100) {
 			i++;
 			$scope.refreshInterval = setTimeout(function() {
 				clearInterval($scope.refreshInterval);
@@ -7086,7 +7086,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 			$scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i], $scope.mySelections.length);
 		}
 		var i = 0;
-		while (!$scope.refreshCounters() && i<100) {
+		while (!$scope.refreshCounters() && i < 100) {
 			i++;
 			$scope.refreshInterval = setTimeout(function() {
 				clearInterval($scope.refreshInterval);
@@ -7101,14 +7101,15 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 			$scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI, $scope.mySelections.length);
 		}
 		var i = 0;
-		while (!$scope.refreshCounters() && i<100) {
+		while (!$scope.refreshCounters() && i < 100) {
 			i++;
 			$scope.refreshInterval = setTimeout(function() {
 				clearInterval($scope.refreshInterval);
 				$scope.refreshCounters();
 			}, 500);
 		}
-	};
+	}; 
+
 
 
 
