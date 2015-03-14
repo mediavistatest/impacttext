@@ -460,5 +460,6 @@ app.filter('iif', function () {
 //Some global variables
 var inspiniaNS = {};
 inspiniaNS.wsUrl = "http://tlsionweb01.excel.com/mercury/cmp/";
+//inspiniaNS.wsUrl = "http://api.impacttext.com/";
 //inspiniaNS.wsUrl = "http://impacttext.localhost.rs/ajax.php?todo=";
 //inspiniaNS.wsUrl = "ajax.php?todo=";
