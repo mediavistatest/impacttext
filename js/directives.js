@@ -1,11 +1,5 @@
 /**
- * INSPINIA - Responsive Admin Theme
- * Copyright 2015 Webapplayers.com
- *
- * Main directives.js file
- * Define directives for used plugin
- *
- *
+ 
  * Functions (directives)
  *  - pageTitle
  *  - sideNavigation

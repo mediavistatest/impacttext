@@ -1,18 +1,4 @@
-/**
-
- * INSPINIA - Responsive Admin Theme
-
- * Copyright 2015 Webapplayers.com
-
- *
-
- * Main controller.js file
-
- * Define controllers with data used in Inspinia theme
-
- *
-
- *
+/*
 
  * Functions (controllers)
 

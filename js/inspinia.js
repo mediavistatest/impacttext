@@ -1,9 +1,4 @@
-/**
- * INSPINIA - Responsive Admin Theme
- * Copyright 2015 Webapplayers.com
- *
- * Custom scripts
- */
+
 
 $(document).ready(function () {
 
