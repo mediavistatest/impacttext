@@ -1,7 +1,7 @@
 var ngInbox = {
 	_internal : {
 		ErrorMsg : '',
-		getDataTimeout: 200,
+		getDataTimeout : 200,
 		DataConstructors : {
 			PageOptions : function() {
 				var self = this;
@@ -50,10 +50,10 @@ var ngInbox = {
 			GetPagedDataAsync : function(controllerParent) {
 				if (!controllerParent.getDataBlocked) {
 					controllerParent.getDataBlocked = true;
-					setTimeout(function(){
+					setTimeout(function() {
 						controllerParent.getDataBlocked = false;
 					}, ngInbox._internal.getDataTimeout);
-					
+
 					console.log(controllerParent.getListAction)
 					var pageSize = controllerParent.$scope.pagingOptions.pageSize;
 					var page = controllerParent.$scope.pagingOptions.currentPage;
@@ -123,7 +123,7 @@ var ngInbox = {
 				controllerParent.$scope.$watch('sortOptions.fields', function() {
 					controllerParent.$scope.getPagedDataAsync(controllerParent);
 				}, true);
-				
+
 				controllerParent.$scope.$watch('sortOptions.directions', function() {
 					controllerParent.$scope.getPagedDataAsync(controllerParent);
 				}, true);
@@ -876,7 +876,10 @@ var ngInbox = {
 				// delete clicked message
 				inScope.controllerParent.list = true;
 			},
-			InitialiseEvents : function(controllerParent) {
+			InitialiseEvents : function(inParent) {
+				inParent.$scope.$watch('controllerParent.getListStatus', function() {
+					inParent.$scope.getPagedDataAsync(inParent);
+				}, true);
 			}
 		},
 		Controller : function($scope, $http, $cookieStore) {
