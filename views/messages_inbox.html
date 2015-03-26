@@ -1,116 +1,66 @@
 <h1>Messages </h1>
-
 <div class="tab-navigation animated fadeInRight">
-
     <a ui-sref-active="active" ui-sref="messages.inbox" class="btn tab-style active"><i class="fa fa-inbox"></i> Inbox</a>
-
     <a ui-sref-active="active" ui-sref="messages.sent" class="btn tab-style"><i class="fa fa-share-square"></i> Sent</a>
-
     <a ui-sref-active="active" ui-sref="messages.scheduled" class="btn tab-style"><i class="fa fa-clock-o"></i> Scheduled</a>
-
     <a ui-sref-active="active" ui-sref="messages.drafts" class="btn tab-style"><i class="fa fa-pencil-square"></i> Drafts</a>
-
     <a ui-sref-active="active" ui-sref="messages.trash" class="btn tab-style"><i class="fa fa-trash-o"></i> Trash</a>
-
 </div>
-
 <div class="col-md-12 content-holder animated fadeInRight messages messages-inbox" ng-class="animation">
-
     <h2 class="section-title">Inbox</h2>
-
     <div class="top-buttons">
-
-        <!-- Read/unread 
+        <!-- Read/unread
         <select class="read-unread" disable-search="true" ng-model="controllerParent.getListStatus" ng-init="controllerParent.getListStatus='U'">
-            <option value = 'U'>Unread messages</option>
-            <option value = 'R'>Read messages</option>
+        <option value = 'U'>Unread messages</option>
+        <option value = 'R'>Read messages</option>
         </select>-->
-
         <div class="btn-group dropdown discard-btn">
-        <button data-toggle="dropdown" class="btn dropdown-toggle read-unread" aria-expanded="false">
-
-                 {{controllerParent.getListStatus=='U' && 'Unread messages' || controllerParent.getListStatus=='R' && 'Read Messages'}} <i class="fa fa-caret-down"></i>
-
+            <button data-toggle="dropdown" class="btn dropdown-toggle read-unread" aria-expanded="false">
+                {{controllerParent.getListStatus=='U' && 'Unread messages' || controllerParent.getListStatus=='R' && 'Read Messages'}} <i class="fa fa-caret-down"></i>
             </button>
-
             <div class="dropdown-menu dropdown-list dropdown-alerts">
-
-             <button class="btn drop-btn" ng-click="controllerParent.getListStatus='U'">Unread messages</button>
-             <button class="btn drop-btn" ng-click="controllerParent.getListStatus='R'">Read messages</button>
-
+                <button class="btn drop-btn" ng-click="controllerParent.getListStatus='U'">
+                    Unread messages
+                </button>
+                <button class="btn drop-btn" ng-click="controllerParent.getListStatus='R'">
+                    Read messages
+                </button>
             </div>
-
         </div><!-- end-read unread -->
-        
-
         <button class="btn" ng-click="MarkAsReadMessages(controllerParent)" ng-show="controllerParent.getListStatus=='U'">
-
             <i class="fa fa-eye"></i> Mark as read
-
         </button>
         <button class="btn" ng-click="MarkAsUnreadMessages(controllerParent)" ng-hide="controllerParent.getListStatus=='U'">
-
             <i class="fa fa-eye"></i> Mark as unread
-
         </button>
         <div class="btn-group dropdown discard-btn">
-
             <button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">
-
                 Delete message
-
             </button>
-
             <ul class="dropdown-menu dropdown-alerts">
-
                 <li>
-
                     Are you sure you want to delete the message(s)?
-
                 </li>
-
                 <li>
-
                     &nbsp;
-
                 </li>
-
                 <li>
-
                     <span class="discard-cancel" data-toggle="dropdown"><strong ng-click="DeleteMessages(controllerParent)">Yes</strong></span>
-
                     &nbsp;&nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span>
-
                 </li>
-
             </ul>
-
         </div>
-
         <div class="page-select-wrapper">
-
             <strong>Show:</strong>&nbsp;
-
             <select class="page-select" ng-model="pagingOptions.pageSize">
-
                 <option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
-
             </select>
-
         </div>
-
     </div><!-- end top button -->
-
     <div>
-
         <input class="search-input" placeholder="Search by contact number, name, email or custom field" type="text" ng-model="filterOptions.filterText">
-
     </div>
-
     <br>
-
     <!--START TABLE-->
-
     <div class="gridStyle" ng-grid="ngOptions"></div>
-
 </div>
