@@ -4,7 +4,9 @@
 
 <div class="col-md-12 content-holder animated fadeInRight send-messages" ng-class="animation" ng-controller="FormSendCtrl" >
 
-
+<div ng-show="ShowPreview" class="iphone-prev">
+{{FromName}}: {{MessageTxt}} {{optFields.OptOutTxt1}}{{optFields.OptOutTxt3}}
+</div>
 
 <h2 class="section-title">Compose Message</h2>
 
@@ -493,8 +495,6 @@
 	<span><i class="fa fa-clock-o"></i> Schedule</span>
 
 </a>
-
-
 
 
 

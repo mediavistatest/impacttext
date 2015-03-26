@@ -1,915 +1,374 @@
 .logo-name img {
-
-margin: 0 auto 60px auto;
-
+    margin: 0 auto 60px auto;
 }
-
-
-
 .loginscreen.middle-box {
-
-width: 320px;
-
-margin-left: -160px;
-
-margin-top: -330px;
-
+    width: 320px;
+    margin-left: -160px;
+    margin-top: -330px;
 }
-
-
-
 .btn-primary {
-
-background-color: #e36f1e;
-
-border-color: #e36f1e;
-
-color: #FFFFFF;
-
+    background-color: #e36f1e;
+    border-color: #e36f1e;
+    color: #FFFFFF;
 }
-
-
-
 .btn-primary:hover, .btn-primary:active {
-
-background-color: #d26315;
-
-border-color: #d26315;
-
-color: #FFFFFF;
-
+    background-color: #d26315;
+    border-color: #d26315;
+    color: #FFFFFF;
 }
-
-
-
 .btn-gray {
-
-color: white;
-
-background: #959595;
-
-border: 1px solid #959595;
-
+    color: white;
+    background: #959595;
+    border: 1px solid #959595;
 }
-
-
-
 .btn-gray:hover, .btn-gray:active {
-
-color: white;
-
-background: #878787;
-
-border: 1px solid #878787;
-
+    color: white;
+    background: #878787;
+    border: 1px solid #878787;
 }
-
-
-
 .theme-config {
-
-  display: none;
-
+    display: none;
 }
-
-
-
 .main-logo {
-
-  margin-bottom: 30px;
-
+    margin-bottom: 30px;
 }
-
-
-
 nav.navbar-default.navbar-static-side {
-
-background: #005faa;
-
+    background: #005faa;
 }
-
-
-
 .nav > li.active {
-
-border-left: 0;
-
-background: #0570c5 !important;
-
+    border-left: 0;
+    background: #0570c5 !important;
 }
-
-
-
-.navbar-default .nav > li > a:hover,
-
-.navbar-default .nav > li > a:focus {
-
-  background-color: #0570c5;
-
-  color: white;
-
+.navbar-default .nav > li > a:hover, .navbar-default .nav > li > a:focus {
+    background-color: #0570c5;
+    color: white;
 }
-
-
-
 .nav-header {
-
-padding: 15px 25px;
-
-background: #005faa;
-
+    padding: 15px 25px;
+    background: #005faa;
 }
-
-
-
 .navbar-static-top {
-
-background: white;
-
-height: 74px;
-
-padding-top: 7px;
-
+    background: white;
+    height: 74px;
+    padding-top: 7px;
 }
-
-
-
 /*PROFILE PAGE*/
 
 .box-header h2 {
-
-  font-size: 15px;
-
-  font-weight: 700;
-
-  padding: 14px 20px;
-
+    font-size: 15px;
+    font-weight: 700;
+    padding: 14px 20px;
 }
-
-
-
 .blue {
-
-  background: #005eaa;
-
-  color:#93daff;
-
+    background: #005eaa;
+    color: #93daff;
 }
-
-
-
 .green {
-
-  background: #007d32;
-
-  color:#a9e3c0;
-
+    background: #007d32;
+    color: #a9e3c0;
 }
-
-
-
 body {
-
-  background-color: #005eaa;
-
+    background-color: #005eaa;
 }
-
-
-
 .nav > li > a {
-
-  color: white;
-
+    color: white;
 }
-
-
-
 .navbar-static-side .nav > li > a i {
-
-  color: #93daff;
-
-  font-size: 15px;
-
-  margin-right: 10px;
-
-  width: 17px;
-
+    color: #93daff;
+    font-size: 15px;
+    margin-right: 10px;
+    width: 17px;
 }
-
-
-
-
-
-
-
 .nav > li > a {
-
-  color: white;
-
-  font-weight: 400;
-
-  padding: 14px 20px 14px 35px;
-
+    color: white;
+    font-weight: 400;
+    padding: 14px 20px 14px 35px;
 }
-
-
-
 .nav-second-level li a {
-
-  padding: 7px 10px 7px 10px;
-
-  padding-left: 67px;
-
+    padding: 7px 10px 7px 10px;
+    padding-left: 67px;
 }
-
-
-
 .profile-element a.dropdown-toggle {
-
-  float: left;
-
+    float: left;
 }
-
-
-
 .profile-element .img-circle {
-
-  border-radius: 50%;
-
-  float: left;
-
-  margin-right: 10px;
-
+    border-radius: 50%;
+    float: left;
+    margin-right: 10px;
 }
-
-
-
 .profile-element.clearfix {
-
-  background: #0570c5;
-
-  padding: 20px 25px 20px 18px;
-
-  margin: 0 -25px;
-
+    background: #0570c5;
+    padding: 20px 25px 20px 18px;
+    margin: 0 -25px;
 }
-
-
-
 .profile-element .font-bold {
-
-  font-weight: 700;
-
+    font-weight: 700;
 }
-
-
-
 .nav .profile-element.open > a, .nav .profile-element.open > a:hover, .nav .profile-element.open > a:focus {
-
-  background: none;
-
+    background: none;
 }
-
-
-
 .profile-element a {
-
-  color:white;
-
+    color: white;
 }
-
-
-
 .profile-element.open>.dropdown-menu {
-
-  display: block;
-
-  left: 52px;
-
-  top: 70px;
-
+    display: block;
+    left: 52px;
+    top: 70px;
 }
-
-
-
 .profile-element .text-muted {
-
-  color: white;
-
+    color: white;
 }
-
-
-
 .navbar-header {
-
-  display:none;
-
+    display: none;
 }
-
-
-
 .welcome-msg {
-
-  float:left;
-
-  margin-left:15px;
-
-  margin-top:20px;
-
-  font-size: 14px;
-
+    float: left;
+    margin-left: 15px;
+    margin-top: 20px;
+    font-size: 14px;
 }
-
-
-
 .nav.navbar-top-links a {
-
-  font-size: 14px;
-
-  padding: 14px 20px 14px 15px;
-
+    font-size: 14px;
+    padding: 14px 20px 14px 15px;
 }
-
-
-
 .nav-second-level li.active a, .nav-second-level li.active a:hover, .nav-second-level li.active a:focus {
-
     background-color: #0570C5;
-
     color: #93DAFF;
-
 }
-
-
-
 .highlighted-btn {
-
     background: #e46f1f;
-
     border-radius: 5px;
-
     margin: 10px 15px 15px 15px;
-
     padding: 10px 0 10px 20px !important;
-
 }
-
-
-
 .highlighted-btn:hover {
-
     background: #d5671c !important;
-
 }
-
-
-
-
-
-
-
 .highlighted-btn i {
-
-    color:white !important;
-
+    color: white !important;
 }
-
-
-
 .count-info.bell .label {
-
-  right: 10px;
-
+    right: 10px;
 }
-
-
-
 .navbar-top-links li {
-
-  display: inline-block;
-
-  margin-top: 5px;
-
+    display: inline-block;
+    margin-top: 5px;
 }
-
-
-
 .content-holder {
-
-  background:white;
-
-  border:1px solid lightgrey;
-
+    background: white;
+    border: 1px solid lightgrey;
 }
-
-
-
 .control-label.message-type {
-
-  height: 42px;
-
-  line-height: 42px;
-
-  text-align: right;
-
+    height: 42px;
+    line-height: 42px;
+    text-align: right;
 }
-
-
-
 .radio label, .checkbox label {
-
-  min-height: 20px;
-
-  padding-left: 0;
-
-  margin-bottom: 0;
-
-  font-weight: 400;
-
-  cursor: pointer;
-
-  margin-right: 20px;
-
+    min-height: 20px;
+    padding-left: 0;
+    margin-bottom: 0;
+    font-weight: 400;
+    cursor: pointer;
+    margin-right: 20px;
 }
-
-
-
 .control-label {
-
-  text-align: right;
-
-  height: 34px;
-
-  line-height: 34px;
-
-  color: black;
-
+    text-align: right;
+    height: 34px;
+    line-height: 34px;
+    color: black;
 }
-
-
-
 .chosen-container-multi .chosen-choices {
-
-  -moz-box-sizing: border-box;
-
-  background-color: #FFFFFF;
-
-  border: 1px solid #e5e6e7;
-
-  border-radius: 2px;
-
-  cursor: text;
-
-  height: 34px !important;
-
-  margin: 0;
-
-  min-height: 30px;
-
-  overflow: hidden;
-
-  padding: 2px;
-
-  position: relative;
-
-  width: 100%;
-
+    -moz-box-sizing: border-box;
+    background-color: #FFFFFF;
+    border: 1px solid #e5e6e7;
+    border-radius: 2px;
+    cursor: text;
+    height: 34px !important;
+    margin: 0;
+    min-height: 30px;
+    overflow: hidden;
+    padding: 2px;
+    position: relative;
+    width: 100%;
 }
-
-
-
 .chosen-container {
+    position: relative;
+    /* display: inline-block; */
 
-  position: relative;
-
-  /* display: inline-block; */
-
-  vertical-align: middle;
-
-  font-size: 13px;
-
-  zoom: 1;
-
-  -webkit-user-select: none;
-
-  -moz-user-select: none;
-
-  user-select: none;
-
-  width: 100% !important;
-
+vertical-align: middle;
+    font-size: 13px;
+    zoom: 1;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    width: 100% !important;
 }
-
-
-
 .m-b {
-
-  margin-bottom: 0;
-
+    margin-bottom: 0;
 }
-
-
-
 .content-holder {
-
-  background: white;
-
-  border: 1px solid lightgrey;
-
-  padding: 0 30px 40px 30px;
-
-  max-width: 1140px;
-
+    background: white;
+    border: 1px solid lightgrey;
+    padding: 0 30px 40px 30px;
+    max-width: 1140px;
 }
-
-
-
 h1 {
-
-font-size: 24px;
-
-font-weight: 600;
-
-margin:15px 30px;
-
+    font-size: 24px;
+    font-weight: 600;
+    margin: 15px 30px;
 }
-
-
-
 h2.section-title {
-
     /*border-bottom: 1px solid lightgrey;*/
 
-    margin: 20px -15px;
-
+margin: 20px -15px;
     padding: 0 15px 20px 15px;
-
 }
-
-
-
 .btn {
-
-  padding:6px 10px;
-
-  border-radius:3px;
-
-  font-size: 12px;
-
-  color:#5c5e60;
-
-  border: 1px solid lightgrey;
-
-  background: none;
-
+    padding: 6px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #5c5e60;
+    border: 1px solid lightgrey;
+    background: none;
 }
-
-
-
 .btn-discard {
-
-  color:white;
-
-  background: #acacac;
-
-  border:none;
-
-  border: 1px solid #acacac;
-
+    color: white;
+    background: #acacac;
+    border: none;
+    border: 1px solid #acacac;
 }
-
-
-
 .btn-discard:hover {
-
-  color:white;
-
+    color: white;
 }
-
-
-
-
-
-
-
 .btn-add {
-
-  color: white;
-
-  background: #005eaa;
-
-  border: none;
-
-  font-size: 13px;
-
+    color: white;
+    background: #005eaa;
+    border: none;
+    font-size: 13px;
 }
-
-
-
 .btn-add:hover, .btn-add:active {
-
-  color:white;
-
-  background: #015598;
-
-  border:none;
-
+    color: white;
+    background: #015598;
+    border: none;
 }
-
-
-
 .btn-send {
-
-  color:white;
-
-  background: #007d32;
-
-  width: 168px;
-
-  border:none;
-
+    color: white;
+    background: #007d32;
+    width: 168px;
+    border: none;
 }
-
-
-
 .btn-send:hover {
-
-  color:white;
-
+    color: white;
 }
-
-
-
-
-
 .right {
-
-  float:right;
-
+    float: right;
 }
-
-
-
 .iradio_square-green {
-
     display: inline-block;
-
     vertical-align: middle;
-
     margin: 0px;
-
     padding: 0px;
-
     width: 22px;
-
     height: 22px;
-
     background: url("blue.png") no-repeat scroll 0% 0% transparent;
-
     border: medium none;
-
     cursor: pointer;
-
 }
-
-
-
 a.addBtn {
-
-border: none;
-
-color: #005eaa;
-
-display: block;
-
-margin-top: -10px;
-
-font-size: 13px;
-
-width: 260px;
-
+    border: none;
+    color: #005eaa;
+    display: block;
+    margin-top: -10px;
+    font-size: 13px;
+    width: 260px;
 }
-
-
-
 .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
-
-margin: 1px 0;
-
-padding: 7px 11px;
-
-height: 25px;
-
-outline: 0;
-
-border: 0 !important;
-
-background: transparent !important;
-
-box-shadow: none;
-
-color: #999c9c;
-
-font-size: 14px;
-
-font-family: Open Sans, sans-serif;
-
-line-height: normal;
-
-border-radius: 0;
-
+    margin: 1px 0;
+    padding: 7px 11px;
+    height: 25px;
+    outline: 0;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none;
+    color: #999c9c;
+    font-size: 14px;
+    font-family: Open Sans, sans-serif;
+    line-height: normal;
+    border-radius: 0;
 }
-
-
-
 .text-counter {
-
-float: right;
-
-font-size: 12px;
-
+    float: right;
+    font-size: 12px;
 }
-
-
-
 .now {
-
-color: #ffffff;
-
-text-shadow: none !important;
-
-background-color: lightgrey !important;
-
-background: lightgrey !important;
-
-border-radius:0 !important;
-
-}
-
-
-
-.now:hover,
-
-.now:active,
-
-.now.active,
-
-.now.disabled,
-
-.now[disabled] {
-
     color: #ffffff;
-
-    background-color:lightgrey !important;
-
+    text-shadow: none !important;
+    background-color: lightgrey !important;
+    background: lightgrey !important;
+    border-radius: 0 !important;
+}
+.now:hover, .now:active, .now.active, .now.disabled, .now[disabled] {
+    color: #ffffff;
+    background-color: lightgrey !important;
     background: lightgrey;
-
 }
-
-
-
-
-
 .active.active {
-
     background-color: #005eaa !important;
-
     background: #005eaa !important;
-
-    border-radius:0 !important;
-
+    border-radius: 0 !important;
 }
-
-
-
 [date-picker] span {
-
-  border-radius:0 !important;
-
+    border-radius: 0 !important;
 }
-
-
-
 label.checkbox {
-
     font-weight: 400;
-
     margin-top: 0;
-
 }
-
-
-
 .iradio_square-green, .icheckbox_square-green {
-
     margin-right: 3px !important;
-
 }
-
-
-
 .icheckbox_square-green {
-
     margin-right: 3px !important;
-
 }
-
-
-
 .cg-notify-message.alert-success {
-
-  position: fixed;
-
-  left: 50%;
-
-  top: 0;
-
-  z-index: 9999;
-
-  max-width: 400px;
-
-  text-align: center;
-
-  background-color: #007d32;
-
-  color: white;
-
-  padding: 15px 25px;
-
-  border: none;
-
-  border-radius: 4px;
-
-  -webkit-transition: top .5s ease-out, opacity .2s ease-out;
-
-  -moz-transition: top .5s ease-out, opacity .2s ease-out;
-
-  -o-transition: top .5s ease-out, opacity .2s ease-out;
-
-  transition: top .5s ease-out, opacity .2s ease-out;
-
-  visibility: hidden;
-
-  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-
-  box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-
-  background: rgba(0,124,51,.7);
-
+    position: fixed;
+    left: 50%;
+    top: 0;
+    z-index: 9999;
+    max-width: 400px;
+    text-align: center;
+    background-color: #007d32;
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 4px;
+    -webkit-transition: top .5s ease-out, opacity .2s ease-out;
+    -moz-transition: top .5s ease-out, opacity .2s ease-out;
+    -o-transition: top .5s ease-out, opacity .2s ease-out;
+    transition: top .5s ease-out, opacity .2s ease-out;
+    visibility: hidden;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    background: rgba(0, 124, 51, .7);
 }
-
-
-
 .dropup.discard-btn .dropdown-menu {
+    margin-bottom: 5px;
+    /* width: 250px; */
 
-  margin-bottom: 5px;
-
-  /* width: 250px; */
-
-  text-align: center;
-
-  margin-left: -50px;
-
-  padding: 15px;
-
-  width: 180px;
-
+text-align: center;
+    margin-left: -50px;
+    padding: 15px;
+    width: 180px;
 }
-
-
-
 .discard-cancel:hover {
-
-  color:#005eaa;
-
-  cursor: pointer;
-
+    color: #005eaa;
+    cursor: pointer;
 }
-
-
-
 ul.alert.alert-danger {
-
-margin-left: 0;
-
-padding-left: 15px;
-
-list-style: none;
-
+    margin-left: 0;
+    padding-left: 15px;
+    list-style: none;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 /****DATETIMEPICKER****/
 
 /**
@@ -1690,1833 +1149,953 @@ list-style: none;
 
 END DATETIME******/
 
-
-
-
-
-
-
 .ngViewport {
-
-  overflow: auto;
-
-  min-height: 20px;
-
-  height: auto !important;
-
-  text-align: center;
-
-}
-
-
-
-.gridStyle {
-
-  border: none;
-
-  width: 100%;
-
-  height: auto;
-
-}
-
-
-
-.ngHeaderScroller {
-
-  background: white;
-
-  border: none;
-
-  color: #005eaa;
-
-  text-align: center;
-
-}
-
-
-
-.ngVerticalBarVisible {
-
-  width: 1px;
-
-  background-color: transparent;
-
-}
-
-
-
-.ngRow.even, .ngRow.odd {
-
-  background: white;
-
-}
-
-
-
-.colt1 {
-
-  text-align: left;
-
-}
-
-
-
-.ngSelectionCell {
-
-  text-align: center;
-
-}
-
-
-
-.ngViewport {
-
-  overflow: auto;
-
-  min-height: 20px;
-
-  height: auto !important;
-
-  text-align: center;
-
-  background: white;
-
-  border-top:1px solid #d6ebf9;
-
-  margin-top: 10px;
-
-}
-
-
-
-.ngHeaderScroller {
-
-  background: white;
-
-  border: none;
-
-  color: #005eaa;
-
-  text-align: center;
-
-
-
-}
-
-
-
-.ngHeaderContainer {
-
-  position: relative;
-
-  overflow: hidden;
-
-  font-weight: bold;
-
-  background-color: inherit;
-
-
-
-}
-
-
-
-.ngVerticalBarVisible {
-
-  width: 1px;
-
-  background-color: transparent;
-
-
-
-}
-
-
-
-.ngCellText {
-
-  vertical-align: middle;
-
-  display: table-cell;
-
-}
-
-
-
-.ngSelectionCell {
-
-  margin-top: 16px;
-
-  margin-left: 0;
-
-}
-
-.messages .ngSelectionCell {
-  margin-top: 16px;
-  margin-left: 0;
-}
-
-.messages input.ngSelectionHeader {
-  margin-top: -2px;
-}
-
-
-
-.ngCellText.ng-scope.col2.colt2 {
-
-  text-align: left;
-
-}
-
-
-
-.ngHeaderText.ng-binding.colt2 {
-
-  text-align: left;
-
-}
-
-
-
-.ngGrid {
-
-background-color: white;
-
-}
-
-
-
-input.search-input {
-
-padding: 5px 12px;
-
-width: 40%;
-
-margin-bottom: 20px;
-
-border: 1px solid lightgrey;
-
-}
-
-
-
-.ngSortButtonDown {
-
-position: absolute;
-
-top: 11px;
-
-left: initial;
-
-right: 0;
-
-margin-left: auto;
-
-margin-right: auto;
-
-border-color: gray transparent;
-
-border-style: solid;
-
-border-width: 0 5px 5px 5px;
-
-height: 0;
-
-width: 0;
-
-}
-
-
-
-.ngSortButtonUp {
-
-position: absolute;
-
-top: 11px;
-
-left: initial;
-
-right: 0;
-
-margin-left: auto;
-
-margin-right: auto;
-
-border-color: gray transparent;
-
-border-style: solid;
-
-border-width: 5px 5px 0 5px;
-
-height: 0;
-
-width: 0;
-
-}
-
-
-
-.ngCellText a {
-
-  color:black;
-
-  font-weight:600;
-
-}
-
-
-
-.ngCellText a.btn {
-
-  color: grey;
-
-  font-weight: 600;
-
-}
-
-
-
-.ngCellText {
-
-  border-bottom: 1px solid lightgrey;
-
-}
-
-
-
-.ngCell {
-
-  border-bottom: 1px solid lightgrey;
-
-}
-
-
-
-.ngCellText.col7 {
-
-  text-align: right;
-
-  padding-right: 0;
-
-}
-
-
-
-.ngTotalSelectContainer {
-
-  float: left;
-
-  margin: 5px;
-
-  margin-top: 7px;
-
-  display: none;
-
-}
-
-
-
-.datetimepicker-wrapper {
-
-  vertical-align: middle;
-
-  display: inline-block;
-
-}
-
-
-
-.datetimepicker-wrapper > input {
-
-  margin-bottom: 0 !important;
-
-  width: 130px;
-
-}
-
-
-
-.datetimepicker-wrapper [ng-model=hours], [ng-model=minutes] {
-
-  width: 46px !important;
-
-}
-
-
-
-.datetimepicker-wrapper .btn {
-
-  padding: 7px 10px;
-
-  border-radius: 3px;
-
-  font-size: 12px;
-
-  color: black;
-
-  border: none;
-
-  background: none;
-
-  outline: none !important;
-
-}
-
-
-
-.datetimepicker-wrapper .btn:hover {
-
-  background: lightgrey;
-
-}
-
-
-
-.datetimepicker-wrapper .btn:active {
-
-  background: #005eaa;
-
-}
-
-
-
-.datetimepicker-wrapper .btn-default[disabled] {
-
-  color:lightgrey;
-
-}
-
-
-
-.datetimepicker-wrapper .active.active {
-
-  background-color: #005eaa !important;
-
-  background: #005eaa !important;
-
-  border-radius: 0 !important;
-
-  color: white !important;
-
-  box-shadow: none;
-
-}
-
-
-
-.datetimepicker-wrapper .dropdown-menu .ng-isolate-scope {
-
-  outline: none;
-
-  border: none;
-
-  padding: 5px;
-
-}
-
-
-
-.datetimepicker-wrapper table {
-
-  outline: none;
-
-  border: none;
-
-}
-
-
-
-
-
-.ngFooterPanel {
-
-  background-color: white;
-
-  padding: 0;
-
-  border-top: none;
-
-  position: relative;
-
-}
-
-
-
-.ngPagerLastTriangle {
-
-  width: 0;
-
-  height: 0;
-
-  border-style: solid;
-
-  border-width: 5px 0 5px 8.7px;
-
-  border-color: transparent transparent transparent #005eaa;
-
-  margin-left: -1px;
-
-}
-
-
-
-.ngPagerLastTriangle {
-
-  width: 0;
-
-  height: 0;
-
-  border-style: solid;
-
-  border-width: 5px 0 5px 8.7px;
-
-  border-color: transparent transparent transparent #005eaa;
-
-  margin-left: -1px;
-
-}
-
-
-
-.ngPagerLastBar {
-
-  width: 10px;
-
-  border-left: 2px solid #005eaa;
-
-  margin-top: -6px;
-
-  height: 12px;
-
-  margin-left: 1px;
-
-}
-
-
-
-.ngPagerFirstTriangle {
-
-  width: 0;
-
-  height: 0;
-
-  border-style: solid;
-
-  border-width: 5px 8.7px 5px 0;
-
-  border-color: transparent #005eaa transparent transparent;
-
-  margin-left: 2px;
-
-}
-
-
-
-.ngPagerFirstBar {
-
-  width: 10px;
-
-  border-left: 2px solid #005eaa;
-
-  margin-top: -6px;
-
-  height: 12px;
-
-  margin-left: -3px;
-
-}
-
-
-
-.ngGridMaxPagesNumber {
-
-  vertical-align: top;
-
-  margin-top: 1px;
-
-  display: inline-block;
-
-}
-
-
-
-
-
-
-
-button.ngPagerButton {
-
-  border: none;
-
-  background: white;
-
-  color: #005eaa;
-
-}
-
-
-
-button:disabled .ngPagerFirstBar {
-
-  width: 10px;
-
-  border-left: 2px solid #d6ebf9;
-
-  margin-top: -6px;
-
-  height: 12px;
-
-  margin-left: -3px;
-
-}
-
-
-
-button:disabled .ngPagerFirstTriangle {
-
-  width: 0;
-
-  height: 0;
-
-  border-style: solid;
-
-  border-width: 5px 8.7px 5px 0;
-
-  border-color: transparent #d6ebf9 transparent transparent;
-
-  margin-left: 2px;
-
-}
-
-
-
-.ngPagerContainer {
-
-  margin-top: 20px !important;
-
-}
-
-
-
-.ngPagerContainer input {
-
-width: 50 !important;
-
-  height: auto !important;
-
-  margin-top: 0px !important;
-
-  padding: 0px 0 0 3px !important;
-
-  border: 1px solid lightgrey !important;
-
-}
-
-
-
-.ngPagerContainer .ngRowCountPicker {
-
-  display: none;
-
-}
-
-
-
-.top-buttons {
-
-  text-align: right;
-
-  margin-bottom: 20px;
-
-  margin-top: -50px;
-
-}
-
-
-
-.manage-list .top-buttons {
-
-  text-align: right;
-
-  margin-bottom: 68px;
-
-  margin-top: -78px;
-
-}
-
-
-
-select.page-select {
-
-  padding: 4px 0 4px 20px;
-
-  width: 115px;
-
-  border: 1px solid lightgrey;
-
-}
-
-
-
-.page-select-wrapper {
-
-  float:right;
-
-}
-
-
-
-strong {
-
-  font-weight: 600;
-
-}
-
-
-
-.btn i {
-
-  margin-right: 4px;
-
-}
-
-.bottom-buttons {
-
-  text-align: right;
-
-  margin-top: 20px;
-
-}
-
-
-
-.col-sm-2.bottom-buttons {
-
-  text-align: left;
-
-  margin-top: 20px;
-
-  margin-left: 0;
-
-}
-
-
-
-.btn-back {
-
-  color:#005eaa;
-
-  border-color: #005eaa;
-
-}
-
-
-
-.btn-back:hover, .btn-back:active {
-
-  color:#005eaa;
-
-  border-color: #005eaa;
-
-  background: whitesmoke;
-
-}
-
-
-
-.bottom-buttons .btn, .bottom-buttons .discard-btn {
-
-  margin-left:5px;
-
-}
-
-
-
-.col-sm-2.bottom-buttons .btn {
-
-  margin-left:0;
-
-}
-
-
-
- ul.dropdown-menu.time-pick a {
-
-  display: inline-block;
-
-  padding: 3px 7px;
-
-  clear: both;
-
-  font-weight: 400;
-
-  line-height: 1.42857143;
-
-  color: #333;
-
-  white-space: nowrap;
-
-}
-
-
-
- ul.dropdown-menu.time-pick a:hover {
-
-  background: lightgray;
-
-}
-
-
-
-ul.dropdown-menu.time-pick span {
-
-  display: block;
-
-  text-align: center;
-
-  font-weight: 600;
-
-  color: black;
-
-  margin-top: 5px;
-
-}
-
-
-
-
-
-.form-control:focus, .single-line:focus {
-
-  border-color: #d6ebf9;
-
-}
-
-
-
-.timing .form-control[readonly] {
-
-  cursor: pointer;
-
-  background-color: transparent;
-
-  opacity: 1;
-
-}
-
-
-
-.timing input {
-
-  width:
-
-  50px;
-
-}
-
-
-
-.label-icon {
-
-  margin-right:5px;
-
-  color:grey;
-
-  vertical-align: middle;
-
-  font-size: 16px;
-
-}
-
-
-
-.section-title span {
-
-  font-weight: 700;
-
-  display: block;
-
-}
-
-
-
-.manage-list .ngCellText.col7 {
-
-  text-align: center;
-
-  padding-right: 5px;
-
-}
-
-
-
-.manage-list .ngCellText.col2 {
-
-  color:black;
-
-  font-weight:700;
-
-}
-
-
-
-.manage-list .ngCellText.col9 {
-
-  text-align: right;
-
-  padding-right: 0;
-
-}
-
-
-
-span.O, span.I {
-
-  background: #ef5352;
-
-  color: white;
-
-  width: 20px;
-
-  display: block;
-
-  height: 20px;
-
-  line-height: 20px;
-
-  border-radius: 50%;
-
-  margin: 0 auto;
-
-  font-size: 11px;
-
-}
-
-span.I {
-
-  background: #e46f1f;
-
-  color: white;
-
-  width: 20px;
-
-  display: block;
-
-  height: 20px;
-
-  line-height: 20px;
-
-  border-radius: 50%;
-
-  margin: 0 auto;
-
-  font-size: 11px;
-
-}
-
-
-
-span.B {
-
-  background: #efac59;
-
-  color: white;
-
-  width: 20px;
-
-  display: block;
-
-  height: 20px;
-
-  line-height: 20px;
-
-  border-radius: 50%;
-
-  margin: 0 auto;
-
-  font-size: 11px;
-
-}
-
-
-
-span.A {
-  background: #39b96a;
-  color: white;
-  width: 20px;
-  display: block;
-  height: 20px;
-  line-height: 20px;
-  border-radius: 50%;
-  margin: 0 auto;
-  font-size: 11px;
-}
-
-
-
-
-
-
-
-.ngCellText a.linkclass {
-
-  color: #676a6c;
-
-  font-weight: 400;
-
-}
-
-
-
-.list-box {
-
-  border: 1px solid lightgrey;
-
-  max-width: 250px;
-
-  padding: 15px;
-
-  margin-top: 30px;
-
-}
-
-
-
-.list-box ul li {
-
-  display: block;
-
-  padding: 5px 0;
-
-  font-weight: 700;
-
-  color:#464646;
-
-}
-
-
-
-.list-box p {
-
-  border-bottom: 1px solid lightgrey;
-
-  margin: -15px -15px 10px -15px;
-
-  padding: 10px;
-
-}
-
-
-
-.list-box a {
-
-  font-weight: 700;
-
-  color:#464646;
-
-}
-
-
-
-.btn-send.smaller {
-
-  color: white;
-
-  background: #007d32;
-
-  width: 110px;
-
-  border: none;
-
-}
-
-
-
-.form-control, .single-line {
-
-  border-color: lightgrey;
-
-}
-
-
-
-.form-control.inline {
-
-  max-width: 250px;
-
-}
-
-
-
- .add-list-contact .control-label {
-
-  text-align: left;
-
-  height: 34px;
-
-  line-height: 34px;
-
-  color: black;
-
-  min-width: 110px;
-
-}
-
-
-
-.add-list-contact .list-box {
-
-  max-width: 360px;
-
-}
-
-
-
-.add-list-contact .radio label {
-
-  font-weight: 600;
-
-}
-
-
-
-.upload-holder {
-
-  max-width: 500px;
-
-}
-
-
-
-body {
-
-  color:#363636;
-
-}
-
-
-
-.messages .top-buttons {
-
-  text-align: left;
-
-  margin-bottom: 20px;
-
-  margin-top: -10px;
-
-}
-
-
-
-.messages .ngCellText.col7 {
-
-  text-align: center;
-
-  padding-right: 0;
-
-}
-
-
-
-.messages .itTopPager {
-
-    background-color: #FFF;
-
-    padding: 0px;
-
-    border-top: medium none;
-
-    position: absolute;
-
-    top: 110px;
-
-    right: 10px;
-
-    display: inline-block;
-
-    width: auto !important;
-
-}
-
-
-
-.ngRow:last-child .ngCell, .ngRow:last-child .ngCellText, .ngRow:last-child{
-
-    border: 0;
-
-}
-
-
-
-.messages .open > .dropdown-menu {
-
-    display: block;
-
+    overflow: auto;
+    min-height: 20px;
+    height: auto !important;
     text-align: center;
-
 }
-
-
-
-.btn.tab-style {
-
-padding:5px 20px;
-
-margin-right: 5px;
-
-border-bottom-left-radius: 0 !important;
-
-border-bottom-right-radius: 0 !important;
-
-border: none;
-
-background: #dcdbe1;
-
-color: #5f6364;
-
-font-size: 12px;
-
+.gridStyle {
+    border: none;
+    width: 100%;
+    height: auto;
 }
-
-
-
-.btn.tab-style.active {
-
-  border-radius: 3px !important;
-
-  border-bottom-left-radius: 0 !important;
-
-border-bottom-right-radius: 0 !important;
-
-border:1px solid lightgrey;
-
-background: white !important;
-
-color:#005eaa;
-
-box-shadow: none;
-
-border-bottom: none;
-
-position: relative;
-
-z-index: 10;
-
-font-size: 14px;
-
-margin-top:-3px;
-
+.ngHeaderScroller {
+    background: white;
+    border: none;
+    color: #005eaa;
+    text-align: center;
 }
-
-
-
-.tab-navigation {
-
-position: relative;
-
-top: 1px;
-
-z-index: 1000;
-
+.ngVerticalBarVisible {
+    width: 1px;
+    background-color: transparent;
 }
-
-
-
-.opt-out {
-
-  margin-top:15px;
-
+.ngRow.even, .ngRow.odd {
+    background: white;
 }
-
-
-
-.messages-view .top-buttons {
-
-text-align: left;
-
-margin-bottom: 0;
-
-margin-top: 30px;
-
+.colt1 {
+    text-align: left;
 }
-
-
-
-.view-from-number {
-
-  font-size: 18px;
-
-  color:#005eaa;
-
+.ngSelectionCell {
+    text-align: center;
 }
-
-
-
-.view-from-number span {
-
-  font-weight: 700;
-
-  color:#363636;
-
+.ngViewport {
+    overflow: auto;
+    min-height: 20px;
+    height: auto !important;
+    text-align: center;
+    background: white;
+    border-top: 1px solid #d6ebf9;
+    margin-top: 10px;
 }
-
-
-
-.view-info-box {
-
-  margin-top:-15px;
-
-  color: #363636;
-
+.ngHeaderScroller {
+    background: white;
+    border: none;
+    color: #005eaa;
+    text-align: center;
 }
-
-
-
-.message-box {
-
-border-top: 1px solid lightgrey;
-
-padding-top: 25px;
-
-margin-top: 30px;
-
-margin-bottom: 50px;
-
+.ngHeaderContainer {
+    position: relative;
+    overflow: hidden;
+    font-weight: bold;
+    background-color: inherit;
 }
-
-
-
-.bottom-buttons.left {
-
-  text-align: left;
-
+.ngVerticalBarVisible {
+    width: 1px;
+    background-color: transparent;
 }
-
-
-
-.bottom-buttons.left .btn, .bottom-buttons.left .discard-btn {
-
-margin-left: 0;
-
+.ngCellText {
+    vertical-align: middle;
+    display: table-cell;
 }
-
-
-
-a.back-btn {
-
-border: none;
-
-color: #005eaa;
-
+.ngSelectionCell {
+    margin-top: 16px;
+    margin-left: 0;
 }
-
-
-
-.messages .open > .dropdown-menu.dropdown-list {
-
-display: block;
-
-text-align: left;
-
+.messages .ngSelectionCell {
+    margin-top: 16px;
+    margin-left: 0;
 }
-
-
-
-.messages .open > .dropdown-menu.dropdown-list {
-
-padding:;
-
+.messages input.ngSelectionHeader {
+    margin-top: -2px;
 }
-
-
-
-.dropdown-list li {
-
-margin-bottom: 4px;
-
+.ngCellText.ng-scope.col2.colt2 {
+    text-align: left;
 }
-
-
-
-.list-holder {
-
-  max-height: 150px;
-
-  overflow: auto;
-
+.ngHeaderText.ng-binding.colt2 {
+    text-align: left;
 }
-
-
-
-.list-holder div {
-
-  margin-bottom:4px;
-
+.ngGrid {
+    background-color: white;
 }
-
-
-
-.dropdown-list .btn-send.smaller {
-
-color: white;
-
-background: #007d32;
-
-width: 100%;
-
-border: none;
-
-margin-top: 10px;
-
+input.search-input {
+    padding: 5px 12px;
+    width: 40%;
+    margin-bottom: 20px;
+    border: 1px solid lightgrey;
 }
-
-.reply-box .control-label {
-  text-align: right;
-  height: 14px;
-  line-height: 14px;
-  color: black;
+.ngSortButtonDown {
+    position: absolute;
+    top: 11px;
+    left: initial;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    border-color: gray transparent;
+    border-style: solid;
+    border-width: 0 5px 5px 5px;
+    height: 0;
+    width: 0;
 }
-
-.reply-box-inner {
-  padding:15px;
-  background: whitesmoke;
-  margin-top:20px;
+.ngSortButtonUp {
+    position: absolute;
+    top: 11px;
+    left: initial;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    border-color: gray transparent;
+    border-style: solid;
+    border-width: 5px 5px 0 5px;
+    height: 0;
+    width: 0;
 }
-
-.activebtn, .activebtn:focus, .activebtn:active {
-  border-color: lightgrey;
-  color: #005eaa;
-  background: whitesmoke;
-  outline:none;
+.ngCellText a {
+    color: black;
+    font-weight: 600;
 }
-
-.form-control[readonly] {
-  cursor: not-allowed;
-  background-color: whitesmoke;
-  opacity: 1;
+.ngCellText a.btn {
+    color: grey;
+    font-weight: 600;
 }
-
-.form-btn.active.active {
-  background-color: whitesmoke !important;
-  background: whitesmoke !important;
-  border-radius: 3px !important;
-  color: #005eaa;
-  box-shadow: none;
+.ngCellText {
+    border-bottom: 1px solid lightgrey;
 }
-
-.btn.btn-primary {
-background-color: #e36f1e;
-border-color: #e36f1e;
-color: #FFFFFF;
+.ngCell {
+    border-bottom: 1px solid lightgrey;
 }
-
-.manage-list .chosen-container {
-position: relative;
-/* display: inline-block; */
-vertical-align: middle;
-font-size: 13px;
-zoom: 1;
--webkit-user-select: none;
--moz-user-select: none;
-user-select: none;
-width: 120px !important;
-/* height: 30px; */
-padding: 0;
-top: -2px;
-border-radius: 0;
+.ngCellText.col7 {
+    text-align: right;
+    padding-right: 0;
 }
-
-.manage-list .chosen-container-single .chosen-single {
-background: #ffffff;
-box-shadow: none;
--moz-box-sizing: border-box;
-background-color: #FFFFFF;
-border: 1px solid lightgrey;
-border-radius: 0;
-cursor: text;
-height: auto !important;
-margin: 0;
-min-height: 30px;
-overflow: hidden;
-padding: 1px 12px;
-position: relative;
-width: 100%;
+.ngTotalSelectContainer {
+    float: left;
+    margin: 5px;
+    margin-top: 7px;
+    display: none;
 }
-
-.manage-list input.search-input {
-padding: 5px 12px;
-width: 30%;
-margin-bottom: 20px;
-border: 1px solid lightgrey;
+.datetimepicker-wrapper {
+    vertical-align: middle;
+    display: inline-block;
 }
-
-.manage-list .chosen-container-single .chosen-drop {
-margin-top: -1px;
-border-radius: 0 0 4px 4px;
-background-clip: padding-box;
-border: 1px solid lightgrey;
-border-top: none;
+.datetimepicker-wrapper > input {
+    margin-bottom: 0 !important;
+    width: 130px;
 }
-
-button.btn.btn-search {
-padding: 0;
-position: relative;
-top: -2px;
-font-size: 20px;
-border: none;
-color: #005eaa;
-margin-left: 5px;
+.datetimepicker-wrapper[ng-model=hours], [ng-model=minutes] {
+    width: 46px !important;
 }
-
-button.btn.btn-search:hover {
-color: #0570c5;
+.datetimepicker-wrapper .btn {
+    padding: 7px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: black;
+    border: none;
+    background: none;
+    outline: none !important;
 }
-
-button.btn.btn-search:active {
-box-shadow: none;
-outline: none;
-color: #005eaa;
-top: -1px;
+.datetimepicker-wrapper .btn:hover {
+    background: lightgrey;
 }
-
-button.btn.btn-search:focus {
-box-shadow: none;
-outline: none;
-color: #005eaa;
+.datetimepicker-wrapper .btn:active {
+    background: #005eaa;
 }
-
-.manage-list .itTopPager {
-background-color: #FFF;
-padding: 0px;
-border-top: medium none;
-position: absolute;
-top: 115px;
-right: 10px;
-display: inline-block;
-width: auto !important;
-height: 0 !important;
+.datetimepicker-wrapper .btn-default[disabled] {
+    color: lightgrey;
 }
-
-
-.ngPagerControl {
-margin-right: -10px !important;
+.datetimepicker-wrapper .active.active {
+    background-color: #005eaa !important;
+    background: #005eaa !important;
+    border-radius: 0 !important;
+    color: white !important;
+    box-shadow: none;
 }
-
-.itTopPager .ngPagerControl {
-margin-right: 10px !important;
+.datetimepicker-wrapper .dropdown-menu .ng-isolate-scope {
+    outline: none;
+    border: none;
+    padding: 5px;
 }
-
-.manage-list .page-select-wrapper {
-position: absolute;
-top: 0;
-right: 30px;
-top: 90px;
+.datetimepicker-wrapper table {
+    outline: none;
+    border: none;
 }
-
-.disabled[disabled] {
-background: none;
-border: none;
-height: 0;
-padding: 0;
+.ngFooterPanel {
+    background-color: white;
+    padding: 0;
+    border-top: none;
+    position: relative;
 }
-
-.lists-view .ngCellText.col7 {
-text-align: center;
-padding-right: 0;
+.ngPagerLastTriangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 0 5px 8.7px;
+    border-color: transparent transparent transparent #005eaa;
+    margin-left: -1px;
 }
-
-.error.red {
-  color: #a94442;
+.ngPagerLastTriangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 0 5px 8.7px;
+    border-color: transparent transparent transparent #005eaa;
+    margin-left: -1px;
 }
-
-.messages-inbox .top-buttons .chosen-container.chosen-container-single {
-  /* width: auto !important; */
-  height: 31px;
-  width: 165px !important;
-  margin-right: 5px;
-  cursor: pointer;
+.ngPagerLastBar {
+    width: 10px;
+    border-left: 2px solid #005eaa;
+    margin-top: -6px;
+    height: 12px;
+    margin-left: 1px;
 }
-
-.messages-inbox .top-buttons .chosen-container-single .chosen-drop {
-  margin-top: -3px;
-  border-radius: 0 0 4px 4px;
-  background-clip: padding-box;
+.ngPagerFirstTriangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 8.7px 5px 0;
+    border-color: transparent #005eaa transparent transparent;
+    margin-left: 2px;
 }
-
-.messages-inbox .top-buttons .chosen-container-single .chosen-single {
-  border-radius: 3px;
-  padding: 2px 12px 3px 12px;
-  cursor: pointer;
+.ngPagerFirstBar {
+    width: 10px;
+    border-left: 2px solid #005eaa;
+    margin-top: -6px;
+    height: 12px;
+    margin-left: -3px;
 }
-
-.messages-inbox .top-buttons .chosen-container-single .chosen-single div b {
-  background-position: 0px 5px;
+.ngGridMaxPagesNumber {
+    vertical-align: top;
+    margin-top: 1px;
+    display: inline-block;
 }
-
+button.ngPagerButton {
+    border: none;
+    background: white;
+    color: #005eaa;
+}
+button: disabled .ngPagerFirstBar {
+    width: 10px;
+    border-left: 2px solid #d6ebf9;
+    margin-top: -6px;
+    height: 12px;
+    margin-left: -3px;
+}
+button: disabled .ngPagerFirstTriangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 8.7px 5px 0;
+    border-color: transparent #d6ebf9 transparent transparent;
+    margin-left: 2px;
+}
+.ngPagerContainer {
+    margin-top: 20px !important;
+}
+.ngPagerContainer input {
+    width: 50 !important;
+    height: auto !important;
+    margin-top: 0px !important;
+    padding: 0px 0 0 3px !important;
+    border: 1px solid lightgrey !important;
+}
+.ngPagerContainer .ngRowCountPicker {
+    display: none;
+}
 .top-buttons {
-  min-height: 31px;
+    text-align: right;
+    margin-bottom: 20px;
+    margin-top: -50px;
 }
+.manage-list .top-buttons {
+    text-align: right;
+    margin-bottom: 68px;
+    margin-top: -78px;
+}
+select.page-select {
+    padding: 4px 0 4px 20px;
+    width: 115px;
+    border: 1px solid lightgrey;
+}
+.page-select-wrapper {
+    float: right;
+}
+strong {
+    font-weight: 600;
+}
+.btn i {
+    margin-right: 4px;
+}
+.bottom-buttons {
+    text-align: right;
+    margin-top: 20px;
+}
+.col-sm-2.bottom-buttons {
+    text-align: left;
+    margin-top: 20px;
+    margin-left: 0;
+}
+.btn-back {
+    color: #005eaa;
+    border-color: #005eaa;
+}
+.btn-back:hover, .btn-back:active {
+    color: #005eaa;
+    border-color: #005eaa;
+    background: whitesmoke;
+}
+.bottom-buttons .btn, .bottom-buttons .discard-btn {
+    margin-left: 5px;
+}
+.col-sm-2.bottom-buttons .btn {
+    margin-left: 0;
+}
+ul.dropdown-menu.time-pick a {
+    display: inline-block;
+    padding: 3px 7px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+ul.dropdown-menu.time-pick a:hover {
+    background: lightgray;
+}
+ul.dropdown-menu.time-pick span {
+    display: block;
+    text-align: center;
+    font-weight: 600;
+    color: black;
+    margin-top: 5px;
+}
+.form-control:focus, .single-line:focus {
+    border-color: #d6ebf9;
+}
+.timing .form-control[readonly] {
+    cursor: pointer;
+    background-color: transparent;
+    opacity: 1;
+}
+.timing input {
+    width: 50px;
+}
+.label-icon {
+    margin-right: 5px;
+    color: grey;
+    vertical-align: middle;
+    font-size: 16px;
+}
+.section-title span {
+    font-weight: 700;
+    display: block;
+}
+.manage-list .ngCellText.col7 {
+    text-align: center;
+    padding-right: 5px;
+}
+.manage-list .ngCellText.col2 {
+    color: black;
+    font-weight: 700;
+}
+.manage-list .ngCellText.col9 {
+    text-align: right;
+    padding-right: 0;
+}
+span.O, span.I {
+    background: #ef5352;
+    color: white;
+    width: 20px;
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 50%;
+    margin: 0 auto;
+    font-size: 11px;
+}
+span.I {
+    background: #e46f1f;
+    color: white;
+    width: 20px;
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 50%;
+    margin: 0 auto;
+    font-size: 11px;
+}
+span.B {
+    background: #efac59;
+    color: white;
+    width: 20px;
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 50%;
+    margin: 0 auto;
+    font-size: 11px;
+}
+span.A {
+    background: #39b96a;
+    color: white;
+    width: 20px;
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 50%;
+    margin: 0 auto;
+    font-size: 11px;
+}
+.ngCellText a.linkclass {
+    color: #676a6c;
+    font-weight: 400;
+}
+.list-box {
+    border: 1px solid lightgrey;
+    max-width: 250px;
+    padding: 15px;
+    margin-top: 30px;
+}
+.list-box ul li {
+    display: block;
+    padding: 5px 0;
+    font-weight: 700;
+    color: #464646;
+}
+.list-box p {
+    border-bottom: 1px solid lightgrey;
+    margin: -15px -15px 10px -15px;
+    padding: 10px;
+}
+.list-box a {
+    font-weight: 700;
+    color: #464646;
+}
+.btn-send.smaller {
+    color: white;
+    background: #007d32;
+    width: 110px;
+    border: none;
+}
+.form-control, .single-line {
+    border-color: lightgrey;
+}
+.form-control.inline {
+    max-width: 250px;
+}
+.add-list-contact .control-label {
+    text-align: left;
+    height: 34px;
+    line-height: 34px;
+    color: black;
+    min-width: 110px;
+}
+.add-list-contact .list-box {
+    max-width: 360px;
+}
+.add-list-contact .radio label {
+    font-weight: 600;
+}
+.upload-holder {
+    max-width: 500px;
+}
+body {
+    color: #363636;
+}
+.messages .top-buttons {
+    text-align: left;
+    margin-bottom: 20px;
+    margin-top: -10px;
+}
+.messages .ngCellText.col7 {
+    text-align: center;
+    padding-right: 0;
+}
+.messages .itTopPager {
+    background-color: #FFF;
+    padding: 0px;
+    border-top: medium none;
+    position: absolute;
+    top: 110px;
+    right: 10px;
+    display: inline-block;
+    width: auto !important;
+}
+.ngRow: last-child .ngCell, .ngRow: last-child .ngCellText, .ngRow: last-child {
+    border: 0;
+}
+.messages .open > .dropdown-menu {
+    display: block;
+    text-align: center;
+}
+.btn.tab-style {
+    padding: 5px 20px;
+    margin-right: 5px;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border: none;
+    background: #dcdbe1;
+    color: #5f6364;
+    font-size: 12px;
+}
+.btn.tab-style.active {
+    border-radius: 3px !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border: 1px solid lightgrey;
+    background: white !important;
+    color: #005eaa;
+    box-shadow: none;
+    border-bottom: none;
+    position: relative;
+    z-index: 10;
+    font-size: 14px;
+    margin-top: -3px;
+}
+.tab-navigation {
+    position: relative;
+    top: 1px;
+    z-index: 1000;
+}
+.opt-out {
+    margin-top: 15px;
+}
+.messages-view .top-buttons {
+    text-align: left;
+    margin-bottom: 0;
+    margin-top: 30px;
+}
+.view-from-number {
+    font-size: 18px;
+    color: #005eaa;
+}
+.view-from-number span {
+    font-weight: 700;
+    color: #363636;
+}
+.view-info-box {
+    margin-top: -15px;
+    color: #363636;
+}
+.message-box {
+    border-top: 1px solid lightgrey;
+    padding-top: 25px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+.bottom-buttons.left {
+    text-align: left;
+}
+.bottom-buttons.left .btn, .bottom-buttons.left .discard-btn {
+    margin-left: 0;
+}
+a.back-btn {
+    border: none;
+    color: #005eaa;
+}
+.messages .open > .dropdown-menu.dropdown-list {
+    display: block;
+    text-align: left;
+}
+.messages .open > .dropdown-menu.dropdown-list {
+    padding: ;
+}
+.dropdown-list li {
+    margin-bottom: 4px;
+}
+.list-holder {
+    max-height: 150px;
+    overflow: auto;
+}
+.list-holder div {
+    margin-bottom: 4px;
+}
+.dropdown-list .btn-send.smaller {
+    color: white;
+    background: #007d32;
+    width: 100%;
+    border: none;
+    margin-top: 10px;
+}
+.reply-box .control-label {
+    text-align: right;
+    height: 14px;
+    line-height: 14px;
+    color: black;
+}
+.reply-box-inner {
+    padding: 15px;
+    background: whitesmoke;
+    margin-top: 20px;
+}
+.activebtn, .activebtn:focus, .activebtn:active {
+    border-color: lightgrey;
+    color: #005eaa;
+    background: whitesmoke;
+    outline: none;
+}
+.form-control[readonly] {
+    cursor: not-allowed;
+    background-color: whitesmoke;
+    opacity: 1;
+}
+.form-btn.active.active {
+    background-color: whitesmoke !important;
+    background: whitesmoke !important;
+    border-radius: 3px !important;
+    color: #005eaa;
+    box-shadow: none;
+}
+.btn.btn-primary {
+    background-color: #e36f1e;
+    border-color: #e36f1e;
+    color: #FFFFFF;
+}
+.manage-list .chosen-container {
+    position: relative;
+    /* display: inline-block; */
 
+vertical-align: middle;
+    font-size: 13px;
+    zoom: 1;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    width: 120px !important;
+    /* height: 30px; */
+
+padding: 0;
+    top: -2px;
+    border-radius: 0;
+}
+.manage-list .chosen-container-single .chosen-single {
+    background: #ffffff;
+    box-shadow: none;
+    -moz-box-sizing: border-box;
+    background-color: #FFFFFF;
+    border: 1px solid lightgrey;
+    border-radius: 0;
+    cursor: text;
+    height: auto !important;
+    margin: 0;
+    min-height: 30px;
+    overflow: hidden;
+    padding: 1px 12px;
+    position: relative;
+    width: 100%;
+}
+.manage-list input.search-input {
+    padding: 5px 12px;
+    width: 30%;
+    margin-bottom: 20px;
+    border: 1px solid lightgrey;
+}
+.manage-list .chosen-container-single .chosen-drop {
+    margin-top: -1px;
+    border-radius: 0 0 4px 4px;
+    background-clip: padding-box;
+    border: 1px solid lightgrey;
+    border-top: none;
+}
+button.btn.btn-search {
+    padding: 0;
+    position: relative;
+    top: -2px;
+    font-size: 20px;
+    border: none;
+    color: #005eaa;
+    margin-left: 5px;
+}
+button.btn.btn-search:hover {
+    color: #0570c5;
+}
+button.btn.btn-search:active {
+    box-shadow: none;
+    outline: none;
+    color: #005eaa;
+    top: -1px;
+}
+button.btn.btn-search:focus {
+    box-shadow: none;
+    outline: none;
+    color: #005eaa;
+}
+.manage-list .itTopPager {
+    background-color: #FFF;
+    padding: 0px;
+    border-top: medium none;
+    position: absolute;
+    top: 115px;
+    right: 10px;
+    display: inline-block;
+    width: auto !important;
+    height: 0 !important;
+}
+.ngPagerControl {
+    margin-right: -10px !important;
+}
+.itTopPager .ngPagerControl {
+    margin-right: 10px !important;
+}
+.manage-list .page-select-wrapper {
+    position: absolute;
+    top: 0;
+    right: 30px;
+    top: 90px;
+}
+.disabled[disabled] {
+    background: none;
+    border: none;
+    height: 0;
+    padding: 0;
+}
+.lists-view .ngCellText.col7 {
+    text-align: center;
+    padding-right: 0;
+}
+.error.red {
+    color: #a94442;
+}
+.messages-inbox .top-buttons .chosen-container.chosen-container-single {
+    /* width: auto !important; */
+
+height: 31px;
+    width: 165px !important;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.messages-inbox .top-buttons .chosen-container-single .chosen-drop {
+    margin-top: -3px;
+    border-radius: 0 0 4px 4px;
+    background-clip: padding-box;
+}
+.messages-inbox .top-buttons .chosen-container-single .chosen-single {
+    border-radius: 3px;
+    padding: 2px 12px 3px 12px;
+    cursor: pointer;
+}
+.messages-inbox .top-buttons .chosen-container-single .chosen-single div b {
+    background-position: 0px 5px;
+}
+.top-buttons {
+    min-height: 31px;
+}
 .right-side-message {
-  float: left;
-  font-size: 12px;
+    float: left;
+    font-size: 12px;
 }
-
 .error {
-  color:#a94442;
+    color: #a94442;
 }
-
 .drop-btn {
-  border: none;
-  padding-left: 0;
+    border: none;
+    padding-left: 0;
 }
-
 .drop-btn:hover {
-  color:#005eaa;
+    color: #005eaa;
 }
-
 i.fa.fa-caret-down {
-  margin-left: 10px;
-  margin-right: 0;
-  float: right;
-  margin-top: 3px;
+    margin-left: 10px;
+    margin-right: 0;
+    float: right;
+    margin-top: 3px;
 }
-
 button.read-unread {
-  width: 141px;
-  text-align: left;
-  margin-right: 10px;
+    width: 141px;
+    text-align: left;
+    margin-right: 10px;
 }
-
 .content-box {
-  background: white;
-  border: 1px solid lightgrey;
-  margin-bottom: 25px;
+    background: white;
+    border: 1px solid lightgrey;
+    margin-bottom: 25px;
 }
-
 .content-box h2 {
-  margin-top: 0;
-  padding: 10px 15px;
-  font-weight: 600;
-  font-size: 15px;
+    margin-top: 0;
+    padding: 10px 15px;
+    font-weight: 600;
+    font-size: 15px;
 }
-
 .content-box ul {
-  list-style: none;
-  padding: 0 15px;
-  margin: 35px 0;
-  font-size: 13px;
+    list-style: none;
+    padding: 0 15px;
+    margin: 35px 0;
+    font-size: 13px;
 }
-
 .content-box ul li {
-  margin-bottom:20px;
+    margin-bottom: 20px;
 }
-
 span.li-label {
-  color: #8c8c8c;
+    color: #8c8c8c;
 }
-
 .blue-txt {
-  color:#005eaa;
+    color: #005eaa;
 }
-
 .ngSelectionCheckbox {
     top: -5px;
-  position: relative;
+    position: relative;
 }
-
 .ngCellText.col9 .btn {
-  border: none;
-  padding: 0;
+    border: none;
+    padding: 0;
 }
-
 .violet {
-background: #9f4a9c;
-color: #fbb5f9;
+    background: #9f4a9c;
+    color: #fbb5f9;
 }
-
 .orange {
-background: #e36f1e;
-color: #fbd3a8;
+    background: #e36f1e;
+    color: #fbd3a8;
 }
-
 .dashboard-table td, .dashboard-table th {
-padding: 0 15px;
-border-bottom: 1px solid whitesmoke;
-height: 40px;
+    padding: 0 15px;
+    border-bottom: 1px solid whitesmoke;
+    height: 40px;
+    font-weight: 400;
+}
+.dashboard-li li {
+    position: relative;
+    padding-left: 10px;
+}
+.dashboard-li li span {
+    display: block;
+    font-size: 12px;
+    color: #898989;
+}
+.dashboard-li i {
+    position: absolute;
+    left: 0;
+    top: 3px;
+}
+.green-txt {
+    color: #61a07a;
+}
+.violet-txt {
+    color: #9f4a9c;
+}
+h3.sub-h2 {
+    font-size: 18px;
+    font-weight: 300;
+    padding: 10px 15px;
+    margin-bottom: 0;
+}
+ul.dashboard-li {
+    margin-top: 0;
+}
+ul.dashboard-li li {
+    margin-bottom: 10px;
+}
+.dashboard-li li hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 10px -5px 10px -15px;
+}
+.dashboard .content-box {
+    background: white;
+    border: 1px solid lightgrey;
+    margin-bottom: 25px;
+    height: 330px;
+}
+thead {
+    background: whitesmoke;
+    color: #005eaa;
+    font-weight: 300 !important;
+}
+#page-wrapper {
+    padding-bottom: 210px;
+}
+table.dashboard-table {
+    margin-top: -10px;
+}
+.dashboard-table tr: last-child td {
+    border-bottom: none;
+}
+.content-box-inside h2 {
+    background: none;
+    /* margin-bottom: 0; */
+
 font-weight: 400;
 }
-
-.dashboard-li li {
-position: relative;
-padding-left:10px;
-}
-
-.dashboard-li li span {
-display: block;
-font-size: 12px;
-color: #898989;
-
-}
-
-.dashboard-li i {
-position: absolute;
-left: 0;
-top:3px;
-}
-
-.green-txt {
-  color:#61a07a;
-}
-
-.violet-txt {
-  color:#9f4a9c;
-}
-
-h3.sub-h2 {
-font-size: 18px;
-font-weight: 300;
-padding: 10px 15px;
-margin-bottom: 0;
-}
-
-ul.dashboard-li {
-margin-top: 0;
-}
-
-ul.dashboard-li li {
-margin-bottom: 10px;
-}
-
-.dashboard-li li hr {
-border: 0;
-border-top: 1px solid #eee;
-margin: 10px -5px 10px -15px;
-}
-
-.dashboard .content-box {
-background: white;
-border: 1px solid lightgrey;
-margin-bottom: 25px;
-height: 330px;
-}
-
-thead {
-background: whitesmoke;
-color: #005eaa;
-font-weight: 300 !important;
-}
-
-#page-wrapper {
-padding-bottom: 210px;
-}
-
-table.dashboard-table {
-margin-top: -10px;
-}
-
-.dashboard-table tr:last-child td {
-border-bottom: none;
-}
-
-.content-box-inside h2 {
-  background: none;
-  /* margin-bottom: 0; */
-  font-weight: 400;
-}
-
 .txt-row {
-  padding: 0 30px;
-  margin: 10px 0;
+    padding: 0 30px;
+    margin: 10px 0;
 }
-
 .txt-row h3 {
-  font-size: 24px;
+    font-size: 24px;
 }
-
 .txt-row p {
-  font-size: 16px;
+    font-size: 16px;
 }
-
 .content-box-inside a.btn {
-  margin:0 15px 15px 15px;
+    margin: 0 15px 15px 15px;
 }
-
 .content-box a.view-more {
-  margin:0 15px 15px 15px;
+    margin: 0 15px 15px 15px;
 }
-
 .orange-txt {
-  color: #e36f1e;
+    color: #e36f1e;
 }
-
 .content-box .form-group {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
-
 form.contact-us {
-  padding: 10px 15px 0 15px;
+    padding: 10px 15px 0 15px;
 }
-
 .btn.orange-send-btn {
-  background: #e36f1e;
-  color: white;
-  border: 1px solid #e36f1e;
+    background: #e36f1e;
+    color: white;
+    border: 1px solid #e36f1e;
 }
-
 .right-float {
-  text-align: right;
-  margin-top: 15px;
+    text-align: right;
+    margin-top: 15px;
 }
-
 .three-col .content-box {
-  
-  min-height: 312px;
+    min-height: 312px;
 }
-
 .footer {
-  background: none;
-  padding-top: 30px;
+    background: none;
+    padding-top: 30px;
 }
-
 p.nav-title {
-font-size: 12px;
-color: #005eaa;
-text-transform: uppercase;
+    font-size: 12px;
+    color: #005eaa;
+    text-transform: uppercase;
 }
-
 .footer ul {
-padding: 0;
-list-style: none;
+    padding: 0;
+    list-style: none;
 }
-
 .footer ul a {
-color: #464646; 
+    color: #464646;
 }
-
 .copy-section, .copy-section a {
-  color:#959595;
-  font-size: 10px;
-} 
-
+    color: #959595;
+    font-size: 10px;
+}
 .copy-section {
-  margin-top:30px;
-  padding-top: 15px;
-  border-top: 1px solid #e7eaec;
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #e7eaec;
 }
-
 .terms-box {
-text-align: right;
+    text-align: right;
 }
-
 i.fa.fa-info-circle {
-position: absolute;
-left: -5px;
-top: 10px;
-color: lightgrey;
+    position: absolute;
+    left: -5px;
+    top: 10px;
+    color: lightgrey;
 }
-
 i.fa.fa-caret-down {
     margin-left: 10px;
     margin-right: 0px;
@@ -3526,99 +2105,109 @@ i.fa.fa-caret-down {
     right: 10px;
     top: 5px;
 }
-
 .right-side-message.error.ng-binding {
-  height: 0;
-  margin-top: -13px;
-  text-align: right;
-  width: 100%;
-  padding-right: 15px;
+    height: 0;
+    margin-top: -13px;
+    text-align: right;
+    width: 100%;
+    padding-right: 15px;
 }
-
 .settings .control-label {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
-
 .settings h2.section-title {
-  /* border-bottom: 1px solid lightgrey; */
-  margin: 20px -15px;
-  padding: 0 15px;
-}
+    /* border-bottom: 1px solid lightgrey; */
 
+margin: 20px -15px;
+    padding: 0 15px;
+}
 .number-of {
-  font-size: 36px;
-  font-weight: 300;
-  padding-left: 30px;
-  margin-bottom: 0;
+    font-size: 36px;
+    font-weight: 300;
+    padding-left: 30px;
+    margin-bottom: 0;
 }
-
 .number-of-what {
-  font-size: 15px;
-  padding-left: 30px;
+    font-size: 15px;
+    padding-left: 30px;
 }
-
 .animated.dashboard, .animated.support, .animated.reports {
-	max-width: 1400px;
+    max-width: 1400px;
 }
-
 .table-holder {
-  position: relative;
+    position: relative;
 }
-
 .manage-list .page-select-wrapper {
-  position: absolute;
-  right: 0;
-  top: -40px;
+    position: absolute;
+    right: 0;
+    top: -40px;
 }
-
 .manage-list .itTopPager {
-  background-color: #FFF;
-  padding: 0px;
-  border-top: medium none;
-  position: absolute;
-  top: -18px;
-  right: -20px;
-  display: inline-block;
-  width: auto !important;
-  height: 0 !important;
+    background-color: #FFF;
+    padding: 0px;
+    border-top: medium none;
+    position: absolute;
+    top: -18px;
+    right: -20px;
+    display: inline-block;
+    width: auto !important;
+    height: 0 !important;
 }
-
 .manage-list .top-buttons {
-  text-align: right;
-  margin-bottom: 48px;
-  margin-top: -78px;
+    text-align: right;
+    margin-bottom: 48px;
+    margin-top: -78px;
 }
-
 .manage-list-txt {
-	margin-bottom: 50px;
+    margin-bottom: 50px;
 }
-
 .add-list-contact .list-inline {
-  padding-left: 0;
-  margin-left: -5px;
-  list-style: none;
-  max-height: 300px;
-  overflow: auto;
+    padding-left: 0;
+    margin-left: -5px;
+    list-style: none;
+    max-height: 300px;
+    overflow: auto;
 }
-
 .right-side-message.error.ng-binding {
-  height: 0;
-  margin-top: 7px;
-  text-align: left;
-  width: 100%;
-  padding-right: 15px;
+    height: 0;
+    margin-top: 7px;
+    text-align: left;
+    width: 100%;
+    padding-right: 15px;
 }
-
 .footer-inner {
-	max-width: 1140px;
+    max-width: 1140px;
+}
+.settings-section {
+    padding: 20px 0 30px 0;
+    border-bottom: 1px solid whitesmoke;
+}
+.settings-section .checkbox {
+  margin: 0;
+  margin-top: 7px;
+  padding-left: 20px;
+}
+.settings-section .checkbox label {
+  margin-right: 50px;
 }
 
-@media all and (max-width:990px) {
+/*.iphone-prev.ng-binding {
+  position: absolute;
+  width: 150px;
+  height: 300px;
+  background: whitesmoke;
+  top: -500px;
+  right: -300px;
+  padding: 10px;
+}*/
 
-  .welcome-msg {display:none;}
 
-  .navbar-header {display: block;}
 
+@media all and (max-width: 990px) {
+    .welcome-msg {
+        display: none;
+   }
+   .navbar-header {
+       display: block;
+  }
 }
-
-
