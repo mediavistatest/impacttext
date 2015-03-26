@@ -1,0 +1,30 @@
+<h1>Accounts</h1>
+<!--<p>This is your account. This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. </p>--><br>
+<div class="content-holder animated fadeInRight clearfix"  ng-controller="AccountListCtrl">
+    <a href="#/manage_account" class="btn add-btn">Add Account</a>
+    <div class="row top-search">
+        <div class="col-sm-6">
+            <input class="search-input" placeholder="Search by account name, name, email ..." type="text" ng-model="filterOptions.filterText">
+        </div>
+        <div class="page-select-wrapper col-sm-6">
+            <strong>Show:</strong>&nbsp;
+            <select class="page-select" ng-model="pagingOptions.pageSize">
+                <option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="gridStyle" ng-grid="gridOptions"></div>
+    <br><br>
+    <!-- Delete button -->
+    <div class="btn-group dropup left" dropdown>
+        <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+        Delete Account(s)
+        </button>
+        <ul class="dropdown-menu dropup dropdown-alerts">
+            <li>Are you sure you want to delete account(s)?</li>
+            <li>&nbsp;</li>
+            <li><span ng-click="" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+        </ul>
+    </div>
+    <!-- end delete button -->
+</div>

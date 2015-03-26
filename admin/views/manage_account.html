@@ -1,0 +1,304 @@
+<h1>Manage Account</h1>
+<!--<p>This is your account. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor,
+nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. </p>--><br>
+<div class="content-holder animated fadeInRight clearfix" ng-controller="ManageAccountCtrl">
+    <form class="clearfix">
+        <h2>Account Information</h2>
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label">Company ID:</label>
+            <div class="col-sm-6">
+                <input type="text" name="CompanyID" placeholder="Company ID" ng-model="CompanyID" class="form-control"  ng-trim="false">
+            </div>
+            <div class="col-sm-4">
+                <i class="fa fa-info-circle" tooltip='Company ID'></i>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label">Account Name:</label>
+            <div class="col-sm-6">
+                <input type="text" name="AccountName" placeholder="Account Name" ng-model="AccountName" class="form-control"  ng-trim="false">
+            </div>
+            <div class="col-sm-4">
+                <i class="fa fa-info-circle" tooltip='Account Name'></i>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label">Billing Cycle:</label>
+            <div class="col-sm-6">
+                <select name="BillingCycle" placeholder="Billing Cycle" ng-model="BillingCycle" class="form-control">
+                    <option>1</option>
+                    <option>11</option>
+                    <option>17</option>
+                    <option>25</option>
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <i class="fa fa-info-circle" tooltip='Billing Cycle'></i>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label">First Name:</label>
+            <div class="col-sm-6">
+                <input type="text" name="FirstName" placeholder="First Name" ng-model="FirstName" class="form-control"  ng-trim="false">
+            </div>
+            <div class="col-sm-4">
+                <i class="fa fa-info-circle" tooltip='First Name'></i>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label">Last Name:</label>
+            <div class="col-sm-6">
+                <input type="text" name="LastName" placeholder="Last Name" ng-model="LastName" class="form-control"  ng-trim="false">
+            </div>
+            <div class="col-sm-4">
+                <i class="fa fa-info-circle" tooltip='Last Name'></i>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label">Email Address:</label>
+            <div class="col-sm-6">
+                <input type="text" name="EmailAddress" placeholder="Email Address" ng-model="EmailAddress" class="form-control"  ng-trim="false">
+            </div>
+            <div class="col-sm-4">
+                <i class="fa fa-info-circle" tooltip='Email Address'></i>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label double">External Account Number:</label>
+            <div class="col-sm-6">
+                <input type="text" name="ExternalAccount" placeholder="External Account Number" ng-model="ExternalAccount" class="form-control"  ng-trim="false">
+            </div>
+            <div class="col-sm-4">
+                <i class="fa fa-info-circle" tooltip='External Account Number'></i>
+            </div>
+        </div>
+        <br>
+        <!-- ACCORDION -->
+        <accordion close-others="oneAtATime">
+        <!-- ADD ACCOUNT DID -->
+        <accordion-group is-open="status.open">
+        <accordion-heading>
+        Account Code
+        <p>Add long code or short code to the account</p>
+        <i class="pull-right glyphicon" ng-class="{'fa fa-chevron': status.open, 'fa fa-chevron': !status.open}"></i>
+        </accordion-heading>
+        <div class="clearfix">
+            <div class="col-md-8">
+            <div class="radio col-sm-8 col-sm-offset-3">
+
+            <label> <input type="radio" name="AccCode" value="Long" ng-model="AccCode"> Long Code </label>
+
+            <label> <input type="radio" name="AccCode" value="Short" ng-model="AccCode"> Short Code </label>
+
+            </div>
+
+                <!--START LONG CODE-->
+                    <div ng-show="AccCode == 'Long'">
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">Long Code:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="LongCode" placeholder="Long Code" ng-model="LongCode" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='Long Code'></i>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">Long Code Name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="LongCodeName" placeholder="Long Code Name" ng-model="LongCodeName" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='Long Code Name'></i>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">Keyword:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="LongKeyword" placeholder="Long Code Keyword" ng-model="LongKeyword" class="form-control"  ng-init="LongKeyword='YES'">
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='Long Keyword'></i>
+                        </div>
+                    </div>
+                    </div>
+                    <!--END LONG CODE-->
+                    <!--START SHORT CODE-->
+                    <div ng-show="AccCode == 'Short'">
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">Short Code:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="ShortCode" placeholder="Short Code" ng-model="ShortCode" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='Short Code'></i>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">Short Code Name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="ShortCodeName" placeholder="Short Code Name" ng-model="ShortCodeName" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='Short Code Name'></i>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">Keyword:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="ShortKeyword" placeholder="Short Code Keyword" ng-model="ShortKeyword" class="form-control">
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='Short Keyword'></i>
+                        </div>
+                    </div>
+                    </div>
+                    <!--END SHORT CODE-->
+                    <div class="checkbox col-sm-8 col-sm-offset-3">
+                        <label>
+                            <input type="checkbox"> Set this code as the primary code for the account
+                        </label>
+                    </div>
+                    <div class="bottom-buttons col-sm-8 col-sm-offset-3">
+                        <!-- Delete button -->
+                        <div class="btn-group dropup left" dropdown>
+                            <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                            Delete Code
+                            </button>
+                            <ul class="dropdown-menu dropup dropdown-alerts">
+                                <li>Are you sure you want to delete account code?</li>
+                                <li>&nbsp;</li>
+                                <li><span ng-click="" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+                            </ul>
+                        </div>
+                        <!-- end delete button -->
+                        <button class="btn discard-btn"> Discard</button>
+                        <button class="btn save-btn"> Save</button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="box" >
+                        <div class="box-header">Account Codes:</div>
+                        <ul class="box-list">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </accordion-group>
+            <!-- ADD USERs -->
+            <accordion-group>
+            <accordion-heading>
+            Users
+            <p>This will add users to a CMP account.</p>
+            </accordion-heading>
+            <div class="clearfix">
+                <div class="col-md-8">
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">User Name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="UserName" placeholder="User Name" ng-model="UserName" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='User Name'></i>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">User Password:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="UserPassword" placeholder="User Password" ng-model="UserPassword" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='User Password'></i>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">Email Address:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="UserEmail" placeholder="User Email" ng-model="UserEmail" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='User Email'></i>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">First Name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="UserFirstName" placeholder="User First Name" ng-model="UserFirstName" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='User First Name'></i>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">Last Name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="UserLastName" placeholder="User Last Name" ng-model="UserLastName" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='User Last Name'></i>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">Roles:</label>
+                        <div class="col-sm-8">
+                            <select name="CycleGroupID" placeholder="Cycle Group ID" ng-model="CycleGroupID" class="form-control">
+                                <option value="admin" selected>Admin</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <i class="fa fa-info-circle" tooltip='User Roles'></i>
+                        </div>
+                    </div>
+                    <div class="bottom-buttons col-sm-8 col-sm-offset-3">
+                        <!-- Delete button -->
+                        <div class="btn-group dropup left" dropdown>
+                            <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                            Delete User
+                            </button>
+                            <ul class="dropdown-menu dropup dropdown-alerts">
+                                <li>Are you sure you want to delete user?</li>
+                                <li>&nbsp;</li>
+                                <li><span ng-click="" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+                            </ul>
+                        </div>
+                        <!-- end delete button -->
+                        <button class="btn discard-btn"> Discard</button>
+                        <button class="btn save-btn"> Save</button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="box" >
+                        <div class="box-header">User Names:</div>
+                        <ul class="box-list">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </accordion-group>
+            </accordion>
+            <br><br>
+            <div class="account-bottom-buttons col-sm-6 col-sm-offset-2">
+                <!-- Delete button -->
+                <div class="btn-group dropup left" dropdown>
+                    <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                    Delete Account
+                    </button>
+                    <ul class="dropdown-menu dropup dropdown-alerts">
+                        <li>Are you sure you want to delete account?</li>
+                        <li>&nbsp;</li>
+                        <li><span ng-click="" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+                    </ul>
+                </div>
+                <!-- end delete button -->
+                <button class="btn discard-btn"> Discard</button>
+                <button class="btn save-btn" ng-click="demo()"> Save account</button>
+            </div>
+        </form>
+        <a href="#/" class="btn back-btn"><i class="fa fa-undo"></i> Back to previous screen</a>
+    </div>
