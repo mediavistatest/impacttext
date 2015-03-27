@@ -171,9 +171,9 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
     .error(function(data, status, headers, config) {
         alert("Error occured while getting account info!");
     });
-    
+
     main.fromNumbersString = '';
-    
+
     //Server request logic here
     main.ServerRequests = {
 		didGet : function() {
@@ -6334,7 +6334,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 
 
     $scope.pagingOptions = {
-        pageSizes : [2, 5, 10, 20],
+        pageSizes : [2, 5, 10, 20, 50, 100],
         pageSize : 10,
         currentPage : 1
     };
@@ -6972,7 +6972,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
 
     $scope.pagingOptions = {
-        pageSizes : [2, 5, 10, 20],
+        pageSizes : [2, 5, 10, 20, 50, 100],
         pageSize : 10,
         currentPage : 1
     };
@@ -6984,10 +6984,10 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         directions : ['ASC'],
         useExternalSorting : true
     };
-    
-    
-  
-  
+
+
+
+
 
 	$scope.blockContacts_ngContactListCtrl = function() {
 		for (var i in $scope.mySelections) {
@@ -7037,11 +7037,11 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 			}
 		}
 		// $scope.refresh();
-	}; 
+	};
 
 
 
-    
+
     // $scope.blockContactsngContactListCtrl = function() {
         // for (var i in $scope.mySelections) {
             // $scope.changeContactStatus('I', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
@@ -7065,7 +7065,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         // }
         // $scope.refresh();
     // };
-// 
+//
     // $scope.changeContactStatus = function(inStatus, inContactId, inANI) {
         // var request = {
             // sethttp : 1,
@@ -7126,7 +7126,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
 
     $scope.getPagedDataAsync = function(pageSize, page, searchText, filterBy, sortFields, sortOrders) {
-		
+
         if ( typeof page == 'undefined' || page == null || page == '') {
 
             page = 0;
@@ -8272,13 +8272,13 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     var msg = 'Please enter phone number without leading 1';
                     $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     return false;
-                }                
-                
+                }
+
                 // if (!(2 <= parseInt(phoneNumber.substring(4, 5)) <= 9)) {
                     // var msg = 'Error: ' + phoneNumber + ' fifth digit is not in range (2-9)!';
                     // $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     // return false;
-                // }            	
+                // }
                 if (!(phoneNumber == phoneNumber.replace(/\D/g, ''))) {
                     //var msg = 'Error: ' + phoneNumber + ' is not digits only!';
                     var msg = 'Please enter digits only.';
@@ -8327,7 +8327,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
             return $scope.PhoneNumberArrayValidator.PhoneNumbers;
         }
-    }; 
+    };
 
 
 
@@ -8478,7 +8478,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         }
 		 }
 	);
-    
+
 	// //now read DIDs
 	// $http.post(
 	// inspiniaNS.wsUrl + "did_get",
@@ -8509,7 +8509,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 	// }
 	// }
 	// );
-	$scope.fromNumbers = $scope.main.fromNumbers; 
+	$scope.fromNumbers = $scope.main.fromNumbers;
 
     //helper function for generating message text
     $scope.generateMessageText = function() {
