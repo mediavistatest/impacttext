@@ -7,7 +7,8 @@
         'ui.bootstrap',                 // Ui Bootstrap
         'pascalprecht.translate',        // Angular Translate
         'ui.bootstrap.datetimepicker',        // Datetimepicker
-        'ajoslin.promise-tracker'			//promise tracker
+        'ajoslin.promise-tracker',			//promise tracker
+        'ja.qr'                             //qr generator
         //'angular-momentjs'					//momentjs
     ]);
 })();

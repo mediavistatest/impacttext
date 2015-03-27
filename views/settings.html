@@ -1,0 +1,174 @@
+<h1>Settings</h1>
+<div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation">
+    <!-- settings section -->
+    <div class="settings-section">
+        <h2 class="section-title">Opt-out</h2>
+        <p>Set your custom opt-out here. It will appear as the default opt-out message when you go to Compose Message.</p>
+        <br>
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label">Opt-out Text:</label>
+            <div class="col-sm-6">
+                <input type="text" name="DefaultOptOutText" ng-model="DefaultOptOutText" class="form-control"  ng-trim="false" ng-init="DefaultOptOutText='Reply STOP to end msgs.'">
+            </div>
+            <div class="col-sm-4">
+                <i class="fa fa-info-circle" tooltip='This will count in your character limit.'></i>
+            </div>
+        </div>
+        </div><!-- end settings section -->
+        <!-- settings section -->
+        <div class="settings-section">
+            <h2 class="section-title">Page View</h2>
+            <p>Set the default view for number of items per page.</p><br>
+            <div class="form-group clearfix">
+                <label class="col-sm-2 control-label">Page size:</label>
+                <div class="col-sm-2">
+                    <select class="form-control m-b" name="DefaultPageSize" ng-model="DefaultPageSize" ng-init="DefaultPageSize='10'">
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+            </div>
+            </div><!-- end settings section -->
+            <!-- settings section -->
+            <div class="settings-section">
+                <h2 class="section-title">ImpactText Number</h2>
+                <p>Set your default ImpactText number. If you have more than one ImpactText number, choose a preferred number.
+                <br>Your messages will default to send from this number.</p><br>
+                <div class="form-group clearfix">
+                    <label class="col-sm-2 control-label">ImpactText Number:</label>
+                    <div class="col-sm-6">
+                        <select class="form-control m-b" name="DefaultFromNumber" ng-model="DefaultFromNumber" ng-init="DefaultFromNumber='1'">
+                            <option value="1" selected>+14155942929</option>
+                            <option value="2">+12248140018</option>
+                            <option value="3">+18444500010</option>
+                            <option value="4">+18007111701</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <i class="fa fa-info-circle" tooltip='Messages will be by default sent from this From Number.'></i>
+                    </div>
+                </div>
+                <div class="form-group clearfix">
+                    <label class="col-sm-2 control-label">From Name:</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="DefaultFromName" placeholder="Set your From Name here." ng-model="DefaultFromName" class="form-control"  ng-trim="false">
+                    </div>
+                    <div class="col-sm-4">
+                        <i class="fa fa-info-circle" tooltip='Messages will automatically be sent from this From Name. This will count in your character limit.'></i>
+                    </div>
+                </div>
+                </div><!-- end settings section -->
+                <!-- settings section -->
+                <div class="settings-section">
+                    <h2 class="section-title">Keyword selection</h2>
+                    <p>Enter desired keyword</p><br>
+                    <div class="form-group clearfix">
+                        <label class="col-sm-2 control-label">Keyword:</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="SetKeyword" placeholder="Set your keyword." ng-model="SetKeyword" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-4">
+                            <i class="fa fa-info-circle" tooltip='Set your keyword.'></i>
+                        </div>
+                    </div>
+                    </div><!-- end settings section -->
+                    <!-- settings section -->
+                    <div class="settings-section">
+                        <h2 class="section-title">Columns visibility settings</h2>
+                        <p>Set default column visibility</p><br>
+                        <div class="form-group clearfix">
+                            <label class="col-sm-2 control-label">Inbox columns:</label>
+                            <div class="col-sm-6">
+
+                                <div class="checkbox" >
+                                    <label><input type="checkbox" value="" checked="">Message</label>
+                                
+                                    <label><input type="checkbox" value="" checked="">Date</label>
+                                
+                                    <label><input type="checkbox" value="" checked="">Lists</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="col-sm-2 control-label">Sent columns:</label>
+                            <div class="col-sm-6">
+
+                                <div class="checkbox" >
+                                    <label><input type="checkbox" value="" checked="">Message</label>
+                                
+                                    <label><input type="checkbox" value="" checked="">Date sent</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="col-sm-2 control-label">Scheduled columns:</label>
+                            <div class="col-sm-6">
+
+                                <div class="checkbox" >
+                                    <label><input type="checkbox" value="" checked="">Date & time saved</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="col-sm-2 control-label">Drafts columns:</label>
+                            <div class="col-sm-6">
+
+                                <div class="checkbox" >
+                                    <label><input type="checkbox" value="" checked="">Message</label>
+                                
+                                    <label><input type="checkbox" value="" checked="">Date created</label>
+
+                                    <label><input type="checkbox" value="" checked="">Date scheduled</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="col-sm-2 control-label">Trash columns:</label>
+                            <div class="col-sm-6">
+
+                                <div class="checkbox" >
+                                    <label><input type="checkbox" value="" checked="">Message</label>
+                                
+                                    <label><input type="checkbox" value="" checked="">Date & time deleted</label>
+                                </div>
+                            </div>
+                        </div>
+                        </div><!-- end settings section -->
+                        <!-- settings section -->
+                <div class="settings-section">
+                    <h2 class="section-title">Set Autoresponder</h2>
+                    <p>Define up 5 replies based on combo of code (DID), keyword, term, time active and active vs. inactive</p><br>
+                    <!--<div class="form-group clearfix">
+                        <label class="col-sm-2 control-label">Keyword:</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="SetKeyword" placeholder="Set your keyword." ng-model="SetKeyword" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-4">
+                            <i class="fa fa-info-circle" tooltip='Set your keyword.'></i>
+                        </div>
+                    </div>-->
+                    </div><!-- end settings section -->
+
+                    <!-- settings section -->
+                <div class="settings-section">
+                    <h2 class="section-title">Forward SMS</h2>
+                    <p>Set forward for incoming SMS</p><br>
+                    <div class="form-group clearfix">
+                        <label class="col-sm-2 control-label">Forward Number:</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="SetForward" placeholder="Set your forward" ng-model="SetForward" class="form-control"  ng-trim="false">
+                        </div>
+                        <div class="col-sm-4">
+                            <i class="fa fa-info-circle" tooltip='Set forward for incoming SMS'></i>
+                        </div>
+                    </div>
+                    </div><!-- end settings section -->
+
+                        <br><br><br>
+                        <div class="col-sm-6 col-sm-offset-2">
+                            <button class="btn btn-send smaller right">
+                            <span><i class="fa fa-floppy-o"></i> Save changes</span>
+                            </button>
+                        </div>
+                    </div>

@@ -8874,6 +8874,19 @@ function loginCtrl($scope, $cookieStore, $http, $window) {
 }
 
 
+/** QR GENERATOR **/
+
+function qrCtrl($scope) {
+
+    $scope.qrcodeString = '';
+  $scope.size = 200;
+  $scope.correctionLevel = 'M';
+  $scope.typeNumber = 0;
+  $scope.inputMode = '';
+  $scope.image = true;
+
+}
+
 
 /**
 
@@ -8958,6 +8971,8 @@ angular
     .controller('FormSendCtrl' , ['$scope', '$cookieStore', '$http', FormSendCtrl])
 
     .controller('loginCtrl' , ['$scope', '$cookieStore', '$http', '$window', loginCtrl])
+
+    .controller('qrCtrl',  qrCtrl)
 
     .controller('ProfileCtrl', ['$scope', '$http', profile.Controller]);
 
