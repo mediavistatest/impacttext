@@ -1,43 +1,46 @@
-<h1>My Profile</h1>
+<div ng-controller="ProfileCtrl as pCtrl">
+<!-- <h1>My Profile</h1> -->
+<h1>{{main.accountInfo.accountName}}</h1>
 
 <div class="animated fadeInRight" >
 <div class="col-sm-8">
-	<div class="content-box clearfix">
-		<h2 class="blue">Impact Plan Information</h2>
-		<div class="col-md-6">
-		<ul>
-		<li><span class="li-label">ImpactText Account Number:</span> 1025978458</li>
-		<li><span class="li-label">ImpactText Plan:</span> Basic</li>
-		<li><span class="li-label">ImpactText Number(s):</span>{{main.fromNumbersString}}</li>
+    <div class="content-box clearfix">
+        <h2 class="blue">Impact Plan Information</h2>
+        <div class="col-md-6">
+        <ul>
+        <li><span class="li-label">ImpactText Account Number:</span> {{main.accountId}}</li>
+        <li><span class="li-label">ImpactText Plan:</span> {{main.accountInfo.productPackage}}</li>
+        <li><span class="li-label">ImpactText Number(s):</span>{{main.fromNumbersString}}</li>
 
-		<li><hr></li>
+        <li><hr></li>
 
-		<li><span class="li-label">Messages used:</span> <span class="blue-txt">328</span></li>
-		<li><span class="li-label">Messages available:</span> <span class="blue-txt">672</span></li>
-		</ul>
-		</div>
-		<div class="col-md-6">
-			<img src="img/profile-graph.png" class="img-responsive">
-		</div>
-	</div>
+        <li><span class="li-label">Messages used:</span> <span class="blue-txt">{{pCtrl.messageCount}}</span></li>
+        <li><span class="li-label">Messages available:</span> <span class="blue-txt">{{pCtrl.bucketOfMessages}}</span></li>
+        </ul>
+        </div>
+        <div class="col-md-6">
+            <img src="img/profile-graph.png" class="img-responsive">
+        </div>
+    </div>
 </div>
 
 <div class="col-sm-8">
-	<div class="content-box">
-		<h2 class="green">Account Information</h2>
-		<ul>
-		<li><span class="li-label">First name:</span> {{main.accountInfo.firstName}}</li>
-		<li><span class="li-label">Last name:</span> {{main.accountInfo.lastName}}</li>
-		<li><span class="li-label">Company Name:</span> {{main.companyInfo.companyName}}</li>
+    <div class="content-box">
+        <h2 class="green">Account Information</h2>
+        <ul>
+        <li><span class="li-label">First name:</span> {{main.accountInfo.firstName}}</li>
+        <li><span class="li-label">Last name:</span> {{main.accountInfo.lastName}}</li>
+        <li><span class="li-label">Company Name:</span> {{main.companyInfo.companyName}}</li>
 
-		<li><hr></li>
+        <li><hr></li>
 
-		<li><span class="li-label">Address 1:</span> 123 MAGNOLIA ST</li>
-		<li><span class="li-label">Address 2:</span> 456 Main ST</li>
-		<li><span class="li-label">City:</span> San Francisco</li>
-		<li><span class="li-label">State:</span> California</li>
-		<li><span class="li-label">Zip code:</span> 94101</li>
-		</ul>
-	</div>
+        <li><span class="li-label">Address 1:</span> 123 MAGNOLIA ST</li>
+        <li><span class="li-label">Address 2:</span> 456 Main ST</li>
+        <li><span class="li-label">City:</span> San Francisco</li>
+        <li><span class="li-label">State:</span> California</li>
+        <li><span class="li-label">Zip code:</span> 94101</li>
+        </ul>
+    </div>
+</div>
 </div>
 </div>

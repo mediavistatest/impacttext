@@ -1,3 +1,28 @@
+var profile = {
+    Controller : function($scope, $http) {
+        var pCtrl = this;
+
+        pCtrl.bucketOfMessages = 0;
+        pCtrl.messageCount = 0;
+
+        //get messages count
+        var $param = $.param({
+            apikey : $scope.main.authToken,
+            accountID : $scope.main.accountId
+        });
+        $http.post(inspiniaNS.wsUrl + 'reporting_getbom', $param)
+        // success function
+        .success(function(result) {
+            pCtrl.bucketOfMessages = result.apidata.bucketOfMessages;
+            pCtrl.messageCount = result.apidata.messageCount;
+        })
+        // error function
+        .error(function(data, status, headers, config) {
+            console.log('reporting_getbom error');
+        });
+    }
+};
+
 var ngInbox = {
 	_internal : {
 		ErrorMsg : '',
@@ -587,6 +612,9 @@ var ngInbox = {
 		}, {
 			field : 'sendEndDate',
 			displayName : 'Date sent',
+        }, {
+            field : 'DID',
+            displayName : 'From',
 		}],
 		sortOptions : {
 			fields : ['sendEndDate'],
