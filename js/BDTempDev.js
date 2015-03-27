@@ -203,6 +203,7 @@ var ngInbox = {
 				.success(function(result) {
 					successfullRequestsCount_++;
 					if (totalNumberOfMessages_ == successfullRequestsCount_) {
+						console.log(callback)
 						callback();
 					}
 				})
@@ -661,6 +662,7 @@ var ngInbox = {
 		getListAction : 'messages_outbound',
 		getListStatus : 'S',
 		statusChangeAction : null, //'message_changeoutboundstatus',
+		deleteMessagesChangeAction : 'message_deleteoutbound',
 		primaryKey : 'outboundMessageID',
 		columnDefs : [{
 			field : 'con_lis',
@@ -768,6 +770,7 @@ var ngInbox = {
 		getListAction : 'messages_outbound',
 		getListStatus : 'D',
 		statusChangeAction : null, //'message_changeoutboundstatus',
+		deleteMessagesChangeAction : 'message_deleteoutbound',
 		primaryKey : 'outboundMessageID',
 		columnDefs : [{
 			field : 'message',
