@@ -611,6 +611,9 @@ var ngInbox = {
         }, {
             field : 'sendEndDate',
             displayName : 'Date sent',
+        }, {
+            field : 'DID',
+            displayName : 'From',
         }],
         sortOptions : {
             fields : ['sendEndDate'],
