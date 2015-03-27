@@ -2116,10 +2116,9 @@ i.fa.fa-caret-down {
     margin-bottom: 0;
 }
 .settings h2.section-title {
-    /* border-bottom: 1px solid lightgrey; */
-
-margin: 20px -15px;
-    padding: 0 15px;
+  /* border-bottom: 1px solid lightgrey; */
+  margin: 20px -15px 10px -15px;
+  padding: 0 15px;
 }
 .number-of {
     font-size: 36px;
@@ -2200,6 +2199,35 @@ margin: 20px -15px;
   right: -300px;
   padding: 10px;
 }*/
+
+.iphone-prev {
+  background: url(../img/iphone6-2.png)no-repeat 0 0;
+  height: 475px;
+  position: absolute;
+  width: 250px;
+  right: 20px;
+  top: 90px;
+}
+
+.message-cloud.ng-binding {
+  padding: 10px;
+  width: 160px;
+  background: whitesmoke;
+  border-radius: 10px;
+  position: absolute;
+  top: 110px;
+  left: 30px;
+}
+
+#text {
+  display: block;
+  height: 80px;
+  width: 100%;
+}
+
+.qr-settings {
+    max-width: 80%;
+}
 
 
 

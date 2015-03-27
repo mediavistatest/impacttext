@@ -406,6 +406,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             url: "/tools",
             templateUrl: "views/tools.html",
             data: { pageTitle: 'Tools' }
+            
+        })
+        .state('settings', {
+            url: "/settings",
+            templateUrl: "views/settings.html",
+            data: { pageTitle: 'Settings' }
         })
         .state('reports', {
             url: "/reports",
