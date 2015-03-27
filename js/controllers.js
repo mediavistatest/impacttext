@@ -125,6 +125,10 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
     // getting account info
     main.accountInfo = {};
     main.companyInfo = {};
+
+    main.authToken = $cookieStore.get('inspinia_auth_token');
+    main.accountId = $cookieStore.get('inspinia_account_id');
+
     $http.post(inspiniaNS.wsUrl + "account_get", $.param({
         apikey : $cookieStore.get('inspinia_auth_token'),
         accountID : $cookieStore.get('inspinia_account_id'),
@@ -8953,5 +8957,7 @@ angular
 
     .controller('FormSendCtrl' , ['$scope', '$cookieStore', '$http', FormSendCtrl])
 
-    .controller('loginCtrl' , ['$scope', '$cookieStore', '$http', '$window', loginCtrl]);
+    .controller('loginCtrl' , ['$scope', '$cookieStore', '$http', '$window', loginCtrl])
+
+    .controller('ProfileCtrl', ['$scope', '$http', profile.Controller]);
 
