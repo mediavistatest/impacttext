@@ -1,26 +1,26 @@
 var profile = {
-    Controller : function($scope, $http) {
-        var pCtrl = this;
+	Controller : function($scope, $http) {
+		var pCtrl = this;
 
-        pCtrl.bucketOfMessages = 0;
-        pCtrl.messageCount = 0;
+		pCtrl.bucketOfMessages = 0;
+		pCtrl.messageCount = 0;
 
-        //get messages count
-        var $param = $.param({
-            apikey : $scope.main.authToken,
-            accountID : $scope.main.accountId
-        });
-        $http.post(inspiniaNS.wsUrl + 'reporting_getbom', $param)
-        // success function
-        .success(function(result) {
-            pCtrl.bucketOfMessages = result.apidata.bucketOfMessages;
-            pCtrl.messageCount = result.apidata.messageCount;
-        })
-        // error function
-        .error(function(data, status, headers, config) {
-            console.log('reporting_getbom error');
-        });
-    }
+		//get messages count
+		var $param = $.param({
+			apikey : $scope.main.authToken,
+			accountID : $scope.main.accountId
+		});
+		$http.post(inspiniaNS.wsUrl + 'reporting_getbom', $param)
+		// success function
+		.success(function(result) {
+			pCtrl.bucketOfMessages = result.apidata.bucketOfMessages;
+			pCtrl.messageCount = result.apidata.messageCount;
+		})
+		// error function
+		.error(function(data, status, headers, config) {
+			console.log('reporting_getbom error');
+		});
+	}
 };
 
 var ngInbox = {
@@ -184,8 +184,7 @@ var ngInbox = {
 					accountID : controllerParent.$cookieStore.get('inspinia_account_id')
 					// status : changeToStatus,
 				};
-				var successfullRequestsCount_ = 0;
-				var totalNumberOfMessages_ = messageToChangeStatusArray.length;
+
 				var msgList_ = '';
 				for (var j = 0; j < messageToChangeStatusArray.length; j++) {
 					var tempId_;
@@ -226,15 +225,21 @@ var ngInbox = {
 				controllerParent.$http.post(inspiniaNS.wsUrl + apiCallAction_, $param)
 				// success function
 				.success(function(result) {
-					successfullRequestsCount_++;
-					if (totalNumberOfMessages_ == successfullRequestsCount_) {
-						console.log(callback)
+					if (result == null || typeof result.apicode == 'undefined') {
+						//This should never happen
+						controllerParent.$scope.$broadcast("ErrorOnMessages", ngInbox._internal.ErrorMsg);
+						return;
+					}
+					if (result.apicode == 0) {
+						//Reset form and inform user about success
 						callback();
+					} else {
+						controllerParent.$scope.$broadcast("ErrorOnMessages", ngInbox._internal.ErrorMsg + ' Error code: ' + result.apicode + ' ' + result.apitext);
 					}
 				})
 				// error function
 				.error(function(data, status, headers, config) {
-					controllerParent.$scope.$broadcast("ErrorOnMessages", ngInbox._internal.ErrorMsg);
+					controllerParent.$scope.$broadcast("ErrorOnMessages", 'Request error: ' + ngInbox._internal.ErrorMsg);
 				});
 
 			},
@@ -612,9 +617,9 @@ var ngInbox = {
 		}, {
 			field : 'sendEndDate',
 			displayName : 'Date sent',
-        }, {
-            field : 'DID',
-            displayName : 'From',
+		}, {
+			field : 'DID',
+			displayName : 'From',
 		}],
 		sortOptions : {
 			fields : ['sendEndDate'],
