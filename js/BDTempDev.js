@@ -241,7 +241,6 @@ var ngInbox = {
 				.error(function(data, status, headers, config) {
 					controllerParent.$scope.$broadcast("ErrorOnMessages", 'Request error: ' + ngInbox._internal.ErrorMsg);
 				});
-
 			},
 			DeleteMessage : function(controllerParent, messageList) {
 				ngInbox._internal.ErrorMsg = 'Delete message(s) failed!';
@@ -803,7 +802,7 @@ var ngInbox = {
 		getListAction : 'messages_outbound',
 		getListStatus : 'D',
 		statusChangeAction : null, //'message_changeoutboundstatus',
-		deleteMessagesChangeAction : 'message_deleteoutbound',
+		deleteMessagesChangeAction : 'draft_delete',
 		primaryKey : 'outboundMessageID',
 		columnDefs : [{
 			field : 'message',
