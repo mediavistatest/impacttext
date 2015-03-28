@@ -321,6 +321,14 @@ function MainCtrl($scope, $http, $cookieStore, $window) {
                 status : inStatus
             };
             $scope.main.ServerRequests.contactModifyRequest(request, inScope, refresh, callback);
+        },
+        forwardToMail : function(message){
+        	var emailWindow = window.open();
+        	var $param = $.param({
+        		subject: 'impact text',
+        		body : message
+        	});
+        	emailWindow.location.href = 'mailto:?'+$param;
         }
     };
 

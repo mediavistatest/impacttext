@@ -21,6 +21,9 @@
         <button class="btn form-btn" ng-model="controllerParent.radioModel" btn-radio="'forward'" uncheckable>
             <i class="fa fa-share"></i> Forward
         </button>
+        <button class="btn" ng-click="main.CommonActions.forwardToMail(controllerParent.clickedMessage.message)">
+            <i class="fa fa-envelope"></i> Forward to email
+        </button>
         <button class="btn" ng-click="MarkAsUnreadMessage(controllerParent)" ng-hide="controllerParent.getListStatus=='U'">
             <i class="fa fa-eye"></i> Mark as unread
         </button>
