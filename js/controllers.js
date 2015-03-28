@@ -6853,76 +6853,45 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 			return;
 		}
 
-		var numberOfItemsToProccess = $scope.mySelections.length;
-		var successfullyProcessed = 0;
-		var failedToProcess = 0;
+		var contactListIDs = '';
 		for (var i in $scope.mySelections) {
-			var contactListId = $scope.mySelections[i].contactListID;
-			var contactListName = $scope.mySelections[i].contactListName;
-			$http.post(inspiniaNS.wsUrl + "contactlist_modify", $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'),
-				contactListID: contactListId, contactListName: contactListName, status: newStatus})
-			).success(
-				//Successful request to the server
-				function(data, status, headers, config) {
-					numberOfItemsToProccess--;
-					if (data == null || typeof data.apicode == 'undefined') {
-						//This should never happen
-						failedToProcess++;
-						alert("Unidentified error occurred when editing contact!");
-						return;
-					}
-					if (data.apicode == 0) {
-						successfullyProcessed++;
-					} else {
-						failedToProcess++;
-						alert("An error occurred when changing your contact Error code: " + data.apicode);
-						console.log(JSON.stringify(data));
-					}
-					if (numberOfItemsToProccess == 0 && failedToProcess == 0) {
-						if (newStatus == 'A') {
-							$scope.$broadcast("ListsSuccessfullyActivated");
-						} else if (newStatus == 'I') {
-							$scope.$broadcast("ListsSuccessfullyDeactivated");
-						}
-					}
-					if (numberOfItemsToProccess == 0) {
-						$scope.refresh();
-					}
-				}).error(
-				//An error occurred with this request
-				function(data, status, headers, config) {
-					numberOfItemsToProccess--;
-					if (status == 400) {
-						if (data.apicode == 4 && data.apitext == "No data to change") {
-							//This is idiotically regular situation! Can you imagine?!
-							successfullyProcessed++;
-							if (numberOfItemsToProccess == 0 && failedToProcess == 0) {
-								if (newStatus == 'A') {
-									$scope.$broadcast("ListsSuccessfullyActivated");
-								} else if (newStatus == 'I') {
-									$scope.$broadcast("ListsSuccessfullyDeactivated");
-								}
-							}
-							if (numberOfItemsToProccess == 0) {
-								$scope.refresh();
-							}
-							return;
-						} else {
-							failedToProcess++;
-							alert("An error occurred when changing your contact! Error code: " + data.apicode);
-							console.log(JSON.stringify(data));
-						}
-					}
-					if (newStatus == 'A') {
-						$scope.$broadcast("FailedToActivateList");
-					} else if (newStatus == 'I') {
-						$scope.$broadcast("FailedToDeactivateList");
-					}
-					if (numberOfItemsToProccess == 0) {
-						$scope.refresh();
-					}
-				});
+			if (contactListIDs != '') {
+				contactListIDs += ',';
+			}
+			contactListIDs += $scope.mySelections[i].contactListID;
 		}
+
+		$http.post(inspiniaNS.wsUrl + "contactlist_modify", $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'),
+			accountID: $cookieStore.get('inspinia_account_id'), contactListID: contactListIDs, status: newStatus})
+		).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unidentified error occurred when editing contact!");
+					return;
+				}
+				if (data.apicode == 0) {
+					if (newStatus == 'A') {
+						$scope.$broadcast("ListsSuccessfullyActivated");
+					} else if (newStatus == 'I') {
+						$scope.$broadcast("ListsSuccessfullyDeactivated");
+					}
+				} else {
+					alert("An error occurred when changing your contact Error code: " + data.apicode);
+					console.log(JSON.stringify(data));
+				}
+				$scope.refresh();
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				if (newStatus == 'A') {
+					$scope.$broadcast("FailedToActivateList");
+				} else if (newStatus == 'I') {
+					$scope.$broadcast("FailedToDeactivateList");
+				}
+				$scope.refresh();
+			});
 	};
 
 
