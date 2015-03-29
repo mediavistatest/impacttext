@@ -178,46 +178,71 @@ var ngInbox = {
 
 				controllerParent.$scope.controllerParent = controllerParent;
 			},
-			GetANI : function(inSendScope) {
+			GetANI : function(controllerParent, continueFunction) {
 				try {
-					if (inSendScope.controllerParent.clickedMessage && inSendScope.controllerParent.clickedMessage.ANI) {
-						if (inSendScope.controllerParent.clickedMessage.ANI.length == 10) {
-							inSendScope.ToNumber = inSendScope.controllerParent.clickedMessage.ANI;
+					if (controllerParent.clickedMessage && controllerParent.clickedMessage.ANI) {
+						if (controllerParent.clickedMessage.ANI.length == 10) {
+							controllerParent.ANIList = controllerParent.clickedMessage.ANI;
+							continueFunction(controllerParent);
 						} else {
 
-							if (inSendScope.controllerParent.clickedMessage.ANI.length == 11 && inSendScope.controllerParent.clickedMessage.ANI[0] == '1') {
-								inSendScope.ToNumber = inSendScope.controllerParent.clickedMessage.ANI.substring(1);
+							if (controllerParent.clickedMessage.ANI.length == 11 && controllerParent.clickedMessage.ANI[0] == '1') {
+								controllerParent.ANIList = controllerParent.clickedMessage.ANI.substring(1);
+								continueFunction(controllerParent);
+
 							} else {
 								var callback = function(data) {
-									inSendScope.ToNumber = data.apidata;
-									inSendScope.controllerParent.clickedMessage.con_lis = data.apidata;
-									// return data.apidata;
+									controllerParent.ANIList = '';
+									var tmpANIList_ = data.apidata;
+
+									while (tmpANIList_.indexOf(',') != -1) {
+										var commaPosition_ = tmpANIList_.indexOf(',');
+										var currentPhoneNumber_ = tmpANIList_.substring(0, commaPosition_);
+
+										var tmpANI_ = tmpANIList_.substring(0, commaPosition_);
+										tmpANIList_ = tmpANIList_.substring(commaPosition_ + 1);
+										if (tmpANI_.length == 11) {
+											tmpANI_ = tmpANI_.substring(1);
+										}
+
+										if (controllerParent.ANIList == '') {
+											controllerParent.ANIList = tmpANI_;
+										} else {
+											controllerParent.ANIList = controllerParent.ANIList + ',' + tmpANI_;
+										}
+
+									};
+									if (tmpANIList_.length == 11) {
+										tmpANIList_ = tmpANIList_.substring(1);
+									}
+
+									controllerParent.ANIList = controllerParent.ANIList + ',' + tmpANIList_;
+
+									continueFunction(controllerParent);
 								};
 
 								var params = {
-									apikey : inSendScope.controllerParent.$cookieStore.get('inspinia_auth_token'),
-									accountID : inSendScope.controllerParent.$cookieStore.get('inspinia_account_id'),
-									outboundMessageID : inSendScope.controllerParent.clickedMessage.outboundMessageID
+									apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
+									accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
+									outboundMessageID : controllerParent.clickedMessage.outboundMessageID
 								};
 
 								//Send request to the server
-								inSendScope.controllerParent.$http.post(inspiniaNS.wsUrl + "messages_outboundmessageani_get", $.param(params))
+								controllerParent.$http.post(inspiniaNS.wsUrl + "messages_outboundmessageani_get", $.param(params))
 								//Successful request to the server
 								.success(function(data, status, headers, config) {
 									if (data == null || typeof data.apicode == 'undefined') {
 										//This should never happen
-										inSendScope.controllerParent.$scope.$broadcast("ErrorOnMessages", 'Unidentified error occurred when trying to get ANI!');
+										controllerParent.$scope.$broadcast("ErrorOnMessages", 'Unidentified error occurred when trying to get ANI!');
 										return;
 									}
 									if (data.apicode == 0) {
 										//Reset form and inform user about success
 										// controllerParent.$scope.$broadcast("SendingMessageSucceeded", data.apidata);
-										callback(data);
+										return callback(data);
 									} else {
-										inSendScope.controllerParent.$scope.$broadcast("ErrorOnMessages", 'An error occurred when trying to get ANI! Error code: ' + data.apicode);
+										controllerParent.$scope.$broadcast("ErrorOnMessages", 'An error occurred when trying to get ANI! Error code: ' + data.apicode);
 									}
-
-									
 
 								}).error(
 								//An error occurred with this request
@@ -368,53 +393,58 @@ var ngInbox = {
 				ngInbox._internal.Methods.RestoreToInboxMessage(controllerParent, controllerParent.$scope.mySelections);
 			},
 			SendMessage : function(controllerParent, messageToSendArray, changeToStatus, callback) {
-				var params = {
-					apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
-					accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
-					sethttp : 1
-				};
-
 				var successfullRequestsCount_ = 0;
 				var totalNumberOfMessages_ = messageToSendArray.length;
 				for (var j = 0; j < messageToSendArray.length; j++) {
+					var params = {
+						apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
+						accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
+						sethttp : 1
+					};
 					params.message = messageToSendArray[j].message;
-					params.contactListID == messageToSendArray[j].contactListID;
-					params.ANI = messageToSendArray[j].ANI;
+					params.contactListID = messageToSendArray[j].contactListID;
 					params.DID = messageToSendArray[j].DID;
+					controllerParent.params = params;
 
-					//Send request to the server
-					controllerParent.$http.post(inspiniaNS.wsUrl + "message_send", $.param(params))
-					//Successful request to the server
-					.success(function(data, status, headers, config) {
-						if (data == null || typeof data.apicode == 'undefined') {
-							//This should never happen
-							controllerParent.$scope.$broadcast("ErrorOnMessages", 'Unidentified error occurred when sending your message!');
-							return;
-						}
-						if (data.apicode == 0) {
-							//Reset form and inform user about success
-							// controllerParent.$scope.$broadcast("SendingMessageSucceeded", data.apidata);
-						} else {
-							controllerParent.$scope.$broadcast("ErrorOnMessages", 'An error occurred when sending your message! Error code: ' + data.apicode);
-						}
-						successfullRequestsCount_++;
+					continueFunction = function(controllerParent) {
+						controllerParent.params.ANI = controllerParent.ANIList;
 
-						if (totalNumberOfMessages_ == successfullRequestsCount_) {
-							callback();
-
-						}
-					}).error(
-					//An error occurred with this request
-					function(data, status, headers, config) {
-						if (status == 400) {
-							if (data.apicode == 1) {
-								controllerParent.$scope.$broadcast("ErrorOnMessages", 'ANI that you are trying to send message to is opted-out!');
-							} else {
-								//Just non handled errors by optout are counted
-								controllerParent.$scope.$broadcast("ErrorOnMessages", ngInbox._internal.ErrorMsg);
+						//Send request to the server
+						controllerParent.$http.post(inspiniaNS.wsUrl + "message_send", $.param(controllerParent.params))
+						//Successful request to the server
+						.success(function(data, status, headers, config) {
+							if (data == null || typeof data.apicode == 'undefined') {
+								//This should never happen
+								controllerParent.$scope.$broadcast("ErrorOnMessages", 'Unidentified error occurred when sending your message!');
+								return;
 							}
-						}
-					});
+							if (data.apicode == 0) {
+								//Reset form and inform user about success
+								callback();
+								// controllerParent.$scope.$broadcast("SendingMessageSucceeded", data.apidata);
+							} else {
+								controllerParent.$scope.$broadcast("ErrorOnMessages", 'An error occurred when sending your message! Error code: ' + data.apicode);
+							}
+							successfullRequestsCount_++;
+
+							// if (totalNumberOfMessages_ == successfullRequestsCount_) {
+							// callback();
+							// }
+						}).error(
+						//An error occurred with this request
+						function(data, status, headers, config) {
+							if (status == 400) {
+								if (data.apicode == 1) {
+									controllerParent.$scope.$broadcast("ErrorOnMessages", 'ANI that you are trying to send message to is opted-out!');
+								} else {
+									//Just non handled errors by optout are counted
+									controllerParent.$scope.$broadcast("ErrorOnMessages", ngInbox._internal.ErrorMsg);
+								}
+							}
+						});
+					};
+					ngInbox._internal.Methods.GetANI(controllerParent, continueFunction);
+
 				}
 			},
 			ResendMessage : function(controllerParent, messageList) {
@@ -834,31 +864,34 @@ var ngInbox = {
 				$sendScope.FromName = $sendScope.initial;
 				$sendScope.MessageType = 'SMS';
 
-				// $sendScope.ToNumber = ngInbox._internal.Methods.GetANI($sendScope);
-				// $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.ToNumber;
+				continueFunction = function(controllerParent) {
+					$sendScope = controllerParent.$scope;
+					$sendScope.ToNumber = $sendScope.controllerParent.ANIList;
+					$sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
 
-				ngInbox._internal.Methods.GetANI($sendScope);
+					$sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
+					return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+					})[0];
+					$sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+					return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+					})[0];
+					// $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
+					// $sendScope.ToNumber = $sendScope.ToNumber.replace(' ...', '');
+					// if ($sendScope.ToNumber.length > 10 && $sendScope.ToNumber[0] == '1') {
+					// $sendScope.ToNumber = $sendScope.ToNumber.substring(1);
+					// }
 
-				$sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
-				return member.DID == $sendScope.controllerParent.clickedMessage.DID;
-				})[0];
-				$sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
-				return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
-				})[0];
-				// $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
-				// $sendScope.ToNumber = $sendScope.ToNumber.replace(' ...', '');
-				// if ($sendScope.ToNumber.length > 10 && $sendScope.ToNumber[0] == '1') {
-				// $sendScope.ToNumber = $sendScope.ToNumber.substring(1);
-				// }
-				// ngInbox._internal.Methods.GetANI($sendScope);
+					$sendScope.OptOutMsg = '';
+					$sendScope.OptOutTxt3 = $sendScope.initial;
+					$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
+					$sendScope.ScheduleCheck = true;
+					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
+					$sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+					$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+				};
 
-				$sendScope.OptOutMsg = '';
-				$sendScope.OptOutTxt3 = $sendScope.initial;
-				$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
-				$sendScope.ScheduleCheck = true;
-				$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
-				$sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-				$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+				ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
+
 			} catch(e) {
 				//TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
 				console.log(e);
@@ -949,17 +982,21 @@ var ngInbox = {
 				$sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
 				return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
 				})[0];
-				// $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
 
-				$sendScope.ToNumber = ngInbox._internal.Methods.GetANI($sendScope);
-				$sendScope.controllerParent.clickedMessage.con_lis = $sendScope.ToNumber;
-				$sendScope.OptOutMsg = '';
-				$sendScope.OptOutTxt3 = $sendScope.initial;
-				$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
-				$sendScope.ScheduleCheck = false;
-				$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
-				$sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-				$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+				continueFunction = function(controllerParent) {
+					$sendScope = controllerParent.$scope;
+					$sendScope.ToNumber = $sendScope.controllerParent.ANIList;
+					$sendScope.controllerParent.clickedMessage.con_lis = $sendScope.ToNumber;
+					$sendScope.OptOutMsg = '';
+					$sendScope.OptOutTxt3 = $sendScope.initial;
+					$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
+					$sendScope.ScheduleCheck = false;
+					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
+					$sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+					$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+				};
+				ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
+
 			} catch(e) {
 				//TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
 			}
