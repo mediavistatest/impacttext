@@ -178,6 +178,67 @@ var ngInbox = {
 
 				controllerParent.$scope.controllerParent = controllerParent;
 			},
+			GetANI : function(inSendScope) {
+				try {
+					if (inSendScope.controllerParent.clickedMessage && inSendScope.controllerParent.clickedMessage.ANI) {
+						if (inSendScope.controllerParent.clickedMessage.ANI.length == 10) {
+							inSendScope.ToNumber = inSendScope.controllerParent.clickedMessage.ANI;
+						} else {
+
+							if (inSendScope.controllerParent.clickedMessage.ANI.length == 11 && inSendScope.controllerParent.clickedMessage.ANI[0] == '1') {
+								inSendScope.ToNumber = inSendScope.controllerParent.clickedMessage.ANI.substring(1);
+							} else {
+								var callback = function(data) {
+									inSendScope.ToNumber = data.apidata;
+									inSendScope.controllerParent.clickedMessage.con_lis = data.apidata;
+									// return data.apidata;
+								};
+
+								var params = {
+									apikey : inSendScope.controllerParent.$cookieStore.get('inspinia_auth_token'),
+									accountID : inSendScope.controllerParent.$cookieStore.get('inspinia_account_id'),
+									outboundMessageID : inSendScope.controllerParent.clickedMessage.outboundMessageID
+								};
+
+								//Send request to the server
+								inSendScope.controllerParent.$http.post(inspiniaNS.wsUrl + "messages_outboundmessageani_get", $.param(params))
+								//Successful request to the server
+								.success(function(data, status, headers, config) {
+									if (data == null || typeof data.apicode == 'undefined') {
+										//This should never happen
+										inSendScope.controllerParent.$scope.$broadcast("ErrorOnMessages", 'Unidentified error occurred when trying to get ANI!');
+										return;
+									}
+									if (data.apicode == 0) {
+										//Reset form and inform user about success
+										// controllerParent.$scope.$broadcast("SendingMessageSucceeded", data.apidata);
+										callback(data);
+									} else {
+										inSendScope.controllerParent.$scope.$broadcast("ErrorOnMessages", 'An error occurred when trying to get ANI! Error code: ' + data.apicode);
+									}
+
+									
+
+								}).error(
+								//An error occurred with this request
+								function(data, status, headers, config) {
+									if (status == 400) {
+										if (data.apicode == 1) {
+											controllerParent.$scope.$broadcast("ErrorOnMessages", 'ANI that you are trying to send message to is opted-out!');
+										} else {
+											//Just non handled errors by optout are counted
+											controllerParent.$scope.$broadcast("ErrorOnMessages", ngInbox._internal.ErrorMsg);
+										}
+									}
+								});
+
+							}
+						}
+					}
+				} catch(e) {
+					console.log('GetANI catch ' + e.message + ' ' + e.stack);
+				}
+			},
 			StatusChange : function(controllerParent, messageToChangeStatusArray, changeToStatus, callback) {
 				var params = {
 					apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
@@ -769,19 +830,28 @@ var ngInbox = {
 		},
 		PopulateSend : function($sendScope) {
 			try {
+				// $sendScope.reScheduledMessageID = $sendScope.controllerParent.clickedMessage.outboundMessageID;
 				$sendScope.FromName = $sendScope.initial;
 				$sendScope.MessageType = 'SMS';
+
+				// $sendScope.ToNumber = ngInbox._internal.Methods.GetANI($sendScope);
+				// $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.ToNumber;
+
+				ngInbox._internal.Methods.GetANI($sendScope);
+
 				$sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
 				return member.DID == $sendScope.controllerParent.clickedMessage.DID;
 				})[0];
 				$sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
 				return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
 				})[0];
-				$sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
-				$sendScope.ToNumber = $sendScope.ToNumber.replace(' ...', '');
-				if ($sendScope.ToNumber.length > 10 && $sendScope.ToNumber[0] == '1') {
-					$sendScope.ToNumber = $sendScope.ToNumber.substring(1);
-				}
+				// $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
+				// $sendScope.ToNumber = $sendScope.ToNumber.replace(' ...', '');
+				// if ($sendScope.ToNumber.length > 10 && $sendScope.ToNumber[0] == '1') {
+				// $sendScope.ToNumber = $sendScope.ToNumber.substring(1);
+				// }
+				// ngInbox._internal.Methods.GetANI($sendScope);
+
 				$sendScope.OptOutMsg = '';
 				$sendScope.OptOutTxt3 = $sendScope.initial;
 				$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
@@ -791,6 +861,7 @@ var ngInbox = {
 				$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
 			} catch(e) {
 				//TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
+				console.log(e);
 			}
 
 		},
@@ -878,7 +949,10 @@ var ngInbox = {
 				$sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
 				return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
 				})[0];
-				$sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
+				// $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
+
+				$sendScope.ToNumber = ngInbox._internal.Methods.GetANI($sendScope);
+				$sendScope.controllerParent.clickedMessage.con_lis = $sendScope.ToNumber;
 				$sendScope.OptOutMsg = '';
 				$sendScope.OptOutTxt3 = $sendScope.initial;
 				$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
