@@ -16,7 +16,23 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         })
         .state('profile', {
             url: "/profile",
-            templateUrl: "views/profile.html"
+            templateUrl: "views/profile.html",
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            insertBefore: '#loadBefore',
+                            name: 'angles',
+                            files: ['js/plugins/chartJs/Chart.min.js' , 'js/plugins/chartJs/angles.js']
+                        }
+                        //{
+                        //    insertBefore: '#loadBefore',
+                        //    name: 'chart.js',
+                        //    files: ['js/plugins/chartJs/angular-chart.css' , 'js/plugins/chartJs/Chart.min.js' , 'js/plugins/chartJs/angular-chart.js']
+                        //}
+                    ]);
+                }
+            }
         })
         .state('lists', {
             abstract: true,

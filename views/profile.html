@@ -19,7 +19,14 @@
         </ul>
         </div>
         <div class="col-md-6">
-            <img src="img/profile-graph.png" class="img-responsive">
+            <!--<img src="img/profile-graph.png" class="img-responsive" style="display:none">-->
+            <br>
+            <div>
+            <canvas doughnutchart legend=true options="pCtrl.doughnutOptions" data="pCtrl.doughnutData" height="140" responsive=true></canvas>
+            </div>
+
+            <!--<input ng-model="pCtrl.messageCount">-->       
+
         </div>
     </div>
 </div>

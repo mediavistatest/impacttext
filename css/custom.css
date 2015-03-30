@@ -2229,6 +2229,21 @@ i.fa.fa-caret-down {
     max-width: 80%;
 }
 
+ul.doughnut-legend span {
+  width: 13px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+ul.doughnut-legend li {
+  margin-bottom:5px;
+}
+
+ul.doughnut-legend {
+  max-width: 180px;
+  margin: 20px auto;
+}
 
 
 @media all and (max-width: 990px) {
