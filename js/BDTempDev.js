@@ -38,6 +38,7 @@ var profile = {
 		};
 
 		$scope.$watch('pCtrl.messageCount', updateDouhnutOptions, true);
+		//$scope.$watch('pCtrl.bucketOfMessages', updateDouhnutOptions, true);
 
 		//get messages count
 		var $param = $.param({

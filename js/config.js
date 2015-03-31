@@ -12,7 +12,34 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
 
         .state('dashboard', {
             url: "/dashboard",
-            templateUrl: "views/dashboard.html"
+            templateUrl: "views/dashboard.html",
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            insertBefore: '#loadBefore',
+                            name: 'angles',
+                            files: ['js/plugins/chartJs/Chart.min.js' , 'js/plugins/chartJs/angles.js']
+                        },
+                        {
+                            insertBefore: '#loadBefore',
+                            files: ['css/plugins/fullcalendar/fullcalendar.css',
+                                    'js/plugins/fullcalendar/fullcalendar.min.js'
+                                    //'js/plugins/fullcalendar/gcal.js'
+                                    ]
+                        },
+                        {
+                            name: 'ui.calendar',
+                            files: ['js/plugins/fullcalendar/calendar.js']
+                        }
+                        //{
+                        //    insertBefore: '#loadBefore',
+                        //    name: 'chart.js',
+                        //    files: ['js/plugins/chartJs/angular-chart.css' , 'js/plugins/chartJs/Chart.min.js' , 'js/plugins/chartJs/angular-chart.js']
+                        //}
+                    ]);
+                }
+            }
         })
         .state('profile', {
             url: "/profile",
