@@ -8,7 +8,8 @@
         'pascalprecht.translate',        // Angular Translate
         'ui.bootstrap.datetimepicker',        // Datetimepicker
         'ajoslin.promise-tracker',			//promise tracker
-        'ja.qr'                             //qr generator
+        'ja.qr',                             //qr generator
+        'ipCookie'							//cookies that have expiration settings
         //'angular-momentjs'					//momentjs
     ]);
 })();

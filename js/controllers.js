@@ -120,8 +120,11 @@ function generateOrderByField(sortFields, sortOrders) {
 
  */
 
-function MainCtrl($scope, $http, $cookieStore, $window) {
+function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     var main = this;
+    
+    main.ipCookie = ipCookie;
+    
     // getting account info
     main.accountInfo = {};
     main.companyInfo = {};
@@ -8887,7 +8890,7 @@ angular
 
     .module('inspinia')
 
-    .controller('MainCtrl',['$scope', '$http', '$cookieStore', '$window', MainCtrl])
+    .controller('MainCtrl',['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl])
 
     .controller('dashboardFlotOne', dashboardFlotOne)
 
