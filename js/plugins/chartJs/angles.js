@@ -19,6 +19,7 @@ angles.chart = function (type) {
         link: function ($scope, $elem) {
             var ctx = $elem[0].getContext("2d");
             var autosize = false;
+            var legendRendered = false;
 
 			$scope.size = function () {
 	            if ($scope.width <= 0) {
@@ -63,8 +64,11 @@ angles.chart = function (type) {
 
                 chartCreated = chart[type]($scope.data, $scope.options);
                 chartCreated.update();
-                if($scope.legend)
-                    angular.element($elem[0]).parent().after( chartCreated.generateLegend() );
+                if($scope.legend && !legendRendered){
+                	legendRendered = true;
+                	angular.element($elem[0]).parent().after( chartCreated.generateLegend() );
+                }
+                    
             }, true);
 
             $scope.$watch("tooltip", function (newVal, oldVal) {

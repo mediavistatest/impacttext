@@ -2,8 +2,42 @@ var profile = {
 	Controller : function($scope, $http) {
 		var pCtrl = this;
 
-        pCtrl.bucketOfMessages = 36;
-        pCtrl.messageCount = 100;
+		pCtrl.bucketOfMessages = null;
+		pCtrl.messageCount = null;
+
+		//DOUGHNUT DATA FOR PROFILE
+		pCtrl.doughnutData = [{
+			value : pCtrl.bucketOfMessages,
+			color : "#a3d7ff",
+			highlight : "#a3d7ff",
+			label : "Messages available"
+		}, {
+			value : pCtrl.messageCount,
+			color : "#005fab",
+			highlight : "#005fab",
+			label : "Messages sent"
+		}];
+
+		/**
+		 * Options for Doughnut chart
+		 */
+		pCtrl.doughnutOptions = {
+			segmentShowStroke : true,
+			segmentStrokeColor : "#fff",
+			segmentStrokeWidth : 2,
+			percentageInnerCutout : 70, // This is 0 for Pie charts
+			animationSteps : 100,
+			animationEasing : "easeOutBounce",
+			animateRotate : true,
+			animateScale : false
+		};
+		
+		var updateDouhnutOptions = function() {
+			pCtrl.doughnutData[0].value = pCtrl.bucketOfMessages;
+			pCtrl.doughnutData[1].value = pCtrl.messageCount;
+		};
+
+		$scope.$watch('pCtrl.messageCount', updateDouhnutOptions, true);
 
 		//get messages count
 		var $param = $.param({
@@ -21,43 +55,7 @@ var profile = {
 			console.log('reporting_getbom error');
 		});
 
-        //DOUGHNUT DATA FOR PROFILE
-        pCtrl.doughnutData = [
-
-                
-            {
-            value : pCtrl.bucketOfMessages, 
-            color : "#a3d7ff",  
-            highlight : "#a3d7ff",  
-            label : "Messages available"    
-            },
-            {   
-            value : pCtrl.messageCount, 
-            color : "#005fab",  
-            highlight : "#005fab",  
-            label : "Messages sent" 
-            }
-
-        ];
-
-        /**
-    
-         * Options for Doughnut chart
-    
-         */
-    
-        pCtrl.doughnutOptions = {
-            segmentShowStroke : true,
-            segmentStrokeColor : "#fff",
-            segmentStrokeWidth : 2,
-            percentageInnerCutout : 70, // This is 0 for Pie charts
-            animationSteps : 100,
-            animationEasing : "easeOutBounce",
-            animateRotate : true,
-            animateScale : false
-    
-};
-    }
+	}
 };
 
 var ngInbox = {
