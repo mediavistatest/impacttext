@@ -183,6 +183,38 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 
     //Server request logic here
     main.ServerRequests = {
+    	contactListsGet : function() {
+			//Read the data from the remote server. First read the contact lists.
+			$http.post(inspiniaNS.wsUrl + "contactlist_get", $.param({
+				sethttp : 1,
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $cookieStore.get('inspinia_account_id'),
+				status : 'A'
+			})).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					main.contactLists = [];
+					return;
+				}
+
+				if (data.apicode == 0) {
+					//Reading contact lists
+					main.contactLists = data.apidata;
+				} else {
+					main.contactLists = [];
+				}
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				//alert('Unexpected error occurred when trying to fetch contact lists!');
+				if (status == 400) {
+					alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
+			}); 
+    	},
 		didGet : function() {
 			$http.post(inspiniaNS.wsUrl + "did_get", $.param({
 				sethttp : 1,
@@ -296,9 +328,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
         }
     };
 
-	//now read DIDs
+	
+	main.ServerRequests.contactListsGet();
 	main.ServerRequests.didGet();
-// main.CommonActions.optOutContact
 
     main.CommonActions = {
         blockContact : function(inScope, inContact, refresh, callback) {
@@ -8432,67 +8464,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         $scope.SendToList = false;
     };
 
-    //Read the data from the remote server. First read the contact lists.
-    $http.post(
-		 inspiniaNS.wsUrl + "contactlist_get",
-		 $.param({sethttp: 1,  apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id'), status: 'A'})
-	 ).success(
-    //Successful request to the server
-    function(data, status, headers, config) {
-        if (data == null || typeof data.apicode == 'undefined') {
-            //This should never happen
-            $scope.contactLists = [];
-            return;
-        }
-
-        if (data.apicode == 0) {
-            //Reading contact lists
-            $scope.contactLists = data.apidata;
-        } else {
-            $scope.contactLists = [];
-        }
-		 }
-	 ).error(
-    //An error occurred with this request
-    function(data, status, headers, config) {
-        //alert('Unexpected error occurred when trying to fetch contact lists!');
-        if (status == 400) {
-            alert("An error occurred when getting contact lists! Error code: " + data.apicode);
-            alert(JSON.stringify(data));
-        }
-		 }
-	);
-
-	// //now read DIDs
-	// $http.post(
-	// inspiniaNS.wsUrl + "did_get",
-	// $.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountID: $cookieStore.get('inspinia_account_id')})
-	// ).success(
-	// //Successful request to the server
-	// function(data, status, headers, config) {
-	// if (data == null || typeof data.apicode == 'undefined') {
-	// //This should never happen
-	// $scope.fromNumbers = [];
-	// return;
-	// }
-	//
-	// if (data.apicode == 0) {
-	// //Reading contact lists
-	// $scope.fromNumbers = data.apidata;
-	// } else {
-	// $scope.fromNumbers = [];
-	// }
-	// }
-	// ).error(
-	// //An error occurred with this request
-	// function(data, status, headers, config) {
-	// //alert('Unexpected error occurred when trying to fetch DIDs!');
-	// if (status == 400) {
-	// alert("An error occurred when getting DID! Error code: " + data.apicode);
-	// alert(JSON.stringify(data));
-	// }
-	// }
-	// );
+	$scope.contactLists = $scope.main.contactLists;
 	$scope.fromNumbers = $scope.main.fromNumbers;
 
     //helper function for generating message text

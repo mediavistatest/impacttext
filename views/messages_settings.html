@@ -3,3 +3,8 @@
 <div class="top-buttons">
 	<a ng-show="controllerParent" class="btn btn-back" ng-click="controllerParent.Events.ShowList(controllerParent)"><i class="fa fa-undo"></i>Back</a>
 </div>
+
+<div ng-repeat="column in controllerParent.columnDefs">
+	<input type="checkbox" ng-model="column.checked"></input>
+	<h3>{{column.displayName}}</h3>
+</div>

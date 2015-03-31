@@ -215,6 +215,12 @@ var ngInbox = {
 			},
 			GetANI : function(controllerParent, continueFunction) {
 				try {
+					if (controllerParent.$scope.fromNumbers == null){
+						controllerParent.$scope.fromNumbers = controllerParent.$scope.main.fromNumbers;
+					}
+					if (controllerParent.$scope.contactLists == null){
+						controllerParent.$scope.contactLists = controllerParent.$scope.main.contactLists;
+					}
 					if (controllerParent.clickedMessage && controllerParent.clickedMessage.ANI) {
 						if (controllerParent.clickedMessage.ANI.length == 10) {
 							controllerParent.ANIList = controllerParent.clickedMessage.ANI;
@@ -589,17 +595,21 @@ var ngInbox = {
 		markAsUnreadMessageStatus : 'U',
 		primaryKey : 'inboundMessageID',
 		columnDefs : [{
+			checked : true,
 			field : 'sourceANI',
 			displayName : 'Contact',
 			cellTemplate : 'views/table/MessageTableTemplate.html'
 		}, {
+			checked : true,
 			field : 'message',
 			displayName : 'Message',
 			cellTemplate : 'views/table/MessageTableTemplate.html'
 		}, {
+			checked : true,
 			field : 'createdDate',
 			displayName : 'Date',
 		}, {
+			checked : true,
 			field : 'lists',
 			displayName : 'List'
 		}],
@@ -791,7 +801,7 @@ var ngInbox = {
 			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
-				inParent.list = false;
+				inParent.Events.ShowView(inParent);
 			},
 			Send_onClick : function(inScope) {
 				// delete clicked message
@@ -824,6 +834,7 @@ var ngInbox = {
 			controllerParent.$scope = $scope;
 			controllerParent.$http = $http;
 			controllerParent.$cookieStore = $cookieStore;
+			controllerParent.$scope.fromNumbers = $scope.main.fromNumbers;
 
 			ngInbox._internal.Methods.PopulateScope(controllerParent);
 			controllerParent.Events.InitialiseEvents(controllerParent);
@@ -837,10 +848,11 @@ var ngInbox = {
 
 					$sendScope.ToNumber = $sendScope.controllerParent.ANIList;
 					$sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
-
+console.log($sendScope.controllerParent.clickedMessage.DID)
 					$sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
 					return member.DID == $sendScope.controllerParent.clickedMessage.DID;
 					})[0];
+					console.log($sendScope.FromNumber)
 					$sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
 					return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
 					})[0];
