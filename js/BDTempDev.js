@@ -849,11 +849,9 @@ var ngInbox = {
 
 					$sendScope.ToNumber = $sendScope.controllerParent.ANIList;
 					$sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
-console.log($sendScope.controllerParent.clickedMessage.DID)
 					$sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
 					return member.DID == $sendScope.controllerParent.clickedMessage.DID;
 					})[0];
-					console.log($sendScope.FromNumber)
 					$sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
 					return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
 					})[0];

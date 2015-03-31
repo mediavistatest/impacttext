@@ -8503,9 +8503,39 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     //Create a function for sending messages
 
     $scope.sendMessage = function(scheduled) {
-        if ($scope.controllerParent) {
-            $scope.controllerParent.Events.Send_onClick($scope);
-        }
+		var requestData = {
+			// sethttp : 1,
+			apikey : $cookieStore.get('inspinia_auth_token'),
+			accountID : $cookieStore.get('inspinia_account_id')
+		};
+
+
+
+		var messageText;
+		if ($scope.controllerParent) {
+			$scope.controllerParent.Events.Send_onClick($scope);
+			$scope.ToNumber = $scope.controllerParent.clickedMessage.con_lis;
+			$scope.FromNumber = {
+				DID : ''
+			};
+			//$scope.FromNumber.DID = $scope.controllerParent.clickedMessage.DID.substring(1, 11);
+			$scope.FromNumber.DID = $scope.controllerParent.clickedMessage.DID;
+			$scope.MessageTxt = $scope.controllerParent.clickedMessage.message;
+			messageText = $scope.controllerParent.clickedMessage.message;
+			$scope.SetDate = new Date($scope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $scope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $scope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
+			$scope.SetTimeHour = $scope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+			$scope.SetTimeMinute = $scope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+			
+			
+			deletePreviousMessage = function(controllerParent){
+				ngInbox._internal.Methods.DeleteMessage(controllerParent);
+			};
+		} else {
+			//Generate message text
+			messageText = $scope.generateMessageText();
+		}
+
+
 
         // Trigger validation flag.
         //$scope.submitted = true;
@@ -8530,10 +8560,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
             $scope.SetTimeMinute = "00";
         }
 
-        //Generate message text
-        var messageText = $scope.generateMessageText();
 
-        //Creating a api request data object
+        // //Creating a api request data object
         var requestData = {
             sethttp : 1,
             DID : $scope.FromNumber.DID,
@@ -8611,7 +8639,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 			$.param(requestData)
 		).success(
         //Successful request to the server
-        function(data, status, headers, config) {
+        function(data, status, headers, config, deletePreviousMessage) {
             if (data == null || typeof data.apicode == 'undefined') {
                 //This should never happen
                 alert("Unidentified error occurred when sending your message!");
@@ -8623,6 +8651,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 $scope.reset();
                 if (scheduled) {
                     $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
+                    deletePreviousMessage($scope.controllerParent);
                 } else {
                     $scope.$broadcast("SendingMessageSucceeded", data.apidata);
                 }
