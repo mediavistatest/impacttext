@@ -1,7 +1,8 @@
 <div ng-controller="ngTrashListCtrl">
     <div ng-controller="ngInboxNotifyCtrl">
         <div ng-show = "controllerParent.list" ng-include="'views/messages_trash.html'"></div>
-        <div ng-hide = "controllerParent.list"ng-include="'views/messages_view_trash.html'"></div>
+        <div ng-show = "controllerParent.view"ng-include="'views/messages_view_trash.html'"></div>
+        <div ng-show = "controllerParent.settings" ng-include="'views/messages_settings.html'"></div>
     </div>
 </div>
 

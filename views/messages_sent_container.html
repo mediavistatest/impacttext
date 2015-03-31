@@ -1,8 +1,9 @@
 <div ng-controller="ngSentListCtrl">
     <div ng-controller="ngInboxNotifyCtrl">
         <div ng-show = "controllerParent.list" ng-include="'views/messages_sent.html'"></div>
-        <div ng-hide = "controllerParent.list"ng-include="'views/messages_view_sent.html'"></div>
+        <div ng-show = "controllerParent.view"ng-include="'views/messages_view_sent.html'"></div>
         <!-- <div ng-show = "false" ng-include="'views/messages_send.html'"></div> -->
+        <div ng-show = "controllerParent.settings" ng-include="'views/messages_settings.html'"></div>
     </div>
 </div>
 

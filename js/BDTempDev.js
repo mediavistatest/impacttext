@@ -31,7 +31,7 @@ var profile = {
 			animateRotate : true,
 			animateScale : false
 		};
-		
+
 		var updateDouhnutOptions = function() {
 			pCtrl.doughnutData[0].value = pCtrl.bucketOfMessages;
 			pCtrl.doughnutData[1].value = pCtrl.messageCount;
@@ -513,6 +513,9 @@ var ngInbox = {
 					}
 				}
 				controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, result.apidata, result.apicount);
+			},
+			Settings : function(inParent) {
+				inParent.Events.ShowSettings(inParent);
 			}
 		},
 		ngInboxNotifyCtrl : function($scope, notify) {
@@ -577,6 +580,7 @@ var ngInbox = {
 		}
 	},
 	InboxList : {
+		Name : 'Inbox',
 		getListAction : 'messages_inbound',
 		getListStatus : 'U',
 		statusChangeAction : 'message_changeinboundstatus',
@@ -614,8 +618,12 @@ var ngInbox = {
 		list : true,
 		view : false,
 		add : false,
+		settings : false,
 		radioModel : '',
 		Events : {
+			Settings_onClick : function(inParent) {
+				ngInbox._internal.Methods.Settings(inParent);
+			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
 				inParent.Events.ShowView(inParent);
@@ -632,16 +640,25 @@ var ngInbox = {
 				inParent.list = true;
 				inParent.view = false;
 				inParent.add = false;
+				inParent.settings = false;
 			},
 			ShowView : function(inParent) {
 				inParent.list = false;
 				inParent.view = true;
 				inParent.add = false;
+				inParent.settings = false;
 			},
 			ShowAdd : function(inParent) {
 				inParent.list = false;
 				inParent.view = false;
 				inParent.add = true;
+				inParent.settings = false;
+			},
+			ShowSettings : function(inParent) {
+				inParent.list = false;
+				inParent.view = false;
+				inParent.add = false;
+				inParent.settings = true;
 			},
 			InitialiseEvents : function(inParent) {
 				inParent.$scope.$watch('controllerParent.getListStatus', function() {
@@ -731,6 +748,7 @@ var ngInbox = {
 		}
 	},
 	SentList : {
+		Name : 'Sent',
 		getListAction : 'messages_outbound',
 		getListStatus : 'C',
 		// statusChangeAction : 'message_changeoutboundstatus',
@@ -764,19 +782,36 @@ var ngInbox = {
 		$cookieStore : null,
 		clickedMessage : null,
 		list : true,
+		view : false,
+		settings : false,
 		radioModel : '',
 		Events : {
+			Settings_onClick : function(inParent) {
+				ngInbox._internal.Methods.Settings(inParent);
+			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
 				inParent.list = false;
 			},
 			Send_onClick : function(inScope) {
 				// delete clicked message
-				inScope.controllerParent.list = true;
+				inScope.controllerParent.Events.ShowList(inScope.controllerParent);
 				inScope.controllerParent.radioModel = '';
 			},
 			ShowList : function(inParent) {
 				inParent.list = true;
+				inParent.view = false;
+				inParent.settings = false;
+			},
+			ShowView : function(inParent) {
+				inParent.list = false;
+				inParent.view = true;
+				inParent.settings = false;
+			},
+			ShowSettings : function(inParent) {
+				inParent.list = false;
+				inParent.view = false;
+				inParent.settings = true;
 			},
 			InitialiseEvents : function(controllerParent) {
 			}
@@ -784,7 +819,7 @@ var ngInbox = {
 		Controller : function($scope, $http, $cookieStore) {
 			//Controler parrent setting !!!!
 			var controllerParent = ngInbox.SentList;
-			controllerParent.list = true;
+			controllerParent.Events.ShowList(controllerParent);
 
 			controllerParent.$scope = $scope;
 			controllerParent.$http = $http;
@@ -831,6 +866,7 @@ var ngInbox = {
 		}
 	},
 	ScheduledList : {
+		Name : 'Scheduled',
 		getListAction : 'messages_outbound',
 		getListStatus : 'S',
 		statusChangeAction : null, //'message_changeoutboundstatus',
@@ -866,9 +902,13 @@ var ngInbox = {
 		$cookieStore : null,
 		clickedMessage : null,
 		list : true,
-		view : true,
+		view : false,
 		send : false,
+		settings : false,
 		Events : {
+			Settings_onClick : function(inParent) {
+				ngInbox._internal.Methods.Settings(inParent);
+			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
 				inParent.Events.ShowView(inParent);
@@ -881,16 +921,25 @@ var ngInbox = {
 				inParent.list = true;
 				inParent.view = false;
 				inParent.send = false;
+				inParent.settings = false;
 			},
 			ShowView : function(inParent) {
 				inParent.list = false;
 				inParent.view = true;
 				inParent.send = false;
+				inParent.settings = false;
 			},
 			ShowSend : function(inParent) {
 				inParent.list = false;
 				inParent.view = false;
 				inParent.send = true;
+				inParent.settings = false;
+			},
+			ShowSettings : function(inParent) {
+				inParent.list = false;
+				inParent.view = false;
+				inParent.send = false;
+				inParent.settings = true;
 			},
 			InitialiseEvents : function(controllerParent) {
 			}
@@ -951,6 +1000,7 @@ var ngInbox = {
 		}
 	},
 	DraftsList : {
+		Name : 'Drafts',
 		getListAction : 'messages_outbound',
 		getListStatus : 'D',
 		statusChangeAction : null, //'message_changeoutboundstatus',
@@ -979,9 +1029,13 @@ var ngInbox = {
 		$cookieStore : null,
 		clickedMessage : null,
 		list : true,
-		view : true,
+		view : false,
 		send : false,
+		settings : false,
 		Events : {
+			Settings_onClick : function(inParent) {
+				ngInbox._internal.Methods.Settings(inParent);
+			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
 				inParent.Events.ShowView(inParent);
@@ -994,16 +1048,25 @@ var ngInbox = {
 				inParent.list = true;
 				inParent.view = false;
 				inParent.send = false;
+				inParent.settings = false;
 			},
 			ShowView : function(inParent) {
 				inParent.list = false;
 				inParent.view = true;
 				inParent.send = false;
+				inParent.settings = false;
 			},
 			ShowSend : function(inParent) {
 				inParent.list = false;
 				inParent.view = false;
 				inParent.send = true;
+				inParent.settings = false;
+			},
+			ShowSettings : function(inParent) {
+				inParent.list = false;
+				inParent.view = false;
+				inParent.send = false;
+				inParent.settings = true;
 			},
 			InitialiseEvents : function(controllerParent) {
 			}
@@ -1055,6 +1118,7 @@ var ngInbox = {
 		}
 	},
 	TrashList : {
+		Name : 'Trash',
 		getListAction : 'messages_inbound',
 		getListStatus : 'D',
 		// getListAction : 'messages_outbound',
@@ -1088,14 +1152,34 @@ var ngInbox = {
 		$cookieStore : null,
 		clickedMessage : null,
 		list : true,
+		view : false,
+		settings : false,
 		Events : {
+			Settings_onClick : function(inParent) {
+				ngInbox._internal.Methods.Settings(inParent);
+			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
-				inParent.list = false;
+				inParent.Events.ShowView(inParent);
 			},
 			Send_onClick : function(inScope) {
 				// delete clicked message
-				inScope.controllerParent.list = true;
+				inScope.controllerParent.Events.ShowList(inScope.controllerParent);
+			},
+			ShowList : function(inParent) {
+				inParent.list = true;
+				inParent.view = false;
+				inParent.settings = false;
+			},
+			ShowView : function(inParent) {
+				inParent.list = false;
+				inParent.view = true;
+				inParent.settings = false;
+			},
+			ShowSettings : function(inParent) {
+				inParent.list = false;
+				inParent.view = false;
+				inParent.settings = true;
 			},
 			InitialiseEvents : function(inParent) {
 				inParent.$scope.$watch('controllerParent.getListStatus', function() {
@@ -1106,7 +1190,7 @@ var ngInbox = {
 		Controller : function($scope, $http, $cookieStore) {
 			//Controler parrent setting !!!!
 			var controllerParent = ngInbox.TrashList;
-			controllerParent.list = true;
+			controllerParent.Events.ShowList(controllerParent);
 
 			controllerParent.$scope = $scope;
 			controllerParent.$http = $http;
