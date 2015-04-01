@@ -5,6 +5,17 @@
     <div class="row top-search">
         <div class="col-sm-6">
             <input class="search-input" placeholder="Search by account name, name, email ..." type="text" ng-model="filterOptions.filterText">
+            <select>
+                <option selected>- search by -</option>
+                <option value="ANI">Account Name</option>
+                <option value="firstName">Company ID</option>
+                <option value="lastName">Last Name</option>
+                <!--<option value="emailAddress">Email</option>-->
+                <option value="custom1">First Name</option>
+                <option value="custom2">Last Name</option>
+                <option value="custom3">Email</option>
+            </select>
+            <button class="btn btn-search"><i class="fa fa-search"></i></button>
         </div>
         <div class="page-select-wrapper col-sm-6">
             <strong>Show:</strong>&nbsp;
