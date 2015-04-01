@@ -148,6 +148,17 @@ var ngInbox = {
 
 			},
 			PopulateScope : function(controllerParent) {
+				var cookie = ngInbox._internal.Settings.GetCookie(controllerParent);
+				if (cookie != null) {
+					var parentCookie = $.grep(cookie, function(member){
+						return member.Name == controllerParent.Name;
+					});
+					if (parentCookie.length!=0){
+						controllerParent.columnDefs = parentCookie[0].columnDefs;
+					} 
+					
+					
+				}
 				ngInbox._internal.ErrorMsg = controllerParent.errorMessage;
 
 				controllerParent.$scope.mySelections = [];
@@ -191,6 +202,7 @@ var ngInbox = {
 				// controllerParent.$scope.getPagedDataAsync(controllerParent);
 
 				//TABLE OPTIONS
+				controllerParent.$scope.columnDefs = ngInbox._internal.Settings.GrepColumnDefs(controllerParent.columnDefs);
 				controllerParent.$scope.ngOptions = {
 					data : 'ngData',
 					enableSorting : true,
@@ -207,7 +219,7 @@ var ngInbox = {
 					totalServerItems : 'totalServerItems',
 					pagingOptions : controllerParent.$scope.pagingOptions,
 					filterOptions : controllerParent.$scope.filterOptions,
-					columnDefs : controllerParent.columnDefs,
+					columnDefs : 'columnDefs', //controllerParent.columnDefs,
 					primaryKey : controllerParent.primaryKey
 				};
 
@@ -215,10 +227,10 @@ var ngInbox = {
 			},
 			GetANI : function(controllerParent, continueFunction) {
 				try {
-					if (controllerParent.$scope.fromNumbers == null){
+					if (controllerParent.$scope.fromNumbers == null) {
 						controllerParent.$scope.fromNumbers = controllerParent.$scope.main.fromNumbers;
 					}
-					if (controllerParent.$scope.contactLists == null){
+					if (controllerParent.$scope.contactLists == null) {
 						controllerParent.$scope.contactLists = controllerParent.$scope.main.contactLists;
 					}
 					if (controllerParent.clickedMessage && controllerParent.clickedMessage.ANI) {
@@ -519,9 +531,75 @@ var ngInbox = {
 					}
 				}
 				controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, result.apidata, result.apicount);
-			},
+			}
+		},
+		Settings : {
 			Settings : function(inParent) {
 				inParent.Events.ShowSettings(inParent);
+			},
+			ColumnCanBeClicked_onChange : function(inParent, column, index) {
+				if (column.canBeClicked) {
+					column.cellTemplate = 'views/table/MessageTableTemplate.html';
+				} else {
+					column.cellTemplate = null;
+				}
+			},
+			ColumnUp_onClick : function(inParent, column, index) {
+				var temp = inParent.columnDefs[index];
+				inParent.columnDefs[index] = inParent.columnDefs[index - 1];
+				inParent.columnDefs[index - 1] = temp;
+			},
+			ColumnDown_onClick : function(inParent, column, index) {
+				var temp = inParent.columnDefs[index];
+				inParent.columnDefs[index] = inParent.columnDefs[index + 1];
+				inParent.columnDefs[index + 1] = temp;
+			},
+			UpdateColumns : function(inParent) {
+				ngInbox._internal.Settings.SetCookie(inParent);
+				inParent.Events.ShowList(inParent);
+				inParent.$scope.columnDefs = ngInbox._internal.Settings.GrepColumnDefs(inParent.columnDefs);
+				//setTimeout(function() {
+				inParent.$scope.getPagedDataAsync(inParent);
+				//}, 200);
+			},
+			GrepColumnDefs : function(columnDefs) {
+				var defs = $.grep(columnDefs, function(member) {
+					return (member.canBeClicked || (!member.canBeClicked && member.checked));
+				});
+				function clone(obj) {
+					if (null == obj || "object" != typeof obj)
+						return obj;
+					var copy = obj.constructor();
+					for (var attr in obj) {
+						if (obj.hasOwnProperty(attr))
+							copy[attr] = obj[attr];
+					}
+					return copy;
+				}
+
+				return clone(defs);
+			},
+			GetCookie : function(inParent) {
+				var columnDefsCookie = inParent.$scope.main.ipCookie('itInboxColumnDefs');
+				return columnDefsCookie;
+			},
+			SetCookie : function(inParent) {
+				var columnDefsCookie = ngInbox._internal.Settings.GetCookie(inParent);
+				if (columnDefsCookie == null) {
+					columnDefsCookie = [];
+				} else{
+					columnDefsCookie = $.grep(columnDefsCookie, function(member){
+						return member.Name != inParent.Name; 
+					});
+				}
+				columnDefsCookie.push({
+					Name : inParent.Name,
+					columnDefs : inParent.columnDefs
+				});
+				inParent.$scope.main.ipCookie('itInboxColumnDefs', columnDefsCookie, {
+					expires : 365,
+					expirationUnit : 'days'
+				});
 			}
 		},
 		ngInboxNotifyCtrl : function($scope, notify) {
@@ -596,20 +674,24 @@ var ngInbox = {
 		primaryKey : 'inboundMessageID',
 		columnDefs : [{
 			checked : true,
+			canBeClicked : true,
 			field : 'sourceANI',
 			displayName : 'Contact',
 			cellTemplate : 'views/table/MessageTableTemplate.html'
 		}, {
 			checked : true,
+			canBeClicked : true,
 			field : 'message',
 			displayName : 'Message',
 			cellTemplate : 'views/table/MessageTableTemplate.html'
 		}, {
 			checked : true,
+			canBeClicked : false,
 			field : 'createdDate',
 			displayName : 'Date',
 		}, {
 			checked : true,
+			canBeClicked : false,
 			field : 'lists',
 			displayName : 'List'
 		}],
@@ -632,7 +714,19 @@ var ngInbox = {
 		radioModel : '',
 		Events : {
 			Settings_onClick : function(inParent) {
-				ngInbox._internal.Methods.Settings(inParent);
+				ngInbox._internal.Settings.Settings(inParent);
+			},
+			ColumnCanBeClicked_onChange : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnCanBeClicked_onChange(inParent, column, index);
+			},
+			ColumnUp_onClick : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnUp_onClick(inParent, column, index);
+			},
+			ColumnDown_onClick : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnDown_onClick(inParent, column, index);
+			},
+			UpdateColumns : function(inParent) {
+				ngInbox._internal.Settings.UpdateColumns(inParent);
 			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
@@ -765,17 +859,25 @@ var ngInbox = {
 		deleteMessagesChangeAction : 'message_deleteoutbound',
 		primaryKey : 'outboundMessageID',
 		columnDefs : [{
+			checked : true,
+			canBeClicked : true,
 			field : 'con_lis',
 			displayName : 'Contact/List',
 			cellTemplate : 'views/table/MessageTableTemplate.html'
 		}, {
+			checked : true,
+			canBeClicked : true,
 			field : 'message',
 			displayName : 'Message',
 			cellTemplate : 'views/table/MessageTableTemplate.html'
 		}, {
+			checked : true,
+			canBeClicked : false,
 			field : 'sendEndDate',
 			displayName : 'Date sent',
 		}, {
+			checked : true,
+			canBeClicked : false,
 			field : 'DID',
 			displayName : 'From',
 		}],
@@ -797,7 +899,19 @@ var ngInbox = {
 		radioModel : '',
 		Events : {
 			Settings_onClick : function(inParent) {
-				ngInbox._internal.Methods.Settings(inParent);
+				ngInbox._internal.Settings.Settings(inParent);
+			},
+			ColumnCanBeClicked_onChange : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnCanBeClicked_onChange(inParent, column, index);
+			},
+			ColumnUp_onClick : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnUp_onClick(inParent, column, index);
+			},
+			ColumnDown_onClick : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnDown_onClick(inParent, column, index);
+			},
+			UpdateColumns : function(inParent) {
+				ngInbox._internal.Settings.UpdateColumns(inParent);
 			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
@@ -848,11 +962,9 @@ var ngInbox = {
 
 					$sendScope.ToNumber = $sendScope.controllerParent.ANIList;
 					$sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
-console.log($sendScope.controllerParent.clickedMessage.DID)
 					$sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
 					return member.DID == $sendScope.controllerParent.clickedMessage.DID;
 					})[0];
-					console.log($sendScope.FromNumber)
 					$sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
 					return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
 					})[0];
@@ -867,11 +979,9 @@ console.log($sendScope.controllerParent.clickedMessage.DID)
 				};
 
 				ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
-
 			} catch(e) {
 				//TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
 			}
-
 		},
 		PostSuccess : function(controllerParent, result) {
 			ngInbox._internal.Methods.PostSuccess(controllerParent, result);
@@ -885,20 +995,31 @@ console.log($sendScope.controllerParent.clickedMessage.DID)
 		deleteMessagesChangeAction : 'message_deleteoutbound',
 		primaryKey : 'outboundMessageID',
 		columnDefs : [{
+			checked : true,
+			canBeClicked : true,
 			field : 'con_lis',
 			displayName : 'Contact/List',
 			cellTemplate : 'views/table/MessageTableTemplate.html'
 		}, {
+			checked : true,
+			canBeClicked : true,
 			field : 'message',
 			displayName : 'Message',
 			cellTemplate : 'views/table/MessageTableTemplate.html'
 		}, {
+			checked : true,
+			canBeClicked : false,
 			field : 'createdDate',
 			displayName : 'Date created',
 		}, {
+			checked : true,
+			canBeClicked : false,
 			field : 'scheduledDate',
 			displayName : 'Date scheduled',
 		}, {
+			button : 'Edit',
+			checked : true,
+			canBeClicked : false,
 			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ng-click="controllerParent.Events.Message_onClick(controllerParent,row)"><i class="fa fa-pencil"></i> Edit </a></div>'
 		}],
 		sortOptions : {
@@ -919,7 +1040,19 @@ console.log($sendScope.controllerParent.clickedMessage.DID)
 		settings : false,
 		Events : {
 			Settings_onClick : function(inParent) {
-				ngInbox._internal.Methods.Settings(inParent);
+				ngInbox._internal.Settings.Settings(inParent);
+			},
+			ColumnCanBeClicked_onChange : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnCanBeClicked_onChange(inParent, column, index);
+			},
+			ColumnUp_onClick : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnUp_onClick(inParent, column, index);
+			},
+			ColumnDown_onClick : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnDown_onClick(inParent, column, index);
+			},
+			UpdateColumns : function(inParent) {
+				ngInbox._internal.Settings.UpdateColumns(inParent);
 			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
@@ -1046,7 +1179,19 @@ console.log($sendScope.controllerParent.clickedMessage.DID)
 		settings : false,
 		Events : {
 			Settings_onClick : function(inParent) {
-				ngInbox._internal.Methods.Settings(inParent);
+				ngInbox._internal.Settings.Settings(inParent);
+			},
+			ColumnCanBeClicked_onChange : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnCanBeClicked_onChange(inParent, column, index);
+			},
+			ColumnUp_onClick : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnUp_onClick(inParent, column, index);
+			},
+			ColumnDown_onClick : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnDown_onClick(inParent, column, index);
+			},
+			UpdateColumns : function(inParent) {
+				ngInbox._internal.Settings.UpdateColumns(inParent);
 			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
@@ -1168,7 +1313,19 @@ console.log($sendScope.controllerParent.clickedMessage.DID)
 		settings : false,
 		Events : {
 			Settings_onClick : function(inParent) {
-				ngInbox._internal.Methods.Settings(inParent);
+				ngInbox._internal.Settings.Settings(inParent);
+			},
+			ColumnCanBeClicked_onChange : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnCanBeClicked_onChange(inParent, column, index);
+			},
+			ColumnUp_onClick : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnUp_onClick(inParent, column, index);
+			},
+			ColumnDown_onClick : function(inParent, column, index) {
+				ngInbox._internal.Settings.ColumnDown_onClick(inParent, column, index);
+			},
+			UpdateColumns : function(inParent) {
+				ngInbox._internal.Settings.UpdateColumns(inParent);
 			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;

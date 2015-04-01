@@ -2254,3 +2254,12 @@ ul.doughnut-legend {
        display: block;
   }
 }
+
+.divider {
+  height: 2px;
+  width:100%;
+  display:block; /* for use on default inline elements like span */
+  margin: 9px 0;
+  overflow: hidden;
+  background-color: #858585;
+}

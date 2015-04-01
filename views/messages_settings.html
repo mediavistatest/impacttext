@@ -1,10 +1,32 @@
-<h2 class="section-title">{{controllerParent.Name}} column settings </h2>
+<h2 class="section-title">
+{{controllerParent.Name}} column settings
+</h2>
+<!-- <div class="top-buttons">
+    <a ng-show="controllerParent" class="btn btn-back" ng-click="controllerParent.Events.UpdateColumns(controllerParent)"><i class="fa fa-undo">
+    </i>
+    Back</a>
+</div> -->
+<div ng-repeat="(index, column) in controllerParent.columnDefs">
+    <div class="divider ng-scope"></div>
+    <h3>
+    {{column.displayName}}
+    </h3>
+    <button title="Up" class="btn" ng-disabled="index==0" ng-click="controllerParent.Events.ColumnUp_onClick(controllerParent, column, index)">
+        <i class="fa fa-arrow-up">
+        </i>
+    </button>
+    <button title="Down" class="btn" ng-disabled="index==controllerParent.columnDefs.length-1" ng-click="controllerParent.Events.ColumnDown_onClick(controllerParent, column, index)">
+        <i class="fa fa-arrow-down">
+        </i>
+    </button>
+    <label ng-hide="column.canBeClicked">
+        <input type="checkbox" ng-model="column.checked" >
+        </input>display
+    </label>
+    <!-- <input type="checkbox" ng-model="column.canBeClicked" ng-change="controllerParent.Events.ColumnCanBeClicked_onChange(controllerParent, column, index)">
+    can be clicked     </input> -->
+</div><div class="divider ng-scope"></div>
 
-<div class="top-buttons">
-	<a ng-show="controllerParent" class="btn btn-back" ng-click="controllerParent.Events.ShowList(controllerParent)"><i class="fa fa-undo"></i>Back</a>
-</div>
-
-<div ng-repeat="column in controllerParent.columnDefs">
-	<input type="checkbox" ng-model="column.checked"></input>
-	<h3>{{column.displayName}}</h3>
-</div>
+<a class="btn btn-send left" ng-click="controllerParent.Events.UpdateColumns(controllerParent)">
+    <span><i class="fa fa-floppy-o"></i> Save</span>
+</a>
