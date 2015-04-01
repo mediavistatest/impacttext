@@ -7,9 +7,18 @@
     <a ui-sref-active="active" ui-sref="messages.trash" class="btn tab-style"><i class="fa fa-trash-o"></i> Trash</a>
 </div>
 <div class="col-md-12 content-holder animated fadeInRight messages messages-inbox" ng-class="animation">
-    <h2 class="section-title">Sent <button title="Column settings" class="btn pull-right" ng-click="controllerParent.Events.Settings_onClick(controllerParent)">
+    <h2 class="section-title">Sent <!--<button title="Column settings" class="btn pull-right" ng-click="controllerParent.Events.Settings_onClick(controllerParent)">
             <i class="fa fa-cog"></i>
-        </button></h2>
+        </button>-->
+        <div class="btn-group dropdown discard-btn pull-right">
+            <button data-toggle="dropdown" class="btn dropdown-toggle" aria-expanded="false">
+                <i class="fa fa-cog"></i>
+            </button>
+            <div class="dropdown-menu dropdown-list dropdown-alerts column-settings" ng-click="$event.stopPropagation()">
+                <div ng-include="'views/messages_settings.html'" ></div>
+            </div>
+        </div>
+    </h2>
     <div class="top-buttons">
         <!-- <button class="btn" ng-click="ResendMessages(controllerParent)">
             <i class="fa fa-retweet"></i> Resend

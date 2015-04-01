@@ -2317,13 +2317,8 @@ ul.bar-legend span {
   float: right;
 }
 
-@media all and (max-width: 990px) {
-    .welcome-msg {
-        display: none;
-   }
-   .navbar-header {
-       display: block;
-  }
+.btn i.fa.fa-cog {
+  margin: 0;
 }
 
 .divider {
@@ -2334,3 +2329,61 @@ ul.bar-legend span {
   overflow: hidden;
   background-color: #858585;
 }
+
+.dropdown h2 {
+  font-size: 15px;
+  margin: 0;
+  text-align: left;
+  padding: 0;
+  font-weight: 400;
+}
+
+.dropdown h3 {
+  font-size: 13px;
+}
+
+.dropdown .column-settings  i.fa.fa-arrow-up {
+  margin: 0;
+}
+
+.dropdown .column-settings  i.fa.fa-arrow-down {
+  margin-right: 0;
+}
+
+.dropdown .column-settings .btn {
+  padding: 3px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  color: #5c5e60;
+  border: 1px solid lightgrey;
+  background: none;
+}
+
+.column-settings label {
+  margin: 0;
+  margin-left: 20px;
+  position: relative;
+}
+
+.column-settings input {
+  margin-top: 0;
+  position: absolute;
+  top: 1px;
+  left: -15px;
+}
+
+.dropdown .column-settings .btn-send {
+  background: #007d32;
+  color: white;
+  border: none;
+}
+
+@media all and (max-width: 990px) {
+    .welcome-msg {
+        display: none;
+   }
+   .navbar-header {
+       display: block;
+  }
+}
+
