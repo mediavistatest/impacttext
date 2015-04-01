@@ -325,6 +325,45 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 // }
             });
 
+        },
+                contactOptoutUndoRequest : function(request, $inScope, refresh, callback) {
+            $http.post(inspiniaNS.wsUrl + "optout_undo", $.param(request)).success(
+            //Successful request to the server
+            function(data, status, headers, config) {
+
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    alert("Unidentified error occurred when trying to undo opt out contact!");
+                    return;
+                }
+                if (data.apicode == 0) {
+                } else if (data.apicode == 4) {
+                } else {
+                    alert("An error occurred when trying to undo opt out contact! Error code: " + data.apicode);
+                    console.log(JSON.stringify(data));
+                }
+                if (refresh){
+                		if (callback){
+                				callback();
+                		}
+                	}
+            }).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                //alert('Unexpected error occurred when trying to send message!');
+                if (status == 400) {
+                    if (data.apicode == 4) {
+                        //This is an error saying there is nothing to change
+                        //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                        $window.location.reload();
+                    } else {
+                        alert("An error occurred when trying to undo opt out contact! Error code: " + data.apicode);
+                        console.log(JSON.stringify(data));
+                    }
+                }
+                // }
+            });
+
         }
     };
 
@@ -339,6 +378,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
         unblockContact : function(inScope, inContact, refresh, callback) {
             $scope.main.CommonActions.changeContactStatus('A', inContact.contactID, inContact.ANI, inScope, refresh, callback);
         },
+        deleteContact : function(inScope, inContact, refresh, callback) {
+            $scope.main.CommonActions.changeContactStatus('D', inContact.contactID, inContact.ANI, inScope, refresh, callback);
+        },        
         optOutContact : function(inScope, inANI, refresh, callback) {
             var request = {
                 // sethttp : 1,
@@ -347,6 +389,14 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             request.ANI = inANI;
             $scope.main.ServerRequests.contactOptOutAddRequest(request, inScope, refresh, callback);
         },
+        optInContact : function(inScope, inANI, refresh, callback) {
+            var request = {
+                // sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token')
+            };
+            request.ANI = inANI;
+            $scope.main.ServerRequests.contactOptoutUndoRequest(request, inScope, refresh, callback);
+        },        
         changeContactStatus : function(inStatus, inContactId, inANI, inScope, refresh, callback) {
             var request = {
                 sethttp : 1,
@@ -7038,6 +7088,22 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 		}
 		//$scope.refresh();
 	};
+	$scope.deleteContact_ngContactListCtrl = function() {
+		for (var i in $scope.mySelections) {
+			var refresh = false;
+			if (i == $scope.mySelections.length - 1) {
+				refresh = true;
+			}
+			if ($scope.mySelections[i].status == 'I') {
+				$scope.main.CommonActions.deleteContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
+			}else{
+				if (refresh){
+					$scope.refresh();
+				}
+			}
+		}
+		//$scope.refresh();
+	};	
 	$scope.optOutContacts_ngContactListCtrl = function() {
 		for (var i in $scope.mySelections) {
 			var refresh = false;
@@ -7055,7 +7121,22 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 		// $scope.refresh();
 	};
 
-
+	$scope.optInContacts_ngContactListCtrl = function() {
+		for (var i in $scope.mySelections) {
+			var refresh = false;
+			if (i == $scope.mySelections.length - 1) {
+				refresh = true;
+			}
+			if ($scope.mySelections[i].status != 'O') {
+				$scope.main.CommonActions.optInContact($scope, $scope.mySelections[i].ANI, refresh, $scope.refresh);
+			}else{
+				if (refresh){
+					$scope.refresh();
+				}
+			}
+		}
+		// $scope.refresh();
+	};
 
 
     // $scope.blockContactsngContactListCtrl = function() {
