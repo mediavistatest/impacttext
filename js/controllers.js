@@ -7998,7 +7998,19 @@ function notifyCtrl($scope, notify) {
         });
 
     };
+    
+     $scope.RescheduledMsg = function() {
 
+        notify({
+
+            message : 'Your message has been rescheduled!',
+
+            classes : 'alert-success'
+
+        });
+
+    };   
+    
     $scope.AniOptedOutMsg = function() {
 
         notify({
@@ -8111,7 +8123,14 @@ function notifyCtrl($scope, notify) {
         $scope.ScheduledMsg();
 
     });
+    
+    
+      $scope.$on('ReschedulingMessageSucceeded', function(event, args) {
 
+        $scope.RescheduledMsg();
+
+    });  
+    
     //If SaveDraftSucceeded event is triggered, show related message
 
     $scope.$on('SaveDraftSucceeded', function(event, args) {
@@ -8518,7 +8537,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 			$scope.FromNumber = {
 				DID : ''
 			};
-			//$scope.FromNumber.DID = $scope.controllerParent.clickedMessage.DID.substring(1, 11);
 			$scope.FromNumber.DID = $scope.controllerParent.clickedMessage.DID;
 			$scope.MessageTxt = $scope.controllerParent.clickedMessage.message;
 			messageText = $scope.controllerParent.clickedMessage.message;
@@ -8639,7 +8657,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 			$.param(requestData)
 		).success(
         //Successful request to the server
-        function(data, status, headers, config, deletePreviousMessage) {
+        function(data, status, headers, config) {
             if (data == null || typeof data.apicode == 'undefined') {
                 //This should never happen
                 alert("Unidentified error occurred when sending your message!");
@@ -8650,8 +8668,14 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 //Reset form and inform user about success
                 $scope.reset();
                 if (scheduled) {
-                    $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
-                    deletePreviousMessage($scope.controllerParent);
+                    if ($scope.controllerParent) {
+                        $scope.controllerParent.DontShowMessage = true;
+                        ngInbox._internal.Methods.DeleteMessage($scope.controllerParent);
+                        $scope.$broadcast("ReschedulingMessageSucceeded", data.apidata);  
+                    } else {
+                        $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);    
+                    }
+
                 } else {
                     $scope.$broadcast("SendingMessageSucceeded", data.apidata);
                 }
