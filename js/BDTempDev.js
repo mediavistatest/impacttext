@@ -38,6 +38,7 @@ var profile = {
 		};
 
 		$scope.$watch('pCtrl.messageCount', updateDouhnutOptions, true);
+        //$scope.$watch('pCtrl.bucketOfMessages', updateDouhnutOptions, true);
 
 		//get messages count
 		var $param = $.param({
@@ -642,23 +643,35 @@ var ngInbox = {
 			};
 
 			$scope.$on('DeleteMessageSucceeded', function(event, args) {
+                if (!$scope.controllerParent.DontShowMessage) {
 				$scope.DeleteMsg();
+                }
+
 			});
 			$scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
+                if (!$scope.controllerParent.DontShowMessage) {
 				$scope.MarkAsReadMsg();
+                }
 			});
 			$scope.$on('MarkAsUnreadMessageSucceeded', function(event, args) {
+                if (!$scope.controllerParent.DontShowMessage) {
 				$scope.MarkAsUnreadMsg();
+                }
 			});
 			$scope.$on('RestoreToInboxMessageSucceeded', function(event, args) {
+                if (!$scope.controllerParent.DontShowMessage) {
 				$scope.RestoreToInboxMsg();
+                }
 			});
 			$scope.$on('ResendMessageSucceeded', function(event, args) {
+                if (!$scope.controllerParent.DontShowMessage) {
 				$scope.ResendMsg();
+                }
 			});
-
 			$scope.$on('ErrorOnMessages', function(event, args) {
+                if (!$scope.controllerParent.DontShowMessage) {
 				$scope.ErrorOnMsg(args);
+                }
 			});
 
 		}

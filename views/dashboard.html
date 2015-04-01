@@ -6,8 +6,9 @@
 <div class="col-lg-6 row">
 
 <div class="col-sm-12">
-	<div class="content-box">
+	<div class="content-box" ng-controller="DashboardInboxCtrl">
 		<h2 class="blue">Recent Sent Messages</h2>
+
 
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="dashboard-table">
 		  <thead>
@@ -18,35 +19,10 @@
 		  </tr>
 		  </thead>
 		  <tbody>
-		  <tr>
-		    <td>12134456734 </td>
-		    <td>Your appointment is confirmed. </td>
-		    <td>12:15PM</td>
-		  </tr>
-		  <tr>
-		    <td>14459873478 </td>
-		    <td>We have received your order. </td>
-		    <td>9:34AM</td>
-		  </tr>
-		  <tr>
-		    <td>Promo List </td>
-		    <td>Text FREE now to get a gift from us. </td>
-		    <td>Feb 12</td>
-		  </tr>
-		  <tr>
-		    <td>Prospects List </td>
-		    <td>Join us at our open house for a free gift. </td>
-		    <td>Jan 29</td>
-		  </tr>
-		  <tr>
-		    <td>Leads List </td>
-		    <td>To learn more about us text INFO. </td>
-		    <td>Jan 20</td>
-		  </tr>
-		  <tr>
-		    <td>Q1 Coupon</td>
-		    <td>Get 20% off your next order. Text 20NOW.</td>
-		    <td>Jan 1</td>
+		  <tr ng-repeat="x in SentResults | limitTo:5">
+		    <td>{{ x.ANI }}</td>
+		    <td>{{ x.message }}</td>
+		    <td>{{ x.createdDate }}</td>
 		  </tr>
 		  </tbody>
 		</table>
@@ -55,9 +31,27 @@
 </div>
 
 <div class="col-sm-12">
-	<div class="content-box">
+	<div class="content-box" ng-controller="DashboardInboxCtrl">
 		<h2 class="blue">Recent Received Messages</h2>
-		<table width="100%" border="0" cellspacing="0" cellpadding="0"  class="dashboard-table">
+
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="dashboard-table">
+		  <thead>
+		  <tr>
+		    <th>To</th>
+		    <th>Message</th>
+		    <th>Sent</th>
+		  </tr>
+		  </thead>
+		  <tbody>
+		  <tr ng-repeat="x in InboxResults | limitTo:5">
+		    <td>{{ x.sourceANI}}</td>
+		    <td>{{ x.message }}</td>
+		    <td>{{ x.createdDate }}</td>
+		  </tr>
+		  </tbody>
+		</table>
+
+		<!--<table width="100%" border="0" cellspacing="0" cellpadding="0"  class="dashboard-table">
 		  <thead>
 		  <tr>
 		    <th>From</th>
@@ -92,15 +86,19 @@
 		    <td>Jan 20</td>
 		  </tr>
 		  </tbody>
-		</table>
+		</table>-->
 
 	</div>
 </div>
 
 <div class="col-sm-12">
-	<div class="content-box">
+	<div class="content-box statistics" ng-controller="DashboardBarCtrl">
 	<h2 class="blue">Message Statistics</h2>
-		<img src="img/grafikon-dashboard-2.jpg" class="img-responsive">
+		<!--<img src="img/grafikon-dashboard-2.jpg" class="img-responsive">-->
+		<div class="col-sm-7 col-sm-offset-4">
+		<br>
+		<canvas barchart options="barOptions" data="barData" width="200" height="100" legend=true responsive=true></canvas>
+		</div>
 		<br>
 	</div>
 </div>
@@ -110,9 +108,12 @@
 <div class="col-lg-6 row">
 
 <div class="col-sm-12">
-	<div class="content-box">
+	<div class="content-box" ng-controller="DashboardCalendarCtrl">
 		<h2 class="orange">Calendar</h2>
-		<img src="img/calendar-4.png" class="img-responsive">
+		<!--<img src="img/calendar-4.png" class="img-responsive">-->
+		<div class="calendar">
+		<div ui-calendar="uiConfig.calendar" calendar="myCalendar1" class="calendar" ng-model="eventSources"></div>
+		</div>
 		<br>
 	</div>
 </div>

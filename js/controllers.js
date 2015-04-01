@@ -5908,47 +5908,47 @@ function chartJsCtrl() {
 
      */
 
-    this.barData = {
-
-        labels : ["January", "February", "March", "April", "May", "June", "July"],
-
-        datasets: [
-
-            {
-
-            label : "My First dataset",
-
-            fillColor : "rgba(220,220,220,0.5)",
-
-            strokeColor : "rgba(220,220,220,0.8)",
-
-            highlightFill : "rgba(220,220,220,0.75)",
-
-            highlightStroke : "rgba(220,220,220,1)",
-
-            data : [65, 59, 80, 81, 56, 55, 40]
-
-            },
-
-            {
-
-            label : "My Second dataset",
-
-            fillColor : "rgba(26,179,148,0.5)",
-
-            strokeColor : "rgba(26,179,148,0.8)",
-
-            highlightFill : "rgba(26,179,148,0.75)",
-
-            highlightStroke : "rgba(26,179,148,1)",
-
-            data : [28, 48, 40, 19, 86, 27, 90]
-
-            }
-
-        ]
-
-    };
+//    this.barData = {
+//
+//        labels : ["January", "February", "March", "April", "May", "June", "July"],
+//
+//        datasets: [
+//
+//            {
+//
+//            label : "My First dataset",
+//
+//            fillColor : "rgba(220,220,220,0.5)",
+//
+//            strokeColor : "rgba(220,220,220,0.8)",
+//
+//            highlightFill : "rgba(220,220,220,0.75)",
+//
+//            highlightStroke : "rgba(220,220,220,1)",
+//
+//            data : [65, 59, 80, 81, 56, 55, 40]
+//
+//            },
+//
+//            {
+//
+//            label : "My Second dataset",
+//
+//            fillColor : "rgba(26,179,148,0.5)",
+//
+//            strokeColor : "rgba(26,179,148,0.8)",
+//
+//            highlightFill : "rgba(26,179,148,0.75)",
+//
+//            highlightStroke : "rgba(26,179,148,1)",
+//
+//            data : [28, 48, 40, 19, 86, 27, 90]
+//
+//            }
+//
+//        ]
+//
+//    };
 
 
 
@@ -7998,7 +7998,19 @@ function notifyCtrl($scope, notify) {
         });
 
     };
+    
+     $scope.RescheduledMsg = function() {
 
+        notify({
+
+            message : 'Your message has been rescheduled!',
+
+            classes : 'alert-success'
+
+        });
+
+    };   
+    
     $scope.AniOptedOutMsg = function() {
 
         notify({
@@ -8111,7 +8123,14 @@ function notifyCtrl($scope, notify) {
         $scope.ScheduledMsg();
 
     });
+    
+    
+      $scope.$on('ReschedulingMessageSucceeded', function(event, args) {
 
+        $scope.RescheduledMsg();
+
+    });  
+    
     //If SaveDraftSucceeded event is triggered, show related message
 
     $scope.$on('SaveDraftSucceeded', function(event, args) {
@@ -8503,9 +8522,38 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     //Create a function for sending messages
 
     $scope.sendMessage = function(scheduled) {
-        if ($scope.controllerParent) {
-            $scope.controllerParent.Events.Send_onClick($scope);
-        }
+		var requestData = {
+			// sethttp : 1,
+			apikey : $cookieStore.get('inspinia_auth_token'),
+			accountID : $cookieStore.get('inspinia_account_id')
+		};
+
+
+
+		var messageText;
+		if ($scope.controllerParent) {
+			$scope.controllerParent.Events.Send_onClick($scope);
+			$scope.ToNumber = $scope.controllerParent.clickedMessage.con_lis;
+			$scope.FromNumber = {
+				DID : ''
+			};
+			$scope.FromNumber.DID = $scope.controllerParent.clickedMessage.DID;
+			$scope.MessageTxt = $scope.controllerParent.clickedMessage.message;
+			messageText = $scope.controllerParent.clickedMessage.message;
+			$scope.SetDate = new Date($scope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $scope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $scope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
+			$scope.SetTimeHour = $scope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+			$scope.SetTimeMinute = $scope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+			
+			
+			deletePreviousMessage = function(controllerParent){
+				ngInbox._internal.Methods.DeleteMessage(controllerParent);
+			};
+		} else {
+			//Generate message text
+			messageText = $scope.generateMessageText();
+		}
+
+
 
         // Trigger validation flag.
         //$scope.submitted = true;
@@ -8530,10 +8578,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
             $scope.SetTimeMinute = "00";
         }
 
-        //Generate message text
-        var messageText = $scope.generateMessageText();
 
-        //Creating a api request data object
+        // //Creating a api request data object
         var requestData = {
             sethttp : 1,
             DID : $scope.FromNumber.DID,
@@ -8622,7 +8668,14 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 //Reset form and inform user about success
                 $scope.reset();
                 if (scheduled) {
-                    $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
+                    if ($scope.controllerParent) {
+                        $scope.controllerParent.DontShowMessage = true;
+                        ngInbox._internal.Methods.DeleteMessage($scope.controllerParent);
+                        $scope.$broadcast("ReschedulingMessageSucceeded", data.apidata);  
+                    } else {
+                        $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);    
+                    }
+
                 } else {
                     $scope.$broadcast("SendingMessageSucceeded", data.apidata);
                 }
@@ -8858,6 +8911,198 @@ function qrCtrl($scope) {
 
  */
 
+function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
+     /**
+
+     * Options for Bar chart
+
+     */
+
+    $scope.barOptions = {
+
+        scaleBeginAtZero : true,
+        scaleShowGridLines : true,
+        scaleGridLineColor : "rgba(0,0,0,.05)",
+        scaleGridLineWidth : 1,
+        barShowStroke : true,
+        barStrokeWidth : 2,
+        barValueSpacing : 5,
+        barDatasetSpacing : 1
+
+    };
+
+
+
+    /**
+
+     * Data for Bar chart
+
+     */
+
+    $scope.barData = {
+
+        labels : ["Monthly statistics"],
+
+        datasets: [
+
+            {
+
+            label : "Sent messages",
+            fillColor : "rgba(229,229,229,0.5)",
+            strokeColor : "rgba(229,229,229,0.5)",
+            highlightFill : "rgba(229,229,229,0.8)",
+            highlightStroke : "rgba(229,229,229,1)",
+            data : [65]
+            },
+
+            {
+            label : "Opt-outs",
+            fillColor : "rgba(139,211,251,0.5)",
+            strokeColor : "rgba(139,211,251,0.5)",
+            highlightFill : "rgba(139,211,251,0.8)",
+            highlightStroke : "rgba(139,211,251,1)",
+            data : [28]
+            },
+
+            {
+            label : "Reply",
+            fillColor : "rgba(0,95,171,0.5)",
+            strokeColor : "rgba(0,95,171,0.5)",
+            highlightFill : "rgba(0,95,171,0.8)",
+            highlightStroke : "rgba(0,95,171,1)",
+            data : [68]
+            }
+
+        ]
+
+    };
+
+    //var updateBarOptions = function() {
+    //        barData[0].value = pCtrl.bucketOfMessages;
+    //        barData[1].value = pCtrl.messageCount;
+    //    };
+//
+    //    $scope.$watch('pCtrl.messageCount', updateBarOptions, true);
+    //    //$scope.$watch('pCtrl.bucketOfMessages', updateDouhnutOptions, true);
+
+
+}
+
+/**
+
+ * DASHBOARD CALENDAR
+
+ */
+
+function DashboardCalendarCtrl($scope, $http, $cookieStore) {
+
+
+    var date = new Date();
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
+
+
+    // Events
+    $scope.events = [
+        //{title: 'All Day Event',start: new Date(y, m, 1)},
+//
+        //{title: 'Long Event',start: new Date(y, m, d - 5),end: new Date(y, m, d - 2)},
+//
+        //{id: 999,title: 'Repeating Event',start: new Date(y, m, d - 3, 16, 0),allDay: false},
+//
+        //{id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
+//
+        //{title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false},
+        {title: 'Scheduled',start: new Date(y, m, 05),end: new Date(y, m, 05),url: '#/messages/messages_scheduled'},
+        {title: 'Scheduled',start: new Date(y, m, 06),end: new Date(y, m, 06),url: '#/messages/messages_scheduled'},
+        {title: 'Scheduled',start: new Date(y, m, 22),end: new Date(y, m, 22),url: '#/messages/messages_scheduled'},
+        {title: 'Scheduled',start: new Date(y, m, 30),end: new Date(y, m, 30),url: '#/messages/messages_scheduled'},
+        {title: 'Scheduled',start: new Date(y, m, 30),end: new Date(y, m, 30),url: '#/messages/messages_scheduled'}
+
+    ];
+
+
+
+
+
+    /* message on eventClick */
+
+    $scope.alertOnEventClick = function(event, allDay, jsEvent, view) {
+        $scope.alertMessage = (event.title + ': Clicked ');
+    };
+
+    /* message on Drop */
+
+    $scope.alertOnDrop = function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+        $scope.alertMessage = (event.title + ': Droped to make dayDelta ' + dayDelta);
+    };
+
+    /* message on Resize */
+
+    $scope.alertOnResize = function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
+        $scope.alertMessage = (event.title + ': Resized to make dayDelta ' + minuteDelta);
+    };
+
+
+    /* config object */
+
+    $scope.uiConfig = {
+        calendar : {
+            height : 250,
+            editable : false,
+            header : {
+                left : 'prev,next',
+                center : 'title',
+                right : 'month,agendaWeek,agendaDay'
+            },
+            eventClick : $scope.alertOnEventClick,
+            eventDrop : $scope.alertOnDrop,
+            eventResize : $scope.alertOnResize
+        }
+    };
+
+
+    /* Event sources array */
+
+    $scope.eventSources = [$scope.events];
+
+}
+
+
+function DashboardInboxCtrl($scope, $http, $cookieStore) {
+
+    $scope.InboxResults = null;
+    $scope.SentResults = null;
+    
+//get messages count
+        var $param = $.param({
+            apikey : $scope.main.authToken,
+            accountID : $scope.main.accountId
+        });
+        $http.post(inspiniaNS.wsUrl + 'messages_inbound', $param)
+        // success function
+        .success(function(result) {
+            $scope.InboxResults = result.apidata;
+            //iCtrl.Message = result.apidata.message;
+        })
+        // error function
+        .error(function(data, status, headers, config) {
+            console.log('messages_inbound error');
+        });
+
+        $http.post(inspiniaNS.wsUrl + 'messages_outbound', $param)
+        // success function
+        .success(function(result) {
+            $scope.SentResults = result.apidata;
+            //iCtrl.Message = result.apidata.message;
+        })
+        // error function
+        .error(function(data, status, headers, config) {
+            console.log('messages_outbound error');
+        });
+}
+
 angular
 
     .module('inspinia')
@@ -8926,5 +9171,13 @@ angular
 
     .controller('qrCtrl',  qrCtrl)
 
-    .controller('ProfileCtrl', ['$scope', '$http', profile.Controller]);
+    .controller('ProfileCtrl', ['$scope', '$http', profile.Controller])
+
+    .controller('DashboardBarCtrl', ['$scope', '$http', '$cookieStore', '$state', DashboardBarCtrl])
+
+    .controller('DashboardCalendarCtrl', ['$scope', '$http', '$cookieStore', DashboardCalendarCtrl])
+
+    .controller('DashboardInboxCtrl', ['$scope', '$http', '$cookieStore', DashboardInboxCtrl]);
+
+
 

@@ -6,7 +6,7 @@
 
         // also include ngRoute for all our routing needs
 
-    var superAdmin = angular.module('superAdmin', ['ngRoute', 'ui.bootstrap', 'ngGrid', 'cgNotify']);
+    var superAdmin = angular.module('superAdmin', ['ngRoute', 'ui.bootstrap', 'ngGrid', 'cgNotify', 'ngCookies']);
 
 
 

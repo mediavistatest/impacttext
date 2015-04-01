@@ -5,7 +5,7 @@ superAdmin.controller('mainController', function($scope) {
 
 
 // Account List
-superAdmin.controller('AccountListCtrl', function($scope) {
+superAdmin.controller('AccountListCtrl',['$scope', '$cookieStore', '$http', function($scope, $cookieStore, $http) {
     $scope.mySelections = [];
     $scope.filterOptions = {
         filterText: '',
@@ -22,43 +22,13 @@ superAdmin.controller('AccountListCtrl', function($scope) {
     };
     // sort
     $scope.sortOptions = {
-        fields: ['AccountName'],
+        fields: ['accountName'],
         directions: ['ASC'],
         useExternalSorting: true
     };
-    $scope.myData = [{
-        AccountName: "Impact Telecom",
-        CompanyID: 50,
-        FirstName: "Bill",
-        LastName: "Potter",
-        EmailAddress: "bpotter@impacttelecom.com"
-    }, {
-        AccountName: "ImpactConnect",
-        CompanyID: 43,
-        FirstName: "Ann",
-        LastName: "Cooper",
-        EmailAddress: "acooper@impacttelecom.com"
-    }, {
-        AccountName: "Excel",
-        CompanyID: 27,
-        FirstName: "John",
-        LastName: "Doe",
-        EmailAddress: "jdoe@impacttelecom.com"
-    }, {
-        AccountName: "HostedPBX",
-        CompanyID: 29,
-        FirstName: "Jane",
-        LastName: "Doe",
-        EmailAddress: "janed@impacttelecom.com"
-    }, {
-        AccountName: "Global Mobility",
-        CompanyID: 34,
-        FirstName: "Don",
-        LastName: "Draper",
-        EmailAddress: "dd@impacttelecom.com"
-    }];
+
     $scope.gridOptions = {
-        data: 'myData',
+        data: 'accounts',
         enableSorting: true,
         useExternalSorting: true,
         sortInfo: $scope.sortOptions,
@@ -71,17 +41,17 @@ superAdmin.controller('AccountListCtrl', function($scope) {
         showFooter: false,
         pagingOptions: $scope.pagingOptions,
         columnDefs: [{
-            field: 'AccountName',
+            field: 'accountName',
             displayName: 'Account Name'
         }, {
-            field: 'CompanyID',
-            displayAccountName: 'Company ID'
+            field: 'companyID',
+            displayName: 'Company ID'
         }, {
-            field: 'FirstName',
+            field: 'firstName',
             displayName: 'Name',
-            cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.FirstName}} {{row.entity.LastName}}</div>'
+            cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.firstName}} {{row.entity.lastName}}</div>'
         }, {
-            field: 'EmailAddress',
+            field: 'emailAddress',
             displayName: 'Email Address'
         }, {
             field: '',
@@ -89,7 +59,33 @@ superAdmin.controller('AccountListCtrl', function($scope) {
             cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn"><i class="fa fa-pencil"></i> Manage Account </a></div>'
         }]
     };
-});
+
+	$scope.refresh = function() {
+		$http.post(inspiniaAdminNS.wsUrl + "accounts", $.param({
+			apikey : $cookieStore.get('inspinia_auth_token'),
+			sethttp : 1
+		}))
+			//Successful request to the server
+			.success(function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unidentified error occurred when getting account info!");
+					return;
+				}
+				if (data.apicode == 0) {
+					$scope.accounts = data.apidata;
+				} else {
+					alert("Error occured while getting account info!");
+				}
+			})
+			//An error occurred with this request
+			.error(function(data, status, headers, config) {
+				alert("Error occured while getting account info!");
+			});
+	};
+
+	$scope.refresh();
+}]);
 
 
 //Manage Account
