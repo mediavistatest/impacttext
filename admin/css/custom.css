@@ -292,3 +292,22 @@ select.page-select {
     background: #878787;
     border: 1px solid #878787;
 }
+.search-input {
+  width: 60%;
+  padding-left: 10px;
+  border: 1px solid lightgrey;
+  height: 30px;
+}
+
+select {
+  height: 30px;
+  border: 1px solid lightgrey;
+}
+
+button.btn.btn-search {
+  border: none;
+  font-size: 20px;
+  color: #005eaa;
+  padding: 0;
+  margin-left: 5px;
+}
