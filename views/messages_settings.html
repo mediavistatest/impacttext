@@ -8,8 +8,11 @@
 </div> -->
 <div ng-repeat="(index, column) in controllerParent.columnDefs">
     <div class="divider ng-scope"></div>
-    <h3>
+    <h3 ng-show="column.displayName">
     {{column.displayName}}
+    </h3>
+    <h3 ng-show="column.button">
+    {{column.button}}
     </h3>
     <button title="Up" class="btn" ng-disabled="index==0" ng-click="controllerParent.Events.ColumnUp_onClick(controllerParent, column, index)">
         <i class="fa fa-arrow-up">
