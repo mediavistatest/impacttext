@@ -374,7 +374,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     main.CommonActions = {
         blockContact : function(inScope, inContact, refresh, callback) {
             $scope.main.CommonActions.changeContactStatus('I', inContact.contactID, inContact.ANI, inScope, refresh, callback);
-            $scope.main.CommonActions.optOutContact(inScope, inContact.ANI, refresh, callback);
+            // $scope.main.CommonActions.optOutContact(inScope, inContact.ANI, refresh, callback);
         },
         unblockContact : function(inScope, inContact, refresh, callback) {
             $scope.main.CommonActions.changeContactStatus('A', inContact.contactID, inContact.ANI, inScope, refresh, callback);
