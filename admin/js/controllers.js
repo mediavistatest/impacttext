@@ -155,9 +155,24 @@ $scope.getPagedDataAsync = function(pageSize, page, searchText, filterBy, sortFi
 		self.gettingData = true;
 		if (searchText) {
 			var ft = searchText.toLowerCase();
+			var request = {sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize};
+			switch (filterBy) {
+				case "accountName":
+					request.accountName = searchText;
+					break;
+				case "firstName":
+					request.firstName = searchText;
+					break;
+				case "lastName":
+					request.lastName = searchText;
+					break;
+				case "emailAddress":
+					request.emailAddress = searchText;
+					break;
+			}
 			$http.post(
-				inspiniaNS.wsUrl + "accounts",
-				$.param({sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), accountName: ft, orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize})
+				inspiniaAdminNS.wsUrl + "accounts",
+				$.param(request)
 			).success(
 				function (data) {
 					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
