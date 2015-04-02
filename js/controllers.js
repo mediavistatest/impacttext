@@ -374,6 +374,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     main.CommonActions = {
         blockContact : function(inScope, inContact, refresh, callback) {
             $scope.main.CommonActions.changeContactStatus('I', inContact.contactID, inContact.ANI, inScope, refresh, callback);
+            $scope.main.CommonActions.optOutContact(inScope, inContact.ANI, refresh, callback);
         },
         unblockContact : function(inScope, inContact, refresh, callback) {
             $scope.main.CommonActions.changeContactStatus('A', inContact.contactID, inContact.ANI, inScope, refresh, callback);
@@ -384,6 +385,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
         optOutContact : function(inScope, inANI, refresh, callback) {
             var request = {
                 // sethttp : 1,
+                accountId : $cookieStore.get('inspinia_account_id'),
                 apikey : $cookieStore.get('inspinia_auth_token')
             };
             request.ANI = inANI;
@@ -392,6 +394,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
         optInContact : function(inScope, inANI, refresh, callback) {
             var request = {
                 // sethttp : 1,
+                accountId : $cookieStore.get('inspinia_account_id'),
                 apikey : $cookieStore.get('inspinia_auth_token')
             };
             request.ANI = inANI;
@@ -400,6 +403,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
         changeContactStatus : function(inStatus, inContactId, inANI, inScope, refresh, callback) {
             var request = {
                 sethttp : 1,
+                accountId : $cookieStore.get('inspinia_account_id'),
                 apikey : $cookieStore.get('inspinia_auth_token'),
                 contactID : inContactId,
                 ANI : inANI,
@@ -7094,13 +7098,13 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 			if (i == $scope.mySelections.length - 1) {
 				refresh = true;
 			}
-			if ($scope.mySelections[i].status == 'I') {
+			// if ($scope.mySelections[i].status == 'I') {
 				$scope.main.CommonActions.deleteContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
-			}else{
-				if (refresh){
-					$scope.refresh();
-				}
-			}
+			// }else{
+				// if (refresh){
+					// $scope.refresh();
+				// }
+			// }
 		}
 		//$scope.refresh();
 	};	
@@ -7127,7 +7131,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 			if (i == $scope.mySelections.length - 1) {
 				refresh = true;
 			}
-			if ($scope.mySelections[i].status != 'O') {
+			if ($scope.mySelections[i].status == 'O') {
 				$scope.main.CommonActions.optInContact($scope, $scope.mySelections[i].ANI, refresh, $scope.refresh);
 			}else{
 				if (refresh){
@@ -7909,6 +7913,7 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
         var request = {
             sethttp : 1,
             apikey : $cookieStore.get('inspinia_auth_token'),
+            accountId : $cookieStore.get('inspinia_account_id'),
             contactID : $state.params.id,
 			ANI: phoneNo
         };
