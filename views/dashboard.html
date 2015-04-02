@@ -1,156 +1,135 @@
 <h1>Dashboard</h1>
-
-
 <div class="animated fadeInRight dashboard clearfix">
+    <div class="col-lg-6 row">
+        <div class="col-sm-12">
+            <div class="content-box" ng-controller="DashboardInboxCtrl">
+                <a href="#/messages/messages_sent"><h2 class="blue">Recent Sent Messages</h2></a>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>To</th>
+                            <th>Message</th>
+                            <th>Sent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in SentResults | limitTo:5">
+                            <td>{{ x.ANI }}</td>
+                            <td>{{ x.message }}</td>
+                            <td>{{ x.createdDate }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="content-box" ng-controller="DashboardInboxCtrl">
+                <a href="#/messages/messages_inbox"><h2 class="blue-2">Recent Received Messages</h2></a>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>To</th>
+                            <th>Message</th>
+                            <th>Sent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in InboxResults | limitTo:5">
+                            <td>{{ x.sourceANI}}</td>
+                            <td>{{ x.message }}</td>
+                            <td>{{ x.createdDate }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!--<table width="100%" border="0" cellspacing="0" cellpadding="0"  class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>From</th>
+                            <th>Message</th>
+                            <th>Recieved</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>14459873478</td>
+                            <td>Thank u.</td>
+                            <td>12:15PM</td>
+                        </tr>
+                        <tr>
+                            <td>17886927452</td>
+                            <td>FREE</td>
+                            <td>9:34AM</td>
+                        </tr>
+                        <tr>
+                            <td>18956430988</td>
+                            <td>STOP</td>
+                            <td>Feb 12</td>
+                        </tr>
+                        <tr>
+                            <td>12336509281</td>
+                            <td>I want to make an appt. for 1/15/15 8AM.</td>
+                            <td>Jan 29</td>
+                        </tr>
+                        <tr>
+                            <td>19217834452</td>
+                            <td>Do you accept checks for online orders? </td>
+                            <td>Jan 20</td>
+                        </tr>
+                    </tbody>
+                </table>-->
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="content-box statistics" ng-controller="DashboardBarCtrl">
+                <h2 class="blue">Message Statistics</h2>
+                <!--<img src="img/grafikon-dashboard-2.jpg" class="img-responsive">-->
+                <div class="col-sm-7 col-sm-offset-4">
+                    <br>
+                    <canvas barchart options="barOptions" data="barData" width="200" height="100" legend=true responsive=true></canvas>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 row">
+        <div class="col-sm-12">
+            <div class="content-box" ng-controller="DashboardCalendarCtrl">
+                <h2 class="orange">Calendar</h2>
+                <!--<img src="img/calendar-4.png" class="img-responsive">-->
+                <div class="calendar">
+                    <div ui-calendar="uiConfig.calendar" calendar="myCalendar1" class="calendar" ng-model="eventSources"></div>
+                </div>
+                <br>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="content-box">
+                <h2 class="green">Texting Tips & Best Practices</h2>
+                <h3 class="green-txt sub-h2">Start a conversation with ImpactText <br>Texting is a quick and easy way to reach your customers!</h3>
+                <ul class="dashboard-li">
+                    <li><hr></li>
+                    <li><i class="fa fa-caret-right green-txt"></i> Planning a text messaging campaign <span>Learn how to implement and schedule a successful text campaign.</span></li>
+                    <li><hr></li>
+                    <li><i class="fa fa-caret-right green-txt"></i> Managing contacts in ImpactText <span>Enter your customers into ImpactText for easy business communications.</span></li>
+                    <li><hr></li>
+                    <li><i class="fa fa-caret-right green-txt"></i> Compliance: Text messaging legal guidance <span>Stay within the law. Get tips on running smart and effective text campaigns.</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="content-box clearfix">
+                <h2 class="violet">Video Tutorial</h2>
 
-<div class="col-lg-6 row">
-
-<div class="col-sm-12">
-	<div class="content-box" ng-controller="DashboardInboxCtrl">
-		<h2 class="blue">Recent Sent Messages</h2>
-
-
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="dashboard-table">
-		  <thead>
-		  <tr>
-		    <th>To</th>
-		    <th>Message</th>
-		    <th>Sent</th>
-		  </tr>
-		  </thead>
-		  <tbody>
-		  <tr ng-repeat="x in SentResults | limitTo:5">
-		    <td>{{ x.ANI }}</td>
-		    <td>{{ x.message }}</td>
-		    <td>{{ x.createdDate }}</td>
-		  </tr>
-		  </tbody>
-		</table>
-
-	</div>
-</div>
-
-<div class="col-sm-12">
-	<div class="content-box" ng-controller="DashboardInboxCtrl">
-		<h2 class="blue">Recent Received Messages</h2>
-
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="dashboard-table">
-		  <thead>
-		  <tr>
-		    <th>To</th>
-		    <th>Message</th>
-		    <th>Sent</th>
-		  </tr>
-		  </thead>
-		  <tbody>
-		  <tr ng-repeat="x in InboxResults | limitTo:5">
-		    <td>{{ x.sourceANI}}</td>
-		    <td>{{ x.message }}</td>
-		    <td>{{ x.createdDate }}</td>
-		  </tr>
-		  </tbody>
-		</table>
-
-		<!--<table width="100%" border="0" cellspacing="0" cellpadding="0"  class="dashboard-table">
-		  <thead>
-		  <tr>
-		    <th>From</th>
-		    <th>Message</th>
-		    <th>Recieved</th>
-		  </tr>
-		  </thead>
-		  <tbody>
-		  <tr>
-		    <td>14459873478</td>
-		    <td>Thank u.</td>
-		    <td>12:15PM</td>
-		  </tr>
-		  <tr>
-		    <td>17886927452</td>
-		    <td>FREE</td>
-		    <td>9:34AM</td>
-		  </tr>
-		  <tr>
-		    <td>18956430988</td>
-		    <td>STOP</td>
-		    <td>Feb 12</td>
-		  </tr>
-		  <tr>
-		    <td>12336509281</td>
-		    <td>I want to make an appt. for 1/15/15 8AM.</td>
-		    <td>Jan 29</td>
-		  </tr>
-		  <tr>
-		    <td>19217834452</td>
-		    <td>Do you accept checks for online orders? </td>
-		    <td>Jan 20</td>
-		  </tr>
-		  </tbody>
-		</table>-->
-
-	</div>
-</div>
-
-<div class="col-sm-12">
-	<div class="content-box statistics" ng-controller="DashboardBarCtrl">
-	<h2 class="blue">Message Statistics</h2>
-		<!--<img src="img/grafikon-dashboard-2.jpg" class="img-responsive">-->
-		<div class="col-sm-7 col-sm-offset-4">
-		<br>
-		<canvas barchart options="barOptions" data="barData" width="200" height="100" legend=true responsive=true></canvas>
-		</div>
-		<br>
-	</div>
-</div>
-
-</div>
-
-<div class="col-lg-6 row">
-
-<div class="col-sm-12">
-	<div class="content-box" ng-controller="DashboardCalendarCtrl">
-		<h2 class="orange">Calendar</h2>
-		<!--<img src="img/calendar-4.png" class="img-responsive">-->
-		<div class="calendar">
-		<div ui-calendar="uiConfig.calendar" calendar="myCalendar1" class="calendar" ng-model="eventSources"></div>
-		</div>
-		<br>
-	</div>
-</div>
-
-<div class="col-sm-12">
-	<div class="content-box">
-		<h2 class="green">Texting Tips & Best Practices</h2>
-
-		<h3 class="green-txt sub-h2">Start a conversation with ImpactText <br>Texting is a quick and easy way to reach your customers!</h3>
-		<ul class="dashboard-li">
-		<li><hr></li>
-		<li><i class="fa fa-caret-right green-txt"></i> Planning a text messaging campaign <span>Learn how to implement and schedule a successful text campaign.</span></li>
-		<li><hr></li>
-		<li><i class="fa fa-caret-right green-txt"></i> Managing contacts in ImpactText <span>Enter your customers into ImpactText for easy business communications.</span></li>
-		<li><hr></li>
-		<li><i class="fa fa-caret-right green-txt"></i> Compliance: Text messaging legal guidance <span>Stay within the law. Get tips on running smart and effective text campaigns.</span></li>
-		</ul>
-	</div>
-</div>
-
-<div class="col-sm-12">
-	<div class="content-box clearfix">
-		<h2 class="violet">Video Tutorial</h2>
-		
-			<ul class="dashboard-li">
-				<li>&nbsp;</li>
-				<li><i class="fa fa-caret-right violet-txt"></i> How to send a text message</li>
-				<li><hr></li>
-				<li><i class="fa fa-caret-right violet-txt"></i> How to add contacts and create lists</li>
-				<li><hr></li>
-				<li><i class="fa fa-caret-right violet-txt"></i> Using ImpactText for marketing and promotions</li>
-				</ul>
-	</div>
-</div>
-
-</div>
-
-<div class="spacer">&nbsp;</div>
-
+                <ul class="dashboard-li">
+                    <li>&nbsp;</li>
+                    <li><i class="fa fa-caret-right violet-txt"></i> How to send a text message</li>
+                    <li><hr></li>
+                    <li><i class="fa fa-caret-right violet-txt"></i> How to add contacts and create lists</li>
+                    <li><hr></li>
+                    <li><i class="fa fa-caret-right violet-txt"></i> Using ImpactText for marketing and promotions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="spacer">&nbsp;</div>
 </div>
