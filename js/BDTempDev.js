@@ -43,7 +43,7 @@ var profile = {
 		//get messages count
 		var $param = $.param({
 			apikey : $scope.main.authToken,
-			accountID : $scope.main.accountId
+			accountID : $scope.main.accountID
 		});
 		$http.post(inspiniaNS.wsUrl + 'reporting_getbom', $param)
 		// success function
