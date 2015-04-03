@@ -62,7 +62,7 @@
 	</div>
 
 	<div class="bottom-buttons left">
-		<a ng-click="controllerParent.radioModel='';controllerParent.list = true;" class="btn back-btn"><i class="fa fa-undo"></i> Back to Sent</a>
+		<a ng-click="controllerParent.radioModel='';controllerParent.Events.ShowList(controllerParent);" class="btn back-btn"><i class="fa fa-undo"></i> Back to Sent</a>
 	</div>
 
 	<div ng-show="radioModel == 'forward'" class="reply-box clearfix" ng-include src="'views/forward_form.html'"></div>

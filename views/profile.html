@@ -15,7 +15,7 @@
         <li><hr></li>
 
         <li><span class="li-label">Messages used:</span> <span class="blue-txt">{{pCtrl.messageCount}}</span></li>
-        <li><span class="li-label">Messages available:</span> <span class="blue-txt">{{pCtrl.bucketOfMessages}}</span></li>
+        <li><span class="li-label">Messages available in plan:</span> <span class="blue-txt">{{pCtrl.bucketOfMessages - pCtrl.messageCount}}</span></li>
         </ul>
         </div>
         <div class="col-md-6">
@@ -39,7 +39,7 @@
         <ul>
         <li><span class="li-label">First name:</span> {{main.accountInfo.firstName}}</li>
         <li><span class="li-label">Last name:</span> {{main.accountInfo.lastName}}</li>
-        <li><span class="li-label">Company Name:</span> {{main.companyInfo.companyName}}</li>
+        <li><span class="li-label">Company Name:</span> {{main.accountInfo.accountName}}</li>
 
         <!--<li><hr></li>
 

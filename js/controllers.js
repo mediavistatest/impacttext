@@ -148,28 +148,28 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
         if (data.apicode == 0) {
             main.accountInfo = data.apidata[0];
             // geting company info
-            $http.post(inspiniaNS.wsUrl + "company_get", $.param({
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                companyID : main.accountInfo.companyID
-            }))
-            //Successful request to the server
-            .success(function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    alert("Unidentified error occurred when getting company info!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    main.companyInfo = data.apidata;
-                } else {
-                    // alert("Error occured while getting account company info!");
-                }
-            })
-            //An error occurred with this request
-            .error(function(data, status, headers, config) {
-                alert("Error occured while getting account company info!");
-            });
+            // $http.post(inspiniaNS.wsUrl + "company_get", $.param({
+                // apikey : $cookieStore.get('inspinia_auth_token'),
+                // accountID : $cookieStore.get('inspinia_account_id'),
+                // companyID : main.accountInfo.companyID
+            // }))
+            // //Successful request to the server
+            // .success(function(data, status, headers, config) {
+                // if (data == null || typeof data.apicode == 'undefined') {
+                    // //This should never happen
+                    // alert("Unidentified error occurred when getting company info!");
+                    // return;
+                // }
+                // if (data.apicode == 0) {
+                    // main.companyInfo = data.apidata;
+                // } else {
+                    // // alert("Error occured while getting account company info!");
+                // }
+            // })
+            // //An error occurred with this request
+            // .error(function(data, status, headers, config) {
+                // alert("Error occured while getting account company info!");
+            // });
         } else {
             alert("Error occured while getting account info!");
         }
@@ -6435,7 +6435,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 
 
     $scope.pagingOptions = {
-        pageSizes : [2, 5, 10, 20, 50, 100],
+        pageSizes : [10, 20, 50, 100],
         pageSize : 10,
         currentPage : 1
     };
@@ -7042,7 +7042,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
 
     $scope.pagingOptions = {
-        pageSizes : [2, 5, 10, 20, 50, 100],
+        pageSizes : [10, 20, 50, 100],
         pageSize : 10,
         currentPage : 1
     };
@@ -8344,7 +8344,6 @@ function imageCrop($scope) {
 
 
 function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracker) {
-
     $scope.PhoneNumberArrayValidator = {
         PhoneNumbers : {
             inputNumberString : '',
@@ -8454,13 +8453,9 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 
     if ($scope.controllerParent && $scope.controllerParent.PopulateSend) {
-
         $scope.$watch('controllerParent.clickedMessage', function() {
-
             $scope.controllerParent.PopulateSend($scope);
-
         }, true);
-
     }
 
     //CHARACTER COUNTER

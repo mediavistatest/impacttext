@@ -38,7 +38,7 @@ var profile = {
 		};
 
 		$scope.$watch('pCtrl.messageCount', updateDouhnutOptions, true);
-        //$scope.$watch('pCtrl.bucketOfMessages', updateDouhnutOptions, true);
+		//$scope.$watch('pCtrl.bucketOfMessages', updateDouhnutOptions, true);
 
 		//get messages count
 		var $param = $.param({
@@ -66,7 +66,7 @@ var ngInbox = {
 		DataConstructors : {
 			PageOptions : function() {
 				var self = this;
-				self.pageSizes = [2, 5, 10, 20, 50, 100];
+				self.pageSizes = [10, 20, 50, 100];
 				self.pageSize = 10;
 				self.currentPage = 1;
 			},
@@ -151,14 +151,12 @@ var ngInbox = {
 			PopulateScope : function(controllerParent) {
 				var cookie = ngInbox._internal.Settings.GetCookie(controllerParent);
 				if (cookie != null) {
-					var parentCookie = $.grep(cookie, function(member){
+					var parentCookie = $.grep(cookie, function(member) {
 						return member.Name == controllerParent.Name;
 					});
-					if (parentCookie.length!=0){
+					if (parentCookie.length != 0) {
 						controllerParent.columnDefs = parentCookie[0].columnDefs;
-					} 
-					
-					
+					}
 				}
 				ngInbox._internal.ErrorMsg = controllerParent.errorMessage;
 
@@ -588,9 +586,9 @@ var ngInbox = {
 				var columnDefsCookie = ngInbox._internal.Settings.GetCookie(inParent);
 				if (columnDefsCookie == null) {
 					columnDefsCookie = [];
-				} else{
-					columnDefsCookie = $.grep(columnDefsCookie, function(member){
-						return member.Name != inParent.Name; 
+				} else {
+					columnDefsCookie = $.grep(columnDefsCookie, function(member) {
+						return member.Name != inParent.Name;
 					});
 				}
 				columnDefsCookie.push({
@@ -643,35 +641,35 @@ var ngInbox = {
 			};
 
 			$scope.$on('DeleteMessageSucceeded', function(event, args) {
-                if (!$scope.controllerParent.DontShowMessage) {
-				$scope.DeleteMsg();
-                }
+				if (!$scope.controllerParent.DontShowMessage) {
+					$scope.DeleteMsg();
+				}
 
 			});
 			$scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
-                if (!$scope.controllerParent.DontShowMessage) {
-				$scope.MarkAsReadMsg();
-                }
+				if (!$scope.controllerParent.DontShowMessage) {
+					$scope.MarkAsReadMsg();
+				}
 			});
 			$scope.$on('MarkAsUnreadMessageSucceeded', function(event, args) {
-                if (!$scope.controllerParent.DontShowMessage) {
-				$scope.MarkAsUnreadMsg();
-                }
+				if (!$scope.controllerParent.DontShowMessage) {
+					$scope.MarkAsUnreadMsg();
+				}
 			});
 			$scope.$on('RestoreToInboxMessageSucceeded', function(event, args) {
-                if (!$scope.controllerParent.DontShowMessage) {
-				$scope.RestoreToInboxMsg();
-                }
+				if (!$scope.controllerParent.DontShowMessage) {
+					$scope.RestoreToInboxMsg();
+				}
 			});
 			$scope.$on('ResendMessageSucceeded', function(event, args) {
-                if (!$scope.controllerParent.DontShowMessage) {
-				$scope.ResendMsg();
-                }
+				if (!$scope.controllerParent.DontShowMessage) {
+					$scope.ResendMsg();
+				}
 			});
 			$scope.$on('ErrorOnMessages', function(event, args) {
-                if (!$scope.controllerParent.DontShowMessage) {
-				$scope.ErrorOnMsg(args);
-                }
+				if (!$scope.controllerParent.DontShowMessage) {
+					$scope.ErrorOnMsg(args);
+				}
 			});
 
 		}
@@ -968,8 +966,7 @@ var ngInbox = {
 		},
 		PopulateSend : function($sendScope) {
 			try {
-				continueFunction = function(controllerParent) {
-					$sendScope = controllerParent.$scope;
+				continueFunction = function() {
 					$sendScope.FromName = $sendScope.initial;
 					$sendScope.MessageType = 'SMS';
 
@@ -1119,8 +1116,7 @@ var ngInbox = {
 				$sendScope.FromName = $sendScope.initial;
 				$sendScope.MessageType = 'SMS';
 
-				continueFunction = function(controllerParent) {
-					$sendScope = controllerParent.$scope;
+				continueFunction = function() {
 					$sendScope.ToNumber = $sendScope.controllerParent.ANIList;
 					$sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
 
@@ -1146,7 +1142,6 @@ var ngInbox = {
 				};
 
 				ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
-
 			} catch(e) {
 				//TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
 				console.log(e);
@@ -1176,7 +1171,7 @@ var ngInbox = {
 			field : 'statusDate',
 			displayName : 'Date & Time Saved',
 		}, {
-			button: 'Edit',
+			button : 'Edit',
 			checked : true,
 			canBeClicked : true,
 			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ng-click="controllerParent.Events.Message_onClick(controllerParent,row)"><i class="fa fa-pencil"></i> Edit </a></div>'
@@ -1270,21 +1265,19 @@ var ngInbox = {
 				$sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
 				return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
 				})[0];
-
-				continueFunction = function(controllerParent) {
-					$sendScope = controllerParent.$scope;
+				$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
+				continueFunction = function() {
+					console.log($sendScope.controllerParent.clickedMessage)
 					$sendScope.ToNumber = $sendScope.controllerParent.ANIList;
 					$sendScope.controllerParent.clickedMessage.con_lis = $sendScope.ToNumber;
 					$sendScope.OptOutMsg = '';
 					$sendScope.OptOutTxt3 = $sendScope.initial;
-					$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
 					$sendScope.ScheduleCheck = false;
 					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
 					$sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
 					$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
 				};
 				ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
-
 			} catch(e) {
 				//TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
 			}
