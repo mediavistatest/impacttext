@@ -913,7 +913,7 @@ function flotChartCtrl() {
     var lineAreaData = [{
         label : "line",
         data : [[1, 34], [2, 22], [3, 19], [4, 12], [5, 32], [6, 54], [7, 23], [8, 57], [9, 12], [10, 24], [11, 44], [12, 64], [13, 21]]
-    }]
+    }];
     /**
      * Line Area Chart Options
      */
@@ -1006,7 +1006,7 @@ function flotChartCtrl() {
             onHover : function(flotItem, $tooltipEl) {
             }
         }
-    }
+    };
     /**
      * Definition of variables
      * Flot chart
@@ -1263,7 +1263,7 @@ function rickshawChartCtrl() {
             left : 0.05,
             right : 0.05
         }
-    }
+    };
     /**
      * Data for Scatterplot chart
      */
@@ -1303,7 +1303,7 @@ function rickshawChartCtrl() {
             y : 16
         }],
         color : '#1ab394'
-    }]
+    }];
     /**
      * Definition all variables
      * Rickshaw chart
@@ -4106,5 +4106,32 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
     });
 }
 
-
-angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]).controller('dashboardFlotOne', dashboardFlotOne).controller('dashboardFlotTwo', dashboardFlotTwo).controller('dashboardMap', dashboardMap).controller('flotChartCtrl', flotChartCtrl).controller('rickshawChartCtrl', rickshawChartCtrl).controller('sparklineChartCtrl', sparklineChartCtrl).controller('widgetFlotChart', widgetFlotChart).controller('modalDemoCtrl', modalDemoCtrl).controller('ionSlider', ionSlider).controller('wizardCtrl', wizardCtrl).controller('CalendarCtrl', CalendarCtrl).controller('chartJsCtrl', chartJsCtrl).controller('GoogleMaps', GoogleMaps).controller('ngGridCtrl', ['$scope', '$http', '$cookieStore', ngGridCtrl]).controller('ngContactListCtrl', ['$scope', '$http', '$cookieStore', '$state', ngContactListCtrl]).controller('ngInboxListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.InboxList.Controller]).controller('ngSentListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.SentList.Controller]).controller('ngScheduledListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.ScheduledList.Controller]).controller('ngDraftsListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.DraftsList.Controller]).controller('ngTrashListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.TrashList.Controller]).controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', 'filterFilter', AddListsCtrl]).controller('EditContactCtrl', ['$scope', '$http', '$cookieStore', '$window', '$state', EditContactCtrl]).controller('codeEditorCtrl', codeEditorCtrl).controller('nestableCtrl', nestableCtrl).controller('notifyCtrl', notifyCtrl).controller('ngInboxNotifyCtrl', ngInbox._internal.ngInboxNotifyCtrl).controller('translateCtrl', translateCtrl).controller('imageCrop', imageCrop).controller('FormSendCtrl', ['$scope', '$cookieStore', '$http', FormSendCtrl]).controller('loginCtrl', ['$scope', '$cookieStore', '$http', '$window', loginCtrl]).controller('qrCtrl', qrCtrl).controller('ProfileCtrl', ['$scope', '$http', profile.Controller]).controller('DashboardBarCtrl', ['$scope', '$http', '$cookieStore', '$state', DashboardBarCtrl]).controller('DashboardCalendarCtrl', ['$scope', '$http', '$cookieStore', DashboardCalendarCtrl]).controller('DashboardInboxCtrl', ['$scope', '$http', '$cookieStore', DashboardInboxCtrl]);
+angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);
+angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
+angular.module('inspinia').controller('dashboardFlotTwo', dashboardFlotTwo);
+angular.module('inspinia').controller('dashboardMap', dashboardMap);
+angular.module('inspinia').controller('flotChartCtrl', flotChartCtrl);
+angular.module('inspinia').controller('rickshawChartCtrl', rickshawChartCtrl);
+angular.module('inspinia').controller('sparklineChartCtrl', sparklineChartCtrl);
+angular.module('inspinia').controller('widgetFlotChart', widgetFlotChart).controller('modalDemoCtrl', modalDemoCtrl);
+angular.module('inspinia').controller('ionSlider', ionSlider).controller('wizardCtrl', wizardCtrl);
+angular.module('inspinia').controller('CalendarCtrl', CalendarCtrl).controller('chartJsCtrl', chartJsCtrl);
+angular.module('inspinia').controller('GoogleMaps', GoogleMaps);
+angular.module('inspinia').controller('ngGridCtrl', ['$scope', '$http', '$cookieStore', ngGridCtrl]);
+angular.module('inspinia').controller('ngContactListCtrl', ['$scope', '$http', '$cookieStore', '$state', ngContactListCtrl]);
+angular.module('inspinia').controller('ngInboxListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.InboxList.Controller]);
+angular.module('inspinia').controller('ngSentListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.SentList.Controller]);
+angular.module('inspinia').controller('ngScheduledListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.ScheduledList.Controller]);
+angular.module('inspinia').controller('ngDraftsListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.DraftsList.Controller]);
+angular.module('inspinia').controller('ngTrashListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.TrashList.Controller]);
+angular.module('inspinia').controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', 'filterFilter', AddListsCtrl]);
+angular.module('inspinia').controller('EditContactCtrl', ['$scope', '$http', '$cookieStore', '$window', '$state', EditContactCtrl]);
+angular.module('inspinia').controller('codeEditorCtrl', codeEditorCtrl).controller('nestableCtrl', nestableCtrl);
+angular.module('inspinia').controller('notifyCtrl', notifyCtrl).controller('ngInboxNotifyCtrl', ngInbox._internal.ngInboxNotifyCtrl);
+angular.module('inspinia').controller('translateCtrl', translateCtrl).controller('imageCrop', imageCrop);
+angular.module('inspinia').controller('FormSendCtrl', ['$scope', '$cookieStore', '$http', FormSendCtrl]);
+angular.module('inspinia').controller('loginCtrl', ['$scope', '$cookieStore', '$http', '$window', loginCtrl]);
+angular.module('inspinia').controller('qrCtrl', qrCtrl).controller('ProfileCtrl', ['$scope', '$http', profile.Controller]);
+angular.module('inspinia').controller('DashboardBarCtrl', ['$scope', '$http', '$cookieStore', '$state', DashboardBarCtrl]);
+angular.module('inspinia').controller('DashboardCalendarCtrl', ['$scope', '$http', '$cookieStore', DashboardCalendarCtrl]);
+angular.module('inspinia').controller('DashboardInboxCtrl', ['$scope', '$http', '$cookieStore', DashboardInboxCtrl]);
