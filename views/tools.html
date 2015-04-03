@@ -1,41 +1,39 @@
 <h1>Tools</h1>
 <div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation" ng-controller="qrCtrl">
-    <h2 class="section-title">URL Shortener</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    <br><br>
-    <iframe src="views/url.html" width="100%" height="auto" style="border:none"></iframe>
-    <br><br>
-    <hr>
-    <br>
-    <h2 class="section-title">Qr code generator</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    <br><br>
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="qr-settings">
-                <textarea id="text" class="textarea " ng-model="qrcodeString" placeholder="ENTER YOUR TEXT TO ENCODE"></textarea>
-                <br>
-                <p>
-                <label for="size">Correction Level:</label>
-                <span>{{correctionLevel}}</span><br>
-                <!--<input type="radio" id="correctionLevel" ng-model="correctionLevel" value=""/>  Auto (M) &nbsp;&nbsp;&nbsp;-->
-                <input type="radio" id="correctionLevel" ng-model="correctionLevel" value="L"/>  L (Low) &nbsp;&nbsp;&nbsp;
-                <input type="radio" id="correctionLevel" ng-model="correctionLevel" value="M"/>  M (Medium) &nbsp;&nbsp;&nbsp;
-                <!--<input type="radio" id="correctionLevel" ng-model="correctionLevel" value="Q"/>  Q (Quartile)-->
-                <input type="radio" id="correctionLevel" ng-model="correctionLevel" value="H"/>  H (High)
-                </p>
-                <br>
-                <p>
-                <label for="size">Size:</label>
-                <span>{{size}}</span>
-                <br>
-                <input type="range" id="size" class="range" ng-model="size" min="100" max="500"/>
-                </p>
+    <div class="settings-section"><h2 class="section-title">URL Shortener</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <br><br>
+    <iframe src="views/url.html" width="100%" height="auto" style="border:none"></iframe></div>
+    <div class="settings-section">
+        <h2 class="section-title">Qr code generator</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <br><br>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="qr-settings">
+                    <textarea id="text" class="textarea " ng-model="qrcodeString" placeholder="ENTER YOUR TEXT TO ENCODE"></textarea>
+                    <br>
+                    <p>
+                    <label for="size">Correction Level:</label>
+                    <span>{{correctionLevel}}</span><br>
+                    <!--<input type="radio" id="correctionLevel" ng-model="correctionLevel" value=""/>  Auto (M) &nbsp;&nbsp;&nbsp;-->
+                    <input type="radio" id="correctionLevel" ng-model="correctionLevel" value="L"/>  L (Low) &nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="correctionLevel" ng-model="correctionLevel" value="M"/>  M (Medium) &nbsp;&nbsp;&nbsp;
+                    <!--<input type="radio" id="correctionLevel" ng-model="correctionLevel" value="Q"/>  Q (Quartile)-->
+                    <input type="radio" id="correctionLevel" ng-model="correctionLevel" value="H"/>  H (High)
+                    </p>
+                    <br>
+                    <p>
+                    <label for="size">Size:</label>
+                    <span>{{size}}</span>
+                    <br>
+                    <input type="range" id="size" class="range" ng-model="size" min="100" max="500"/>
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <qr text="qrcodeString" type-number="typeNumber" correction-level="correctionLevel" size="size" input-mode="inputMode" image="image"></qr>
             </div>
         </div>
-        <div class="col-sm-3">
-            <qr text="qrcodeString" type-number="typeNumber" correction-level="correctionLevel" size="size" input-mode="inputMode" image="image"></qr>
-        </div>
-    </div>
-    <br><br>
+    <br><br></div>
 </div>
