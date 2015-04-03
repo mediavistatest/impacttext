@@ -297,47 +297,50 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             for (var i = 0; i < contactList.length; i++) {
                 if (i == 0) {
                     ANIlist_ = contactList[i].ANI;
-                    ContactList_ = contactList[i].ANI;
+                    ContactIDList_ = contactList[i].contactID;
                 } else {
                     ANIlist_ = ANIlist_ + ',' + contactList[i].ANI;
+                    ContactIDList_ = ContactIDList_ + ',' + contactList[i].contactID;
                 }
             }
             return params_ = {
                 ANIList : ANIlist_,
-                ContactList : ContactList_
+                ContactIDList : ContactIDList_
             };
         },
         blockContact : function(inScope, inContactList, refresh, callback) {
-            var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContact);
-            $scope.main.CommonActions.changeContactStatus('I', inContact.contactID, commaSeparatedAniList_, inScope, refresh, callback);
+            var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
+            $scope.main.CommonActions.changeContactStatus('I', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
             // $scope.main.CommonActions.optOutContact(inScope, inContact.ANI, refresh, callback);
         },
         unblockContact : function(inScope, inContactList, refresh, callback) {
-            var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContact);
-            $scope.main.CommonActions.changeContactStatus('A', inContact.contactID, commaSeparatedAniList_, inScope, refresh, callback);
+            var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
+            $scope.main.CommonActions.changeContactStatus('A', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
         },
         deleteContact : function(inScope, inContactList, refresh, callback) {
-            var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContact);
-            $scope.main.CommonActions.changeContactStatus('D', inContact.contactID, commaSeparatedAniList_, inScope, refresh, callback);
+            var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
+            $scope.main.CommonActions.changeContactStatus('D', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
         },
         optOutContact : function(inScope, inContactList, refresh, callback) {
+            var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             var request = {
                 // sethttp : 1,
                 apikey : main.authToken,
                 accountID : main.accountID,
-                companyID : main.accountInfo.companyID
+                companyID : main.accountInfo.companyID,
+                ANI : commaSeparatedAniList_.ANIList
             };
-            request.ANI = inANI;
             $scope.main.ServerRequests.contactOptOutAddRequest(request, inScope, refresh, callback);
         },
         optInContact : function(inScope, inContactList, refresh, callback) {
+            var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             var request = {
                 // sethttp : 1,
                 apikey : main.authToken,
                 accountID : main.accountID,
-                companyID : main.accountInfo.companyID
+                companyID : main.accountInfo.companyID,
+                ANI : commaSeparatedAniList_.ANIList
             };
-            request.ANI = inANI;
             $scope.main.ServerRequests.contactOptoutUndoRequest(request, inScope, refresh, callback);
         },
         changeContactStatus : function(inStatus, inContactId, inANI, inScope, refresh, callback) {
@@ -2609,7 +2612,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         useExternalSorting : true
     };
     $scope.blockContacts_ngContactListCtrl = function() {
-        $scope.main.CommonActions.blockContact($scope, $scope.mySelections, refresh, $scope.refresh);
+        $scope.main.CommonActions.blockContact($scope, $scope.mySelections, true, $scope.refresh);
         // for (var i in $scope.mySelections) {
         // var refresh = false;
         // if (i == $scope.mySelections.length - 1) {
@@ -2627,23 +2630,24 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         // //$scope.refresh();
     };
     $scope.unblockContacts_ngContactListCtrl = function() {
-        for (var i in $scope.mySelections) {
-            var refresh = false;
-            if (i == $scope.mySelections.length - 1) {
-                refresh = true;
-            }
-            if ($scope.mySelections[i].status == 'I') {
-                $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
-            } else {
-                if (refresh) {
-                    $scope.refresh();
-                }
-            }
-        }
+        $scope.main.CommonActions.unblockContact($scope, $scope.mySelections, true, $scope.refresh);
+        // for (var i in $scope.mySelections) {
+            // var refresh = false;
+            // if (i == $scope.mySelections.length - 1) {
+                // refresh = true;
+            // }
+            // if ($scope.mySelections[i].status == 'I') {
+                // $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
+            // } else {
+                // if (refresh) {
+                    // $scope.refresh();
+                // }
+            // }
+        // }
         //$scope.refresh();
     };
     $scope.deleteContact_ngContactListCtrl = function() {
-        scope.main.CommonActions.deleteContact($scope, $scope.mySelections, refresh, $scope.refresh);
+        scope.main.CommonActions.deleteContact($scope, $scope.mySelections, true, $scope.refresh);
         // for (var i in $scope.mySelections) {
         // var refresh = false;
         // if (i == $scope.mySelections.length - 1) {
@@ -2660,7 +2664,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         // //$scope.refresh();
     };
     $scope.optOutContacts_ngContactListCtrl = function() {
-        $scope.main.CommonActions.optOutContact($scope, $scope.mySelections, refresh, $scope.refresh);
+        $scope.main.CommonActions.optOutContact($scope, $scope.mySelections, true, $scope.refresh);
         // for (var i in $scope.mySelections) {
         // var refresh = false;
         // if (i == $scope.mySelections.length - 1) {
@@ -2677,7 +2681,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         // $scope.refresh();
     };
     $scope.optInContacts_ngContactListCtrl = function() {
-        $scope.main.CommonActions.optInContact($scope, $scope.mySelections, refresh, $scope.refresh);
+        $scope.main.CommonActions.optInContact($scope, $scope.mySelections, true, $scope.refresh);
         // for (var i in $scope.mySelections) {
         // var refresh = false;
         // if (i == $scope.mySelections.length - 1) {
@@ -2693,49 +2697,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         // }
         // $scope.refresh();
     };
-    // $scope.blockContactsngContactListCtrl = function() {
-    // for (var i in $scope.mySelections) {
-    // $scope.changeContactStatus('I', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
-    // }
-    // $scope.refresh();
-    // };
-    // $scope.unblockContacts = function() {
-    // for (var i in $scope.mySelections) {
-    // $scope.changeContactStatus('A', $scope.mySelections[i].contactID, $scope.mySelections[i].ANI);
-    // }
-    // $scope.refresh();
-    // };
-    // $scope.optOutContacts = function() {
-    // var request = {
-    // // sethttp : 1,
-    // apikey : $cookieStore.get('inspinia_auth_token')
-    // };
-    // for (var i in $scope.mySelections) {
-    // request.ANI = $scope.mySelections[i].ANI;
-    // $scope.main.ServerRequests.contactOptOutAddRequest(request, $scope);
-    // }
-    // $scope.refresh();
-    // };
-    //
-    // $scope.changeContactStatus = function(inStatus, inContactId, inANI) {
-    // var request = {
-    // sethttp : 1,
-    // apikey : $cookieStore.get('inspinia_auth_token'),
-    // contactID : inContactId,
-    // ANI : inANI,
-    // status : inStatus
-    // };
-    // $scope.main.ServerRequests.contactModifyRequest(request, $scope);
-    // };
-    //$scope.filterStatusO = function() {
-    //var filterText = "Status:O";
-    //if ($scope.filterOptions.filterText === '') {
-    //  $scope.filterOptions.filterText = filterText;
-    //}
-    //else if ($scope.filterOptions.filterText === filterText) {
-    //  $scope.filterOptions.filterText = '';
-    //}
-    //};
+
     //GET DATA
     $scope.setPagingData = function(data, page, pageSize) {
         var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
