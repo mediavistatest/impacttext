@@ -1,0 +1,34 @@
+<h2 class="section-title">
+Thread view
+</h2>
+<div ng-repeat="(index, message) in controllerParent.clickedMessage.threadMessages">
+    <div class="divider ng-scope"></div>
+    <div ng-class="{left: message.messageType=='Inbound', right: message.messageType=='Outbound'}">
+        <h5 >
+        {{message.dateTime}}
+        </h5>
+        <h4 >
+        {{message.message}}
+        </h4>
+    </div>
+</div><div class="divider ng-scope"></div>
+<a class="btn btn-back" ng-click="controllerParent.Events.ShowView(controllerParent)">
+<span><i class="fa fa-undo">
+    </i>
+    Back to message</span>
+</a>
+<a class="btn btn-back" ng-click="controllerParent.Events.ThreadPreviousPage_onClick(controllerParent)" ng-disabled="controllerParent.ThreadPageOptions.currentPage==1">
+<span><i class="fa fa-arrow-left">
+    </i>
+</span>
+</a>
+<a class="btn btn-back" ng-disabled="true">
+<span>
+    Page {{controllerParent.ThreadPageOptions.currentPage}} of {{controllerParent.ThreadPageOptions.lastPage}}
+</span>
+</a>
+<a class="btn btn-back" ng-click="controllerParent.Events.ThreadNextPage_onClick(controllerParent)" ng-disabled="controllerParent.ThreadPageOptions.currentPage==controllerParent.ThreadPageOptions.lastPage">
+<span><i class="fa fa-arrow-right">
+    </i>
+</span>
+</a>
