@@ -310,8 +310,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
         },
         blockContact : function(inScope, inContactList, refresh, callback) {
             var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
+            $scope.main.CommonActions.optOutContact(inScope, inContactList, refresh, callback);
             $scope.main.CommonActions.changeContactStatus('I', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
-            // $scope.main.CommonActions.optOutContact(inScope, inContact.ANI, refresh, callback);
         },
         unblockContact : function(inScope, inContactList, refresh, callback) {
             var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
@@ -2632,17 +2632,17 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     $scope.unblockContacts_ngContactListCtrl = function() {
         $scope.main.CommonActions.unblockContact($scope, $scope.mySelections, true, $scope.refresh);
         // for (var i in $scope.mySelections) {
-            // var refresh = false;
-            // if (i == $scope.mySelections.length - 1) {
-                // refresh = true;
-            // }
-            // if ($scope.mySelections[i].status == 'I') {
-                // $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
-            // } else {
-                // if (refresh) {
-                    // $scope.refresh();
-                // }
-            // }
+        // var refresh = false;
+        // if (i == $scope.mySelections.length - 1) {
+        // refresh = true;
+        // }
+        // if ($scope.mySelections[i].status == 'I') {
+        // $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
+        // } else {
+        // if (refresh) {
+        // $scope.refresh();
+        // }
+        // }
         // }
         //$scope.refresh();
     };
@@ -4067,6 +4067,7 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
         console.log('messages_outbound error');
     });
 }
+
 
 angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
