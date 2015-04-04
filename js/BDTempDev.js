@@ -178,7 +178,6 @@ var ngInbox = {
                 controllerParent.$http.post(inspiniaNS.wsUrl + 'messages_messagelog', $param)
                 // success function
                 .success(function(result) {
-                    console.log(result)
                     controllerParent.ThreadPageOptions.threadMessagesCount = result.apicount;
                     controllerParent.ThreadPageOptions.lastPage=Math.ceil(Number(controllerParent.ThreadPageOptions.threadMessagesCount)/controllerParent.ThreadPageOptions.pageSize);
                     controllerParent.clickedMessage.threadMessages = result.apidata;
@@ -1353,7 +1352,6 @@ var ngInbox = {
                 })[0];
                 $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
                 continueFunction = function() {
-                    console.log($sendScope.controllerParent.clickedMessage)
                     $sendScope.ToNumber = $sendScope.controllerParent.ANIList;
                     $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.ToNumber;
                     $sendScope.OptOutMsg = '';

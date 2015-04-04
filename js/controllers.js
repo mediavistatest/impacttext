@@ -78,29 +78,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
         }
         if (data.apicode == 0) {
             main.accountInfo = data.apidata[0];
-            // geting company info
-            // $http.post(inspiniaNS.wsUrl + "company_get", $.param({
-            // apikey : $cookieStore.get('inspinia_auth_token'),
-            // accountID : $cookieStore.get('inspinia_account_id'),
-            // companyID : main.accountInfo.companyID
-            // }))
-            // //Successful request to the server
-            // .success(function(data, status, headers, config) {
-            // if (data == null || typeof data.apicode == 'undefined') {
-            // //This should never happen
-            // alert("Unidentified error occurred when getting company info!");
-            // return;
-            // }
-            // if (data.apicode == 0) {
-            // main.companyInfo = data.apidata;
-            // } else {
-            // // alert("Error occured while getting account company info!");
-            // }
-            // })
-            // //An error occurred with this request
-            // .error(function(data, status, headers, config) {
-            // alert("Error occured while getting account company info!");
-            // });
+
+            main.ServerRequests.contactListsGet();
+            main.ServerRequests.didGet();
         } else {
             alert("Error occured while getting account info!");
         }
@@ -290,8 +270,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             });
         }
     };
-    main.ServerRequests.contactListsGet();
-    main.ServerRequests.didGet();
+
     main.CommonActions = {
         makeListFromSelection : function(contactList) {
             for (var i = 0; i < contactList.length; i++) {
@@ -309,31 +288,31 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             };
         },
         blockContact : function(inScope, inContactList, refresh, callback) {
-        	$scope.main.CommonActions.optOutContact(inScope, inContactList, refresh, callback);
-        	//Uncomment block when multi ani and contact list support is added to contact_modify request
+            $scope.main.CommonActions.optOutContact(inScope, inContactList, refresh, callback);
+            //Uncomment block when multi ani and contact list support is added to contact_modify request
             // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             // $scope.main.CommonActions.changeContactStatus('I', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
-			for (var i = 0; i < inContactList.length; i++) {
-				$scope.main.CommonActions.changeContactStatus('I', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
-			}            
+            for (var i = 0; i < inContactList.length; i++) {
+                $scope.main.CommonActions.changeContactStatus('I', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
+            }
         },
         unblockContact : function(inScope, inContactList, refresh, callback) {
-        	//Uncomment block when multi ani and contact list support is added to contact_modify request
+            //Uncomment block when multi ani and contact list support is added to contact_modify request
             // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             // $scope.main.CommonActions.changeContactStatus('A', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
-			for (var i = 0; i < inContactList.length; i++) {
-				$scope.main.CommonActions.changeContactStatus('A', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
-			}            
-            
+            for (var i = 0; i < inContactList.length; i++) {
+                $scope.main.CommonActions.changeContactStatus('A', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
+            }
+
         },
         deleteContact : function(inScope, inContactList, refresh, callback) {
             //Uncomment block when multi ani and contact list support is added to contact_modify request
             // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             // $scope.main.CommonActions.changeContactStatus('D', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
 
-			for (var i = 0; i < inContactList.length; i++) {
-				$scope.main.CommonActions.changeContactStatus('D', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
-			}
+            for (var i = 0; i < inContactList.length; i++) {
+                $scope.main.CommonActions.changeContactStatus('D', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
+            }
         },
         optOutContact : function(inScope, inContactList, refresh, callback) {
             var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
@@ -515,7 +494,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     this.randomStacked = function() {
         this.stacked = [];
         var types = ['success', 'info', 'warning', 'danger'];
-        for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+        for (var i = 0,
+            n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
             var index = Math.floor((Math.random() * 4));
             this.stacked.push({
                 value : Math.floor((Math.random() * 30) + 1),
@@ -4145,7 +4125,7 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
     //Date/time control
     $scope.StartDate = '';
     $scope.EndDate = '';
-    
+
     $scope.today = function() {
         $scope.StartDate = new Date();
         $scope.EndDate = new Date();
