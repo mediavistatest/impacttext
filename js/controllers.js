@@ -4036,11 +4036,21 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
     $scope.InboxResults = null;
     $scope.SentResults = null;
     //get messages count
-    var $param = $.param({
+    var $paramInbound = $.param({
         apikey : $scope.main.authToken,
-        accountID : $scope.main.accountID
+        accountID : $scope.main.accountID,
+        sethttp : 1,
+        status : "U",
+        orderby : "createddate desc"
     });
-    $http.post(inspiniaNS.wsUrl + 'messages_inbound', $param)
+    var $paramOutbound = $.param({
+        apikey : $scope.main.authToken,
+        accountID : $scope.main.accountID,
+        sethttp : 1,
+        status : "C",
+        orderby : "sendenddate desc"
+    });
+    $http.post(inspiniaNS.wsUrl + 'messages_inbound', $paramInbound)
     // success function
     .success(function(result) {
         $scope.InboxResults = result.apidata;
@@ -4050,7 +4060,7 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
     .error(function(data, status, headers, config) {
         console.log('messages_inbound error');
     });
-    $http.post(inspiniaNS.wsUrl + 'messages_outbound', $param)
+    $http.post(inspiniaNS.wsUrl + 'messages_outbound', $paramOutbound)
     // success function
     .success(function(result) {
         $scope.SentResults = result.apidata;
