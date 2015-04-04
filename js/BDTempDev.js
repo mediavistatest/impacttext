@@ -33,7 +33,7 @@ var profile = {
         };
 
         var updateDouhnutOptions = function() {
-            pCtrl.doughnutData[0].value = pCtrl.bucketOfMessages;
+            pCtrl.doughnutData[0].value = pCtrl.bucketOfMessages - pCtrl.messageCount;
             pCtrl.doughnutData[1].value = pCtrl.messageCount;
         };
 
@@ -179,7 +179,7 @@ var ngInbox = {
                 // success function
                 .success(function(result) {
                     controllerParent.ThreadPageOptions.threadMessagesCount = result.apicount;
-                    controllerParent.ThreadPageOptions.lastPage=Math.ceil(Number(controllerParent.ThreadPageOptions.threadMessagesCount)/controllerParent.ThreadPageOptions.pageSize);
+                    controllerParent.ThreadPageOptions.lastPage = Math.ceil(Number(controllerParent.ThreadPageOptions.threadMessagesCount) / controllerParent.ThreadPageOptions.pageSize);
                     controllerParent.clickedMessage.threadMessages = result.apidata;
                 })
                 // error function
@@ -896,39 +896,39 @@ var ngInbox = {
             var messages = result.apidata;
 
             // for (var i in messages) {
-                // var params = {
-                    // apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
-                    // accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
-                    // ANI : messages[i].sourceANI,
-                    // sethttp : 1
-                // };
-// 
-                // var $param = $.param(params);
-                
-                // messages[i].lists =messages[i].ContactLists ; 
-                
-                // var success = function(cnt) {
-                    // var lists = '';
-                    // for (var j in cnt.apidata) {
-                        // lists += cnt.apidata[j].contactListName;
-                        // if (j < cnt.apidata.length - 1) {
-                            // lists += ', ';
-                        // }
-                    // }
-                    // messages[nListsReturned].lists = lists;
-                    // nListsReturned++;
-                // };
-                // // POST
-                // controllerParent.$http.post(inspiniaNS.wsUrl + 'contact_get', $param)
-                // // success function
-                // .success(function(contacts) {
-                    // success(contacts);
-                // })
-                // // error function
-                // .error(function(data, status, headers, config) {
-                    // nListsReturned++;
-                // });
-                controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, messages, result.apicount);
+            // var params = {
+            // apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
+            // accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
+            // ANI : messages[i].sourceANI,
+            // sethttp : 1
+            // };
+            //
+            // var $param = $.param(params);
+
+            // messages[i].lists =messages[i].ContactLists ;
+
+            // var success = function(cnt) {
+            // var lists = '';
+            // for (var j in cnt.apidata) {
+            // lists += cnt.apidata[j].contactListName;
+            // if (j < cnt.apidata.length - 1) {
+            // lists += ', ';
+            // }
+            // }
+            // messages[nListsReturned].lists = lists;
+            // nListsReturned++;
+            // };
+            // // POST
+            // controllerParent.$http.post(inspiniaNS.wsUrl + 'contact_get', $param)
+            // // success function
+            // .success(function(contacts) {
+            // success(contacts);
+            // })
+            // // error function
+            // .error(function(data, status, headers, config) {
+            // nListsReturned++;
+            // });
+            controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, messages, result.apicount);
             // }
         }
     },
