@@ -65,7 +65,7 @@ superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', fun
 	};
 	$scope.totalServerItems = 0;
 	$scope.pagingOptions = {
-		pageSizes: [2, 5, 10, 20],
+		pageSizes: [2, 5, 10, 20, 100],
 		pageSize: 5,
 		currentPage: 1
 	};
@@ -83,8 +83,8 @@ superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', fun
 		sortInfo: $scope.sortOptions,
 		rowHeight: 35,
 		selectedItems: $scope.mySelections,
-		showSelectionCheckbox: true,
-		multiSelect: true,
+		showSelectionCheckbox: false,
+		multiSelect: false,
 		selectWithCheckboxOnly: true,
 		enablePaging: true,
 		showFooter: true,
@@ -111,9 +111,13 @@ superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', fun
 				displayName: 'Email Address'
 			},
 			{
+				field: 'status',
+				displayName: 'Status'
+			},
+			{
 				field: '',
 				displayName: '',
-				cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn"><i class="fa fa-pencil"></i> Manage Account </a></div>'
+				cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="#/manage_account/{{row.entity.accountID}}" class="btn"><i class="fa fa-pencil"></i> Manage Account </a></div>'
 			}
 		]
 };
@@ -224,11 +228,19 @@ $scope.refresh();
 
 
 //Manage Account
-superAdmin.controller('ManageAccountCtrl', function($scope, notify) {
+superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore, $routeParams, notify) {
 
-	$scope.AccCode = 'Long';
+	$scope.smsCode = {};
+	$scope.smsCode.AccCode = 'Long';
+	$scope.smsCode.ShortCode = '766337';
+	$scope.smsCode.ShortKeyword = 'Automatically Generated';
+	$scope.CompanyID = 1;
+	$scope.accountId = typeof $routeParams.accountId == 'undefined' ? null : $routeParams.accountId;
+	$scope.DidList = [];
+	$scope.UsersList = [];
 
-	$scope.msg = 'Hello! This is a sample message!';
+	/*$scope.msg = 'Hello! This is a sample message!';
+	$scope.template = '';
 	$scope.template = '';
 
 	$scope.demo = function() {
@@ -238,12 +250,565 @@ superAdmin.controller('ManageAccountCtrl', function($scope, notify) {
 			templateUrl: $scope.template,
 			duration: 3000
 		});
-	};
+	};*/
 
 	$scope.closeAll = function() {
 		notify.closeAll();
 	};
 
+	$scope.saveAccount = function() {
+		//Setting request parameters
+		var request = {
+			companyID: $scope.CompanyID,
+			accountName: $scope.AccountName,
+			cycleGroupID: $scope.BillingCycle,
+			firstName: $scope.FirstName,
+			lastName: $scope.LastName,
+			emailAddress: $scope.EmailAddress,
+			externalAccountNumber: $scope.ExternalAccount,
+			primaryDID: $scope.PrimaryDID,
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			sethttp: 1
+		};
+
+		var requestPage = "account_add";
+		//Checking if this is modify account request
+		var modify = $scope.accountId != null && $scope.accountId != '';
+		if (modify) {
+			request.accountID = $scope.accountId;
+			requestPage = "account_modify";
+		}
+
+		$http.post(
+				inspiniaAdminNS.wsUrl + requestPage, $.param(request)
+			).success(
+				function (data) {
+					if (data.apicode == 0) {
+						if (modify) {
+							notify("Account data is successfully updated!");
+						} else {
+							notify("New account is successfully created!");
+							$scope.accountId = data.apidata.accountID;
+							$scope.accountStatus = data.apidata.status;
+							$scope.createOptInList();
+						}
+						$scope.updatePreviousAccountData();
+					} else {
+						notify("Creating accounts failed! Please try again!");
+					}
+				}).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					if (status == 422) {
+						//some input parameters are invalid
+						var invalidParameter = '';
+						var invalidParameterName = null;
+						var operation = modify ? 'update' : 'create';
+						if (data.apitext) {
+							var errorParamsMap = [];
+							errorParamsMap['accountname'] = "Account Name";
+							errorParamsMap['cyclegroupid'] = "Billing Cycle";
+							errorParamsMap['firstname'] = "First Name";
+							errorParamsMap['lastname'] = "Last Name";
+							errorParamsMap['emailaddress'] = "Email Address";
+							errorParamsMap['primarydid'] = "Primary DID";
+							errorParamsMap['externalaccountnumber'] = "Extenral Account Number";
+							invalidParameter = data.apitext.split(':')[0];
+							invalidParameterName = errorParamsMap[invalidParameter];
+						}
+						if (typeof invalidParameterName != 'undefined' && invalidParameterName != null && invalidParameterName != '') {
+							notify ({message: "Failed to " + operation +  " account. Invalid parameter " + invalidParameterName + "!", classes : 'alert-danger'});
+						} else {
+							notify ({message: "Failed to " + operation +  " account. Please check your input parameters and try again!", classes : 'alert-danger'});
+						}
+						//alert(JSON.stringify(data));
+						return;
+					}
+					notify("Unexpected error occurred when trying to " + operation + " an account!");
+				}
+			);
+	};
+
+	$scope.resetAccount = function() {
+		$scope.accountId = null;
+		$scope.AccountName = null;
+		$scope.CompanyID = 1;
+		$scope.smsCode.AccCode = 'Long';
+		$scope.BillingCycle = null,
+		$scope.FirstName = null,
+		$scope.LastName = null,
+		$scope.EmailAddress = null,
+		$scope.ExternalAccount = null,
+		$scope.PrimaryDID = null
+	};
+
+	$scope.restorePreviousAccountData = function() {
+		if (typeof $scope.accountId == 'undefined' || $scope.accountId == null || $scope.accountId == '') {
+			$scope.resetAccount();
+			return;
+		}
+		$scope.updateAccountFields($scope.previousAccountData);
+	};
+
+	$scope.updatePreviousAccountData = function() {
+		if (typeof $scope.previousAccountData == 'undefined') {
+			$scope.previousAccountData = {};
+		}
+		$scope.previousAccountData.accountName = $scope.AccountName;
+		$scope.previousAccountData.cycleGroupID = $scope.BillingCycle;
+		$scope.previousAccountData.firstName = $scope.FirstName;
+		$scope.previousAccountData.lastName = $scope.LastName;
+		$scope.previousAccountData.emailAddress = $scope.EmailAddress;
+		$scope.previousAccountData.externalAccountNumber = $scope.ExternalAccount;
+		$scope.previousAccountData.primaryDIDID = $scope.primaryDidId;
+		$scope.previousAccountData.status = $scope.accountStatus;
+	};
+
+	$scope.updateAccountFields = function(accountData) {
+		if (typeof accountData == 'undefined' || accountData == null) {
+			return;
+		}
+		$scope.AccountName = accountData.accountName;
+		$scope.BillingCycle = accountData.cycleGroupID;
+		$scope.FirstName = accountData.firstName;
+		$scope.LastName = accountData.lastName;
+		$scope.EmailAddress = accountData.emailAddress;
+		$scope.ExternalAccount = accountData.externalAccountNumber;
+		$scope.primaryDidId = accountData.primaryDIDID;
+		$scope.refreshPrimaryDID();
+		$scope.accountStatus = accountData.status;
+		$scope.previousAccountData = accountData;
+	};
+
+	$scope.refreshAccount = function() {
+		if ($scope.accountId == null) {
+			//this is creating new account. Refresh all data means resetting all inputs.
+			$scope.resetAccount();
+		} else {
+			//Getting the account info data
+			$http.post(
+				inspiniaAdminNS.wsUrl + "account_get",
+				$.param({
+					apikey : $cookieStore.get('inspinia_auth_token'),
+					accountID : $scope.accountId,
+					sethttp : 1
+				})
+			).success(
+				function (data) {
+					if (data.apicode == 0) {
+						var accountData = data.apidata[0];
+						$scope.updateAccountFields(accountData);
+					}
+				}).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					if (status == 422) {
+						alert("An error occurred when getting account data! Error code: " + data.apicode);
+						alert(JSON.stringify(data));
+					}
+				}
+			);
+		}
+	};
+
+	$scope.cancelAccount = function() {
+		if ($scope.accountId == null) {
+			return;
+		}
+		//Cancelling the account
+		$http.post(
+			inspiniaAdminNS.wsUrl + "account_cancel",
+			$.param({
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $scope.accountId,
+				sethttp : 1
+			})
+		).success(
+			function (data) {
+				if (data.apicode == 0) {
+					notify("Account is successfully canceled.");
+					$scope.refreshAccount();
+				}
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				if (status == 422) {
+					alert("An error occurred when canceling account! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
+			}
+		);
+	};
+	
+	$scope.activateAccount = function() {
+		if ($scope.accountId == null) {
+			return;
+		}
+		//Cancelling the account
+		$http.post(
+			inspiniaAdminNS.wsUrl + "account_activate",
+			$.param({
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $scope.accountId,
+				sethttp : 1
+			})
+		).success(
+			function (data) {
+				if (data.apicode == 0) {
+					notify("Account is successfully activated.");
+					$scope.refreshAccount();
+				}
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				if (status == 422) {
+					alert("An error occurred when canceling account! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
+			}
+		);
+	};
+
+	$scope.refreshPrimaryDID = function() {
+		if (typeof $scope.primaryDidId == 'undefined' || $scope.primaryDidId == null || $scope.primaryDidId == '') {
+			return;
+		}
+
+		//Getting the account info data
+		$http.post(
+			inspiniaAdminNS.wsUrl + "did_get",
+			$.param({
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				DIDID : $scope.primaryDidId,
+				accountID: $scope.accountId,
+				sethttp : 1
+			})
+		).success(
+			function (data) {
+				if (data.apicode == 0) {
+					$scope.PrimaryDID = data.apidata[0].DID;
+				}
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				if (status == 422) {
+					alert("An error occurred when getting primary data! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
+			}
+		);
+	};
+
+	$scope.createOptInList = function() {
+		if (typeof $scope.accountId == 'undefined' || $scope.accountId == null || $scope.accountId == '') {
+			return;
+		}
+
+		//Send request to the server to add list named Opt-In List for the newly created account
+		$http.post(inspiniaAdminNS.wsUrl + "contactlist_add", $.param({
+			sethttp : 1,
+			apikey : $cookieStore.get('inspinia_auth_token'),
+			accountID : $scope.accountId,
+			companyID : $scope.CompanyID,
+			contactListName : 'Opt-In List'
+		}))
+		.success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					notify("Unidentified error occurred when creating Opt-In contact list!");
+					return;
+				}
+				if (data.apicode == 0) {
+					//Do nothing, all is OK
+				} else {
+					notify("An error occurred when adding Opt-In contact list! Error code: " + data.apicode);
+				}
+			}
+		)
+		.error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				notify({message: "An error occurred when creating Opt-In List!", classes : 'alert-danger'})
+			}
+		);
+	};
+
+	$scope.refreshDidList = function() {
+		if (typeof $scope.accountId == 'undefined' || $scope.accountId == null) {
+			return;
+		}
+		//Cancelling the account
+		$http.post(
+			inspiniaAdminNS.wsUrl + "did_get",
+			$.param({
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $scope.accountId,
+				sethttp : 1
+			})
+		).success(
+			function (data) {
+				if (data.apicode == 0) {
+					$scope.DidList = data.apidata;
+					$.each(data.apidata, function(key, value) {
+						if (value.DID.length < 11) {
+							$scope.shortCodeDisabled = true;
+						}
+					});
+				}
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				notify("An error occurred when getting DID list! Error code: " + data.apicode);
+				alert(JSON.stringify(data));
+			}
+		);
+	};
+
+	$scope.resetDIDFields = function() {
+		if (typeof $scope.smsCode == 'undefined') {
+			$scope.smsCode = {};
+		}
+		$scope.smsCode.selectedDidId = null;
+		$scope.smsCode.AccCode = 'Long';
+		$scope.smsCode.LongCode = null;
+		$scope.smsCode.LongCodeName = null;
+		$scope.smsCode.LongKeyword = 'YES';
+		$scope.smsCode.ShortCode = 766337;
+		$scope.smsCode.ShortCodeName = null;
+		$scope.smsCode.ShortKeyword = 'Automatically Generated';
+	};
+
+	$scope.addDID = function() {
+		var request = {
+			apikey : $cookieStore.get('inspinia_auth_token'),
+			accountID : $scope.accountId,
+			companyID: $scope.CompanyID,
+			sethttp : 1
+		};
+
+		if ($scope.smsCode.AccCode == 'Short') {
+			if (typeof $scope.smsCode.ShortCode == 'undefined' ||  $scope.smsCode.ShortCode == null || $.trim($scope.smsCode.ShortCode) == '') {
+				notify("Please enter the valid short code.");
+				return;
+			}
+			if (typeof $scope.smsCode.ShortCodeName == 'undefined' ||  $scope.smsCode.ShortCodeName == null || $.trim($scope.smsCode.ShortCodeName) == '') {
+				notify("Please enter the valid short code name.");
+				return;
+			}
+			request.DID = $scope.smsCode.ShortCode;
+			request.DIDName = $scope.smsCode.ShortCodeName;
+		} else {
+			if (typeof $scope.smsCode.LongCode == 'undefined' ||  $scope.smsCode.LongCode == null || $.trim($scope.smsCode.LongCode) == '') {
+				notify("Please enter the valid long code.");
+				return;
+			}
+			if ($scope.smsCode.LongCode.length != 11) {
+				notify("Long code length must be 11 characters!");
+				return;
+			}
+			if (typeof $scope.smsCode.LongCodeName == 'undefined' || $scope.smsCode.LongCodeName == null || $.trim($scope.smsCode.LongCodeName) == '') {
+				notify("Please enter the valid long code name.");
+				return;
+			}
+			request.DID = $scope.smsCode.LongCode;
+			request.DIDName = $scope.smsCode.LongCodeName;
+			//Set the start date
+			var now = new Date();
+			var timezoneOffsetMinutes = now.getTimezoneOffset();
+			var startDate = new Date(now.getTime() + 60000 * timezoneOffsetMinutes);
+			if (inspiniaAdminNS.developmentEnvironment) {
+				//Development environment is not set to GMT, so we need to move start date to the past...
+				startDate = new Date(startDate.getTime() - 24*60*60000);
+			}
+			//Date is in format MM/dd/yyyy
+			var dateParts = [];
+			dateParts[0] = startDate.getFullYear();
+			dateParts[1] = "" + (startDate.getMonth() + 1);
+			dateParts[2] = "" + startDate.getDate();
+			dateParts[3] = "" + startDate.getHours();
+			dateParts[4] = "" + startDate.getMinutes();
+			//Fix month
+			if (dateParts[1].length < 2) {
+				 dateParts[1] = "0" + dateParts[1];
+			}
+			//Fix day
+			if (dateParts[2].length < 2) {
+				 dateParts[2] = "0" + dateParts[2];
+			}
+			//Fix hours
+			if (dateParts[3].length < 2) {
+				 dateParts[3] = "0" + dateParts[3];
+			}
+			//Fix minutes
+			if (dateParts[4].length < 2) {
+				 dateParts[4] = "0" + dateParts[4];
+			}
+			request.startDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
+		}
+
+		$http
+			.post(inspiniaAdminNS.wsUrl + "did_add", $.param(request))
+			.success(
+				function (data) {
+					if (data.apicode == 0) {
+						//If DID is successfully added, add the keyword as well
+						$scope.addKeyword(10);
+					}
+				}
+			).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					notify({message: "Failed to add new DID! Error code: " + data.apicode, classes: "alert-danger"});
+				}
+			);
+	};
+
+	$scope.addKeyword = function(maxRetries) {
+		maxRetries--;
+		var keyword = '';
+		var did;
+		if ($scope.smsCode.AccCode == 'Long') {
+			if(typeof $scope.smsCode.LongCode == 'undefined' || $scope.smsCode.LongCode == null || $.trim($scope.smsCode.LongCode) == '') {
+				return;
+			}
+			did = $scope.smsCode.LongCode;
+			//Long codes have a default keyword YES
+			keyword = 'YES';
+		} else {
+			if(typeof $scope.smsCode.ShortCode == 'undefined' || $scope.smsCode.ShortCode == null || $.trim($scope.smsCode.ShortCode) == '') {
+				return;
+			}
+			did = $scope.smsCode.ShortCode;
+			//for short codes we have a random 5 letter keyword
+			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+			for (var i = 0; i < 5; i++) {
+				keyword += possible.charAt(Math.floor(Math.random() * possible.length));
+			}
+		}
+
+		$http.post(inspiniaAdminNS.wsUrl + "accountkeyword_add",
+			$.param({
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $scope.accountId,
+				companyID: $scope.CompanyID,
+				did: did,
+				keyword: keyword,
+				status: 'A',
+				sethttp : 1
+			})
+		).success(
+			function (data) {
+				if (data.apicode == 0) {
+					if ($scope.smsCode.AccCode == 'Long') {
+						notify("Long code successfully added!")
+					} else {
+						notify("Short code successfully added!")
+					}
+					$scope.refreshDidList();
+					$scope.resetDIDFields();
+				}
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				if ($scope.smsCode.AccCode == 'Long') {
+					notify({message: "Failed to add long code! Error code " + data.apicode, classes: "alert-danger"});
+					return;
+				}
+				if (maxRetries <= 0) {
+					notify({message: "Failed to add keyword, maximum number of retries reached! Error code: " + data.apicode, classes: "alert-danger"});
+					return;
+				}
+				//recursively try to add keyword
+				$scope.addKeyword(maxRetries);
+			}
+		);
+	};
+
+	$scope.deleteDID = function() {
+		if (typeof $scope.smsCode.selectedDidId == 'undefined' || $scope.smsCode.selectedDidId == null) {
+			return;
+		}
+		$http
+			.post(inspiniaAdminNS.wsUrl + "did_delete", $.param({
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $scope.accountId,
+				DIDID: $scope.smsCode.selectedDidId,
+				sethttp : 1
+			}))
+			.success(
+				function (data) {
+					if (data.apicode == 0) {
+						//If DID is successfully deleted
+						notify("SMS Code is successfully deleted.");
+						$scope.refreshDidList();
+						$scope.resetDIDFields();
+					}
+				}
+			).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					notify({message: "Failed to delete SMS code! Error code: " + data.apicode, classes: "alert-danger"});
+				}
+			);
+	};
+
+	$scope.populateSmsCode = function (smsCodeData) {
+		$scope.resetDIDFields();
+		if(typeof smsCodeData == 'undefined' || smsCodeData == null) {
+			return;
+		}
+		if (smsCodeData.DID.length < 11) {
+			//This is short code
+			$scope.smsCode.AccCode = 'Short';
+			$scope.smsCode.ShortCode = smsCodeData.DID;
+			$scope.smsCode.ShortCodeName = smsCodeData.DIDName;
+		} else {
+			//This is long code
+			$scope.smsCode.AccCode = 'Long';
+			$scope.smsCode.LongCode = smsCodeData.DID;
+			$scope.smsCode.LongCodeName = smsCodeData.DIDName;
+		}
+		$scope.smsCode.selectedDidId = smsCodeData.DIDID;
+	};
+
+	$scope.refreshUsersList = function() {
+		if (typeof $scope.accountId == 'undefined' || $scope.accountId == null) {
+			return;
+		}
+		//Cancelling the account
+		$http.post(
+			inspiniaAdminNS.wsUrl + "user_get",
+			$.param({
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $scope.accountId,
+				sethttp : 1
+			})
+		).success(
+			function (data) {
+				if (data.apicode == 0) {
+					$scope.UsersList = data.apidata;
+				}
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				notify("An error occurred when getting users list! Error code: " + data.apicode);
+				alert(JSON.stringify(data));
+			}
+		);
+	};
+
+	$scope.populateUser = function(userData) {
+
+	};
+
+	$scope.refreshAccount();
+	$scope.refreshDidList();
+	$scope.refreshUsersList();
 });
 
 

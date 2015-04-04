@@ -26,10 +26,10 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
             <label class="col-sm-2 control-label">Billing Cycle:</label>
             <div class="col-sm-6">
                 <select name="BillingCycle" placeholder="Billing Cycle" ng-model="BillingCycle" class="form-control">
-                    <option>1</option>
-                    <option>11</option>
-                    <option>17</option>
-                    <option>25</option>
+                    <option value="3">1</option>
+                    <option value="6">11</option>
+                    <option value="7">17</option>
+                    <option value="9">25</option>
                 </select>
             </div>
             <div class="col-sm-4">
@@ -64,6 +64,15 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
             </div>
         </div>
         <div class="form-group clearfix">
+            <label class="col-sm-2 control-label double">Primary DID:</label>
+            <div class="col-sm-6">
+                <input type="text" name="PrimaryDID" placeholder="PrimaryDID" ng-model="PrimaryDID" class="form-control"  ng-trim="false">
+            </div>
+            <div class="col-sm-4">
+                <i class="fa fa-info-circle" tooltip='PrimaryDID'></i>
+            </div>
+        </div>
+        <div class="form-group clearfix">
             <label class="col-sm-2 control-label double">External Account Number:</label>
             <div class="col-sm-6">
                 <input type="text" name="ExternalAccount" placeholder="External Account Number" ng-model="ExternalAccount" class="form-control"  ng-trim="false">
@@ -73,24 +82,36 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
             </div>
         </div><br>
         <div class="account-bottom-buttons col-sm-6 col-sm-offset-2">
-                <!-- Delete button -->
-                <div class="btn-group dropup left" dropdown>
-                    <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-                    Delete Account
+                <!-- Cancel button -->
+                <div class="btn-group dropup left" dropdown ng-show="accountId && accountStatus == 'A'">
+                    <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle>
+                    Cancel Account
                     </button>
                     <ul class="dropdown-menu dropup dropdown-alerts">
-                        <li>Are you sure you want to delete account?</li>
+                        <li>Are you sure you want to cancel account?</li>
                         <li>&nbsp;</li>
-                        <li><span ng-click="" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+                        <li><span ng-click="cancelAccount()" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
                     </ul>
                 </div>
                 <!-- end delete button -->
-                <button class="btn discard-btn"> Discard</button>
-                <button class="btn save-btn" ng-click="demo()"> Save account</button>
+                <!-- Activate button -->
+                <div class="btn-group dropup left" dropdown ng-show="accountId && accountStatus == 'C'">
+                    <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle>
+                    Activate Account
+                    </button>
+                    <ul class="dropdown-menu dropup dropdown-alerts">
+                        <li>Are you sure you want to activate account?</li>
+                        <li>&nbsp;</li>
+                        <li><span ng-click="activateAccount()" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+                    </ul>
+                </div>
+                <!-- end activate button -->
+                <button class="btn discard-btn" ng-click="restorePreviousAccountData()"> Discard</button>
+                <button class="btn save-btn" ng-click="saveAccount()"> Save account</button>
             </div>
         <br><br>
         <!-- ACCORDION -->
-        <accordion close-others="oneAtATime">
+        <accordion close-others="oneAtATime" ng-show="accountId">
         <!-- ADD ACCOUNT DID -->
         <accordion-group is-open="status.open">
         <accordion-heading>
@@ -102,18 +123,18 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
             <div class="col-md-8">
             <div class="radio col-sm-8 col-sm-offset-3">
 
-            <label> <input type="radio" name="AccCode" value="Long" ng-model="AccCode"> Long Code </label>
+            <label> <input type="radio" value="Long" ng-model="smsCode.AccCode"> Long Code </label>
 
-            <label> <input type="radio" name="AccCode" value="Short" ng-model="AccCode"> Short Code </label>
+            <label> <input type="radio" value="Short" ng-model="smsCode.AccCode" ng-disabled="shortCodeDisabled"> Short Code </label>
 
             </div>
 
                 <!--START LONG CODE-->
-                    <div ng-show="AccCode == 'Long'">
+                    <div ng-show="smsCode.AccCode == 'Long'">
                     <div class="form-group clearfix">
                         <label class="col-sm-3 control-label">Long Code:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="LongCode" placeholder="Long Code" ng-model="LongCode" class="form-control"  ng-trim="false">
+                            <input type="text" name="LongCode" placeholder="Long Code" ng-model="smsCode.LongCode" class="form-control"  ng-trim="false">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='Long Code'></i>
@@ -122,7 +143,7 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <div class="form-group clearfix">
                         <label class="col-sm-3 control-label">Long Code Name:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="LongCodeName" placeholder="Long Code Name" ng-model="LongCodeName" class="form-control"  ng-trim="false">
+                            <input type="text" name="LongCodeName" placeholder="Long Code Name" ng-model="smsCode.LongCodeName" class="form-control"  ng-trim="false">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='Long Code Name'></i>
@@ -131,7 +152,7 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <div class="form-group clearfix">
                         <label class="col-sm-3 control-label">Keyword:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="LongKeyword" placeholder="Long Code Keyword" ng-model="LongKeyword" class="form-control"  ng-init="LongKeyword='YES'">
+                            <input type="text" name="LongKeyword" placeholder="Long Code Keyword" ng-model="smsCode.LongKeyword" class="form-control"  ng-init="smsCode.LongKeyword='YES'" ng-disabled="true">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='Long Keyword'></i>
@@ -140,11 +161,11 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     </div>
                     <!--END LONG CODE-->
                     <!--START SHORT CODE-->
-                    <div ng-show="AccCode == 'Short'">
+                    <div ng-show="smsCode.AccCode == 'Short'">
                     <div class="form-group clearfix">
                         <label class="col-sm-3 control-label">Short Code:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="ShortCode" placeholder="Short Code" ng-model="ShortCode" class="form-control"  ng-trim="false">
+                            <input type="text" name="ShortCode" placeholder="Short Code" ng-model="smsCode.ShortCode" class="form-control" ng-disabled="true"  ng-trim="false">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='Short Code'></i>
@@ -153,7 +174,7 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <div class="form-group clearfix">
                         <label class="col-sm-3 control-label">Short Code Name:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="ShortCodeName" placeholder="Short Code Name" ng-model="ShortCodeName" class="form-control"  ng-trim="false">
+                            <input type="text" name="ShortCodeName" placeholder="Short Code Name" ng-model="smsCode.ShortCodeName" class="form-control"  ng-trim="false">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='Short Code Name'></i>
@@ -162,7 +183,7 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <div class="form-group clearfix">
                         <label class="col-sm-3 control-label">Keyword:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="ShortKeyword" placeholder="Short Code Keyword" ng-model="ShortKeyword" class="form-control">
+                            <input type="text" name="ShortKeyword" placeholder="Short Code Keyword" ng-model="smsCode.ShortKeyword" class="form-control" ng-disabled="true">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='Short Keyword'></i>
@@ -177,28 +198,26 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     </div>
                     <div class="bottom-buttons col-sm-8 col-sm-offset-3">
                         <!-- Delete button -->
-                        <div class="btn-group dropup left" dropdown>
-                            <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                        <div class="btn-group dropup left" dropdown ng-show="smsCode.selectedDidId">
+                            <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle>
                             Delete Code
                             </button>
                             <ul class="dropdown-menu dropup dropdown-alerts">
-                                <li>Are you sure you want to delete account code?</li>
+                                <li>Are you sure you want to delete SMS code?</li>
                                 <li>&nbsp;</li>
-                                <li><span ng-click="" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+                                <li><span ng-click="deleteDID()" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
                             </ul>
                         </div>
                         <!-- end delete button -->
-                        <button class="btn discard-btn"> Discard</button>
-                        <button class="btn save-btn"> Save</button>
+                        <button class="btn discard-btn" ng-click="resetDIDFields()"> Discard</button>
+                        <button class="btn save-btn" ng-click="addDID()" ng-hide="smsCode.selectedDidId"> Save</button>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="box" >
                         <div class="box-header">SMS Codes:</div>
-                        <ul class="box-list">
-                            <li></li>
-                            <li></li>
-                            <li></li>
+                        <ul class="box-list" ng-repeat="did in DidList">
+                            <li ng-click="populateSmsCode(did)">{{did.DID}}</li>
                         </ul>
                     </div>
                 </div>
@@ -271,7 +290,7 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <div class="bottom-buttons col-sm-8 col-sm-offset-3">
                         <!-- Delete button -->
                         <div class="btn-group dropup left" dropdown>
-                            <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                            <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-disabled="true">
                             Delete User
                             </button>
                             <ul class="dropdown-menu dropup dropdown-alerts">
@@ -281,17 +300,15 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                             </ul>
                         </div>
                         <!-- end delete button -->
-                        <button class="btn discard-btn"> Discard</button>
+                        <button class="btn discard-btn" ng-click=""> Discard</button>
                         <button class="btn save-btn"> Save</button>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="box" >
                         <div class="box-header">User Names:</div>
-                        <ul class="box-list">
-                            <li></li>
-                            <li></li>
-                            <li></li>
+                        <ul class="box-list" ng-repeat="user in UsersList">
+                            <li ng-click="populateUser(user)">{{user.userName}}</li>
                         </ul>
                     </div>
                 </div>

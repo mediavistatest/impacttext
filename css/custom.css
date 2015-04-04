@@ -3139,6 +3139,10 @@ margin: 9px 0;
   color: #005eaa;
 }
 
+a table {
+  color: black;
+}
+
 @media all and (max-width: 990px) {
     .welcome-msg {
         display: none;
