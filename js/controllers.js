@@ -3541,10 +3541,32 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         OptOutTxt2 : '',
         OptOutTxt3 : ''
     };
+
+    $scope.contactLists = $scope.main.contactLists;
+    $scope.fromNumbers = [];
     //send form initial states
     $scope.initial = "";
     $scope.MessageType = "SMS";
     $scope.FromNumber = "default";
+
+    function setFromNumber() {
+        if ($scope.main.fromNumbers != null) {
+            $scope.fromNumbers = $scope.main.fromNumbers;
+            $scope.FromNumber = $.grep($scope.fromNumbers, function(number){
+            return number.DIDID == $scope.main.accountInfo.primaryDIDID;
+            })[0];
+            if (!$scope.$$phase){
+                $scope.$apply();
+            }
+        } else {
+            setTimeout(function() {
+                setFromNumber();
+            }, 500);
+        }
+    }
+
+    setFromNumber();
+
     $scope.OptOutMsg = "";
     $scope.ScheduleCheck = "";
     $scope.SetDate = "";
@@ -3600,8 +3622,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         $scope.SetTimeMinute = '';
         $scope.SendToList = false;
     };
-    $scope.contactLists = $scope.main.contactLists;
-    $scope.fromNumbers = $scope.main.fromNumbers;
+
     //helper function for generating message text
     $scope.generateMessageText = function() {
         //Checking the type of opt out message
