@@ -309,17 +309,31 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             };
         },
         blockContact : function(inScope, inContactList, refresh, callback) {
-            var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
-            $scope.main.CommonActions.optOutContact(inScope, inContactList, refresh, callback);
-            $scope.main.CommonActions.changeContactStatus('I', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
+        	$scope.main.CommonActions.optOutContact(inScope, inContactList, refresh, callback);
+        	//Uncomment block when multi ani and contact list support is added to contact_modify request
+            // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
+            // $scope.main.CommonActions.changeContactStatus('I', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
+			for (var i = 0; i < inContactList.length; i++) {
+				$scope.main.CommonActions.changeContactStatus('I', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
+			}            
         },
         unblockContact : function(inScope, inContactList, refresh, callback) {
-            var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
-            $scope.main.CommonActions.changeContactStatus('A', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
+        	//Uncomment block when multi ani and contact list support is added to contact_modify request
+            // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
+            // $scope.main.CommonActions.changeContactStatus('A', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
+			for (var i = 0; i < inContactList.length; i++) {
+				$scope.main.CommonActions.changeContactStatus('A', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
+			}            
+            
         },
         deleteContact : function(inScope, inContactList, refresh, callback) {
-            var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
-            $scope.main.CommonActions.changeContactStatus('D', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
+            //Uncomment block when multi ani and contact list support is added to contact_modify request
+            // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
+            // $scope.main.CommonActions.changeContactStatus('D', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
+
+			for (var i = 0; i < inContactList.length; i++) {
+				$scope.main.CommonActions.changeContactStatus('D', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
+			}
         },
         optOutContact : function(inScope, inContactList, refresh, callback) {
             var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
@@ -2647,7 +2661,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         //$scope.refresh();
     };
     $scope.deleteContact_ngContactListCtrl = function() {
-        scope.main.CommonActions.deleteContact($scope, $scope.mySelections, true, $scope.refresh);
+        $scope.main.CommonActions.deleteContact($scope, $scope.mySelections, true, $scope.refresh);
         // for (var i in $scope.mySelections) {
         // var refresh = false;
         // if (i == $scope.mySelections.length - 1) {
