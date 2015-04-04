@@ -565,7 +565,7 @@ var ngInbox = {
                     if (message.contactListID == '0') {
                         message.con_lis = message.ANI;
                     } else {
-                        message.con_lis = message.contactListName;
+                        message.con_lis = message.ContactLists;
                     }
                 }
                 controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, result.apidata, result.apicount);
@@ -750,7 +750,7 @@ var ngInbox = {
         }, {
             checked : true,
             canBeClicked : false,
-            field : 'lists',
+            field : 'ContactLists',
             displayName : 'List'
         }],
         sortOptions : {
@@ -895,17 +895,17 @@ var ngInbox = {
             var nListsReturned = 0;
             var messages = result.apidata;
 
-            for (var i in messages) {
-                var params = {
-                    apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
-                    accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
-                    ANI : messages[i].sourceANI,
-                    sethttp : 1
-                };
-
-                var $param = $.param(params);
+            // for (var i in messages) {
+                // var params = {
+                    // apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
+                    // accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
+                    // ANI : messages[i].sourceANI,
+                    // sethttp : 1
+                // };
+// 
+                // var $param = $.param(params);
                 
-                messages[i].lists =messages[i].ContactLists ; 
+                // messages[i].lists =messages[i].ContactLists ; 
                 
                 // var success = function(cnt) {
                     // var lists = '';
@@ -918,7 +918,7 @@ var ngInbox = {
                     // messages[nListsReturned].lists = lists;
                     // nListsReturned++;
                 // };
-                //POST
+                // // POST
                 // controllerParent.$http.post(inspiniaNS.wsUrl + 'contact_get', $param)
                 // // success function
                 // .success(function(contacts) {
@@ -929,7 +929,7 @@ var ngInbox = {
                     // nListsReturned++;
                 // });
                 controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, messages, result.apicount);
-            }
+            // }
         }
     },
     SentList : {
