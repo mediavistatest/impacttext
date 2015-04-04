@@ -459,7 +459,18 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         .state('reports', {
             url: "/reports",
             templateUrl: "views/reports.html",
-            data: { pageTitle: 'Reports' }
+            data: { pageTitle: 'Reports' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            insertBefore: '#loadBefore',
+                            name: 'angles',
+                            files: ['js/plugins/chartJs/Chart.min.js' , 'js/plugins/chartJs/angles.js']
+                        }
+                    ]);
+                }
+            }
         })
         .state('support', {
             url: "/support",

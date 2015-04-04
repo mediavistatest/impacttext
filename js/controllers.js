@@ -4068,6 +4068,107 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
     });
 }
 
+/**
+ *
+ * Reports
+ */
+function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
+    /**
+     * Options for Bar chart
+     */
+    $scope.barOptions = {
+        scaleBeginAtZero : true,
+        scaleShowGridLines : true,
+        scaleGridLineColor : "rgba(0,0,0,.05)",
+        scaleGridLineWidth : 1,
+        barShowStroke : true,
+        barStrokeWidth : 2,
+        barValueSpacing : 5,
+        barDatasetSpacing : 1
+    };
+    /**
+     * Data for Bar chart
+     */
+    $scope.barData = {
+        labels : ["January", "February", "March", "April"],
+        datasets : [{
+            label : "Sent messages",
+            fillColor : "rgba(0,94,170,0.5)",
+            strokeColor : "rgba(0,94,170,0.5)",
+            highlightFill : "rgba(0,94,170,0.8)",
+            highlightStroke : "rgba(0,94,170,1)",
+            data : [65, 54, 25, 80]
+        }, {
+            label : "Received messages",
+            fillColor : "rgba(227,111,30,0.5)",
+            strokeColor : "rgba(227,111,30,0.5)",
+            highlightFill : "rgba(227,111,30,0.8)",
+            highlightStroke : "rgba(227,111,30,1)",
+            data : [28, 52, 44, 12]
+        }, {
+            label : "Scheduled",
+            fillColor : "rgba(0,125,50,0.5)",
+            strokeColor : "rgba(0,125,50,0.5)",
+            highlightFill : "rgba(0,125,50,0.8)",
+            highlightStroke : "rgba(0,125,50,1)",
+            data : [28, 52, 44, 12]
+        }, {
+            label : "Opt-outs",
+            fillColor : "rgba(159,74,156,0.5)",
+            strokeColor : "rgba(159,74,156,0.5)",
+            highlightFill : "rgba(159,74,156,0.8)",
+            highlightStroke : "rgba(159,74,156,1)",
+            data : [68, 33, 64, 9]
+        }]
+    };
+    //var updateBarOptions = function() {
+    //        barData[0].value = pCtrl.bucketOfMessages;
+    //        barData[1].value = pCtrl.messageCount;
+    //    };
+    //
+    //    $scope.$watch('pCtrl.messageCount', updateBarOptions, true);
+    //    //$scope.$watch('pCtrl.bucketOfMessages', updateDouhnutOptions, true);
+    //Date/time control
+    $scope.StartDate = '';
+    $scope.EndDate = '';
+    
+    $scope.today = function() {
+        $scope.StartDate = new Date();
+        $scope.EndDate = new Date();
+    };
+
+    $scope.today();
+
+    $scope.clear = function() {
+        $scope.StartDate = null;
+        $scope.EndDate = null;
+    };
+    // Disable weekend selection
+    //$scope.disabled = function(date, mode) {
+    //  return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    //};
+    $scope.toggleMin = function() {
+        $scope.minDate = $scope.minDate ? null : new Date();
+    };
+    $scope.toggleMin();
+    $scope.open = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.opened = true;
+    };
+    $scope.open2 = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.opened2 = true;
+    };
+    $scope.dateOptions = {
+        formatYear : 'yy',
+        startingDay : 1,
+        showWeeks : 'false',
+        initDate : 'false'
+    };
+}
+
 
 angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
@@ -4098,3 +4199,4 @@ angular.module('inspinia').controller('qrCtrl', qrCtrl).controller('ProfileCtrl'
 angular.module('inspinia').controller('DashboardBarCtrl', ['$scope', '$http', '$cookieStore', '$state', DashboardBarCtrl]);
 angular.module('inspinia').controller('DashboardCalendarCtrl', ['$scope', '$http', '$cookieStore', DashboardCalendarCtrl]);
 angular.module('inspinia').controller('DashboardInboxCtrl', ['$scope', '$http', '$cookieStore', DashboardInboxCtrl]);
+angular.module('inspinia').controller('ReportsBarCtrl', ['$scope', '$http', '$cookieStore', '$state', ReportsBarCtrl]);

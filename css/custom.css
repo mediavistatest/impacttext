@@ -255,7 +255,7 @@ margin: 20px -15px;
     color: white;
     background: #007d32;
     width: 168px;
-    border: none;
+    border: 1px solid #007d32;
 }
 .btn-send:hover {
     color: white;
@@ -3141,6 +3141,30 @@ margin: 9px 0;
 
 a table {
   color: black;
+}
+
+ul.bar-legend {
+  position: absolute;
+  top: 40px;
+  list-style: none;
+  right: 30px;
+}
+
+.label-icon span {
+  color: black;
+  font-weight: 600;
+}
+
+.label-icon span i {
+  margin-right: 10px;
+}
+
+.reports .content-box ul.dropdown-menu {
+  margin: 5px 0;
+}
+
+.reports .form-control {
+    height: 31px;
 }
 
 @media all and (max-width: 990px) {
