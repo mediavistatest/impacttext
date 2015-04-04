@@ -904,27 +904,30 @@ var ngInbox = {
                 };
 
                 var $param = $.param(params);
-                var success = function(cnt) {
-                    var lists = '';
-                    for (var j in cnt.apidata) {
-                        lists += cnt.apidata[j].contactListName;
-                        if (j < cnt.apidata.length - 1) {
-                            lists += ', ';
-                        }
-                    }
-                    messages[nListsReturned].lists = lists;
-                    nListsReturned++;
-                };
+                
+                messages[i].lists =messages[i].ContactLists ; 
+                
+                // var success = function(cnt) {
+                    // var lists = '';
+                    // for (var j in cnt.apidata) {
+                        // lists += cnt.apidata[j].contactListName;
+                        // if (j < cnt.apidata.length - 1) {
+                            // lists += ', ';
+                        // }
+                    // }
+                    // messages[nListsReturned].lists = lists;
+                    // nListsReturned++;
+                // };
                 //POST
-                controllerParent.$http.post(inspiniaNS.wsUrl + 'contact_get', $param)
-                // success function
-                .success(function(contacts) {
-                    success(contacts);
-                })
-                // error function
-                .error(function(data, status, headers, config) {
-                    nListsReturned++;
-                });
+                // controllerParent.$http.post(inspiniaNS.wsUrl + 'contact_get', $param)
+                // // success function
+                // .success(function(contacts) {
+                    // success(contacts);
+                // })
+                // // error function
+                // .error(function(data, status, headers, config) {
+                    // nListsReturned++;
+                // });
                 controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, messages, result.apicount);
             }
         }
