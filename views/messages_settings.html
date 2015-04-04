@@ -1,11 +1,6 @@
 <h2 class="section-title">
 {{controllerParent.Name}} column settings
 </h2>
-<!-- <div class="top-buttons">
-    <a ng-show="controllerParent" class="btn btn-back" ng-click="controllerParent.Events.UpdateColumns(controllerParent)"><i class="fa fa-undo">
-    </i>
-    Back</a>
-</div> -->
 <div ng-repeat="(index, column) in controllerParent.columnDefs">
     <div class="divider ng-scope"></div>
     <h3 ng-show="column.displayName">
@@ -26,8 +21,6 @@
         <input type="checkbox" ng-model="column.checked" >
         </input>display
     </label>
-    <!-- <input type="checkbox" ng-model="column.canBeClicked" ng-change="controllerParent.Events.ColumnCanBeClicked_onChange(controllerParent, column, index)">
-    can be clicked     </input> -->
 </div><div class="divider ng-scope"></div>
 
 <a class="btn btn-send left" ng-click="controllerParent.Events.UpdateColumns(controllerParent)">

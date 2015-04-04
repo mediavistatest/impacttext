@@ -2,8 +2,9 @@
 <div class="animated fadeInRight dashboard clearfix">
     <div class="col-lg-6 row">
         <div class="col-sm-12">
+        <a href="#/messages/messages_sent">
             <div class="content-box" ng-controller="DashboardInboxCtrl">
-                <a href="#/messages/messages_sent"><h2 class="blue">Recent Sent Messages</h2></a>
+                <h2 class="blue">Recent Sent Messages</h2>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="dashboard-table">
                     <thead>
                         <tr>
@@ -21,10 +22,12 @@
                     </tbody>
                 </table>
             </div>
+        </a>
         </div>
         <div class="col-sm-12">
+            <a href="#/messages/messages_inbox">
             <div class="content-box" ng-controller="DashboardInboxCtrl">
-                <a href="#/messages/messages_inbox"><h2 class="blue-2">Recent Received Messages</h2></a>
+                <h2 class="blue-2">Recent Received Messages</h2>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="dashboard-table">
                     <thead>
                         <tr>
@@ -78,6 +81,7 @@
                     </tbody>
                 </table>-->
             </div>
+            </a>
         </div>
         <div class="col-sm-12">
             <div class="content-box statistics" ng-controller="DashboardBarCtrl">
