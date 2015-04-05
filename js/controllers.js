@@ -3393,8 +3393,11 @@ function notifyCtrl($scope, notify) {
 		$scope.FailedToDeactivateListMsg();
 	});
 	$scope.$on('RequestError', function(event, args) {
-		console.log(event)
-		console.log(args)
+		notify({
+            message : 'Failed to deactivate list!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
 	});
 }
 
