@@ -8,16 +8,16 @@
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="dashboard-table">
                     <thead>
                         <tr>
-                            <th>To</th>
-                            <th>Message</th>
-                            <th>Sent</th>
+                            <th><div class="col col-1">To</div></th>
+                            <th><div class="col col-2">Message</div></th>
+                            <th><div class="col col-3">Sent</div></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="x in SentResults | limitTo:5">
-                            <td>{{ x.ANI }}</td>
-                            <td>{{ x.message }}</td>
-                            <td>{{ x.createdDate }}</td>
+                            <td><div class="col col-1">{{ x.ANI }}</div></td>
+                            <td><div class="col col-2">{{ x.message }}</div></td>
+                            <td><div class="col col-3">{{ x.createdDate }}</div></td>
                         </tr>
                     </tbody>
                 </table>
@@ -31,16 +31,16 @@
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="dashboard-table">
                     <thead>
                         <tr>
-                            <th>To</th>
-                            <th>Message</th>
-                            <th>Sent</th>
+                            <th><div class="col col-1">To</div></th>
+                            <th><div class="col col-2">Message</div></th>
+                            <th><div class="col col-3">Received</div></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="x in InboxResults | limitTo:5">
-                            <td>{{ x.sourceANI}}</td>
-                            <td>{{ x.message }}</td>
-                            <td>{{ x.createdDate }}</td>
+                            <td><div class="col col-1">{{ x.sourceANI}}</div></td>
+                            <td><div class="col col-2">{{ x.message }}</div></td>
+                            <td><div class="col col-3">{{ x.createdDate }}</div></td>
                         </tr>
                     </tbody>
                 </table>

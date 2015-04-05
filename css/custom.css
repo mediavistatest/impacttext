@@ -3167,6 +3167,12 @@ ul.bar-legend {
     height: 31px;
 }
 
+.dashboard .col-2 {
+  max-width: 200px;
+  overflow: hidden;
+  max-height: 40px;
+}
+
 @media all and (max-width: 990px) {
     .welcome-msg {
         display: none;
