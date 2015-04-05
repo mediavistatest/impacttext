@@ -64,9 +64,17 @@
             <li ui-sref-active="active">
                 <a ui-sref="tools"><i class="fa fa-wrench"></i> <span class="nav-label">Tools</span></a>
             </li>
-            <li ui-sref-active="active">
+            <!-- <li ui-sref-active="active">
                 <a ui-sref="settings"><i class="fa fa-cog"></i> <span class="nav-label">Settings</span></a>
-            </li>
+            </li> -->
+            <li ng-class="{active: $state.includes('settings')}">
+                <a href=""><i class="fa fa-cog"></i> <span class="nav-label">Settings </span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('settings')}">
+                    <li ui-sref-active="active"><a ui-sref="settings.basic">Basic</a></li>
+                    <li ui-sref-active="active"><a ui-sref="settings.numbers">Numbers</a></li>
+                    <li ui-sref-active="active"><a ui-sref="settings.autoresponders">Autoresponders</a></li>
+                </ul>
+            </li>            
             <li ui-sref-active="active">
                 <a ui-sref="reports"><i class="fa fa-bar-chart"></i> <span class="nav-label">Reports</span></a>
             </li>

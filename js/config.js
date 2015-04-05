@@ -451,11 +451,79 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             data: { pageTitle: 'Tools' }
             
         })
+        // .state('settings', {
+            // url: "/settings",
+            // templateUrl: "views/settings.html",
+            // data: { pageTitle: 'Settings' }
+        // })
         .state('settings', {
+            abstract: true,
             url: "/settings",
-            templateUrl: "views/settings.html",
-            data: { pageTitle: 'Settings' }
+            templateUrl: "views/common/content.html",
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        },
+                        {
+                            files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                        },
+                        {
+                            insertBefore: '#loadBefore',
+                            name: 'localytics.directives',
+                            files: ['css/plugins/chosen/chosen.css','js/plugins/chosen/chosen.jquery.js','js/plugins/chosen/chosen.js']
+                        }
+                    ]);
+                }
+            }
         })
+        .state('settings.basic', {
+            url: "/settings_basic",
+            templateUrl: "views/settings_basic_container.html",
+            data: { pageTitle: 'Settings Basic' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
+        })  
+        .state('settings.numbers', {
+            url: "/settings_numbers",
+            templateUrl: "views/settings_numbers_container.html",
+            data: { pageTitle: 'Settings Numbers' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
+        })  
+        .state('settings.autoresponders', {
+            url: "/settings_autoresponders",
+            templateUrl: "views/settings_autoresponders_container.html",
+            data: { pageTitle: 'Settings Autoresponders' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+                        }
+                    ]);
+                }
+            }
+        })          
         .state('reports', {
             url: "/reports",
             templateUrl: "views/reports.html",
