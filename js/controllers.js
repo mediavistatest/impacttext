@@ -511,8 +511,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     this.randomStacked = function() {
         this.stacked = [];
         var types = ['success', 'info', 'warning', 'danger'];
-        for (var i = 0,
-            n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+        for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
             var index = Math.floor((Math.random() * 4));
             this.stacked.push({
                 value : Math.floor((Math.random() * 30) + 1),
@@ -2406,6 +2405,9 @@ function ngGridCtrl($scope, $http, $cookieStore) {
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
         $scope.mySelections.length = 0;
     };
+    $scope.$watch('ngData', function() {
+        $('.gridStyle').trigger('resize');
+    });
     //    $scope.filterOptions = {
     //           filterText: '',
     //           useExternalFilter: true
@@ -3771,7 +3773,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
             //Date is in format MM/dd/yyyy
             var dateParts = [];
             dateParts[0] = scheduledTime.getFullYear();
-            dateParts[1] = "" + (scheduledTime.getMonth() + 1);
+            // dateParts[1] = "" + (scheduledTime.getMonth() + 1);
+            dateParts[1] = "" + scheduledTime.getMonth();
             dateParts[2] = "" + scheduledTime.getDate();
             dateParts[3] = "" + scheduledTime.getHours();
             dateParts[4] = "" + scheduledTime.getMinutes();
