@@ -176,6 +176,13 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 }
                 if (data.apicode == 0) {
                     $scope.$broadcast("RequestSuccess", data, 'Contact modified');
+                    if (request.status == 'I') {
+                        var $param = $.param({
+                            subject : 'Blocked contact',
+                            body : 'Please to block following number: '+request.ANI+' for all incoming text messages.'
+                        });
+                        window.location.href = 'mailto:nselimic@impacttelecom.com?' + $param;
+                    }
                 } else {
                     $scope.$broadcast("RequestError", data, 'contact_modify');
                     console.log(JSON.stringify(data));
@@ -360,12 +367,10 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             $scope.main.ServerRequests.contactModifyRequest(request, inScope, refresh, callback);
         },
         forwardToMail : function(message) {
-            // var emailWindow = window.open();
             var $param = $.param({
                 subject : 'impact text',
                 body : message
             });
-            // emailWindow.location.href = 'mailto:?' + $param;
             window.location.href = 'mailto:?' + $param;
         }
     };
@@ -3404,7 +3409,6 @@ function notifyCtrl($scope, notify) {
         });
     });
     $scope.$on('RequestError', function(event, args, name) {
-        notify.config({duration:15000});
         notify({
             message : name + ', ' + 'apicode: ' + args.apicode + ', ' + args.apitext,
             classes : 'alert-danger',

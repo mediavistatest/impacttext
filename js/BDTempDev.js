@@ -1263,7 +1263,7 @@ var ngInbox = {
         primaryKey : 'outboundMessageID',
         columnDefs : [{
             checked : true,
-            canBeClicked : false,
+            canBeClicked : true,
             field : 'message',
             displayName : 'Message',
             cellTemplate : 'views/table/MessageTableTemplate.html'
@@ -1272,11 +1272,6 @@ var ngInbox = {
             canBeClicked : false,
             field : 'statusDate',
             displayName : 'Date & Time Saved',
-        }, {
-            button : 'Edit',
-            checked : true,
-            canBeClicked : true,
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ng-click="controllerParent.Events.Message_onClick(controllerParent,row)"><i class="fa fa-pencil"></i> Edit </a></div>'
         }],
         sortOptions : {
             fields : ['statusDate'],
