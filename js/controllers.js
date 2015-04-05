@@ -4228,7 +4228,6 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
     };
 }
 
-
 angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
 angular.module('inspinia').controller('dashboardFlotTwo', dashboardFlotTwo);
@@ -4266,3 +4265,4 @@ angular.module('inspinia').controller('DashboardBarCtrl', ['$scope', '$http', '$
 angular.module('inspinia').controller('DashboardCalendarCtrl', ['$scope', '$http', '$cookieStore', DashboardCalendarCtrl]);
 angular.module('inspinia').controller('DashboardInboxCtrl', ['$scope', '$http', '$cookieStore', DashboardInboxCtrl]);
 angular.module('inspinia').controller('ReportsBarCtrl', ['$scope', '$http', '$cookieStore', '$state', ReportsBarCtrl]);
+angular.module('inspinia').controller('ngSettintsCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Settings.Controller]);

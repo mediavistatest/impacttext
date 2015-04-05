@@ -1491,3 +1491,77 @@ var ngInbox = {
     }
 };
 
+var ngSettings = {
+    Settings : {
+        ServerRequests : {
+
+        },
+        Controller : function($scope, $http, $cookieStore) {
+            var param = {
+                apikey : $scope.main.authToken,
+                accountID : $scope.main.accountID,
+                companyID : $scope.main.accountInfo.companyID
+                //sethttp : 1
+            };
+
+            // if (true) {
+            // param.name = name;
+            // };
+            //
+            // if (true) {
+            // param.status = status;
+            // };
+            // if (true) {
+            // param.createdby = createdby;
+            // };
+            // if (true) {
+            // param.limit = limit;
+            // };
+
+            // if (true) {
+            // param.offset = offset;
+            // };
+
+            //param.orderby = 'createddate';
+
+            $http.post(inspiniaNS.wsUrl + "autoresponder_get", $.param(param))
+            //Successful request to the server
+            .success(function(data, status, headers, config) {
+
+                console.log(data)
+                // if (data == null || typeof data.apicode == 'undefined') {
+                // //This should never happen
+                // alert("Unidentified error occurred when getting autoresponders!");
+                // return;
+                // }
+                // if (data.apicode == 0) {
+                // main.accountInfo = data.apidata[0];
+                //
+                // main.ServerRequests.contactListsGet();
+                // main.ServerRequests.didGet();
+                // } else {
+                // $scope.$broadcast("RequestError", data, 'autoresponder_get');
+                // }
+            })
+            //An error occurred with this request
+            .error(function(data, status, headers, config) {
+                $scope.$broadcast("RequestError", data, 'autoresponder_get');
+            });
+        }
+    },
+    NumberNames : {
+        ServerRequests : {
+
+        },
+        Controller : function($scope, $http, $cookieStore) {
+        }
+    },
+    Autoresponder : {
+        ServerRequests : {
+
+        },
+        Controller : function($scope, $http, $cookieStore) {
+        }
+    }
+};
+
