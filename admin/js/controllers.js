@@ -957,7 +957,6 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			companyID: $scope.CompanyID,
 			accountID: $scope.accountId,
 			active: activate,
-			role: $scope.userData.Role,
 			userID: $scope.userData.selectedUserId,
 			apikey: $cookieStore.get('inspinia_auth_token'),
 			sethttp: 1
