@@ -191,24 +191,36 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     </div>
                     </div>
                     <!--END SHORT CODE-->
-                    <div class="checkbox col-sm-8 col-sm-offset-3">
+                    <!--<div class="checkbox col-sm-8 col-sm-offset-3">
                         <label>
                             <input type="checkbox"> Set this code as the primary code for the account
                         </label>
-                    </div>
+                    </div>-->
                     <div class="bottom-buttons col-sm-8 col-sm-offset-3">
-                        <!-- Delete button -->
-                        <div class="btn-group dropup left" dropdown ng-show="smsCode.selectedDidId">
+                        <!-- Cancel DID button -->
+                        <div class="btn-group dropup left" dropdown ng-show="smsCode.selectedDidId && smsCode.status == 'A'">
                             <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle>
-                            Delete Code
+                            Cancel SMS Code
                             </button>
                             <ul class="dropdown-menu dropup dropdown-alerts">
-                                <li>Are you sure you want to delete SMS code?</li>
+                                <li>Are you sure you want to cancel SMS code?</li>
                                 <li>&nbsp;</li>
-                                <li><span ng-click="deleteDID()" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+                                <li><span ng-click="cancelDID()" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
                             </ul>
                         </div>
-                        <!-- end delete button -->
+                        <!-- end cancel DID button -->
+                        <!-- Activate button -->
+                        <div class="btn-group dropup left" dropdown ng-show="smsCode.selectedDidId && smsCode.status != 'A'">
+                            <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle>
+                            Activate SMS Code
+                            </button>
+                            <ul class="dropdown-menu dropup dropdown-alerts">
+                                <li>Are you sure you want to activate SMS code?</li>
+                                <li>&nbsp;</li>
+                                <li><span ng-click="activateDID()" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+                            </ul>
+                        </div>
+                        <!-- end activate button -->
                         <button class="btn discard-btn" ng-click="resetDIDFields()"> Discard</button>
                         <button class="btn save-btn" ng-click="addDID()" ng-hide="smsCode.selectedDidId"> Save</button>
                     </div>
@@ -217,7 +229,7 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <div class="box" >
                         <div class="box-header">SMS Codes:</div>
                         <ul class="box-list" ng-repeat="did in DidList">
-                            <li ng-click="populateSmsCode(did)">{{did.DID}}</li>
+                            <li ng-click="populateSmsCode(did)">{{did.DID}} ({{did.status}})</li>
                         </ul>
                     </div>
                 </div>
@@ -234,16 +246,16 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <div class="form-group clearfix">
                         <label class="col-sm-3 control-label">User Name:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="UserName" placeholder="User Name" ng-model="UserName" class="form-control"  ng-trim="false">
+                            <input type="text" name="UserName" placeholder="User Name" ng-model="userData.UserName" class="form-control" ng-disabled="userData.selectedUserId" ng-trim="false">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='User Name'></i>
                         </div>
                     </div>
-                    <div class="form-group clearfix">
+                    <div class="form-group clearfix" ng-hide="userData.selectedUserId">
                         <label class="col-sm-3 control-label">User Password:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="UserPassword" placeholder="User Password" ng-model="UserPassword" class="form-control"  ng-trim="false">
+                            <input type="text" name="UserPassword" placeholder="User Password" ng-model="userData.UserPassword" class="form-control"  ng-trim="false">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='User Password'></i>
@@ -252,7 +264,7 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <div class="form-group clearfix">
                         <label class="col-sm-3 control-label">Email Address:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="UserEmail" placeholder="User Email" ng-model="UserEmail" class="form-control"  ng-trim="false">
+                            <input type="text" name="UserEmail" placeholder="User Email" ng-model="userData.UserEmail" class="form-control"  ng-trim="false">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='User Email'></i>
@@ -261,7 +273,7 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <div class="form-group clearfix">
                         <label class="col-sm-3 control-label">First Name:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="UserFirstName" placeholder="User First Name" ng-model="UserFirstName" class="form-control"  ng-trim="false">
+                            <input type="text" name="UserFirstName" placeholder="User First Name" ng-model="userData.UserFirstName" class="form-control"  ng-trim="false">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='User First Name'></i>
@@ -270,17 +282,17 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <div class="form-group clearfix">
                         <label class="col-sm-3 control-label">Last Name:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="UserLastName" placeholder="User Last Name" ng-model="UserLastName" class="form-control"  ng-trim="false">
+                            <input type="text" name="UserLastName" placeholder="User Last Name" ng-model="userData.UserLastName" class="form-control"  ng-trim="false">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='User Last Name'></i>
                         </div>
                     </div>
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">Roles:</label>
+                        <label class="col-sm-3 control-label">Role:</label>
                         <div class="col-sm-8">
-                            <select name="CycleGroupID" placeholder="Cycle Group ID" ng-model="CycleGroupID" class="form-control">
-                                <option value="admin" selected>Admin</option>
+                            <select name="Role" placeholder="Role" ng-model="userData.Role" class="form-control">
+                                <option value="accountadmin" selected>Admin</option>
                             </select>
                         </div>
                         <div class="col-sm-1">
@@ -288,20 +300,32 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                         </div>
                     </div>
                     <div class="bottom-buttons col-sm-8 col-sm-offset-3">
-                        <!-- Delete button -->
+                        <!-- Deactivate user button -->
                         <div class="btn-group dropup left" dropdown>
-                            <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-disabled="true">
-                            Delete User
+                            <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-show="userData.selectedUserId && userData.active == 1">
+                            Deactivate User
                             </button>
                             <ul class="dropdown-menu dropup dropdown-alerts">
-                                <li>Are you sure you want to delete user?</li>
+                                <li>Are you sure you want to deactivate user?</li>
                                 <li>&nbsp;</li>
-                                <li><span ng-click="" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+                                <li><span ng-click="activateDeactivateUser(0)" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
                             </ul>
                         </div>
-                        <!-- end delete button -->
-                        <button class="btn discard-btn" ng-click=""> Discard</button>
-                        <button class="btn save-btn"> Save</button>
+                        <!-- end deactivate user button -->
+                        <!-- Activate user button -->
+                        <div class="btn-group dropup left" dropdown>
+                            <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-show="userData.selectedUserId && userData.active == 0">
+                            Activate User
+                            </button>
+                            <ul class="dropdown-menu dropup dropdown-alerts">
+                                <li>Are you sure you want to activate user?</li>
+                                <li>&nbsp;</li>
+                                <li><span ng-click="activateDeactivateUser(1)" class="discard-cancel" data-toggle="dropdown"><strong>Yes</strong></span> &nbsp;&nbsp;&nbsp;  <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span></li>
+                            </ul>
+                        </div>
+                        <!-- end activate user button -->
+                        <button class="btn discard-btn" ng-click="resetUserData()"> Discard</button>
+                        <button class="btn save-btn" ng-click="saveUser()"> Save</button>
                     </div>
                 </div>
                 <div class="col-md-3">

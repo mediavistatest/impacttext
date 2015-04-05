@@ -293,6 +293,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 							$scope.createOptInList();
 						}
 						$scope.updatePreviousAccountData();
+						$scope.refreshDidList();
 					} else {
 						notify("Creating accounts failed! Please try again!");
 					}
@@ -579,6 +580,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.smsCode.ShortCode = 766337;
 		$scope.smsCode.ShortCodeName = null;
 		$scope.smsCode.ShortKeyword = 'Automatically Generated';
+		$scope.smsCode.status = null;
 	};
 
 	$scope.addDID = function() {
@@ -728,12 +730,12 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		);
 	};
 
-	$scope.deleteDID = function() {
+	$scope.cancelDID = function() {
 		if (typeof $scope.smsCode.selectedDidId == 'undefined' || $scope.smsCode.selectedDidId == null) {
 			return;
 		}
 		$http
-			.post(inspiniaAdminNS.wsUrl + "did_delete", $.param({
+			.post(inspiniaAdminNS.wsUrl + "did_cancel", $.param({
 				apikey : $cookieStore.get('inspinia_auth_token'),
 				accountID : $scope.accountId,
 				DIDID: $scope.smsCode.selectedDidId,
@@ -743,7 +745,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 				function (data) {
 					if (data.apicode == 0) {
 						//If DID is successfully deleted
-						notify("SMS Code is successfully deleted.");
+						notify("SMS Code is successfully canceled.");
 						$scope.refreshDidList();
 						$scope.resetDIDFields();
 					}
@@ -751,7 +753,35 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			).error(
 				//An error occurred with this request
 				function(data, status, headers, config) {
-					notify({message: "Failed to delete SMS code! Error code: " + data.apicode, classes: "alert-danger"});
+					notify({message: "Failed to cancel SMS code! Error code: " + data.apicode, classes: "alert-danger"});
+				}
+			);
+	};
+
+	$scope.activateDID = function() {
+		if (typeof $scope.smsCode.selectedDidId == 'undefined' || $scope.smsCode.selectedDidId == null) {
+			return;
+		}
+		$http
+			.post(inspiniaAdminNS.wsUrl + "did_activate", $.param({
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $scope.accountId,
+				DIDID: $scope.smsCode.selectedDidId,
+				sethttp : 1
+			}))
+			.success(
+				function (data) {
+					if (data.apicode == 0) {
+						//If DID is successfully deleted
+						notify("SMS Code is successfully activated.");
+						$scope.refreshDidList();
+						$scope.resetDIDFields();
+					}
+				}
+			).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					notify({message: "Failed to activate SMS code! Error code: " + data.apicode, classes: "alert-danger"});
 				}
 			);
 	};
@@ -773,6 +803,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			$scope.smsCode.LongCodeName = smsCodeData.DIDName;
 		}
 		$scope.smsCode.selectedDidId = smsCodeData.DIDID;
+		$scope.smsCode.status = smsCodeData.status;
 	};
 
 	$scope.refreshUsersList = function() {
@@ -802,13 +833,174 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		);
 	};
 
-	$scope.populateUser = function(userData) {
+	$scope.resetUserData = function() {
+		if (typeof $scope.userData == 'undefined' || $scope.userData == '') {
+			$scope.userData = {};
+		}
+		$scope.userData.UserName = null;
+		$scope.userData.UserPassword = null;
+		$scope.userData.UserEmail = null;
+		$scope.userData.UserFirstName = null;
+		$scope.userData.UserLastName = null;
+		$scope.userData.Role = 'accountadmin';
+		$scope.userData.selectedUserId = null;
+		$scope.userData.active = 1;
+	};
 
+	$scope.populateUser = function(userData) {
+		if (typeof $scope.userData == 'undefined' || $scope.userData == '') {
+			$scope.userData = {};
+		}
+		$scope.userData.UserName = userData.userName;
+		$scope.userData.UserPassword = null;
+		$scope.userData.UserEmail = userData.emailAddress;
+		$scope.userData.UserFirstName = userData.firstName;
+		$scope.userData.UserLastName = userData.lastName;
+		$scope.userData.Role = 'accountadmin';
+		$scope.userData.selectedUserId = userData.userId;
+		$scope.userData.active = userData.active;
+	};
+
+	$scope.saveUser = function() {
+		//Setting request parameters
+		var request = {
+			companyID: $scope.CompanyID,
+			accountID: $scope.accountId,
+			emailAddress: $scope.userData.UserEmail,
+			firstName: $scope.userData.UserFirstName,
+			lastName: $scope.userData.UserLastName,
+			role: $scope.userData.Role,
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			sethttp: 1
+		};
+
+		var requestPage = "user_add";
+		//Checking if this is modify account request
+		var modify = $scope.userData.selectedUserId != null && $scope.userData.selectedUserId != '';
+		if (modify) {
+			request.userID = $scope.userData.selectedUserId;
+			requestPage = "user_modify";
+		} else {
+			request.newUsername = $scope.userData.UserName;
+			request.newUserPassword = $scope.userData.UserPassword;
+		}
+
+		$http.post(
+				inspiniaAdminNS.wsUrl + requestPage, $.param(request)
+			).success(
+				function (data) {
+					if (data.apicode == 0) {
+						if (modify) {
+							notify("User data is successfully updated!");
+						} else {
+							notify("New user is successfully created!");
+						}
+						$scope.resetUserData();
+						$scope.refreshUsersList();
+					} else {
+						if (modify) {
+							notify("Updating user data failed! Please try again!");
+						} else {
+							notify("Creating user failed! Please try again!");
+						}
+					}
+				}).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					if (status == 422) {
+						//some input parameters are invalid
+						var invalidParameter = '';
+						var invalidParameterName = null;
+						var operation = modify ? 'update' : 'create';
+						var errorDescription = '';
+						if (data.apitext) {
+							var errorParamsMap = [];
+							errorParamsMap['newusername'] = "User Name";
+							errorParamsMap['newuserpassword'] = "User Password";
+							errorParamsMap['firstname'] = "First Name";
+							errorParamsMap['lastname'] = "Last Name";
+							errorParamsMap['emailaddress'] = "Email Address";
+							errorParamsMap['role'] = "Role";
+							var errorMessageParts = data.apitext.split(':');
+							invalidParameter = errorMessageParts[0];
+							errorDescription = $.trim(errorMessageParts[1]);
+							invalidParameterName = errorParamsMap[invalidParameter];
+						}
+						if (typeof invalidParameterName != 'undefined' && invalidParameterName != null && invalidParameterName != '') {
+							if (invalidParameter == 'newusername' && errorDescription == 'already exists') {
+								notify ({message: "Failed to " + operation +  " user. User with the specified username already exists!", classes : 'alert-danger'});
+							} else {
+								notify ({message: "Failed to " + operation +  " user. Invalid parameter " + invalidParameterName + "!", classes : 'alert-danger'});
+							}
+						} else {
+							notify ({message: "Failed to " + operation +  " user. Please check your input parameters and try again!", classes : 'alert-danger'});
+						}
+						//alert(JSON.stringify(data));
+						return;
+					}
+					notify("Unexpected error occurred when trying to " + operation + " user!");
+				}
+			);
+	};
+
+	$scope.activateDeactivateUser = function(activate) {
+		//Checking input parameters
+		if (typeof activate == 'undefined' || (activate != 1 && activate != 0)) {
+			return;
+		}
+		//Checking if user data is set
+		if (typeof $scope.userData == 'undefined' || typeof $scope.userData.selectedUserId == 'undefined' || $scope.userData.selectedUserId == null || $scope.userData.selectedUserId == null) {
+			return;
+		}
+
+		var request = {
+			companyID: $scope.CompanyID,
+			accountID: $scope.accountId,
+			active: activate,
+			role: $scope.userData.Role,
+			userID: $scope.userData.selectedUserId,
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			sethttp: 1
+		};
+		var requestPage = "user_modify";
+		
+		$http.post(
+				inspiniaAdminNS.wsUrl + requestPage, $.param(request)
+			).success(
+				function (data) {
+					if (data.apicode == 0) {
+						if (activate == 1) {
+							notify("User is successfully activated!");
+						} else {
+							notify("User is successfully deactivated!");
+						}
+						$scope.resetUserData();
+						$scope.refreshUsersList();
+					} else {
+						if (activate == 1) {
+							notify("Activating user failed! Please try again!");
+						} else {
+							notify("Deactivating user failed! Please try again!");
+						}
+					}
+				}).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					if (status == 422) {
+						//some input parameters are invalid
+						notify("Invalid input parameters!");
+						alert(JSON.stringify(data));
+						return;
+					}
+					notify("Unexpected error occurred when trying to " + operation + " user!");
+				}
+			);
 	};
 
 	$scope.refreshAccount();
 	$scope.refreshDidList();
 	$scope.refreshUsersList();
+	$scope.resetUserData();
 });
 
 
