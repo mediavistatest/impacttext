@@ -101,7 +101,7 @@ angular.module('cgNotify', []).factory('notify',['$timeout','$http','$compile','
             });
 
             var retVal = {};
-            
+
             retVal.close = function(){
                 if (scope.$close){
                     scope.$close();
