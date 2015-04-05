@@ -270,7 +270,7 @@ var ngInbox = {
 					data : 'ngData',
 					enableSorting : true,
 					useExternalSorting : true,
-					sortInfo : controllerParent.$scope.sortOptions,
+					sortInfo : controllerParent.$scope.sortOptions,//'sortOptions',
 					rowHeight : 35,
 					selectedItems : controllerParent.$scope.mySelections,
 					showSelectionCheckbox : true,
@@ -280,8 +280,8 @@ var ngInbox = {
 					showFooter : true,
 					footerTemplate : 'views/table/footerTemplate.html',
 					totalServerItems : 'totalServerItems',
-					pagingOptions : controllerParent.$scope.pagingOptions,
-					filterOptions : controllerParent.$scope.filterOptions,
+					pagingOptions : controllerParent.$scope.pagingOptions,//'pagingOptions',
+					filterOptions : controllerParent.$scope.filterOptions,//'filterOptions',
 					columnDefs : 'columnDefs', //controllerParent.columnDefs,
 					primaryKey : controllerParent.primaryKey
 				};
@@ -629,9 +629,7 @@ var ngInbox = {
 				ngInbox._internal.Settings.SetCookie(inParent);
 				inParent.Events.ShowList(inParent);
 				inParent.$scope.columnDefs = ngInbox._internal.Settings.GrepColumnDefs(inParent.columnDefs);
-				//setTimeout(function() {
 				inParent.$scope.getPagedDataAsync(inParent);
-				//}, 200);
 			},
 			GrepColumnDefs : function(columnDefs) {
 				var defs = $.grep(columnDefs, function(member) {
@@ -652,6 +650,10 @@ var ngInbox = {
 			},
 			GetCookie : function(inParent) {
 				var columnDefsCookie = inParent.$scope.main.ipCookie('itInboxColumnDefs');
+				if (columnDefsCookie==null){
+					ngInbox._internal.Settings.SetCookie(inParent);
+					columnDefsCookie = inParent.$scope.main.ipCookie('itInboxColumnDefs');
+				}
 				return columnDefsCookie;
 			},
 			SetCookie : function(inParent) {
@@ -671,6 +673,21 @@ var ngInbox = {
 					expires : 365,
 					expirationUnit : 'days'
 				});
+			},
+			DefaultCookie: function(inParent) {
+				var columnDefsCookie = ngInbox._internal.Settings.GetCookie(inParent);
+				if (columnDefsCookie == null) {
+					columnDefsCookie = [];
+				} else {
+					columnDefsCookie = $.grep(columnDefsCookie, function(member) {
+						return member.Name != inParent.Name;
+					});
+				}
+				inParent.$scope.main.ipCookie('itInboxColumnDefs', columnDefsCookie, {
+					expires : 365,
+					expirationUnit : 'days'
+				});
+				location.reload();
 			}
 		},
 		ngInboxNotifyCtrl : function($scope, notify) {
@@ -818,8 +835,12 @@ var ngInbox = {
 			UpdateColumns : function(inParent) {
 				ngInbox._internal.Settings.UpdateColumns(inParent);
 			},
+			DefaultColumns : function(inParent){
+				ngInbox._internal.Settings.DefaultCookie(inParent);
+			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
+				console.log(inParent.clickedMessage)
 				inParent.Events.ShowView(inParent);
 				ngInbox._internal.Methods.GetThread(inParent);
 			},
@@ -917,45 +938,8 @@ var ngInbox = {
 
 		},
 		PostSuccess : function(controllerParent, result) {
-			var nListsReturned = 0;
 			var messages = result.apidata;
-
-			// for (var i in messages) {
-			// var params = {
-			// apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
-			// accountID : controllerParent.$cookieStore.get('inspinia_account_id'),
-			// ANI : messages[i].sourceANI,
-			// sethttp : 1
-			// };
-			//
-			// var $param = $.param(params);
-
-			// messages[i].lists =messages[i].ContactLists ;
-
-			// var success = function(cnt) {
-			// var lists = '';
-			// for (var j in cnt.apidata) {
-			// lists += cnt.apidata[j].contactListName;
-			// if (j < cnt.apidata.length - 1) {
-			// lists += ',
-			// ';
-			// }
-			// }
-			// messages[nListsReturned].lists = lists;
-			// nListsReturned++;
-			// };
-			// // POST
-			// controllerParent.$http.post(inspiniaNS.wsUrl + 'contact_get', $param)
-			// // success function
-			// .success(function(contacts) {
-			// success(contacts);
-			// })
-			// // error function
-			// .error(function(data, status, headers, config) {
-			// nListsReturned++;
-			// });
 			controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, messages, result.apicount);
-			// }
 		}
 	},
 	SentList : {
@@ -1026,6 +1010,9 @@ var ngInbox = {
 			},
 			UpdateColumns : function(inParent) {
 				ngInbox._internal.Settings.UpdateColumns(inParent);
+			},
+			DefaultColumns : function(inParent){
+				ngInbox._internal.Settings.DefaultCookie(inParent);
 			},
 			Message_onClick : function(inParent, row) {
 				inParent.clickedMessage = row.entity;
