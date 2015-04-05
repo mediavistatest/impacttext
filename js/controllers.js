@@ -86,7 +86,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             // } else {
             // alert("Error occured while getting account info!");
         } else {
-            $scope.$broadcast("RequestError", data);
+            $scope.$broadcast("RequestError", data, 'account_get');
         }
     })
     //An error occurred with this request
@@ -175,8 +175,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                     return;
                 }
                 if (data.apicode == 0) {
+                    $scope.$broadcast("RequestSuccess", data, 'Contact modified');
                 } else {
-                    alert("An error occurred when changing your contact Error code: " + data.apicode);
+                    $scope.$broadcast("RequestError", data, 'contact_modify');
                     console.log(JSON.stringify(data));
                 }
                 if (refresh) {
@@ -187,16 +188,18 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             }).error(
             //An error occurred with this request
             function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to send message!');
-                if (status == 400) {
-                    if (data.apicode == 4) {
-                        $scope.$broadcast("InvalidANI");
-                    } else {
-                        alert("An error occurred when changing your contact! Error code: " + data.apicode);
-                        console.log(JSON.stringify(data));
-                    }
-                }
+                // //alert('Unexpected error occurred when trying to send message!');
+                // if (status == 400) {
+                // if (data.apicode == 4) {
+                // $scope.$broadcast("InvalidANI");
+                // } else {
+                // alert("An error occurred when changing your contact! Error code: " + data.apicode);
+                // console.log(JSON.stringify(data));
                 // }
+                // }
+                // // }
+                $scope.$broadcast("RequestError", data, 'contact_modify');
+                console.log(JSON.stringify(data));
             });
         },
         contactOptOutAddRequest : function(request, $inScope, refresh, callback) {
@@ -209,12 +212,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                     return;
                 }
                 if (data.apicode == 0) {
-                    // } else if (data.apicode == 4) {
+                    $scope.$broadcast("RequestSuccess", data, 'Contact opt out');
                 } else {
-                    // alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
-                    // else {
-                    $inScope.$broadcast("RequestError", data);
-                    //}
+                    $scope.$broadcast("RequestError", data, 'optout_add');
                     console.log(JSON.stringify(data));
                 }
                 if (refresh) {
@@ -225,18 +225,20 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             }).error(
             //An error occurred with this request
             function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to send message!');
-                if (status == 400) {
-                    if (data.apicode == 4) {
-                        //This is an error saying there is nothing to change
-                        //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                        $window.location.reload();
-                    } else {
-                        alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
-                        console.log(JSON.stringify(data));
-                    }
-                }
+                // //alert('Unexpected error occurred when trying to send message!');
+                // if (status == 400) {
+                // if (data.apicode == 4) {
+                // //This is an error saying there is nothing to change
+                // //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                // $window.location.reload();
+                // } else {
+                // alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
+                // console.log(JSON.stringify(data));
                 // }
+                // }
+                // // }
+                $scope.$broadcast("RequestError", data, 'optout_add');
+                console.log(JSON.stringify(data));
             });
         },
         contactOptoutUndoRequest : function(request, $inScope, refresh, callback) {
@@ -249,9 +251,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                     return;
                 }
                 if (data.apicode == 0) {
-                } else if (data.apicode == 4) {
+                    $scope.$broadcast("RequestSuccess", data, 'Contact opt in');
                 } else {
-                    alert("An error occurred when trying to undo opt out contact! Error code: " + data.apicode);
+                    $scope.$broadcast("RequestError", data, 'optout_undo');
                     console.log(JSON.stringify(data));
                 }
                 if (refresh) {
@@ -263,17 +265,19 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             //An error occurred with this request
             function(data, status, headers, config) {
                 //alert('Unexpected error occurred when trying to send message!');
-                if (status == 400) {
-                    if (data.apicode == 4) {
-                        //This is an error saying there is nothing to change
-                        //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                        $window.location.reload();
-                    } else {
-                        alert("An error occurred when trying to undo opt out contact! Error code: " + data.apicode);
-                        console.log(JSON.stringify(data));
-                    }
-                }
+                // if (status == 400) {
+                // if (data.apicode == 4) {
+                // //This is an error saying there is nothing to change
+                // //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                // $window.location.reload();
+                // } else {
+                // alert("An error occurred when trying to undo opt out contact! Error code: " + data.apicode);
+                // console.log(JSON.stringify(data));
                 // }
+                // }
+                // // }
+                $scope.$broadcast("RequestError", data, 'optout_undo');
+                console.log(JSON.stringify(data));
             });
         }
     };
@@ -3394,9 +3398,17 @@ function notifyCtrl($scope, notify) {
     $scope.$on('FailedToDeactivateListList', function(event, args) {
         $scope.FailedToDeactivateListMsg();
     });
-    $scope.$on('RequestError', function(event, args) {
+    $scope.$on('RequestSuccess', function(event, args, name) {
         notify({
-            message : 'Failed to deactivate list!',
+            message : name,
+            classes : 'alert-success',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    });
+    $scope.$on('RequestError', function(event, args, name) {
+        notify.config({duration:15000});
+        notify({
+            message : name + ', ' + 'apicode: ' + args.apicode + ', ' + args.apitext,
             classes : 'alert-danger',
             templateUrl : $scope.inspiniaTemplate
         });
