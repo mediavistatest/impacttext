@@ -45,7 +45,7 @@ var profile = {
 			apikey : $scope.main.authToken,
 			accountID : $scope.main.accountID
 		});
-		$http.post(inspiniaNS.wsUrl + 'reporting_getbom', $param)
+			post(inspiniaNS.wsUrl + 'reporting_getbom', $param)
 		// success function
 		.success(function(result) {
 			pCtrl.bucketOfMessages = result.apidata.bucketOfMessages;
@@ -364,8 +364,7 @@ var ngInbox = {
 										return callback(data);
 									} else {
 										controllerParent.$scope.$broadcast("ErrorOnMessages", 'An error occurred when trying to get ANI! Error code: ' + data.apicode);
-									}
-
+									} 
 								}).error(
 								//An error occurred with this request
 								function(data, status, headers, config) {
@@ -760,7 +759,6 @@ var ngInbox = {
 					$scope.ErrorOnMsg(args);
 				}
 			});
-
 		}
 	},
 	InboxList : {
