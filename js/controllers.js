@@ -91,7 +91,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 	})
 	//An error occurred with this request
 	.error(function(data, status, headers, config) {
-		alert("Error occured while getting account info!");
+		if (status != 401) {
+			alert("Error occured while getting account info!");
+		}
 	});
 	main.fromNumbersString = '';
 	//Server request logic here
@@ -2572,6 +2574,26 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 			$scope.refresh();
 		});
 	};
+
+	$scope.exportOptOuts = function() {
+		$http.post(inspiniaNS.wsUrl + "contact_get", $.param({
+				sethttp : 1,
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $cookieStore.get('inspinia_account_id'),
+				status: "O",
+				export: "csv"
+			})).success(function(data) {
+				if (data.apicode == 0) {
+					window.location.href = data.apidata;
+					//window.open(data.apidata, "_blank");
+				}
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				alert("An error occurred when exporting Opt-Outs! Error code: " + data.apicode);
+				alert(JSON.stringify(data));
+			});
+	}
 }
 
 /**
@@ -2869,6 +2891,26 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 	$scope.refresh = function() {
 		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
 	};
+
+	$scope.export = function() {
+		$http.post(inspiniaNS.wsUrl + "contact_get", $.param({
+				sethttp : 1,
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $cookieStore.get('inspinia_account_id'),
+				contactListID : $state.params.id,
+				export: "csv"
+			})).success(function(data) {
+				if (data.apicode == 0) {
+					window.location.href = data.apidata;
+					//window.open(data.apidata, "_blank");
+				}
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				alert("An error occurred when exporting contacts! Error code: " + data.apicode);
+				alert(JSON.stringify(data));
+			});
+	}
 }
 
 //ADD LISTS
