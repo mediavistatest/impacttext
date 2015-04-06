@@ -1037,7 +1037,7 @@ superAdmin.controller('loginCtrl', function($scope, $cookieStore, $http, $window
                 $cookieStore.put('inspinia_auth_token', data.apikey);
                 $cookieStore.put('inspinia_account_id', data.apidata.accountID);
                 $cookieStore.put('inspinia_company_id', data.apidata.companyID);
-                $window.location.href = "/#/";
+                $window.location.href = "/admin/#/";
             } else if (data.apicode == 2) {
                 //Invalid credentials
                 $scope.invalidCredentials = true;
