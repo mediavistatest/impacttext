@@ -3213,7 +3213,7 @@ ul.bar-legend {
   width: 80%;
   height: auto;
   padding: 10px;
-  background: whitesmoke;
+  background: #eaeaea;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
@@ -3228,7 +3228,7 @@ ul.bar-legend {
   left: 39px;
   border-style: solid;
   border-width: 15px 13px 0;
-  border-color: whitesmoke transparent;
+  border-color: #eaeaea transparent;
   display: block;
   width: 0;
   z-index: 1;
