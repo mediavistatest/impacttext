@@ -3173,6 +3173,15 @@ ul.bar-legend {
   max-height: 40px;
 }
 
+.dashboard ul.bar-legend {
+  left: 15px;
+}
+
+.grey {
+  background: lightgrey;
+  color: grey;
+}
+
 @media all and (max-width: 990px) {
     .welcome-msg {
         display: none;
