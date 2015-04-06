@@ -1004,6 +1004,50 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 
 
 //Login
-superAdmin.controller('loginCtrl', function($scope) {
-
+superAdmin.controller('loginCtrl', function($scope, $cookieStore, $http, $window) {
+    $scope.invalidCredentials = false;
+    //Reset authentication token
+    $cookieStore.put('inspinia_auth_token', '');
+    $cookieStore.put('inspinia_account_id', '');
+    $cookieStore.put('inspinia_company_id', '');
+    //Login function
+    $scope.login = function() {
+        $scope.invalidCredentials = false;
+        //Checking if username and password are provided
+        if ( typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
+            return;
+        }
+        if ( typeof $scope.password == 'undefined' || $scope.password == null || $scope.password == '') {
+            return;
+        }
+        //Calling rest service to sign in
+        $http.post(inspiniaAdminNS.wsUrl + "login", $.param({
+            username : $scope.username,
+            password : $scope.password
+        })).success(
+        //Successful request to the server
+        function(data, status, headers, config) {
+            if (data == null || typeof data.apicode == 'undefined') {
+                //This should never happen
+                alert("Unknown error occurred when trying to sign in! Please try again.");
+                return;
+            }
+            if (data.apicode == 0) {
+                //User signed in successfully
+                $cookieStore.put('inspinia_auth_token', data.apikey);
+                $cookieStore.put('inspinia_account_id', data.apidata.accountID);
+                $cookieStore.put('inspinia_company_id', data.apidata.companyID);
+                $window.location.href = "/#/";
+            } else if (data.apicode == 2) {
+                //Invalid credentials
+                $scope.invalidCredentials = true;
+            } else {
+                alert("An error occurred when trying to sign in. Error code: " + data.apicode);
+            }
+        }).error(
+        //An error occurred with this request
+        function(data, status, headers, config) {
+            alert("Failed to sign in! Please try again.");
+        });
+    };
 });
