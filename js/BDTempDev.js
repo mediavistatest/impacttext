@@ -45,7 +45,7 @@ var profile = {
             apikey : $scope.main.authToken,
             accountID : $scope.main.accountID
         });
-        post(inspiniaNS.wsUrl + 'reporting_getbom', $param)
+        $http.post(inspiniaNS.wsUrl + 'reporting_getbom', $param)
         // success function
         .success(function(result) {
             pCtrl.bucketOfMessages = result.apidata.bucketOfMessages;
