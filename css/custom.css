@@ -3182,6 +3182,75 @@ ul.bar-legend {
   color: grey;
 }
 
+  .bubbleRight {
+  position: relative;
+  width: 80%;
+  height: auto;
+  padding: 10px;
+  background: #bee7fa;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  float:right;
+  margin-bottom: 20px;
+}
+
+  .bubbleRight:after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  right: 39px;
+  border-style: solid;
+  border-width: 15px 13px 0;
+  border-color: #bee7fa transparent;
+  display: block;
+  width: 0;
+  z-index: 1;
+}
+
+.bubbleLeft {
+  position: relative;
+  width: 80%;
+  height: auto;
+  padding: 10px;
+  background: #cadfd0;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  float: left;
+  margin-bottom: 20px;
+}
+
+  .bubbleLeft:after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 39px;
+  border-style: solid;
+  border-width: 15px 13px 0;
+  border-color: #cadfd0 transparent;
+  display: block;
+  width: 0;
+  z-index: 1;
+}
+
+.threaded .divider {
+  height: 0;
+  width: 100%;
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.threaded {
+    max-width: 800px;
+}
+
+.threaded h4 {
+    font-weight: 400;   
+}
+
 @media all and (max-width: 990px) {
     .welcome-msg {
         display: none;

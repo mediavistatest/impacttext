@@ -1,9 +1,17 @@
+<h1>
+Messages
+</h1>
+
+<div class="col-md-12 content-holder animated fadeInRight">
+<div class="threaded">
+
 <h2 class="section-title">
 Thread view
 </h2>
+
 <div ng-repeat="(index, message) in controllerParent.clickedMessage.threadMessages">
     <div class="divider ng-scope"></div>
-    <div ng-class="{left: message.messageType=='Inbound', right: message.messageType=='Outbound'}">
+    <div ng-class="{bubbleLeft: message.messageType=='Inbound', bubbleRight: message.messageType=='Outbound'}">
         <h5 >
         {{message.dateTime}}
         </h5>
@@ -11,24 +19,28 @@ Thread view
         {{message.message}}
         </h4>
     </div>
-</div><div class="divider ng-scope"></div>
-<a class="btn btn-back" ng-click="controllerParent.Events.ShowView(controllerParent)">
-<span><i class="fa fa-undo">
+    </div><div class="divider ng-scope"></div>
+    <br><br>
+    <a class="btn btn-back" ng-click="controllerParent.Events.ShowView(controllerParent)">
+    <span><i class="fa fa-undo">
     </i>
     Back to message</span>
-</a>
-<a class="btn btn-back" ng-click="controllerParent.Events.ThreadPreviousPage_onClick(controllerParent)" ng-disabled="controllerParent.ThreadPageOptions.currentPage==1">
-<span><i class="fa fa-angle-left">
+    </a>
+    <a class="btn btn-back" ng-click="controllerParent.Events.ThreadPreviousPage_onClick(controllerParent)" ng-disabled="controllerParent.ThreadPageOptions.currentPage==1">
+    <span><i class="fa fa-angle-left">
     </i>
-</span>
-</a>
-<a class="btn btn-back" ng-disabled="true">
-<span>
+    </span>
+    </a>
+    <a class="btn btn-back" ng-disabled="true">
+    <span>
     Page {{controllerParent.ThreadPageOptions.currentPage}} of {{controllerParent.ThreadPageOptions.lastPage}}
-</span>
-</a>
-<a class="btn btn-back" ng-click="controllerParent.Events.ThreadNextPage_onClick(controllerParent)" ng-disabled="controllerParent.ThreadPageOptions.currentPage==controllerParent.ThreadPageOptions.lastPage">
-<span><i class="fa fa-angle-right">
+    </span>
+    </a>
+    <a class="btn btn-back" ng-click="controllerParent.Events.ThreadNextPage_onClick(controllerParent)" ng-disabled="controllerParent.ThreadPageOptions.currentPage==controllerParent.ThreadPageOptions.lastPage">
+    <span><i class="fa fa-angle-right">
     </i>
-</span>
-</a>
+    </span>
+    </a>
+
+</div>
+</div>
