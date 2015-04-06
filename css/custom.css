@@ -3187,7 +3187,7 @@ ul.bar-legend {
   width: 80%;
   height: auto;
   padding: 10px;
-  background: #bee7fa;
+  background: #dcf3fd;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
@@ -3202,7 +3202,7 @@ ul.bar-legend {
   right: 39px;
   border-style: solid;
   border-width: 15px 13px 0;
-  border-color: #bee7fa transparent;
+  border-color: #dcf3fd transparent;
   display: block;
   width: 0;
   z-index: 1;
@@ -3213,7 +3213,7 @@ ul.bar-legend {
   width: 80%;
   height: auto;
   padding: 10px;
-  background: #cadfd0;
+  background: whitesmoke;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
@@ -3228,7 +3228,7 @@ ul.bar-legend {
   left: 39px;
   border-style: solid;
   border-width: 15px 13px 0;
-  border-color: #cadfd0 transparent;
+  border-color: whitesmoke transparent;
   display: block;
   width: 0;
   z-index: 1;
