@@ -1525,6 +1525,15 @@ var ngSettings = {
 
         },
         Events : {
+            DefaultNumber_onChange : function(cpo, Number) {
+                if (Number.prefered) {
+                    for (var N in cpo.$scope.main.Settings.Numbers) {
+                        if (cpo.$scope.main.Settings.Numbers[N].DID != Number.DID) {
+                            cpo.$scope.main.Settings.Numbers[N].prefered = false;
+                        }
+                    }
+                }
+            },
             Save_onClick : function(cpo) {
                 cpo.$scope.main.ipCookie('itSettings', cpo.$scope.main.Settings, {
                     expires : 365,

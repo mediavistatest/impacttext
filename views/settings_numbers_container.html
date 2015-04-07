@@ -40,7 +40,7 @@ Settings
             <div ng-repeat="Number in main.Settings.Numbers track by Number.DID">
                 <div class="form-group clearfix">
                     <div class="col-sm-1">
-                        <input type="radio" name="defaultNumber" ng-model="Number.prefered" ng-trim="false" ng-value="true">
+                        <input type="checkbox" name="defaultNumber" ng-model="Number.prefered" ng-trim="false" ng-value="true" ng-change="cpo.Events.DefaultNumber_onChange(cpo, Number)">
                     </div>
                     <div class="col-sm-3">
                         <input type="text" name="Number" ng-model="Number.DID" class="form-control" ng-trim="false" readonly>
