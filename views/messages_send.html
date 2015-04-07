@@ -6,7 +6,7 @@
 
 <div class="iphone-prev">
 <div class="message-cloud">
-<span ng-show="FromName">{{FromName}}: </span>{{MessageTxt}} {{optFields.OptOutTxt1}}{{optFields.OptOutTxt3}}
+<span ng-show="FromName">{{FromName}}: </span>{{MessageTxt}} {{optFields.OptOutTxt1}}{{optFields.OptOutTxt2}}{{optFields.OptOutTxt3}}
 </div>
 </div>
 
@@ -213,10 +213,11 @@
 
             <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="OptOutMsg">
 
-
                 <option value="standard">Standard</option>
+                
+                <option value="custom">Custom opt-out message</option>
 
-                <option value="custom">No opt-out message</option>
+                <option value="noMessage">No opt-out message</option>
 
                 <option value="write">Write opt-out message</option>
 
@@ -226,11 +227,13 @@
 
             <div class="animate-switch-container" ng-switch on="OptOutMsg">
 
-            <textarea ng-switch-when="standard" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt1" ng-init="optFields.OptOutTxt1='Reply STOP to end msgs.'; optFields.OptOutTxt3=''" ng-trim="false" readonly></textarea>
+            <textarea ng-init="optFields.OptOutTxt1='Reply STOP to end msgs.'; optFields.OptOutTxt2=''; optFields.OptOutTxt3=''" ng-switch-when="standard" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt1" ng-trim="false" readonly></textarea>
+            
+            <textarea ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt2=main.Settings.defaultOptOutText; optFields.OptOutTxt3=''" ng-switch-when="custom" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt2" ng-trim="false" readonly></textarea>
 
-            <textarea ng-switch-when="custom" name="message" class="form-control opt-out disabled" rows="2" ng-model="optFields.OptOutTxt2" ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt3=''; optFields.OptOutTxt2=''" disabled></textarea>
+            <textarea ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt2=''; optFields.OptOutTxt3=''" ng-switch-when="noMessage" name="message" class="form-control opt-out disabled" rows="2" disabled></textarea>
 
-            <textarea ng-switch-when="write" placeholder="Write your opt-out message" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt3"  ng-init="optFields.OptOutTxt1=''"  ng-trim="false" ></textarea>
+            <textarea ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt2=''" ng-switch-when="write" placeholder="Write your opt-out message" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt3"  ng-trim="false" ></textarea>
 
             </div>
 

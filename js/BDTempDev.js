@@ -64,15 +64,15 @@ var ngInbox = {
         ErrorMsg : '',
         getDataTimeout : 200,
         DataConstructors : {
-            PageOptions : function() {
+            PageOptions : function(settings) {
                 var self = this;
                 self.pageSizes = [10, 20, 50, 100];
-                self.pageSize = 10;
+                self.pageSize = Number(settings.defaultPageSize);
                 self.currentPage = 1;
             },
-            ThreadPageOptions : function() {
+            ThreadPageOptions : function(settings) {
                 var self = this;
-                self.pageSize = 10;
+                self.pageSize = Number(settings.defaultPageSize);
                 self.currentPage = 1;
                 self.threadMessagesCount = 0;
                 self.lastPage = 1;
@@ -203,7 +203,7 @@ var ngInbox = {
                 controllerParent.$scope.mySelections = [];
                 controllerParent.$scope.totalServerItems = 0;
                 controllerParent.$scope.sortOptions = controllerParent.sortOptions;
-                controllerParent.$scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions();
+                controllerParent.$scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions(controllerParent.$scope.main.Settings);
                 controllerParent.$scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
 
                 //GET DATA
@@ -735,7 +735,6 @@ var ngInbox = {
                 if (!$scope.controllerParent.DontShowMessage) {
                     $scope.DeleteMsg();
                 }
-
             });
             $scope.$on('MarkAsReadMessageSucceeded', function(event, args) {
                 if (!$scope.controllerParent.DontShowMessage) {
@@ -761,6 +760,12 @@ var ngInbox = {
                 if (!$scope.controllerParent.DontShowMessage) {
                     $scope.ErrorOnMsg(args);
                 }
+            });
+            $scope.$on('itMessage', function(event, args) {
+                notify({
+                    message : args.message,
+                    classes : 'alert-success'
+                });
             });
         }
     },
@@ -898,12 +903,12 @@ var ngInbox = {
             //Controler parrent setting !!!!
             var controllerParent = ngInbox.InboxList;
             controllerParent.Events.ShowList(controllerParent);
-            controllerParent.ThreadPageOptions = new ngInbox._internal.DataConstructors.ThreadPageOptions();
 
             controllerParent.$scope = $scope;
             controllerParent.$http = $http;
             controllerParent.$cookieStore = $cookieStore;
 
+            controllerParent.ThreadPageOptions = new ngInbox._internal.DataConstructors.ThreadPageOptions(controllerParent.$scope.main.Settings);
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
         },
@@ -1056,13 +1061,13 @@ var ngInbox = {
             //Controler parrent setting !!!!
             var controllerParent = ngInbox.SentList;
             controllerParent.Events.ShowList(controllerParent);
-            controllerParent.ThreadPageOptions = new ngInbox._internal.DataConstructors.ThreadPageOptions();
 
             controllerParent.$scope = $scope;
             controllerParent.$http = $http;
             controllerParent.$cookieStore = $cookieStore;
             controllerParent.$scope.fromNumbers = $scope.main.fromNumbers;
 
+            controllerParent.ThreadPageOptions = new ngInbox._internal.DataConstructors.ThreadPageOptions(controllerParent.$scope.main.Settings);
             ngInbox._internal.Methods.PopulateScope(controllerParent);
             controllerParent.Events.InitialiseEvents(controllerParent);
         },
@@ -1496,64 +1501,47 @@ var ngSettings = {
         ServerRequests : {
 
         },
+        Events : {
+            Save_onClick : function(cpo) {
+                cpo.$scope.main.ipCookie('itSettings', cpo.$scope.main.Settings, {
+                    expires : 365,
+                    expirationUnit : 'days'
+                });
+                cpo.$scope.$broadcast('itMessage', {
+                    message : 'Basic Settings saved'
+                });
+            }
+        },
         Controller : function($scope, $http, $cookieStore) {
-            var param = {
-                apikey : $scope.main.authToken,
-                accountID : $scope.main.accountID,
-                companyID : $scope.main.accountInfo.companyID
-                //sethttp : 1
-            };
-
-            // if (true) {
-            // param.name = name;
-            // };
-            //
-            // if (true) {
-            // param.status = status;
-            // };
-            // if (true) {
-            // param.createdby = createdby;
-            // };
-            // if (true) {
-            // param.limit = limit;
-            // };
-
-            // if (true) {
-            // param.offset = offset;
-            // };
-
-            //param.orderby = 'createddate';
-
-            $http.post(inspiniaNS.wsUrl + "autoresponder_get", $.param(param))
-            //Successful request to the server
-            .success(function(data, status, headers, config) {
-
-                console.log(data)
-                // if (data == null || typeof data.apicode == 'undefined') {
-                // //This should never happen
-                // alert("Unidentified error occurred when getting autoresponders!");
-                // return;
-                // }
-                // if (data.apicode == 0) {
-                // main.accountInfo = data.apidata[0];
-                //
-                // main.ServerRequests.contactListsGet();
-                // main.ServerRequests.didGet();
-                // } else {
-                // $scope.$broadcast("RequestError", data, 'autoresponder_get');
-                // }
-            })
-            //An error occurred with this request
-            .error(function(data, status, headers, config) {
-                $scope.$broadcast("RequestError", data, 'autoresponder_get');
-            });
+            var cpo = ngSettings.Settings;
+            cpo.$scope = $scope;
+            cpo.$http = $http;
+            cpo.$cookieStore = $cookieStore;
+            cpo.$scope.cpo = cpo;
         }
     },
     NumberNames : {
         ServerRequests : {
 
         },
+        Events : {
+            Save_onClick : function(cpo) {
+                cpo.$scope.main.ipCookie('itSettings', cpo.$scope.main.Settings, {
+                    expires : 365,
+                    expirationUnit : 'days'
+                });
+                cpo.$scope.$broadcast('itMessage', {
+                    message : 'ImpactText Number settings saved'
+                });
+            }
+        },
         Controller : function($scope, $http, $cookieStore) {
+            console.log($scope.main.Settings.Numbers);
+            var cpo = ngSettings.NumberNames;
+            cpo.$scope = $scope;
+            cpo.$http = $http;
+            cpo.$cookieStore = $cookieStore;
+            cpo.$scope.cpo = cpo;
         }
     },
     Autoresponder : {
@@ -1561,6 +1549,11 @@ var ngSettings = {
 
         },
         Controller : function($scope, $http, $cookieStore) {
+            var cpo = ngSettings.Autoresponder;
+            cpo.$scope = $scope;
+            cpo.$http = $http;
+            cpo.$cookieStore = $cookieStore;
+            cpo.$scope.cpo = cpo;
         }
     }
 };

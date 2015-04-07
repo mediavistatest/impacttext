@@ -19,7 +19,6 @@
  *  - nestableCtrl
  *  - notifyCtrl
  *  - translateCtrl
- *
  */
 function setPagingDataSliced($scope, data, totalResultsCount) {
     $scope.ngData = data;
@@ -61,38 +60,30 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     //main.notify = notify;
     //console.log($scope.cNotify.notify)
     main.ipCookie = ipCookie;
+    // settings
+    main.Settings = {
+        defaultOptOutText : 'Reply STOP to end msgs.',
+        defaultPageSize : '10',
+        Numbers : [
+        // {
+        // DID : '',
+        // name : ''
+        // }
+        ]
+    };
+
+    var settingsCookie = main.ipCookie('itSettings');
+    if (settingsCookie != null) {
+        for (setting in settingsCookie) {
+            main.Settings[setting] = settingsCookie[setting];
+        }
+    }
     // getting account info
     main.accountInfo = {};
     main.companyInfo = {};
     main.authToken = $cookieStore.get('inspinia_auth_token');
     main.accountID = $cookieStore.get('inspinia_account_id');
-    $http.post(inspiniaNS.wsUrl + "account_get", $.param({
-        apikey : main.authToken,
-        accountID : main.accountID,
-        sethttp : 1
-    }))
-    //Successful request to the server
-    .success(function(data, status, headers, config) {
-        if (data == null || typeof data.apicode == 'undefined') {
-            //This should never happen
-            alert("Unidentified error occurred when getting account info!");
-            return;
-        }
-        if (data.apicode == 0) {
-            main.accountInfo = data.apidata[0];
 
-            main.ServerRequests.contactListsGet();
-            main.ServerRequests.didGet();
-            // } else {
-            // alert("Error occured while getting account info!");
-        } else {
-            $scope.$broadcast("RequestError", data, 'account_get');
-        }
-    })
-    //An error occurred with this request
-    .error(function(data, status, headers, config) {
-        alert("Error occured while getting account info!");
-    });
     main.fromNumbersString = '';
     //Server request logic here
     main.ServerRequests = {
@@ -145,9 +136,37 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 if (data.apicode == 0) {
                     //Reading contact lists
                     main.fromNumbers = data.apidata;
+                    main.Settings.Numbers = $.grep(main.Settings.Numbers, function(member) {
+                        var numberIn = false;
+                        for (var number in main.fromNumbers) {
+                            if (main.fromNumbers[number].DID == member.DID) {
+                                numberIn = true;
+                                break;
+                            }
+                        }
+                        return numberIn;
+                    });
+                    for (var number in main.fromNumbers) {
+                        if ($.grep(main.Settings.Numbers, function(member) {
+                            return member.DID == main.fromNumbers[number].DID;
+                        }).length == 0) {
+                            main.Settings.Numbers.push({
+                                DID : main.fromNumbers[number].DID,
+                                prefered : false,
+                                name : ''
+                            });
+                        }
+                    };
                 } else {
                     main.fromNumbers = [];
+                    main.Settings.Numbers = [];
                 }
+
+                main.ipCookie('itSettings', main.Settings, {
+                    expires : 365,
+                    expirationUnit : 'days'
+                });
+
                 for (var j in main.fromNumbers) {
                     main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();
                     if (j < main.fromNumbers.length - 1) {
@@ -179,7 +198,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                     if (request.status == 'I') {
                         var $param = $.param({
                             subject : 'Blocked contact',
-                            body : 'Please to block following number: '+request.ANI+' for all incoming text messages.'
+                            body : 'Please to block following number: ' + request.ANI + ' for all incoming text messages.'
                         });
                         window.location.href = 'mailto:nselimic@impacttelecom.com?' + $param;
                     }
@@ -286,6 +305,43 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 $scope.$broadcast("RequestError", data, 'optout_undo');
                 console.log(JSON.stringify(data));
             });
+        },
+        reportingGetMessageStats : function(inScope, callback) {
+            console.log(inScope.params)
+			
+			     // startdatetime : '2015-01-01 12:30:00',//$scope.StartDate,//'2015-01-01 12:30:00',
+        // enddatetime : '2015-09-01 12:30:00',//$scope.EndDate,
+			
+            $http.post(inspiniaNS.wsUrl + "reporting_getmessagestats", $.param({
+                // sethttp : 1,
+                apikey : main.authToken,
+                accountID : main.accountID,
+                companyID : 1, //main.accountInfo.companyID,
+				startdate : inScope.params.startdatetime,
+				enddate : inScope.params.enddatetime
+            })).success(
+            //Successful request to the server
+            function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    alert("Unidentified error occurred when trying to reporting get message stats!");
+                    return;
+                }
+                if (data.apicode == 0) {
+                    $scope.$broadcast("RequestSuccess", data);
+                } else {
+                    $scope.$broadcast("RequestError", data, 'reporting_getmessagestats');
+                    console.log(JSON.stringify(data));
+                }
+                console.log(data)
+				callback(data);
+				
+            }).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                $scope.$broadcast("RequestError", data, 'optout_undo');
+                console.log(JSON.stringify(data));
+            });
         }
     };
 
@@ -374,6 +430,35 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             window.location.href = 'mailto:?' + $param;
         }
     };
+
+    $http.post(inspiniaNS.wsUrl + "account_get", $.param({
+        apikey : main.authToken,
+        accountID : main.accountID,
+        sethttp : 1
+    }))
+    //Successful request to the server
+    .success(function(data, status, headers, config) {
+        if (data == null || typeof data.apicode == 'undefined') {
+            //This should never happen
+            alert("Unidentified error occurred when getting account info!");
+            return;
+        }
+        if (data.apicode == 0) {
+            main.accountInfo = data.apidata[0];
+
+            main.ServerRequests.contactListsGet();
+            main.ServerRequests.didGet();
+            // } else {
+            // alert("Error occured while getting account info!");
+        } else {
+            $scope.$broadcast("RequestError", data, 'account_get');
+        }
+    })
+    //An error occurred with this request
+    .error(function(data, status, headers, config) {
+        alert("Error occured while getting account info!");
+    });
+
     /**
      * slideInterval - Interval for bootstrap Carousel, in milliseconds:
      */
@@ -511,7 +596,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     this.randomStacked = function() {
         this.stacked = [];
         var types = ['success', 'info', 'warning', 'danger'];
-        for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+        for (var i = 0,
+            n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
             var index = Math.floor((Math.random() * 4));
             this.stacked.push({
                 value : Math.floor((Math.random() * 30) + 1),
@@ -2297,7 +2383,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
         pageSizes : [10, 20, 50, 100],
-        pageSize : 10,
+        pageSize : Number($scope.main.Settings.defaultPageSize),
         currentPage : 1
     };
     // sort
@@ -2584,25 +2670,25 @@ function ngGridCtrl($scope, $http, $cookieStore) {
         });
     };
 
-	$scope.exportOptOuts = function() {
-		$http.post(inspiniaNS.wsUrl + "contact_get", $.param({
-				sethttp : 1,
-				apikey : $cookieStore.get('inspinia_auth_token'),
-				accountID : $cookieStore.get('inspinia_account_id'),
-				status: "O",
-				export: "csv"
-			})).success(function(data) {
-				if (data.apicode == 0) {
-					window.location.href = data.apidata;
-					//window.open(data.apidata, "_blank");
-				}
-			}).error(
-			//An error occurred with this request
-			function(data, status, headers, config) {
-				alert("An error occurred when exporting Opt-Outs! Error code: " + data.apicode);
-				alert(JSON.stringify(data));
-			});
-	}
+    $scope.exportOptOuts = function() {
+        $http.post(inspiniaNS.wsUrl + "contact_get", $.param({
+            sethttp : 1,
+            apikey : $cookieStore.get('inspinia_auth_token'),
+            accountID : $cookieStore.get('inspinia_account_id'),
+            status : "O",
+            export : "csv"
+        })).success(function(data) {
+            if (data.apicode == 0) {
+                window.location.href = data.apidata;
+                //window.open(data.apidata, "_blank");
+            }
+        }).error(
+        //An error occurred with this request
+        function(data, status, headers, config) {
+            alert("An error occurred when exporting Opt-Outs! Error code: " + data.apicode);
+            alert(JSON.stringify(data));
+        });
+    };
 }
 
 /**
@@ -2635,7 +2721,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
         pageSizes : [10, 20, 50, 100],
-        pageSize : 10,
+        pageSize : Number($scope.main.Settings.defaultPageSize),
         currentPage : 1
     };
     // sort
@@ -2901,25 +2987,25 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
     };
 
-	$scope.export = function() {
-		$http.post(inspiniaNS.wsUrl + "contact_get", $.param({
-				sethttp : 1,
-				apikey : $cookieStore.get('inspinia_auth_token'),
-				accountID : $cookieStore.get('inspinia_account_id'),
-				contactListID : $state.params.id,
-				export: "csv"
-			})).success(function(data) {
-				if (data.apicode == 0) {
-					window.location.href = data.apidata;
-					//window.open(data.apidata, "_blank");
-				}
-			}).error(
-			//An error occurred with this request
-			function(data, status, headers, config) {
-				alert("An error occurred when exporting contacts! Error code: " + data.apicode);
-				alert(JSON.stringify(data));
-			});
-	}
+    $scope.export = function() {
+        $http.post(inspiniaNS.wsUrl + "contact_get", $.param({
+            sethttp : 1,
+            apikey : $cookieStore.get('inspinia_auth_token'),
+            accountID : $cookieStore.get('inspinia_account_id'),
+            contactListID : $state.params.id,
+            export : "csv"
+        })).success(function(data) {
+            if (data.apicode == 0) {
+                window.location.href = data.apidata;
+                //window.open(data.apidata, "_blank");
+            }
+        }).error(
+        //An error occurred with this request
+        function(data, status, headers, config) {
+            alert("An error occurred when exporting contacts! Error code: " + data.apicode);
+            alert(JSON.stringify(data));
+        });
+    };
 }
 
 //ADD LISTS
@@ -3695,7 +3781,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.MessageTxt = '';
     $scope.FromName = '';
     var maxLengthCalc = function() {
-        $scope.maxLength = 160 - ($scope.FromName.length + $scope.optFields.OptOutTxt1.length + $scope.optFields.OptOutTxt3.length) - ($scope.FromName.length > 0 ? 2 : 0) - ($scope.optFields.OptOutTxt1.length > 0 ? 1 : 0) - ($scope.optFields.OptOutTxt3.length > 0 ? 1 : 0);
+        $scope.maxLength = 160 - ($scope.FromName.length + $scope.optFields.OptOutTxt1.length + $scope.optFields.OptOutTxt2.length + $scope.optFields.OptOutTxt3.length) - ($scope.FromName.length > 0 ? 2 : 0) - ($scope.optFields.OptOutTxt1.length > 0 ? 1 : 0) - ($scope.optFields.OptOutTxt2.length > 0 ? 1 : 0) - ($scope.optFields.OptOutTxt3.length > 0 ? 1 : 0);
     };
     //$scope.$watch('MessageTxt', function() {
     //
@@ -3703,6 +3789,17 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     //
     //        }, true);
     var phoneCheckInterval;
+    $scope.$watch('FromNumber', function(){
+        if ($scope.main.Settings.Numbers && $scope.main.Settings.Numbers.length>0 && $scope.FromNumber && $scope.FromNumber.DID){
+            var Number = $.grep($scope.main.Settings.Numbers, function(member){
+                console.log(member.DID)
+               return member.DID == $scope.FromNumber.DID;
+            })[0];
+            if (Number.name != null && Number.name!=''){
+                $scope.FromName = Number.name;
+            }
+        }
+    });
     $scope.$watch('ToNumber', function() {
         // clearInterval(phoneCheckInterval);
         // phoneCheckInterval = setTimeout(function(){
@@ -3731,12 +3828,32 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
     function setFromNumber() {
         if ($scope.main.fromNumbers != null) {
+            var defaultNumberDID = '';
+            var defaultNumberName = '';
+            if ($scope.main.Settings.Numbers != null) {
+                for (var Number in $scope.main.Settings.Numbers) {
+                    if ($scope.main.Settings.Numbers[Number].prefered) {
+                        defaultNumberDID = $scope.main.Settings.Numbers[Number].DID;
+                        defaultNumberName = $scope.main.Settings.Numbers[Number].name;
+                    }
+                }
+            }
             $scope.fromNumbers = $scope.main.fromNumbers;
-            $scope.FromNumber = $.grep($scope.fromNumbers, function(number){
-            return number.DIDID == $scope.main.accountInfo.primaryDIDID;
-            })[0];
-            if (!$scope.$$phase) {
-                $scope.$apply();
+            if (defaultNumberDID != '') {
+                $scope.FromNumber = $.grep($scope.fromNumbers, function(number){
+                return number.DID == defaultNumberDID;
+                })[0];
+                $scope.FromName = defaultNumberName;
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            } else {
+                $scope.FromNumber = $.grep($scope.fromNumbers, function(number){
+                return number.DIDID == $scope.main.accountInfo.primaryDIDID;
+                })[0];
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
             }
         } else {
             setTimeout(function() {
@@ -4296,36 +4413,46 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
      * Data for Bar chart
      */
     $scope.barData = {
-        labels : ["January", "February", "March", "April"],
+		// labels : ["January", "February", "March", "April"],
+		labels : [],
         datasets : [{
-            label : "Sent messages",
+			label : "Received messages",
             fillColor : "rgba(0,94,170,0.5)",
             strokeColor : "rgba(0,94,170,0.5)",
             highlightFill : "rgba(0,94,170,0.8)",
             highlightStroke : "rgba(0,94,170,1)",
-            data : [65, 54, 25, 80]
+			data : []
         }, {
-            label : "Received messages",
+			label : "Sent messages",
             fillColor : "rgba(227,111,30,0.5)",
             strokeColor : "rgba(227,111,30,0.5)",
             highlightFill : "rgba(227,111,30,0.8)",
             highlightStroke : "rgba(227,111,30,1)",
-            data : [28, 52, 44, 12]
+			data : []
         }, {
-            label : "Scheduled",
+			label : "Total Contacts",
             fillColor : "rgba(0,125,50,0.5)",
             strokeColor : "rgba(0,125,50,0.5)",
             highlightFill : "rgba(0,125,50,0.8)",
             highlightStroke : "rgba(0,125,50,1)",
-            data : [28, 52, 44, 12]
+			data : []
         }, {
-            label : "Opt-outs",
+			label : "Total Opt-Outs",
             fillColor : "rgba(159,74,156,0.5)",
             strokeColor : "rgba(159,74,156,0.5)",
             highlightFill : "rgba(159,74,156,0.8)",
             highlightStroke : "rgba(159,74,156,1)",
-            data : [68, 33, 64, 9]
-        }]
+			data : []
+		}
+		// , {
+            // label : "Unique Reply Ani",
+            // fillColor : "rgba(159,74,156,0.5)",
+            // strokeColor : "rgba(159,74,156,0.5)",
+            // highlightFill : "rgba(159,74,156,0.8)",
+            // highlightStroke : "rgba(159,74,156,1)",
+            // data : []
+        // }
+        ]
     };
     //var updateBarOptions = function() {
     //        barData[0].value = pCtrl.bucketOfMessages;
@@ -4373,7 +4500,25 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
         showWeeks : 'false',
         initDate : 'false'
     };
+
+	
+	// $scope.barData.label[] 
+	callback = function(inData){   
+        $scope.barData.datasets[0].data.push(inData.apidata.totalReplies);
+		$scope.barData.datasets[1].data.push(inData.apidata.totalMessagesDelivered);
+		$scope.barData.datasets[2].data.push(inData.apidata.totalContacts);
+		$scope.barData.datasets[3].data.push(inData.apidata.totalOptOuts);
+		// $scope.barData.datasets[4].data.push(inData.apidata.uniqueReplyAni);
+    };
+    $scope.params = {
+		startdatetime : '2015-01-01 12:30:00',//$scope.StartDate,//'2015-01-01 12:30:00',
+		enddatetime : '2016-01-01 12:30:00',//$scope.EndDate,
+        didid : null
+    };
+
+    $scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
 }
+
 
 angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
@@ -4413,3 +4558,4 @@ angular.module('inspinia').controller('DashboardCalendarCtrl', ['$scope', '$http
 angular.module('inspinia').controller('DashboardInboxCtrl', ['$scope', '$http', '$cookieStore', DashboardInboxCtrl]);
 angular.module('inspinia').controller('ReportsBarCtrl', ['$scope', '$http', '$cookieStore', '$state', ReportsBarCtrl]);
 angular.module('inspinia').controller('ngSettintsCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Settings.Controller]);
+angular.module('inspinia').controller('ngNumbersCtrl', ['$scope', '$http', '$cookieStore', ngSettings.NumberNames.Controller]);
