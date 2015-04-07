@@ -1572,7 +1572,7 @@ var ngSettings = {
 				$scope.maxLength = 160 - ($scope.FromName.length + $scope.optFields.OptOutTxt1.length + $scope.optFields.OptOutTxt2.length + $scope.optFields.OptOutTxt3.length) - ($scope.FromName.length > 0 ? 2 : 0) - ($scope.optFields.OptOutTxt1.length > 0 ? 1 : 0) - ($scope.optFields.OptOutTxt2.length > 0 ? 1 : 0) - ($scope.optFields.OptOutTxt3.length > 0 ? 1 : 0);
 			};
 
-			var phoneCheckInterval;
+			$scope.FromNumber = "default";
 			$scope.$watch('FromNumber', function() {
 				if ($scope.main.Settings.Numbers && $scope.main.Settings.Numbers.length > 0 && $scope.FromNumber && $scope.FromNumber.DID) {
 					var Number = $.grep($scope.main.Settings.Numbers, function(member){
@@ -1582,7 +1582,7 @@ var ngSettings = {
 						$scope.FromName = Number.name;
 					}
 				}
-			});
+			}, true);
 			$scope.$watch('FromName', function() {
 				maxLengthCalc();
 			}, true);
@@ -1601,7 +1601,7 @@ var ngSettings = {
 			//send form initial states
 			$scope.initial = "";
 			//$scope.MessageType = "SMS";
-			$scope.FromNumber = "default";
+			
 
 			function setFromNumber() {
 				if ($scope.main.fromNumbers != null) {
@@ -1638,7 +1638,6 @@ var ngSettings = {
 					}, 500);
 				}
 			}
-
 			setFromNumber();
 
 			$scope.OptOutMsg = "";
