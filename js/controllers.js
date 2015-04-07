@@ -328,7 +328,6 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 					$scope.$broadcast("RequestError", data, 'reporting_getmessagestats');
 					console.log(JSON.stringify(data));
 				}
-				console.log(data)
 				callback(data);
 
 			}).error(
