@@ -617,39 +617,39 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			}
 			request.DID = $scope.smsCode.LongCode;
 			request.DIDName = $scope.smsCode.LongCodeName;
-			//Set the start date
-			var now = new Date();
-			var timezoneOffsetMinutes = now.getTimezoneOffset();
-			var startDate = new Date(now.getTime() + 60000 * timezoneOffsetMinutes);
-			if (inspiniaAdminNS.developmentEnvironment) {
-				//Development environment is not set to GMT, so we need to move start date to the past...
-				startDate = new Date(startDate.getTime() - 24*60*60000);
-			}
-			//Date is in format MM/dd/yyyy
-			var dateParts = [];
-			dateParts[0] = startDate.getFullYear();
-			dateParts[1] = "" + (startDate.getMonth() + 1);
-			dateParts[2] = "" + startDate.getDate();
-			dateParts[3] = "" + startDate.getHours();
-			dateParts[4] = "" + startDate.getMinutes();
-			//Fix month
-			if (dateParts[1].length < 2) {
-				 dateParts[1] = "0" + dateParts[1];
-			}
-			//Fix day
-			if (dateParts[2].length < 2) {
-				 dateParts[2] = "0" + dateParts[2];
-			}
-			//Fix hours
-			if (dateParts[3].length < 2) {
-				 dateParts[3] = "0" + dateParts[3];
-			}
-			//Fix minutes
-			if (dateParts[4].length < 2) {
-				 dateParts[4] = "0" + dateParts[4];
-			}
-			request.startDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
 		}
+		//Set the start date
+		var now = new Date();
+		var timezoneOffsetMinutes = now.getTimezoneOffset();
+		var startDate = new Date(now.getTime() + 60000 * timezoneOffsetMinutes);
+		if (inspiniaAdminNS.developmentEnvironment) {
+			//Development environment is not set to GMT, so we need to move start date to the past...
+			startDate = new Date(startDate.getTime() - 24*60*60000);
+		}
+		//Date is in format MM/dd/yyyy
+		var dateParts = [];
+		dateParts[0] = startDate.getFullYear();
+		dateParts[1] = "" + (startDate.getMonth() + 1);
+		dateParts[2] = "" + startDate.getDate();
+		dateParts[3] = "" + startDate.getHours();
+		dateParts[4] = "" + startDate.getMinutes();
+		//Fix month
+		if (dateParts[1].length < 2) {
+			dateParts[1] = "0" + dateParts[1];
+		}
+		//Fix day
+		if (dateParts[2].length < 2) {
+			dateParts[2] = "0" + dateParts[2];
+		}
+		//Fix hours
+		if (dateParts[3].length < 2) {
+			dateParts[3] = "0" + dateParts[3];
+		}
+		//Fix minutes
+		if (dateParts[4].length < 2) {
+			dateParts[4] = "0" + dateParts[4];
+		}
+		request.startDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
 
 		$http
 			.post(inspiniaAdminNS.wsUrl + "did_add", $.param(request))
