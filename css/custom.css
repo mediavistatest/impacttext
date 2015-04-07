@@ -3251,6 +3251,11 @@ ul.bar-legend {
     font-weight: 400;   
 }
 
+.col-sm-1.check {
+  padding-top: 6px;
+  width: 40px;
+}
+
 @media all and (max-width: 990px) {
     .welcome-msg {
         display: none;
