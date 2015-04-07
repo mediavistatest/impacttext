@@ -299,7 +299,37 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 				$scope.$broadcast("RequestError", data, 'optout_undo');
 				console.log(JSON.stringify(data));
 			});
-		}
+		},
+		reportingGetMessageStats : function(inScope, callback) {
+			console.log(inScope.params)
+			$http.post(inspiniaNS.wsUrl + "reporting_getmessagestats", $.param({
+				// sethttp : 1,
+				apikey : main.authToken,
+				accountID : main.accountID,
+				companyID : 1, //main.accountInfo.companyID,
+				startdate : inScope.params.startdate
+			})).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unidentified error occurred when trying to reporting get message stats!");
+					return;
+				}
+				if (data.apicode == 0) {
+					$scope.$broadcast("RequestSuccess", data);
+				} else {
+					$scope.$broadcast("RequestError", data, 'reporting_getmessagestats');
+					console.log(JSON.stringify(data));
+				}
+				callback();
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				$scope.$broadcast("RequestError", data, 'optout_undo');
+				console.log(JSON.stringify(data));
+			});
+		}	
 	};
 
 	main.CommonActions = {
@@ -2617,8 +2647,8 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 			alert("An error occurred when exporting Opt-Outs! Error code: " + data.apicode);
 			alert(JSON.stringify(data));
 		});
+	};
 	}
-}
 
 /**
  * CONTROLLER FOR CONTACT VIEW TABLE
@@ -2934,8 +2964,8 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 			alert("An error occurred when exporting contacts! Error code: " + data.apicode);
 			alert(JSON.stringify(data));
 		});
+	};
 	}
-}
 
 //ADD LISTS
 function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
@@ -4281,6 +4311,18 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
 		showWeeks : 'false',
 		initDate : 'false'
 	};
+	
+	callback = function(){
+		
+	};
+	$scope.params = {
+		startdatetime : $scope.StartDate,//'2015-01-01 12:30:00',
+		enddatetime : $scope.EndDate,
+		didid : null
+	};
+
+	
+	$scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
 }
 
 
