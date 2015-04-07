@@ -3736,13 +3736,13 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 }
                 if (phoneNumber.length < 10) {
                     //var msg = 'Error: ' + phoneNumber + ' is less then 10 digits number (lenght=' + phoneNumber.length + ')!';
-                    var msg = 'Please enter 10 digits number.';
+                    var msg = 'Please enter 10 digit number.';
                     $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     return false;
                 }
                 if (phoneNumber.length > 10) {
                     //var msg = 'Error: ' + phoneNumber + ' is greater then 10 digits number (lenght=' + phoneNumber.length + ')!';
-                    var msg = 'Please enter 10 digits number.';
+                    var msg = 'Please enter 10 digit number.';
                     $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
                     return false;
                 }
