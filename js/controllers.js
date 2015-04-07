@@ -302,12 +302,17 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 		},
 		reportingGetMessageStats : function(inScope, callback) {
 			console.log(inScope.params)
+			
+			     // startdatetime : '2015-01-01 12:30:00',//$scope.StartDate,//'2015-01-01 12:30:00',
+        // enddatetime : '2015-09-01 12:30:00',//$scope.EndDate,
+			
 			$http.post(inspiniaNS.wsUrl + "reporting_getmessagestats", $.param({
 				// sethttp : 1,
 				apikey : main.authToken,
 				accountID : main.accountID,
 				companyID : 1, //main.accountInfo.companyID,
-				startdate : inScope.params.startdate
+				startdate : inScope.params.startdatetime,
+				enddate : inScope.params.enddatetime
 			})).success(
 			//Successful request to the server
 			function(data, status, headers, config) {
@@ -322,7 +327,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 					$scope.$broadcast("RequestError", data, 'reporting_getmessagestats');
 					console.log(JSON.stringify(data));
 				}
-				callback();
+                console.log(data)
+				callback(data);
+				
 			}).error(
 			//An error occurred with this request
 			function(data, status, headers, config) {
@@ -4234,36 +4241,46 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
 	 * Data for Bar chart
 	 */
 	$scope.barData = {
-		labels : ["January", "February", "March", "April"],
+		// labels : ["January", "February", "March", "April"],
+		labels : [],
 		datasets : [{
-			label : "Sent messages",
+			label : "Received messages",
 			fillColor : "rgba(0,94,170,0.5)",
 			strokeColor : "rgba(0,94,170,0.5)",
 			highlightFill : "rgba(0,94,170,0.8)",
 			highlightStroke : "rgba(0,94,170,1)",
-			data : [65, 54, 25, 80]
+			data : []
 		}, {
-			label : "Received messages",
+			label : "Sent messages",
 			fillColor : "rgba(227,111,30,0.5)",
 			strokeColor : "rgba(227,111,30,0.5)",
 			highlightFill : "rgba(227,111,30,0.8)",
 			highlightStroke : "rgba(227,111,30,1)",
-			data : [28, 52, 44, 12]
+			data : []
 		}, {
-			label : "Scheduled",
+			label : "Total Contacts",
 			fillColor : "rgba(0,125,50,0.5)",
 			strokeColor : "rgba(0,125,50,0.5)",
 			highlightFill : "rgba(0,125,50,0.8)",
 			highlightStroke : "rgba(0,125,50,1)",
-			data : [28, 52, 44, 12]
+			data : []
 		}, {
-			label : "Opt-outs",
+			label : "Total Opt-Outs",
 			fillColor : "rgba(159,74,156,0.5)",
 			strokeColor : "rgba(159,74,156,0.5)",
 			highlightFill : "rgba(159,74,156,0.8)",
 			highlightStroke : "rgba(159,74,156,1)",
-			data : [68, 33, 64, 9]
-		}]
+			data : []
+		}
+		// , {
+            // label : "Unique Reply Ani",
+            // fillColor : "rgba(159,74,156,0.5)",
+            // strokeColor : "rgba(159,74,156,0.5)",
+            // highlightFill : "rgba(159,74,156,0.8)",
+            // highlightStroke : "rgba(159,74,156,1)",
+            // data : []
+        // }
+        ]
 	};
 	//var updateBarOptions = function() {
 	//        barData[0].value = pCtrl.bucketOfMessages;
@@ -4312,15 +4329,20 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
 		initDate : 'false'
 	};
 	
-	callback = function(){
-		
+	
+	// $scope.barData.label[] 
+	callback = function(inData){   
+        $scope.barData.datasets[0].data.push(inData.apidata.totalReplies);
+		$scope.barData.datasets[1].data.push(inData.apidata.totalMessagesDelivered);
+		$scope.barData.datasets[2].data.push(inData.apidata.totalContacts);
+		$scope.barData.datasets[3].data.push(inData.apidata.totalOptOuts);
+		// $scope.barData.datasets[4].data.push(inData.apidata.uniqueReplyAni);
 	};
 	$scope.params = {
-		startdatetime : $scope.StartDate,//'2015-01-01 12:30:00',
-		enddatetime : $scope.EndDate,
+		startdatetime : '2015-01-01 12:30:00',//$scope.StartDate,//'2015-01-01 12:30:00',
+		enddatetime : '2016-01-01 12:30:00',//$scope.EndDate,
 		didid : null
 	};
-
 	
 	$scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
 }
