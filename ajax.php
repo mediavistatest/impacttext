@@ -1,4 +1,6 @@
 <?php
+echo "OK";
+exit;
 $ch = curl_init();
 $url = "http://tlsionweb01.excel.com/mercury/cmp/$_GET[todo]";
 curl_setopt($ch,CURLOPT_URL, $url);

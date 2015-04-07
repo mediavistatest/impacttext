@@ -83,11 +83,14 @@
 <p>Upload a CSV or Excel file with phone numbers you wish to add to this contact list. 10 digit phone numbers must begin with a 1 followed by the area code. The following formats are accepted: .csv, .xls and .txt files up to 10MB in size. Duplicate numbers will automatically be removed.</p><br>
 	<div class="form-group clearfix">
 
-		<input type="file" name="ListUpload" placeholder="Supported formats: CSV, XLS(X), TXT" ng-model="ListUpload" class="form-control">
+		<!--<input type="file" name="ListUpload" placeholder="Supported formats: CSV, XLS(X), TXT" ng-model="ListUpload" class="form-control">-->
+		<input type="file" id="csvFile" nv-file-select="" uploader="fileUploader" />
 		<small><br>Your list must be in a specific format beginning with the phone number in column A and no headers. The following fields are optional: first name, last name, email, custom field 1, custom field 2, custom field 3. You can use custom fields to collect information about each contact’s preferences, or to segment lists for campaigns.
 
 If you are having trouble formatting your import list, view an example here.</small>
 	</div>
+
+	<form method="POST" action=""></form>
 
 	<br>
 	<p><strong>PASTE LIST</strong></p>
@@ -110,7 +113,7 @@ If you are having trouble formatting your import list, view an example here.</sm
 
 	<br>
 <a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="addContact()">
-<span><i class="fa fa-floppy-o"></i> Save contact</span>
+<span><i class="fa fa-floppy-o"></i> Save contact(s)</span>
 </a>
 
 </form>
