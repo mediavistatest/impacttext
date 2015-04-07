@@ -9,7 +9,7 @@ Settings
             Auto responder
             </h2>
             <p>
-                Enter autoresponder data
+            Enter autoresponder data
             </p>
             <br>
             <div class="form-group clearfix">
@@ -24,7 +24,6 @@ Settings
                     </i>
                 </div>
             </div>
-
             <div class="form-group clearfix">
                 <label class="col-sm-2 control-label">
                     Term (Keyword):
@@ -37,10 +36,8 @@ Settings
                     </i>
                 </div>
             </div>
-
             <br>
             <br>
-
             <div class="form-group clearfix">
                 <label class="col-sm-2 control-label">
                     From:
@@ -66,29 +63,28 @@ Settings
                     </i>
                 </div>
             </div>
-
             <div class="form-group clearfix">
                 <label class="col-sm-2 control-label">
-                    Message text:</label>
+                Message text:</label>
                 <div class="col-sm-6">
                     <textarea name="MessageTxt" class="form-control" ng-maxlength="{{ maxLength }}" rows="3" ng-model="MessageTxt" ng-trim="false"></textarea>
                     <!--<div ng-hide="SendForm.$error.maxlength" class="text-counter">{{ 160 - ((FromName.length > 0 && FromName.length + 2 || FromName.length) + MessageTxt.length + (optFields.OptOutTxt1.length > 0 && optFields.OptOutTxt1.length + 1 || optFields.OptOutTxt1.length) + (optFields.OptOutTxt3.length > 0 && optFields.OptOutTxt3.length + 1 || optFields.OptOutTxt3.length)) }} characters left.</div>-->
                     <!--<div ng-show="SendForm.$error.maxlength" class="text-counter error">
-                    Limit reached!
+                                            Limit reached!
                     </div>-->
                 </div>
             </div>
             <div class="form-group clearfix">
                 <label class="col-sm-2 control-label">
-                    Opt-out Message:</label>
+                Opt-out Message:</label>
                 <div class="col-sm-6">
                     <!--<div class="radio">
-                    <!--<label> <input icheck type="radio" name="OptOutMsg" value="standard" ng-model="OptOutMsg"> Standard </label>
-                    <label> <input icheck type="radio" name="OptOutMsg" value="custom" ng-model="OptOutMsg"> Customized </label>
-                    <label> <input icheck type="radio" name="OptOutMsg" value="write" ng-model="OptOutMsg"> Write opt-out message </label></div>
-                    <textarea ng-show="OptOutMsg == 'standard'" name="message" class="form-control" rows="2" ng-model="OptOutTxt1" ng-init="OptOutTxt1='This is standard'" disabled></textarea>
-                    <textarea ng-show="OptOutMsg == 'custom'" name="message" class="form-control" rows="2" ng-model="OptOutTxt2" ng-init="OptOutTxt2='This is custom'" disabled></textarea>
-                    <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>
+                        <!--<label> <input icheck type="radio" name="OptOutMsg" value="standard" ng-model="OptOutMsg"> Standard </label>
+                                            <label> <input icheck type="radio" name="OptOutMsg" value="custom" ng-model="OptOutMsg"> Customized </label>
+                                            <label> <input icheck type="radio" name="OptOutMsg" value="write" ng-model="OptOutMsg"> Write opt-out message </label></div>
+                                            <textarea ng-show="OptOutMsg == 'standard'" name="message" class="form-control" rows="2" ng-model="OptOutTxt1" ng-init="OptOutTxt1='This is standard'" disabled></textarea>
+                                            <textarea ng-show="OptOutMsg == 'custom'" name="message" class="form-control" rows="2" ng-model="OptOutTxt2" ng-init="OptOutTxt2='This is custom'" disabled></textarea>
+                                            <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>
                     </div>-->
                     <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="OptOutMsg">
                         <option value="standard">
@@ -118,23 +114,23 @@ Settings
             </div>
             <div class="form-group clearfix">
                 <label class="col-sm-2 control-label">
-                    Valid from:</label>
+                Valid from:</label>
                 <div class="col-md-10">
                     <span class="label-icon"><i class="fa fa-calendar">
-                        </i></span>
+                    </i></span>
                     <div class="btn-group datetimepicker-wrapper" >
-                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="ValidFrom" is-open="opened" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="ValidFrom" is-open="opened" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click = "opened = true" />
                     </div>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="label-icon"><i class="fa fa-clock-o">
-                        </i></span>
+                    </i></span>
                     <!-- Single button -->
                     <div class="btn-group timing" dropdown is-open="status.isopenHour">
                         <input type="text" name="SetTimeHourFrom" placeholder="Hour" class="form-control" dropdown-toggle ng-init="SetTimeHourFrom='00'" ng-model='SetTimeHourFrom' readonly>
                         <ul class="dropdown-menu time-pick" role="menu">
                             <li>
                                 <span>
-                                    Set hours</span>
+                                Set hours</span>
                             </li>
                             <li>
                                 <a ng-click='SetTimeHourFrom = "00"'>
@@ -205,7 +201,7 @@ Settings
                         <ul class="dropdown-menu time-pick" role="menu">
                             <li>
                                 <span>
-                                    Set minutes</span>
+                                Set minutes</span>
                             </li>
                             <li>
                                 <a ng-click='SetTimeMinuteFrom = "00"'>
@@ -223,23 +219,23 @@ Settings
             </div>
             <div class="form-group clearfix">
                 <label class="col-sm-2 control-label">
-                    Valid until:</label>
+                Valid until:</label>
                 <div class="col-md-10">
                     <span class="label-icon"><i class="fa fa-calendar">
-                        </i></span>
+                    </i></span>
                     <div class="btn-group datetimepicker-wrapper" >
-                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="ValidFrom" is-open="opened" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="ValidUntil" is-open="opened2" min-date="ValidFrom" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click = "opened2 = true" />
                     </div>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="label-icon"><i class="fa fa-clock-o">
-                        </i></span>
+                    </i></span>
                     <!-- Single button -->
-                    <div class="btn-group timing" dropdown is-open="status.isopenHour">
+                    <div class="btn-group timing" dropdown is-open="status.isopenHour2">
                         <input type="text" name="SetTimeHourUntil" placeholder="Hour" class="form-control" dropdown-toggle ng-init="SetTimeHourUntil='00'" ng-model='SetTimeHourUntil' readonly>
                         <ul class="dropdown-menu time-pick" role="menu">
                             <li>
                                 <span>
-                                    Set hours</span>
+                                Set hours</span>
                             </li>
                             <li>
                                 <a ng-click='SetTimeHourUntil = "00"'>
@@ -305,12 +301,12 @@ Settings
                     </div>
                     &nbsp;:&nbsp;
                     <!-- Single button -->
-                    <div class="btn-group timing" dropdown is-open="status.isopenMinute">
+                    <div class="btn-group timing" dropdown is-open="status.isopenMinute2">
                         <input type="text" name="SetTimeMinuteUntil" placeholder="Minute" class="form-control" dropdown-toggle ng-init="SetTimeMinuteUntil='00'" ng-model='SetTimeMinuteUntil' readonly>
                         <ul class="dropdown-menu time-pick" role="menu">
                             <li>
                                 <span>
-                                    Set minutes</span>
+                                Set minutes</span>
                             </li>
                             <li>
                                 <a ng-click='SetTimeMinuteUntil = "00"'>
@@ -334,7 +330,6 @@ Settings
                     </label>
                 </div>
             </div>
-
             <div class="form-group clearfix">
                 <div class="col-sm-6 col-sm-offset-2">
                     <label class="checkbox">
@@ -345,15 +340,14 @@ Settings
             </div>
         </div>
         <!-- end settings section -->
-
         <br>
         <br>
         <br>
         <div class="col-sm-6 col-sm-offset-2">
             <button class="btn btn-send smaller right">
-                <span><i class="fa fa-floppy-o">
-                    </i>
-                    Save changes</span>
+            <span><i class="fa fa-floppy-o">
+            </i>
+            Save changes</span>
             </button>
         </div>
     </div>

@@ -1649,35 +1649,42 @@ var ngSettings = {
 			// $scope.contactLists = [];
 			// $scope.SendToList = false;
 			//Date/time control
-			// $scope.today = function() {
-			// $scope.SetDate = new Date();
-			// };
-			// $scope.today();
-			// $scope.clear = function() {
-			// $scope.SetDate = null;
-			// };
-			// Disable weekend selection
-			//$scope.disabled = function(date, mode) {
-			//  return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-			//};
-			// $scope.toggleMin = function() {
-			// $scope.minDate = $scope.minDate ? null : new Date();
-			// };
-			// $scope.toggleMin();
-			$scope.open = function($event) {
-				$event.preventDefault();
-				$event.stopPropagation();
-				$scope.opened = true;
-			};
-			$scope.dateOptions = {
-				formatYear : 'yy',
-				startingDay : 1,
-				showWeeks : 'false',
-				initDate : 'false'
-			};
-			$scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-			$scope.format = $scope.formats[0];
-			//reset send form
+			$scope.today = function() {
+             $scope.ValidFrom = new Date();
+             $scope.ValidUntil = new Date();
+             };
+             $scope.today();
+             $scope.clear = function() {
+             $scope.ValidFrom = null;
+             $scope.ValidUntil = null;
+             };
+            // Disable weekend selection
+            //$scope.disabled = function(date, mode) {
+            //  return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+            //};
+             $scope.toggleMin = function() {
+             $scope.minDate = $scope.minDate ? null : new Date();
+             };
+             $scope.toggleMin();
+            $scope.open = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.opened = true;
+            };
+            $scope.open2 = function($event) {
+    		    $event.preventDefault();
+    		    $event.stopPropagation();
+    		    $scope.opened2 = true;
+    		};
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                startingDay: 1,
+                showWeeks: 'false',
+                initDate: 'false'
+            };
+            $scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+            $scope.format = $scope.formats[0];
+            //reset send form
 			$scope.reset = function() {
 				if ($scope.controllerParent) {
 					$scope.controllerParent.Events.Send_onClick($scope);
