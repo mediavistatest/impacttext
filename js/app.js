@@ -9,6 +9,7 @@
         'ui.bootstrap.datetimepicker',        // Datetimepicker
         'ajoslin.promise-tracker',			//promise tracker
         'ja.qr',                             //qr generator
+        'angularFileUpload',                 //File upload
         'ipCookie'							//cookies that have expiration settings
         //'angular-momentjs'					//momentjs
     ]);

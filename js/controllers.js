@@ -3009,7 +3009,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 }
 
 //ADD LISTS
-function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
+function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
     if ($scope.controllerParent && $scope.controllerParent.PopulateAdd) {
         $scope.controllerParent.$addScope = $scope;
         $scope.$watch('controllerParent.clickedMessage', function() {
@@ -3149,6 +3149,10 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
         if (selectedLists.length <= 0) {
             return;
         }
+		 if ($scope.UploadType == 'upload') {
+			 $scope.uploadContacts();
+			 return;
+		 }
         //Checking if all required parameters are there
         if ( typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
             $scope.$broadcast("InvalidANI");
@@ -3233,6 +3237,48 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter) {
         }
     };
     $scope.refreshLists();
+
+
+	$scope.fileUploader = new FileUploader({
+		//url: "ajax.php",
+		url: inspiniaNS.wsUrl + "contact_upload",
+		queueLimit: 1,
+		onSuccessItem: function(item, data, status, headers) {
+			if (typeof data == 'undefined' || data == null) {
+				//This should never happen
+				alert("Unknown error occurred when trying to upload file!");
+				return;
+			}
+			if (data.apicode == 0) {
+				$scope.$broadcast("ImportSucceeded", data.apidata);
+			}
+			$("#csvFile").val('');
+			$scope.refreshLists();
+		},
+		onErrorItem: function(item, data, status, headers) {
+			$scope.$broadcast("ImportFailed");
+			$("#csvFile").val('');
+			$scope.refreshLists();
+		}
+	});
+	$scope.uploadContacts = function() {
+		if ($scope.fileUploader.queue.length <= 0) {
+			return;
+		}
+		var selectedLists = $scope.selectedLists();
+		if (selectedLists.length > 1) {
+			$scope.$broadcast("UploadToMultipleListsNotSupported");
+			return;
+		}
+		var uploadItem = $scope.fileUploader.queue[0];
+		uploadItem.removeAfterUpload = true;
+		uploadItem.formData.push({sethttp : 1});
+		uploadItem.formData.push({apikey : $cookieStore.get('inspinia_auth_token')});
+		uploadItem.formData.push({accountID : $cookieStore.get('inspinia_account_id')});
+		uploadItem.formData.push({companyID : $cookieStore.get('inspinia_company_id')});
+		uploadItem.formData.push({contactListID : selectedLists[0].contactListID});
+		uploadItem.upload();
+	}
 }
 
 function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
@@ -3420,6 +3466,19 @@ function notifyCtrl($scope, notify) {
             classes : 'alert-success'
         });
     };
+	$scope.ContactsUploadedMsg = function() {
+		notify({
+			message : 'Contact list is successfully uploaded!',
+			classes : 'alert-success'
+		});
+	};
+	$scope.ContactsUploadFailedMsg = function() {
+		notify({
+			message : 'Failed to upload contact list!',
+			classes : 'alert-danger',
+			templateUrl : $scope.inspiniaTemplate
+		});
+	};
     $scope.InvalidANIMsg = function() {
         notify({
             message : 'Invalid phone number!',
@@ -3466,6 +3525,34 @@ function notifyCtrl($scope, notify) {
             templateUrl : $scope.inspiniaTemplate
         });
     };
+    $scope.ImportSucceededMsg = function(inserted, updated, invalid) {
+		 if (invalid > 0) {
+			 notify({
+				 message : 'There are ' + invalid + ' invalid items in your input file. Number of inserted items: ' + inserted + '. Number of updated items: ' + updated + '.',
+				 classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+			 });
+		 } else {
+			 notify({
+				 message : 'Import succeeded. Number of inserted items: ' + inserted + '. Number of updated items: ' + updated + '. Number of invalid items: ' + invalid,
+				 classes : 'alert-success'
+			 });
+		 }
+    };
+	$scope.ImportFailedMsg = function() {
+		 notify({
+			 message : 'Failed to import data from the specified file. Please check if file is in valid CSV format and if the content of the file is proper.',
+			 classes : 'alert-danger',
+			templateUrl : $scope.inspiniaTemplate
+		 });
+    };
+	$scope.UploadToMultipleListsNotSupportedMsg = function() {
+		 notify({
+			 message : 'Importing contacts to multiple contact lists is currently not supported. Please select single list to import contacts to.',
+			 classes : 'alert-danger',
+			templateUrl : $scope.inspiniaTemplate
+		 });
+    };
     //If SendingMessageSucceeded event is triggered, show related message
     $scope.$on('SendingMessageSucceeded', function(event, args) {
         $scope.SentMsg();
@@ -3501,6 +3588,14 @@ function notifyCtrl($scope, notify) {
     $scope.$on('CreateContactFailed', function(event, args) {
         $scope.CreateContactFailedMsg();
     });
+    //If ContactsUploaded event is triggered, show related message
+    $scope.$on('ContactsUploaded', function(event, args) {
+        $scope.ContactsUploadedMsg();
+    });
+    //If ContactsUploadFailed event is triggered, show related message
+    $scope.$on('ContactsUploadFailed', function(event, args) {
+        $scope.ContactsUploadFailedMsg();
+    });
     //If InvalidANI event is triggered, show related message
     $scope.$on('InvalidANI', function(event, args) {
         $scope.InvalidANIMsg();
@@ -3528,6 +3623,18 @@ function notifyCtrl($scope, notify) {
     //If FailedToDeactivateList event is triggered, show related message
     $scope.$on('FailedToDeactivateListList', function(event, args) {
         $scope.FailedToDeactivateListMsg();
+    });
+    //If ImportSucceeded event is triggered, show related message
+    $scope.$on('ImportSucceeded', function(event, args) {
+        $scope.ImportSucceededMsg(args.inserted, args.updated, args.invalidCount);
+    });
+    //If ImportFailed event is triggered, show related message
+    $scope.$on('ImportFailed', function(event, args) {
+        $scope.ImportFailedMsg();
+    });
+    //If UploadToMultipleListsNotSupported event is triggered, show related message
+    $scope.$on('UploadToMultipleListsNotSupported', function(event, args) {
+        $scope.UploadToMultipleListsNotSupportedMsg();
     });
     $scope.$on('RequestSuccess', function(event, args, name) {
         notify({
@@ -4434,7 +4541,7 @@ angular.module('inspinia').controller('ngSentListCtrl', ['$scope', '$http', '$co
 angular.module('inspinia').controller('ngScheduledListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.ScheduledList.Controller]);
 angular.module('inspinia').controller('ngDraftsListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.DraftsList.Controller]);
 angular.module('inspinia').controller('ngTrashListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.TrashList.Controller]);
-angular.module('inspinia').controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', 'filterFilter', AddListsCtrl]);
+angular.module('inspinia').controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', 'filterFilter', 'FileUploader', AddListsCtrl]);
 angular.module('inspinia').controller('EditContactCtrl', ['$scope', '$http', '$cookieStore', '$window', '$state', EditContactCtrl]);
 angular.module('inspinia').controller('codeEditorCtrl', codeEditorCtrl);
 angular.module('inspinia').controller('nestableCtrl', nestableCtrl);
