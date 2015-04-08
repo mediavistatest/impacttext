@@ -322,7 +322,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             };
             if (inScope.params.contactListID) {
                 param.contactListID = inScope.params.contactListID;
-            };            
+            };
 
             $http.post(inspiniaNS.wsUrl + "reporting_getmessagestats", $.param(param)).success(
             //Successful request to the server
@@ -4546,13 +4546,13 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
         // }
         // }
         var didid;
-        if ($scope.selectedDID.DIDID) {
+        if ($scope.selectedDID && $scope.selectedDID.DIDID) {
             didid = $scope.selectedDID.DIDID;
         };
         var contactListID;
-        if ($scope.selectedContactList.contactListID) {
+        if ($scope.selectedContactList && $scope.selectedContactList.contactListID) {
             contactListID = $scope.selectedContactList.contactListID;
-        };        
+        };
 
         $scope.params = {
             startdatetime : $('#idStartDate').val() + ' 00:00:00',
@@ -4568,12 +4568,7 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
     $scope.selectedContactList = {
         contactListID : null
     };
-
-    // $scope.barData.label[]
     callback = function(inData) {
-        // console.log('callback')
-        // console.log(inData)
-
         $scope.SentMessages = inData.apidata.totalMessagesDelivered;
         $scope.ReceivedMessages = inData.apidata.totalReplies;
         $scope.TotalContacts = inData.apidata.totalContacts;
@@ -4589,12 +4584,10 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
         $scope.barData.datasets[2].data.push($scope.TotalContacts);
         $scope.barData.datasets[3].data.push($scope.TotalOptOuts);
 
-        $scope.StartDate = String(inData.apidata.startDateTime).substring(0, 10);
+        // $scope.StartDate = String(inData.apidata.startDateTime).substring(0, 10);
         // $scope.EndDate = String(inData.apidata.endDateTime).substring(0, 10);
     };
-    console.log($scope.main.contactLists)
 }
-
 
 angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
