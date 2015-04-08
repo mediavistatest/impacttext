@@ -462,7 +462,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     })
     //An error occurred with this request
     .error(function(data, status, headers, config) {
-        alert("Error occured while getting account info!");
+		if (status != 401) {
+			alert("Error occurred while getting account info!");
+		}
     });
 
     /**
