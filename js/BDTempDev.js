@@ -55,7 +55,6 @@ var profile = {
         .error(function(data, status, headers, config) {
             console.log('reporting_getbom error');
         });
-
     }
 };
 
@@ -1612,7 +1611,7 @@ var ngSettings = {
                     keyword : cpo.arCtrl.termKeyword,
                     fromname : cpo.arCtrl.fromName,
                     message : cpo.arCtrl.generateMessageText(),
-                    addtocontactlist : cpo.arCtrl.addToList,
+                    addtocontactlist : cpo.arCtrl.addToList?1:0,
                     optoutmessageid : 1,
                     startdate : cpo.arCtrl.validFrom,
                     enddate : cpo.arCtrl.validFrom,
@@ -1631,7 +1630,7 @@ var ngSettings = {
                     cpo.$scope.$broadcast('itError', {
                         message : 'Error! ' + data.apitext
                     });
-                    console.log('keyword_get: ' + data.apitext);
+                    console.log('keyword_add: ' + data.apitext);
                 });
             },
             ModifyKeyword : function(cpo, callback) {
@@ -1662,7 +1661,7 @@ var ngSettings = {
                     cpo.$scope.$broadcast('itError', {
                         message : 'Error! ' + data.apitext
                     });
-                    console.log('keyword_get: ' + data.apitext);
+                    console.log('keyword_modify: ' + data.apitext);
                 });
             }
         },
@@ -1726,6 +1725,7 @@ var ngSettings = {
 
             ModifyKeywordCallback = function(cpo, result) {
                 if (result.apicode == 0) {
+                	console.log('modify keyword')
                     console.log(result);
                     // var resultAR = result.apidata[0];
                     // arCtrl.autoresponderID = resultAR.autoResponderID;
@@ -1747,6 +1747,7 @@ var ngSettings = {
             };
             AddKeywordCallback = function(cpo, result) {
                 if (result.apicode == 0) {
+                	console.log('add keyword')
                     console.log(result);
                     // var resultAR = result.apidata[0];
                     // arCtrl.autoresponderID = resultAR.autoResponderID;
@@ -1768,6 +1769,7 @@ var ngSettings = {
             };
 
             GetKeywordCallback = function(cpo, result) {
+            	console.log('get keyword')
                 console.log(result);
                 if (result.apicode == 0) {
                     if (result.apidata.length > 0) {
