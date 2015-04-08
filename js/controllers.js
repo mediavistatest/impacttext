@@ -4774,6 +4774,16 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
 	$scope.selectedContactList = {
 		contactListID : null
 	};
+	var callRequest = function(){
+		// if ($scope.selectedContactList && $scope.selectedContactList.contactListID){
+			$scope.showReport();
+		// }else{
+			// setTimeout(function(){
+				// callRequest();
+			// },500);
+		// }
+	};
+	callRequest();
 }
 
 
