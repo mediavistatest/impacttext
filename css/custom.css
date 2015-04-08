@@ -3248,7 +3248,7 @@ ul.bar-legend {
 }
 
 .threaded h4 {
-    font-weight: 400;   
+    font-weight: 400;
 }
 
 .col-sm-1.check {
@@ -3263,4 +3263,8 @@ ul.bar-legend {
    .navbar-header {
        display: block;
   }
+}
+
+.ng-invalid {
+    border-color: red
 }
