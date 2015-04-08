@@ -4290,29 +4290,66 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
 	 */
 	$scope.barData = {
 		labels : ["Monthly statistics"],
+		// datasets : [{
+			// label : "Sent messages",
+			// fillColor : "rgba(229,229,229,0.5)",
+			// strokeColor : "rgba(229,229,229,0.5)",
+			// highlightFill : "rgba(229,229,229,0.8)",
+			// highlightStroke : "rgba(229,229,229,1)",
+			// data : []
+		// }, {
+			// label : "Opt-outs",
+			// fillColor : "rgba(139,211,251,0.5)",
+			// strokeColor : "rgba(139,211,251,0.5)",
+			// highlightFill : "rgba(139,211,251,0.8)",
+			// highlightStroke : "rgba(139,211,251,1)",
+			// data : []
+		// }, {
+			// label : "Reply",
+			// fillColor : "rgba(0,95,171,0.5)",
+			// strokeColor : "rgba(0,95,171,0.5)",
+			// highlightFill : "rgba(0,95,171,0.8)",
+			// highlightStroke : "rgba(0,95,171,1)",
+			// data : []
+		// }]
 		datasets : [{
+			label : "Received messages",
+			fillColor : "rgba(0,94,170,0.5)",
+			strokeColor : "rgba(0,94,170,0.5)",
+			highlightFill : "rgba(0,94,170,0.8)",
+			highlightStroke : "rgba(0,94,170,1)",
+			data : []
+		}, {
 			label : "Sent messages",
-			fillColor : "rgba(229,229,229,0.5)",
-			strokeColor : "rgba(229,229,229,0.5)",
-			highlightFill : "rgba(229,229,229,0.8)",
-			highlightStroke : "rgba(229,229,229,1)",
+			fillColor : "rgba(227,111,30,0.5)",
+			strokeColor : "rgba(227,111,30,0.5)",
+			highlightFill : "rgba(227,111,30,0.8)",
+			highlightStroke : "rgba(227,111,30,1)",
 			data : []
 		}, {
-			label : "Opt-outs",
-			fillColor : "rgba(139,211,251,0.5)",
-			strokeColor : "rgba(139,211,251,0.5)",
-			highlightFill : "rgba(139,211,251,0.8)",
-			highlightStroke : "rgba(139,211,251,1)",
+			label : "Recipients",
+			fillColor : "rgba(0,125,50,0.5)",
+			strokeColor : "rgba(0,125,50,0.5)",
+			highlightFill : "rgba(0,125,50,0.8)",
+			highlightStroke : "rgba(0,125,50,1)",
 			data : []
 		}, {
-			label : "Reply",
-			fillColor : "rgba(0,95,171,0.5)",
-			strokeColor : "rgba(0,95,171,0.5)",
-			highlightFill : "rgba(0,95,171,0.8)",
-			highlightStroke : "rgba(0,95,171,1)",
+			label : "Opt-Outs",
+			fillColor : "rgba(159,74,156,0.5)",
+			strokeColor : "rgba(159,74,156,0.5)",
+			highlightFill : "rgba(159,74,156,0.8)",
+			highlightStroke : "rgba(159,74,156,1)",
+			data : []
+		}, {
+			label : "Senders",
+			fillColor : "rgba(159,159,159,0.5)",
+			strokeColor : "rgba(159,159,159,0.5)",
+			highlightFill : "rgba(159,159,159,0.8)",
+			highlightStroke : "rgba(159,159,159,1)",
 			data : []
 		}]
 	};
+	
 	//var updateBarOptions = function() {
 	//        barData[0].value = pCtrl.bucketOfMessages;
 	//        barData[1].value = pCtrl.messageCount;
@@ -4322,20 +4359,33 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
 	//    //$scope.$watch('pCtrl.bucketOfMessages', updateDouhnutOptions, true);
 
 	callback = function(inData) {
-		console.log(inData)
+		// $scope.SentMessages = inData.apidata.totalMessagesDelivered;
+		// $scope.ReceivedMessages = inData.apidata.totalReplies;
+		// $scope.TotalContacts = inData.apidata.totalContacts;
+		// $scope.TotalOptOuts = inData.apidata.totalOptOuts;
+		// $scope.NumberOfSenders = inData.apidata.uniqueReplyAni;
+		
 		$scope.SentMessages = inData.apidata.totalMessagesDelivered;
 		$scope.ReceivedMessages = inData.apidata.totalReplies;
-		$scope.TotalContacts = inData.apidata.totalContacts;
-		$scope.TotalOptOuts = inData.apidata.totalOptOuts;
-		$scope.NumberOfSenders = inData.apidata.uniqueReplyAni;
+		$scope.Recipients = inData.apidata.totalContacts;
+		$scope.OptOuts = inData.apidata.totalOptOuts;
+		$scope.Senders = inData.apidata.uniqueReplyAni;
 
 		$scope.barData.datasets[0].data = [];
 		$scope.barData.datasets[1].data = [];
 		$scope.barData.datasets[2].data = [];
+		$scope.barData.datasets[3].data = [];
+		$scope.barData.datasets[4].data = [];
 
+		// $scope.barData.datasets[0].data.push($scope.SentMessages);
+		// $scope.barData.datasets[1].data.push($scope.TotalOptOuts);
+		// $scope.barData.datasets[2].data.push($scope.ReceivedMessages);
+		
 		$scope.barData.datasets[0].data.push($scope.SentMessages);
-		$scope.barData.datasets[1].data.push($scope.TotalOptOuts);
-		$scope.barData.datasets[2].data.push($scope.ReceivedMessages);
+		$scope.barData.datasets[1].data.push($scope.ReceivedMessages);
+		$scope.barData.datasets[2].data.push($scope.Recipients);
+		$scope.barData.datasets[3].data.push($scope.OptOuts);
+		$scope.barData.datasets[4].data.push($scope.Senders);
 
 		// $scope.StartDate = String(inData.apidata.startDateTime).substring(0, 10);
 		// $scope.EndDate = String(inData.apidata.endDateTime).substring(0, 10);
