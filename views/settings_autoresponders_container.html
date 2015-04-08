@@ -6,33 +6,33 @@ Settings
         <!-- settings section -->
         <div class="settings-section">
             <h2 class="section-title">
-            Auto responder
+            Autoresponder
             </h2>
             <p>
             Enter autoresponder data
             </p>
             <br>
             <div class="form-group clearfix">
-                <label class="col-sm-2 control-label">
-                    Name:
+                <label class="col-sm-2 control-label double">
+                    Autoresponder rule name:
                 </label>
                 <div class="col-sm-6">
-                    <input type="text" name="SetAutoresponderName" placeholder="Set your autoresponder name." ng-model="SetAutoresponderName" class="form-control"  ng-trim="false">
+                    <input type="text" name="SetAutoresponderName" placeholder="Set your autoresponder rule name." ng-model="SetAutoresponderName" class="form-control"  ng-trim="false">
                 </div>
                 <div class="col-sm-4">
-                    <i class="fa fa-info-circle" tooltip='Set your autresponder name.'>
+                    <i class="fa fa-info-circle" tooltip='Set your autoresponder rule name.'>
                     </i>
                 </div>
             </div>
             <div class="form-group clearfix">
                 <label class="col-sm-2 control-label">
-                    Term (Keyword):
+                    Enter keyword:
                 </label>
                 <div class="col-sm-6">
-                    <input type="text" name="SetKeyword" placeholder="Enter keyword" ng-model="SetKeyword" class="form-control"  ng-trim="false">
+                    <input type="text" name="SetKeyword" placeholder="Enter term" ng-model="SetKeyword" class="form-control"  ng-trim="false">
                 </div>
                 <div class="col-sm-4">
-                    <i class="fa fa-info-circle" tooltip='Set keyword.'>
+                    <i class="fa fa-info-circle" tooltip='Enter term'>
                     </i>
                 </div>
             </div>
@@ -40,14 +40,14 @@ Settings
             <br>
             <div class="form-group clearfix">
                 <label class="col-sm-2 control-label">
-                    From:
+                    Send from:
                 </label>
                 <div class="col-sm-6">
                     <select class="form-control m-b" name="FromNumber" ng-model="FromNumber" ng-options="fromNumber.DID for fromNumber in fromNumbers track by fromNumber.DIDID">
                     </select>
                 </div>
                 <div class="col-sm-4">
-                    <i class="fa fa-info-circle" tooltip='Messages will be by default sent from this From Number.'>
+                    <i class="fa fa-info-circle" tooltip='Send from'>
                     </i>
                 </div>
             </div>
@@ -334,7 +334,7 @@ Settings
                 <div class="col-sm-6 col-sm-offset-2">
                     <label class="checkbox">
                         <input type="checkbox" value="yes" ng-model="AddToList">
-                        Add to contact list
+                        Add sender to Opt-in list
                     </label>
                 </div>
             </div>
