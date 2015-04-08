@@ -3,67 +3,72 @@ Settings
 </h1>
 <div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation" ng-controller="ngAutoresponderCtrl as arCtrl">
     <div class="iphone-prev">
-<div class="message-cloud">
-<span ng-show="arCtrl.fromName">{{arCtrl.fromName}}: </span>{{arCtrl.messageTxt}} {{arCtrl.optFields.OptOutTxt1}}{{arCtrl.optFields.OptOutTxt2}}{{arCtrl.optFields.OptOutTxt3}}
-</div>
-</div>
+        <div class="message-cloud">
+            <span ng-show="arCtrl.fromName">
+                {{arCtrl.fromName}}:
+            </span>
+            {{arCtrl.messageTxt}} {{arCtrl.optFields.OptOutTxt1}}{{arCtrl.optFields.OptOutTxt2}}{{arCtrl.optFields.OptOutTxt3}}
+        </div>
+    </div>
     <div ng-controller="ngInboxNotifyCtrl">
         <!-- settings section -->
-        <form name="autoresponderForm" novalidate>{{autoresponderForm.$valid}}
+        <form name="autoresponderForm" novalidate>
             <div class="settings-section">
                 <h2 class="section-title">
-            Autoresponder
+                Autoresponder
                 </h2>
                 <p>
                     Enter autoresponder data
                 </p>
                 <br>
                 <div class="form-group clearfix">
-                <label class="col-sm-2 control-label double">
-                    Autoresponder rule name:
+                    <label class="col-sm-2 control-label double">
+                        SMS code:
                     </label>
                     <div class="col-sm-6">
                         <select class="form-control m-b" name="FromNumber" ng-model="arCtrl.fromNumber" ng-options="fNumber.DID for fNumber in main.fromNumbers track by fNumber.DIDID" required ></select>
                     </div>
                     <div class="col-sm-4">
-                    <i class="fa fa-info-circle" tooltip='Set your autoresponder rule name.'>
+                        <i class="fa fa-info-circle" tooltip='Set your autoresponder rule name.'>
                         </i>
                     </div>
                 </div>
                 <div class="form-group clearfix">
                     <label class="col-sm-2 control-label">
-                    Enter keyword:
+                        Autoresponder rule name:
                     </label>
                     <div class="col-sm-6">
-                        <input type="text" name="SetFromName" placeholder="Enter term" ng-model="arCtrl.fromName" class="form-control"  ng-trim="false">
+                        <input type="text" name="SetAutoresponderName" placeholder="Set your autoresponder rule name." ng-model="arCtrl.autoresponderName" class="form-control"  ng-trim="false" required>
                     </div>
                     <div class="col-sm-4">
-                    <i class="fa fa-info-circle" tooltip='Enter term'>
+                        <i class="fa fa-info-circle" tooltip='Send from'>
+                        </i>
+                    </div>
+                </div>
+                <div class="form-group clearfix">
+                    <label class="col-sm-2 control-label">
+                        Trigger term:
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="text" name="TermKeyword" placeholder="Enter trigger term." ng-model="arCtrl.termKeyword" class="form-control"  ng-trim="false" required >
+                    </div>
+                    <div class="col-sm-4">
+                        <i class="fa fa-info-circle" tooltip='Set keyword.'>
                         </i>
                     </div>
                 </div>
                 <br>
+                <br>
+                <br>
                 <div class="form-group clearfix">
                     <label class="col-sm-2 control-label">
-                    Send from:
+                        From name:
                     </label>
                     <div class="col-sm-6">
-                        <input type="text" name="SetAutoresponderName" placeholder="Set your autoresponder name." ng-model="arCtrl.autoresponderName" class="form-control"  ng-trim="false" required>
+                        <input type="text" name="SetFromName" placeholder="Enter from name." ng-model="arCtrl.fromName" class="form-control"  ng-trim="false">
                     </div>
                     <div class="col-sm-4">
-                    <i class="fa fa-info-circle" tooltip='Send from'>
-                        </i>
-                    </div>
-                </div>
-                <div class="form-group clearfix">
-                    <label class="col-sm-2 control-label">
-                        Term (Keyword):
-                    </label>
-                    <div class="col-sm-6">
-                        <input type="text" name="TermKeyword" placeholder="Enter keyword" ng-model="arCtrl.termKeyword" class="form-control"  ng-trim="false" required >
-                    </div>
-                    <div class="col-sm-4">
-                        <i class="fa fa-info-circle" tooltip='Set keyword.'>
+                        <i class="fa fa-info-circle" tooltip='Enter term'>
                         </i>
                     </div>
                 </div>
@@ -395,19 +400,20 @@ Settings
                 <div class="form-group clearfix">
                     <div class="col-sm-6 col-sm-offset-2">
                         <label class="checkbox">
-                            <input type="checkbox" value="yes" ng-model="arCtrl.makeInactive">
-                            Make rule inactive
+                            <input type="checkbox" value="yes" ng-model="arCtrl.addToList">
+                            Add sender to Opt-in list
                         </label>
                     </div>
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-sm-6 col-sm-offset-2">
                         <label class="checkbox">
-                            <input type="checkbox" value="yes" ng-model="arCtrl.addToList">
-                        Add sender to Opt-in list
+                            <input type="checkbox" value="yes" ng-model="arCtrl.makeInactive">
+                            Make rule inactive
                         </label>
                     </div>
                 </div>
+
             </div>
         </form>
         <!-- end settings section -->
