@@ -1594,10 +1594,11 @@ var ngSettings = {
 				cpo.$http.post(inspiniaNS.wsUrl + 'keyword_get', $param)
 				// success function
 				.success(function(result) {
-					callback(cpo, result);
+					callback(result);
 				})
 				// error function
 				.error(function(data, status, headers, config) {
+					// console.log(data)
 					cpo.$scope.$broadcast('itError', {
 						message : 'Error! ' + data.apitext
 					});
@@ -1631,7 +1632,7 @@ var ngSettings = {
 				cpo.$http.post(inspiniaNS.wsUrl + 'keyword_add', $param)
 				// success function
 				.success(function(result) {
-					callback(cpo, result);
+					callback(result);
 				})
 				// error function
 				.error(function(data, status, headers, config) {
@@ -1668,7 +1669,7 @@ var ngSettings = {
 				cpo.$http.post(inspiniaNS.wsUrl + 'keyword_modify', $param)
 				// success function
 				.success(function(result) {
-					callback(cpo, result);
+					callback(result);
 				})
 				// error function
 				.error(function(data, status, headers, config) {
@@ -1739,8 +1740,8 @@ var ngSettings = {
 
 			arCtrl.ModifyKeywordCallback = function(result) {
 				if (result.apicode == 0) {
-					console.log('modify keyword')
-					console.log(result);
+					// console.log('modify keyword')
+					// console.log(result);
 					// var resultAR = result.apidata[0];
 					// arCtrl.autoresponderID = resultAR.autoResponderID;
 					// //arCtrl.autoresponderName = resultAR.autoResponderID;
@@ -1750,7 +1751,7 @@ var ngSettings = {
 					// arCtrl.validUntil = new Date(resultAR.autoResponderID);
 					// arCtrl.makeInactive = resultAR.status == 'I';
 					// arCtrl.addToList = resultAR.addtocontactlist == 1;
-					cpo.$scope.$broadcast('itMessage', {
+					$scope.$broadcast('itMessage', {
 						message : 'Autoresponder modified'
 					});
 				} else {
@@ -1761,8 +1762,8 @@ var ngSettings = {
 			};
 			arCtrl.AddKeywordCallback = function(result) {
 				if (result.apicode == 0) {
-					console.log('add keyword')
-					console.log(result);
+					// console.log('add keyword')
+					// console.log(result);
 					// var resultAR = result.apidata[0];
 					// arCtrl.autoresponderID = resultAR.autoResponderID;
 					// //arCtrl.autoresponderName = resultAR.autoResponderID;
@@ -1772,7 +1773,7 @@ var ngSettings = {
 					// arCtrl.validUntil = new Date(resultAR.autoResponderID);
 					// arCtrl.makeInactive = resultAR.status == 'I';
 					// arCtrl.addToList = resultAR.addtocontactlist == 1;
-					cpo.$scope.$broadcast('itMessage', {
+					$scope.$broadcast('itMessage', {
 						message : 'Autoresponder added'
 					});
 				} else {
@@ -1782,9 +1783,9 @@ var ngSettings = {
 				}
 			};
 
-			arCtrl.GetKeywordCallback = function(cpo, result) {
-				console.log('get keyword')
-				console.log(result);
+			arCtrl.GetKeywordCallback = function(result) {
+				//console.log('get keyword')
+				//console.log(result);
 				if (result.apicode == 0) {
 					if (result.apidata.length > 0) {
 						var resultAR = result.apidata[0];
