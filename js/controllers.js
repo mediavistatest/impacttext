@@ -308,7 +308,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             });
         },
         reportingGetMessageStats : function(inScope, callback) {
-             console.log(inScope.params)
+            console.log(inScope.params)
             var param = {
                 apikey : main.authToken,
                 accountID : main.accountID,
@@ -600,7 +600,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     this.randomStacked = function() {
         this.stacked = [];
         var types = ['success', 'info', 'warning', 'danger'];
-        for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+        for (var i = 0,
+            n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
             var index = Math.floor((Math.random() * 4));
             this.stacked.push({
                 value : Math.floor((Math.random() * 30) + 1),
@@ -4295,6 +4296,7 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
+
     // Events
     $scope.events = [
     //{title: 'All Day Event',start: new Date(y, m, 1)},
@@ -4306,44 +4308,34 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
     //{id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
     //
     //{title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false},
-    {
-        title : 'Scheduled',
-        start : new Date(y, m, 05),
-        end : new Date(y, m, 05),
-        url : '#/messages/messages_scheduled'
-    }, {
-        title : 'Scheduled',
-        start : new Date(y, m, 06),
-        end : new Date(y, m, 06),
-        url : '#/messages/messages_scheduled'
-    }, {
-        title : 'Scheduled',
-        start : new Date(y, m, 22),
-        end : new Date(y, m, 22),
-        url : '#/messages/messages_scheduled'
-    }, {
-        title : 'Scheduled',
-        start : new Date(y, m, 30),
-        end : new Date(y, m, 30),
-        url : '#/messages/messages_scheduled'
-    }, {
-        title : 'Scheduled',
-        start : new Date(y, m, 30),
-        end : new Date(y, m, 30),
-        url : '#/messages/messages_scheduled'
-    }];
-    /* message on eventClick */
-    $scope.alertOnEventClick = function(event, allDay, jsEvent, view) {
-        $scope.alertMessage = (event.title + ': Clicked ');
-    };
-    /* message on Drop */
-    $scope.alertOnDrop = function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
-        $scope.alertMessage = (event.title + ': Droped to make dayDelta ' + dayDelta);
-    };
-    /* message on Resize */
-    $scope.alertOnResize = function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
-        $scope.alertMessage = (event.title + ': Resized to make dayDelta ' + minuteDelta);
-    };
+    // {
+        // title : 'Scheduled',
+        // start : new Date(y, m, 05),
+        // end : new Date(y, m, 05),
+        // url : '#/messages/messages_scheduled'
+    // }, {
+        // title : 'Scheduled',
+        // start : new Date(y, m, 06),
+        // end : new Date(y, m, 06),
+        // url : '#/messages/messages_scheduled'
+    // }, {
+        // title : 'Scheduled',
+        // start : new Date(y, m, 22),
+        // end : new Date(y, m, 22),
+        // url : '#/messages/messages_scheduled'
+    // }, {
+        // title : 'Scheduled',
+        // start : new Date(y, m, 30),
+        // end : new Date(y, m, 30),
+        // url : '#/messages/messages_scheduled'
+    // }, {
+        // title : 'Scheduled',
+        // start : new Date(y, m, 30),
+        // end : new Date(y, m, 30),
+        // url : '#/messages/messages_scheduled'
+    // }
+    ];
+
     /* config object */
     $scope.uiConfig = {
         calendar : {
@@ -4353,14 +4345,85 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
                 left : 'prev,next',
                 center : 'title',
                 right : 'month,agendaWeek,agendaDay'
-            },
-            eventClick : $scope.alertOnEventClick,
-            eventDrop : $scope.alertOnDrop,
-            eventResize : $scope.alertOnResize
+            }
+            // ,
+            // eventClick : $scope.alertOnEventClick,
+            // eventDrop : $scope.alertOnDrop,
+            // eventResize : $scope.alertOnResize
         }
     };
     /* Event sources array */
     $scope.eventSources = [$scope.events];
+    //$scope.eventSources = [];
+
+    var $param = $.param({
+        apikey : $scope.main.authToken,
+        accountID : $scope.main.accountID,
+        status : 'S',
+        sethttp : 1
+    });
+
+    //POST
+    $http.post(inspiniaNS.wsUrl + 'messages_outbound', $param)
+    // success function
+    .success(function(result) {
+        console.log(result)
+        if (result.apicode == 0) {
+            //$scope.events.slice(0, $scope.events.length);
+            for (var event in result.apidata) {
+                var currentEvent = result.apidata[event];
+                var date = new Date(currentEvent.scheduledDate);
+                // var d = date.getDate();
+                // var m = date.getMonth();
+                // var y = date.getFullYear();
+                var callendarEvent = {
+                    originalTitle: 'Scheduled',
+                    no : 1,
+                    // start : new Date(y, m, d),
+                    // end : new Date(y, m, d),
+                    start : date,
+                    end : date,
+                    url : '#/messages/messages_scheduled'
+                };
+
+
+    var dateString = new Date(date).toISOString().substring(0, 10);
+
+                var dayEvents = $.grep($scope.events, function(dayEvent){
+                    var dayEventString = new Date(dayEvent.start).toISOString().substring(0, 10);
+                    return dayEventString==dateString;
+                });
+
+                if (dayEvents.length>0){
+                    dayEvents[0].no++;
+                    dayEvents[0].title = dayEvents[0].originalTitle + ' ('+dayEvents[0].no+')';
+                } else{
+                    callendarEvent.title = callendarEvent.originalTitle;
+                    $scope.events.push(callendarEvent);
+                }
+
+            }
+            $scope.eventSources = [$scope.events];
+            console.log($scope.eventSources)
+        }
+    })
+    // error function
+    .error(function(data, status, headers, config) {
+        console.log(ngInbox._internal.ErrorMsg);
+    });
+
+    // /* message on eventClick */
+    // $scope.alertOnEventClick = function(event, allDay, jsEvent, view) {
+        // $scope.alertMessage = (event.title + ': Clicked ');
+    // };
+    // /* message on Drop */
+    // $scope.alertOnDrop = function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+        // $scope.alertMessage = (event.title + ': Droped to make dayDelta ' + dayDelta);
+    // };
+    // /* message on Resize */
+    // $scope.alertOnResize = function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
+        // $scope.alertMessage = (event.title + ': Resized to make dayDelta ' + minuteDelta);
+    // };
 }
 
 function DashboardInboxCtrl($scope, $http, $cookieStore) {
@@ -4588,6 +4651,7 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
         // $scope.EndDate = String(inData.apidata.endDateTime).substring(0, 10);
     };
 }
+
 
 angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);

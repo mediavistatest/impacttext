@@ -1601,7 +1601,7 @@ var ngSettings = {
 			//send form initial states
 			$scope.initial = "";
 			//$scope.MessageType = "SMS";
-			
+
 
 			function setFromNumber() {
 				if ($scope.main.fromNumbers != null) {
