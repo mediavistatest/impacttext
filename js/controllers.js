@@ -157,7 +157,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                                 name : ''
                             });
                         }
-                    };
+                    }
                 } else {
                     main.fromNumbers = [];
                     main.Settings.Numbers = [];
@@ -317,14 +317,14 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 
             if (inScope.params.enddatetime) {
                 param.enddate = inScope.params.enddatetime;
-            };
+            }
 
             if (inScope.params.didid) {
                 param.didid = inScope.params.didid;
-            };
+            }
             if (inScope.params.contactListID) {
                 param.contactListID = inScope.params.contactListID;
-            };
+            }
 
             $http.post(inspiniaNS.wsUrl + "reporting_getmessagestats", $.param(param)).success(
             //Successful request to the server
@@ -348,7 +348,36 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 $scope.$broadcast("RequestError", data, 'optout_undo');
                 console.log(JSON.stringify(data));
             });
-        }
+        },
+
+		getCustomOptOutMessage: function() {
+			var param = {
+				sethttp: 1,
+				apikey : main.authToken,
+				accountID : main.accountID
+			};
+
+			$http.post(inspiniaNS.wsUrl + "optoutsignature_get", $.param(param)).success(
+				//Successful request to the server
+				function(data, status, headers, config) {
+					if (data == null || typeof data.apicode == 'undefined') {
+						//This should never happen
+						alert("Unidentified error occurred when trying to get !");
+						return;
+					}
+					if (data.apicode == 0) {
+						if (typeof data.apidata != 'undefined' && data.apidata != null && data.apidata.length > 0) {
+							main.Settings.defaultOptOutText = data.apidata[0].optOutSignatureText;
+							main.Settings.defaultOptOutTextId = data.apidata[0].optOutSignatureID;
+						}
+					}
+				}).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					$scope.$broadcast("RequestError", data, 'optout_undo');
+					console.log(JSON.stringify(data));
+				});
+		}
     };
 
     main.CommonActions = {
@@ -454,6 +483,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 
             main.ServerRequests.contactListsGet();
             main.ServerRequests.didGet();
+			main.ServerRequests.getCustomOptOutMessage();
             // } else {
             // alert("Error occured while getting account info!");
         } else {
@@ -462,7 +492,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     })
     //An error occurred with this request
     .error(function(data, status, headers, config) {
-        alert("Error occured while getting account info!");
+		if (status != 401) {
+			alert("Error occurred while getting account info!");
+		}
     });
 
     /**

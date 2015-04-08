@@ -12,46 +12,46 @@ Settings
         <form name="autoresponderForm" novalidate>{{autoresponderForm.$valid}}
             <div class="settings-section">
                 <h2 class="section-title">
-                Auto responder
+            Autoresponder
                 </h2>
                 <p>
                     Enter autoresponder data
                 </p>
                 <br>
                 <div class="form-group clearfix">
-                    <label class="col-sm-2 control-label">
-                        From:
+                <label class="col-sm-2 control-label double">
+                    Autoresponder rule name:
                     </label>
                     <div class="col-sm-6">
                         <select class="form-control m-b" name="FromNumber" ng-model="arCtrl.fromNumber" ng-options="fNumber.DID for fNumber in main.fromNumbers track by fNumber.DIDID" required ></select>
                     </div>
                     <div class="col-sm-4">
-                        <i class="fa fa-info-circle" tooltip='Messages will be sent from this From Number.'>
+                    <i class="fa fa-info-circle" tooltip='Set your autoresponder rule name.'>
                         </i>
                     </div>
                 </div>
                 <div class="form-group clearfix">
                     <label class="col-sm-2 control-label">
-                        From name:
+                    Enter keyword:
                     </label>
                     <div class="col-sm-6">
-                        <input type="text" name="SetFromName" placeholder="Set from name." ng-model="arCtrl.fromName" class="form-control"  ng-trim="false">
+                        <input type="text" name="SetFromName" placeholder="Enter term" ng-model="arCtrl.fromName" class="form-control"  ng-trim="false">
                     </div>
                     <div class="col-sm-4">
-                        <i class="fa fa-info-circle" tooltip='Set from name.'>
+                    <i class="fa fa-info-circle" tooltip='Enter term'>
                         </i>
                     </div>
                 </div>
                 <br>
                 <div class="form-group clearfix">
                     <label class="col-sm-2 control-label">
-                        Name:
+                    Send from:
                     </label>
                     <div class="col-sm-6">
                         <input type="text" name="SetAutoresponderName" placeholder="Set your autoresponder name." ng-model="arCtrl.autoresponderName" class="form-control"  ng-trim="false" required>
                     </div>
                     <div class="col-sm-4">
-                        <i class="fa fa-info-circle" tooltip='Set your autresponder name.'>
+                    <i class="fa fa-info-circle" tooltip='Send from'>
                         </i>
                     </div>
                 </div>
@@ -404,7 +404,7 @@ Settings
                     <div class="col-sm-6 col-sm-offset-2">
                         <label class="checkbox">
                             <input type="checkbox" value="yes" ng-model="arCtrl.addToList">
-                            Add to contact list
+                        Add sender to Opt-in list
                         </label>
                     </div>
                 </div>

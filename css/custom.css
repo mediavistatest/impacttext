@@ -3256,6 +3256,10 @@ ul.bar-legend {
   width: 40px;
 }
 
+.double {
+    line-height: initial;
+}
+
 @media all and (max-width: 990px) {
     .welcome-msg {
         display: none;

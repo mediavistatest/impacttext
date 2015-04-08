@@ -1493,10 +1493,47 @@ var ngSettings = {
                     expires : 365,
                     expirationUnit : 'days'
                 });
-                cpo.$scope.$broadcast('itMessage', {
-                    message : 'Basic Settings saved'
-                });
-            }
+				var addNew =  typeof cpo.$scope.main.Settings.defaultOptOutTextId == 'undefined' || cpo.$scope.main.Settings.defaultOptOutTextId == null || cpo.$scope.main.Settings.defaultOptOutTextId == '';
+				var request = {
+					sethttp : 1,
+					apikey : cpo.$scope.main.authToken,
+					accountID : cpo.$scope.main.accountID,
+					companyID : cpo.$scope.main.accountInfo.companyID,
+					optOutSignatureText: cpo.$scope.main.Settings.defaultOptOutText
+				};
+				if (!addNew) {
+					request.optOutSignatureID = cpo.$scope.main.Settings.defaultOptOutTextId;
+				}
+				cpo.$http.post(inspiniaNS.wsUrl + (addNew ? "optoutsignature_add" : "optoutsignature_modify"), $.param(request))
+					//Successful request to the server
+					.success(function(data, status, headers, config) {
+						if (data == null || typeof data.apicode == 'undefined') {
+							//This should never happen
+							alert("Unidentified error occurred when getting account info!");
+							return;
+						}
+						if (data.apicode == 0) {
+							cpo.$scope.main.Settings.defaultOptOutTextId = data.apidata;
+							cpo.$scope.$broadcast('itMessage', {
+								message : 'Basic Settings saved'
+							});
+						} else {
+							cpo.$scope.$broadcast('itMessage', {
+								message : 'Failed to save Basic Settings! Error code: ' + data.apicode,
+								classes: "alert-danger"
+							});
+						}
+					})
+					//An error occurred with this request
+					.error(function(data, status, headers, config) {
+						if (status != 401) {
+							cpo.$scope.$broadcast('itMessage', {
+								message : 'Failed to save Basic Settings! Error description: ' + data.apitext,
+								classes: "alert-danger"
+							});
+						}
+					});
+			}
         },
         Controller : function($scope, $http, $cookieStore) {
             var cpo = ngSettings.Settings;

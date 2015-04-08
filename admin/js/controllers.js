@@ -92,139 +92,139 @@ superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', fun
 		totalServerItems: 'totalServerItems',
 		primaryKey : 'accountID',
 		columnDefs:
-		[
-			{
-				field: 'accountName',
-				displayName: 'Account Name'
-			},
-			{
-				field: 'companyID',
-				displayName: 'Company ID'
-			},
-			{
-				field: 'firstName',
-				displayName: 'Name',
-				cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.firstName}} {{row.entity.lastName}}</div>'
-			},
-			{
-				field: 'emailAddress',
-				displayName: 'Email Address'
-			},
-			{
-				field: 'status',
-				displayName: 'Status'
-			},
-			{
-				field: '',
-				displayName: '',
-				cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="#/manage_account/{{row.entity.accountID}}" class="btn"><i class="fa fa-pencil"></i> Manage Account </a></div>'
-			}
-		]
-};
-
-$scope.setPagingDataSliced = setPagingDataSliced;
-
-$scope.$watch('pagingOptions', function(newVal, oldVal) {
-	if (!self.poInit || self.gettingData) {
-		self.poInit = true;
-		return;
-	}
-	if (newVal.currentPage != oldVal.currentPage || newVal.pageSize != oldVal.pageSize) {
-		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
-	}
-}, true);
-
-$scope.$watch('sortOptions', function(newVal, oldVal) {
-	if (!self.soInit || self.gettingData) {
-		self.soInit = true;
-		return;
-	}
-	if (implode(newVal.fields) !== implode(oldVal.fields) || implode(newVal.directions) !== implode(oldVal.directions)) {
-		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
-	}
-}, true);
-
-$scope.getPagedDataAsync = function(pageSize, page, searchText, filterBy, sortFields, sortOrders) {
-	if (typeof page == 'undefined' || page == null || page == '') {
-		page = 0;
-	}
-
-	var orderBy = generateOrderByField(sortFields, sortOrders);
-	if (orderBy == '') {
-		orderBy = "accountName";
-	}
-
-	setTimeout(function() {
-		var data;
-		self.gettingData = true;
-		if (searchText) {
-			var ft = searchText.toLowerCase();
-			var request = {sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize};
-			switch (filterBy) {
-				case "accountName":
-					request.accountName = searchText;
-					break;
-				case "firstName":
-					request.firstName = searchText;
-					break;
-				case "lastName":
-					request.lastName = searchText;
-					break;
-				case "emailAddress":
-					request.emailAddress = searchText;
-					break;
-			}
-			$http.post(
-				inspiniaAdminNS.wsUrl + "accounts",
-				$.param(request)
-			).success(
-				function (data) {
-					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-					self.gettingData = false;
-				}).error(
-
-				//An error occurred with this request
-				function(data, status, headers, config) {
-					//if (status == 400) {
-					alert("An error occurred when getting account lists! Error code: " + data.apicode);
-					alert(JSON.stringify(data));
-					//}
-					self.gettingData = false;
+			[
+				{
+					field: 'accountName',
+					displayName: 'Account Name'
+				},
+				{
+					field: 'companyID',
+					displayName: 'Company ID'
+				},
+				{
+					field: 'firstName',
+					displayName: 'Name',
+					cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.firstName}} {{row.entity.lastName}}</div>'
+				},
+				{
+					field: 'emailAddress',
+					displayName: 'Email Address'
+				},
+				{
+					field: 'status',
+					displayName: 'Status'
+				},
+				{
+					field: '',
+					displayName: '',
+					cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="#/manage_account/{{row.entity.accountID}}" class="btn"><i class="fa fa-pencil"></i> Manage Account </a></div>'
 				}
-			);
-		} else {
-			$http.post(
-				inspiniaAdminNS.wsUrl + "accounts", $.param({
-					sethttp : 1, apikey : $cookieStore.get('inspinia_auth_token'),
-					limit: pageSize, offset: (page - 1) * pageSize, orderby : orderBy
-				})
-			).success(
-				function (data) {
-					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-					self.gettingData = false;
-				}).error(
-				//An error occurred with this request
-				function(data, status, headers, config) {
-					//alert('Unexpected error occurred when trying to fetch contact lists!');
-					//if (status == 422) {
-					alert("An error occurred when getting contact lists! Error code: " + data.apicode);
-					alert(JSON.stringify(data));
-					//}
-					self.gettingData = false;
-				}
-			);
+			]
+	};
+
+	$scope.setPagingDataSliced = setPagingDataSliced;
+
+	$scope.$watch('pagingOptions', function(newVal, oldVal) {
+		if (!self.poInit || self.gettingData) {
+			self.poInit = true;
+			return;
 		}
-	}, 100);
-};
+		if (newVal.currentPage != oldVal.currentPage || newVal.pageSize != oldVal.pageSize) {
+			$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
+		}
+	}, true);
 
-$scope.refresh = function() {
-	$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
-	$scope.mySelections.length = 0;
-};
+	$scope.$watch('sortOptions', function(newVal, oldVal) {
+		if (!self.soInit || self.gettingData) {
+			self.soInit = true;
+			return;
+		}
+		if (implode(newVal.fields) !== implode(oldVal.fields) || implode(newVal.directions) !== implode(oldVal.directions)) {
+			$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
+		}
+	}, true);
 
-$scope.refresh();
+	$scope.getPagedDataAsync = function(pageSize, page, searchText, filterBy, sortFields, sortOrders) {
+		if (typeof page == 'undefined' || page == null || page == '') {
+			page = 0;
+		}
+
+		var orderBy = generateOrderByField(sortFields, sortOrders);
+		if (orderBy == '') {
+			orderBy = "accountName";
+		}
+
+		setTimeout(function() {
+			var data;
+			self.gettingData = true;
+			if (searchText) {
+				var ft = searchText.toLowerCase();
+				var request = {sethttp: 1, apikey: $cookieStore.get('inspinia_auth_token'), orderby: orderBy, limit: pageSize, offset: (page - 1) * pageSize};
+				switch (filterBy) {
+					case "accountName":
+						request.accountName = searchText;
+						break;
+					case "firstName":
+						request.firstName = searchText;
+						break;
+					case "lastName":
+						request.lastName = searchText;
+						break;
+					case "emailAddress":
+						request.emailAddress = searchText;
+						break;
+				}
+				$http.post(
+					inspiniaAdminNS.wsUrl + "accounts",
+					$.param(request)
+				).success(
+					function (data) {
+						$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+						self.gettingData = false;
+					}).error(
+
+					//An error occurred with this request
+					function(data, status, headers, config) {
+						//if (status == 400) {
+						alert("An error occurred when getting account lists! Error code: " + data.apicode);
+						alert(JSON.stringify(data));
+						//}
+						self.gettingData = false;
+					}
+				);
+			} else {
+				$http.post(
+					inspiniaAdminNS.wsUrl + "accounts", $.param({
+						sethttp : 1, apikey : $cookieStore.get('inspinia_auth_token'),
+						limit: pageSize, offset: (page - 1) * pageSize, orderby : orderBy
+					})
+				).success(
+					function (data) {
+						$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+						self.gettingData = false;
+					}).error(
+					//An error occurred with this request
+					function(data, status, headers, config) {
+						//alert('Unexpected error occurred when trying to fetch contact lists!');
+						if (status != 401) {
+							alert("An error occurred when getting accounts! Error code: " + data.apicode);
+							alert(JSON.stringify(data));
+						}
+						self.gettingData = false;
+					}
+				);
+			}
+		}, 100);
+	};
+
+	$scope.refresh = function() {
+		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
+		$scope.mySelections.length = 0;
+	};
+
+	$scope.refresh();
 }])
-;
+	;
 
 
 //Manage Account
@@ -240,17 +240,17 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 	$scope.UsersList = [];
 
 	/*$scope.msg = 'Hello! This is a sample message!';
-	$scope.template = '';
-	$scope.template = '';
+	 $scope.template = '';
+	 $scope.template = '';
 
-	$scope.demo = function() {
-		notify({
-			message: $scope.msg,
-			classes: $scope.classes,
-			templateUrl: $scope.template,
-			duration: 3000
-		});
-	};*/
+	 $scope.demo = function() {
+	 notify({
+	 message: $scope.msg,
+	 classes: $scope.classes,
+	 templateUrl: $scope.template,
+	 duration: 3000
+	 });
+	 };*/
 
 	$scope.closeAll = function() {
 		notify.closeAll();
@@ -280,54 +280,54 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		}
 
 		$http.post(
-				inspiniaAdminNS.wsUrl + requestPage, $.param(request)
-			).success(
-				function (data) {
-					if (data.apicode == 0) {
-						if (modify) {
-							notify("Account data is successfully updated!");
-						} else {
-							notify("New account is successfully created!");
-							$scope.accountId = data.apidata.accountID;
-							$scope.accountStatus = data.apidata.status;
-							$scope.createOptInList();
-						}
-						$scope.updatePreviousAccountData();
-						$scope.refreshDidList();
+			inspiniaAdminNS.wsUrl + requestPage, $.param(request)
+		).success(
+			function (data) {
+				if (data.apicode == 0) {
+					if (modify) {
+						notify("Account data is successfully updated!");
 					} else {
-						notify("Creating accounts failed! Please try again!");
+						notify("New account is successfully created!");
+						$scope.accountId = data.apidata.accountID;
+						$scope.accountStatus = data.apidata.status;
+						$scope.createOptInList();
 					}
-				}).error(
-				//An error occurred with this request
-				function(data, status, headers, config) {
-					if (status == 422) {
-						//some input parameters are invalid
-						var invalidParameter = '';
-						var invalidParameterName = null;
-						var operation = modify ? 'update' : 'create';
-						if (data.apitext) {
-							var errorParamsMap = [];
-							errorParamsMap['accountname'] = "Account Name";
-							errorParamsMap['cyclegroupid'] = "Billing Cycle";
-							errorParamsMap['firstname'] = "First Name";
-							errorParamsMap['lastname'] = "Last Name";
-							errorParamsMap['emailaddress'] = "Email Address";
-							errorParamsMap['primarydid'] = "Primary DID";
-							errorParamsMap['externalaccountnumber'] = "Extenral Account Number";
-							invalidParameter = data.apitext.split(':')[0];
-							invalidParameterName = errorParamsMap[invalidParameter];
-						}
-						if (typeof invalidParameterName != 'undefined' && invalidParameterName != null && invalidParameterName != '') {
-							notify ({message: "Failed to " + operation +  " account. Invalid parameter " + invalidParameterName + "!", classes : 'alert-danger'});
-						} else {
-							notify ({message: "Failed to " + operation +  " account. Please check your input parameters and try again!", classes : 'alert-danger'});
-						}
-						//alert(JSON.stringify(data));
-						return;
-					}
-					notify("Unexpected error occurred when trying to " + operation + " an account!");
+					$scope.updatePreviousAccountData();
+					$scope.refreshDidList();
+				} else {
+					notify("Creating accounts failed! Please try again!");
 				}
-			);
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				if (status == 422) {
+					//some input parameters are invalid
+					var invalidParameter = '';
+					var invalidParameterName = null;
+					var operation = modify ? 'update' : 'create';
+					if (data.apitext) {
+						var errorParamsMap = [];
+						errorParamsMap['accountname'] = "Account Name";
+						errorParamsMap['cyclegroupid'] = "Billing Cycle";
+						errorParamsMap['firstname'] = "First Name";
+						errorParamsMap['lastname'] = "Last Name";
+						errorParamsMap['emailaddress'] = "Email Address";
+						errorParamsMap['primarydid'] = "Primary DID";
+						errorParamsMap['externalaccountnumber'] = "Extenral Account Number";
+						invalidParameter = data.apitext.split(':')[0];
+						invalidParameterName = errorParamsMap[invalidParameter];
+					}
+					if (typeof invalidParameterName != 'undefined' && invalidParameterName != null && invalidParameterName != '') {
+						notify({message: "Failed to " + operation + " account. Invalid parameter " + invalidParameterName + "!", classes : 'alert-danger'});
+					} else {
+						notify({message: "Failed to " + operation + " account. Please check your input parameters and try again!", classes : 'alert-danger'});
+					}
+					//alert(JSON.stringify(data));
+					return;
+				}
+				notify("Unexpected error occurred when trying to " + operation + " an account!");
+			}
+		);
 	};
 
 	$scope.resetAccount = function() {
@@ -336,11 +336,11 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.CompanyID = 1;
 		$scope.smsCode.AccCode = 'Long';
 		$scope.BillingCycle = null,
-		$scope.FirstName = null,
-		$scope.LastName = null,
-		$scope.EmailAddress = null,
-		$scope.ExternalAccount = null,
-		$scope.PrimaryDID = null
+			$scope.FirstName = null,
+			$scope.LastName = null,
+			$scope.EmailAddress = null,
+			$scope.ExternalAccount = null,
+			$scope.PrimaryDID = null
 	};
 
 	$scope.restorePreviousAccountData = function() {
@@ -440,7 +440,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			}
 		);
 	};
-	
+
 	$scope.activateAccount = function() {
 		if ($scope.accountId == null) {
 			return;
@@ -513,7 +513,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			companyID : $scope.CompanyID,
 			contactListName : 'Opt-In List'
 		}))
-		.success(
+			.success(
 			//Successful request to the server
 			function(data, status, headers, config) {
 				if (data == null || typeof data.apicode == 'undefined') {
@@ -528,7 +528,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 				}
 			}
 		)
-		.error(
+			.error(
 			//An error occurred with this request
 			function(data, status, headers, config) {
 				notify({message: "An error occurred when creating Opt-In List!", classes : 'alert-danger'})
@@ -583,6 +583,14 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.smsCode.status = null;
 	};
 
+	$scope.saveDID = function() {
+		if (typeof $scope.smsCode.selectedDidId == 'undefined' || $scope.smsCode.selectedDidId == null || $scope.smsCode.selectedDidId == '') {
+			$scope.addDID();
+		} else {
+			$scope.editDID();
+		}
+	};
+
 	$scope.addDID = function() {
 		var request = {
 			apikey : $cookieStore.get('inspinia_auth_token'),
@@ -592,18 +600,18 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		};
 
 		if ($scope.smsCode.AccCode == 'Short') {
-			if (typeof $scope.smsCode.ShortCode == 'undefined' ||  $scope.smsCode.ShortCode == null || $.trim($scope.smsCode.ShortCode) == '') {
+			if (typeof $scope.smsCode.ShortCode == 'undefined' || $scope.smsCode.ShortCode == null || $.trim($scope.smsCode.ShortCode) == '') {
 				notify("Please enter the valid short code.");
 				return;
 			}
-			if (typeof $scope.smsCode.ShortCodeName == 'undefined' ||  $scope.smsCode.ShortCodeName == null || $.trim($scope.smsCode.ShortCodeName) == '') {
+			if (typeof $scope.smsCode.ShortCodeName == 'undefined' || $scope.smsCode.ShortCodeName == null || $.trim($scope.smsCode.ShortCodeName) == '') {
 				notify("Please enter the valid short code name.");
 				return;
 			}
 			request.DID = $scope.smsCode.ShortCode;
 			request.DIDName = $scope.smsCode.ShortCodeName;
 		} else {
-			if (typeof $scope.smsCode.LongCode == 'undefined' ||  $scope.smsCode.LongCode == null || $.trim($scope.smsCode.LongCode) == '') {
+			if (typeof $scope.smsCode.LongCode == 'undefined' || $scope.smsCode.LongCode == null || $.trim($scope.smsCode.LongCode) == '') {
 				notify("Please enter the valid long code.");
 				return;
 			}
@@ -624,7 +632,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		var startDate = new Date(now.getTime() + 60000 * timezoneOffsetMinutes);
 		if (inspiniaAdminNS.developmentEnvironment) {
 			//Development environment is not set to GMT, so we need to move start date to the past...
-			startDate = new Date(startDate.getTime() - 24*60*60000);
+			startDate = new Date(startDate.getTime() - 24 * 60 * 60000);
 		}
 		//Date is in format MM/dd/yyyy
 		var dateParts = [];
@@ -654,18 +662,61 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$http
 			.post(inspiniaAdminNS.wsUrl + "did_add", $.param(request))
 			.success(
-				function (data) {
-					if (data.apicode == 0) {
-						//If DID is successfully added, add the keyword as well
-						$scope.addKeyword(10);
-					}
+			function (data) {
+				if (data.apicode == 0) {
+					//If DID is successfully added, add the keyword as well
+					$scope.addKeyword(10);
 				}
-			).error(
-				//An error occurred with this request
-				function(data, status, headers, config) {
-					notify({message: "Failed to add new DID! Error code: " + data.apicode, classes: "alert-danger"});
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				notify({message: "Failed to add new DID! Error code: " + data.apicode, classes: "alert-danger"});
+			}
+		);
+	};
+
+	$scope.editDID = function() {
+		var request = {
+			apikey : $cookieStore.get('inspinia_auth_token'),
+			accountID : $scope.accountId,
+			companyID: $scope.CompanyID,
+			DIDID: $scope.smsCode.selectedDidId,
+			sethttp: 1
+		};
+
+		if ($scope.smsCode.AccCode == 'Short') {
+			if (typeof $scope.smsCode.ShortCodeName == 'undefined' || $scope.smsCode.ShortCodeName == null || $.trim($scope.smsCode.ShortCodeName) == '') {
+				notify("Please enter the valid short code name.");
+				return;
+			}
+			request.DIDName = $scope.smsCode.ShortCodeName;
+		} else {
+			if (typeof $scope.smsCode.LongCodeName == 'undefined' || $scope.smsCode.LongCodeName == null || $.trim($scope.smsCode.LongCodeName) == '') {
+				notify("Please enter the valid long code name.");
+				return;
+			}
+			request.DIDName = $scope.smsCode.LongCodeName;
+		}
+
+		$http
+			.post(inspiniaAdminNS.wsUrl + "did_modify", $.param(request))
+			.success(
+			function (data) {
+				if (data.apicode == 0) {
+					notify("SMS code is successfully saved!");
+					$scope.refreshDidList();
+					$scope.resetDIDFields();
+				} else {
+					notify({message: "Failed to save DID! Error message: " + data.apitext, classes: "alert-danger"});
 				}
-			);
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				notify({message: "Failed to save DID! Error code: " + data.apicode, classes: "alert-danger"});
+			}
+		);
 	};
 
 	$scope.addKeyword = function(maxRetries) {
@@ -673,14 +724,14 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		var keyword = '';
 		var did;
 		if ($scope.smsCode.AccCode == 'Long') {
-			if(typeof $scope.smsCode.LongCode == 'undefined' || $scope.smsCode.LongCode == null || $.trim($scope.smsCode.LongCode) == '') {
+			if (typeof $scope.smsCode.LongCode == 'undefined' || $scope.smsCode.LongCode == null || $.trim($scope.smsCode.LongCode) == '') {
 				return;
 			}
 			did = $scope.smsCode.LongCode;
 			//Long codes have a default keyword YES
 			keyword = 'YES';
 		} else {
-			if(typeof $scope.smsCode.ShortCode == 'undefined' || $scope.smsCode.ShortCode == null || $.trim($scope.smsCode.ShortCode) == '') {
+			if (typeof $scope.smsCode.ShortCode == 'undefined' || $scope.smsCode.ShortCode == null || $.trim($scope.smsCode.ShortCode) == '') {
 				return;
 			}
 			did = $scope.smsCode.ShortCode;
@@ -736,26 +787,26 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		}
 		$http
 			.post(inspiniaAdminNS.wsUrl + "did_cancel", $.param({
-				apikey : $cookieStore.get('inspinia_auth_token'),
-				accountID : $scope.accountId,
-				DIDID: $scope.smsCode.selectedDidId,
-				sethttp : 1
-			}))
+			apikey : $cookieStore.get('inspinia_auth_token'),
+			accountID : $scope.accountId,
+			DIDID: $scope.smsCode.selectedDidId,
+			sethttp : 1
+		}))
 			.success(
-				function (data) {
-					if (data.apicode == 0) {
-						//If DID is successfully deleted
-						notify("SMS Code is successfully canceled.");
-						$scope.refreshDidList();
-						$scope.resetDIDFields();
-					}
+			function (data) {
+				if (data.apicode == 0) {
+					//If DID is successfully deleted
+					notify("SMS Code is successfully canceled.");
+					$scope.refreshDidList();
+					$scope.resetDIDFields();
 				}
-			).error(
-				//An error occurred with this request
-				function(data, status, headers, config) {
-					notify({message: "Failed to cancel SMS code! Error code: " + data.apicode, classes: "alert-danger"});
-				}
-			);
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				notify({message: "Failed to cancel SMS code! Error code: " + data.apicode, classes: "alert-danger"});
+			}
+		);
 	};
 
 	$scope.activateDID = function() {
@@ -764,31 +815,31 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		}
 		$http
 			.post(inspiniaAdminNS.wsUrl + "did_activate", $.param({
-				apikey : $cookieStore.get('inspinia_auth_token'),
-				accountID : $scope.accountId,
-				DIDID: $scope.smsCode.selectedDidId,
-				sethttp : 1
-			}))
+			apikey : $cookieStore.get('inspinia_auth_token'),
+			accountID : $scope.accountId,
+			DIDID: $scope.smsCode.selectedDidId,
+			sethttp : 1
+		}))
 			.success(
-				function (data) {
-					if (data.apicode == 0) {
-						//If DID is successfully deleted
-						notify("SMS Code is successfully activated.");
-						$scope.refreshDidList();
-						$scope.resetDIDFields();
-					}
+			function (data) {
+				if (data.apicode == 0) {
+					//If DID is successfully deleted
+					notify("SMS Code is successfully activated.");
+					$scope.refreshDidList();
+					$scope.resetDIDFields();
 				}
-			).error(
-				//An error occurred with this request
-				function(data, status, headers, config) {
-					notify({message: "Failed to activate SMS code! Error code: " + data.apicode, classes: "alert-danger"});
-				}
-			);
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				notify({message: "Failed to activate SMS code! Error code: " + data.apicode, classes: "alert-danger"});
+			}
+		);
 	};
 
 	$scope.populateSmsCode = function (smsCodeData) {
 		$scope.resetDIDFields();
-		if(typeof smsCodeData == 'undefined' || smsCodeData == null) {
+		if (typeof smsCodeData == 'undefined' || smsCodeData == null) {
 			return;
 		}
 		if (smsCodeData.DID.length < 11) {
@@ -886,61 +937,61 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		}
 
 		$http.post(
-				inspiniaAdminNS.wsUrl + requestPage, $.param(request)
-			).success(
-				function (data) {
-					if (data.apicode == 0) {
-						if (modify) {
-							notify("User data is successfully updated!");
-						} else {
-							notify("New user is successfully created!");
-						}
-						$scope.resetUserData();
-						$scope.refreshUsersList();
+			inspiniaAdminNS.wsUrl + requestPage, $.param(request)
+		).success(
+			function (data) {
+				if (data.apicode == 0) {
+					if (modify) {
+						notify("User data is successfully updated!");
 					} else {
-						if (modify) {
-							notify("Updating user data failed! Please try again!");
-						} else {
-							notify("Creating user failed! Please try again!");
-						}
+						notify("New user is successfully created!");
 					}
-				}).error(
-				//An error occurred with this request
-				function(data, status, headers, config) {
-					if (status == 422) {
-						//some input parameters are invalid
-						var invalidParameter = '';
-						var invalidParameterName = null;
-						var operation = modify ? 'update' : 'create';
-						var errorDescription = '';
-						if (data.apitext) {
-							var errorParamsMap = [];
-							errorParamsMap['newusername'] = "User Name";
-							errorParamsMap['newuserpassword'] = "User Password";
-							errorParamsMap['firstname'] = "First Name";
-							errorParamsMap['lastname'] = "Last Name";
-							errorParamsMap['emailaddress'] = "Email Address";
-							errorParamsMap['role'] = "Role";
-							var errorMessageParts = data.apitext.split(':');
-							invalidParameter = errorMessageParts[0];
-							errorDescription = $.trim(errorMessageParts[1]);
-							invalidParameterName = errorParamsMap[invalidParameter];
-						}
-						if (typeof invalidParameterName != 'undefined' && invalidParameterName != null && invalidParameterName != '') {
-							if (invalidParameter == 'newusername' && errorDescription == 'already exists') {
-								notify ({message: "Failed to " + operation +  " user. User with the specified username already exists!", classes : 'alert-danger'});
-							} else {
-								notify ({message: "Failed to " + operation +  " user. Invalid parameter " + invalidParameterName + "!", classes : 'alert-danger'});
-							}
-						} else {
-							notify ({message: "Failed to " + operation +  " user. Please check your input parameters and try again!", classes : 'alert-danger'});
-						}
-						//alert(JSON.stringify(data));
-						return;
+					$scope.resetUserData();
+					$scope.refreshUsersList();
+				} else {
+					if (modify) {
+						notify("Updating user data failed! Please try again!");
+					} else {
+						notify("Creating user failed! Please try again!");
 					}
-					notify("Unexpected error occurred when trying to " + operation + " user!");
 				}
-			);
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				if (status == 422) {
+					//some input parameters are invalid
+					var invalidParameter = '';
+					var invalidParameterName = null;
+					var operation = modify ? 'update' : 'create';
+					var errorDescription = '';
+					if (data.apitext) {
+						var errorParamsMap = [];
+						errorParamsMap['newusername'] = "User Name";
+						errorParamsMap['newuserpassword'] = "User Password";
+						errorParamsMap['firstname'] = "First Name";
+						errorParamsMap['lastname'] = "Last Name";
+						errorParamsMap['emailaddress'] = "Email Address";
+						errorParamsMap['role'] = "Role";
+						var errorMessageParts = data.apitext.split(':');
+						invalidParameter = errorMessageParts[0];
+						errorDescription = $.trim(errorMessageParts[1]);
+						invalidParameterName = errorParamsMap[invalidParameter];
+					}
+					if (typeof invalidParameterName != 'undefined' && invalidParameterName != null && invalidParameterName != '') {
+						if (invalidParameter == 'newusername' && errorDescription == 'already exists') {
+							notify({message: "Failed to " + operation + " user. User with the specified username already exists!", classes : 'alert-danger'});
+						} else {
+							notify({message: "Failed to " + operation + " user. Invalid parameter " + invalidParameterName + "!", classes : 'alert-danger'});
+						}
+					} else {
+						notify({message: "Failed to " + operation + " user. Please check your input parameters and try again!", classes : 'alert-danger'});
+					}
+					//alert(JSON.stringify(data));
+					return;
+				}
+				notify("Unexpected error occurred when trying to " + operation + " user!");
+			}
+		);
 	};
 
 	$scope.activateDeactivateUser = function(activate) {
@@ -962,38 +1013,38 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			sethttp: 1
 		};
 		var requestPage = "user_modify";
-		
+
 		$http.post(
-				inspiniaAdminNS.wsUrl + requestPage, $.param(request)
-			).success(
-				function (data) {
-					if (data.apicode == 0) {
-						if (activate == 1) {
-							notify("User is successfully activated!");
-						} else {
-							notify("User is successfully deactivated!");
-						}
-						$scope.resetUserData();
-						$scope.refreshUsersList();
+			inspiniaAdminNS.wsUrl + requestPage, $.param(request)
+		).success(
+			function (data) {
+				if (data.apicode == 0) {
+					if (activate == 1) {
+						notify("User is successfully activated!");
 					} else {
-						if (activate == 1) {
-							notify("Activating user failed! Please try again!");
-						} else {
-							notify("Deactivating user failed! Please try again!");
-						}
+						notify("User is successfully deactivated!");
 					}
-				}).error(
-				//An error occurred with this request
-				function(data, status, headers, config) {
-					if (status == 422) {
-						//some input parameters are invalid
-						notify("Invalid input parameters!");
-						alert(JSON.stringify(data));
-						return;
+					$scope.resetUserData();
+					$scope.refreshUsersList();
+				} else {
+					if (activate == 1) {
+						notify("Activating user failed! Please try again!");
+					} else {
+						notify("Deactivating user failed! Please try again!");
 					}
-					notify("Unexpected error occurred when trying to " + operation + " user!");
 				}
-			);
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				if (status == 422) {
+					//some input parameters are invalid
+					notify("Invalid input parameters!");
+					alert(JSON.stringify(data));
+					return;
+				}
+				notify("Unexpected error occurred when trying to " + operation + " user!");
+			}
+		);
 	};
 
 	$scope.refreshAccount();
@@ -1005,49 +1056,51 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 
 //Login
 superAdmin.controller('loginCtrl', function($scope, $cookieStore, $http, $window) {
-    $scope.invalidCredentials = false;
-    //Reset authentication token
-    $cookieStore.put('inspinia_auth_token', '');
-    $cookieStore.put('inspinia_account_id', '');
-    $cookieStore.put('inspinia_company_id', '');
-    //Login function
-    $scope.login = function() {
-        $scope.invalidCredentials = false;
-        //Checking if username and password are provided
-        if ( typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
-            return;
-        }
-        if ( typeof $scope.password == 'undefined' || $scope.password == null || $scope.password == '') {
-            return;
-        }
-        //Calling rest service to sign in
-        $http.post(inspiniaAdminNS.wsUrl + "login", $.param({
-            username : $scope.username,
-            password : $scope.password
-        })).success(
-        //Successful request to the server
-        function(data, status, headers, config) {
-            if (data == null || typeof data.apicode == 'undefined') {
-                //This should never happen
-                alert("Unknown error occurred when trying to sign in! Please try again.");
-                return;
-            }
-            if (data.apicode == 0) {
-                //User signed in successfully
-                $cookieStore.put('inspinia_auth_token', data.apikey);
-                $cookieStore.put('inspinia_account_id', data.apidata.accountID);
-                $cookieStore.put('inspinia_company_id', data.apidata.companyID);
-                $window.location.href = "/admin/#/";
-            } else if (data.apicode == 2) {
-                //Invalid credentials
-                $scope.invalidCredentials = true;
-            } else {
-                alert("An error occurred when trying to sign in. Error code: " + data.apicode);
-            }
-        }).error(
-        //An error occurred with this request
-        function(data, status, headers, config) {
-            alert("Failed to sign in! Please try again.");
-        });
-    };
+	$scope.invalidCredentials = false;
+	//Reset authentication token
+	$cookieStore.put('inspinia_auth_token', '');
+	$cookieStore.put('inspinia_account_id', '');
+	$cookieStore.put('inspinia_company_id', '');
+	//Login function
+	$scope.login = function() {
+		$scope.invalidCredentials = false;
+		//Checking if username and password are provided
+		if (typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
+			return;
+		}
+		if (typeof $scope.password == 'undefined' || $scope.password == null || $scope.password == '') {
+			return;
+		}
+		//Calling rest service to sign in
+		$http.post(inspiniaAdminNS.wsUrl + "login", $.param({
+			username : $scope.username,
+			password : $scope.password
+		})).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unknown error occurred when trying to sign in! Please try again.");
+					return;
+				}
+				if (data.apicode == 0) {
+					//User signed in successfully
+					$cookieStore.put('inspinia_auth_token', data.apikey);
+					$cookieStore.put('inspinia_account_id', data.apidata.accountID);
+					$cookieStore.put('inspinia_company_id', data.apidata.companyID);
+					$window.location.href = "/admin/#/";
+				} else if (data.apicode == 2) {
+					//Invalid credentials
+					$scope.invalidCredentials = true;
+				} else {
+					alert("An error occurred when trying to sign in. Error code: " + data.apicode);
+				}
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				if (status != 401) {
+					alert("Failed to sign in! Please try again.");
+				}
+			});
+	};
 });
