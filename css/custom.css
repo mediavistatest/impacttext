@@ -3270,7 +3270,7 @@ ul.bar-legend {
     padding-left: 15px;
 }
 
-.ng-invalid {
+.ng-touched.ng-invalid {
     border-color: red
 }
 
