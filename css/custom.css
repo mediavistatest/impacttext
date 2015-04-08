@@ -3260,6 +3260,31 @@ ul.bar-legend {
     line-height: initial;
 }
 
+.col-xs-15,
+.col-sm-15,
+.col-md-15,
+.col-lg-15 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.ng-invalid {
+    border-color: red
+}
+
+.col-xs-15 {
+    width: 20%;
+    float: left;
+}
+
+@media (min-width: 768px) {
+.col-sm-15 {
+        width: 20%;
+        float: left;
+    }
+}
 @media all and (max-width: 990px) {
     .welcome-msg {
         display: none;
@@ -3268,7 +3293,17 @@ ul.bar-legend {
        display: block;
   }
 }
-
-.ng-invalid {
-    border-color: red
+@media (min-width: 992px) {
+    .col-md-15 {
+        width: 20%;
+        float: left;
+    }
 }
+@media (min-width: 1200px) {
+    .col-lg-15 {
+        width: 20%;
+        float: left;
+    }
+}
+
+
