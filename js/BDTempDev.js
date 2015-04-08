@@ -137,8 +137,11 @@ var ngInbox = {
 						sethttp : 1
 					};
 
-					if (searchText) {
-						params.search = searchText.toLowerCase();
+					if (String(searchText).length>3 ) {
+						params.search = String(searchText).toLowerCase();
+					}else{
+						if (String(searchText).length!=0)
+						return;
 					}
 
 					var $param = $.param(params);
