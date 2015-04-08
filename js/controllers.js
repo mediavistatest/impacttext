@@ -308,13 +308,15 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             });
         },
         reportingGetMessageStats : function(inScope, callback) {
-             console.log(inScope.params)
             var param = {
                 apikey : main.authToken,
                 accountID : main.accountID,
                 companyID : main.accountInfo.companyID,
-                startdate : inScope.params.startdatetime,
-                enddate : inScope.params.enddatetime
+                startdate : inScope.params.startdatetime
+            };
+
+            if (inScope.params.enddatetime) {
+                param.enddate = inScope.params.enddatetime;
             };
 
             if (inScope.params.didid) {
@@ -4261,21 +4263,21 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
             strokeColor : "rgba(229,229,229,0.5)",
             highlightFill : "rgba(229,229,229,0.8)",
             highlightStroke : "rgba(229,229,229,1)",
-            data : [65]
+            data : []
         }, {
             label : "Opt-outs",
             fillColor : "rgba(139,211,251,0.5)",
             strokeColor : "rgba(139,211,251,0.5)",
             highlightFill : "rgba(139,211,251,0.8)",
             highlightStroke : "rgba(139,211,251,1)",
-            data : [28]
+            data : []
         }, {
             label : "Reply",
             fillColor : "rgba(0,95,171,0.5)",
             strokeColor : "rgba(0,95,171,0.5)",
             highlightFill : "rgba(0,95,171,0.8)",
             highlightStroke : "rgba(0,95,171,1)",
-            data : [68]
+            data : []
         }]
     };
     //var updateBarOptions = function() {
@@ -4285,6 +4287,44 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
     //
     //    $scope.$watch('pCtrl.messageCount', updateBarOptions, true);
     //    //$scope.$watch('pCtrl.bucketOfMessages', updateDouhnutOptions, true);
+
+    callback = function(inData) {
+        $scope.SentMessages = inData.apidata.totalMessagesDelivered;
+        $scope.ReceivedMessages = inData.apidata.totalReplies;
+        $scope.TotalContacts = inData.apidata.totalContacts;
+        $scope.TotalOptOuts = inData.apidata.totalOptOuts;
+
+        $scope.barData.datasets[0].data = [];
+        $scope.barData.datasets[1].data = [];
+        $scope.barData.datasets[2].data = [];
+
+        $scope.barData.datasets[0].data.push($scope.SentMessages);
+        $scope.barData.datasets[1].data.push($scope.TotalOptOuts);
+        $scope.barData.datasets[2].data.push($scope.ReceivedMessages);
+
+        // $scope.StartDate = String(inData.apidata.startDateTime).substring(0, 10);
+        // $scope.EndDate = String(inData.apidata.endDateTime).substring(0, 10);
+    };
+    var startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth = startOfMonth.toISOString().substring(0, 10);
+
+    $scope.params = {
+        startdatetime : startOfMonth + ' 00:00:00',
+        enddatetime : null
+    };
+
+    function callRequest() {
+        if ($scope.main.accountInfo.companyID) {
+            $scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
+        } else {
+            setTimeout(function() {
+                callRequest();
+            }, 500);
+        }
+    };
+    callRequest();
+
 }
 
 /**
@@ -4588,6 +4628,7 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
         // $scope.EndDate = String(inData.apidata.endDateTime).substring(0, 10);
     };
 }
+
 
 angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
