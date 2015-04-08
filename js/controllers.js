@@ -311,18 +311,23 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 			var param = {
 				apikey : main.authToken,
 				accountID : main.accountID,
-				companyID : main.accountInfo.companyID,
-				startdate : inScope.params.startdatetime
+				companyID : main.accountInfo.companyID
 			};
 
-			if (inScope.params.enddatetime) {
+			console.log(inScope)
+
+			if (inScope.params && inScope.params.startdatetime) {
+				param.startdate = inScope.params.startdatetime;
+			}
+
+			if (inScope.params && inScope.params.enddatetime) {
 				param.enddate = inScope.params.enddatetime;
 			}
 
-			if (inScope.params.didid) {
+			if (inScope.params && inScope.params.didid) {
 				param.didid = inScope.params.didid;
 			}
-			if (inScope.params.contactListID) {
+			if (inScope.params && inScope.params.contactListID) {
 				param.contactListID = inScope.params.contactListID;
 			}
 
@@ -4291,26 +4296,26 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
 	$scope.barData = {
 		labels : ["Monthly statistics"],
 		// datasets : [{
-			// label : "Sent messages",
-			// fillColor : "rgba(229,229,229,0.5)",
-			// strokeColor : "rgba(229,229,229,0.5)",
-			// highlightFill : "rgba(229,229,229,0.8)",
-			// highlightStroke : "rgba(229,229,229,1)",
-			// data : []
+		// label : "Sent messages",
+		// fillColor : "rgba(229,229,229,0.5)",
+		// strokeColor : "rgba(229,229,229,0.5)",
+		// highlightFill : "rgba(229,229,229,0.8)",
+		// highlightStroke : "rgba(229,229,229,1)",
+		// data : []
 		// }, {
-			// label : "Opt-outs",
-			// fillColor : "rgba(139,211,251,0.5)",
-			// strokeColor : "rgba(139,211,251,0.5)",
-			// highlightFill : "rgba(139,211,251,0.8)",
-			// highlightStroke : "rgba(139,211,251,1)",
-			// data : []
+		// label : "Opt-outs",
+		// fillColor : "rgba(139,211,251,0.5)",
+		// strokeColor : "rgba(139,211,251,0.5)",
+		// highlightFill : "rgba(139,211,251,0.8)",
+		// highlightStroke : "rgba(139,211,251,1)",
+		// data : []
 		// }, {
-			// label : "Reply",
-			// fillColor : "rgba(0,95,171,0.5)",
-			// strokeColor : "rgba(0,95,171,0.5)",
-			// highlightFill : "rgba(0,95,171,0.8)",
-			// highlightStroke : "rgba(0,95,171,1)",
-			// data : []
+		// label : "Reply",
+		// fillColor : "rgba(0,95,171,0.5)",
+		// strokeColor : "rgba(0,95,171,0.5)",
+		// highlightFill : "rgba(0,95,171,0.8)",
+		// highlightStroke : "rgba(0,95,171,1)",
+		// data : []
 		// }]
 		datasets : [{
 			label : "Received messages",
@@ -4349,7 +4354,7 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
 			data : []
 		}]
 	};
-	
+
 	//var updateBarOptions = function() {
 	//        barData[0].value = pCtrl.bucketOfMessages;
 	//        barData[1].value = pCtrl.messageCount;
@@ -4364,7 +4369,7 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
 		// $scope.TotalContacts = inData.apidata.totalContacts;
 		// $scope.TotalOptOuts = inData.apidata.totalOptOuts;
 		// $scope.NumberOfSenders = inData.apidata.uniqueReplyAni;
-		
+
 		$scope.SentMessages = inData.apidata.totalMessagesDelivered;
 		$scope.ReceivedMessages = inData.apidata.totalReplies;
 		$scope.Recipients = inData.apidata.totalContacts;
@@ -4380,7 +4385,7 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
 		// $scope.barData.datasets[0].data.push($scope.SentMessages);
 		// $scope.barData.datasets[1].data.push($scope.TotalOptOuts);
 		// $scope.barData.datasets[2].data.push($scope.ReceivedMessages);
-		
+
 		$scope.barData.datasets[0].data.push($scope.SentMessages);
 		$scope.barData.datasets[1].data.push($scope.ReceivedMessages);
 		$scope.barData.datasets[2].data.push($scope.Recipients);
@@ -4774,14 +4779,30 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
 	$scope.selectedContactList = {
 		contactListID : null
 	};
-	var callRequest = function(){
-		// if ($scope.selectedContactList && $scope.selectedContactList.contactListID){
-			$scope.showReport();
-		// }else{
-			// setTimeout(function(){
-				// callRequest();
-			// },500);
-		// }
+	// var callRequest = function(){
+	// // if ($scope.selectedContactList && $scope.selectedContactList.contactListID){
+	// $scope.showReport();
+	// // }else{
+	// // setTimeout(function(){
+	// // callRequest();
+	// // },500);
+	// // }
+	// };
+	// callRequest();
+	//
+
+	function callRequest() {
+		if ($scope.main.accountInfo.companyID) {
+			$scope.params = {
+				startdatetime : $('#idStartDate').val() + ' 00:00:00',
+				enddatetime : $('#idEndDate').val() + ' 00:00:00'
+			};
+			$scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
+		} else {
+			setTimeout(function() {
+				callRequest();
+			}, 500);
+		}
 	};
 	callRequest();
 }
