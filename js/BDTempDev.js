@@ -1582,9 +1582,11 @@ var ngSettings = {
                     apikey : cpo.$scope.main.authToken,
                     accountID : cpo.$scope.main.accountID,
                     companyID : cpo.$scope.main.accountInfo.companyID,
-                    didid : cpo.arCtrl.fromNumber.DIDID,
-                    sethttp : 1
+                    didid : cpo.arCtrl.fromNumber.DIDID
+                    // ,sethttp : 1
                 };
+
+				console.log(params)    
 
                 var $param = $.param(params);
 
@@ -1612,11 +1614,19 @@ var ngSettings = {
                     fromname : cpo.arCtrl.fromName,
                     message : cpo.arCtrl.generateMessageText(),
                     addtocontactlist : cpo.arCtrl.addToList?1:0,
-                    optoutmessageid : 1,
-                    startdate : cpo.arCtrl.validFrom,
-                    enddate : cpo.arCtrl.validFrom,
-                    sethttp : 1
+                    optoutmessageid : 1
+                    // ,sethttp : 1
                 };
+                
+            	if (cpo.arCtrl.validFrom){
+            		params.startdate = cpo.arCtrl.validFrom.toISOString().substring(0, 10) + ' 00:00:00';
+            	}; 
+            	if (cpo.arCtrl.validUntil){
+            		params.enddate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
+            	};               	               
+                
+                console.log(params)    
+                
                 var $param = $.param(params);
 
                 //POST
@@ -1643,11 +1653,19 @@ var ngSettings = {
                     fromname : cpo.arCtrl.fromName,
                     message : cpo.arCtrl.generateMessageText(),
                     addtocontactlist : cpo.arCtrl.addToList,
-                    optoutmessageid : 1,
-                    startdate : cpo.arCtrl.validFrom,
-                    enddate : cpo.arCtrl.validFrom,
-                    sethttp : 1
+                    optoutmessageid : 1
+                    // ,sethttp : 1
                 };
+                
+            	if (cpo.arCtrl.validFrom){
+            		params.startdate = cpo.arCtrl.validFrom.toISOString().substring(0, 10) + ' 00:00:00';
+            	}; 
+            	if (cpo.arCtrl.validUntil){
+            		params.enddate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
+            	};   
+            	
+            	console.log(params)            	               
+                                
                 var $param = $.param(params);
 
                 //POST
@@ -1692,7 +1710,7 @@ var ngSettings = {
                 OptOutTxt2 : '',
                 OptOutTxt3 : ''
             };
-            resetAutoresponder = function() {
+            arCtrl.resetAutoresponder = function() {
                 arCtrl.autoresponderID = null;
                 arCtrl.autoresponderName = '';
                 arCtrl.termKeyword = '';
@@ -1704,7 +1722,7 @@ var ngSettings = {
                 arCtrl.addToList = false;
                 //OptOutFields
             };
-            resetAutoresponder();
+            arCtrl.resetAutoresponder();
             // arCtrl.autoresponderID = null;
             // arCtrl.autoresponderName = '';
             // arCtrl.termKeyword = '';
@@ -1723,7 +1741,9 @@ var ngSettings = {
             // OptOutTxt3 : ''
             // };
 
-            ModifyKeywordCallback = function(cpo, result) {
+
+
+            arCtrl.ModifyKeywordCallback = function(result) {
                 if (result.apicode == 0) {
                 	console.log('modify keyword')
                     console.log(result);
@@ -1745,7 +1765,7 @@ var ngSettings = {
                     });
                 }
             };
-            AddKeywordCallback = function(cpo, result) {
+            arCtrl.AddKeywordCallback = function(result) {
                 if (result.apicode == 0) {
                 	console.log('add keyword')
                     console.log(result);
@@ -1768,7 +1788,7 @@ var ngSettings = {
                 }
             };
 
-            GetKeywordCallback = function(cpo, result) {
+            arCtrl.GetKeywordCallback = function(cpo, result) {
             	console.log('get keyword')
                 console.log(result);
                 if (result.apicode == 0) {
@@ -1783,7 +1803,7 @@ var ngSettings = {
                         arCtrl.makeInactive = resultAR.status == 'I';
                         arCtrl.addToList = resultAR.addtocontactlist == 1;
                     } else {
-                        resetAutoresponder();
+               arCtrl.resetAutoresponder();
                     }
                 } else {
                     cpo.$scope.$broadcast('itError', {
@@ -1791,12 +1811,12 @@ var ngSettings = {
                     });
                 }
             };
-            callGetKeywordRequest = function() {
+            arCtrl.callGetKeywordRequest = function() {
                 if ($scope.main.accountInfo.companyID) {
-                    ngSettings.Autoresponder.ServerRequests.GetKeyword(cpo, GetKeywordCallback);
+                    ngSettings.Autoresponder.ServerRequests.GetKeyword(cpo, arCtrl.GetKeywordCallback);
                 } else {
                     setTimeout(function() {
-                        callGetKeywordRequest();
+                        arCtrl.callGetKeywordRequest();
                     }, 500);
                 }
             };
@@ -1811,11 +1831,11 @@ var ngSettings = {
                     }
                 }
                 if (arCtrl.fromNumber.DIDID) {
-                    callGetKeywordRequest();
+                    arCtrl.callGetKeywordRequest();
                 }
             });
 
-            function setFromNumber() {
+            arCtrl.setFromNumber = function() {
                 if ($scope.main.fromNumbers != null) {
                     var defaultNumberDID = '';
                     if ($scope.main.Settings.Numbers != null) {
@@ -1840,20 +1860,20 @@ var ngSettings = {
                     }
                 } else {
                     setTimeout(function() {
-                        setFromNumber();
+                        arCtrl.setFromNumber();
                     }, 500);
                 }
-            }
+            };
 
-            setFromNumber();
-            maxLengthCalc = function() {
+            arCtrl.setFromNumber();
+            arCtrl.maxLengthCalc = function() {
                 arCtrl.maxLength = 160 - (arCtrl.fromName.length + arCtrl.optFields.OptOutTxt1.length + arCtrl.optFields.OptOutTxt2.length + arCtrl.optFields.OptOutTxt3.length) - (arCtrl.fromName.length > 0 ? 2 : 0) - (arCtrl.optFields.OptOutTxt1.length > 0 ? 1 : 0) - (arCtrl.optFields.OptOutTxt2.length > 0 ? 1 : 0) - (arCtrl.optFields.OptOutTxt3.length > 0 ? 1 : 0);
             };
             $scope.$watch('arCtrl.fromName', function() {
-                maxLengthCalc();
+                arCtrl.maxLengthCalc();
             }, true);
             $scope.$watch('arCtrl.optFields', function() {
-                maxLengthCalc();
+                arCtrl.maxLengthCalc();
             }, true);
             arCtrl.generateMessageText = function() {
                 //Checking the type of opt out message
