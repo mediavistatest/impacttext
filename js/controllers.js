@@ -4790,12 +4790,13 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
 	// };
 	// callRequest();
 	//
-
+  
 	function callRequest() {
 		if ($scope.main.accountInfo.companyID) {
+			$scope.today();
 			$scope.params = {
-				startdatetime : $('#idStartDate').val() + ' 00:00:00',
-				enddatetime : $('#idEndDate').val() + ' 00:00:00'
+				startdatetime : $scope.StartDate.toISOString().substring(0, 10) + ' 00:00:00',
+				enddatetime : $scope.EndDate.toISOString().substring(0, 10) + ' 00:00:00'
 			};
 			$scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
 		} else {
