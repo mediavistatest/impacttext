@@ -207,7 +207,7 @@ superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', fun
 					function(data, status, headers, config) {
 						//alert('Unexpected error occurred when trying to fetch contact lists!');
 						if (status != 401) {
-							alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+							alert("An error occurred when getting accounts! Error code: " + data.apicode);
 							alert(JSON.stringify(data));
 						}
 						self.gettingData = false;
@@ -583,6 +583,14 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.smsCode.status = null;
 	};
 
+	$scope.saveDID = function() {
+		if (typeof $scope.smsCode.selectedDidId == 'undefined' || $scope.smsCode.selectedDidId == null || $scope.smsCode.selectedDidId == '') {
+			$scope.addDID();
+		} else {
+			$scope.editDID();
+		}
+	};
+
 	$scope.addDID = function() {
 		var request = {
 			apikey : $cookieStore.get('inspinia_auth_token'),
@@ -664,6 +672,49 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			//An error occurred with this request
 			function(data, status, headers, config) {
 				notify({message: "Failed to add new DID! Error code: " + data.apicode, classes: "alert-danger"});
+			}
+		);
+	};
+
+	$scope.editDID = function() {
+		var request = {
+			apikey : $cookieStore.get('inspinia_auth_token'),
+			accountID : $scope.accountId,
+			companyID: $scope.CompanyID,
+			DIDID: $scope.smsCode.selectedDidId,
+			sethttp: 1
+		};
+
+		if ($scope.smsCode.AccCode == 'Short') {
+			if (typeof $scope.smsCode.ShortCodeName == 'undefined' || $scope.smsCode.ShortCodeName == null || $.trim($scope.smsCode.ShortCodeName) == '') {
+				notify("Please enter the valid short code name.");
+				return;
+			}
+			request.DIDName = $scope.smsCode.ShortCodeName;
+		} else {
+			if (typeof $scope.smsCode.LongCodeName == 'undefined' || $scope.smsCode.LongCodeName == null || $.trim($scope.smsCode.LongCodeName) == '') {
+				notify("Please enter the valid long code name.");
+				return;
+			}
+			request.DIDName = $scope.smsCode.LongCodeName;
+		}
+
+		$http
+			.post(inspiniaAdminNS.wsUrl + "did_modify", $.param(request))
+			.success(
+			function (data) {
+				if (data.apicode == 0) {
+					notify("SMS code is successfully saved!");
+					$scope.refreshDidList();
+					$scope.resetDIDFields();
+				} else {
+					notify({message: "Failed to save DID! Error message: " + data.apitext, classes: "alert-danger"});
+				}
+			}
+		).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				notify({message: "Failed to save DID! Error code: " + data.apicode, classes: "alert-danger"});
 			}
 		);
 	};

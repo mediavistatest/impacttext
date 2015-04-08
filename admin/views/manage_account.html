@@ -134,7 +134,7 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <div class="form-group clearfix">
                         <label class="col-sm-3 control-label">Long Code:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="LongCode" placeholder="Long Code" ng-model="smsCode.LongCode" class="form-control"  ng-trim="false">
+                            <input type="text" name="LongCode" placeholder="Long Code" ng-model="smsCode.LongCode" class="form-control"  ng-trim="false" ng-disabled="smsCode.selectedDidId">
                         </div>
                         <div class="col-sm-1">
                             <i class="fa fa-info-circle" tooltip='Long Code'></i>
@@ -222,7 +222,7 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                         </div>
                         <!-- end activate button -->
                         <button class="btn discard-btn" ng-click="resetDIDFields()"> Discard</button>
-                        <button class="btn save-btn" ng-click="addDID()" ng-hide="smsCode.selectedDidId"> Save</button>
+                        <button class="btn save-btn" ng-click="saveDID()"> Save</button>
                     </div>
                 </div>
                 <div class="col-md-3">
