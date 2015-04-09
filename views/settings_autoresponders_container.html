@@ -4,10 +4,10 @@ Settings
 <div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation" ng-controller="ngAutoresponderCtrl as arCtrl">
     <div class="iphone-prev">
         <div class="message-cloud">
-            <span ng-show="arCtrl.fromName">
+            <!-- <span ng-show="arCtrl.fromName">
                 {{arCtrl.fromName}}:
-            </span>
-            {{arCtrl.messageTxt}} {{arCtrl.optFields.OptOutTxt1}}{{arCtrl.optFields.OptOutTxt2}}{{arCtrl.optFields.OptOutTxt3}}
+            </span> -->
+            {{arCtrl.messageTxt}} <!-- {{arCtrl.optFields.OptOutTxt1}}{{arCtrl.optFields.OptOutTxt2}}{{arCtrl.optFields.OptOutTxt3}} -->
         </div>
     </div>
     <div ng-controller="ngInboxNotifyCtrl">
@@ -60,7 +60,7 @@ Settings
                 <br>
                 <br>
                 <br>
-                <div class="form-group clearfix">
+                <!-- <div class="form-group clearfix">
                     <label class="col-sm-2 control-label">
                         From name:
                     </label>
@@ -71,7 +71,7 @@ Settings
                         <i class="fa fa-info-circle" tooltip='Enter term'>
                         </i>
                     </div>
-                </div>
+                </div> -->
                 <br>
                 <br>
                 <div class="form-group clearfix">
@@ -86,11 +86,11 @@ Settings
                         </div>-->
                     </div>
                 </div>
-                <div class="form-group clearfix">
+                <!-- <div class="form-group clearfix">
                     <label class="col-sm-2 control-label">
                         Opt-out Message:
                     </label>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6"> -->
                         <!--<div class="radio">
                         <!--<label> <input icheck type="radio" name="OptOutMsg" value="standard" ng-model="OptOutMsg"> Standard </label>
                         <label> <input icheck type="radio" name="OptOutMsg" value="custom" ng-model="OptOutMsg"> Customized </label>
@@ -99,7 +99,7 @@ Settings
                         <textarea ng-show="OptOutMsg == 'custom'" name="message" class="form-control" rows="2" ng-model="OptOutTxt2" ng-init="OptOutTxt2='This is custom'" disabled></textarea>
                         <textarea placeholder="Write your opt-out message or leave it blank for no opt-out message" ng-show="OptOutMsg == 'write'" name="message" class="form-control" rows="2" ng-model="OptOutTxt3" maxlength="160"></textarea>
                         </div>-->
-                        <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="arCtrl.optOutMsg">
+                        <!-- <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="arCtrl.optOutMsg">
                             <option value="standard">
                                 Standard
                             </option>
@@ -124,7 +124,7 @@ Settings
                         <i class="fa fa-info-circle" tooltip='This will count in your character limit.'>
                         </i>
                     </div>
-                </div>
+                </div> -->
                 <div class="form-group clearfix">
                     <label class="col-sm-2 control-label">
                         Valid from:

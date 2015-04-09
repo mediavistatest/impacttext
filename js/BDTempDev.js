@@ -1882,32 +1882,33 @@ var ngSettings = {
 				arCtrl.maxLengthCalc();
 			}, true);
 			arCtrl.generateMessageText = function() {
-				//Checking the type of opt out message
-				var optOutMessage = '';
-				if (arCtrl.optOutMsg == 'standard') {
-					//todo: check how to receive standard opt out message
-					optOutMessage = arCtrl.optFields.OptOutTxt1;
-				} else if (arCtrl.optOutMsg == 'custom') {
-					//todo: check how to receive custom opt out message for the account
-					optOutMessage = arCtrl.optFields.OptOutTxt2;
-				} else if (arCtrl.optOutMsg == 'write') {
-					if ( typeof arCtrl.optFields.OptOutTxt3 != 'undefined' && arCtrl.optFields.OptOutTxt3 != null) {
-						optOutMessage = arCtrl.optFields.OptOutTxt3;
-					}
-				}
-				//Generate a message text
-				var messageText = '';
-				if ( typeof arCtrl.fromName != 'undefined' && arCtrl.fromName != null) {
-					messageText += $.trim(arCtrl.fromName);
-					if (messageText.length > 0) {
-						messageText += ': ';
-					}
-				}
-				messageText += arCtrl.messageTxt;
-				if (optOutMessage != '') {
-					messageText += '\r\n' + optOutMessage;
-				}
-				return messageText;
+				// //Checking the type of opt out message
+				// var optOutMessage = '';
+				// if (arCtrl.optOutMsg == 'standard') {
+					// //todo: check how to receive standard opt out message
+					// optOutMessage = arCtrl.optFields.OptOutTxt1;
+				// } else if (arCtrl.optOutMsg == 'custom') {
+					// //todo: check how to receive custom opt out message for the account
+					// optOutMessage = arCtrl.optFields.OptOutTxt2;
+				// } else if (arCtrl.optOutMsg == 'write') {
+					// if ( typeof arCtrl.optFields.OptOutTxt3 != 'undefined' && arCtrl.optFields.OptOutTxt3 != null) {
+						// optOutMessage = arCtrl.optFields.OptOutTxt3;
+					// }
+				// }
+				// //Generate a message text
+				// var messageText = '';
+				// if ( typeof arCtrl.fromName != 'undefined' && arCtrl.fromName != null) {
+					// messageText += $.trim(arCtrl.fromName);
+					// if (messageText.length > 0) {
+						// messageText += ': ';
+					// }
+				// }
+				// messageText += arCtrl.messageTxt;
+				// if (optOutMessage != '') {
+					// messageText += '\r\n' + optOutMessage;
+				// }
+				// return messageText;
+				return arCtrl.messageTxt;
 			};
 		}
 	}
