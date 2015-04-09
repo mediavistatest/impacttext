@@ -1719,7 +1719,7 @@ var ngSettings = {
 				arCtrl.validFrom = new Date();
 				arCtrl.validUntil = null;
 				arCtrl.makeInactive = false;
-				arCtrl.addToList = false;
+				arCtrl.addToList = true;
 				//OptOutFields
 			};
 			arCtrl.resetAutoresponder();
