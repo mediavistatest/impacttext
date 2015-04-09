@@ -23,13 +23,13 @@
                 <br>
                 <br>
                 <span class="label-icon"><span><i class="fa fa-phone"></i>Choose SMS code: &nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <select class="page-select" ng-model="selectedDID" ng-options="number.DID for number in main.Settings.Numbers" style="width: auto;">
+                <select class="page-select" ng-model="selectedDID" ng-options="number.DID for number in main.Settings.Numbers" style="width: 165px; margin-left:12px">
                     <option value="" selected="selected" label="">All codes</option>
                 </select>
                 <br>
                 <br>
                 <span class="label-icon"><span><i class="glyphicon glyphicon-list-alt"></i>Choose contact list: &nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <select class="page-select" ng-model="selectedContactList" ng-options="list.contactListName for list in main.contactLists" style="width: auto;">
+                <select class="page-select" ng-model="selectedContactList" ng-options="list.contactListName for list in main.contactLists" style="width: 165px;">
                     <option value="" selected="selected" label="">All Contact lists</option>
                 </select>
                 <br>
@@ -41,7 +41,6 @@
             </div>
         </div>
     </div>
-
     <div class="col-md-15">
         <div class="content-box clearfix">
             <h2 class="blue">Sent messages</h2>
