@@ -910,22 +910,9 @@ var ngInbox = {
 		},
 		PopulateSend : function($sendScope) {
 			try {
-				// $sendScope.FromName = $sendScope.initial;
-				// $sendScope.MessageType = 'SMS';
 				$sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
 				return member.DID == $sendScope.controllerParent.clickedMessage.DID;
 				})[0];
-				// $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
-				// return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
-				// })[0];
-				// $sendScope.ToNumber = '';//$sendScope.controllerParent.clickedMessage.ANI;
-				// $sendScope.OptOutMsg = '';
-				// $sendScope.OptOutTxt3 = $sendScope.initial;
-				// $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
-				// $sendScope.ScheduleCheck = false;
-				// $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
-				// $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-				// $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
 			} catch(e) {
 				//TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
 			}
@@ -1078,7 +1065,7 @@ var ngInbox = {
 					$sendScope.OptOutTxt3 = $sendScope.initial;
 					$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
 					$sendScope.ScheduleCheck = false;
-					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
+					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0,10));
 					$sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
 					$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
 				};
@@ -1221,18 +1208,13 @@ var ngInbox = {
 					$sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
 					return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
 					})[0];
-					// $sendScope.ToNumber = $sendScope.controllerParent.clickedMessage.ANI;
-					// $sendScope.ToNumber = $sendScope.ToNumber.replace(' ...', '');
-					// if ($sendScope.ToNumber.length > 10 && $sendScope.ToNumber[0] == '1') {
-					// $sendScope.ToNumber = $sendScope.ToNumber.substring(1);
-					// }
 
 					$sendScope.OptOutMsg = '';
 					$sendScope.OptOutTxt3 = $sendScope.initial;
 					$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
 					$sendScope.ScheduleCheck = true;
 
-					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate);
+					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0,10));
 					$sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
 					$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
 				};
@@ -1363,7 +1345,7 @@ var ngInbox = {
 					$sendScope.OptOutMsg = '';
 					$sendScope.OptOutTxt3 = $sendScope.initial;
 					$sendScope.ScheduleCheck = false;
-					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
+					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0,10));
 					$sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
 					$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
 				};
@@ -1580,7 +1562,6 @@ var ngSettings = {
 	Autoresponder : {
 		ServerRequests : {
 			GetKeyword : function(cpo, callback) {
-				console.log(cpo.arCtrl)
 				var params = {
 					apikey : cpo.$scope.main.authToken,
 					accountID : cpo.$scope.main.accountID,
@@ -1588,8 +1569,6 @@ var ngSettings = {
 					didid : cpo.arCtrl.fromNumber.DIDID
 					// ,sethttp : 1
 				};
-
-				console.log(params)
 
 				var $param = $.param(params);
 
@@ -1723,37 +1702,9 @@ var ngSettings = {
 				//OptOutFields
 			};
 			arCtrl.resetAutoresponder();
-			// arCtrl.autoresponderID = null;
-			// arCtrl.autoresponderName = '';
-			// arCtrl.termKeyword = '';
-			//
-			// arCtrl.messageTxt = '';
-			// arCtrl.maxLength = 160;
-			// arCtrl.optOutMsg = '';
-			// arCtrl.validFrom = new Date();
-			// arCtrl.validUntil = null;
-			// arCtrl.makeInactive = false;
-			// arCtrl.addToList = false;
-			// //OptOutFields
-			// arCtrl.optFields = {
-			// OptOutTxt1 : '',
-			// OptOutTxt2 : '',
-			// OptOutTxt3 : ''
-			// };
 
 			arCtrl.ModifyKeywordCallback = function(result) {
 				if (result.apicode == 0) {
-					// console.log('modify keyword')
-					// console.log(result);
-					// var resultAR = result.apidata[0];
-					// arCtrl.autoresponderID = resultAR.autoResponderID;
-					// //arCtrl.autoresponderName = resultAR.autoResponderID;
-					// arCtrl.termKeyword = resultAR.keyword;
-					// //arCtrl.messageTxt = resultAR.autoResponderID;
-					// arCtrl.validFrom = new Date(resultAR.autoResponderID);
-					// arCtrl.validUntil = new Date(resultAR.autoResponderID);
-					// arCtrl.makeInactive = resultAR.status == 'I';
-					// arCtrl.addToList = resultAR.addtocontactlist == 1;
 					$scope.$broadcast('itMessage', {
 						message : 'Autoresponder modified'
 					});
@@ -1765,17 +1716,6 @@ var ngSettings = {
 			};
 			arCtrl.AddKeywordCallback = function(result) {
 				if (result.apicode == 0) {
-					// console.log('add keyword')
-					// console.log(result);
-					// var resultAR = result.apidata[0];
-					// arCtrl.autoresponderID = resultAR.autoResponderID;
-					// //arCtrl.autoresponderName = resultAR.autoResponderID;
-					// arCtrl.termKeyword = resultAR.keyword;
-					// //arCtrl.messageTxt = resultAR.autoResponderID;
-					// arCtrl.validFrom = new Date(resultAR.autoResponderID);
-					// arCtrl.validUntil = new Date(resultAR.autoResponderID);
-					// arCtrl.makeInactive = resultAR.status == 'I';
-					// arCtrl.addToList = resultAR.addtocontactlist == 1;
 					$scope.$broadcast('itMessage', {
 						message : 'Autoresponder added'
 					});
@@ -1797,12 +1737,12 @@ var ngSettings = {
 						arCtrl.termKeyword = resultAR.keyword;
 						arCtrl.messageTxt = resultAR.message;
 						if (resultAR.startDate) {
-							arCtrl.validFrom = new Date(resultAR.startDate);
+							arCtrl.validFrom = new Date(resultAR.startDate.substring(0,10));
 						} else {
 							arCtrl.validFrom = null;
 						}
 						if (resultAR.endDate) {
-							arCtrl.validUntil = new Date(resultAR.endDate);
+							arCtrl.validUntil = new Date(resultAR.endDate.substring(0,10));
 						} else {
 							arCtrl.validUntil = null;
 						}

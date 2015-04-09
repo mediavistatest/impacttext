@@ -314,8 +314,6 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 				companyID : main.accountInfo.companyID
 			};
 
-			console.log(inScope)
-
 			if (inScope.params && inScope.params.startdatetime) {
 				param.startdate = inScope.params.startdatetime;
 			}
@@ -3844,7 +3842,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 	$scope.$watch('FromNumber', function() {
 		if ($scope.main.Settings.Numbers && $scope.main.Settings.Numbers.length > 0 && $scope.FromNumber && $scope.FromNumber.DID) {
 			var Number = $.grep($scope.main.Settings.Numbers, function(member){
-			console.log(member.DID)
 			return member.DID == $scope.FromNumber.DID;
 			})[0];
 			if (Number.name != null && Number.name != '') {
@@ -4495,12 +4492,11 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
 	$http.post(inspiniaNS.wsUrl + 'messages_outbound', $param)
 	// success function
 	.success(function(result) {
-		console.log(result)
 		if (result.apicode == 0) {
 			//$scope.events.slice(0, $scope.events.length);
 			for (var event in result.apidata) {
 				var currentEvent = result.apidata[event];
-				var date = new Date(currentEvent.scheduledDate);
+				var date = new Date(currentEvent.scheduledDate.substring(0, 10));
 				// var d = date.getDate();
 				// var m = date.getMonth();
 				// var y = date.getFullYear();
@@ -4531,7 +4527,6 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
 
 			}
 			$scope.eventSources = [$scope.events];
-			console.log($scope.eventSources)
 		}
 	})
 	// error function
@@ -4790,7 +4785,7 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
 	// };
 	// callRequest();
 	//
-  
+
 	function callRequest() {
 		if ($scope.main.accountInfo.companyID) {
 			$scope.today();
