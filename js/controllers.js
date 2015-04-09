@@ -194,16 +194,16 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 					//Reading contact lists
 					// console.log(data)
 					main.fromNumbers = data.apidata;
-					main.Settings.Numbers = $.grep(main.Settings.Numbers, function(member) {
-						var numberIn = false;
-						for (var number in main.fromNumbers) {
-							if (main.fromNumbers[number].DID == member.DID) {
-								numberIn = true;
-								break;
-							}
-						}
-						return numberIn;
-					});
+					// main.Settings.Numbers = $.grep(main.Settings.Numbers, function(member) {
+						// var numberIn = false;
+						// for (var number in main.fromNumbers) {
+							// if (main.fromNumbers[number].DID == member.DID) {
+								// numberIn = true;
+								// break;
+							// }
+						// }
+						// return numberIn;
+					// });
 					// for (var number in main.fromNumbers) {
 						// if ($.grep(main.Settings.Numbers, function(member) {
 							// return member.DID == main.fromNumbers[number].DID;
