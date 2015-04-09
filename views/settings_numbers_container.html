@@ -1,7 +1,7 @@
 <h1>
 Settings
 </h1>
-<div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation" ng-controller="ngNumbersCtrl as nCtrl">
+<div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation" ng-controller="ngNumbersCtrl as numCtrl">
     <div ng-controller="ngInboxNotifyCtrl">
         <div class="settings-section">
             <h2 class="section-title">
@@ -37,13 +37,16 @@ Settings
             </i>
             </div>
             </div> -->
-            <div ng-repeat="Number in main.Settings.Numbers track by Number.DID">
+            <div ng-repeat="Number in numCtrl.numbers track by Number.DIDID">
                 <div class="form-group clearfix">
                     <div class="col-sm-1 check">
                         <input type="checkbox" name="defaultNumber" ng-model="Number.prefered" ng-trim="false" ng-value="true" ng-change="cpo.Events.DefaultNumber_onChange(cpo, Number)">
                     </div>
                     <div class="col-sm-3">
                         <input type="text" name="Number" ng-model="Number.DID" class="form-control" ng-trim="false" readonly>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="text" name="Keyword" ng-model="Number.keyword" class="form-control" ng-trim="false" readonly>
                     </div>
                     <div class="col-sm-3">
                         <input type="text" name="Name" placeholder="Set your From Name here." ng-model="Number.name" class="form-control"  ng-trim="false">

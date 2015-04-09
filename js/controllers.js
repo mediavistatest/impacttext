@@ -119,6 +119,63 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 				}
 			});
 		},
+		accountKeywordGet : function() {
+			$http.post(inspiniaNS.wsUrl + "accountkeyword_get", $.param({
+				sethttp : 1,
+				apikey : main.authToken,
+				accountID : main.accountID,
+				companyID : main.accountInfo.companyID
+			})).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				// console.log('keywords')
+				// console.log(data)
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					main.fromNumbers = [];
+					return;
+				}
+				if (data.apicode == 0) {
+					//Reading contact lists
+					main.keywords = data.apidata;
+					
+					for (var number in main.fromNumbers) {
+						if ($.grep(main.Settings.Numbers, function(member) {
+							return (member.DID == main.fromNumbers[number].DID && member.accountID == main.fromNumbers[number].accountID);
+						}).length == 0) {
+							var keyword = '';
+							var didKeyword = $.grep(main.keywords, function(keyword){
+								return (keyword.DIDID == main.fromNumbers[number].DIDID);
+							})[0];
+							if (didKeyword){
+								keyword = didKeyword.keyword;
+							}
+							
+							main.Settings.Numbers.push({
+								accountID : main.accountID,
+								DIDID : main.fromNumbers[number].DIDID,
+								DID : main.fromNumbers[number].DID,
+								keyword : keyword,
+								prefered : false,
+								name : ''
+							});
+						}
+					}
+				}
+				main.ipCookie('itSettings', main.Settings, {
+					expires : 365,
+					expirationUnit : 'days'
+				});
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				//alert('Unexpected error occurred when trying to fetch DIDs!');
+				if (status == 400) {
+					alert("An error occurred when getting keywords! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
+			});
+		},
 		didGet : function() {
 			$http.post(inspiniaNS.wsUrl + "did_get", $.param({
 				sethttp : 1,
@@ -135,6 +192,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 				}
 				if (data.apicode == 0) {
 					//Reading contact lists
+					// console.log(data)
 					main.fromNumbers = data.apidata;
 					main.Settings.Numbers = $.grep(main.Settings.Numbers, function(member) {
 						var numberIn = false;
@@ -146,27 +204,29 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 						}
 						return numberIn;
 					});
-					for (var number in main.fromNumbers) {
-						if ($.grep(main.Settings.Numbers, function(member) {
-							return member.DID == main.fromNumbers[number].DID;
-						}).length == 0) {
-							main.Settings.Numbers.push({
-								DIDID : main.fromNumbers[number].DIDID,
-								DID : main.fromNumbers[number].DID,
-								prefered : false,
-								name : ''
-							});
-						}
-					}
+					// for (var number in main.fromNumbers) {
+						// if ($.grep(main.Settings.Numbers, function(member) {
+							// return member.DID == main.fromNumbers[number].DID;
+						// }).length == 0) {
+							// main.Settings.Numbers.push({
+								// DIDID : main.fromNumbers[number].DIDID,
+								// DID : main.fromNumbers[number].DID,
+								// prefered : false,
+								// name : ''
+							// });
+						// }
+					// }
 				} else {
 					main.fromNumbers = [];
 					main.Settings.Numbers = [];
 				}
-
-				main.ipCookie('itSettings', main.Settings, {
-					expires : 365,
-					expirationUnit : 'days'
-				});
+				
+				main.ServerRequests.accountKeywordGet();
+				
+				// main.ipCookie('itSettings', main.Settings, {
+					// expires : 365,
+					// expirationUnit : 'days'
+				// });				
 
 				for (var j in main.fromNumbers) {
 					main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();

@@ -137,11 +137,11 @@ var ngInbox = {
 						sethttp : 1
 					};
 
-					if (String(searchText).length>3 ) {
+					if (String(searchText).length > 3) {
 						params.search = String(searchText).toLowerCase();
-					}else{
-						if (String(searchText).length!=0)
-						return;
+					} else {
+						if (String(searchText).length != 0)
+							return;
 					}
 
 					var $param = $.param(params);
@@ -1065,7 +1065,7 @@ var ngInbox = {
 					$sendScope.OptOutTxt3 = $sendScope.initial;
 					$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
 					$sendScope.ScheduleCheck = false;
-					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0,10));
+					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
 					$sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
 					$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
 				};
@@ -1214,7 +1214,7 @@ var ngInbox = {
 					$sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
 					$sendScope.ScheduleCheck = true;
 
-					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0,10));
+					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
 					$sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
 					$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
 				};
@@ -1345,7 +1345,7 @@ var ngInbox = {
 					$sendScope.OptOutMsg = '';
 					$sendScope.OptOutTxt3 = $sendScope.initial;
 					$sendScope.ScheduleCheck = false;
-					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0,10));
+					$sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
 					$sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
 					$sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
 				};
@@ -1552,11 +1552,23 @@ var ngSettings = {
 			}
 		},
 		Controller : function($scope, $http, $cookieStore) {
+			var numCtrl = this;
 			var cpo = ngSettings.NumberNames;
 			cpo.$scope = $scope;
 			cpo.$http = $http;
 			cpo.$cookieStore = $cookieStore;
 			cpo.$scope.cpo = cpo;
+
+			numCtrl.getNumbers = function() {
+				if ($scope.main.Settings) {
+					numCtrl.numbers = $.grep($scope.main.Settings.Numbers, function(number) {
+						return (number.accountID == $scope.main.accountID)
+					});
+				}else{
+					numCtrl.getNumbers();
+				}
+			};
+			numCtrl.getNumbers();
 		}
 	},
 	Autoresponder : {
@@ -1737,12 +1749,12 @@ var ngSettings = {
 						arCtrl.termKeyword = resultAR.keyword;
 						arCtrl.messageTxt = resultAR.message;
 						if (resultAR.startDate) {
-							arCtrl.validFrom = new Date(resultAR.startDate.substring(0,10));
+							arCtrl.validFrom = new Date(resultAR.startDate.substring(0, 10));
 						} else {
 							arCtrl.validFrom = null;
 						}
 						if (resultAR.endDate) {
-							arCtrl.validUntil = new Date(resultAR.endDate.substring(0,10));
+							arCtrl.validUntil = new Date(resultAR.endDate.substring(0, 10));
 						} else {
 							arCtrl.validUntil = null;
 						}
@@ -1825,27 +1837,27 @@ var ngSettings = {
 				// //Checking the type of opt out message
 				// var optOutMessage = '';
 				// if (arCtrl.optOutMsg == 'standard') {
-					// //todo: check how to receive standard opt out message
-					// optOutMessage = arCtrl.optFields.OptOutTxt1;
+				// //todo: check how to receive standard opt out message
+				// optOutMessage = arCtrl.optFields.OptOutTxt1;
 				// } else if (arCtrl.optOutMsg == 'custom') {
-					// //todo: check how to receive custom opt out message for the account
-					// optOutMessage = arCtrl.optFields.OptOutTxt2;
+				// //todo: check how to receive custom opt out message for the account
+				// optOutMessage = arCtrl.optFields.OptOutTxt2;
 				// } else if (arCtrl.optOutMsg == 'write') {
-					// if ( typeof arCtrl.optFields.OptOutTxt3 != 'undefined' && arCtrl.optFields.OptOutTxt3 != null) {
-						// optOutMessage = arCtrl.optFields.OptOutTxt3;
-					// }
+				// if ( typeof arCtrl.optFields.OptOutTxt3 != 'undefined' && arCtrl.optFields.OptOutTxt3 != null) {
+				// optOutMessage = arCtrl.optFields.OptOutTxt3;
+				// }
 				// }
 				// //Generate a message text
 				// var messageText = '';
 				// if ( typeof arCtrl.fromName != 'undefined' && arCtrl.fromName != null) {
-					// messageText += $.trim(arCtrl.fromName);
-					// if (messageText.length > 0) {
-						// messageText += ': ';
-					// }
+				// messageText += $.trim(arCtrl.fromName);
+				// if (messageText.length > 0) {
+				// messageText += ': ';
+				// }
 				// }
 				// messageText += arCtrl.messageTxt;
 				// if (optOutMessage != '') {
-					// messageText += '\r\n' + optOutMessage;
+				// messageText += '\r\n' + optOutMessage;
 				// }
 				// return messageText;
 				return arCtrl.messageTxt;
