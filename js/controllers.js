@@ -3867,8 +3867,18 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 		OptOutTxt2 : '',
 		OptOutTxt3 : ''
 	};
-
-	$scope.contactLists = $scope.main.contactLists;
+	$scope.contactLists = [];
+	function setContactLists(){
+		if ($scope.main.contactLists){
+			$scope.contactLists = $scope.main.contactLists;
+		}else{
+			setTimeout(function() {
+				setContactLists();
+			}, 500);
+		}
+	}
+	setContactLists();
+	
 	$scope.fromNumbers = [];
 	//send form initial states
 	$scope.initial = "";
@@ -3918,7 +3928,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 	$scope.SetDate = "";
 	$scope.SetTimeHour = "";
 	$scope.SetTimeMinute = "";
-	$scope.contactLists = [];
 	$scope.SendToList = false;
 	//Date/time control
 	$scope.today = function() {
