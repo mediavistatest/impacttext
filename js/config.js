@@ -480,7 +480,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             }
         })
         .state('settings.basic', {
-            url: "/settings_basic",
+            url: "/settings_account",
             templateUrl: "views/settings_basic_container.html",
             data: { pageTitle: 'Settings Basic' },
             resolve: {

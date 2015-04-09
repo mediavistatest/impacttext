@@ -2937,7 +2937,13 @@ margin: 20px -15px 10px -15px;
 .manage-list-txt {
     margin-bottom: 50px;
 }
-.add-list-contact .list-inline {
+.add-list-contact .list-inline, .add-list .list-inline {
+  padding-left: 0;
+  margin-left: -5px;
+  list-style: none;
+  max-height: 300px;
+  overflow: auto;
+} {
     padding-left: 0;
     margin-left: -5px;
     list-style: none;
