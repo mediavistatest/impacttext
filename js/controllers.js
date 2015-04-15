@@ -2786,7 +2786,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
 		}).error(
 		//An error occurred with this request
 		function(data, status, headers, config) {
-			alert("An error occurred when exporting Opt-Outs! Error code: " + data.apicode);
+			alert("An error occurred when exporting Opt-outs! Error code: " + data.apicode);
 			alert(JSON.stringify(data));
 		});
 	};
@@ -4405,7 +4405,7 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
 			highlightStroke : "rgba(0,125,50,1)",
 			data : []
 		}, {
-			label : "Opt-Outs",
+			label : "Opt-outs",
 			fillColor : "rgba(159,74,156,0.5)",
 			strokeColor : "rgba(159,74,156,0.5)",
 			highlightFill : "rgba(159,74,156,0.8)",
@@ -4703,7 +4703,7 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
 			highlightStroke : "rgba(0,125,50,1)",
 			data : []
 		}, {
-			label : "Opt-Outs",
+			label : "Opt-outs",
 			fillColor : "rgba(159,74,156,0.5)",
 			strokeColor : "rgba(159,74,156,0.5)",
 			highlightFill : "rgba(159,74,156,0.8)",

@@ -783,7 +783,7 @@ var ngInbox = {
 			checked : true,
 			canBeClicked : false,
 			field : 'createdDate',
-			displayName : 'Date',
+			displayName : 'Date/Time',
 		}, {
 			checked : true,
 			canBeClicked : false,

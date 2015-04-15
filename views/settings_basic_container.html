@@ -9,7 +9,7 @@ Account Settings
             Opt-out
             </h2>
             <p>
-                Set your custom opt-out here. It will appear as the default opt-out message when you go to Compose Message.
+                Set your custom opt-out text here. It will appear as the default opt-out message when you go to Compose Message.
             </p>
             <br>
             <div class="form-group clearfix">
@@ -17,7 +17,13 @@ Account Settings
                     Opt-out Text:
                 </label>
                 <div class="col-sm-6">
-                    <input type="text" name="defaultOptOutText" ng-model="main.Settings.defaultOptOutText" class="form-control"  ng-trim="false">
+                    <input type="text" name="defaultOptOutText" ng-model="main.Settings.defaultOptOutText" maxlength="160" class="form-control"  ng-trim="false">
+                    <div ng-hide="main.Settings.defaultOptOutText.maxlength" class="text-counter">{{ 160 - main.Settings.defaultOptOutText.length }} characters left.</div>
+
+
+                        <div ng-show="main.Settings.defaultOptOutText.maxlength" class="text-counter error">
+                             Limit reached!
+                        </div>
                 </div>
                 <div class="col-sm-4">
                     <i class="fa fa-info-circle" tooltip='This will count in your character limit.'>
@@ -35,8 +41,8 @@ Account Settings
             </p>
             <br>
             <div class="form-group clearfix">
-                <label class="col-sm-2 control-label">
-                    Page size:
+                <label class="col-sm-2 control-label double">
+                    Number of rows displayed:
                 </label>
                 <div class="col-sm-2">
                     <select class="form-control m-b" name="DefaultPageSize" ng-model="main.Settings.defaultPageSize">

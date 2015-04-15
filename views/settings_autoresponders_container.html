@@ -15,21 +15,21 @@ Settings
         <form name="autoresponderForm" novalidate>
             <div class="settings-section">
                 <h2 class="section-title">
-                Autoresponder
+                Autoresponders
                 </h2>
                 <p>
-                    Enter autoresponder data
+                    Autoresponders are automated text messages that are sent back in reply to incoming texts based on a rule you create. Each autoresponder is activated by a “trigger term” that initiates the process. For example, you could send a link to a coupon back to every incoming text that mentions the term SALE.
                 </p>
                 <br>
                 <div class="form-group clearfix">
                     <label class="col-sm-2 control-label">
-                        SMS code:
+                        From:
                     </label>
                     <div class="col-sm-6">
                         <select class="form-control m-b" name="FromNumber" ng-model="arCtrl.fromNumber" ng-options="fNumber.DID for fNumber in main.fromNumbers track by fNumber.DIDID" required ></select>
                     </div>
                     <div class="col-sm-4">
-                        <i class="fa fa-info-circle" tooltip='Set your autoresponder rule name.'>
+                        <i class="fa fa-info-circle" tooltip='This is the number from which the automated response will be sent.'>
                         </i>
                     </div>
                 </div>
@@ -73,10 +73,11 @@ Settings
                 <br>
                 <div class="form-group clearfix">
                     <label class="col-sm-2 control-label">
-                        Message text:
+                        Autoresponse Text:
                     </label>
                     <div class="col-sm-6">
                         <textarea name="MessageTxt" class="form-control" ng-maxlength="{{ arCtrl.maxLength }}" rows="3" ng-model="arCtrl.messageTxt" ng-trim="false" required></textarea>
+                        <div ng-hide="arCtrl.messageTxt.maxlength" class="text-counter">{{ 160 - arCtrl.messageTxt.length }} characters left.</div>
                         <!--<div ng-hide="SendForm.$error.maxlength" class="text-counter">{{ 160 - ((FromName.length > 0 && FromName.length + 2 || FromName.length) + MessageTxt.length + (optFields.OptOutTxt1.length > 0 && optFields.OptOutTxt1.length + 1 || optFields.OptOutTxt1.length) + (optFields.OptOutTxt3.length > 0 && optFields.OptOutTxt3.length + 1 || optFields.OptOutTxt3.length)) }} characters left.</div>-->
                         <!--<div ng-show="SendForm.$error.maxlength" class="text-counter error">
                         Limit reached!

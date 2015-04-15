@@ -28,12 +28,12 @@
 		<div class="btn-group dropdown discard-btn">
         <button data-toggle="dropdown" class="btn dropdown-toggle read-unread" aria-expanded="false">
 
-                 {{controllerParent.getListStatus=='D' && 'Inbound messages' || controllerParent.getListStatus=='X' && 'Sent Messages'}} <i class="fa fa-caret-down"></i>
+                 {{controllerParent.getListStatus=='D' && 'Received messages' || controllerParent.getListStatus=='X' && 'Sent Messages'}} <i class="fa fa-caret-down"></i>
             </button>
 
             <div class="dropdown-menu dropdown-list dropdown-alerts">
 
-             <button class="btn drop-btn" ng-click="controllerParent.getListAction='messages_inbound';controllerParent.getListStatus='D';">Inbound messages</button>
+             <button class="btn drop-btn" ng-click="controllerParent.getListAction='messages_inbound';controllerParent.getListStatus='D';">Received messages</button>
              <button class="btn drop-btn" ng-click="controllerParent.getListAction='messages_outbound';controllerParent.getListStatus='X';">Sent Messages</button>
 
             </div>
