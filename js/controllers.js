@@ -3829,7 +3829,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 				// }
 				if (parseInt(phoneNumber.substring(4, 5)) < 2) {
 					//var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
-					var msg = 'Please enter phone number without leading 1';
+					var msg = 'Fifth digit is not in range (2-9)';
 					$scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
 					return false;
 				}

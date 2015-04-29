@@ -312,7 +312,7 @@ var ngInbox = {
 										if (controllerParent.ANIList == '') {
 											controllerParent.ANIList = tmpANI_;
 										} else {
-											controllerParent.ANIList = controllerParent.ANIList + ',' + tmpANI_;
+											controllerParent.ANIList = controllerParent.ANIList + ', ' + tmpANI_;
 										}
 
 									};
@@ -320,7 +320,7 @@ var ngInbox = {
 										tmpANIList_ = tmpANIList_.substring(1);
 									}
 
-									controllerParent.ANIList = controllerParent.ANIList + ',' + tmpANIList_;
+									controllerParent.ANIList = controllerParent.ANIList + ', ' + tmpANIList_;
 
 									continueFunction(controllerParent);
 								};
