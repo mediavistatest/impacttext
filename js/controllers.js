@@ -4075,25 +4075,28 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 			accountID : $cookieStore.get('inspinia_account_id')
 		};
 		var messageText;
-		if ($scope.controllerParent) {
-			$scope.controllerParent.Events.Send_onClick($scope);
-			$scope.ToNumber = $scope.controllerParent.clickedMessage.con_lis;
-			$scope.FromNumber = {
-				DID : ''
-			};
-			$scope.FromNumber.DID = $scope.controllerParent.clickedMessage.DID;
-			$scope.MessageTxt = $scope.controllerParent.clickedMessage.message;
-			messageText = $scope.controllerParent.clickedMessage.message;
-			$scope.SetDate = new Date($scope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $scope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $scope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
-			$scope.SetTimeHour = $scope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-			$scope.SetTimeMinute = $scope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
-			deletePreviousMessage = function(controllerParent) {
-				ngInbox._internal.Methods.DeleteMessage(controllerParent);
-			};
-		} else {
-			//Generate message text
-			messageText = $scope.generateMessageText();
-		}
+		// if ($scope.controllerParent) {
+			// $scope.controllerParent.Events.Send_onClick($scope);
+			// $scope.ToNumber = $scope.controllerParent.clickedMessage.con_lis;
+			// $scope.FromNumber = {
+				// DID : ''
+			// };
+			// $scope.FromNumber.DID = $scope.controllerParent.clickedMessage.DID;
+			// $scope.MessageTxt = $scope.controllerParent.clickedMessage.message;
+			// messageText = $scope.controllerParent.clickedMessage.message;
+			// $scope.SetDate = new Date($scope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $scope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $scope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
+			// $scope.SetTimeHour = $scope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+			// $scope.SetTimeMinute = $scope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+			// deletePreviousMessage = function(controllerParent) {
+				// ngInbox._internal.Methods.DeleteMessage(controllerParent);
+			// };
+		// } else {
+			// //Generate message text
+			// messageText = $scope.generateMessageText();
+		// }
+		
+		
+		messageText = $scope.generateMessageText();
 		// Trigger validation flag.
 		//$scope.submitted = true;
 		if (($scope.SendToList && ( typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0)) && (!$scope.SendToList && ( typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == ''))) {

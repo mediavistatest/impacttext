@@ -495,7 +495,7 @@ var ngInbox = {
 			RestoreToInboxMessages : function(controllerParent) {
 				ngInbox._internal.Methods.RestoreToInboxMessage(controllerParent, controllerParent.$scope.mySelections);
 			},
-			SendMessage : function(controllerParent, messageToSendArray, changeToStatus, callback) {
+			SendMessage : function(controllerParent, messageToSendArray, changeToStatus, callback, broadcastOutside) {
 				// var successfullRequestsCount_ = 0;
 				// var totalNumberOfMessages_ = messageToSendArray.length;
 				for (var j = 0; j < messageToSendArray.length; j++) {
@@ -528,7 +528,10 @@ var ngInbox = {
 							if (data.apicode == 0) {
 								//Reset form and inform user about success
 								callback();
-								controllerParent.$scope.$broadcast("SendingMessageSucceeded", data.apidata);
+								if (!broadcastOutside){
+									controllerParent.$scope.$broadcast("SendingMessageSucceeded", data.apidata);	
+								}
+								
 							} else {
 								controllerParent.$scope.$broadcast("ErrorOnMessages", 'An error occurred when sending your message! Error code: ' + data.apicode);
 							}
@@ -559,7 +562,7 @@ var ngInbox = {
 				if (!messageList) {
 					messageList = [controllerParent.clickedMessage];
 				}
-				ngInbox._internal.Methods.SendMessage(controllerParent, messageList, controllerParent.restoreMessageStatus, callback);
+				ngInbox._internal.Methods.SendMessage(controllerParent, messageList, controllerParent.restoreMessageStatus, callback, true);
 			},
 			ResendMessages : function(controllerParent) {
 				ngInbox._internal.Methods.ResendMessage(controllerParent, controllerParent.$scope.mySelections);
