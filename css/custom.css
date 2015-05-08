@@ -4569,6 +4569,24 @@ margin: 20px -15px 10px -15px;
     right: 20px;
     top: 90px;
 }
+
+.autoresponder .iphone-prev {
+    background: url(../img/iphone6-2.png)no-repeat 0 0;
+    height: 475px;
+    position: absolute;
+    width: 250px;
+    right: 0;
+    top: 0;
+}
+
+.autoresponder .settings-section {
+    border-bottom:none;
+}
+
+.btn-send:active {
+    background: #015924;
+}
+
 .message-cloud.ng-binding {
     padding: 10px;
     width: 160px;

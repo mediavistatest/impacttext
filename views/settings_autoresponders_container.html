@@ -1,7 +1,17 @@
 <h1>
 Settings
 </h1>
-<div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation" ng-controller="ngAutoresponderCtrl as arCtrl">
+<div class="col-md-12 content-holder animated fadeInRight settings autoresponder" ng-class="animation" ng-controller="ngAutoresponderCtrl as arCtrl">
+
+<h2 class="section-title">
+                Autoresponder
+                </h2>
+                <p>
+                  Autoresponders are automated text messages that are sent back in reply to incoming texts based on a rule you create. Each autoresponder is activated by a “trigger term” that initiates the process. For example, you could send a link to a coupon back to every incoming text that mentions the term SALE.
+                </p>
+
+    <br><br>
+    <div ng-controller="ngInboxNotifyCtrl" style="position:relative">
     <div class="iphone-prev">
         <div class="message-cloud">
             <!-- <span ng-show="arCtrl.fromName">
@@ -10,21 +20,11 @@ Settings
             {{arCtrl.messageTxt}} <!-- {{arCtrl.optFields.OptOutTxt1}}{{arCtrl.optFields.OptOutTxt2}}{{arCtrl.optFields.OptOutTxt3}} -->
         </div>
     </div>
-    <div ng-controller="ngInboxNotifyCtrl">
         <!-- settings section -->
         <form name="autoresponderForm" novalidate>
-                <div class="clearfix">
-                    <div class="col-sm-8">
-                    <h2 class="section-title">
-                    Autoresponders
-                    </h2>
-                    <p>
-                    Autoresponders are automated text messages that are sent back in reply to incoming texts based on a rule you create. Each autoresponder is activated by a   “trigger term” that initiates the process. For example, you could send a link to a coupon back to every incoming text that mentions the term SALE.
-                    </p>
-                    <br>
-                    <br>
-                    </div>
-                </div>
+            <div class="settings-section">
+                
+               
                 <div class="form-group clearfix">
                     <label class="col-sm-2 control-label">
                         From:
