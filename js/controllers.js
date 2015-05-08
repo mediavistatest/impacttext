@@ -138,7 +138,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 				if (data.apicode == 0) {
 					//Reading contact lists
 					main.keywords = data.apidata;
-					
+
 					for (var number in main.fromNumbers) {
 						if ($.grep(main.Settings.Numbers, function(member) {
 							return (member.DID == main.fromNumbers[number].DID && member.accountID == main.fromNumbers[number].accountID);
@@ -150,7 +150,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 							if (didKeyword){
 								keyword = didKeyword.keyword;
 							}
-							
+
 							main.Settings.Numbers.push({
 								accountID : main.accountID,
 								DIDID : main.fromNumbers[number].DIDID,
@@ -220,13 +220,13 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 					main.fromNumbers = [];
 					main.Settings.Numbers = [];
 				}
-				
+
 				main.ServerRequests.accountKeywordGet();
-				
+
 				// main.ipCookie('itSettings', main.Settings, {
 					// expires : 365,
 					// expirationUnit : 'days'
-				// });				
+				// });
 
 				for (var j in main.fromNumbers) {
 					main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();
@@ -3938,7 +3938,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 		}
 	}
 	setContactLists();
-	
+
 	$scope.fromNumbers = [];
 	//send form initial states
 	$scope.initial = "";
@@ -4075,8 +4075,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 			accountID : $cookieStore.get('inspinia_account_id')
 		};
 		var messageText;
-		// if ($scope.controllerParent) {
-			// $scope.controllerParent.Events.Send_onClick($scope);
+		 if ($scope.controllerParent) {
+			$scope.controllerParent.Events.Send_onClick($scope);
 			// $scope.ToNumber = $scope.controllerParent.clickedMessage.con_lis;
 			// $scope.FromNumber = {
 				// DID : ''
@@ -4093,9 +4093,9 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 		// } else {
 			// //Generate message text
 			// messageText = $scope.generateMessageText();
-		// }
-		
-		
+		}
+
+
 		messageText = $scope.generateMessageText();
 		// Trigger validation flag.
 		//$scope.submitted = true;
