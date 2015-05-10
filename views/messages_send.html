@@ -121,7 +121,7 @@
 
     		<div class="form-group" ng-show="SendToList">
 
-			<select  chosen name="ToList" data-placeholder="Select from an existing list(s)..." class="chosen-select form-control" tabindex="4" ng-model="ToList" ng-options="contactList.contactListName for contactList in contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists">
+			<select  chosen name="ToList" data-placeholder="Select from an existing list(s)..." class="chosen-select form-control" tabindex="4" ng-model="ToList" ng-options="contactList.contactListName for contactList in main.contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists">
 
 			</select>
 

@@ -3171,16 +3171,19 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
 			if (data == null || typeof data.apicode == 'undefined') {
 				//This should never happen
 				$scope.lists.names = data;
+				$scope.main.contactLists = data;
 				return;
 			}
 			if (data.apicode == 0) {
 				//Reading contact lists
 				$scope.lists.names = data.apidata;
+				$scope.main.contactLists = data.apidata;
 				for (var i in $scope.lists.names) {
 					$scope.lists.names[i].selected = false;
 				}
 			} else {
 				$scope.lists.names = [];
+				$scope.main.contactLists = [];
 			}
 		}).error(
 		//An error occurred with this request
@@ -3388,7 +3391,7 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
 			contactListID : selectedLists[0].contactListID
 		});
 		uploadItem.upload();
-	}
+	};
 }
 
 function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
