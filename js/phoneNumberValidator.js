@@ -50,7 +50,7 @@ var PhoneNumberArrayValidator = {
                 PhoneNumberArrayValidator.setError(phoneNumber, msg);
                 return false;
             }
-            if (!(2 <= phoneNumber.substring(4, 5) <= 9)) {
+            if (!(2 <= phoneNumber.substring(3, 4) <= 9)) {
                 var msg = 'Error: ' + phoneNumber + ' fourth digit is not in range (2-9)!';
                 PhoneNumberArrayValidator.setError(phoneNumber, msg);
                 return false;
