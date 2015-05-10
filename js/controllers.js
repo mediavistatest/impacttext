@@ -3830,9 +3830,9 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 				// $scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
 				// return false;
 				// }
-				if (parseInt(phoneNumber.substring(4, 5)) < 2) {
+				if (parseInt(phoneNumber.substring(3, 4)) < 2) {
 					//var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
-					var msg = 'Fifth digit is not in range (2-9)';
+					var msg = 'Fourth digit is not in range (2-9)';
 					$scope.PhoneNumberArrayValidator.setError(phoneNumber, msg);
 					return false;
 				}

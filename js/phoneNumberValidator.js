@@ -51,7 +51,7 @@ var PhoneNumberArrayValidator = {
                 return false;
             }
             if (!(2 <= phoneNumber.substring(4, 5) <= 9)) {
-                var msg = 'Error: ' + phoneNumber + ' fifth digit is not in range (2-9)!';
+                var msg = 'Error: ' + phoneNumber + ' fourth digit is not in range (2-9)!';
                 PhoneNumberArrayValidator.setError(phoneNumber, msg);
                 return false;
             }
