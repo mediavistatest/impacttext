@@ -521,6 +521,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 			$scope.main.ServerRequests.contactModifyRequest(request, inScope, refresh, callback);
 		},
 		forwardToMail : function(message) {
+			//Fix for '+' in some email clients
+			message = message.replace(/\ /g, '%20');
+
 			var $param = $.param({
 				subject : 'impact text',
 				body : message
