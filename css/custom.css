@@ -4880,3 +4880,5 @@ ul.bar-legend {
         float: left;
    }
 }
+
+#page-loading { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 999999; background: #eee url('../img/loading.gif') center no-repeat; }

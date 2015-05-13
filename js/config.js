@@ -575,8 +575,13 @@ var app = angular
 		//Http Intercpetor to check auth failures for xhr requests
 		$httpProvider.interceptors.push('authInterceptor');
 	}])
-	.run(function($rootScope, $state) {
+	.run(function($rootScope, $state, $cookieStore) {
 		$rootScope.$state = $state;
+
+		$rootScope.hide_loading = Boolean($cookieStore.get('inspinia_account_id'));
+		$rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
+			$rootScope.hide_loading = Boolean($cookieStore.get('inspinia_account_id'));
+		});
 	});
 
 app.filter('iif', function () {
