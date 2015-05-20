@@ -162,10 +162,15 @@
 
     	<div class="col-sm-6">
 
-    		<textarea name="MessageTxt" class="form-control" ng-maxlength="{{ maxLength }}" rows="3" ng-model="MessageTxt" ng-trim="false"></textarea>
+			<div class="text-dynamic-tags" ng-if="SendToList">
+				<button class="btn" ng-repeat="tag in dynamicContentKeys" ng-click="insertDynamicContent('send-message-txtarea', tag);">{{dynamicContent[tag]}}</button>
+			</div>
+
+    		<textarea id="send-message-txtarea" name="MessageTxt" class="form-control" ng-maxlength="{{ maxLength }}" rows="3" ng-model="MessageTxt" ng-trim="false"></textarea>
+
+			<div class="text-dynamic-notice" ng-if="hasTags"><i class="fa fa-exclamation-triangle"></i> Exact character count cannot be calculated because your message contains dynamically generated data.</div>
 
     		<div ng-hide="SendForm.$error.maxlength" class="text-counter"><!--{{ 160 - (MessageTxt.length + FromName.length + optFields.OptOutTxt1.length + optFields.OptOutTxt3.length) - (FromName.length>0|iif:2:0) - (optFields.OptOutTxt1.length|iif:2:0) - (optFields.OptOutTxt3.length|iif:2:0)}}--> {{ 160 - ((FromName.length > 0 && FromName.length + 2 || FromName.length) + MessageTxt.length + (optFields.OptOutTxt1.length > 0 && optFields.OptOutTxt1.length + 1 || optFields.OptOutTxt1.length) + (optFields.OptOutTxt3.length > 0 && optFields.OptOutTxt3.length + 1 || optFields.OptOutTxt3.length)) }} characters left.</div>
-
 
             <div ng-show="SendForm.$error.maxlength" class="text-counter error">
                  Limit reached!

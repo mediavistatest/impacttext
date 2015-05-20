@@ -3161,6 +3161,8 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
 		$scope.CustomField1 = '';
 		$scope.CustomField2 = '';
 		$scope.CustomField3 = '';
+		$scope.CustomField4 = '';
+		$scope.CustomField5 = '';
 	};
 	$scope.refreshLists = function(withCheckboxes) {
 		$http.post(inspiniaNS.wsUrl + "contactlist_get", $.param({
@@ -3295,6 +3297,12 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
 		if ( typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
 			request.custom3 = $.trim($scope.CustomField3);
 		}
+		if ( typeof $scope.CustomField4 != 'undefined' && $scope.CustomField4 != null && $.trim($scope.CustomField4) != '') {
+			request.custom4 = $.trim($scope.CustomField4);
+		}
+		if ( typeof $scope.CustomField5 != 'undefined' && $scope.CustomField5 != null && $.trim($scope.CustomField5) != '') {
+			request.custom5 = $.trim($scope.CustomField5);
+		}
 		var remainingListsCount = selectedLists.length;
 		var successfullyAddedToListsCount = 0;
 		var failedToAddToListsCount = 0;
@@ -3424,6 +3432,8 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 				$scope.CustomField1 = data.apidata[0].custom1;
 				$scope.CustomField2 = data.apidata[0].custom2;
 				$scope.CustomField3 = data.apidata[0].custom3;
+				$scope.CustomField4 = data.apidata[0].custom4;
+				$scope.CustomField5 = data.apidata[0].custom5;
 				$scope.ContactListID = data.apidata[0].contactListID;
 			}
 		}).error(
@@ -3470,6 +3480,12 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 		}
 		if ( typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
 			request.custom3 = $.trim($scope.CustomField3);
+		}
+		if ( typeof $scope.CustomField4 != 'undefined' && $scope.CustomField4 != null && $.trim($scope.CustomField4) != '') {
+			request.custom4 = $.trim($scope.CustomField4);
+		}
+		if ( typeof $scope.CustomField5 != 'undefined' && $scope.CustomField5 != null && $.trim($scope.CustomField5) != '') {
+			request.custom5 = $.trim($scope.CustomField5);
 		}
 		// console.log(main)
 		// console.log(MainCtrl.ServerRequests)
@@ -4278,6 +4294,33 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 			}
 		});
 	};
+
+	// Dynamic content (tags)
+	$scope.dynamicContent = {
+		'[firstname]': 'first name',
+		'[lastname]': 'last name',
+		'[emailaddress]': 'email',
+		'[contactsource]': 'contact source',
+		'[custom1]': 'custom 1',
+		'[custom2]': 'custom 2',
+		'[custom3]': 'custom 3',
+		'[custom4]': 'custom 4',
+		'[custom5]': 'custom 5'
+	};
+	$scope.dynamicContentKeys = Object.keys($scope.dynamicContent);
+	$scope.insertDynamicContent = function(elem_id, tag){
+		$scope.MessageTxt = FrontendHelper.insertAtCaret(elem_id, tag);
+	};
+
+	$scope.$watch('MessageTxt', function(newValue){
+		$scope.hasTags = false;
+		for(var tag in $scope.dynamicContent){
+			if(newValue.indexOf(tag) > -1){
+				$scope.hasTags = true;
+				break;
+			}
+		}
+	});
 }
 
 /**
