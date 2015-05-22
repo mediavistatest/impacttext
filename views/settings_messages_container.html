@@ -1,0 +1,18 @@
+<h1>
+	{{$state.current.data.pageTitle}}
+</h1>
+<div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation" ng-controller="ngNumbersCtrl as numCtrl">
+	<h2 class="section-title">SMS to email forwarding</h2>
+	<p>Set if you wish to forward all incoming SMS messages to your email address.</p>
+	<br />
+	<div ng-controller="ngInboxNotifyCtrl" style="position:relative">
+		<form name="smsForwardingForm" novalidate>
+				<div class="sms-forwarding form-group clearfix">
+					<label class="checkbox">
+						<input type="checkbox" value="yes">
+						Forward SMS messages to email
+					</label>
+				</div>
+		</form>
+	</div>
+</div>

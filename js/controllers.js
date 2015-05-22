@@ -3112,6 +3112,128 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 	};
 }
 
+/**
+ *
+ * CONTROLLER FOR ACTIVITY LOG VIEW TABLE
+ */
+function ngActivityLogListCtrl($scope, $http, $cookieStore){
+	//   $scope.ngData = [
+	//       {ip: "172.20.194.134", timestamp: "2015-05-21 07:20:23", userId: "12", firstName: "demo", lastName: "demo", request: "contactlist_get"},
+	//   ];
+
+	$scope.mySelections = [];
+	$scope.totalServerItems = 0;
+	$scope.pagingOptions = {
+		pageSizes : [10, 20, 50, 100],
+		pageSize : Number($scope.main.Settings.defaultPageSize),
+		currentPage : 1
+	};
+	// sort
+	$scope.sortOptions = {
+		fields : ['timestamp', 'requets'],
+		directions : ['desc'],
+		useExternalSorting : true
+	};
+
+	$scope.getPagedDataAsync = function(pageSize, page, sortFields, sortOrders) {
+		//Creating a sort options string
+		var orderBy = generateOrderByField(sortFields, sortOrders);
+		if (orderBy == '') { orderBy = 'timestamp asc'; }
+
+		setTimeout(function() {
+			var data;
+			self.gettingData = true;
+
+			$http.post(inspiniaNS.wsUrl + "activitylog_get", $.param({
+					sethttp : 1,
+					apikey : $cookieStore.get('inspinia_auth_token'),
+					accountID : $cookieStore.get('inspinia_account_id'),
+					limit : pageSize,
+					offset : (page - 1) * pageSize,
+					orderby : orderBy
+			})).success(function(data) {
+				$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+				self.gettingData = false;
+			}).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					if (status == 400) {
+						alert("An error occurred when getting activity logs! Error code: " + data.apicode);
+						alert(JSON.stringify(data));
+					}
+					self.gettingData = false;
+				}
+			);
+		}, 100);
+	};
+
+	$scope.setPagingData = function(data, page, pageSize) {
+		var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+		$scope.ngData = pagedData;
+		$scope.totalServerItems = data.length;
+		if (!$scope.$$phase) {
+			$scope.$apply();
+		}
+	};
+	$scope.setPagingDataSliced = setPagingDataSliced;
+
+	//WHATCH
+	$scope.$watch('pagingOptions', function() {
+		if (!self.poInit || self.gettingData) {
+			self.poInit = true;
+			return;
+		}
+		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.sortOptions.fields, $scope.sortOptions.directions);
+	}, true);
+	$scope.$watch('sortOptions', function(newVal, oldVal) {
+		if (!self.soInit || self.gettingData) {
+			self.soInit = true;
+			return;
+		}
+
+		if (newVal !== oldVal) {
+			$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.sortOptions.fields, $scope.sortOptions.directions);
+		}
+	}, true);
+
+	$scope.refresh = function() {
+		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.sortOptions.fields, $scope.sortOptions.directions);
+		$scope.mySelections.length = 0;
+	};
+
+
+	$scope.ngOptions = {
+		data : 'ngData',
+		enableSorting : true,
+		useExternalSorting : true,
+		sortInfo : $scope.sortOptions,
+		rowHeight : 35,
+		selectedItems : $scope.mySelections,
+		showSelectionCheckbox : false,
+		multiSelect : false,
+		selectWithCheckboxOnly : true,
+		enablePaging : true,
+		showFooter : true,
+		totalServerItems : 'totalServerItems',
+		pagingOptions : $scope.pagingOptions,
+		filterOptions : $scope.filterOptions,
+		primaryKey : 'timestamp',
+		columnDefs : [{
+			field : '',
+			width : 30
+		}, {
+			field : 'timestamp',
+			displayName : 'Time',
+			width : 150
+		}, {
+			field : 'request',
+			displayName : 'Short description'
+		}]
+	};
+
+	//$scope.refresh();
+}
+
 //ADD LISTS
 function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
 	if ($scope.controllerParent && $scope.controllerParent.PopulateAdd) {
@@ -4941,6 +5063,7 @@ angular.module('inspinia').controller('chartJsCtrl', chartJsCtrl);
 angular.module('inspinia').controller('GoogleMaps', GoogleMaps);
 angular.module('inspinia').controller('ngGridCtrl', ['$scope', '$http', '$cookieStore', ngGridCtrl]);
 angular.module('inspinia').controller('ngContactListCtrl', ['$scope', '$http', '$cookieStore', '$state', ngContactListCtrl]);
+angular.module('inspinia').controller('ngActivityLogListCtrl', ['$scope', '$http', '$cookieStore', ngActivityLogListCtrl]);
 angular.module('inspinia').controller('ngInboxListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.InboxList.Controller]);
 angular.module('inspinia').controller('ngSentListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.SentList.Controller]);
 angular.module('inspinia').controller('ngScheduledListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.ScheduledList.Controller]);

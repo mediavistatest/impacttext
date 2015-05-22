@@ -37,6 +37,9 @@ h5 {
   margin-top: 5px;
   font-weight: 600;
 }
+.f-left { float: left !important; }
+.f-right { float: right !important; }
+.f-clear { clear: both !important; }
 .nav > li > a {
   color: #a7b1c2;
   font-weight: 600;

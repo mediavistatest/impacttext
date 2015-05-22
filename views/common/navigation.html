@@ -61,8 +61,12 @@
                     <li ui-sref-active="active"><a ui-sref="messages.trash">Trash</a></li>
                 </ul>
             </li>
-            <li ui-sref-active="active">
-                <a ui-sref="tools"><i class="fa fa-wrench"></i> <span class="nav-label">Tools</span></a>
+			  <li ng-class="{active: $state.includes('tools')}">
+				  	 <a href=""><i class="fa fa-wrench"></i> <span class="nav-label">Tools </span> <span class="fa arrow"></span></a>
+				  	 <ul class="nav nav-second-level" ng-class="{in: $state.includes('tools')}">
+						 <li ui-sref-active="active"><a ui-sref="tools.general">General</a></li>
+						 <li ui-sref-active="active"><a ui-sref="tools.activity_log">Activity Log</a></li>
+				  	 </ul>
             </li>
             <!-- <li ui-sref-active="active">
                 <a ui-sref="settings"><i class="fa fa-cog"></i> <span class="nav-label">Settings</span></a>
@@ -72,6 +76,7 @@
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('settings')}">
                     <li ui-sref-active="active"><a ui-sref="settings.basic">Account</a></li>
                     <li ui-sref-active="active"><a ui-sref="settings.numbers">Numbers</a></li>
+                    <li ui-sref-active="active"><a ui-sref="settings.messages">Messages</a></li>
                     <li ui-sref-active="active"><a ui-sref="settings.autoresponders">Autoresponders</a></li>
                     <li><a ui-sref="profile">Profile</a></li>
                 </ul>

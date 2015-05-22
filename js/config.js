@@ -446,11 +446,47 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             }
         })
         .state('tools', {
+			 	abstract: true,
             url: "/tools",
-            templateUrl: "views/tools.html",
-            data: { pageTitle: 'Tools' }
-            
+			 	templateUrl: "views/common/content.html"
         })
+ 		  .state('tools.general', {
+			  url: "/tools_general",
+			  templateUrl: "views/tools/general.html",
+			  data: { pageTitle: 'Tools' }
+		  })
+		  .state('tools.activity_log', {
+			  url: "/tools_activity_log",
+			  templateUrl: "views/tools/activity_log.html",
+			  data: { pageTitle: 'Activity Log' },
+			  resolve: {
+				 loadPlugin: function ($ocLazyLoad) {
+					 return $ocLazyLoad.load([
+						 {
+							 name: 'cgNotify',
+							 files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+
+						 },
+						 {
+							 name: 'ngGrid',
+							 files: ['js/plugins/nggrid/ng-grid-2.0.14.min.js']
+						 },
+						 {
+							 insertBefore: '#loadBefore',
+							 files: ['js/plugins/nggrid/ng-grid.css']
+						 },
+						 {
+							 files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+						 },
+						 {
+							 insertBefore: '#loadBefore',
+							 name: 'localytics.directives',
+							 files: ['css/plugins/chosen/chosen.css','js/plugins/chosen/chosen.jquery.js','js/plugins/chosen/chosen.js']
+						 }
+					 ]);
+				 }
+			  }
+		  })
         // .state('settings', {
             // url: "/settings",
             // templateUrl: "views/settings.html",
@@ -508,7 +544,22 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                     ]);
                 }
             }
-        })  
+        })
+		  .state('settings.messages', {
+			 url: "/settings_messages",
+			 templateUrl: "views/settings_messages_container.html",
+			 data: { pageTitle: 'Message Settings' },
+			 resolve: {
+				 loadPlugin: function ($ocLazyLoad) {
+					 return $ocLazyLoad.load([
+						 {
+							 name: 'cgNotify',
+							 files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+						 }
+					 ]);
+				 }
+			 }
+		  })
         .state('settings.autoresponders', {
             url: "/settings_autoresponders",
             templateUrl: "views/settings_autoresponders_container.html",
@@ -523,7 +574,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                     ]);
                 }
             }
-        })          
+        })
         .state('reports', {
             url: "/reports",
             templateUrl: "views/reports.html",
