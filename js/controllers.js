@@ -3807,6 +3807,19 @@ function notifyCtrl($scope, notify) {
 			templateUrl : $scope.inspiniaTemplate
 		});
 	};
+	$scope.ModifyDIDForwardEmailSuccessMsg = function() {
+		notify({
+			message : 'Forward Email Address is successfully saved.',
+			classes : 'alert-success'
+		});
+	};
+	$scope.ModifyDIDForwardEmailFailedMsg = function() {
+		notify({
+			message : 'Failed to save Forward Email Address!',
+			classes : 'alert-danger'
+		});
+	};
+
 	//If SendingMessageSucceeded event is triggered, show related message
 	$scope.$on('SendingMessageSucceeded', function(event, args) {
 		$scope.SentMsg();
@@ -3903,6 +3916,12 @@ function notifyCtrl($scope, notify) {
 			classes : 'alert-danger',
 			templateUrl : $scope.inspiniaTemplate
 		});
+	});
+	$scope.$on('ModifyDIDForwardEmailSuccess', function(event, args){
+		$scope.ModifyDIDForwardEmailSuccessMsg();
+	});
+	$scope.$on('ModifyDIDForwardEmailFailed', function(event, args){
+		$scope.ModifyDIDForwardEmailFailedMsg();
 	});
 }
 
@@ -5087,4 +5106,5 @@ angular.module('inspinia').controller('DashboardInboxCtrl', ['$scope', '$http', 
 angular.module('inspinia').controller('ReportsBarCtrl', ['$scope', '$http', '$cookieStore', '$state', ReportsBarCtrl]);
 angular.module('inspinia').controller('ngSettintsCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Settings.Controller]);
 angular.module('inspinia').controller('ngNumbersCtrl', ['$scope', '$http', '$cookieStore', ngSettings.NumberNames.Controller]);
+angular.module('inspinia').controller('ngForwardEmailCtrl', ['$scope', '$http', '$cookieStore', ngSettings.ForwardEmails.Controller]);
 angular.module('inspinia').controller('ngAutoresponderCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Autoresponder.Controller]);
