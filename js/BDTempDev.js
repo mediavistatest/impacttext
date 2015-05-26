@@ -1637,10 +1637,6 @@ var ngSettings = {
 					})
 					// error function
 					.error(function(data, status, headers, config) {
-						// console.log(data)
-						cpo.$scope.$broadcast('itError', {
-							message : 'Error! ' + data.apitext
-						});
 						console.log('did_get: ' + data.apitext);
 					});
 			},
@@ -1712,6 +1708,118 @@ var ngSettings = {
 			};
 
 			fwCtrl.callGetNumbersRequest();
+		}
+	},
+	Email2SMS: {
+		ServerRequests: {
+			GetAccount: function(cpo, callback){
+				var params = {
+					apikey : cpo.$scope.main.authToken,
+					accountID : cpo.$scope.main.accountID,
+					companyID : cpo.$scope.main.accountInfo.companyID
+				};
+
+				var $param = $.param(params);
+
+				//POST
+				cpo.$http.post(inspiniaNS.wsUrl + 'account_get', $param)
+					// success function
+					.success(function(result) {
+						callback(result);
+					})
+					// error function
+					.error(function(data, status, headers, config) {
+						console.log('account_get: ' + data.apitext);
+					});
+			},
+			ModifyAccount : function(cpo, emails, callback){
+				var params = {
+					apikey : cpo.$scope.main.authToken,
+					accountID : cpo.$scope.main.accountID,
+					companyID : cpo.$scope.main.accountInfo.companyID,
+					email2sms: emails,
+					sethttp: 1
+
+				};
+				var $param = $.param(params);
+
+				//POST
+				cpo.$http.post(inspiniaNS.wsUrl + "account_modify", $param)
+					.success(
+					function (data) {
+						if (data.apicode == 0) {
+							callback();
+						} else {
+							cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
+						}
+					}
+				).error(
+					//An error occurred with this request
+					function(data, status, headers, config) {
+						cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
+					}
+				);
+			}
+		},
+		Events: {
+			Save_onClick : function(cpo){
+				if(cpo.e2sCtrl){
+					// API seams to revers the comma separated values so we need to create a reversed copy of cpo.e2sCtrl.newEmail2SMS
+					var newEmail2SMS_reversed = [];
+					angular.copy(cpo.e2sCtrl.newEmail2SMS, newEmail2SMS_reversed);
+					newEmail2SMS_reversed.reverse();
+
+					// Remove empty
+					newEmail2SMS_reversed = newEmail2SMS_reversed.filter(function(el){ return el !== "" });
+
+					ngSettings.Email2SMS.ServerRequests.ModifyAccount(cpo, newEmail2SMS_reversed.join(), function(){
+						cpo.$scope.$broadcast('ModifyAccountEmail2SMSSuccess');
+					});
+				}
+			}
+		},
+		Controller : function($scope, $http, $cookieStore) {
+			var e2sCtrl = this;
+			var cpo = ngSettings.Email2SMS;
+			cpo.e2sCtrl = e2sCtrl;
+			cpo.$scope = $scope;
+			cpo.$http = $http;
+			cpo.$cookieStore = $cookieStore;
+			cpo.$scope.cpo = cpo;
+
+			e2sCtrl.GetAccountCallback = function(result) {
+				e2sCtrl.email2sms = [];
+				if (result.apicode == 0) {
+					if (result.apidata.length > 0) {
+						e2sCtrl.email2sms = result.apidata[0]['email2sms'].split(",");
+						if(e2sCtrl.email2sms.length > 5){
+							e2sCtrl.email2sms.splice(5, e2sCtrl.email2sms.length - 5);
+						}
+
+						e2sCtrl.newEmail2SMS = [];
+						angular.copy(e2sCtrl.email2sms, e2sCtrl.newEmail2SMS);
+
+						if(e2sCtrl.newEmail2SMS.length < 5){
+							var missing = 5 - e2sCtrl.newEmail2SMS.length;
+							for(var i = 1; i <= missing; i++){
+								e2sCtrl.email2sms.push('');
+							}
+						}
+					}
+				}
+			};
+
+			e2sCtrl.callGetAccountRequest = function() {
+				if ($scope.main.accountInfo.companyID) {
+					ngSettings.Email2SMS.ServerRequests.GetAccount(cpo, e2sCtrl.GetAccountCallback);
+				} else {
+					setTimeout(function() {
+						e2sCtrl.callGetAccountRequest();
+					}, 500);
+				}
+			};
+
+			e2sCtrl.callGetAccountRequest();
 		}
 	},
 	Autoresponder : {
