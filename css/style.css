@@ -4939,6 +4939,14 @@ body.skin-3 {
 .skin-3 .nav.nav-tabs > li.active {
   background: transparent;
 }
+
+.loading-32 {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background: url(../img/loading_24.gif) center no-repeat;
+}
+
 @media (min-width: 768px) {
   #page-wrapper {
     position: inherit;

@@ -4890,3 +4890,6 @@ ul.bar-legend {
 
 .form-group-header, .forward-email-number-list > .form-group { border-bottom: 1px solid #eee; margin-bottom: 7px; padding-bottom: 7px; }
 .forward-email-number-list .column-did, .forward-email-number-list .column-emailForwardAddress { line-height: 34px; }
+
+.send-message-from-name { position: relative; }
+.send-message-from-name .loading-32 { position: absolute; right: 16px; top: 1px; }

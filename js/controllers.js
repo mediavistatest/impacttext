@@ -4063,14 +4063,46 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 	//        }, true);
 	var phoneCheckInterval;
 	$scope.$watch('FromNumber', function() {
-		if ($scope.main.Settings.Numbers && $scope.main.Settings.Numbers.length > 0 && $scope.FromNumber && $scope.FromNumber.DID) {
-			var Number = $.grep($scope.main.Settings.Numbers, function(member){
-			return member.DID == $scope.FromNumber.DID;
-			})[0];
-			if (Number.name != null && Number.name != '') {
-				$scope.FromName = Number.name;
+		$scope.FromNameLoading = true;
+		$scope.FromName = '';
+
+		$http.post(inspiniaNS.wsUrl + "did_get", $.param({
+			sethttp : 1,
+			apikey : $scope.main.authToken,
+			accountID : $scope.main.accountID,
+			companyID : $scope.main.accountInfo.companyID
+		})).success(function(data, status, headers, config) {
+			if (data == null || typeof data.apicode == 'undefined') {
+				$scope.main.fromNumbers = [];
+				return;
 			}
-		}
+			if (data.apicode == 0) {
+				$scope.main.fromNumbers = data.apidata;
+			} else {
+				$scope.main.fromNumbers = [];
+				$scope.main.Settings.Numbers = [];
+			}
+
+			for (var j in $scope.main.fromNumbers) {
+				$scope.main.fromNumbersString = $scope.main.fromNumbersString + ' +' + $scope.main.fromNumbers[j].DID.toString();
+				if (j < $scope.main.fromNumbers.length - 1) {
+					$scope.main.fromNumbersString += ',';
+				}
+			}
+
+			if ($scope.main.Settings.Numbers && $scope.main.Settings.Numbers.length > 0 && $scope.FromNumber && $scope.FromNumber.DID) {
+				var Number = $.grep($scope.main.Settings.Numbers, function(member){
+					return member.DID == $scope.FromNumber.DID;
+				})[0];
+				if (Number.name != null && Number.name != '') {
+					$scope.FromName = Number.name;
+				}
+			}
+
+			$scope.FromNameLoading = false;
+		}).error(function(data, status, headers, config) {
+			$scope.FromNameLoading = false;
+		});
 	});
 	$scope.$watch('ToNumber', function() {
 		// clearInterval(phoneCheckInterval);
