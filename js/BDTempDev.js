@@ -1125,9 +1125,12 @@ var ngInbox = {
                     $sendScope.OptOutTxt3 = $sendScope.initial;
                     $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
                     $sendScope.ScheduleCheck = false;
-                    $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
-                    $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-                    $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime = [];
+                    var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                    scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
                 };
 
                 ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
@@ -1274,9 +1277,11 @@ var ngInbox = {
                     $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
                     $sendScope.ScheduleCheck = true;
 
-                    $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
-                    $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-                    $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                    scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
                 };
 
                 ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
@@ -1405,9 +1410,11 @@ var ngInbox = {
                     $sendScope.OptOutMsg = '';
                     $sendScope.OptOutTxt3 = $sendScope.initial;
                     $sendScope.ScheduleCheck = false;
-                    $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
-                    $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-                    $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                    scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
                 };
                 ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
             } catch(e) {
@@ -1631,102 +1638,98 @@ var ngSettings = {
             numCtrl.getNumbers();
         }
     },
-	ForwardEmails: {
-		ServerRequests: {
-			GetNumbers : function(cpo, callback){
-				var params = {
-					apikey : cpo.$scope.main.authToken,
-					accountID : cpo.$scope.main.accountID,
-					companyID : cpo.$scope.main.accountInfo.companyID
-				};
+    ForwardEmails : {
+        ServerRequests : {
+            GetNumbers : function(cpo, callback) {
+                var params = {
+                    apikey : cpo.$scope.main.authToken,
+                    accountID : cpo.$scope.main.accountID,
+                    companyID : cpo.$scope.main.accountInfo.companyID
+                };
 
-				var $param = $.param(params);
+                var $param = $.param(params);
 
-				//POST
-				cpo.$http.post(inspiniaNS.wsUrl + 'did_get', $param)
-					// success function
-					.success(function(result) {
-						callback(result);
-					})
-					// error function
-					.error(function(data, status, headers, config) {
-						// console.log(data)
-						cpo.$scope.$broadcast('itError', {
-							message : 'Error! ' + data.apitext
-						});
-						console.log('did_get: ' + data.apitext);
-					});
-			},
-			ModifyNumbers : function(cpo, didid, email, callback){
-				var params = {
-					apikey : cpo.$scope.main.authToken,
-					accountID : cpo.$scope.main.accountID,
-					companyID : cpo.$scope.main.accountInfo.companyID,
-					DIDID : didid,
-					sethttp: 1
+                //POST
+                cpo.$http.post(inspiniaNS.wsUrl + 'did_get', $param)
+                // success function
+                .success(function(result) {
+                    callback(result);
+                })
+                // error function
+                .error(function(data, status, headers, config) {
+                    // console.log(data)
+                    cpo.$scope.$broadcast('itError', {
+                        message : 'Error! ' + data.apitext
+                    });
+                    console.log('did_get: ' + data.apitext);
+                });
+            },
+            ModifyNumbers : function(cpo, didid, email, callback) {
+                var params = {
+                    apikey : cpo.$scope.main.authToken,
+                    accountID : cpo.$scope.main.accountID,
+                    companyID : cpo.$scope.main.accountInfo.companyID,
+                    DIDID : didid,
+                    sethttp : 1
 
-				};
-				params.emailForwardAddress = email;
-				var $param = $.param(params);
+                };
+                params.emailForwardAddress = email;
+                var $param = $.param(params);
 
-				//POST
-				cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param)
-				.success(
-					function (data) {
-						if (data.apicode == 0) {
-							callback();
-						} else {
-							cpo.$scope.$broadcast('ModifyDIDForwardEmailFailed');
-						}
-					}
-				).error(
-					//An error occurred with this request
-					function(data, status, headers, config) {
-						cpo.$scope.$broadcast('ModifyDIDForwardEmailFailed');
-					}
-				);
-			}
-		},
-		Events: {
-			Save_onClick : function(cpo, key){
-				if(cpo.fwCtrl && cpo.fwCtrl.numbers && cpo.fwCtrl.numbers.hasOwnProperty(key) && cpo.fwCtrl.numbers[key].DIDID){
-					ngSettings.ForwardEmails.ServerRequests.ModifyNumbers(cpo, cpo.fwCtrl.numbers[key].DIDID, cpo.fwCtrl.numbers[key].emailForwardAddress, function(){
-						cpo.fwCtrl.edit[key] = false;
-						cpo.$scope.$broadcast('ModifyDIDForwardEmailSuccess');
-					});
-				}
-			}
-		},
-		Controller : function($scope, $http, $cookieStore) {
-			var fwCtrl = this;
-			var cpo = ngSettings.ForwardEmails;
-			cpo.fwCtrl = fwCtrl;
-			cpo.$scope = $scope;
-			cpo.$http = $http;
-			cpo.$cookieStore = $cookieStore;
-			cpo.$scope.cpo = cpo;
+                //POST
+                cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param).success(function(data) {
+                    if (data.apicode == 0) {
+                        callback();
+                    } else {
+                        cpo.$scope.$broadcast('ModifyDIDForwardEmailFailed');
+                    }
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    cpo.$scope.$broadcast('ModifyDIDForwardEmailFailed');
+                });
+            }
+        },
+        Events : {
+            Save_onClick : function(cpo, key) {
+                if (cpo.fwCtrl && cpo.fwCtrl.numbers && cpo.fwCtrl.numbers.hasOwnProperty(key) && cpo.fwCtrl.numbers[key].DIDID) {
+                    ngSettings.ForwardEmails.ServerRequests.ModifyNumbers(cpo, cpo.fwCtrl.numbers[key].DIDID, cpo.fwCtrl.numbers[key].emailForwardAddress, function() {
+                        cpo.fwCtrl.edit[key] = false;
+                        cpo.$scope.$broadcast('ModifyDIDForwardEmailSuccess');
+                    });
+                }
+            }
+        },
+        Controller : function($scope, $http, $cookieStore) {
+            var fwCtrl = this;
+            var cpo = ngSettings.ForwardEmails;
+            cpo.fwCtrl = fwCtrl;
+            cpo.$scope = $scope;
+            cpo.$http = $http;
+            cpo.$cookieStore = $cookieStore;
+            cpo.$scope.cpo = cpo;
 
-			fwCtrl.GetNumbersCallback = function(result) {
-				if (result.apicode == 0) {
-					if (result.apidata.length > 0) {
-						fwCtrl.numbers = result.apidata;
-					}
-				}
-			};
+            fwCtrl.GetNumbersCallback = function(result) {
+                if (result.apicode == 0) {
+                    if (result.apidata.length > 0) {
+                        fwCtrl.numbers = result.apidata;
+                    }
+                }
+            };
 
-			fwCtrl.callGetNumbersRequest = function() {
-				if ($scope.main.accountInfo.companyID) {
-					ngSettings.ForwardEmails.ServerRequests.GetNumbers(cpo, fwCtrl.GetNumbersCallback);
-				} else {
-					setTimeout(function() {
-						fwCtrl.callGetNumbersRequest();
-					}, 500);
-				}
-			};
+            fwCtrl.callGetNumbersRequest = function() {
+                if ($scope.main.accountInfo.companyID) {
+                    ngSettings.ForwardEmails.ServerRequests.GetNumbers(cpo, fwCtrl.GetNumbersCallback);
+                } else {
+                    setTimeout(function() {
+                        fwCtrl.callGetNumbersRequest();
+                    }, 500);
+                }
+            };
 
-			fwCtrl.callGetNumbersRequest();
-		}
-	},
+            fwCtrl.callGetNumbersRequest();
+        }
+    },
     Autoresponder : {
         ServerRequests : {
             GetKeyword : function(cpo, callback) {
