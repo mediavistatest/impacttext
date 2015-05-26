@@ -1,18 +1,27 @@
 <h1>
 	{{$state.current.data.pageTitle}}
 </h1>
-<div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation" ng-controller="ngNumbersCtrl as numCtrl">
+<div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation" ng-controller="ngForwardEmailCtrl as forwardCtrl">
 	<h2 class="section-title">SMS to email forwarding</h2>
 	<p>Set if you wish to forward all incoming SMS messages to your email address.</p>
 	<br />
-	<div ng-controller="ngInboxNotifyCtrl" style="position:relative">
-		<form name="smsForwardingForm" novalidate>
-				<div class="sms-forwarding form-group clearfix">
-					<label class="checkbox">
-						<input type="checkbox" value="yes">
-						Forward SMS messages to email
-					</label>
-				</div>
-		</form>
+
+	<div class="form-group form-group-header clearfix" ng-controller="notifyCtrl">
+		<div class="col-sm-4"><label>ImpactText Number</label></div>
+		<div class="col-sm-4"><label>Forward Email Address</label></div>
+		<div class="col-sm-4"></div>
+	</div>
+	<div class="forward-email-number-list" ng-repeat="(key, value) in forwardCtrl.numbers">
+		<div class="form-group clearfix">
+			<div class="column-did col-sm-4">{{value.DID}}</div>
+			<div class="column-emailForwardAddress col-sm-4">
+				<div ng-show="forwardCtrl.edit[key]"><input type="text" class="form-control" ng-model="value.emailForwardAddress" /></div>
+				<div ng-show="!forwardCtrl.edit[key]">{{value.emailForwardAddress}}</div>
+			</div>
+			<div class="col-sm-4">
+				<button ng-if="!forwardCtrl.edit[key]" class="btn" ng-click="forwardCtrl.edit[key] = true">Edit</button>
+				<button ng-if="forwardCtrl.edit[key]" class="btn btn-primary" ng-click="cpo.Events.Save_onClick(cpo, key)">Save</button>
+			</div>
+		</div>
 	</div>
 </div>

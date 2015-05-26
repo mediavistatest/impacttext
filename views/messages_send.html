@@ -91,7 +91,7 @@
 
 
 
-	<div class="form-group clearfix">
+	<div class="send-message-from-name form-group clearfix">
 
 		<label class="col-sm-2 control-label">From Name:</label>
 
@@ -100,6 +100,7 @@
     	<div class="col-sm-6">
 
     		<input type="text" name="FromName" placeholder="Your Company Name" ng-model="FromName" class="form-control"  ng-trim="false">
+			<div class="loading-32" ng-if="FromNameLoading"></div>
 
     	</div>
 
