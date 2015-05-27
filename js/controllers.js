@@ -3828,6 +3828,18 @@ function notifyCtrl($scope, notify) {
             classes : 'alert-danger'
         });
     };
+	$scope.ModifyAccountEmail2SMSSuccessMsg = function() {
+		notify({
+			message : 'Email to SMS settings successfully saved.',
+			classes : 'alert-success'
+		});
+	};
+	$scope.ModifyAccountEmail2SMSFailedMsg = function() {
+		notify({
+			message : 'Failed to save Forward Email to SMS settings!',
+			classes : 'alert-danger'
+		});
+	};
 
     //If SendingMessageSucceeded event is triggered, show related message
     $scope.$on('SendingMessageSucceeded', function(event, args) {
@@ -3932,6 +3944,12 @@ function notifyCtrl($scope, notify) {
     $scope.$on('ModifyDIDForwardEmailFailed', function(event, args) {
         $scope.ModifyDIDForwardEmailFailedMsg();
     });
+	$scope.$on('ModifyAccountEmail2SMSSuccess', function(event, args){
+		$scope.ModifyAccountEmail2SMSSuccessMsg();
+	});
+	$scope.$on('ModifyAccountEmail2SMSFailed', function(event, args){
+		$scope.ModifyAccountEmail2SMSFailedMsg();
+	});
 }
 
 function translateCtrl($translate, $scope) {
@@ -4510,7 +4528,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.$watch('MessageTxt', function(newValue) {
         $scope.hasTags = false;
         for (var tag in $scope.dynamicContent) {
-            if (newValue.indexOf(tag) > -1) {
+			if(typeof newValue !== 'undefined' && newValue.indexOf(tag) > -1){
                 $scope.hasTags = true;
                 break;
             }
@@ -5161,4 +5179,5 @@ angular.module('inspinia').controller('ReportsBarCtrl', ['$scope', '$http', '$co
 angular.module('inspinia').controller('ngSettintsCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Settings.Controller]);
 angular.module('inspinia').controller('ngNumbersCtrl', ['$scope', '$http', '$cookieStore', ngSettings.NumberNames.Controller]);
 angular.module('inspinia').controller('ngForwardEmailCtrl', ['$scope', '$http', '$cookieStore', ngSettings.ForwardEmails.Controller]);
+angular.module('inspinia').controller('ngEmail2SMSCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Email2SMS.Controller]);
 angular.module('inspinia').controller('ngAutoresponderCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Autoresponder.Controller]);

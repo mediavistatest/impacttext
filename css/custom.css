@@ -4893,3 +4893,6 @@ ul.bar-legend {
 
 .send-message-from-name { position: relative; }
 .send-message-from-name .loading-32 { position: absolute; right: 16px; top: 1px; }
+
+.settings-section-email2sms { border-bottom: none; padding-bottom: 0; }
+.email2sms-list { max-width: 500px; margin-bottom: 10px; }
