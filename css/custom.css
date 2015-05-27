@@ -317,6 +317,9 @@ a.addBtn {
     background: #005eaa !important;
     border-radius: 0 !important;
 }
+.iradio_square-green.active {
+	border-radius: 50% !important;
+}
 [date-picker] span {
     border-radius: 0 !important;
 }
@@ -3896,6 +3899,9 @@ span.A {
     padding: 15px;
     margin-top: 30px;
 }
+.lists-list-box {
+	overflow: hidden;
+}
 .list-box ul li {
     display: block;
     padding: 5px 0;
@@ -3907,9 +3913,28 @@ span.A {
     margin: -15px -15px 10px -15px;
     padding: 10px;
 }
+.list-box p.radio label {
+	display: block;
+	float: none;
+	margin-bottom: 10px;
+}
+.list-box p.radio label:last-child {
+	margin-bottom: 0;
+}
 .list-box a {
     font-weight: 700;
     color: #464646;
+}
+.list-box .list-inline-wrapper { position: relative; }
+.list-box .list-inline-wrapper .list-inline-disable {
+	width: 110%;
+	height: 110%;
+	position: absolute;
+	top: -12px;
+	left: -15px;
+	background: #eee;
+	opacity: 0.6;
+	z-index: 10;
 }
 .btn-send.smaller {
     color: white;
