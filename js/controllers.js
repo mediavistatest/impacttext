@@ -192,14 +192,12 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                     sethttp : 1,
                     apikey : main.authToken,
                     accountID : main.accountID,
-                    companyID : main.accountInfo.companyID,
-                    success : function(data, status, headers, config) {
-                        successFunction(data, status, headers, config, $inScope);
-                    },
-                    error : function(data, status, headers, config) {
-                        errorFunction(data, status, headers, config, $inScope);
-                    }
-                }));
+                    companyID : main.accountInfo.companyID
+                })).success(function(data, status, headers, config) {
+                    successFunction(data, status, headers, config, $inScope);
+                }).error(function(data, status, headers, config) {
+                    errorFunction(data, status, headers, config, $inScope);
+                });
             } else {
                 setTimeout(function() {
                     main.ServerRequests.didGet(successFunction, errorFunction, $inScope);
@@ -3235,21 +3233,21 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
     $scope.lists = {};
     $scope.lists.names = [];
 
-	$scope.ListsSource = 'manual';
-	$scope.ListsDisable = false;
-	$scope.$watch('ListsSource', function(newValue, oldValue){
-		if(newValue == 'manual'){
-			$scope.ListsDisable = false;
-		}else if(newValue == 'file'){
-			$scope.ListsDisable = true;
-		}
-	});
-	$scope.$watch('UploadType', function(newValue, oldValue){
-		if(newValue == 'single'){
-			$scope.ListsSource = 'manual';
-			$scope.ListsDisable = false;
-		}
-	});
+    $scope.ListsSource = 'manual';
+    $scope.ListsDisable = false;
+    $scope.$watch('ListsSource', function(newValue, oldValue) {
+        if (newValue == 'manual') {
+            $scope.ListsDisable = false;
+        } else if (newValue == 'file') {
+            $scope.ListsDisable = true;
+        }
+    });
+    $scope.$watch('UploadType', function(newValue, oldValue) {
+        if (newValue == 'single') {
+            $scope.ListsSource = 'manual';
+            $scope.ListsDisable = false;
+        }
+    });
 
     //$http({
     //  method: 'GET',
@@ -3383,20 +3381,20 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
             $scope.controllerParent.Events.Add_onClick($scope);
         }
 
-		//Fetch selected lists
-		var selectedLists = $scope.selectedLists();
+        //Fetch selected lists
+        var selectedLists = $scope.selectedLists();
 
-		// Choose the import method
-		if ($scope.UploadType == 'upload') {
-			if($scope.ListsSource == 'file'){
-				$scope.uploadContacts();
-				return;
-			}else if (selectedLists.length <= 0) {
-				return;
-			}
-		}else if (selectedLists.length <= 0) {
-			return;
-		}
+        // Choose the import method
+        if ($scope.UploadType == 'upload') {
+            if ($scope.ListsSource == 'file') {
+                $scope.uploadContacts();
+                return;
+            } else if (selectedLists.length <= 0) {
+                return;
+            }
+        } else if (selectedLists.length <= 0) {
+            return;
+        }
 
         //Checking if all required parameters are there
         if ( typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
@@ -3516,13 +3514,13 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
             return;
         }
 
-		if($scope.ListsSource != 'file'){
-			var selectedLists = $scope.selectedLists();
-			if (selectedLists.length > 1) {
-				$scope.$broadcast("UploadToMultipleListsNotSupported");
-				return;
-			}
-		}
+        if ($scope.ListsSource != 'file') {
+            var selectedLists = $scope.selectedLists();
+            if (selectedLists.length > 1) {
+                $scope.$broadcast("UploadToMultipleListsNotSupported");
+                return;
+            }
+        }
 
         var uploadItem = $scope.fileUploader.queue[0];
         uploadItem.removeAfterUpload = true;
@@ -3539,11 +3537,11 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
             companyID : $cookieStore.get('inspinia_company_id')
         });
 
-		if($scope.ListsSource != 'file'){
-			uploadItem.formData.push({
-				contactListID : selectedLists[0].contactListID
-			});
-		}
+        if ($scope.ListsSource != 'file') {
+            uploadItem.formData.push({
+                contactListID : selectedLists[0].contactListID
+            });
+        }
 
         uploadItem.upload();
     };
@@ -3838,8 +3836,8 @@ function notifyCtrl($scope, notify) {
     $scope.ModifyDIDForwardEmailFailedMsg = function() {
         notify({
             message : 'Failed to save Forward Email Address!',
-			classes : 'alert-danger',
-			templateUrl : $scope.inspiniaTemplate
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
         });
     };
     $scope.ModifyAccountEmail2SMSSuccessMsg = function() {
@@ -3851,8 +3849,8 @@ function notifyCtrl($scope, notify) {
     $scope.ModifyAccountEmail2SMSFailedMsg = function() {
         notify({
             message : 'Failed to save Forward Email to SMS settings!',
-			classes : 'alert-danger',
-			templateUrl : $scope.inspiniaTemplate
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
         });
     };
 
@@ -4110,30 +4108,30 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
         var successDidGet = function(data, status, headers, config, $inScope) {
             // if (data == null || typeof data.apicode == 'undefined') {
-                // $inScope.main.fromNumbers = [];
-                // return;
+            // $inScope.main.fromNumbers = [];
+            // return;
             // }
             // if (data.apicode == 0) {
-                // $inScope.main.fromNumbers = data.apidata;
+            // $inScope.main.fromNumbers = data.apidata;
             // } else {
-                // $inScope.main.fromNumbers = [];
-                // $inScope.main.Settings.Numbers = [];
+            // $inScope.main.fromNumbers = [];
+            // $inScope.main.Settings.Numbers = [];
             // }
-//
+            //
             // for (var j in $inScope.main.fromNumbers) {
-                // $inScope.main.fromNumbersString = $inScope.main.fromNumbersString + ' +' + $inScope.main.fromNumbers[j].DID.toString();
-                // if (j < $inScope.main.fromNumbers.length - 1) {
-                    // $inScope.main.fromNumbersString += ',';
-                // }
+            // $inScope.main.fromNumbersString = $inScope.main.fromNumbersString + ' +' + $inScope.main.fromNumbers[j].DID.toString();
+            // if (j < $inScope.main.fromNumbers.length - 1) {
+            // $inScope.main.fromNumbersString += ',';
             // }
-//
+            // }
+            //
             // if ($inScope.main.Settings.Numbers && $inScope.main.Settings.Numbers.length > 0 && $inScope.FromNumber && $inScope.FromNumber.DID) {
-                // var Number = $.grep($inScope.main.Settings.Numbers, function(member){
-                // return member.DID == $inScope.FromNumber.DID;
-                // })[0];
-                // if (Number.name != null && Number.name != '') {
-                    // $inScope.FromName = Number.name;
-                // }
+            // var Number = $.grep($inScope.main.Settings.Numbers, function(member){
+            // return member.DID == $inScope.FromNumber.DID;
+            // })[0];
+            // if (Number.name != null && Number.name != '') {
+            // $inScope.FromName = Number.name;
+            // }
             // }
             $inScope.FromNameLoading = false;
         };
