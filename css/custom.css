@@ -317,6 +317,9 @@ a.addBtn {
     background: #005eaa !important;
     border-radius: 0 !important;
 }
+.iradio_square-green.active {
+	border-radius: 50% !important;
+}
 [date-picker] span {
     border-radius: 0 !important;
 }
@@ -3896,6 +3899,9 @@ span.A {
     padding: 15px;
     margin-top: 30px;
 }
+.lists-list-box {
+	overflow: hidden;
+}
 .list-box ul li {
     display: block;
     padding: 5px 0;
@@ -3907,9 +3913,28 @@ span.A {
     margin: -15px -15px 10px -15px;
     padding: 10px;
 }
+.list-box p.radio label {
+	display: block;
+	float: none;
+	margin-bottom: 10px;
+}
+.list-box p.radio label:last-child {
+	margin-bottom: 0;
+}
 .list-box a {
     font-weight: 700;
     color: #464646;
+}
+.list-box .list-inline-wrapper { position: relative; }
+.list-box .list-inline-wrapper .list-inline-disable {
+	width: 110%;
+	height: 110%;
+	position: absolute;
+	top: -12px;
+	left: -15px;
+	background: #eee;
+	opacity: 0.6;
+	z-index: 10;
 }
 .btn-send.smaller {
     color: white;
@@ -4854,6 +4879,48 @@ ul.bar-legend {
   position: absolute;
   left: 15px;
 }
+
+#page-loading { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 999999; background: #eee url('../img/loading.gif') center no-repeat; }
+
+.text-dynamic-tags { border: 1px solid lightgrey; border-bottom: none; background: #f6f6f6; padding: 10px 5px 5px 10px; }
+.text-dynamic-tags .btn { padding: 4px 5px; margin: 0 4px 4px 0; }
+.text-dynamic-tags .btn:hover { background: #fff; }
+.text-dynamic-notice { padding: 2px 5px; background: #FFEFBF; border: 1px solid #DFA666; color: #AD4F0A; margin-top: -1px; font-size: 0.923em; }
+
+.form-group-header, .forward-email-number-list > .form-group { border-bottom: 1px solid #eee; margin-bottom: 7px; padding-bottom: 7px; }
+.forward-email-number-list .column-did, .forward-email-number-list .column-emailForwardAddress { line-height: 34px; }
+
+.send-message-from-name { position: relative; }
+.send-message-from-name .loading-32 { position: absolute; right: 16px; top: 1px; }
+
+.settings-section-email2sms { border-bottom: none; padding-bottom: 0; }
+.email2sms-list { max-width: 500px; margin-bottom: 10px; }
+
+.dashboard-li a {
+  color: #363636;
+}
+.dashboard-li a:hover {
+  color: #005eaa;
+}
+.support .three-col a.btn.view-more.right {
+  position: absolute;
+  bottom: 25px;
+  right: 15px;
+}
+
+
+
+
+/*MEDIA QUERIES*/
+@media (max-width: 1375px) {
+    
+   h3.sub-h2 {
+  font-size: 16px;
+  font-weight: 300;
+  padding: 10px 15px;
+  margin-bottom: 0;
+    }
+}
 @media (min-width: 768px) {
     .col-sm-15 {
         width: 20%;
@@ -4881,18 +4948,3 @@ ul.bar-legend {
    }
 }
 
-#page-loading { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 999999; background: #eee url('../img/loading.gif') center no-repeat; }
-
-.text-dynamic-tags { border: 1px solid lightgrey; border-bottom: none; background: #f6f6f6; padding: 10px 5px 5px 10px; }
-.text-dynamic-tags .btn { padding: 4px 5px; margin: 0 4px 4px 0; }
-.text-dynamic-tags .btn:hover { background: #fff; }
-.text-dynamic-notice { padding: 2px 5px; background: #FFEFBF; border: 1px solid #DFA666; color: #AD4F0A; margin-top: -1px; font-size: 0.923em; }
-
-.form-group-header, .forward-email-number-list > .form-group { border-bottom: 1px solid #eee; margin-bottom: 7px; padding-bottom: 7px; }
-.forward-email-number-list .column-did, .forward-email-number-list .column-emailForwardAddress { line-height: 34px; }
-
-.send-message-from-name { position: relative; }
-.send-message-from-name .loading-32 { position: absolute; right: 16px; top: 1px; }
-
-.settings-section-email2sms { border-bottom: none; padding-bottom: 0; }
-.email2sms-list { max-width: 500px; margin-bottom: 10px; }

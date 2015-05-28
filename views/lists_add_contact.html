@@ -116,11 +116,19 @@
 </div>
  <!--END UPLOAD -->
 
-<div class="list-box">
-<p>Choose list:</p>
-<ul class="list-inline">
-    <li ng-repeat="name in lists.names"> <input icheck type="checkbox" value="{{name.contactListID}}" ng-model="name.selected"> {{ name.contactListName }} </li>
-  </ul>
+<div class="lists-list-box list-box" ng-show="UploadType">
+	<p ng-show="UploadType == 'single'">Choose list:</p>
+	<p class="radio" ng-show="UploadType == 'upload'">
+		<label><input icheck type="radio" name="ListsSource" ng-model="ListsSource" value="file" />&nbsp;Get list info from file</label>
+		<label><input icheck type="radio" name="ListsSource" ng-model="ListsSource" value="manual" />&nbsp;Choose a list</label>
+	</p>
+
+	<div class="list-inline-wrapper">
+		<div class="list-inline-disable" ng-if="ListsDisable"></div>
+		<ul class="list-inline" ng-disabled="ListsDisable">
+			<li ng-repeat="name in lists.names"> <input icheck type="checkbox" value="{{name.contactListID}}" ng-model="name.selected"> {{ name.contactListName }} </li>
+		</ul>
+	</div>
 </div>
 
 	<br>

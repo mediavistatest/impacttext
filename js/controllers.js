@@ -3234,6 +3234,23 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
     }
     $scope.lists = {};
     $scope.lists.names = [];
+
+	$scope.ListsSource = 'manual';
+	$scope.ListsDisable = false;
+	$scope.$watch('ListsSource', function(newValue, oldValue){
+		if(newValue == 'manual'){
+			$scope.ListsDisable = false;
+		}else if(newValue == 'file'){
+			$scope.ListsDisable = true;
+		}
+	});
+	$scope.$watch('UploadType', function(newValue, oldValue){
+		if(newValue == 'single'){
+			$scope.ListsSource = 'manual';
+			$scope.ListsDisable = false;
+		}
+	});
+
     //$http({
     //  method: 'GET',
     //  url: 'views/datasets/ngData.json'
@@ -3365,15 +3382,22 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
         if ($scope.controllerParent) {
             $scope.controllerParent.Events.Add_onClick($scope);
         }
-        //Fetch selected lists and check if user selected any of them
-        var selectedLists = $scope.selectedLists();
-        if (selectedLists.length <= 0) {
-            return;
-        }
-        if ($scope.UploadType == 'upload') {
-            $scope.uploadContacts();
-            return;
-        }
+
+		//Fetch selected lists
+		var selectedLists = $scope.selectedLists();
+
+		// Choose the import method
+		if ($scope.UploadType == 'upload') {
+			if($scope.ListsSource == 'file'){
+				$scope.uploadContacts();
+				return;
+			}else if (selectedLists.length <= 0) {
+				return;
+			}
+		}else if (selectedLists.length <= 0) {
+			return;
+		}
+
         //Checking if all required parameters are there
         if ( typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
             $scope.$broadcast("InvalidANI");
@@ -3491,11 +3515,15 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
         if ($scope.fileUploader.queue.length <= 0) {
             return;
         }
-        var selectedLists = $scope.selectedLists();
-        if (selectedLists.length > 1) {
-            $scope.$broadcast("UploadToMultipleListsNotSupported");
-            return;
-        }
+
+		if($scope.ListsSource != 'file'){
+			var selectedLists = $scope.selectedLists();
+			if (selectedLists.length > 1) {
+				$scope.$broadcast("UploadToMultipleListsNotSupported");
+				return;
+			}
+		}
+
         var uploadItem = $scope.fileUploader.queue[0];
         uploadItem.removeAfterUpload = true;
         uploadItem.formData.push({
@@ -3510,9 +3538,13 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
         uploadItem.formData.push({
             companyID : $cookieStore.get('inspinia_company_id')
         });
-        uploadItem.formData.push({
-            contactListID : selectedLists[0].contactListID
-        });
+
+		if($scope.ListsSource != 'file'){
+			uploadItem.formData.push({
+				contactListID : selectedLists[0].contactListID
+			});
+		}
+
         uploadItem.upload();
     };
 }
@@ -3806,7 +3838,8 @@ function notifyCtrl($scope, notify) {
     $scope.ModifyDIDForwardEmailFailedMsg = function() {
         notify({
             message : 'Failed to save Forward Email Address!',
-            classes : 'alert-danger'
+			classes : 'alert-danger',
+			templateUrl : $scope.inspiniaTemplate
         });
     };
     $scope.ModifyAccountEmail2SMSSuccessMsg = function() {
@@ -3818,7 +3851,8 @@ function notifyCtrl($scope, notify) {
     $scope.ModifyAccountEmail2SMSFailedMsg = function() {
         notify({
             message : 'Failed to save Forward Email to SMS settings!',
-            classes : 'alert-danger'
+			classes : 'alert-danger',
+			templateUrl : $scope.inspiniaTemplate
         });
     };
 
