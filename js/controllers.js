@@ -78,6 +78,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             self.SetDate = new Date();
             self.SetTimeHour = '00';
             self.SetTimeMinute = '00';
+            self.opened = false;
         }
     };
 
@@ -181,77 +182,29 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 //alert('Unexpected error occurred when trying to fetch DIDs!');
                 if (status == 400) {
                     alert("An error occurred when getting keywords! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
+                    console.log(JSON.stringify(data));
                 }
             });
         },
-        didGet : function() {
-            $http.post(inspiniaNS.wsUrl + "did_get", $.param({
-                sethttp : 1,
-                apikey : main.authToken,
-                accountID : main.accountID,
-                companyID : main.accountInfo.companyID
-            })).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    main.fromNumbers = [];
-                    return;
-                }
-                if (data.apicode == 0) {
-                    //Reading contact lists
-                    // console.log(data)
-                    main.fromNumbers = data.apidata;
-                    // main.Settings.Numbers = $.grep(main.Settings.Numbers, function(member) {
-                    // var numberIn = false;
-                    // for (var number in main.fromNumbers) {
-                    // if (main.fromNumbers[number].DID == member.DID) {
-                    // numberIn = true;
-                    // break;
-                    // }
-                    // }
-                    // return numberIn;
-                    // });
-                    // for (var number in main.fromNumbers) {
-                    // if ($.grep(main.Settings.Numbers, function(member) {
-                    // return member.DID == main.fromNumbers[number].DID;
-                    // }).length == 0) {
-                    // main.Settings.Numbers.push({
-                    // DIDID : main.fromNumbers[number].DIDID,
-                    // DID : main.fromNumbers[number].DID,
-                    // prefered : false,
-                    // name : ''
-                    // });
-                    // }
-                    // }
-                } else {
-                    main.fromNumbers = [];
-                    main.Settings.Numbers = [];
-                }
-
-                main.ServerRequests.accountKeywordGet();
-
-                // main.ipCookie('itSettings', main.Settings, {
-                // expires : 365,
-                // expirationUnit : 'days'
-                // });
-
-                for (var j in main.fromNumbers) {
-                    main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();
-                    if (j < main.fromNumbers.length - 1) {
-                        main.fromNumbersString += ',';
+        didGet : function(successFunction, errorFunction, $inScope) {
+            if (main.accountInfo.companyID) {
+                $http.post(inspiniaNS.wsUrl + "did_get", $.param({
+                    sethttp : 1,
+                    apikey : main.authToken,
+                    accountID : main.accountID,
+                    companyID : main.accountInfo.companyID,
+                    success : function(data, status, headers, config) {
+                        successFunction(data, status, headers, config, $inScope);
+                    },
+                    error : function(data, status, headers, config) {
+                        errorFunction(data, status, headers, config, $inScope);
                     }
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to fetch DIDs!');
-                if (status == 400) {
-                    alert("An error occurred when getting DID! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
-                }
-            });
+                }));
+            } else {
+                setTimeout(function() {
+                    main.ServerRequests.didGet(successFunction, errorFunction, $inScope);
+                }, 500);
+            }
         },
         contactModifyRequest : function(request, $inScope, refresh, callback) {
             //Send request to the server
@@ -557,7 +510,35 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             main.accountInfo = data.apidata[0];
 
             main.ServerRequests.contactListsGet();
-            main.ServerRequests.didGet();
+            var successDidGet = function(data, status, headers, config, $inScope) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    main.fromNumbers = [];
+                    return;
+                }
+                if (data.apicode == 0) {
+                    main.fromNumbers = data.apidata;
+                } else {
+                    main.fromNumbers = [];
+                    main.Settings.Numbers = [];
+                }
+
+                main.ServerRequests.accountKeywordGet();
+
+                for (var j in main.fromNumbers) {
+                    main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();
+                    if (j < main.fromNumbers.length - 1) {
+                        main.fromNumbersString += ',';
+                    }
+                }
+            };
+            var errorDidGet = function(data, status, headers, config, $inScope) {
+                if (status == 400) {
+                    alert("An error occurred when getting DID! Error code: " + data.apicode);
+                    console.log(JSON.stringify(data));
+                }
+            };
+            main.ServerRequests.didGet(successDidGet, errorDidGet, $scope);
             main.ServerRequests.getCustomOptOutMessage();
             // } else {
             // alert("Error occured while getting account info!");
@@ -3828,18 +3809,18 @@ function notifyCtrl($scope, notify) {
             classes : 'alert-danger'
         });
     };
-	$scope.ModifyAccountEmail2SMSSuccessMsg = function() {
-		notify({
-			message : 'Email to SMS settings successfully saved.',
-			classes : 'alert-success'
-		});
-	};
-	$scope.ModifyAccountEmail2SMSFailedMsg = function() {
-		notify({
-			message : 'Failed to save Forward Email to SMS settings!',
-			classes : 'alert-danger'
-		});
-	};
+    $scope.ModifyAccountEmail2SMSSuccessMsg = function() {
+        notify({
+            message : 'Email to SMS settings successfully saved.',
+            classes : 'alert-success'
+        });
+    };
+    $scope.ModifyAccountEmail2SMSFailedMsg = function() {
+        notify({
+            message : 'Failed to save Forward Email to SMS settings!',
+            classes : 'alert-danger'
+        });
+    };
 
     //If SendingMessageSucceeded event is triggered, show related message
     $scope.$on('SendingMessageSucceeded', function(event, args) {
@@ -3944,12 +3925,12 @@ function notifyCtrl($scope, notify) {
     $scope.$on('ModifyDIDForwardEmailFailed', function(event, args) {
         $scope.ModifyDIDForwardEmailFailedMsg();
     });
-	$scope.$on('ModifyAccountEmail2SMSSuccess', function(event, args){
-		$scope.ModifyAccountEmail2SMSSuccessMsg();
-	});
-	$scope.$on('ModifyAccountEmail2SMSFailed', function(event, args){
-		$scope.ModifyAccountEmail2SMSFailedMsg();
-	});
+    $scope.$on('ModifyAccountEmail2SMSSuccess', function(event, args) {
+        $scope.ModifyAccountEmail2SMSSuccessMsg();
+    });
+    $scope.$on('ModifyAccountEmail2SMSFailed', function(event, args) {
+        $scope.ModifyAccountEmail2SMSFailedMsg();
+    });
 }
 
 function translateCtrl($translate, $scope) {
@@ -4093,43 +4074,42 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         $scope.FromNameLoading = true;
         $scope.FromName = '';
 
-        $http.post(inspiniaNS.wsUrl + "did_get", $.param({
-            sethttp : 1,
-            apikey : $scope.main.authToken,
-            accountID : $scope.main.accountID,
-            companyID : $scope.main.accountInfo.companyID
-        })).success(function(data, status, headers, config) {
-            if (data == null || typeof data.apicode == 'undefined') {
-                $scope.main.fromNumbers = [];
-                return;
+        var successDidGet = function(data, status, headers, config, $inScope) {
+            // if (data == null || typeof data.apicode == 'undefined') {
+                // $inScope.main.fromNumbers = [];
+                // return;
+            // }
+            // if (data.apicode == 0) {
+                // $inScope.main.fromNumbers = data.apidata;
+            // } else {
+                // $inScope.main.fromNumbers = [];
+                // $inScope.main.Settings.Numbers = [];
+            // }
+//
+            // for (var j in $inScope.main.fromNumbers) {
+                // $inScope.main.fromNumbersString = $inScope.main.fromNumbersString + ' +' + $inScope.main.fromNumbers[j].DID.toString();
+                // if (j < $inScope.main.fromNumbers.length - 1) {
+                    // $inScope.main.fromNumbersString += ',';
+                // }
+            // }
+//
+            // if ($inScope.main.Settings.Numbers && $inScope.main.Settings.Numbers.length > 0 && $inScope.FromNumber && $inScope.FromNumber.DID) {
+                // var Number = $.grep($inScope.main.Settings.Numbers, function(member){
+                // return member.DID == $inScope.FromNumber.DID;
+                // })[0];
+                // if (Number.name != null && Number.name != '') {
+                    // $inScope.FromName = Number.name;
+                // }
+            // }
+            $inScope.FromNameLoading = false;
+        };
+        var errorDidGet = function(data, status, headers, config, $inScope) {
+            $inScope.FromNameLoading = false;
+            if (status == 400) {
+                console.log(JSON.stringify(data));
             }
-            if (data.apicode == 0) {
-                $scope.main.fromNumbers = data.apidata;
-            } else {
-                $scope.main.fromNumbers = [];
-                $scope.main.Settings.Numbers = [];
-            }
-
-            for (var j in $scope.main.fromNumbers) {
-                $scope.main.fromNumbersString = $scope.main.fromNumbersString + ' +' + $scope.main.fromNumbers[j].DID.toString();
-                if (j < $scope.main.fromNumbers.length - 1) {
-                    $scope.main.fromNumbersString += ',';
-                }
-            }
-
-            if ($scope.main.Settings.Numbers && $scope.main.Settings.Numbers.length > 0 && $scope.FromNumber && $scope.FromNumber.DID) {
-                var Number = $.grep($scope.main.Settings.Numbers, function(member){
-                return member.DID == $scope.FromNumber.DID;
-                })[0];
-                if (Number.name != null && Number.name != '') {
-                    $scope.FromName = Number.name;
-                }
-            }
-
-            $scope.FromNameLoading = false;
-        }).error(function(data, status, headers, config) {
-            $scope.FromNameLoading = false;
-        });
+        };
+        $scope.main.ServerRequests.didGet(successDidGet, errorDidGet, $scope);
     });
     $scope.$watch('ToNumber', function() {
         // clearInterval(phoneCheckInterval);
@@ -4232,10 +4212,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         $scope.minDate = $scope.minDate ? null : new Date();
     };
     $scope.toggleMin();
-    $scope.open = function($event) {
+    $scope.open = function($event, sheduledDateTime) {
         $event.preventDefault();
         $event.stopPropagation();
-        $scope.opened = true;
+        sheduledDateTime.opened = true;
     };
     $scope.dateOptions = {
         formatYear : 'yy',
@@ -4528,7 +4508,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.$watch('MessageTxt', function(newValue) {
         $scope.hasTags = false;
         for (var tag in $scope.dynamicContent) {
-			if(typeof newValue !== 'undefined' && newValue.indexOf(tag) > -1){
+            if ( typeof newValue !== 'undefined' && newValue.indexOf(tag) > -1) {
                 $scope.hasTags = true;
                 break;
             }

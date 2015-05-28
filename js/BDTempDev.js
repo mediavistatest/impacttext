@@ -1410,6 +1410,7 @@ var ngInbox = {
                     $sendScope.OptOutMsg = '';
                     $sendScope.OptOutTxt3 = $sendScope.initial;
                     $sendScope.ScheduleCheck = false;
+
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
                     scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);

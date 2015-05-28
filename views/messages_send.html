@@ -92,7 +92,7 @@ Send
 
             <div class="col-sm-6">
 
-                <select chosen data-placeholder="Select your number..." disable-search="true"  class="form-control m-b" name="FromNumber" ng-model="FromNumber" ng-options="fromNumber.DID for fromNumber in fromNumbers track by fromNumber.DIDID">
+                <select chosen data-placeholder="Select your number..." disable-search="true"  class="form-control m-b" name="FromNumber" ng-model="FromNumber" ng-options="fromNumber.DID for fromNumber in main.fromNumbers track by fromNumber.DIDID">{{fromNumbers}}
 
                 </select>
 
@@ -289,7 +289,7 @@ Send
                         </i></span>
                     <div class="btn-group datetimepicker-wrapper" >
 
-                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="sheduledDateTime.SetDate" is-open="opened" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="sheduledDateTime.SetDate" is-open="sheduledDateTime.opened" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event,sheduledDateTime)" />
 
                     </div>
 
@@ -313,91 +313,91 @@ Send
                             </li>
 
                             <li>
-                                <a ng-click='SetTimeHour = "00"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "00"'>
                                 00
                                 </a>
-                                <a ng-click='SetTimeHour = "01"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "01"'>
                                 01
                                 </a>
-                                <a ng-click='SetTimeHour = "02"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "02"'>
                                 02
                                 </a>
-                                <a ng-click='SetTimeHour = "03"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "03"'>
                                 03
                                 </a>
                             </li>
 
                             <li>
-                                <a ng-click='SetTimeHour = "04"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "04"'>
                                 04
                                 </a>
-                                <a ng-click='SetTimeHour = "05"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "05"'>
                                 05
                                 </a>
-                                <a ng-click='SetTimeHour = "06"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "06"'>
                                 06
                                 </a>
-                                <a ng-click='SetTimeHour = "07"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "07"'>
                                 07
                                 </a>
                             </li>
 
                             <li>
-                                <a ng-click='SetTimeHour = "08"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "08"'>
                                 08
                                 </a>
-                                <a ng-click='SetTimeHour = "09"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "09"'>
                                 09
                                 </a>
-                                <a ng-click='SetTimeHour = "10"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "10"'>
                                 10
                                 </a>
-                                <a ng-click='SetTimeHour = "11"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "11"'>
                                 11
                                 </a>
                             </li>
 
                             <li>
-                                <a ng-click='SetTimeHour = "12"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "12"'>
                                 12
                                 </a>
-                                <a ng-click='SetTimeHour = "13"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "13"'>
                                 13
                                 </a>
-                                <a ng-click='SetTimeHour = "14"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "14"'>
                                 14
                                 </a>
-                                <a ng-click='SetTimeHour = "15"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "15"'>
                                 15
                                 </a>
                             </li>
 
                             <li>
-                                <a ng-click='SetTimeHour = "16"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "16"'>
                                 16
                                 </a>
-                                <a ng-click='SetTimeHour = "17"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "17"'>
                                 17
                                 </a>
-                                <a ng-click='SetTimeHour = "18"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "18"'>
                                 18
                                 </a>
-                                <a ng-click='SetTimeHour = "19"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "19"'>
                                 19
                                 </a>
                             </li>
 
                             <li>
-                                <a ng-click='SetTimeHour = "20"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "20"'>
                                 20
                                 </a>
-                                <a ng-click='SetTimeHour = "21"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "21"'>
                                 21
                                 </a>
-                                <a ng-click='SetTimeHour = "22"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "22"'>
                                 22
                                 </a>
-                                <a ng-click='SetTimeHour = "23"'>
+                                <a ng-click='sheduledDateTime.SetTimeHour = "23"'>
                                 23
                                 </a>
                             </li>
@@ -423,16 +423,16 @@ Send
                             </li>
 
                             <li>
-                                <a ng-click='SetTimeMinute = "00"'>
+                                <a ng-click='sheduledDateTime.SetTimeMinute = "00"'>
                                 00
                                 </a>
-                                <a ng-click='SetTimeMinute = "15"'>
+                                <a ng-click='sheduledDateTime.SetTimeMinute = "15"'>
                                 15
                                 </a>
-                                <a ng-click='SetTimeMinute = "30"'>
+                                <a ng-click='sheduledDateTime.SetTimeMinute = "30"'>
                                 30
                                 </a>
-                                <a ng-click='SetTimeMinute = "45"'>
+                                <a ng-click='sheduledDateTime.SetTimeMinute = "45"'>
                                 45
                                 </a>
                             </li>
