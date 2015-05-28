@@ -4107,32 +4107,34 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         $scope.FromName = '';
 
         var successDidGet = function(data, status, headers, config, $inScope) {
-            // if (data == null || typeof data.apicode == 'undefined') {
-            // $inScope.main.fromNumbers = [];
-            // return;
-            // }
-            // if (data.apicode == 0) {
-            // $inScope.main.fromNumbers = data.apidata;
-            // } else {
-            // $inScope.main.fromNumbers = [];
-            // $inScope.main.Settings.Numbers = [];
-            // }
-            //
-            // for (var j in $inScope.main.fromNumbers) {
-            // $inScope.main.fromNumbersString = $inScope.main.fromNumbersString + ' +' + $inScope.main.fromNumbers[j].DID.toString();
-            // if (j < $inScope.main.fromNumbers.length - 1) {
-            // $inScope.main.fromNumbersString += ',';
-            // }
-            // }
-            //
-            // if ($inScope.main.Settings.Numbers && $inScope.main.Settings.Numbers.length > 0 && $inScope.FromNumber && $inScope.FromNumber.DID) {
-            // var Number = $.grep($inScope.main.Settings.Numbers, function(member){
-            // return member.DID == $inScope.FromNumber.DID;
-            // })[0];
-            // if (Number.name != null && Number.name != '') {
-            // $inScope.FromName = Number.name;
-            // }
-            // }
+
+            if (data == null || typeof data.apicode == 'undefined') {
+                $inScope.main.fromNumbers = [];
+                return;
+            }
+            if (data.apicode == 0) {
+                $inScope.main.fromNumbers = data.apidata;
+            } else {
+                $inScope.main.fromNumbers = [];
+                $inScope.main.Settings.Numbers = [];
+            }
+
+            for (var j in $inScope.main.fromNumbers) {
+                $inScope.main.fromNumbersString = $inScope.main.fromNumbersString + ' +' + $inScope.main.fromNumbers[j].DID.toString();
+                if (j < $inScope.main.fromNumbers.length - 1) {
+                    $inScope.main.fromNumbersString += ',';
+                }
+            }
+
+            if ($inScope.main.Settings.Numbers && $inScope.main.Settings.Numbers.length > 0 && $inScope.FromNumber && $inScope.FromNumber.DID) {
+                var Number = $.grep($inScope.main.Settings.Numbers, function(member){
+                return member.DID == $inScope.FromNumber.DID;
+                })[0];
+                if (Number.name != null && Number.name != '') {
+                    $inScope.FromName = Number.name;
+                }
+            }
+
             $inScope.FromNameLoading = false;
         };
         var errorDidGet = function(data, status, headers, config, $inScope) {
