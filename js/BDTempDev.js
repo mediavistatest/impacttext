@@ -1228,9 +1228,12 @@ var ngInbox = {
                     $sendScope.OptOutTxt3 = $sendScope.initial;
                     $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
                     $sendScope.ScheduleCheck = false;
-                    $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
-                    $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-                    $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime = [];
+                    var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                    scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
                 };
 
                 ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
@@ -1377,9 +1380,11 @@ var ngInbox = {
                     $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
                     $sendScope.ScheduleCheck = true;
 
-                    $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
-                    $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-                    $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                    scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
                 };
 
                 ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
@@ -1508,9 +1513,12 @@ var ngInbox = {
                     $sendScope.OptOutMsg = '';
                     $sendScope.OptOutTxt3 = $sendScope.initial;
                     $sendScope.ScheduleCheck = false;
-                    $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
-                    $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-                    $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+
+                    var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                    scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
                 };
                 ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
             } catch(e) {
