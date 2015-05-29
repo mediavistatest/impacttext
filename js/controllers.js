@@ -3584,7 +3584,6 @@ var notifyInitialised = false;
 function notifyCtrl($scope, notify) {
     if (!notifyInitialised) {
         notifyInitialised = true;
-        console.log('inicijalizacija')
         $scope.msg = 'Hello! This is a sample message!';
         $scope.demo = function() {
             notify({
