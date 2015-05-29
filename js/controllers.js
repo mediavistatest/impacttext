@@ -78,7 +78,10 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             self.SetDate = new Date();
             self.SetTimeHour = '00';
             self.SetTimeMinute = '00';
+			   self.SetRecurringType = '';
+			   self.SetRecurringEndDate = new Date();
             self.opened = false;
+			   self.opened_recurring = false;
         }
     };
 
@@ -4244,6 +4247,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.clear = function() {
         for (var i = 0; i < $scope.ArrayScheduledDateTime.length; i++) {
             $scope.ArrayScheduledDateTime[i].SetDate = null;
+			   $scope.ArrayScheduledDateTime[i].SetRecurringDate = null;
         }
     };
     // Disable weekend selection
@@ -4259,6 +4263,11 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         $event.stopPropagation();
         sheduledDateTime.opened = true;
     };
+	 $scope.openRecurring = function($event, sheduledDateTime) {
+		  $event.preventDefault();
+		  $event.stopPropagation();
+		  sheduledDateTime.opened_recurring = true;
+	 };
     $scope.dateOptions = {
         formatYear : 'yy',
         startingDay : 1,
@@ -4367,6 +4376,12 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 if ( typeof currentDate.SetTimeMinute == 'undefined' || currentDate.SetTimeMinute == null || currentDate.SetTimeMinute == '') {
                     currentDate.SetTimeMinute = "00";
                 }
+					if ( typeof currentDate.SetRecurringEndDate == 'undefined' || currentDate.SetRecurringEndDate == null) {
+						currentDate.SetRecurringEndDate = '';
+					}
+					if ( typeof currentDate.SetRecurringType == 'undefined' || currentDate.SetRecurringType == null || currentDate.SetRecurringType == '') {
+						currentDate.SetRecurringType = "";
+					}
             }
         }
         // //Creating a api request data object
@@ -4436,7 +4451,17 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     dateParts[4] = "0" + dateParts[4];
                 }
                 requestData.scheduledDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
-            }
+
+					 requestData.recurringStart = requestData.scheduledDate;
+					 var recurringDateParts = [];
+					 recurringDateParts[0] = "" + (currentDateTime.SetRecurringEndDate.getMonth() + 1);
+					 recurringDateParts[1] = "" + currentDateTime.SetRecurringEndDate.getDate();
+					 if (recurringDateParts[0].length < 2) { recurringDateParts[0] = "0" + recurringDateParts[0]; }
+					 if (recurringDateParts[1].length < 2) { recurringDateParts[1] = "0" + recurringDateParts[1]; }
+					 requestData.recurringEnd = currentDateTime.SetRecurringEndDate.getFullYear() + "-" + recurringDateParts[0] + "-" + recurringDateParts[1] + " 23:59";
+					 requestData.recurringType = currentDateTime.SetRecurringType;
+
+				}
             //Send request to the server
             $http.post(inspiniaNS.wsUrl + "message_send", $.param(requestData)).success(
             //Successful request to the server

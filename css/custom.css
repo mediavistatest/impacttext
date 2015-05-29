@@ -4909,6 +4909,19 @@ ul.bar-legend {
 }
 
 
+.send-mesasge-schedule-field-wrapper {
+	float: left;
+	margin-right: 10px;
+	min-width: 170px;
+	margin-bottom: 10px;
+	padding-left: 35px;
+	position: relative;
+}
+.send-mesasge-schedule-field-wrapper .label-icon { position: absolute; top: 6px; left: 10px; }
+.send-mesasge-schedule-field-wrapper .btn-group.chosen { width: 130px !important; }
+.send-mesasge-schedule-field-wrapper .timing input { width: 56px; }
+.send-mesasge-schedule-field-wrapper .chosen-single { cursor: pointer; }
+
 
 
 /*MEDIA QUERIES*/
