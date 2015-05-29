@@ -405,22 +405,36 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 
     main.CommonActions = {
         makeListFromSelection : function(contactList) {
-            for (var i = 0; i < contactList.length; i++) {
-                if (i == 0) {
-                    ANIlist_ = contactList[i].ANI;
-                    ContactIDList_ = contactList[i].contactID;
-                } else {
-                    ANIlist_ = ANIlist_ + ',' + contactList[i].ANI;
-                    ContactIDList_ = ContactIDList_ + ',' + contactList[i].contactID;
+            var params_;
+            var ANIlist_ = '';
+            var ContactIDList_ = '';
+
+            if ( typeof contactList === 'string') {
+                ANIlist_ = contactList;
+            } else {
+                for (var i = 0; i < contactList.length; i++) {
+                    if (i == 0) {
+                        ANIlist_ = contactList[i].ANI;
+                        ContactIDList_ = contactList[i].contactID;
+                    } else {
+                        ANIlist_ = ANIlist_ + ',' + contactList[i].ANI;
+                        ContactIDList_ = ContactIDList_ + ',' + contactList[i].contactID;
+                    }
                 }
             }
-            return params_ = {
+
+            params_ = {
                 ANIList : ANIlist_,
                 ContactIDList : ContactIDList_
             };
+            return params_;
         },
         blockContact : function(inScope, inContactList, refresh, callback) {
-            $scope.main.CommonActions.optOutContact(inScope, inContactList, refresh, callback);
+            //FS#18 - Lists i Inbox - bug! START
+            //earlier there was request to optout all contacts that are blocked but api now doesn't allow that so this is commented out
+            //$scope.main.CommonActions.optOutContact(inScope, inContactList, refresh, callback);
+            //FS#18 - Lists i Inbox - bug! END
+
             //Uncomment block when multi ani and contact list support is added to contact_modify request
             // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             // $scope.main.CommonActions.changeContactStatus('I', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
@@ -2824,89 +2838,18 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     };
     $scope.blockContacts_ngContactListCtrl = function() {
         $scope.main.CommonActions.blockContact($scope, $scope.mySelections, true, $scope.refresh);
-        // for (var i in $scope.mySelections) {
-        // var refresh = false;
-        // if (i == $scope.mySelections.length - 1) {
-        // refresh = true;
-        // }
-        //
-        // if ($scope.mySelections[i].status == 'A') {
-        // $scope.main.CommonActions.blockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
-        // }else{
-        // if (refresh){
-        // $scope.refresh();
-        // }
-        // }
-        // }
-        // //$scope.refresh();
     };
     $scope.unblockContacts_ngContactListCtrl = function() {
         $scope.main.CommonActions.unblockContact($scope, $scope.mySelections, true, $scope.refresh);
-        // for (var i in $scope.mySelections) {
-        // var refresh = false;
-        // if (i == $scope.mySelections.length - 1) {
-        // refresh = true;
-        // }
-        // if ($scope.mySelections[i].status == 'I') {
-        // $scope.main.CommonActions.unblockContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
-        // } else {
-        // if (refresh) {
-        // $scope.refresh();
-        // }
-        // }
-        // }
-        //$scope.refresh();
     };
     $scope.deleteContact_ngContactListCtrl = function() {
         $scope.main.CommonActions.deleteContact($scope, $scope.mySelections, true, $scope.refresh);
-        // for (var i in $scope.mySelections) {
-        // var refresh = false;
-        // if (i == $scope.mySelections.length - 1) {
-        // refresh = true;
-        // }
-        // // if ($scope.mySelections[i].status == 'I') {
-        // $scope.main.CommonActions.deleteContact($scope, $scope.mySelections[i], refresh, $scope.refresh);
-        // // }else{
-        // // if (refresh){
-        // // $scope.refresh();
-        // // }
-        // // }
-        // }
-        // //$scope.refresh();
     };
     $scope.optOutContacts_ngContactListCtrl = function() {
         $scope.main.CommonActions.optOutContact($scope, $scope.mySelections, true, $scope.refresh);
-        // for (var i in $scope.mySelections) {
-        // var refresh = false;
-        // if (i == $scope.mySelections.length - 1) {
-        // refresh = true;
-        // }
-        // if ($scope.mySelections[i].status != 'O') {
-        // $scope.main.CommonActions.optOutContact($scope, $scope.mySelections[i].ANI, refresh, $scope.refresh);
-        // }else{
-        // if (refresh){
-        // $scope.refresh();
-        // }
-        // }
-        // }
-        // $scope.refresh();
     };
     $scope.optInContacts_ngContactListCtrl = function() {
         $scope.main.CommonActions.optInContact($scope, $scope.mySelections, true, $scope.refresh);
-        // for (var i in $scope.mySelections) {
-        // var refresh = false;
-        // if (i == $scope.mySelections.length - 1) {
-        // refresh = true;
-        // }
-        // if ($scope.mySelections[i].status == 'O') {
-        // $scope.main.CommonActions.optInContact($scope, $scope.mySelections[i].ANI, refresh, $scope.refresh);
-        // }else{
-        // if (refresh){
-        // $scope.refresh();
-        // }
-        // }
-        // }
-        // $scope.refresh();
     };
 
     //GET DATA
@@ -3637,332 +3580,337 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 }
 
 //NOTIFY CTRL
+var notifyInitialised = false;
 function notifyCtrl($scope, notify) {
-    $scope.msg = 'Hello! This is a sample message!';
-    $scope.demo = function() {
-        notify({
-            message : $scope.msg,
-            classes : $scope.classes,
-            templateUrl : $scope.template
-        });
-    };
-    $scope.closeAll = function() {
-        notify.closeAll();
-    };
-    $scope.inspiniaTemplate = 'views/common/notify.html';
-    $scope.inspiniaDemo1 = function() {
-        notify({
-            message : 'Info - This is a Inspinia info notification',
-            classes : 'alert-info',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.inspiniaDemo2 = function() {
-        notify({
-            message : 'Success - This is a Inspinia success notification',
-            classes : 'alert-success',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.inspiniaDemo3 = function() {
-        notify({
-            message : 'Warning - This is a Inspinia warning notification',
-            classes : 'alert-warning',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.inspiniaDemo4 = function() {
-        notify({
-            message : 'Danger - This is a Inspinia danger notification',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.SavedDraftMsg = function() {
-        notify({
-            message : 'Your message has been saved to drafts!',
-            classes : 'alert-success'
-        });
-    };
-    $scope.ResetMsg = function() {
-        notify({
-            message : 'Your message has been discarded!',
-            classes : 'alert-success'
-        });
-    };
-    $scope.SentMsg = function() {
-        notify({
-            message : 'Your message has been sent!',
-            classes : 'alert-success'
-        });
-    };
-    $scope.ScheduledMsg = function() {
-        notify({
-            message : 'Your message has been scheduled!',
-            classes : 'alert-success'
-        });
-    };
-    $scope.RescheduledMsg = function() {
-        notify({
-            message : 'Your message has been rescheduled!',
-            classes : 'alert-success'
-        });
-    };
-    $scope.AniOptedOutMsg = function() {
-        notify({
-            message : 'ANI that you are trying to send message to is opted-out!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.DuplicateContactListNameMsg = function() {
-        notify({
-            message : 'Contact list with specified name already exists!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.ContactListCreatedMsg = function() {
-        notify({
-            message : 'Contact list is successfully created!',
-            classes : 'alert-success'
-        });
-    };
-    $scope.ContactCreatedMsg = function() {
-        notify({
-            message : 'Contact is successfully created!',
-            classes : 'alert-success'
-        });
-    };
-    $scope.CreateContactFailedMsg = function() {
-        notify({
-            message : 'An error occurred when adding new contact to the contact list!',
-            classes : 'alert-success'
-        });
-    };
-    $scope.ContactsUploadedMsg = function() {
-        notify({
-            message : 'Contact list is successfully uploaded!',
-            classes : 'alert-success'
-        });
-    };
-    $scope.ContactsUploadFailedMsg = function() {
-        notify({
-            message : 'Failed to upload contact list!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.InvalidANIMsg = function() {
-        notify({
-            message : 'Invalid phone number!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.ContactSavedMsg = function() {
-        notify({
-            message : 'Contact is successfully saved!',
-            classes : 'alert-success'
-        });
-    };
-    $scope.SearchTextTooShortMsg = function() {
-        notify({
-            message : 'Search text is too short!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.ListsSuccessfullyActivatedMsg = function() {
-        notify({
-            message : 'All lists are successfully activated.',
-            classes : 'alert-success'
-        });
-    };
-    $scope.ListsSuccessfullyDeactivatedMsg = function() {
-        notify({
-            message : 'All lists are successfully deactivated.',
-            classes : 'alert-success'
-        });
-    };
-    $scope.FailedToActivateListMsg = function() {
-        notify({
-            message : 'Failed to activate list!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.FailedToDeactivateListMsg = function() {
-        notify({
-            message : 'Failed to deactivate list!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.ImportSucceededMsg = function(inserted, updated, invalid) {
-        if (invalid > 0) {
+    if (!notifyInitialised) {
+        notifyInitialised = true;
+        console.log('inicijalizacija')
+        $scope.msg = 'Hello! This is a sample message!';
+        $scope.demo = function() {
             notify({
-                message : 'There are ' + invalid + ' invalid items in your input file. Number of inserted items: ' + inserted + '. Number of updated items: ' + updated + '.',
+                message : $scope.msg,
+                classes : $scope.classes,
+                templateUrl : $scope.template
+            });
+        };
+        $scope.closeAll = function() {
+            notify.closeAll();
+        };
+        $scope.inspiniaTemplate = 'views/common/notify.html';
+        $scope.inspiniaDemo1 = function() {
+            notify({
+                message : 'Info - This is a Inspinia info notification',
+                classes : 'alert-info',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.inspiniaDemo2 = function() {
+            notify({
+                message : 'Success - This is a Inspinia success notification',
+                classes : 'alert-success',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.inspiniaDemo3 = function() {
+            notify({
+                message : 'Warning - This is a Inspinia warning notification',
+                classes : 'alert-warning',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.inspiniaDemo4 = function() {
+            notify({
+                message : 'Danger - This is a Inspinia danger notification',
                 classes : 'alert-danger',
                 templateUrl : $scope.inspiniaTemplate
             });
-        } else {
+        };
+        $scope.SavedDraftMsg = function() {
             notify({
-                message : 'Import succeeded. Number of inserted items: ' + inserted + '. Number of updated items: ' + updated + '. Number of invalid items: ' + invalid,
+                message : 'Your message has been saved to drafts!',
                 classes : 'alert-success'
             });
-        }
-    };
-    $scope.ImportFailedMsg = function() {
-        notify({
-            message : 'Failed to import data from the specified file. Please check if file is in valid CSV format and if the content of the file is proper.',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.UploadToMultipleListsNotSupportedMsg = function() {
-        notify({
-            message : 'Importing contacts to multiple contact lists is currently not supported. Please select single list to import contacts to.',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.ModifyDIDForwardEmailSuccessMsg = function() {
-        notify({
-            message : 'Forward Email Address is successfully saved.',
-            classes : 'alert-success'
-        });
-    };
-    $scope.ModifyDIDForwardEmailFailedMsg = function() {
-        notify({
-            message : 'Failed to save Forward Email Address!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
-    $scope.ModifyAccountEmail2SMSSuccessMsg = function() {
-        notify({
-            message : 'Email to SMS settings successfully saved.',
-            classes : 'alert-success'
-        });
-    };
-    $scope.ModifyAccountEmail2SMSFailedMsg = function() {
-        notify({
-            message : 'Failed to save Forward Email to SMS settings!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
-        });
-    };
+        };
+        $scope.ResetMsg = function() {
+            notify({
+                message : 'Your message has been discarded!',
+                classes : 'alert-success'
+            });
+        };
+        $scope.SentMsg = function() {
+            notify({
+                message : 'Your message has been sent!',
+                classes : 'alert-success'
+            });
+        };
+        $scope.ScheduledMsg = function() {
+            notify({
+                message : 'Your message has been scheduled!',
+                classes : 'alert-success'
+            });
+        };
+        $scope.RescheduledMsg = function() {
+            notify({
+                message : 'Your message has been rescheduled!',
+                classes : 'alert-success'
+            });
+        };
+        $scope.AniOptedOutMsg = function() {
+            notify({
+                message : 'ANI that you are trying to send message to is opted-out!',
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.DuplicateContactListNameMsg = function() {
+            notify({
+                message : 'Contact list with specified name already exists!',
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.ContactListCreatedMsg = function() {
+            notify({
+                message : 'Contact list is successfully created!',
+                classes : 'alert-success'
+            });
+        };
+        $scope.ContactCreatedMsg = function() {
+            notify({
+                message : 'Contact is successfully created!',
+                classes : 'alert-success'
+            });
+        };
+        $scope.CreateContactFailedMsg = function() {
+            notify({
+                message : 'An error occurred when adding new contact to the contact list!',
+                classes : 'alert-success'
+            });
+        };
+        $scope.ContactsUploadedMsg = function() {
+            notify({
+                message : 'Contact list is successfully uploaded!',
+                classes : 'alert-success'
+            });
+        };
+        $scope.ContactsUploadFailedMsg = function() {
+            notify({
+                message : 'Failed to upload contact list!',
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.InvalidANIMsg = function() {
+            notify({
+                message : 'Invalid phone number!',
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.ContactSavedMsg = function() {
+            notify({
+                message : 'Contact is successfully saved!',
+                classes : 'alert-success'
+            });
+        };
+        $scope.SearchTextTooShortMsg = function() {
+            notify({
+                message : 'Search text is too short!',
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.ListsSuccessfullyActivatedMsg = function() {
+            notify({
+                message : 'All lists are successfully activated.',
+                classes : 'alert-success'
+            });
+        };
+        $scope.ListsSuccessfullyDeactivatedMsg = function() {
+            notify({
+                message : 'All lists are successfully deactivated.',
+                classes : 'alert-success'
+            });
+        };
+        $scope.FailedToActivateListMsg = function() {
+            notify({
+                message : 'Failed to activate list!',
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.FailedToDeactivateListMsg = function() {
+            notify({
+                message : 'Failed to deactivate list!',
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.ImportSucceededMsg = function(inserted, updated, invalid) {
+            if (invalid > 0) {
+                notify({
+                    message : 'There are ' + invalid + ' invalid items in your input file. Number of inserted items: ' + inserted + '. Number of updated items: ' + updated + '.',
+                    classes : 'alert-danger',
+                    templateUrl : $scope.inspiniaTemplate
+                });
+            } else {
+                notify({
+                    message : 'Import succeeded. Number of inserted items: ' + inserted + '. Number of updated items: ' + updated + '. Number of invalid items: ' + invalid,
+                    classes : 'alert-success'
+                });
+            }
+        };
+        $scope.ImportFailedMsg = function() {
+            notify({
+                message : 'Failed to import data from the specified file. Please check if file is in valid CSV format and if the content of the file is proper.',
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.UploadToMultipleListsNotSupportedMsg = function() {
+            notify({
+                message : 'Importing contacts to multiple contact lists is currently not supported. Please select single list to import contacts to.',
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.ModifyDIDForwardEmailSuccessMsg = function() {
+            notify({
+                message : 'Forward Email Address is successfully saved.',
+                classes : 'alert-success'
+            });
+        };
+        $scope.ModifyDIDForwardEmailFailedMsg = function() {
+            notify({
+                message : 'Failed to save Forward Email Address!',
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
+        $scope.ModifyAccountEmail2SMSSuccessMsg = function() {
+            notify({
+                message : 'Email to SMS settings successfully saved.',
+                classes : 'alert-success'
+            });
+        };
+        $scope.ModifyAccountEmail2SMSFailedMsg = function() {
+            notify({
+                message : 'Failed to save Forward Email to SMS settings!',
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        };
 
-    //If SendingMessageSucceeded event is triggered, show related message
-    $scope.$on('SendingMessageSucceeded', function(event, args) {
-        $scope.SentMsg();
-    });
-    //If SchedulingMessageSucceeded event is triggered, show related message
-    $scope.$on('SchedulingMessageSucceeded', function(event, args) {
-        $scope.ScheduledMsg();
-    });
-    $scope.$on('ReschedulingMessageSucceeded', function(event, args) {
-        $scope.RescheduledMsg();
-    });
-    //If SaveDraftSucceeded event is triggered, show related message
-    $scope.$on('SaveDraftSucceeded', function(event, args) {
-        $scope.SavedDraftMsg();
-    });
-    //If AniOptedOut event is triggered, show related message
-    $scope.$on('AniOptedOut', function(event, args) {
-        $scope.AniOptedOutMsg();
-    });
-    //If DuplicateContactListName event is triggered, show related message
-    $scope.$on('DuplicateContactListName', function(event, args) {
-        $scope.DuplicateContactListNameMsg();
-    });
-    //If ContactListCreated event is triggered, show related message
-    $scope.$on('ContactListCreated', function(event, args) {
-        $scope.ContactListCreatedMsg();
-    });
-    //If ContactCreated event is triggered, show related message
-    $scope.$on('ContactCreated', function(event, args) {
-        $scope.ContactCreatedMsg();
-    });
-    //If CreateContactFailed event is triggered, show related message
-    $scope.$on('CreateContactFailed', function(event, args) {
-        $scope.CreateContactFailedMsg();
-    });
-    //If ContactsUploaded event is triggered, show related message
-    $scope.$on('ContactsUploaded', function(event, args) {
-        $scope.ContactsUploadedMsg();
-    });
-    //If ContactsUploadFailed event is triggered, show related message
-    $scope.$on('ContactsUploadFailed', function(event, args) {
-        $scope.ContactsUploadFailedMsg();
-    });
-    //If InvalidANI event is triggered, show related message
-    $scope.$on('InvalidANI', function(event, args) {
-        $scope.InvalidANIMsg();
-    });
-    //If ContactSaved event is triggered, show related message
-    $scope.$on('ContactSaved', function(event, args) {
-        $scope.ContactSavedMsg();
-    });
-    //If SearchTextTooShort event is triggered, show related message
-    $scope.$on('SearchTextTooShort', function(event, args) {
-        $scope.SearchTextTooShortMsg();
-    });
-    //If ListsSuccessfullyActivated event is triggered, show related message
-    $scope.$on('ListsSuccessfullyActivated', function(event, args) {
-        $scope.ListsSuccessfullyActivatedMsg();
-    });
-    //If ListsSuccessfullyDeactivated event is triggered, show related message
-    $scope.$on('ListsSuccessfullyDeactivated', function(event, args) {
-        $scope.ListsSuccessfullyDeactivatedMsg();
-    });
-    //If FailedToActivateList event is triggered, show related message
-    $scope.$on('FailedToActivateList', function(event, args) {
-        $scope.FailedToActivateListMsg();
-    });
-    //If FailedToDeactivateList event is triggered, show related message
-    $scope.$on('FailedToDeactivateListList', function(event, args) {
-        $scope.FailedToDeactivateListMsg();
-    });
-    //If ImportSucceeded event is triggered, show related message
-    $scope.$on('ImportSucceeded', function(event, args) {
-        $scope.ImportSucceededMsg(args.inserted, args.updated, args.invalidCount);
-    });
-    //If ImportFailed event is triggered, show related message
-    $scope.$on('ImportFailed', function(event, args) {
-        $scope.ImportFailedMsg();
-    });
-    //If UploadToMultipleListsNotSupported event is triggered, show related message
-    $scope.$on('UploadToMultipleListsNotSupported', function(event, args) {
-        $scope.UploadToMultipleListsNotSupportedMsg();
-    });
-    $scope.$on('RequestSuccess', function(event, args, name) {
-        notify({
-            message : name,
-            classes : 'alert-success',
-            templateUrl : $scope.inspiniaTemplate
+        //If SendingMessageSucceeded event is triggered, show related message
+        $scope.$on('SendingMessageSucceeded', function(event, args) {
+            $scope.SentMsg();
         });
-    });
-    $scope.$on('RequestError', function(event, args, name) {
-        notify({
-            message : name + ', ' + 'apicode: ' + args.apicode + ', ' + args.apitext,
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+        //If SchedulingMessageSucceeded event is triggered, show related message
+        $scope.$on('SchedulingMessageSucceeded', function(event, args) {
+            $scope.ScheduledMsg();
         });
-    });
-    $scope.$on('ModifyDIDForwardEmailSuccess', function(event, args) {
-        $scope.ModifyDIDForwardEmailSuccessMsg();
-    });
-    $scope.$on('ModifyDIDForwardEmailFailed', function(event, args) {
-        $scope.ModifyDIDForwardEmailFailedMsg();
-    });
-    $scope.$on('ModifyAccountEmail2SMSSuccess', function(event, args) {
-        $scope.ModifyAccountEmail2SMSSuccessMsg();
-    });
-    $scope.$on('ModifyAccountEmail2SMSFailed', function(event, args) {
-        $scope.ModifyAccountEmail2SMSFailedMsg();
-    });
+        $scope.$on('ReschedulingMessageSucceeded', function(event, args) {
+            $scope.RescheduledMsg();
+        });
+        //If SaveDraftSucceeded event is triggered, show related message
+        $scope.$on('SaveDraftSucceeded', function(event, args) {
+            $scope.SavedDraftMsg();
+        });
+        //If AniOptedOut event is triggered, show related message
+        $scope.$on('AniOptedOut', function(event, args) {
+            $scope.AniOptedOutMsg();
+        });
+        //If DuplicateContactListName event is triggered, show related message
+        $scope.$on('DuplicateContactListName', function(event, args) {
+            $scope.DuplicateContactListNameMsg();
+        });
+        //If ContactListCreated event is triggered, show related message
+        $scope.$on('ContactListCreated', function(event, args) {
+            $scope.ContactListCreatedMsg();
+        });
+        //If ContactCreated event is triggered, show related message
+        $scope.$on('ContactCreated', function(event, args) {
+            $scope.ContactCreatedMsg();
+        });
+        //If CreateContactFailed event is triggered, show related message
+        $scope.$on('CreateContactFailed', function(event, args) {
+            $scope.CreateContactFailedMsg();
+        });
+        //If ContactsUploaded event is triggered, show related message
+        $scope.$on('ContactsUploaded', function(event, args) {
+            $scope.ContactsUploadedMsg();
+        });
+        //If ContactsUploadFailed event is triggered, show related message
+        $scope.$on('ContactsUploadFailed', function(event, args) {
+            $scope.ContactsUploadFailedMsg();
+        });
+        //If InvalidANI event is triggered, show related message
+        $scope.$on('InvalidANI', function(event, args) {
+            $scope.InvalidANIMsg();
+        });
+        //If ContactSaved event is triggered, show related message
+        $scope.$on('ContactSaved', function(event, args) {
+            $scope.ContactSavedMsg();
+        });
+        //If SearchTextTooShort event is triggered, show related message
+        $scope.$on('SearchTextTooShort', function(event, args) {
+            $scope.SearchTextTooShortMsg();
+        });
+        //If ListsSuccessfullyActivated event is triggered, show related message
+        $scope.$on('ListsSuccessfullyActivated', function(event, args) {
+            $scope.ListsSuccessfullyActivatedMsg();
+        });
+        //If ListsSuccessfullyDeactivated event is triggered, show related message
+        $scope.$on('ListsSuccessfullyDeactivated', function(event, args) {
+            $scope.ListsSuccessfullyDeactivatedMsg();
+        });
+        //If FailedToActivateList event is triggered, show related message
+        $scope.$on('FailedToActivateList', function(event, args) {
+            $scope.FailedToActivateListMsg();
+        });
+        //If FailedToDeactivateList event is triggered, show related message
+        $scope.$on('FailedToDeactivateListList', function(event, args) {
+            $scope.FailedToDeactivateListMsg();
+        });
+        //If ImportSucceeded event is triggered, show related message
+        $scope.$on('ImportSucceeded', function(event, args) {
+            $scope.ImportSucceededMsg(args.inserted, args.updated, args.invalidCount);
+        });
+        //If ImportFailed event is triggered, show related message
+        $scope.$on('ImportFailed', function(event, args) {
+            $scope.ImportFailedMsg();
+        });
+        //If UploadToMultipleListsNotSupported event is triggered, show related message
+        $scope.$on('UploadToMultipleListsNotSupported', function(event, args) {
+            $scope.UploadToMultipleListsNotSupportedMsg();
+        });
+        $scope.$on('RequestSuccess', function(event, args, name) {
+            notify({
+                message : name,
+                classes : 'alert-success',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        });
+        $scope.$on('RequestError', function(event, args, name) {
+            notify({
+                message : name + ', ' + 'apicode: ' + args.apicode + ', ' + args.apitext,
+                classes : 'alert-danger',
+                templateUrl : $scope.inspiniaTemplate
+            });
+        });
+        $scope.$on('ModifyDIDForwardEmailSuccess', function(event, args) {
+            $scope.ModifyDIDForwardEmailSuccessMsg();
+        });
+        $scope.$on('ModifyDIDForwardEmailFailed', function(event, args) {
+            $scope.ModifyDIDForwardEmailFailedMsg();
+        });
+        $scope.$on('ModifyAccountEmail2SMSSuccess', function(event, args) {
+            $scope.ModifyAccountEmail2SMSSuccessMsg();
+        });
+        $scope.$on('ModifyAccountEmail2SMSFailed', function(event, args) {
+            $scope.ModifyAccountEmail2SMSFailedMsg();
+        });
+    }
 }
 
 function translateCtrl($translate, $scope) {
