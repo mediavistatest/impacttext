@@ -32,6 +32,9 @@
             <i class="fa fa-eye"></i> Mark as read
 
         </button>
+        <button class="btn" ng-click="ExportMessage(controllerParent, null, true, null)">
+            <i class="fa fa-file-text"></i> Export message to text file
+        </button>                
         <!-- inbox, sent -->
 
         <!--<button class="btn">
@@ -60,7 +63,9 @@
         <button  class="btn" ng-click="controllerParent.Events.ShowThread(controllerParent)">
             <i class="fa fa-comments-o"></i> View related messages
         </button>
-
+        <button class="btn" ng-click="ExportThread(controllerParent)">
+            <i class="fa fa-file-text"></i> Export thread to text file
+        </button>  
         <div class="btn-group dropdown discard-btn">
             <!-- all -->
 

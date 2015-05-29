@@ -216,7 +216,7 @@ var ngInbox = {
                 }
 
             },
-            GetThread : function(controllerParent) {
+            GetThread : function(controllerParent, getFullThread, continueFunction) {
                 var pageSize = controllerParent.ThreadPageOptions.pageSize;
                 var page = controllerParent.ThreadPageOptions.currentPage;
                 var ani = controllerParent.clickedMessage.sourceANI ? controllerParent.clickedMessage.sourceANI : controllerParent.clickedMessage.ANI;
@@ -225,12 +225,15 @@ var ngInbox = {
                     apikey : controllerParent.$scope.main.authToken,
                     accountID : controllerParent.$scope.main.accountID,
                     companyID : controllerParent.$scope.main.accountInfo.companyID,
-                    limit : pageSize,
-                    offset : (page - 1) * pageSize,
                     sethttp : 1,
                     ani : ani,
                     desc : 'Y'
                 };
+
+                if (!getFullThread) {
+                    params.limit = pageSize;
+                    params.offset = (page - 1) * pageSize;
+                }
 
                 var $param = $.param(params);
 
@@ -241,11 +244,16 @@ var ngInbox = {
                     controllerParent.ThreadPageOptions.threadMessagesCount = result.apicount;
                     controllerParent.ThreadPageOptions.lastPage = Math.ceil(Number(controllerParent.ThreadPageOptions.threadMessagesCount) / controllerParent.ThreadPageOptions.pageSize);
                     controllerParent.clickedMessage.threadMessages = result.apidata;
+
+                    if (continueFunction) {
+                        continueFunction(controllerParent);
+                    }
                 })
                 // error function
                 .error(function(data, status, headers, config) {
                     console.log('');
                 });
+
             },
             PopulateScope : function(controllerParent) {
                 var cookie = ngInbox._internal.Settings.GetCookie(controllerParent);
@@ -278,6 +286,9 @@ var ngInbox = {
                 controllerParent.$scope.ResendMessages = ngInbox._internal.Methods.ResendMessages;
                 controllerParent.$scope.MarkAsUnreadMessage = ngInbox._internal.Methods.MarkAsUnreadMessage;
                 controllerParent.$scope.MarkAsUnreadMessages = ngInbox._internal.Methods.MarkAsUnreadMessages;
+                controllerParent.$scope.ExportMessages = ngInbox._internal.Methods.ExportMessages;
+                controllerParent.$scope.ExportMessage = ngInbox._internal.Methods.ExportMessage;
+                controllerParent.$scope.ExportThread = ngInbox._internal.Methods.ExportThread;
 
                 //WHATCH
                 controllerParent.$scope.$watch('pagingOptions', function() {
@@ -643,6 +654,77 @@ var ngInbox = {
             ThreadPreviousPage_onClick : function(inParent) {
                 inParent.ThreadPageOptions.currentPage--;
                 ngInbox._internal.Methods.GetThread(inParent);
+            },
+            ExportMessage : function(controllerParent, message, exportSingle, callback) {
+                ngInbox._internal.ErrorMsg = 'Exporting message(s) failed!';
+                if (!callback) {
+                    var callback = function() {
+                        controllerParent.$scope.$broadcast("ExportToTextMessageSucceeded");
+                    };
+                }
+
+                if (!message) {
+                    message = controllerParent.clickedMessage.message;
+                }
+
+                if (!controllerParent.mesageTextToExport) {
+                    controllerParent.mesageTextToExport = '';
+                }
+                var enter = '%0D%0A';
+                controllerParent.mesageTextToExport = controllerParent.mesageTextToExport + enter + enter + message;
+
+                if (exportSingle) {
+                    ngInbox._internal.Methods.ExportToFile(controllerParent, callback);
+                }
+            },
+            ExportMessages : function(controllerParent) {
+                var callback = function() {
+                    controllerParent.$scope.$broadcast("ExportToTextMessageSucceeded");
+                };
+                if (controllerParent.$scope.mySelections.length > 0) {
+                    for (var i = 0; i < controllerParent.$scope.mySelections.length; i++) {
+                        ngInbox._internal.Methods.ExportMessage(controllerParent, controllerParent.$scope.mySelections[i].message, false, callback);
+                    }
+                }
+                ngInbox._internal.Methods.ExportToFile(controllerParent, callback);
+            },
+            ExportThread : function(controllerParent) {
+                ngInbox._internal.ErrorMsg = 'Exporting thread failed!';
+                if (!callback) {
+                    var callback = function() {
+                        controllerParent.$scope.$broadcast("ExportThreadToTextMessageSucceeded");
+                    };
+                }
+
+                var moveToRightWithBlanks = '                                        ';
+                var enter = '%0D%0A';
+
+                continueFunction = function(controllerParent) {
+                    controllerParent.mesageTextToExport = '';
+                    for (var i = 0; i < controllerParent.clickedMessage.threadMessages.length; i++) {
+                        // console.log(controllerParent.clickedMessage.threadMessages[i])
+                        if (controllerParent.clickedMessage.threadMessages[i].messageType == 'Outbound') {
+                            controllerParent.mesageTextToExport = controllerParent.mesageTextToExport + enter + enter + moveToRightWithBlanks + controllerParent.clickedMessage.threadMessages[i].DID + ':' + controllerParent.clickedMessage.threadMessages[i].message;
+                        } else {
+                            controllerParent.mesageTextToExport = controllerParent.mesageTextToExport + enter + enter + controllerParent.clickedMessage.threadMessages[i].ANI + ':' + controllerParent.clickedMessage.threadMessages[i].message;
+                        }
+                    }
+
+                    ngInbox._internal.Methods.ExportToFile(controllerParent, callback);
+                };
+
+                ngInbox._internal.Methods.GetThread(controllerParent, true, continueFunction);
+            },
+            ExportToFile : function(controllerParent, callback) {
+                // console.log(controllerParent.mesageTextToExport)
+                var link = document.createElement('a');
+                var mimeType = 'text/plain';
+
+                link.setAttribute('download', 'ExportedMessages.txt');
+                link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + controllerParent.mesageTextToExport);
+                link.click();
+                controllerParent.mesageTextToExport = '';
+                callback();
             }
         },
         Settings : {
@@ -765,6 +847,18 @@ var ngInbox = {
                     classes : 'alert-success'
                 });
             };
+            $scope.ExportToTextMsg = function() {
+                notify({
+                    message : 'Your message(s) has been exported to txt file!',
+                    classes : 'alert-success'
+                });
+            };
+            $scope.ExportThreadToTextMsg = function() {
+                notify({
+                    message : 'Your thread has been exported to txt file!',
+                    classes : 'alert-success'
+                });
+            };
             $scope.ErrorOnMsg = function(errorText) {
                 notify({
                     message : errorText,
@@ -772,7 +866,6 @@ var ngInbox = {
                     templateUrl : 'views/common/notify.html'
                 });
             };
-
             $scope.$on('DeleteMessageSucceeded', function(event, args) {
                 if (!$scope.controllerParent.DontShowMessage) {
                     $scope.DeleteMsg();
@@ -796,6 +889,16 @@ var ngInbox = {
             $scope.$on('ResendMessageSucceeded', function(event, args) {
                 if (!$scope.controllerParent.DontShowMessage) {
                     $scope.ResendMsg();
+                }
+            });
+            $scope.$on('ExportToTextMessageSucceeded', function(event, args) {
+                if (!$scope.controllerParent.DontShowMessage) {
+                    $scope.ExportToTextMsg();
+                }
+            });
+            $scope.$on('ExportThreadToTextMessageSucceeded', function(event, args) {
+                if (!$scope.controllerParent.DontShowMessage) {
+                    $scope.ExportThreadToTextMsg();
                 }
             });
             $scope.$on('ErrorOnMessages', function(event, args) {
@@ -1125,9 +1228,12 @@ var ngInbox = {
                     $sendScope.OptOutTxt3 = $sendScope.initial;
                     $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
                     $sendScope.ScheduleCheck = false;
-                    $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
-                    $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-                    $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime = [];
+                    var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                    scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
                 };
 
                 ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
@@ -1274,9 +1380,11 @@ var ngInbox = {
                     $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
                     $sendScope.ScheduleCheck = true;
 
-                    $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
-                    $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-                    $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                    scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
                 };
 
                 ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
@@ -1405,9 +1513,12 @@ var ngInbox = {
                     $sendScope.OptOutMsg = '';
                     $sendScope.OptOutTxt3 = $sendScope.initial;
                     $sendScope.ScheduleCheck = false;
-                    $sendScope.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
-                    $sendScope.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-                    $sendScope.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+
+                    var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                    scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
                 };
                 ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
             } catch(e) {
@@ -1631,210 +1742,204 @@ var ngSettings = {
             numCtrl.getNumbers();
         }
     },
-	ForwardEmails: {
-		ServerRequests: {
-			GetNumbers : function(cpo, callback){
-				var params = {
-					apikey : cpo.$scope.main.authToken,
-					accountID : cpo.$scope.main.accountID,
-					companyID : cpo.$scope.main.accountInfo.companyID
-				};
+    ForwardEmails : {
+        ServerRequests : {
+            GetNumbers : function(cpo, callback) {
+                var params = {
+                    apikey : cpo.$scope.main.authToken,
+                    accountID : cpo.$scope.main.accountID,
+                    companyID : cpo.$scope.main.accountInfo.companyID
+                };
 
-				var $param = $.param(params);
+                var $param = $.param(params);
 
-				//POST
-				cpo.$http.post(inspiniaNS.wsUrl + 'did_get', $param)
-					// success function
-					.success(function(result) {
-						callback(result);
-					})
-					// error function
-					.error(function(data, status, headers, config) {
-						console.log('did_get: ' + data.apitext);
-					});
-			},
-			ModifyNumbers : function(cpo, didid, email, callback){
-				var params = {
-					apikey : cpo.$scope.main.authToken,
-					accountID : cpo.$scope.main.accountID,
-					companyID : cpo.$scope.main.accountInfo.companyID,
-					DIDID : didid,
-					sethttp: 1
+                //POST
+                cpo.$http.post(inspiniaNS.wsUrl + 'did_get', $param)
+                // success function
+                .success(function(result) {
+                    callback(result);
+                })
+                // error function
+                .error(function(data, status, headers, config) {
+                    console.log('did_get: ' + data.apitext);
+                });
+            },
+            ModifyNumbers : function(cpo, didid, email, callback) {
+                var params = {
+                    apikey : cpo.$scope.main.authToken,
+                    accountID : cpo.$scope.main.accountID,
+                    companyID : cpo.$scope.main.accountInfo.companyID,
+                    DIDID : didid,
+                    sethttp : 1
 
-				};
-				params.emailForwardAddress = email;
-				var $param = $.param(params);
+                };
+                params.emailForwardAddress = email;
+                var $param = $.param(params);
 
-				//POST
-				cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param)
-				.success(
-					function (data) {
-						if (data.apicode == 0) {
-							callback();
-						} else {
-							cpo.$scope.$broadcast('ModifyDIDForwardEmailFailed');
-						}
-					}
-				).error(
-					//An error occurred with this request
-					function(data, status, headers, config) {
-						cpo.$scope.$broadcast('ModifyDIDForwardEmailFailed');
-					}
-				);
-			}
-		},
-		Events: {
-			Save_onClick : function(cpo, key){
-				if(cpo.fwCtrl && cpo.fwCtrl.numbers && cpo.fwCtrl.numbers.hasOwnProperty(key) && cpo.fwCtrl.numbers[key].DIDID){
-					ngSettings.ForwardEmails.ServerRequests.ModifyNumbers(cpo, cpo.fwCtrl.numbers[key].DIDID, cpo.fwCtrl.numbers[key].emailForwardAddress, function(){
-						cpo.fwCtrl.edit[key] = false;
-						cpo.$scope.$broadcast('ModifyDIDForwardEmailSuccess');
-					});
-				}
-			}
-		},
-		Controller : function($scope, $http, $cookieStore) {
-			var fwCtrl = this;
-			var cpo = ngSettings.ForwardEmails;
-			cpo.fwCtrl = fwCtrl;
-			cpo.$scope = $scope;
-			cpo.$http = $http;
-			cpo.$cookieStore = $cookieStore;
-			cpo.$scope.cpo = cpo;
+                //POST
+                cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param).success(function(data) {
+                    if (data.apicode == 0) {
+                        callback();
+                    } else {
+                        cpo.$scope.$broadcast('ModifyDIDForwardEmailFailed');
+                    }
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    cpo.$scope.$broadcast('ModifyDIDForwardEmailFailed');
+                });
+            }
+        },
+        Events : {
+            Save_onClick : function(cpo, key) {
+                if (cpo.fwCtrl && cpo.fwCtrl.numbers && cpo.fwCtrl.numbers.hasOwnProperty(key) && cpo.fwCtrl.numbers[key].DIDID) {
+                    ngSettings.ForwardEmails.ServerRequests.ModifyNumbers(cpo, cpo.fwCtrl.numbers[key].DIDID, cpo.fwCtrl.numbers[key].emailForwardAddress, function() {
+                        cpo.fwCtrl.edit[key] = false;
+                        cpo.$scope.$broadcast('ModifyDIDForwardEmailSuccess');
+                    });
+                }
+            }
+        },
+        Controller : function($scope, $http, $cookieStore) {
+            var fwCtrl = this;
+            var cpo = ngSettings.ForwardEmails;
+            cpo.fwCtrl = fwCtrl;
+            cpo.$scope = $scope;
+            cpo.$http = $http;
+            cpo.$cookieStore = $cookieStore;
+            cpo.$scope.cpo = cpo;
 
-			fwCtrl.GetNumbersCallback = function(result) {
-				if (result.apicode == 0) {
-					if (result.apidata.length > 0) {
-						fwCtrl.numbers = result.apidata;
-					}
-				}
-			};
+            fwCtrl.GetNumbersCallback = function(result) {
+                if (result.apicode == 0) {
+                    if (result.apidata.length > 0) {
+                        fwCtrl.numbers = result.apidata;
+                    }
+                }
+            };
 
-			fwCtrl.callGetNumbersRequest = function() {
-				if ($scope.main.accountInfo.companyID) {
-					ngSettings.ForwardEmails.ServerRequests.GetNumbers(cpo, fwCtrl.GetNumbersCallback);
-				} else {
-					setTimeout(function() {
-						fwCtrl.callGetNumbersRequest();
-					}, 500);
-				}
-			};
+            fwCtrl.callGetNumbersRequest = function() {
+                if ($scope.main.accountInfo.companyID) {
+                    ngSettings.ForwardEmails.ServerRequests.GetNumbers(cpo, fwCtrl.GetNumbersCallback);
+                } else {
+                    setTimeout(function() {
+                        fwCtrl.callGetNumbersRequest();
+                    }, 500);
+                }
+            };
 
-			fwCtrl.callGetNumbersRequest();
-		}
-	},
-	Email2SMS: {
-		ServerRequests: {
-			GetAccount: function(cpo, callback){
-				var params = {
-					apikey : cpo.$scope.main.authToken,
-					accountID : cpo.$scope.main.accountID,
-					companyID : cpo.$scope.main.accountInfo.companyID
-				};
+            fwCtrl.callGetNumbersRequest();
+        }
+    },
+    Email2SMS : {
+        ServerRequests : {
+            GetAccount : function(cpo, callback) {
+                var params = {
+                    apikey : cpo.$scope.main.authToken,
+                    accountID : cpo.$scope.main.accountID,
+                    companyID : cpo.$scope.main.accountInfo.companyID
+                };
 
-				var $param = $.param(params);
+                var $param = $.param(params);
 
-				//POST
-				cpo.$http.post(inspiniaNS.wsUrl + 'account_get', $param)
-					// success function
-					.success(function(result) {
-						callback(result);
-					})
-					// error function
-					.error(function(data, status, headers, config) {
-						console.log('account_get: ' + data.apitext);
-					});
-			},
-			ModifyAccount : function(cpo, emails, callback){
-				var params = {
-					apikey : cpo.$scope.main.authToken,
-					accountID : cpo.$scope.main.accountID,
-					companyID : cpo.$scope.main.accountInfo.companyID,
-					email2sms: emails,
-					sethttp: 1
+                //POST
+                cpo.$http.post(inspiniaNS.wsUrl + 'account_get', $param)
+                // success function
+                .success(function(result) {
+                    callback(result);
+                })
+                // error function
+                .error(function(data, status, headers, config) {
+                    console.log('account_get: ' + data.apitext);
+                });
+            },
+            ModifyAccount : function(cpo, emails, callback) {
+                var params = {
+                    apikey : cpo.$scope.main.authToken,
+                    accountID : cpo.$scope.main.accountID,
+                    companyID : cpo.$scope.main.accountInfo.companyID,
+                    email2sms : emails,
+                    sethttp : 1
 
-				};
-				var $param = $.param(params);
+                };
+                var $param = $.param(params);
 
-				//POST
-				cpo.$http.post(inspiniaNS.wsUrl + "account_modify", $param)
-					.success(
-					function (data) {
-						if (data.apicode == 0) {
-							callback();
-						} else {
-							cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
-						}
-					}
-				).error(
-					//An error occurred with this request
-					function(data, status, headers, config) {
-						cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
-					}
-				);
-			}
-		},
-		Events: {
-			Save_onClick : function(cpo){
-				if(cpo.e2sCtrl){
-					// API seams to revers the comma separated values so we need to create a reversed copy of cpo.e2sCtrl.newEmail2SMS
-					var newEmail2SMS_reversed = [];
-					angular.copy(cpo.e2sCtrl.newEmail2SMS, newEmail2SMS_reversed);
-					newEmail2SMS_reversed.reverse();
+                //POST
+                cpo.$http.post(inspiniaNS.wsUrl + "account_modify", $param).success(function(data) {
+                    if (data.apicode == 0) {
+                        callback();
+                    } else {
+                        cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
+                    }
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
+                });
+            }
+        },
+        Events : {
+            Save_onClick : function(cpo) {
+                if (cpo.e2sCtrl) {
+                    // API seams to revers the comma separated values so we need to create a reversed copy of cpo.e2sCtrl.newEmail2SMS
+                    var newEmail2SMS_reversed = [];
+                    angular.copy(cpo.e2sCtrl.newEmail2SMS, newEmail2SMS_reversed);
+                    newEmail2SMS_reversed.reverse();
 
-					// Remove empty
-					newEmail2SMS_reversed = newEmail2SMS_reversed.filter(function(el){ return el !== "" });
+                    // Remove empty
+                    newEmail2SMS_reversed = newEmail2SMS_reversed.filter(function(el) {
+                        return el !== ""
+                    });
 
-					ngSettings.Email2SMS.ServerRequests.ModifyAccount(cpo, newEmail2SMS_reversed.join(), function(){
-						cpo.$scope.$broadcast('ModifyAccountEmail2SMSSuccess');
-					});
-				}
-			}
-		},
-		Controller : function($scope, $http, $cookieStore) {
-			var e2sCtrl = this;
-			var cpo = ngSettings.Email2SMS;
-			cpo.e2sCtrl = e2sCtrl;
-			cpo.$scope = $scope;
-			cpo.$http = $http;
-			cpo.$cookieStore = $cookieStore;
-			cpo.$scope.cpo = cpo;
+                    ngSettings.Email2SMS.ServerRequests.ModifyAccount(cpo, newEmail2SMS_reversed.join(), function() {
+                        cpo.$scope.$broadcast('ModifyAccountEmail2SMSSuccess');
+                    });
+                }
+            }
+        },
+        Controller : function($scope, $http, $cookieStore) {
+            var e2sCtrl = this;
+            var cpo = ngSettings.Email2SMS;
+            cpo.e2sCtrl = e2sCtrl;
+            cpo.$scope = $scope;
+            cpo.$http = $http;
+            cpo.$cookieStore = $cookieStore;
+            cpo.$scope.cpo = cpo;
 
-			e2sCtrl.GetAccountCallback = function(result) {
-				e2sCtrl.email2sms = [];
-				if (result.apicode == 0) {
-					if (result.apidata.length > 0) {
-						e2sCtrl.email2sms = result.apidata[0]['email2sms'].split(",");
-						if(e2sCtrl.email2sms.length > 5){
-							e2sCtrl.email2sms.splice(5, e2sCtrl.email2sms.length - 5);
-						}
+            e2sCtrl.GetAccountCallback = function(result) {
+                e2sCtrl.email2sms = [];
+                if (result.apicode == 0) {
+                    if (result.apidata.length > 0) {
+                        e2sCtrl.email2sms = result.apidata[0]['email2sms'].split(",");
+                        if (e2sCtrl.email2sms.length > 5) {
+                            e2sCtrl.email2sms.splice(5, e2sCtrl.email2sms.length - 5);
+                        }
 
-						e2sCtrl.newEmail2SMS = [];
-						angular.copy(e2sCtrl.email2sms, e2sCtrl.newEmail2SMS);
+                        e2sCtrl.newEmail2SMS = [];
+                        angular.copy(e2sCtrl.email2sms, e2sCtrl.newEmail2SMS);
 
-						if(e2sCtrl.newEmail2SMS.length < 5){
-							var missing = 5 - e2sCtrl.newEmail2SMS.length;
-							for(var i = 1; i <= missing; i++){
-								e2sCtrl.email2sms.push('');
-							}
-						}
-					}
-				}
-			};
+                        if (e2sCtrl.newEmail2SMS.length < 5) {
+                            var missing = 5 - e2sCtrl.newEmail2SMS.length;
+                            for (var i = 1; i <= missing; i++) {
+                                e2sCtrl.email2sms.push('');
+                            }
+                        }
+                    }
+                }
+            };
 
-			e2sCtrl.callGetAccountRequest = function() {
-				if ($scope.main.accountInfo.companyID) {
-					ngSettings.Email2SMS.ServerRequests.GetAccount(cpo, e2sCtrl.GetAccountCallback);
-				} else {
-					setTimeout(function() {
-						e2sCtrl.callGetAccountRequest();
-					}, 500);
-				}
-			};
+            e2sCtrl.callGetAccountRequest = function() {
+                if ($scope.main.accountInfo.companyID) {
+                    ngSettings.Email2SMS.ServerRequests.GetAccount(cpo, e2sCtrl.GetAccountCallback);
+                } else {
+                    setTimeout(function() {
+                        e2sCtrl.callGetAccountRequest();
+                    }, 500);
+                }
+            };
 
-			e2sCtrl.callGetAccountRequest();
-		}
-	},
+            e2sCtrl.callGetAccountRequest();
+        }
+    },
     Autoresponder : {
         ServerRequests : {
             GetKeyword : function(cpo, callback) {
