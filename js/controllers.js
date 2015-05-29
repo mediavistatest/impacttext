@@ -3176,21 +3176,21 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
     $scope.lists = {};
     $scope.lists.names = [];
 
-    $scope.ListsSource = 'manual';
-    $scope.ListsDisable = false;
-    $scope.$watch('ListsSource', function(newValue, oldValue) {
-        if (newValue == 'manual') {
-            $scope.ListsDisable = false;
-        } else if (newValue == 'file') {
-            $scope.ListsDisable = true;
-        }
-    });
-    $scope.$watch('UploadType', function(newValue, oldValue) {
-        if (newValue == 'single') {
-            $scope.ListsSource = 'manual';
-            $scope.ListsDisable = false;
-        }
-    });
+//	$scope.ListsSource = 'manual';
+//	$scope.ListsDisable = false;
+//	$scope.$watch('ListsSource', function(newValue, oldValue){
+//		if(newValue == 'manual'){
+//			$scope.ListsDisable = false;
+//		}else if(newValue == 'file'){
+//			$scope.ListsDisable = true;
+//		}
+//	});
+//	$scope.$watch('UploadType', function(newValue, oldValue){
+//		if(newValue == 'single'){
+//			$scope.ListsSource = 'manual';
+//			$scope.ListsDisable = false;
+//		}
+//	});
 
     //$http({
     //  method: 'GET',
@@ -3324,111 +3324,119 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
             $scope.controllerParent.Events.Add_onClick($scope);
         }
 
-        //Fetch selected lists
-        var selectedLists = $scope.selectedLists();
+		//Fetch selected lists
+		var selectedLists = $scope.selectedLists();
+		if (selectedLists.length <= 0) {
+			return;
+		}
 
-        // Choose the import method
-        if ($scope.UploadType == 'upload') {
-            if ($scope.ListsSource == 'file') {
-                $scope.uploadContacts();
-                return;
-            } else if (selectedLists.length <= 0) {
-                return;
-            }
-        } else if (selectedLists.length <= 0) {
-            return;
-        }
+		if ($scope.UploadType == 'upload') {
+			$scope.uploadContacts();
+			return;
+		}
 
-        //Checking if all required parameters are there
-        if ( typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
-            $scope.$broadcast("InvalidANI");
-            return;
-        }
-        var phoneNo = $.trim($scope.PhoneNumber);
-        if (phoneNo.length == 10) {
-            phoneNo = '1' + phoneNo;
-        }
-        var request = {
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id'),
-            companyID : $cookieStore.get('inspinia_company_id'),
-            ANI : phoneNo,
-            status : 'A'
-        };
-        if ( typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
-            request.firstName = $.trim($scope.FirstName);
-        }
-        if ( typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
-            request.lastName = $.trim($scope.LastName);
-        }
-        if ( typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
-            request.emailAddress = $.trim($scope.Email);
-        }
-        if ( typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
-            request.custom1 = $.trim($scope.CustomField1);
-        }
-        if ( typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
-            request.custom2 = $.trim($scope.CustomField2);
-        }
-        if ( typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
-            request.custom3 = $.trim($scope.CustomField3);
-        }
-        if ( typeof $scope.CustomField4 != 'undefined' && $scope.CustomField4 != null && $.trim($scope.CustomField4) != '') {
-            request.custom4 = $.trim($scope.CustomField4);
-        }
-        if ( typeof $scope.CustomField5 != 'undefined' && $scope.CustomField5 != null && $.trim($scope.CustomField5) != '') {
-            request.custom5 = $.trim($scope.CustomField5);
-        }
-        var remainingListsCount = selectedLists.length;
-        var successfullyAddedToListsCount = 0;
-        var failedToAddToListsCount = 0;
-        for (var i in selectedLists) {
-            //Send request to the server
-            $http.post(inspiniaNS.wsUrl + "contact_add", $.param($.extend(request, {
-                contactListID : selectedLists[i].contactListID
-            }))).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    remainingListsCount--;
-                    failedToAddToListsCount++;
-                    alert("Unidentified error occurred when adding new contact!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    remainingListsCount--;
-                    successfullyAddedToListsCount++;
-                } else {
-                    remainingListsCount--;
-                    failedToAddToListsCount++;
-                    alert("An error occurred when adding contact! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
-                }
-                if (remainingListsCount == 0) {
-                    //Reset form and inform user about success
-                    $scope.reset();
-                    $scope.$broadcast("ContactCreated", data.apidata);
-                    $scope.refreshLists();
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to send message!');
-                remainingListsCount--;
-                failedToAddToListsCount++;
-                if (status == 400) {
-                    if (data.apicode == 4) {
-                        $scope.$broadcast("InvalidANI", data.apidata);
-                    } else {
-                        $scope.$broadcast("CreateContactFailed");
-                    }
-                }
-            });
-        }
-    };
-    $scope.refreshLists();
+		// Choose the import method
+//		if ($scope.UploadType == 'upload') {
+//			if($scope.ListsSource == 'file'){
+//				$scope.uploadContacts();
+//				return;
+//			}else if (selectedLists.length <= 0) {
+//				return;
+//			}
+//		}else if (selectedLists.length <= 0) {
+//			return;
+//		}
+
+		//Checking if all required parameters are there
+		if ( typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
+			$scope.$broadcast("InvalidANI");
+			return;
+		}
+		var phoneNo = $.trim($scope.PhoneNumber);
+		if (phoneNo.length == 10) {
+			phoneNo = '1' + phoneNo;
+		}
+		var request = {
+			sethttp : 1,
+			apikey : $cookieStore.get('inspinia_auth_token'),
+			accountID : $cookieStore.get('inspinia_account_id'),
+			companyID : $cookieStore.get('inspinia_company_id'),
+			ANI : phoneNo,
+			status : 'A'
+		};
+		if ( typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
+			request.firstName = $.trim($scope.FirstName);
+		}
+		if ( typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
+			request.lastName = $.trim($scope.LastName);
+		}
+		if ( typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
+			request.emailAddress = $.trim($scope.Email);
+		}
+		if ( typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
+			request.custom1 = $.trim($scope.CustomField1);
+		}
+		if ( typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
+			request.custom2 = $.trim($scope.CustomField2);
+		}
+		if ( typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
+			request.custom3 = $.trim($scope.CustomField3);
+		}
+		if ( typeof $scope.CustomField4 != 'undefined' && $scope.CustomField4 != null && $.trim($scope.CustomField4) != '') {
+			request.custom4 = $.trim($scope.CustomField4);
+		}
+		if ( typeof $scope.CustomField5 != 'undefined' && $scope.CustomField5 != null && $.trim($scope.CustomField5) != '') {
+			request.custom5 = $.trim($scope.CustomField5);
+		}
+		var remainingListsCount = selectedLists.length;
+		var successfullyAddedToListsCount = 0;
+		var failedToAddToListsCount = 0;
+		for (var i in selectedLists) {
+			//Send request to the server
+			$http.post(inspiniaNS.wsUrl + "contact_add", $.param($.extend(request, {
+				contactListID : selectedLists[i].contactListID
+			}))).success(
+			//Successful request to the server
+			function(data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					remainingListsCount--;
+					failedToAddToListsCount++;
+					alert("Unidentified error occurred when adding new contact!");
+					return;
+				}
+				if (data.apicode == 0) {
+					remainingListsCount--;
+					successfullyAddedToListsCount++;
+				} else {
+					remainingListsCount--;
+					failedToAddToListsCount++;
+					alert("An error occurred when adding contact! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
+				if (remainingListsCount == 0) {
+					//Reset form and inform user about success
+					$scope.reset();
+					$scope.$broadcast("ContactCreated", data.apidata);
+					$scope.refreshLists();
+				}
+			}).error(
+			//An error occurred with this request
+			function(data, status, headers, config) {
+				//alert('Unexpected error occurred when trying to send message!');
+				remainingListsCount--;
+				failedToAddToListsCount++;
+				if (status == 400) {
+					if (data.apicode == 4) {
+						$scope.$broadcast("InvalidANI", data.apidata);
+					} else {
+						$scope.$broadcast("CreateContactFailed");
+					}
+				}
+			});
+		}
+	};
+	$scope.refreshLists();
 
     $scope.fileUploader = new FileUploader({
         //url: "ajax.php",
@@ -3457,13 +3465,13 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
             return;
         }
 
-        if ($scope.ListsSource != 'file') {
-            var selectedLists = $scope.selectedLists();
-            if (selectedLists.length > 1) {
-                $scope.$broadcast("UploadToMultipleListsNotSupported");
-                return;
-            }
-        }
+		 //if($scope.ListsSource != 'file'){
+		  var selectedLists = $scope.selectedLists();
+		  if (selectedLists.length > 1) {
+			  $scope.$broadcast("UploadToMultipleListsNotSupported");
+			  return;
+		  }
+		  //}
 
         var uploadItem = $scope.fileUploader.queue[0];
         uploadItem.removeAfterUpload = true;
@@ -3480,11 +3488,11 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
             companyID : $cookieStore.get('inspinia_company_id')
         });
 
-        if ($scope.ListsSource != 'file') {
-            uploadItem.formData.push({
-                contactListID : selectedLists[0].contactListID
-            });
-        }
+		   //if($scope.ListsSource != 'file'){
+			uploadItem.formData.push({
+				contactListID : selectedLists[0].contactListID
+			});
+			//}
 
         uploadItem.upload();
     };

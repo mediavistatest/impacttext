@@ -117,11 +117,12 @@
  <!--END UPLOAD -->
 
 <div class="lists-list-box list-box" ng-show="UploadType">
-	<p ng-show="UploadType == 'single'">Choose list:</p>
-	<p class="radio" ng-show="UploadType == 'upload'">
+	<p>Choose list:</p>
+	<!--p ng-show="UploadType == 'single'">Choose list:</p>
+	< class="radio" ng-show="UploadType == 'upload'">
 		<label><input icheck type="radio" name="ListsSource" ng-model="ListsSource" value="file" />&nbsp;Get list info from file</label>
 		<label><input icheck type="radio" name="ListsSource" ng-model="ListsSource" value="manual" />&nbsp;Choose a list</label>
-	</p>
+	</p-->
 
 	<div class="list-inline-wrapper">
 		<div class="list-inline-disable" ng-if="ListsDisable"></div>
