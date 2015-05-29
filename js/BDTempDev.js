@@ -655,23 +655,29 @@ var ngInbox = {
                 inParent.ThreadPageOptions.currentPage--;
                 ngInbox._internal.Methods.GetThread(inParent);
             },
-            ExportMessage : function(controllerParent, message, exportSingle, callback) {
+            ExportMessage : function(controllerParent, messageObject, exportSingle, callback) {
                 ngInbox._internal.ErrorMsg = 'Exporting message(s) failed!';
+                var message = '';
                 if (!callback) {
                     var callback = function() {
                         controllerParent.$scope.$broadcast("ExportToTextMessageSucceeded");
                     };
                 }
 
-                if (!message) {
-                    message = controllerParent.clickedMessage.message;
+                if (!messageObject) {
+                    message = controllerParent.clickedMessage.sourceANI + ': ' + controllerParent.clickedMessage.message;
+                } else {
+                    //console.log(messageObject);
+                    message = messageObject.sourceANI + ': ' + messageObject.message;
                 }
 
-                if (!controllerParent.mesageTextToExport) {
-                    controllerParent.mesageTextToExport = '';
-                }
                 var enter = '%0D%0A';
-                controllerParent.mesageTextToExport = controllerParent.mesageTextToExport + enter + enter + message;
+
+                if (!controllerParent.mesageTextToExport) {
+                    controllerParent.mesageTextToExport = message;
+                } else {
+                    controllerParent.mesageTextToExport = controllerParent.mesageTextToExport + enter + enter + message;
+                }
 
                 if (exportSingle) {
                     ngInbox._internal.Methods.ExportToFile(controllerParent, callback);
@@ -683,7 +689,7 @@ var ngInbox = {
                 };
                 if (controllerParent.$scope.mySelections.length > 0) {
                     for (var i = 0; i < controllerParent.$scope.mySelections.length; i++) {
-                        ngInbox._internal.Methods.ExportMessage(controllerParent, controllerParent.$scope.mySelections[i].message, false, callback);
+                        ngInbox._internal.Methods.ExportMessage(controllerParent, controllerParent.$scope.mySelections[i], false, callback);
                     }
                 }
                 ngInbox._internal.Methods.ExportToFile(controllerParent, callback);
