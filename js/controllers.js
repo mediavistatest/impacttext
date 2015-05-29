@@ -3245,21 +3245,21 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
 	$scope.lists = {};
 	$scope.lists.names = [];
 
-	$scope.ListsSource = 'manual';
-	$scope.ListsDisable = false;
-	$scope.$watch('ListsSource', function(newValue, oldValue){
-		if(newValue == 'manual'){
-			$scope.ListsDisable = false;
-		}else if(newValue == 'file'){
-			$scope.ListsDisable = true;
-		}
-	});
-	$scope.$watch('UploadType', function(newValue, oldValue){
-		if(newValue == 'single'){
-			$scope.ListsSource = 'manual';
-			$scope.ListsDisable = false;
-		}
-	});
+//	$scope.ListsSource = 'manual';
+//	$scope.ListsDisable = false;
+//	$scope.$watch('ListsSource', function(newValue, oldValue){
+//		if(newValue == 'manual'){
+//			$scope.ListsDisable = false;
+//		}else if(newValue == 'file'){
+//			$scope.ListsDisable = true;
+//		}
+//	});
+//	$scope.$watch('UploadType', function(newValue, oldValue){
+//		if(newValue == 'single'){
+//			$scope.ListsSource = 'manual';
+//			$scope.ListsDisable = false;
+//		}
+//	});
 
 	//$http({
 	//  method: 'GET',
@@ -3395,18 +3395,26 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
 
 		//Fetch selected lists
 		var selectedLists = $scope.selectedLists();
-
-		// Choose the import method
-		if ($scope.UploadType == 'upload') {
-			if($scope.ListsSource == 'file'){
-				$scope.uploadContacts();
-				return;
-			}else if (selectedLists.length <= 0) {
-				return;
-			}
-		}else if (selectedLists.length <= 0) {
+		if (selectedLists.length <= 0) {
 			return;
 		}
+
+		if ($scope.UploadType == 'upload') {
+			$scope.uploadContacts();
+			return;
+		}
+
+		// Choose the import method
+//		if ($scope.UploadType == 'upload') {
+//			if($scope.ListsSource == 'file'){
+//				$scope.uploadContacts();
+//				return;
+//			}else if (selectedLists.length <= 0) {
+//				return;
+//			}
+//		}else if (selectedLists.length <= 0) {
+//			return;
+//		}
 
 		//Checking if all required parameters are there
 		if ( typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
@@ -3526,13 +3534,13 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
 			return;
 		}
 
-		if($scope.ListsSource != 'file'){
-			var selectedLists = $scope.selectedLists();
-			if (selectedLists.length > 1) {
-				$scope.$broadcast("UploadToMultipleListsNotSupported");
-				return;
-			}
+		//if($scope.ListsSource != 'file'){
+		var selectedLists = $scope.selectedLists();
+		if (selectedLists.length > 1) {
+			$scope.$broadcast("UploadToMultipleListsNotSupported");
+			return;
 		}
+		//}
 
 		var uploadItem = $scope.fileUploader.queue[0];
 		uploadItem.removeAfterUpload = true;
@@ -3549,11 +3557,11 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
 			companyID : $cookieStore.get('inspinia_company_id')
 		});
 
-		if($scope.ListsSource != 'file'){
-			uploadItem.formData.push({
-				contactListID : selectedLists[0].contactListID
-			});
-		}
+		//if($scope.ListsSource != 'file'){
+		uploadItem.formData.push({
+			contactListID : selectedLists[0].contactListID
+		});
+		//}
 
 		uploadItem.upload();
 	};
