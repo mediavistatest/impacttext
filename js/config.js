@@ -355,6 +355,21 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                 }
             }
         })
+		 .state('messages.view_recurring', {
+			 url: "/messages_view_recurring",
+			 templateUrl: "views/messages_view_recurring.html",
+			 data: { pageTitle: 'View Message' },
+			 resolve: {
+				 loadPlugin: function ($ocLazyLoad) {
+					 return $ocLazyLoad.load([
+						 {
+							 name: 'cgNotify',
+							 files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+						 }
+					 ]);
+				 }
+			 }
+		 })
         .state('messages.view_drafts', {
             url: "/messages_view_drafts",
             templateUrl: "views/messages_view_drafts.html",
@@ -400,6 +415,21 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                 }
             }
         })
+		 .state('messages.recurring', {
+			 url: "/messages_recurring",
+			 templateUrl: "views/messages_recurring_container.html",
+			 data: { pageTitle: 'Recurring' },
+			 resolve: {
+				 loadPlugin: function ($ocLazyLoad) {
+					 return $ocLazyLoad.load([
+						 {
+							 name: 'cgNotify',
+							 files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/notify.js']
+						 }
+					 ]);
+				 }
+			 }
+		 })
         .state('messages.sent', {
             url: "/messages_sent",
             templateUrl: "views/messages_sent_container.html",

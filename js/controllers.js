@@ -4043,9 +4043,11 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         }
     };
     if ($scope.controllerParent && $scope.controllerParent.PopulateSend) {
-        $scope.$watch('controllerParent.clickedMessage', function() {
-            $scope.controllerParent.PopulateSend($scope);
-        }, true);
+        $scope.$watch('controllerParent.clickedMessage', function(newValue, oldValue) {
+			  if(newValue !== null){
+           		$scope.controllerParent.PopulateSend($scope);
+			  }
+        });
     }
     //CHARACTER COUNTER
     $scope.maxLength = 160;
@@ -5152,6 +5154,7 @@ angular.module('inspinia').controller('ngActivityLogListCtrl', ['$scope', '$http
 angular.module('inspinia').controller('ngInboxListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.InboxList.Controller]);
 angular.module('inspinia').controller('ngSentListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.SentList.Controller]);
 angular.module('inspinia').controller('ngScheduledListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.ScheduledList.Controller]);
+angular.module('inspinia').controller('ngRecurringListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.RecurringList.Controller]);
 angular.module('inspinia').controller('ngDraftsListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.DraftsList.Controller]);
 angular.module('inspinia').controller('ngTrashListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.TrashList.Controller]);
 angular.module('inspinia').controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', 'filterFilter', 'FileUploader', AddListsCtrl]);

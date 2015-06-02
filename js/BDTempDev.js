@@ -170,7 +170,9 @@ var ngInbox = {
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
-                $scope.ngOptions.selectAll(false);
+					setTimeout(function(){
+						$scope.ngOptions.selectAll(false);
+					}, 100);
             },
             GetPagedDataAsync : function(controllerParent) {
                 if (!controllerParent.getDataBlocked) {
@@ -1386,10 +1388,20 @@ var ngInbox = {
                     $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
                     $sendScope.ScheduleCheck = true;
 
+						  $sendScope.RecurringTypes = [
+							  {value: 'D', label: 'Every day'},
+							  {value: 'W', label: 'Every week'},
+							  {value: 'M', label: 'Every month'}
+						  ];
+
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
                     scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+						  scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
+						  scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+
+						  $sendScope.ArrayScheduledDateTime = [];
                     $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
                 };
 
@@ -1404,6 +1416,186 @@ var ngInbox = {
             ngInbox._internal.Methods.PostSuccess(controllerParent, result);
         }
     },
+	 RecurringList : {
+		 Name : 'Recurring',
+		 getListAction : 'messages_outbound',
+		 getListStatus : 'T',
+		 statusChangeAction : null, //'message_changeoutboundstatus',
+		 deleteMessagesChangeAction : 'message_deleteoutbound',
+		 primaryKey : 'outboundMessageID',
+		 columnDefs : [{
+			 checked : true,
+			 canBeClicked : true,
+			 field : 'con_lis',
+			 displayName : 'Contact/List',
+			 cellTemplate : 'views/table/MessageTableTemplate.html'
+		 }, {
+			 checked : true,
+			 canBeClicked : true,
+			 field : 'message',
+			 displayName : 'Message',
+			 cellTemplate : 'views/table/MessageTableTemplate.html'
+		 }, {
+			 checked : true,
+			 canBeClicked : false,
+			 field : 'createdDate',
+			 displayName : 'Date created'
+		 }, {
+			 checked : true,
+			 canBeClicked : false,
+			 field : 'scheduledDate',
+			 displayName : 'Date scheduled'
+		 }, {
+			 checked : true,
+			 canBeClicked : false,
+			 field : 'recurringtype',
+			 displayName : 'Repeat',
+			 cellTemplate: 'views/table/RecurringType.html'
+		 }, {
+			 checked : true,
+			 canBeClicked : false,
+			 field : 'recurringend',
+			 displayName : 'Until'
+		 }, {
+			 button : 'Edit',
+			 checked : true,
+			 canBeClicked : false,
+			 cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ng-click="controllerParent.Events.Message_onClick(controllerParent,row)"><i class="fa fa-pencil"></i> Edit </a></div>'
+		 }],
+		 sortOptions : {
+			 fields : ['createdDate'],
+			 directions : ['DESC'],
+			 useExternalSorting : true
+		 },
+		 defaultSortField : 'scheduledDate',
+		 errorMessage : 'Unexpected error occurred when trying to fetch recurring messages list!',
+		 hashUrlviewMessage : 'messages.view_recurring',
+		 $scope : null,
+		 $http : null,
+		 $cookieStore : null,
+		 clickedMessage : null,
+		 list : true,
+		 view : false,
+		 send : false,
+		 settings : false,
+		 Events : {
+			 Settings_onClick : function(inParent) {
+				 ngInbox._internal.Settings.Settings(inParent);
+			 },
+			 ColumnCanBeClicked_onChange : function(inParent, column, index) {
+				 ngInbox._internal.Settings.ColumnCanBeClicked_onChange(inParent, column, index);
+			 },
+			 ColumnUp_onClick : function(inParent, column, index) {
+				 ngInbox._internal.Settings.ColumnUp_onClick(inParent, column, index);
+			 },
+			 ColumnDown_onClick : function(inParent, column, index) {
+				 ngInbox._internal.Settings.ColumnDown_onClick(inParent, column, index);
+			 },
+			 UpdateColumns : function(inParent) {
+				 ngInbox._internal.Settings.UpdateColumns(inParent);
+			 },
+			 Message_onClick : function(inParent, row) {
+				 inParent.clickedMessage = row.entity;
+				 inParent.Events.ShowView(inParent);
+			 },
+			 Send_onClick : function(inScope) {
+				 // delete clicked message
+				 inScope.controllerParent.Events.ShowList(inScope.controllerParent);
+			 },
+			 ShowList : function(inParent) {
+				 inParent.list = true;
+				 inParent.view = false;
+				 inParent.send = false;
+				 inParent.settings = false;
+			 },
+			 ShowView : function(inParent) {
+				 inParent.list = false;
+				 inParent.view = true;
+				 inParent.send = false;
+				 inParent.settings = false;
+			 },
+			 ShowSend : function(inParent) {
+				 inParent.list = false;
+				 inParent.view = false;
+				 inParent.send = true;
+				 inParent.settings = false;
+			 },
+			 ShowSettings : function(inParent) {
+				 inParent.list = false;
+				 inParent.view = false;
+				 inParent.send = false;
+				 inParent.settings = true;
+			 },
+			 InitialiseEvents : function(controllerParent) {
+			 }
+		 },
+		 Controller : function($scope, $http, $cookieStore) {
+			 //Controler parrent setting !!!!
+			 var controllerParent = ngInbox.RecurringList;
+			 controllerParent.Events.ShowList(controllerParent);
+
+			 controllerParent.$scope = $scope;
+			 controllerParent.$http = $http;
+			 controllerParent.$cookieStore = $cookieStore;
+
+			 ngInbox._internal.Methods.PopulateScope(controllerParent);
+			 controllerParent.Events.InitialiseEvents(controllerParent);
+
+			 controllerParent.$scope.RecurringTypeLabels = {
+				 D: 'Every day',
+				 W: 'Every week',
+				 M: 'Every month'
+		 	};
+		 },
+		 PopulateSend : function($sendScope) {
+			 try {
+				 $sendScope.FromName = $sendScope.initial;
+				 $sendScope.MessageType = 'SMS';
+
+				 continueFunction = function() {
+					 $sendScope.ToNumber = $sendScope.controllerParent.ANIList;
+					 $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
+
+					 $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
+						 return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+					 })[0];
+					 $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+						 return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+					 })[0];
+
+					 $sendScope.OptOutMsg = '';
+					 $sendScope.OptOutTxt3 = $sendScope.initial;
+					 $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
+					 $sendScope.ScheduleCheck = true;
+
+					 $sendScope.RecurringTypes = [
+						 {value: 'D', label: 'Every day'},
+						 {value: 'W', label: 'Every week'},
+						 {value: 'M', label: 'Every month'}
+					 ];
+
+					 var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+					 scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+					 scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+					 scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+					 scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
+					 scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+
+					 $sendScope.ArrayScheduledDateTime = [];
+					 $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
+				 };
+
+				 ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
+			 } catch(e) {
+				 //TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
+				 console.log(e);
+			 }
+
+		 },
+		 PostSuccess : function(controllerParent, result) {
+			 ngInbox._internal.Methods.PostSuccess(controllerParent, result);
+		 }
+	 },
     DraftsList : {
         Name : 'Drafts',
         getListAction : 'messages_outbound',

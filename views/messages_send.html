@@ -367,12 +367,7 @@ Send
 							 <div class="send-mesasge-schedule-field-wrapper">
 								 <span class="label-icon"><i class="fa fa-history"></i></span>
 								 <div class="btn-group chosen">
-									 <select chosen disable-search="true" class="form-control m-b" ng-model="sheduledDateTime.SetRecurringType">
-										 <option value="" selected="selected">Don't repeat</option>
-										 <option value="D">Every day</option>
-										 <option value="W">Every week</option>
-										 <option value="M">Every month</option>
-									 </select>
+									 <select chosen data-placeholder="Select an Option..." disable-search="true"  class="form-control m-b" ng-model="sheduledDateTime.SetRecurringType" ng-options="item.value as item.label for item in RecurringTypes"></select>
 								 </div>
 							 </div>
 
