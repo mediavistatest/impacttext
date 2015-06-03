@@ -224,7 +224,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                             subject : 'Blocked contact',
                             body : 'Please to block following number: ' + request.ANI + ' for all incoming text messages.'
                         });
-                        window.location.href = 'mailto:nselimic@impacttelecom.com?' + $param;
+                        //window.location.href = 'mailto:nselimic@impacttelecom.com?' + $param;
                     }
                 } else {
                     $scope.$broadcast("RequestError", data, 'contact_modify');
