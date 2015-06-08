@@ -362,19 +362,19 @@ Send
 					</div>
 
 					<div class="row">
-						 <label class="col-sm-2 control-label"></label>
+						 <label class="col-sm-2 control-label">Recur:</label>
 						 <div class="send-mesasge-schedule-row col-md-10">
 							 <div class="send-mesasge-schedule-field-wrapper">
-								 <span class="label-icon"><i class="fa fa-history"></i></span>
+								 <span class="label-icon" title="Every"><i class="fa fa-history"></i></span>
 								 <div class="btn-group chosen">
 									 <select chosen data-placeholder="Select an Option..." disable-search="true"  class="form-control m-b" ng-model="sheduledDateTime.SetRecurringType" ng-options="item.value as item.label for item in RecurringTypes"></select>
 								 </div>
 							 </div>
 
 							 <div class="send-mesasge-schedule-field-wrapper">
-								 <span class="label-icon"><i class="fa fa-power-off"></i></span>
+								 <span class="label-icon" title="End date"><i class="fa fa-power-off"></i></span>
 								 <div class="btn-group datetimepicker-wrapper">
-									 <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="sheduledDateTime.SetRecurringEndDate" is-open="sheduledDateTime.opened_recurring" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="false" close-text="Close" ng-click="openRecurring($event,sheduledDateTime)" />
+									 <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="sheduledDateTime.SetRecurringEndDate" is-open="sheduledDateTime.opened_recurring" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="false" close-text="Close" ng-click="openRecurring($event,sheduledDateTime)" ng-disabled="!sheduledDateTime.SetRecurringType" />
 								 </div>
 							 </div>
 						 </div>

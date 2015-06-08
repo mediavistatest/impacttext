@@ -4401,14 +4401,20 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 }
                 requestData.scheduledDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
 
-					 requestData.recurringStart = requestData.scheduledDate;
-					 var recurringDateParts = [];
-					 recurringDateParts[0] = "" + (currentDateTime.SetRecurringEndDate.getMonth() + 1);
-					 recurringDateParts[1] = "" + currentDateTime.SetRecurringEndDate.getDate();
-					 if (recurringDateParts[0].length < 2) { recurringDateParts[0] = "0" + recurringDateParts[0]; }
-					 if (recurringDateParts[1].length < 2) { recurringDateParts[1] = "0" + recurringDateParts[1]; }
-					 requestData.recurringEnd = currentDateTime.SetRecurringEndDate.getFullYear() + "-" + recurringDateParts[0] + "-" + recurringDateParts[1] + " 23:59";
 					 requestData.recurringType = currentDateTime.SetRecurringType;
+					 if(requestData.recurringType != ''){
+						 requestData.recurringStart = requestData.scheduledDate;
+						 if(currentDateTime.SetRecurringEndDate != '' && currentDateTime.SetRecurringEndDate != null){
+							 var recurringDateParts = [];
+							 recurringDateParts[0] = "" + (currentDateTime.SetRecurringEndDate.getMonth() + 1);
+							 recurringDateParts[1] = "" + currentDateTime.SetRecurringEndDate.getDate();
+							 if (recurringDateParts[0].length < 2) { recurringDateParts[0] = "0" + recurringDateParts[0]; }
+							 if (recurringDateParts[1].length < 2) { recurringDateParts[1] = "0" + recurringDateParts[1]; }
+							 requestData.recurringEnd = currentDateTime.SetRecurringEndDate.getFullYear() + "-" + recurringDateParts[0] + "-" + recurringDateParts[1] + " 23:59";
+						 }
+					 }else{
+						 delete requestData.recurringType;
+					 }
 
 				}
             //Send request to the server
@@ -4530,6 +4536,14 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
             }
         }
     });
+
+	// Recurring types
+	$scope.RecurringTypes = [
+		{value: '', label: "No"},
+		{value: 'D', label: 'Every day'},
+		{value: 'W', label: 'Every week'},
+		{value: 'M', label: 'Every month'}
+	];
 }
 
 /**
