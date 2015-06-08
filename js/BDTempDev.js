@@ -1389,6 +1389,7 @@ var ngInbox = {
                     $sendScope.ScheduleCheck = true;
 
 						  $sendScope.RecurringTypes = [
+							  {value: '', label: "No"},
 							  {value: 'D', label: 'Every day'},
 							  {value: 'W', label: 'Every week'},
 							  {value: 'M', label: 'Every month'}
@@ -1399,7 +1400,11 @@ var ngInbox = {
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
 						  scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
-						  scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+						  if($sendScope.controllerParent.clickedMessage.recurringend != null){
+						  		scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+					 	  }else{
+							  scheduledDateTime.SetRecurringEndDate = new Date();
+						  }
 
 						  $sendScope.ArrayScheduledDateTime = [];
                     $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
@@ -1569,6 +1574,7 @@ var ngInbox = {
 					 $sendScope.ScheduleCheck = true;
 
 					 $sendScope.RecurringTypes = [
+						 {value: '', label: "No"},
 						 {value: 'D', label: 'Every day'},
 						 {value: 'W', label: 'Every week'},
 						 {value: 'M', label: 'Every month'}
@@ -1579,7 +1585,11 @@ var ngInbox = {
 					 scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
 					 scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
 					 scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
-					 scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+					 if($sendScope.controllerParent.clickedMessage.recurringend != null){
+						 scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+					 }else{
+						 scheduledDateTime.SetRecurringEndDate = new Date();
+					 }
 
 					 $sendScope.ArrayScheduledDateTime = [];
 					 $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
