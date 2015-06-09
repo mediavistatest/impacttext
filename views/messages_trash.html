@@ -71,23 +71,30 @@
 
 	</div><!-- end top button -->
 
-	<div>
+	<div ng-controller="SearchByDateCtrl">
 
-		<!--<input class="search-input" placeholder="Search by contact number, name, email or custom field" type="text" ng-model="filterOptions.filterText">-->
-		<input class="search-input" placeholder="Search term" type="text" ng-model="filterOptions.filterText">
-                <select chosen data-placeholder="search by" disable-search="true" ng-model="filterOptions.filterBy">
-                    <option></option>
-                    <option value="Contact">Contact</option>
-                    <option value="Message">Message</option>
-                    <option value="DateTime">Date/Time</option>
-                </select>
-                <button class="btn btn-search" ng-click="refresh()" ng-controller="notifyCtrl">
-                <i class="fa fa-search"></i>
-                </button>
+            <input class="search-input" placeholder="Search by contact number, name, email or custom field" type="text" ng-model="filterOptions.filterText">
+            
+            <span class="label-icon">
+            &nbsp;&nbsp;&nbsp;<i class="fa fa-calendar"></i>
+            </span>
+            <div class="btn-group datetimepicker-wrapper" >
+                <input id="idStartDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="StartDate" is-open="opened" min-date="" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+            </div>
+            <span class="label-icon">
+            &nbsp; to
+            </span>
+            <div class="btn-group datetimepicker-wrapper" >
+                <input id="idEndDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="EndDate" is-open="opened2" min-date="StartDate" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open2($event)" />
+            </div>
+            
+            <button class="btn btn-search" ng-click="refresh()" ng-controller="notifyCtrl">
+            <i class="fa fa-search"></i>
+            </button>
+            
+            <!-- end search by -->
 
-                <!-- end search by -->
-
-	</div>
+    </div>
 
 	<br>
 

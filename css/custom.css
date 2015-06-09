@@ -4922,7 +4922,18 @@ ul.bar-legend {
 .send-mesasge-schedule-field-wrapper .timing input { width: 56px; }
 .send-mesasge-schedule-field-wrapper .chosen-single { cursor: pointer; }
 
-
+.messages .datetimepicker-wrapper > input {
+  margin-bottom: 0 !important;
+  width: 105px;
+  height: 30px;
+}
+.messages .datetimepicker-wrapper {
+  vertical-align: top;
+  display: inline-block;
+}
+.messages button.btn.btn-search {
+    margin-left:10px;
+}
 
 /*MEDIA QUERIES*/
 @media (max-width: 1375px) {

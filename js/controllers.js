@@ -5147,6 +5147,46 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
     callRequest();
 }
 
+/*SEARCH BY DATE*/
+function SearchByDateCtrl($scope, $http, $cookieStore, $state) {
+    $scope.StartDate = '';
+    $scope.EndDate = '';
+    $scope.today = function() {
+        var monthBeforeToday = new Date();
+        monthBeforeToday.setMonth(monthBeforeToday.getMonth() - 1);
+        $scope.StartDate = monthBeforeToday;
+        $scope.EndDate = new Date();
+    };
+    $scope.today();
+    $scope.clear = function() {
+        $scope.StartDate = null;
+        $scope.EndDate = null;
+    };
+    // Disable weekend selection
+    //$scope.disabled = function(date, mode) {
+    //  return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    //};
+    $scope.toggleMin = function() {
+        $scope.minDate = $scope.minDate ? null : new Date();
+    };
+    $scope.toggleMin();
+    $scope.open = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.opened = true;
+    };
+    $scope.open2 = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.opened2 = true;
+    };
+    $scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1,
+        showWeeks: 'false',
+        initDate: 'false'
+    };
+}
 
 angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
@@ -5187,6 +5227,7 @@ angular.module('inspinia').controller('DashboardBarCtrl', ['$scope', '$http', '$
 angular.module('inspinia').controller('DashboardCalendarCtrl', ['$scope', '$http', '$cookieStore', DashboardCalendarCtrl]);
 angular.module('inspinia').controller('DashboardInboxCtrl', ['$scope', '$http', '$cookieStore', DashboardInboxCtrl]);
 angular.module('inspinia').controller('ReportsBarCtrl', ['$scope', '$http', '$cookieStore', '$state', ReportsBarCtrl]);
+angular.module('inspinia').controller('SearchByDateCtrl', ['$scope', '$http', '$cookieStore', '$state', SearchByDateCtrl]);
 angular.module('inspinia').controller('ngSettintsCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Settings.Controller]);
 angular.module('inspinia').controller('ngNumbersCtrl', ['$scope', '$http', '$cookieStore', ngSettings.NumberNames.Controller]);
 angular.module('inspinia').controller('ngForwardEmailCtrl', ['$scope', '$http', '$cookieStore', ngSettings.ForwardEmails.Controller]);
