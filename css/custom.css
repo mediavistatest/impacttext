@@ -4116,7 +4116,7 @@ a.back-btn {
     border-color: #e36f1e;
     color: #FFFFFF;
 }
-.manage-list .chosen-container {
+.manage-list .chosen-container, .messages .chosen-container {
     position: relative;
     /* display: inline-block; */
 
@@ -4133,7 +4133,7 @@ padding: 0;
     top: -2px;
     border-radius: 0;
 }
-.manage-list .chosen-container-single .chosen-single {
+.manage-list .chosen-container-single .chosen-single, .messages .chosen-container-single .chosen-single {
     background: #ffffff;
     box-shadow: none;
     -moz-box-sizing: border-box;
@@ -4149,13 +4149,13 @@ padding: 0;
     position: relative;
     width: 100%;
 }
-.manage-list input.search-input {
+.manage-list input.search-input, .messages input.search-input {
     padding: 5px 12px;
     width: 30%;
     margin-bottom: 20px;
     border: 1px solid lightgrey;
 }
-.manage-list .chosen-container-single .chosen-drop {
+.manage-list .chosen-container-single .chosen-drop, .messages .chosen-container-single .chosen-drop {
     margin-top: -1px;
     border-radius: 0 0 4px 4px;
     background-clip: padding-box;

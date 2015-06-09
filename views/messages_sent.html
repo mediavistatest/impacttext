@@ -49,7 +49,20 @@
         </div>
     </div><!-- end top button -->
     <div>
-        <input class="search-input" placeholder="Search by contact number, name, email or custom field" type="text" ng-model="filterOptions.filterText">
+        <!--<input class="search-input" placeholder="Search by contact number, name, email or custom field" type="text" ng-model="filterOptions.filterText">-->
+        <input class="search-input" placeholder="Search term" type="text" ng-model="filterOptions.filterText">
+                <select chosen data-placeholder="search by" disable-search="true" ng-model="filterOptions.filterBy">
+                    <option></option>
+                    <option value="ContactList">Contact/List</option>
+                    <option value="Message">Message</option>
+                    <option value="DateSent">Date Sent</option>
+                    <option value="From">From</option>
+                </select>
+                <button class="btn btn-search" ng-click="refresh()" ng-controller="notifyCtrl">
+                <i class="fa fa-search"></i>
+                </button>
+
+                <!-- end search by -->
     </div>
     <br>
     <!--START TABLE-->
