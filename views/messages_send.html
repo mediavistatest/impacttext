@@ -92,7 +92,8 @@ Send
 
             <div class="col-sm-6">
 
-                <select chosen data-placeholder="Select your number..." disable-search="true"  class="form-control m-b" name="FromNumber" ng-model="FromNumber" ng-options="fromNumber.DID for fromNumber in fromNumbers track by fromNumber.DIDID">{{fromNumbers}}
+                <select chosen data-placeholder="Select your number..." disable-search="true"  class="form-control m-b" name="FromNumber" ng-model="FromNumber" ng-options="fromNumber.DID for fromNumber in fromNumbers track by fromNumber.DIDID">
+                    {{fromNumbers}}
 
                 </select>
 
@@ -173,7 +174,8 @@ Send
                         {{dynamicContent[tag]}}
                     </button>
                 </div>
-                <textarea id="send-message-txtarea" name="MessageTxt" class="form-control" ng-maxlength="{{ maxLength }}" rows="3" ng-model="MessageTxt" ng-trim="false"></textarea>
+                <textarea id="send-message-txtarea" name="MessageTxt" class="form-control" ng-maxlength="{{ maxLength }}" rows="3" ng-model="MessageTxt" ng-trim="false"></textarea>                
+
 
 
 
@@ -243,7 +245,7 @@ Send
                 </select>
 
                 <div class="animate-switch-container" ng-switch on="OptOutMsg">
-                    <textarea ng-init="optFields.OptOutTxt1='Reply STOP to end msgs.'; optFields.OptOutTxt2=''; optFields.OptOutTxt3=''" ng-switch-when="standard" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt1" ng-trim="false" readonly></textarea>
+                    <textarea ng-init="optFields.OptOutTxt1='Reply STOP to end msgs.'; optFields.OptOutTxt2=''; optFields.OptOutTxt3=''" ng-switch-when="standard" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt1" ng-trim="false" readonly></textarea>                    
 
 
                      <textarea ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt2=main.Settings.defaultOptOutText; optFields.OptOutTxt3=''" ng-switch-when="custom" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt2" ng-trim="false" readonly></textarea>
@@ -251,6 +253,7 @@ Send
                      <textarea ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt2=''; optFields.OptOutTxt3=''" ng-switch-when="noMessage" name="message" class="form-control opt-out disabled" rows="2" disabled></textarea>
 
                      <textarea ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt2=''" ng-switch-when="write" placeholder="Write your opt-out message" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt3"  ng-trim="false" ></textarea>
+
 
 
 
@@ -279,108 +282,146 @@ Send
 
         <div ng-show="ScheduleCheck">
             <div class="form-group clearfix" ng-repeat="sheduledDateTime in ArrayScheduledDateTime">
-					<div class="row">
-						 <label class="col-sm-2 control-label">Schedule:</label>
+                <div class="row">
 
-						 <div class="send-mesasge-schedule-row col-md-10">
-							 <div class="send-mesasge-schedule-field-wrapper">
-								  <span class="label-icon"><i class="fa fa-calendar"></i></span>
-								  <div class="btn-group datetimepicker-wrapper" >
-										<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="sheduledDateTime.SetDate" is-open="sheduledDateTime.opened" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event,sheduledDateTime)" />
-								  </div>
-							 </div>
+                    <label class="col-sm-2 control-label">
+                        <button class="btn btn-search" ng-click="ArrayScheduledDateTime.splice($index, 1)"  ng-show="ArrayScheduledDateTime.length>1 && ScheduleCheck">
+                            <i class="fa fa-minus">
+                            </i>
+                        </button>
+                        Schedule:</label>
+                    <div class="send-mesasge-schedule-row col-md-10">
+                        <div class="send-mesasge-schedule-field-wrapper">
+                            <span class="label-icon"><i class="fa fa-calendar">
+                                </i></span>
+                            <div class="btn-group datetimepicker-wrapper" >
+                                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="sheduledDateTime.SetDate" is-open="sheduledDateTime.opened" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event,sheduledDateTime)" />
+                            </div>
+                        </div>
 
-							 <div class="send-mesasge-schedule-field-wrapper">
-								  <span class="label-icon"><i class="fa fa-clock-o"></i></span>
-								  <div class="btn-group timing" dropdown is-open="status.isopenHour">
-										<input type="text" name="SetTimeHour" placeholder="Hour" class="form-control" dropdown-toggle ng-model="sheduledDateTime.SetTimeHour" readonly>
-										<ul class="dropdown-menu time-pick" role="menu">
-											<li>
-												<span>Set hours</span>
-											</li>
-											<!--li ng-repeat="setHourRow in [0, 1, 2, 3, 4, 5]">
-												<a ng-repeat="setHourLink in [setHourRow * 4, setHourRow * 4 + 1, setHourRow * 4 + 2, setHourRow * 4 + 3]" ng-click='sheduledDateTime.SetTimeHour = (setHourLink < 10) ? "0" + setHourLink : setHourLink'>{{(setHourLink < 10) ? "0" + setHourLink : setHourLink}}</a>
-											</li-->
-											<li>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "00"'>00</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "01"'>01</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "02"'>02</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "03"'>03</a>
-											</li>
-											<li>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "04"'>04</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "05"'>05</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "06"'>06</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "07"'>07</a>
-											</li>
-											<li>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "08"'>08</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "09"'>09</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "10"'>10</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "11"'>11</a>
-											</li>
-											<li>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "12"'>12</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "13"'>13</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "14"'>14</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "15"'>15</a>
-											</li>
-											<li>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "16"'>16</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "17"'>17</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "18"'>18</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "19"'>19</a>
-											</li>
-											<li>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "20"'>20</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "21"'>21</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "22"'>22</a>
-											  <a ng-click='sheduledDateTime.SetTimeHour = "23"'>23</a>
-											</li>
-										</ul>
-								  </div>
+                        <div class="send-mesasge-schedule-field-wrapper">
+                            <span class="label-icon"><i class="fa fa-clock-o">
+                                </i></span>
+                            <div class="btn-group timing" dropdown is-open="status.isopenHour">
+                                <input type="text" name="SetTimeHour" placeholder="Hour" class="form-control" dropdown-toggle ng-model="sheduledDateTime.SetTimeHour" readonly>
+                                <ul class="dropdown-menu time-pick" role="menu">
+                                    <li>
+                                        <span>
+                                            Set hours</span>
+                                    </li>
+                                    <!--li ng-repeat="setHourRow in [0, 1, 2, 3, 4, 5]">
+                                    <a ng-repeat="setHourLink in [setHourRow * 4, setHourRow * 4 + 1, setHourRow * 4 + 2, setHourRow * 4 + 3]" ng-click='sheduledDateTime.SetTimeHour = (setHourLink < 10) ? "0" + setHourLink : setHourLink'>{{(setHourLink < 10) ? "0" + setHourLink : setHourLink}}</a>
+                                    </li-->
+                                    <li>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "00"'>
+                                        00</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "01"'>
+                                        01</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "02"'>
+                                        02</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "03"'>
+                                        03</a>
+                                    </li>
+                                    <li>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "04"'>
+                                        04</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "05"'>
+                                        05</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "06"'>
+                                        06</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "07"'>
+                                        07</a>
+                                    </li>
+                                    <li>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "08"'>
+                                        08</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "09"'>
+                                        09</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "10"'>
+                                        10</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "11"'>
+                                        11</a>
+                                    </li>
+                                    <li>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "12"'>
+                                        12</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "13"'>
+                                        13</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "14"'>
+                                        14</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "15"'>
+                                        15</a>
+                                    </li>
+                                    <li>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "16"'>
+                                        16</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "17"'>
+                                        17</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "18"'>
+                                        18</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "19"'>
+                                        19</a>
+                                    </li>
+                                    <li>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "20"'>
+                                        20</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "21"'>
+                                        21</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "22"'>
+                                        22</a>
+                                        <a ng-click='sheduledDateTime.SetTimeHour = "23"'>
+                                        23</a>
+                                    </li>
+                                </ul>
+                            </div>
 
-								  &nbsp;:&nbsp;
+                            &nbsp;:&nbsp;
 
-								  <div class="btn-group timing" dropdown is-open="status.isopenMinute">
-										<input type="text" name="SetTimeMinute" placeholder="Minute" class="form-control" dropdown-toggle ng-model="sheduledDateTime.SetTimeMinute" readonly>
-										<ul class="dropdown-menu time-pick" role="menu">
-											 <li>
-												  <span>Set minutes</span>
-											 </li>
-											 <li>
-												  <!--a ng-repeat="setMinutesLink in ['00','15', '30', '45']" ng-click='sheduledDateTime.SetTimeMinute = setMinutesLink'>{{setMinutesLink}}</a-->
-													<a ng-click='sheduledDateTime.SetTimeMinute = "00"'>00</a>
-													<a ng-click='sheduledDateTime.SetTimeMinute = "15"'>15</a>
-													<a ng-click='sheduledDateTime.SetTimeMinute = "30"'>30</a>
-													<a ng-click='sheduledDateTime.SetTimeMinute = "45"'>45</a>
-											 </li>
-										</ul>
-								  </div>
-							 </div>
-						 </div>
-					</div>
+                            <div class="btn-group timing" dropdown is-open="status.isopenMinute">
+                                <input type="text" name="SetTimeMinute" placeholder="Minute" class="form-control" dropdown-toggle ng-model="sheduledDateTime.SetTimeMinute" readonly>
+                                <ul class="dropdown-menu time-pick" role="menu">
+                                    <li>
+                                        <span>
+                                            Set minutes</span>
+                                    </li>
+                                    <li>
+                                        <!--a ng-repeat="setMinutesLink in ['00','15', '30', '45']" ng-click='sheduledDateTime.SetTimeMinute = setMinutesLink'>{{setMinutesLink}}</a-->
+                                        <a ng-click='sheduledDateTime.SetTimeMinute = "00"'>
+                                        00</a>
+                                        <a ng-click='sheduledDateTime.SetTimeMinute = "15"'>
+                                        15</a>
+                                        <a ng-click='sheduledDateTime.SetTimeMinute = "30"'>
+                                        30</a>
+                                        <a ng-click='sheduledDateTime.SetTimeMinute = "45"'>
+                                        45</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-					<div class="row">
-						 <label class="col-sm-2 control-label">Recur:</label>
-						 <div class="send-mesasge-schedule-row col-md-10">
-							 <div class="send-mesasge-schedule-field-wrapper">
-								 <span class="label-icon" title="Every"><i class="fa fa-history"></i></span>
-								 <div class="btn-group chosen">
-									 <select chosen data-placeholder="Select an Option..." disable-search="true"  class="form-control m-b" ng-model="sheduledDateTime.SetRecurringType" ng-options="item.value as item.label for item in RecurringTypes"></select>
-								 </div>
-							 </div>
+                <div class="row">
+                    <label class="col-sm-2 control-label">
+                        Recur:</label>
+                    <div class="send-mesasge-schedule-row col-md-10">
+                        <div class="send-mesasge-schedule-field-wrapper">
+                            <span class="label-icon" title="Every"><i class="fa fa-history">
+                                </i></span>
+                            <div class="btn-group chosen">
+                                <select chosen data-placeholder="Select an Option..." disable-search="true"  class="form-control m-b" ng-model="sheduledDateTime.SetRecurringType" ng-options="item.value as item.label for item in RecurringTypes"></select>
+                            </div>
+                        </div>
 
-							 <div class="send-mesasge-schedule-field-wrapper">
-								 <span class="label-icon" title="End date"><i class="fa fa-power-off"></i></span>
-								 <div class="btn-group datetimepicker-wrapper">
-									 <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="sheduledDateTime.SetRecurringEndDate" is-open="sheduledDateTime.opened_recurring" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="false" close-text="Close" ng-click="openRecurring($event,sheduledDateTime)" ng-disabled="!sheduledDateTime.SetRecurringType" />
-								 </div>
-							 </div>
-						 </div>
-					</div>
-
-
+                        <div class="send-mesasge-schedule-field-wrapper">
+                            <span class="label-icon" title="End date"><i class="fa fa-power-off">
+                                </i></span>
+                            <div class="btn-group datetimepicker-wrapper">
+                                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="sheduledDateTime.SetRecurringEndDate" is-open="sheduledDateTime.opened_recurring" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="false" close-text="Close" ng-click="openRecurring($event,sheduledDateTime)" ng-disabled="!sheduledDateTime.SetRecurringType" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <a ng-click="AddScheduledDateTime()" ng-show="ArrayScheduledDateTime.length<5 && ScheduleCheck">
             + Add more
@@ -504,7 +545,7 @@ Send
                 Schedule</span>
 
             </a>
-		  </div>
+        </div>
 
     </form>
 
