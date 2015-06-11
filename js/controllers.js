@@ -545,6 +545,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                     if (j < main.fromNumbers.length - 1) {
                         main.fromNumbersString += ',';
                     }
+
+						 main.Settings.Numbers[j].name = main.fromNumbers[j].fromName;
                 }
             };
             var errorDidGet = function(data, status, headers, config, $inScope) {
@@ -3593,7 +3595,7 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 //NOTIFY CTRL
 var notifyInitialised = false;
 function notifyCtrl($scope, notify) {
-    if (!notifyInitialised) {
+    if ($scope.forceNotifyInit || !notifyInitialised) {
         notifyInitialised = true;
         $scope.msg = 'Hello! This is a sample message!';
         $scope.demo = function() {
@@ -4084,6 +4086,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 if (j < $inScope.main.fromNumbers.length - 1) {
                     $inScope.main.fromNumbersString += ',';
                 }
+
+					$inScope.main.Settings.Numbers[j].name = $inScope.main.fromNumbers[j].fromName;
             }
 
             if ($inScope.main.Settings.Numbers && $inScope.main.Settings.Numbers.length > 0 && $inScope.FromNumber && $inScope.FromNumber.DID) {
@@ -4512,15 +4516,15 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
     // Dynamic content (tags)
     $scope.dynamicContent = {
-        '[firstname]' : 'first name',
-        '[lastname]' : 'last name',
-        '[emailaddress]' : 'email',
-        '[contactsource]' : 'contact source',
-        '[custom1]' : 'custom 1',
-        '[custom2]' : 'custom 2',
-        '[custom3]' : 'custom 3',
-        '[custom4]' : 'custom 4',
-        '[custom5]' : 'custom 5'
+        '{firstname}' : 'first name',
+        '{lastname}' : 'last name',
+        '{emailaddress}' : 'email',
+        '{contactsource}' : 'contact source',
+        '{custom1}' : 'custom 1',
+        '{custom2}' : 'custom 2',
+        '{custom3}' : 'custom 3',
+        '{custom4}' : 'custom 4',
+        '{custom5}' : 'custom 5'
     };
     $scope.dynamicContentKeys = Object.keys($scope.dynamicContent);
     $scope.insertDynamicContent = function(elem_id, tag) {

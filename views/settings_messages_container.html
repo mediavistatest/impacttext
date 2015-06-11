@@ -7,7 +7,7 @@
 		<p>Set if you wish to forward incoming SMS messages to email for each individual number.</p>
 		<br />
 
-		<div class="form-group form-group-header clearfix" ng-controller="notifyCtrl">
+		<div class="form-group form-group-header clearfix" ng-controller="notifyCtrl" ng-init="forceNotifyInit = true">
 			<div class="col-sm-4"><label>ImpactText Number</label></div>
 			<div class="col-sm-4"><label>Forward Email Address</label></div>
 			<div class="col-sm-4"></div>
@@ -27,7 +27,7 @@
 		</div>
 	</div>
 
-	<div class="settings-section-email2sms settings-section" ng-controller="ngEmail2SMSCtrl as e2sCtrl">
+	<div class="settings-section-email2sms settings-section" ng-controller="ngEmail2SMSCtrl as e2sCtrl" ng-init="forceNotifyInit = true">
 		<h2 class="section-title">Email to SMS forwarding</h2>
 		<p>Register email addresses for Email to SMS forwarding</p>
 		<br />

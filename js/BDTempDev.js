@@ -1908,7 +1908,35 @@ var ngSettings = {
     },
     NumberNames : {
         ServerRequests : {
+			  ModifyNumbers : function(cpo, didid, from_name) {
+				  var params = {
+					  apikey : cpo.$scope.main.authToken,
+					  accountID : cpo.$scope.main.accountID,
+					  companyID : cpo.$scope.main.accountInfo.companyID,
+					  DIDID : didid,
+					  fromName: from_name,
+					  sethttp : 1
 
+				  };
+				  var $param = $.param(params);
+
+				  //POST
+				  cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param).success(function(data) {
+					  if (data.apicode == 0) {
+						  cpo.$scope.$broadcast('itMessage', {
+							  message : 'ImpactText Number settings saved'
+						  });
+					  } else {
+						  cpo.$scope.$broadcast('itMessage', {
+							  message : 'Failed to save ImpactText Number settings!'
+						  });
+						  console.log('did_get: ' + data.apitext);
+					  }
+				  }).error(function(data, status, headers, config){
+					  cpo.$scope.$broadcast('itMessage', {message : 'Failed to save ImpactText Number settings!'});
+					  console.log('did_get: ' + data.apitext);
+				  });
+			  }
         },
         Events : {
             DefaultNumber_onChange : function(cpo, Number) {
@@ -1921,18 +1949,17 @@ var ngSettings = {
                 }
             },
             Save_onClick : function(cpo) {
-                cpo.$scope.main.ipCookie('itSettings', cpo.$scope.main.Settings, {
-                    expires : 365,
-                    expirationUnit : 'days'
-                });
-                cpo.$scope.$broadcast('itMessage', {
-                    message : 'ImpactText Number settings saved'
-                });
+					for(var j in cpo.$scope.main.Settings.Numbers){
+						if(cpo.numCtrl.numbers[j].name && cpo.numCtrl.numbers[j].name != ''){
+							ngSettings.NumberNames.ServerRequests.ModifyNumbers(cpo, cpo.$scope.main.Settings.Numbers[j].DIDID, cpo.numCtrl.numbers[j].name);
+						}
+					}
             }
         },
         Controller : function($scope, $http, $cookieStore) {
             var numCtrl = this;
             var cpo = ngSettings.NumberNames;
+			   cpo.numCtrl = numCtrl;
             cpo.$scope = $scope;
             cpo.$http = $http;
             cpo.$cookieStore = $cookieStore;
