@@ -1999,20 +1999,18 @@ var ngSettings = {
                     console.log('did_get: ' + data.apitext);
                 });
             },
-            ModifyNumbers : function(cpo, didid, email, callback) {
+			  ModifyForwardEmails : function(cpo, didid, email, callback) {
                 var params = {
                     apikey : cpo.$scope.main.authToken,
                     accountID : cpo.$scope.main.accountID,
                     companyID : cpo.$scope.main.accountInfo.companyID,
-                    DIDID : didid,
-                    sethttp : 1
-
+                    DIDID : didid
                 };
-                params.emailForwardAddress = email;
+                params.emailforwardaddress = email;
                 var $param = $.param(params);
 
                 //POST
-                cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param).success(function(data) {
+                cpo.$http.post(inspiniaNS.wsUrl + "did_modifyemail", $param).success(function(data) {
                     if (data.apicode == 0) {
                         callback();
                     } else {
@@ -2028,7 +2026,7 @@ var ngSettings = {
         Events : {
             Save_onClick : function(cpo, key) {
                 if (cpo.fwCtrl && cpo.fwCtrl.numbers && cpo.fwCtrl.numbers.hasOwnProperty(key) && cpo.fwCtrl.numbers[key].DIDID) {
-                    ngSettings.ForwardEmails.ServerRequests.ModifyNumbers(cpo, cpo.fwCtrl.numbers[key].DIDID, cpo.fwCtrl.numbers[key].emailForwardAddress, function() {
+                    ngSettings.ForwardEmails.ServerRequests.ModifyForwardEmails(cpo, cpo.fwCtrl.numbers[key].DIDID, cpo.fwCtrl.numbers[key].emailForwardAddress, function() {
                         cpo.fwCtrl.edit[key] = false;
                         cpo.$scope.$broadcast('ModifyDIDForwardEmailSuccess');
                     });
