@@ -716,15 +716,24 @@ var ngInbox = {
                 ngInbox._internal.Methods.GetThread(controllerParent, true, continueFunction);
             },
             ExportToFile : function(controllerParent, callback) {
-                // console.log(controllerParent.mesageTextToExport)
+                var txtDiv_ = document.createElement('div');
+                txtDiv_.setAttribute('id', 'itExportedMessagesText');
+                txtDiv_.innerText = controllerParent.mesageTextToExport;
+                document.getElementsByTagName("body")[0].appendChild(txtDiv_);
+                
                 var link = document.createElement('a');
+                link.setAttribute('id', 'itExportedMessages');
                 var mimeType = 'text/plain';
 
                 link.setAttribute('download', 'ExportedMessages.txt');
-                link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + controllerParent.mesageTextToExport);
+                link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + txtDiv_.innerText);                
+                
+                document.getElementsByTagName("body")[0].appendChild(link);
+               
                 link.click();
                 controllerParent.mesageTextToExport = '';
                 callback();
+     
             }
         },
         Settings : {
