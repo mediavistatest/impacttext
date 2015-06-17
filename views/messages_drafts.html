@@ -4,6 +4,7 @@
 	<a ui-sref-active="active" ui-sref="messages.inbox" class="btn tab-style active"><i class="fa fa-inbox"></i> Inbox</a>
 	<a ui-sref-active="active" ui-sref="messages.sent" class="btn tab-style"><i class="fa fa-share-square"></i> Sent</a>
 	<a ui-sref-active="active" ui-sref="messages.scheduled" class="btn tab-style"><i class="fa fa-clock-o"></i> Scheduled</a>
+	<a ui-sref-active="active" ui-sref="messages.recurring" class="btn tab-style"><i class="fa fa-history"></i> Recurring</a>
 	<a ui-sref-active="active" ui-sref="messages.drafts" class="btn tab-style"><i class="fa fa-pencil-square"></i> Drafts</a>
 	<a ui-sref-active="active" ui-sref="messages.trash" class="btn tab-style"><i class="fa fa-trash-o"></i> Trash</a>
 </div>
@@ -50,11 +51,30 @@
 
 	</div><!-- end top button -->
 
-	<div>
+	<div ng-controller="SearchByDateCtrl">
 
-		<input class="search-input" placeholder="Search by contact number, name, email or custom field" type="text" ng-model="filterOptions.filterText">
+            <input ng-model="filterOptions.filterText" class="search-input" placeholder="Search by contact number, name, email or custom field" type="text">
 
-	</div>
+            <span class="label-icon">
+            &nbsp;&nbsp;&nbsp;<i class="fa fa-calendar"></i>
+            </span>
+            <div class="btn-group datetimepicker-wrapper" >
+                <input ng-model="filterOptions.startDate" id="idStartDate" type="text" class="form-control" datepicker-popup="{{format}}" is-open="opened" min-date="" show-weeks="false" max-date="filterOptions.endDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+            </div>
+            <span class="label-icon">
+            &nbsp; to
+            </span>
+            <div class="btn-group datetimepicker-wrapper" >
+                <input ng-model="filterOptions.endDate" id="idEndDate" type="text" class="form-control" datepicker-popup="{{format}}" is-open="opened2" min-date="filterOptions.startDate" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open2($event)" />
+            </div>
+
+            <button class="btn btn-search" ng-click="getPagedDataAsync(controllerParent)" ng-controller="notifyCtrl">
+            <i class="fa fa-search"></i>
+            </button>
+
+            <!-- end search by -->
+
+    </div>
 
 	<br>
 

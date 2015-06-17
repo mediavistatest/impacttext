@@ -79,6 +79,10 @@ var ngInbox = {
             FilterOptions : function() {
                 var self = this;
                 self.filterText = '';
+                var monthBeforeToday = new Date();
+                monthBeforeToday.setMonth(monthBeforeToday.getMonth() - 1);
+                self.startDate = monthBeforeToday;
+                self.endDate = new Date();
             }
         },
         Methods : {
@@ -170,7 +174,9 @@ var ngInbox = {
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
-                $scope.ngOptions.selectAll(false);
+                setTimeout(function() {
+                    $scope.ngOptions.selectAll(false);
+                }, 100);
             },
             GetPagedDataAsync : function(controllerParent) {
                 if (!controllerParent.getDataBlocked) {
@@ -183,6 +189,9 @@ var ngInbox = {
                     var page = controllerParent.$scope.pagingOptions.currentPage;
 
                     var searchText = controllerParent.$scope.filterOptions.filterText;
+                    var startDate = controllerParent.$scope.filterOptions.startDate;
+                    var endDate = controllerParent.$scope.filterOptions.endDate;
+
                     var params = {
                         apikey : controllerParent.$scope.main.authToken,
                         accountID : controllerParent.$scope.main.accountID,
@@ -199,6 +208,13 @@ var ngInbox = {
                     } else {
                         if (String(searchText).length != 0)
                             return;
+                    }
+
+                    if (startDate) {
+                        params.startDate = startDate.toISOString().substring(0, 10) + ' 00:00:00';;
+                    }
+                    if (endDate) {
+                        params.endDate = endDate.toISOString().substring(0, 10) + ' 00:00:00';;
                     }
 
                     var $param = $.param(params);
@@ -655,23 +671,29 @@ var ngInbox = {
                 inParent.ThreadPageOptions.currentPage--;
                 ngInbox._internal.Methods.GetThread(inParent);
             },
-            ExportMessage : function(controllerParent, message, exportSingle, callback) {
+            ExportMessage : function(controllerParent, messageObject, exportSingle, callback) {
                 ngInbox._internal.ErrorMsg = 'Exporting message(s) failed!';
+                var message = '';
                 if (!callback) {
                     var callback = function() {
                         controllerParent.$scope.$broadcast("ExportToTextMessageSucceeded");
                     };
                 }
 
-                if (!message) {
-                    message = controllerParent.clickedMessage.message;
+                if (!messageObject) {
+                    message = controllerParent.clickedMessage.sourceANI + ': ' + controllerParent.clickedMessage.message;
+                } else {
+                    //console.log(messageObject);
+                    message = messageObject.sourceANI + ': ' + messageObject.message;
                 }
 
-                if (!controllerParent.mesageTextToExport) {
-                    controllerParent.mesageTextToExport = '';
-                }
                 var enter = '%0D%0A';
-                controllerParent.mesageTextToExport = controllerParent.mesageTextToExport + enter + enter + message;
+
+                if (!controllerParent.mesageTextToExport) {
+                    controllerParent.mesageTextToExport = message;
+                } else {
+                    controllerParent.mesageTextToExport = controllerParent.mesageTextToExport + enter + enter + message;
+                }
 
                 if (exportSingle) {
                     ngInbox._internal.Methods.ExportToFile(controllerParent, callback);
@@ -683,7 +705,7 @@ var ngInbox = {
                 };
                 if (controllerParent.$scope.mySelections.length > 0) {
                     for (var i = 0; i < controllerParent.$scope.mySelections.length; i++) {
-                        ngInbox._internal.Methods.ExportMessage(controllerParent, controllerParent.$scope.mySelections[i].message, false, callback);
+                        ngInbox._internal.Methods.ExportMessage(controllerParent, controllerParent.$scope.mySelections[i], false, callback);
                     }
                 }
                 ngInbox._internal.Methods.ExportToFile(controllerParent, callback);
@@ -1389,10 +1411,224 @@ var ngInbox = {
                     $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
                     $sendScope.ScheduleCheck = true;
 
+                    $sendScope.RecurringTypes = [{
+                        value : '',
+                        label : "No"
+                    }, {
+                        value : 'D',
+                        label : 'Every day'
+                    }, {
+                        value : 'W',
+                        label : 'Every week'
+                    }, {
+                        value : 'M',
+                        label : 'Every month'
+                    }];
+
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
                     scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
+                    if ($sendScope.controllerParent.clickedMessage.recurringend != null) {
+                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+                    } else {
+                        scheduledDateTime.SetRecurringEndDate = new Date();
+                    }
+
+                    $sendScope.ArrayScheduledDateTime = [];
+                    $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
+                };
+
+                ngInbox._internal.Methods.GetANI($sendScope.controllerParent, continueFunction);
+            } catch(e) {
+                //TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
+                console.log(e);
+            }
+
+        },
+        PostSuccess : function(controllerParent, result) {
+            ngInbox._internal.Methods.PostSuccess(controllerParent, result);
+        }
+    },
+    RecurringList : {
+        Name : 'Recurring',
+        getListAction : 'messages_outbound',
+        getListStatus : 'T',
+        statusChangeAction : null, //'message_changeoutboundstatus',
+        deleteMessagesChangeAction : 'message_deleteoutbound',
+        primaryKey : 'outboundMessageID',
+        columnDefs : [{
+            checked : true,
+            canBeClicked : true,
+            field : 'con_lis',
+            displayName : 'Contact/List',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
+        }, {
+            checked : true,
+            canBeClicked : true,
+            field : 'message',
+            displayName : 'Message',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : 'createdDate',
+            displayName : 'Date created'
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : 'scheduledDate',
+            displayName : 'Date scheduled'
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : 'recurringtype',
+            displayName : 'Repeat',
+            cellTemplate : 'views/table/RecurringType.html'
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : 'recurringend',
+            displayName : 'Until'
+        }, {
+            button : 'Edit',
+            checked : true,
+            canBeClicked : false,
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ng-click="controllerParent.Events.Message_onClick(controllerParent,row)"><i class="fa fa-pencil"></i> Edit </a></div>'
+        }],
+        sortOptions : {
+            fields : ['createdDate'],
+            directions : ['DESC'],
+            useExternalSorting : true
+        },
+        defaultSortField : 'scheduledDate',
+        errorMessage : 'Unexpected error occurred when trying to fetch recurring messages list!',
+        hashUrlviewMessage : 'messages.view_recurring',
+        $scope : null,
+        $http : null,
+        $cookieStore : null,
+        clickedMessage : null,
+        list : true,
+        view : false,
+        send : false,
+        settings : false,
+        Events : {
+            Settings_onClick : function(inParent) {
+                ngInbox._internal.Settings.Settings(inParent);
+            },
+            ColumnCanBeClicked_onChange : function(inParent, column, index) {
+                ngInbox._internal.Settings.ColumnCanBeClicked_onChange(inParent, column, index);
+            },
+            ColumnUp_onClick : function(inParent, column, index) {
+                ngInbox._internal.Settings.ColumnUp_onClick(inParent, column, index);
+            },
+            ColumnDown_onClick : function(inParent, column, index) {
+                ngInbox._internal.Settings.ColumnDown_onClick(inParent, column, index);
+            },
+            UpdateColumns : function(inParent) {
+                ngInbox._internal.Settings.UpdateColumns(inParent);
+            },
+            Message_onClick : function(inParent, row) {
+                inParent.clickedMessage = row.entity;
+                inParent.Events.ShowView(inParent);
+            },
+            Send_onClick : function(inScope) {
+                // delete clicked message
+                inScope.controllerParent.Events.ShowList(inScope.controllerParent);
+            },
+            ShowList : function(inParent) {
+                inParent.list = true;
+                inParent.view = false;
+                inParent.send = false;
+                inParent.settings = false;
+            },
+            ShowView : function(inParent) {
+                inParent.list = false;
+                inParent.view = true;
+                inParent.send = false;
+                inParent.settings = false;
+            },
+            ShowSend : function(inParent) {
+                inParent.list = false;
+                inParent.view = false;
+                inParent.send = true;
+                inParent.settings = false;
+            },
+            ShowSettings : function(inParent) {
+                inParent.list = false;
+                inParent.view = false;
+                inParent.send = false;
+                inParent.settings = true;
+            },
+            InitialiseEvents : function(controllerParent) {
+            }
+        },
+        Controller : function($scope, $http, $cookieStore) {
+            //Controler parrent setting !!!!
+            var controllerParent = ngInbox.RecurringList;
+            controllerParent.Events.ShowList(controllerParent);
+
+            controllerParent.$scope = $scope;
+            controllerParent.$http = $http;
+            controllerParent.$cookieStore = $cookieStore;
+
+            ngInbox._internal.Methods.PopulateScope(controllerParent);
+            controllerParent.Events.InitialiseEvents(controllerParent);
+
+            controllerParent.$scope.RecurringTypeLabels = {
+                D : 'Every day',
+                W : 'Every week',
+                M : 'Every month'
+            };
+        },
+        PopulateSend : function($sendScope) {
+            try {
+                $sendScope.FromName = $sendScope.initial;
+                $sendScope.MessageType = 'SMS';
+
+                continueFunction = function() {
+                    $sendScope.ToNumber = $sendScope.controllerParent.ANIList;
+                    $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
+
+                    $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
+                    return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+                    })[0];
+                    $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                    return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                    })[0];
+
+                    $sendScope.OptOutMsg = '';
+                    $sendScope.OptOutTxt3 = $sendScope.initial;
+                    $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
+                    $sendScope.ScheduleCheck = true;
+
+                    $sendScope.RecurringTypes = [{
+                        value : '',
+                        label : "No"
+                    }, {
+                        value : 'D',
+                        label : 'Every day'
+                    }, {
+                        value : 'W',
+                        label : 'Every week'
+                    }, {
+                        value : 'M',
+                        label : 'Every month'
+                    }];
+
+                    var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+                    scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+                    scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
+                    if ($sendScope.controllerParent.clickedMessage.recurringend != null) {
+                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+                    } else {
+                        scheduledDateTime.SetRecurringEndDate = new Date();
+                    }
+
+                    $sendScope.ArrayScheduledDateTime = [];
                     $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
                 };
 
@@ -1709,7 +1945,37 @@ var ngSettings = {
     },
     NumberNames : {
         ServerRequests : {
+            ModifyNumbers : function(cpo, didid, from_name) {
+                var params = {
+                    apikey : cpo.$scope.main.authToken,
+                    accountID : cpo.$scope.main.accountID,
+                    companyID : cpo.$scope.main.accountInfo.companyID,
+                    DIDID : didid,
+                    fromName : from_name,
+                    sethttp : 1
 
+                };
+                var $param = $.param(params);
+
+                //POST
+                cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param).success(function(data) {
+                    if (data.apicode == 0) {
+                        cpo.$scope.$broadcast('itMessage', {
+                            message : 'ImpactText Number settings saved'
+                        });
+                    } else {
+                        cpo.$scope.$broadcast('itMessage', {
+                            message : 'Failed to save ImpactText Number settings!'
+                        });
+                        console.log('did_get: ' + data.apitext);
+                    }
+                }).error(function(data, status, headers, config) {
+                    cpo.$scope.$broadcast('itMessage', {
+                        message : 'Failed to save ImpactText Number settings!'
+                    });
+                    console.log('did_get: ' + data.apitext);
+                });
+            }
         },
         Events : {
             DefaultNumber_onChange : function(cpo, Number) {
@@ -1722,18 +1988,17 @@ var ngSettings = {
                 }
             },
             Save_onClick : function(cpo) {
-                cpo.$scope.main.ipCookie('itSettings', cpo.$scope.main.Settings, {
-                    expires : 365,
-                    expirationUnit : 'days'
-                });
-                cpo.$scope.$broadcast('itMessage', {
-                    message : 'ImpactText Number settings saved'
-                });
+                for (var j in cpo.$scope.main.Settings.Numbers) {
+                    if (cpo.numCtrl.numbers[j].name && cpo.numCtrl.numbers[j].name != '') {
+                        ngSettings.NumberNames.ServerRequests.ModifyNumbers(cpo, cpo.$scope.main.Settings.Numbers[j].DIDID, cpo.numCtrl.numbers[j].name);
+                    }
+                }
             }
         },
         Controller : function($scope, $http, $cookieStore) {
             var numCtrl = this;
             var cpo = ngSettings.NumberNames;
+            cpo.numCtrl = numCtrl;
             cpo.$scope = $scope;
             cpo.$http = $http;
             cpo.$cookieStore = $cookieStore;
@@ -1773,20 +2038,18 @@ var ngSettings = {
                     console.log('did_get: ' + data.apitext);
                 });
             },
-            ModifyNumbers : function(cpo, didid, email, callback) {
+            ModifyForwardEmails : function(cpo, didid, email, callback) {
                 var params = {
                     apikey : cpo.$scope.main.authToken,
                     accountID : cpo.$scope.main.accountID,
                     companyID : cpo.$scope.main.accountInfo.companyID,
-                    DIDID : didid,
-                    sethttp : 1
-
+                    DIDID : didid
                 };
-                params.emailForwardAddress = email;
+                params.emailforwardaddress = email;
                 var $param = $.param(params);
 
                 //POST
-                cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param).success(function(data) {
+                cpo.$http.post(inspiniaNS.wsUrl + "did_modifyemail", $param).success(function(data) {
                     if (data.apicode == 0) {
                         callback();
                     } else {
@@ -1802,7 +2065,7 @@ var ngSettings = {
         Events : {
             Save_onClick : function(cpo, key) {
                 if (cpo.fwCtrl && cpo.fwCtrl.numbers && cpo.fwCtrl.numbers.hasOwnProperty(key) && cpo.fwCtrl.numbers[key].DIDID) {
-                    ngSettings.ForwardEmails.ServerRequests.ModifyNumbers(cpo, cpo.fwCtrl.numbers[key].DIDID, cpo.fwCtrl.numbers[key].emailForwardAddress, function() {
+                    ngSettings.ForwardEmails.ServerRequests.ModifyForwardEmails(cpo, cpo.fwCtrl.numbers[key].DIDID, cpo.fwCtrl.numbers[key].emailForwardAddress, function() {
                         cpo.fwCtrl.edit[key] = false;
                         cpo.$scope.$broadcast('ModifyDIDForwardEmailSuccess');
                     });
