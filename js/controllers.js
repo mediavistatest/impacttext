@@ -151,6 +151,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 if (data.apicode == 0) {
                     //Reading contact lists
                     main.keywords = data.apidata;
+                    main.Settings.Numbers = new Array();
 
                     for (var number in main.fromNumbers) {
                         if ($.grep(main.Settings.Numbers, function(member) {
@@ -526,6 +527,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 
             main.ServerRequests.contactListsGet();
             var successDidGet = function(data, status, headers, config, $inScope) {
+                main.fromNumbersString = '';
                 if (data == null || typeof data.apicode == 'undefined') {
                     //This should never happen
                     main.fromNumbers = [];
@@ -4069,10 +4071,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         $scope.FromName = '';
 
         var successDidGet = function(data, status, headers, config, $inScope) {
-
+$inScope.main.fromNumbersString = '';
             if (data == null || typeof data.apicode == 'undefined') {
                 $inScope.main.fromNumbers = [];
-                return;
+                    return;
             }
             if (data.apicode == 0) {
                 $inScope.main.fromNumbers = data.apidata;
@@ -4086,7 +4088,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 if (j < $inScope.main.fromNumbers.length - 1) {
                     $inScope.main.fromNumbersString += ',';
                 }
-
 					$inScope.main.Settings.Numbers[j].name = $inScope.main.fromNumbers[j].fromName;
             }
 
