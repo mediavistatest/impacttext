@@ -1945,7 +1945,26 @@ var ngSettings = {
     },
     NumberNames : {
         ServerRequests : {
-            ModifyNumbers : function(cpo, didid, from_name) {
+			   GetNumbers : function(cpo, success, error){
+					var params = {
+						apikey : cpo.$scope.main.authToken,
+						accountID : cpo.$scope.main.accountID,
+						companyID : cpo.$scope.main.accountInfo.companyID,
+						sethttp : 1
+					};
+					var $param = $.param(params);
+
+					cpo.$http.post(inspiniaNS.wsUrl + "did_get", $param).success(function(data) {
+						if (data.apicode == 0) {
+							if(typeof success == 'function'){ success(data); }
+						} else {
+							if(typeof error == 'function'){ error(data); }
+						}
+					}).error(function(data, status, headers, config) {
+						if(typeof error == 'function'){ error(data); }
+					});
+				},
+            ModifyNumbers : function(cpo, didid, from_name, success, error) {
                 var params = {
                     apikey : cpo.$scope.main.authToken,
                     accountID : cpo.$scope.main.accountID,
@@ -1953,67 +1972,107 @@ var ngSettings = {
                     DIDID : didid,
                     fromName : from_name,
                     sethttp : 1
-
                 };
                 var $param = $.param(params);
 
-                //POST
                 cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param).success(function(data) {
                     if (data.apicode == 0) {
-                        cpo.$scope.$broadcast('itMessage', {
-                            message : 'ImpactText Number settings saved'
-                        });
+							   if(typeof success == 'function'){ success(data); }
                     } else {
-                        cpo.$scope.$broadcast('itMessage', {
-                            message : 'Failed to save ImpactText Number settings!'
-                        });
-                        console.log('did_get: ' + data.apitext);
+							   if(typeof error == 'function'){ error(data); }
                     }
                 }).error(function(data, status, headers, config) {
-                    cpo.$scope.$broadcast('itMessage', {
-                        message : 'Failed to save ImpactText Number settings!'
-                    });
-                    console.log('did_get: ' + data.apitext);
+						  if(typeof error == 'function'){ error(data); }
                 });
             }
         },
         Events : {
-            DefaultNumber_onChange : function(cpo, Number) {
+            DefaultNumber_onChange: function(cpo, Number) {
                 if (Number.prefered) {
-                    for (var N in cpo.$scope.main.Settings.Numbers) {
-                        if (cpo.$scope.main.Settings.Numbers[N].DID != Number.DID) {
-                            cpo.$scope.main.Settings.Numbers[N].prefered = false;
-                        }
-                    }
+						 for (var N in cpo.numCtrl.numbers) {
+							 if (cpo.numCtrl.numbers[N].DID != Number.DID) {
+								 cpo.numCtrl.numbers[N].prefered = false;
+							 }
+						 }
                 }
             },
             Save_onClick : function(cpo) {
-                for (var j in cpo.$scope.main.Settings.Numbers) {
-                    if (cpo.numCtrl.numbers[j].name && cpo.numCtrl.numbers[j].name != '') {
-                        ngSettings.NumberNames.ServerRequests.ModifyNumbers(cpo, cpo.$scope.main.Settings.Numbers[j].DIDID, cpo.numCtrl.numbers[j].name);
+                for (var j in cpo.numCtrl.numbers) {
+                    if (cpo.numCtrl.numbers[j].fromName && cpo.numCtrl.numbers[j].fromName != '') {
+                        ngSettings.NumberNames.ServerRequests.ModifyNumbers(cpo, cpo.numCtrl.numbers[j].DIDID, cpo.numCtrl.numbers[j].fromName,
+									function(data){
+										cpo.$scope.$broadcast('itMessage', {
+											message : 'ImpactText Number settings saved'
+										});
+									},
+									function(data){
+										cpo.$scope.$broadcast('itError', {
+											message : 'Failed to save ImpactText Number settings!'
+										});
+										console.log('did_modify: ' + data.apitext);
+									}
+								);
                     }
                 }
             }
         },
-        Controller : function($scope, $http, $cookieStore) {
-            var numCtrl = this;
-            var cpo = ngSettings.NumberNames;
-            cpo.numCtrl = numCtrl;
-            cpo.$scope = $scope;
-            cpo.$http = $http;
-            cpo.$cookieStore = $cookieStore;
-            cpo.$scope.cpo = cpo;
+        Controller : function($scope, $http, $cookieStore, $interval) {
+				var numCtrl = this;
+				var cpo = ngSettings.NumberNames;
+				cpo.numCtrl = numCtrl;
+				cpo.$scope = $scope;
+				cpo.$http = $http;
+				cpo.$cookieStore = $cookieStore;
+				cpo.$scope.cpo = cpo;
 
-            numCtrl.getNumbers = function() {
-                if ($scope.main.Settings) {
-                    numCtrl.numbers = $.grep($scope.main.Settings.Numbers, function(number) {
-                        return (number.accountID == $scope.main.accountID);
-                    });
-                } else {
-                    numCtrl.getNumbers();
-                }
-            };
-            numCtrl.getNumbers();
+			   var stop;
+			   cpo.getNumbers = function(){
+					if ( angular.isDefined(stop) ) return;
+
+					stop = $interval(function() {
+						if(cpo.$scope.main.accountInfo.companyID && $scope.main.Settings.Numbers){
+							cpo.stopInterval();
+							numCtrl.numbers = [];
+
+							cpo.ServerRequests.GetNumbers(cpo,
+								// success
+								function(data){
+									numCtrl.numbers = $.extend(true, [], data.apidata);
+
+									// $scope.main.Settings.Numbers
+									for(var i in numCtrl.numbers){
+										var numCtrl_number = numCtrl.numbers[i];
+										for(var j in $scope.main.Settings.Numbers){
+											var number = $scope.main.Settings.Numbers[j];
+											if(number.DIDID == numCtrl_number.DIDID){
+												numCtrl_number['keyword'] = number.keyword;
+											}
+										}
+									}
+								},
+								// error
+								function(data){
+									cpo.$scope.$broadcast('itError', {
+										message : 'Failed to get ImpactText Number!'
+									});
+									console.log('did_get: ' + data.apitext);
+								}
+							);
+						}
+					}, 100);
+				};
+			   cpo.stopInterval = function(){
+					if (angular.isDefined(stop)) {
+						$interval.cancel(stop);
+						stop = undefined;
+					}
+				};
+
+			   cpo.$scope.$on('$destroy', function() {
+					cpo.stopInterval();
+			   });
+
+			   cpo.getNumbers();
         }
     },
     ForwardEmails : {
@@ -2125,28 +2184,31 @@ var ngSettings = {
                 });
             },
             ModifyAccount : function(cpo, emails, callback) {
-                var params = {
-                    apikey : cpo.$scope.main.authToken,
-                    accountID : cpo.$scope.main.accountID,
-                    companyID : cpo.$scope.main.accountInfo.companyID,
-                    email2sms : emails,
-                    sethttp : 1
+					if(emails != ''){
+						var params = {
+							apikey : cpo.$scope.main.authToken,
+							accountID : cpo.$scope.main.accountID,
+							email2sms : emails,
+							sethttp : 1
 
-                };
-                var $param = $.param(params);
+						};
+						var $param = $.param(params);
 
-                //POST
-                cpo.$http.post(inspiniaNS.wsUrl + "account_modify", $param).success(function(data) {
-                    if (data.apicode == 0) {
-                        callback();
-                    } else {
-                        cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
-                    }
-                }).error(
-                //An error occurred with this request
-                function(data, status, headers, config) {
-                    cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
-                });
+						//POST
+						cpo.$http.post(inspiniaNS.wsUrl + "account_modify", $param).success(function(data) {
+							if (data.apicode == 0) {
+								callback();
+							} else {
+								cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
+							}
+						}).error(
+							//An error occurred with this request
+							function(data, status, headers, config) {
+								cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
+							});
+					}else{
+						callback();
+					}
             }
         },
         Events : {

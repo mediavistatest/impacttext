@@ -33,9 +33,26 @@
 		<br />
 
 		<div class="form-group clearfix" ng-controller="notifyCtrl">
-			<div class="email2sms-list" ng-repeat="(key, value) in e2sCtrl.email2sms">
+			<!--div class="email2sms-list" ng-repeat="(key, value) in e2sCtrl.email2sms">
 				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[key]" />
+			</div-->
+
+			<div class="email2sms-list">
+				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[0]" />
 			</div>
+			<div class="email2sms-list">
+				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[1]" />
+			</div>
+			<div class="email2sms-list">
+				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[2]" />
+			</div>
+			<div class="email2sms-list">
+				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[3]" />
+			</div>
+			<div class="email2sms-list">
+				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[4]" />
+			</div>
+
 			<button class="btn btn-primary" ng-click="cpo.Events.Save_onClick(cpo)"><i class="fa fa-floppy-o"></i> Save</button>
 		</div>
 	</div>

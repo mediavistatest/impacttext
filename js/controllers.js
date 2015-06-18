@@ -3595,7 +3595,9 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
 //NOTIFY CTRL
 var notifyInitialised = false;
 function notifyCtrl($scope, notify) {
-    if ($scope.forceNotifyInit || !notifyInitialised) {
+	 // I don't know what purpose does notifyInitialised serve and I tried to go around it with an optional $scope.forceNotifyInit
+	 // on pages where notifications didn't work but it won't work in Chrome at all so I removed it for now.
+    //if ($scope.forceNotifyInit || !notifyInitialised) {
         notifyInitialised = true;
         $scope.msg = 'Hello! This is a sample message!';
         $scope.demo = function() {
@@ -3922,7 +3924,7 @@ function notifyCtrl($scope, notify) {
         $scope.$on('ModifyAccountEmail2SMSFailed', function(event, args) {
             $scope.ModifyAccountEmail2SMSFailedMsg();
         });
-    }
+    //}
 }
 
 function translateCtrl($translate, $scope) {
@@ -5233,7 +5235,7 @@ angular.module('inspinia').controller('DashboardInboxCtrl', ['$scope', '$http', 
 angular.module('inspinia').controller('ReportsBarCtrl', ['$scope', '$http', '$cookieStore', '$state', ReportsBarCtrl]);
 angular.module('inspinia').controller('SearchByDateCtrl', ['$scope', '$http', '$cookieStore', '$state', SearchByDateCtrl]);
 angular.module('inspinia').controller('ngSettintsCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Settings.Controller]);
-angular.module('inspinia').controller('ngNumbersCtrl', ['$scope', '$http', '$cookieStore', ngSettings.NumberNames.Controller]);
+angular.module('inspinia').controller('ngNumbersCtrl', ['$scope', '$http', '$cookieStore', '$interval', ngSettings.NumberNames.Controller]);
 angular.module('inspinia').controller('ngForwardEmailCtrl', ['$scope', '$http', '$cookieStore', ngSettings.ForwardEmails.Controller]);
 angular.module('inspinia').controller('ngEmail2SMSCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Email2SMS.Controller]);
 angular.module('inspinia').controller('ngAutoresponderCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Autoresponder.Controller]);
