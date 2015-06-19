@@ -3027,7 +3027,9 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     $scope.setPagingDataSliced = setPagingDataSliced;
 	 $scope.getContactBlacklist = function(contactData, callback){
 		 $scope.contactBlacklist = [];
+		 $scope.contactBlacklistGetTotalCount = -1;
 		 if($scope.main.Settings && $scope.main.Settings.hasOwnProperty('Numbers') && $scope.main.Settings.Numbers){
+			 $scope.contactBlacklistGetTotalCount = $scope.main.Settings.Numbers.length;
 			 for(var i in $scope.main.Settings.Numbers){
 				 var did = $scope.main.Settings.Numbers[i].DID;
 				 $scope.main.ServerRequests.contactBlacklistGetRequest({
@@ -3037,6 +3039,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 					 DID: did,
 					 sethttp : 1
 				 }, function(blacklistData){
+					 $scope.contactBlacklistGetTotalCount--;
 					 for(var blockedContactIdx in blacklistData){
 						 var found = $.inArray(blacklistData[blockedContactIdx], $scope.contactBlacklist);
 						 if (found == -1) {
@@ -3048,7 +3051,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 							 }
 						 }
 					 }
-					 if(typeof callback == 'function'){ callback(); }
+					 if($scope.contactBlacklistGetTotalCount == 0 && typeof callback == 'function'){ callback(); }
 				 });
 			 }
 		 }
