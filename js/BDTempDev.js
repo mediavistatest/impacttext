@@ -211,10 +211,12 @@ var ngInbox = {
                     }
 
                     if (startDate) {
-                        params.startDate = startDate.toISOString().substring(0, 10) + ' 00:00:00';;
+                        params.startDate = startDate.toISOString().substring(0, 10) + ' 00:00:00';
+                        ;
                     }
                     if (endDate) {
-                        params.endDate = endDate.toISOString().substring(0, 10) + ' 00:00:00';;
+                        params.endDate = endDate.toISOString().substring(0, 10) + ' 00:00:00';
+                        ;
                     }
 
                     var $param = $.param(params);
@@ -658,7 +660,7 @@ var ngInbox = {
                     if (message.contactListID == '0') {
                         message.con_lis = message.ANI;
                     } else {
-                        message.con_lis = message.ContactLists;
+                        message.con_lis = message.contactListName;
                     }
                 }
                 controllerParent.$scope.setPagingDataSliced(controllerParent.$scope, result.apidata, result.apicount);
@@ -742,20 +744,20 @@ var ngInbox = {
                 txtDiv_.setAttribute('id', 'itExportedMessagesText');
                 txtDiv_.innerText = controllerParent.mesageTextToExport;
                 document.getElementsByTagName("body")[0].appendChild(txtDiv_);
-                
+
                 var link = document.createElement('a');
                 link.setAttribute('id', 'itExportedMessages');
                 var mimeType = 'text/plain';
 
                 link.setAttribute('download', 'ExportedMessages.txt');
-                link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + txtDiv_.innerText);                
-                
+                link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + txtDiv_.innerText);
+
                 document.getElementsByTagName("body")[0].appendChild(link);
-               
+
                 link.click();
                 controllerParent.mesageTextToExport = '';
                 callback();
-     
+
             }
         },
         Settings : {
@@ -1945,25 +1947,31 @@ var ngSettings = {
     },
     NumberNames : {
         ServerRequests : {
-			   GetNumbers : function(cpo, success, error){
-					var params = {
-						apikey : cpo.$scope.main.authToken,
-						accountID : cpo.$scope.main.accountID,
-						companyID : cpo.$scope.main.accountInfo.companyID,
-						sethttp : 1
-					};
-					var $param = $.param(params);
+            GetNumbers : function(cpo, success, error) {
+                var params = {
+                    apikey : cpo.$scope.main.authToken,
+                    accountID : cpo.$scope.main.accountID,
+                    companyID : cpo.$scope.main.accountInfo.companyID,
+                    sethttp : 1
+                };
+                var $param = $.param(params);
 
-					cpo.$http.post(inspiniaNS.wsUrl + "did_get", $param).success(function(data) {
-						if (data.apicode == 0) {
-							if(typeof success == 'function'){ success(data); }
-						} else {
-							if(typeof error == 'function'){ error(data); }
-						}
-					}).error(function(data, status, headers, config) {
-						if(typeof error == 'function'){ error(data); }
-					});
-				},
+                cpo.$http.post(inspiniaNS.wsUrl + "did_get", $param).success(function(data) {
+                    if (data.apicode == 0) {
+                        if ( typeof success == 'function') {
+                            success(data);
+                        }
+                    } else {
+                        if ( typeof error == 'function') {
+                            error(data);
+                        }
+                    }
+                }).error(function(data, status, headers, config) {
+                    if ( typeof error == 'function') {
+                        error(data);
+                    }
+                });
+            },
             ModifyNumbers : function(cpo, didid, from_name, success, error) {
                 var params = {
                     apikey : cpo.$scope.main.authToken,
@@ -1977,102 +1985,105 @@ var ngSettings = {
 
                 cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param).success(function(data) {
                     if (data.apicode == 0) {
-							   if(typeof success == 'function'){ success(data); }
+                        if ( typeof success == 'function') {
+                            success(data);
+                        }
                     } else {
-							   if(typeof error == 'function'){ error(data); }
+                        if ( typeof error == 'function') {
+                            error(data);
+                        }
                     }
                 }).error(function(data, status, headers, config) {
-						  if(typeof error == 'function'){ error(data); }
+                    if ( typeof error == 'function') {
+                        error(data);
+                    }
                 });
             }
         },
         Events : {
-            DefaultNumber_onChange: function(cpo, Number) {
+            DefaultNumber_onChange : function(cpo, Number) {
                 if (Number.prefered) {
-						 for (var N in cpo.numCtrl.numbers) {
-							 if (cpo.numCtrl.numbers[N].DID != Number.DID) {
-								 cpo.numCtrl.numbers[N].prefered = false;
-							 }
-						 }
+                    for (var N in cpo.numCtrl.numbers) {
+                        if (cpo.numCtrl.numbers[N].DID != Number.DID) {
+                            cpo.numCtrl.numbers[N].prefered = false;
+                        }
+                    }
                 }
             },
             Save_onClick : function(cpo) {
                 for (var j in cpo.numCtrl.numbers) {
                     if (cpo.numCtrl.numbers[j].fromName && cpo.numCtrl.numbers[j].fromName != '') {
-                        ngSettings.NumberNames.ServerRequests.ModifyNumbers(cpo, cpo.numCtrl.numbers[j].DIDID, cpo.numCtrl.numbers[j].fromName,
-									function(data){
-										cpo.$scope.$broadcast('itMessage', {
-											message : 'ImpactText Number settings saved'
-										});
-									},
-									function(data){
-										cpo.$scope.$broadcast('itError', {
-											message : 'Failed to save ImpactText Number settings!'
-										});
-										console.log('did_modify: ' + data.apitext);
-									}
-								);
+                        ngSettings.NumberNames.ServerRequests.ModifyNumbers(cpo, cpo.numCtrl.numbers[j].DIDID, cpo.numCtrl.numbers[j].fromName, function(data) {
+                            cpo.$scope.$broadcast('itMessage', {
+                                message : 'ImpactText Number settings saved'
+                            });
+                        }, function(data) {
+                            cpo.$scope.$broadcast('itError', {
+                                message : 'Failed to save ImpactText Number settings!'
+                            });
+                            console.log('did_modify: ' + data.apitext);
+                        });
                     }
                 }
             }
         },
         Controller : function($scope, $http, $cookieStore, $interval) {
-				var numCtrl = this;
-				var cpo = ngSettings.NumberNames;
-				cpo.numCtrl = numCtrl;
-				cpo.$scope = $scope;
-				cpo.$http = $http;
-				cpo.$cookieStore = $cookieStore;
-				cpo.$scope.cpo = cpo;
+            var numCtrl = this;
+            var cpo = ngSettings.NumberNames;
+            cpo.numCtrl = numCtrl;
+            cpo.$scope = $scope;
+            cpo.$http = $http;
+            cpo.$cookieStore = $cookieStore;
+            cpo.$scope.cpo = cpo;
 
-			   var stop;
-			   cpo.getNumbers = function(){
-					if ( angular.isDefined(stop) ) return;
+            var stop;
+            cpo.getNumbers = function() {
+                if (angular.isDefined(stop))
+                    return;
 
-					stop = $interval(function() {
-						if(cpo.$scope.main.accountInfo.companyID && $scope.main.Settings.Numbers){
-							cpo.stopInterval();
-							numCtrl.numbers = [];
+                stop = $interval(function() {
+                    if (cpo.$scope.main.accountInfo.companyID && $scope.main.Settings.Numbers) {
+                        cpo.stopInterval();
+                        numCtrl.numbers = [];
 
-							cpo.ServerRequests.GetNumbers(cpo,
-								// success
-								function(data){
-									numCtrl.numbers = $.extend(true, [], data.apidata);
+                        cpo.ServerRequests.GetNumbers(cpo,
+                        // success
+                        function(data) {
+                            numCtrl.numbers = $.extend(true, [], data.apidata);
 
-									// $scope.main.Settings.Numbers
-									for(var i in numCtrl.numbers){
-										var numCtrl_number = numCtrl.numbers[i];
-										for(var j in $scope.main.Settings.Numbers){
-											var number = $scope.main.Settings.Numbers[j];
-											if(number.DIDID == numCtrl_number.DIDID){
-												numCtrl_number['keyword'] = number.keyword;
-											}
-										}
-									}
-								},
-								// error
-								function(data){
-									cpo.$scope.$broadcast('itError', {
-										message : 'Failed to get ImpactText Number!'
-									});
-									console.log('did_get: ' + data.apitext);
-								}
-							);
-						}
-					}, 100);
-				};
-			   cpo.stopInterval = function(){
-					if (angular.isDefined(stop)) {
-						$interval.cancel(stop);
-						stop = undefined;
-					}
-				};
+                            // $scope.main.Settings.Numbers
+                            for (var i in numCtrl.numbers) {
+                                var numCtrl_number = numCtrl.numbers[i];
+                                for (var j in $scope.main.Settings.Numbers) {
+                                    var number = $scope.main.Settings.Numbers[j];
+                                    if (number.DIDID == numCtrl_number.DIDID) {
+                                        numCtrl_number['keyword'] = number.keyword;
+                                    }
+                                }
+                            }
+                        },
+                        // error
+                        function(data) {
+                            cpo.$scope.$broadcast('itError', {
+                                message : 'Failed to get ImpactText Number!'
+                            });
+                            console.log('did_get: ' + data.apitext);
+                        });
+                    }
+                }, 100);
+            };
+            cpo.stopInterval = function() {
+                if (angular.isDefined(stop)) {
+                    $interval.cancel(stop);
+                    stop = undefined;
+                }
+            };
 
-			   cpo.$scope.$on('$destroy', function() {
-					cpo.stopInterval();
-			   });
+            cpo.$scope.$on('$destroy', function() {
+                cpo.stopInterval();
+            });
 
-			   cpo.getNumbers();
+            cpo.getNumbers();
         }
     },
     ForwardEmails : {
@@ -2184,31 +2195,31 @@ var ngSettings = {
                 });
             },
             ModifyAccount : function(cpo, emails, callback) {
-					if(emails != ''){
-						var params = {
-							apikey : cpo.$scope.main.authToken,
-							accountID : cpo.$scope.main.accountID,
-							email2sms : emails,
-							sethttp : 1
+                if (emails != '') {
+                    var params = {
+                        apikey : cpo.$scope.main.authToken,
+                        accountID : cpo.$scope.main.accountID,
+                        email2sms : emails,
+                        sethttp : 1
 
-						};
-						var $param = $.param(params);
+                    };
+                    var $param = $.param(params);
 
-						//POST
-						cpo.$http.post(inspiniaNS.wsUrl + "account_modify", $param).success(function(data) {
-							if (data.apicode == 0) {
-								callback();
-							} else {
-								cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
-							}
-						}).error(
-							//An error occurred with this request
-							function(data, status, headers, config) {
-								cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
-							});
-					}else{
-						callback();
-					}
+                    //POST
+                    cpo.$http.post(inspiniaNS.wsUrl + "account_modify", $param).success(function(data) {
+                        if (data.apicode == 0) {
+                            callback();
+                        } else {
+                            cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
+                        }
+                    }).error(
+                    //An error occurred with this request
+                    function(data, status, headers, config) {
+                        cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
+                    });
+                } else {
+                    callback();
+                }
             }
         },
         Events : {
@@ -2384,16 +2395,63 @@ var ngSettings = {
                 } else {
                     ngSettings.Autoresponder.ServerRequests.AddKeyword(cpo, cpo.arCtrl.AddKeywordCallback);
                 }
+            },
+            ShowList : function(inParent) {
+                inParent.list = true;
+                inParent.rule = false;
+            },
+            ShowRule : function(inParent) {
+                inParent.list = false;
+                inParent.rule = true;
             }
         },
+        list : true,
+        rule : true,
+        sortOptions : {
+            fields : ['createdDate'],
+            directions : ['DESC'],
+            useExternalSorting : true
+        },
+        columnDefs : [{
+            checked : true,
+            canBeClicked : true,
+            field : '',
+            displayName : 'Autoresponder Name',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : '',
+            displayName : 'Status',
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : '',
+            displayName : 'Delays set'
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : '',
+            displayName : 'Valid from'
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : '',
+            displayName : 'Valid to'
+        }],
         Controller : function($scope, $http, $cookieStore) {
             var arCtrl = this;
             var cpo = ngSettings.Autoresponder;
-            cpo.arCtrl = arCtrl;
+
             cpo.$scope = $scope;
+            cpo.$scope.cpo = cpo;
+            cpo.arCtrl = arCtrl;
             cpo.$http = $http;
             cpo.$cookieStore = $cookieStore;
-            cpo.$scope.cpo = cpo;
+
+            // cpo.ThreadPageOptions = new ngInbox._internal.DataConstructors.ThreadPageOptions(cpo.$scope.main.Settings);
+            // ngInbox._internal.Methods.PopulateScope(cpo);
+            //cpo.Events.InitialiseEvents(controllerParent);
 
             arCtrl.fromNumber = {};
             arCtrl.fromName = '';
@@ -2568,4 +2626,3 @@ var ngSettings = {
         }
     }
 };
-
