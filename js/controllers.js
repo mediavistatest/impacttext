@@ -220,13 +220,6 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 }
                 if (data.apicode == 0) {
                     $scope.$broadcast("RequestSuccess", data, 'Contact modified');
-                    if (request.status == 'I') {
-                        var $param = $.param({
-                            subject : 'Blocked contact',
-                            body : 'Please to block following number: ' + request.ANI + ' for all incoming text messages.'
-                        });
-                        //window.location.href = 'mailto:nselimic@impacttelecom.com?' + $param;
-                    }
                 } else {
                     $scope.$broadcast("RequestError", data, 'contact_modify');
                     console.log(JSON.stringify(data));
@@ -404,7 +397,137 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 $scope.$broadcast("RequestError", data, 'optout_undo');
                 console.log(JSON.stringify(data));
             });
-        }
+        },
+
+		 contactBlacklistGetRequest: function(request, callback){
+			 $http.post(inspiniaNS.wsUrl + "blacklist_get", $.param(request)).success(
+				 function(data, status, headers, config) {
+					 if (data.hasOwnProperty('apicode') && data.apicode == 0) {
+						 if (callback) { callback(data.apidata); }
+					 } else {
+						 if (callback) { callback([]); }
+						 console.log(JSON.stringify(data));
+					 }
+			 }).error(
+				 function(data, status, headers, config) {
+					 if (callback) { callback([]); }
+					 console.log(JSON.stringify(data));
+			 });
+		 },
+
+		 contactBlacklistAddRequest: function(request, $inScope, refresh, callback) {
+			 $http.post(inspiniaNS.wsUrl + "blacklist_add", $.param(request)).success(
+				 function(data) {
+					 if($inScope.contactBlacklistAddTotalCount > 0){
+						 $inScope.contactBlacklistAddTotalCount--;
+						 if(data && data.hasOwnProperty('apicode') && data.apicode == 0){
+							 $inScope.contactBlacklistAddSuccessCount++;
+						 }else{
+							 $inScope.contactBlacklistAddErrorCount++;
+						 }
+
+						 if($inScope.contactBlacklistAddTotalCount == 0){
+							 // Display popup notifications
+							 if($inScope.contactBlacklistAddErrorCount > 0){
+								 if($inScope.contactBlacklistAddSuccessCount > 0){
+									 $scope.$broadcast("RequestError", data, 'Some contacts were not blocked');
+								 }else{
+									 $scope.$broadcast("RequestError", data, 'Could not block contacts');
+								 }
+							 }else{
+								 $scope.$broadcast("RequestSuccess", data, 'Contact blocked');
+							 }
+							 // Reset counters
+							 $inScope.contactBlacklistAddTotalCount = 0;
+							 $inScope.contactBlacklistAddSuccessCount = 0;
+							 $inScope.contactBlacklistAddErrorCount = 0;
+
+							 // Refresh
+							 if(refresh && typeof callback == 'function'){ callback(); }
+						 }
+					 }
+			 }).error(
+				 function(data) {
+					 if($inScope.contactBlacklistAddTotalCount > 0){
+						 $inScope.contactBlacklistAddTotalCount--;
+						 $inScope.contactBlacklistAddErrorCount++;
+
+						 if($inScope.contactBlacklistAddTotalCount == 0){
+							 // Display popup notifications
+							 if($inScope.contactBlacklistAddSuccessCount > 0){
+								 $scope.$broadcast("RequestError", data, 'Some contacts were not blocked');
+							 }else{
+								 $scope.$broadcast("RequestError", data, 'Could not block contacts');
+							 }
+
+							 // Reset conters
+							 $inScope.contactBlacklistAddTotalCount = 0;
+							 $inScope.contactBlacklistAddSuccessCount = 0;
+							 $inScope.contactBlacklistAddErrorCount = 0;
+
+							 // Refresh
+							 if(refresh && typeof callback == 'function'){ callback(); }
+						 }
+					 }
+			 });
+		 },
+
+		 contactBlacklistDeleteRequest: function(request, $inScope, refresh, callback) {
+			 $http.post(inspiniaNS.wsUrl + "blacklist_delete", $.param(request)).success(
+				 function(data) {
+					 if($inScope.contactBlacklistDeleteTotalCount > 0){
+						 $inScope.contactBlacklistDeleteTotalCount--;
+						 if(data && data.hasOwnProperty('apicode') && data.apicode == 0){
+							 $inScope.contactBlacklistDeleteSuccessCount++;
+						 }else{
+							 $inScope.contactBlacklistDeleteErrorCount++;
+						 }
+
+						 if($inScope.contactBlacklistDeleteTotalCount == 0){
+							 // Display popup notifications
+							 if($inScope.contactBlacklistDeleteErrorCount > 0){
+								 if($inScope.contactBlacklistDeleteSuccessCount > 0){
+									 $scope.$broadcast("RequestError", data, 'Some contacts were not unblocked');
+								 }else{
+									 $scope.$broadcast("RequestError", data, 'Could not unblock contacts');
+								 }
+							 }else{
+								 $scope.$broadcast("RequestSuccess", data, 'Contact unblocked');
+							 }
+							 // Reset counters
+							 $inScope.contactBlacklistDeleteTotalCount = 0;
+							 $inScope.contactBlacklistDeleteSuccessCount = 0;
+							 $inScope.contactBlacklistDeleteErrorCount = 0;
+
+							 // Refresh
+							 if(refresh && typeof callback == 'function'){ callback(); }
+						 }
+					 }
+				 }).error(
+				 function(data, status, headers, config) {
+					 if($inScope.contactBlacklistDeleteTotalCount > 0){
+						 $inScope.contactBlacklistDeleteTotalCount--;
+						 $inScope.contactBlacklistDeleteErrorCount++;
+
+						 if($inScope.contactBlacklistDeleteTotalCount == 0){
+							 // Display popup notifications
+							 if($inScope.contactBlacklistDeleteSuccessCount > 0){
+								 $scope.$broadcast("RequestError", data, 'Some contacts were not unblocked');
+							 }else{
+								 $scope.$broadcast("RequestError", data, 'Could not unblock contacts');
+							 }
+
+							 // Reset conters
+							 $inScope.contactBlacklistDeleteTotalCount = 0;
+							 $inScope.contactBlacklistDeleteSuccessCount = 0;
+							 $inScope.contactBlacklistDeleteErrorCount = 0;
+
+							 // Refresh
+							 if(refresh && typeof callback == 'function'){ callback(); }
+						 }
+					 }
+				 });
+		 }
     };
 
     main.CommonActions = {
@@ -442,16 +565,40 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             //Uncomment block when multi ani and contact list support is added to contact_modify request
             // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             // $scope.main.CommonActions.changeContactStatus('I', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
+			   inScope.contactBlacklistAddTotalCount = inContactList.length * main.Settings.Numbers.length;
             for (var i = 0; i < inContactList.length; i++) {
-                $scope.main.CommonActions.changeContactStatus('I', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
+					for(var j in main.Settings.Numbers){
+						var did = main.Settings.Numbers[j].DID;
+						$scope.main.ServerRequests.contactBlacklistAddRequest({
+							sethttp: 1,
+							apikey: main.authToken,
+							accountID: main.accountID,
+							companyID: main.accountInfo.companyID,
+							ANI: inContactList[i].ANI,
+							DID: did
+						}, inScope, refresh, callback);
+					}
+               //$scope.main.CommonActions.changeContactStatus('I', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
             }
         },
         unblockContact : function(inScope, inContactList, refresh, callback) {
             //Uncomment block when multi ani and contact list support is added to contact_modify request
             // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             // $scope.main.CommonActions.changeContactStatus('A', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
+			   inScope.contactBlacklistDeleteTotalCount = inContactList.length * main.Settings.Numbers.length;
             for (var i = 0; i < inContactList.length; i++) {
-                $scope.main.CommonActions.changeContactStatus('A', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
+					 for(var j in main.Settings.Numbers){
+						var did = main.Settings.Numbers[j].DID;
+						$scope.main.ServerRequests.contactBlacklistDeleteRequest({
+							sethttp: 1,
+							apikey: main.authToken,
+							accountID: main.accountID,
+							companyID: main.accountInfo.companyID,
+							ANI: inContactList[i].ANI,
+							DID: did
+						}, inScope, refresh, callback);
+					 }
+                //$scope.main.CommonActions.changeContactStatus('A', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
             }
 
         },
@@ -2843,6 +2990,15 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         directions : ['ASC'],
         useExternalSorting : true
     };
+
+	 $scope.contactBlacklistAddTotalCount = 0;
+	 $scope.contactBlacklistAddSuccessCount = 0;
+	 $scope.contactBlacklistAddErrorCount = 0;
+
+	 $scope.contactBlacklistDeleteTotalCount = 0;
+	 $scope.contactBlacklistDeleteSuccessCount = 0;
+	 $scope.contactBlacklistDeleteErrorCount = 0;
+
     $scope.blockContacts_ngContactListCtrl = function() {
         $scope.main.CommonActions.blockContact($scope, $scope.mySelections, true, $scope.refresh);
     };
@@ -2869,6 +3025,34 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         }
     };
     $scope.setPagingDataSliced = setPagingDataSliced;
+	 $scope.getContactBlacklist = function(contactData, callback){
+		 $scope.contactBlacklist = [];
+		 if($scope.main.Settings && $scope.main.Settings.hasOwnProperty('Numbers') && $scope.main.Settings.Numbers){
+			 for(var i in $scope.main.Settings.Numbers){
+				 var did = $scope.main.Settings.Numbers[i].DID;
+				 $scope.main.ServerRequests.contactBlacklistGetRequest({
+					 apikey: $scope.main.authToken,
+					 accountID: $scope.main.accountID,
+					 companyID: $scope.main.accountInfo.companyID,
+					 DID: did,
+					 sethttp : 1
+				 }, function(blacklistData){
+					 for(var blockedContactIdx in blacklistData){
+						 var found = $.inArray(blacklistData[blockedContactIdx], $scope.contactBlacklist);
+						 if (found == -1) {
+							 $scope.contactBlacklist.push(blacklistData[blockedContactIdx]);
+							 for(var j in contactData){
+								 if(contactData[j].ANI == blacklistData[blockedContactIdx]){
+									 contactData[j].status = 'B';
+								 }
+							 }
+						 }
+					 }
+					 if(typeof callback == 'function'){ callback(); }
+				 });
+			 }
+		 }
+	 };
     $scope.getPagedDataAsync = function(pageSize, page, searchText, filterBy, sortFields, sortOrders) {
         if ( typeof page == 'undefined' || page == null || page == '') {
             page = 0;
@@ -2914,7 +3098,9 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
                     break;
                 }
                 $http.post(inspiniaNS.wsUrl + "contact_get", $.param(request)).success(function(data) {
-                    $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+						  $scope.getContactBlacklist(data.apidata, function(){
+							  $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+						  });
                 }).error(
                 //An error occurred with this request
                 function(data, status, headers, config) {
@@ -2940,7 +3126,9 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
                 offset : (page - 1) * pageSize,
                 orderby : orderBy
             })).success(function(data) {
-                $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+					 $scope.getContactBlacklist(data.apidata, function(){
+						 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+					 });
             }).error(
             //An error occurred with this request
             function(data, status, headers, config) {
