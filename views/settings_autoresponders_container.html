@@ -5,5 +5,8 @@ Settings
     <div ng-controller="ngInboxNotifyCtrl">
         <div ng-show = "cpo.list" ng-include="'views/settings_autoresponders_list.html'"></div>
         <div ng-show = "cpo.rule" ng-include="'views/settings_autoresponders_rule.html'"></div>
+        <div ng-show = "!cpo.rule&&!cpo.list">
+            Autoresponders under constuction!
+        </div>
     </div>
 </div>
