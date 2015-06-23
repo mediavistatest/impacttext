@@ -4595,14 +4595,14 @@ margin: 20px -15px 10px -15px;
     top: 90px;
 }
 
-.autoresponder .iphone-prev {
+/*.autoresponder .iphone-prev {
     background: url(../img/iphone6-2.png)no-repeat 0 0;
     height: 475px;
     position: absolute;
     width: 250px;
     right: 0;
     top: 0;
-}
+}*/
 
 .autoresponder .settings-section {
     border-bottom:none;
@@ -4937,7 +4937,7 @@ ul.bar-legend {
 
 /*MEDIA QUERIES*/
 @media (max-width: 1375px) {
-    
+
    h3.sub-h2 {
   font-size: 16px;
   font-weight: 300;

@@ -470,8 +470,6 @@ var ngInbox = {
                                 }
                             }
                         } else if (controllerParent.clickedMessage.contactListName) {
-
-                            console.log('ToList: ' + controllerParent.clickedMessage.contactListName)
                             continueFunction(controllerParent);
                         }
                     }
@@ -1427,7 +1425,7 @@ var ngInbox = {
                     $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
                     return member.DID == $sendScope.controllerParent.clickedMessage.DID;
                     })[0];
-                                        
+
                     $sendScope.FromName = $sendScope.FromNumber.fromName;
 
                     if ($sendScope.controllerParent.ANIList) {
@@ -1440,7 +1438,7 @@ var ngInbox = {
                         return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
                         })[0];
                         $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.clickedMessage.contactListName;
-                    }                    
+                    }
 
                     $sendScope.OptOutMsg = '';
                     $sendScope.OptOutTxt3 = $sendScope.initial;
@@ -1631,7 +1629,7 @@ var ngInbox = {
                     $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
                     return member.DID == $sendScope.controllerParent.clickedMessage.DID;
                     })[0];
-                    
+
                     $sendScope.FromName = $sendScope.FromNumber.fromName;
 
                     if ($sendScope.controllerParent.ANIList) {
@@ -2278,7 +2276,7 @@ var ngSettings = {
 
                     // Remove empty
                     newEmail2SMS_reversed = newEmail2SMS_reversed.filter(function(el) {
-                        return el !== ""
+                        return el !== "";
                     });
 
                     ngSettings.Email2SMS.ServerRequests.ModifyAccount(cpo, newEmail2SMS_reversed.join(), function() {
@@ -2339,7 +2337,7 @@ var ngSettings = {
                 cpo.arCtrl.termKeyword = '';
                 cpo.arCtrl.messageTxt = '';
 
-                cpo.arCtrl.ngData = [1];
+                cpo.$scope.ngData = [1];
 
                 cpo.arCtrl.validFrom = new Date();
                 cpo.arCtrl.validUntil = null;
@@ -2375,7 +2373,6 @@ var ngSettings = {
                         cpo.arCtrl.fromNumber = $.grep(cpo.$scope.main.fromNumbers, function(number){
                         return number.DIDID == cpo.$scope.main.accountInfo.primaryDIDID;
                         })[0];
-
                     }
                     if (!cpo.$scope.$$phase) {
                         cpo.$scope.$apply();
@@ -2478,39 +2475,15 @@ var ngSettings = {
                 }
             },
             GetKeywordCallback : function(cpo, result) {
-                console.log('get keyword')
-                console.log(result)
                 if (result.apicode == 0) {
                     if (result.apidata.length > 0) {
-                        // var resultAR = result.apidata[0];
-                        // cpo.arCtrl.autoresponderID = resultAR.autoResponderID;
-                        // cpo.arCtrl.termKeyword = resultAR.keyword;
-                        // cpo.arCtrl.messageTxt = resultAR.message;
-                        // if (resultAR.startDate) {
-                        // cpo.arCtrl.validFrom = new Date(resultAR.startDate.substring(0, 10));
-                        // } else {
-                        // cpo.arCtrl.validFrom = null;
-                        // }
-                        // if (resultAR.endDate) {
-                        // cpo.arCtrl.validUntil = new Date(resultAR.endDate.substring(0, 10));
-                        // } else {
-                        // cpo.arCtrl.validUntil = null;
-                        // }
-                        // cpo.arCtrl.makeInactive = resultAR.status == 'I';
-                        // cpo.arCtrl.addToList = resultAR.addtocontactlist == 1;
-
-                        // Keywords
-                        //cpo.$scope.ngData = ngInbox._internal.Methods.ConvertObjectUTCDateTimePropsToLocalTime(result.apidata);
-                        console.log(cpo)
-                        //cpo.arCtrl.ngData = result.apidata;
-                        //cpo.arCtrl.ngOptions.data = result.apidata;
+                        cpo.$scope.ngData = result.apidata;
                         cpo.$scope.totalServerItems = result.apicount;
                         if (!cpo.$scope.$$phase) {
                             cpo.$scope.$apply();
                         }
                         setTimeout(function() {
-                            console.log(cpo.arCtrl.ngData)
-                            //cpo.$scope.ngOptions.selectAll(false);
+                            cpo.$scope.ngRespondersOptions.selectAll(false);
                         }, 100);
                     }
                     // else {
@@ -2665,45 +2638,44 @@ var ngSettings = {
             ShowRule : function(inParent) {
                 inParent.list = false;
                 inParent.rule = true;
+            },
+            Autoresponder_onClick : function(cpo, row) {
+                cpo.clickedKeyword = row.entity;
+                console.log(cpo.clickedKeyword)
+                cpo.Events.ShowRule(cpo);
             }
         },
-        list : true,
-        rule : true,
-        sortOptions : {
-            fields : ['createdDate'],
-            directions : ['DESC'],
-            useExternalSorting : true
-        },
+        list : false,
+        rule : false,
         columnDefs : [{
             checked : true,
             canBeClicked : true,
             field : 'name',
             displayName : 'Autoresponder Name',
+            cellTemplate : 'views/table/AutorespondersTableTemplate.html'
         }, {
             checked : true,
             canBeClicked : false,
-            field : 'age',
+            field : 'status',
             displayName : 'Status',
-        }
-
-        // , {
-        // checked : true,
-        // canBeClicked : false,
-        // field : '',
-        // displayName : 'Delays set'
-        // }, {
-        // checked : true,
-        // canBeClicked : false,
-        // field : 'startDate',
-        // displayName : 'Valid from'
-        // }, {
-        // checked : true,
-        // canBeClicked : false,
-        // field : 'endDate',
-        // displayName : 'Valid to'
-        // }
-
-        ],
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()" style="text-align:center"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : '',
+            displayName : 'Delays set'
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : 'startDate',
+            displayName : 'Valid from'
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : 'endDate',
+            displayName : 'Valid to'
+        }],
+        clickedKeyword : null,
         PopulateScope : function(cpo) {
             cpo.$scope.mySelections = [];
             cpo.$scope.ngData = [];
@@ -2713,33 +2685,23 @@ var ngSettings = {
             cpo.$scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
 
             cpo.$scope.columnDefs = ngInbox._internal.Settings.GrepColumnDefs(cpo.columnDefs);
-            cpo.$scope.ngRespondersOptions = {
-                data : [{name: "Moroni", age: 50},
-                     {name: "Tiancum", age: 43},
-                     {name: "Jacob", age: 27},
-                     {name: "Nephi", age: 29},
-                     {name: "Enos", age: 34}],
-                //enableSorting : true,
-                //useExternalSorting : true,
-                // sortInfo : cpo.$scope.sortOptions, //'sortOptions',
-                // rowHeight : 35,
-                // selectedItems : cpo.$scope.mySelections,
-                // showSelectionCheckbox : true,
-                // multiSelect : true,
-                // selectWithCheckboxOnly : true,
-                //enablePaging : true,
-                // showFooter : true,
-                // footerTemplate : 'views/table/footerTemplate.html',
-                // totalServerItems : cpo.$scope.totalServerItems, //'totalServerItems',
-                //pagingOptions : cpo.$scope.pagingOptions, //'pagingOptions',
-                //filterOptions : cpo.$scope.filterOptions, //'filterOptions',
-                columnDefs : cpo.$scope.columnDefs //'columnDefs', //controllerParent.columnDefs,
-                // primaryKey : cpo.primaryKey
-            };
 
-            cpo.$scope.$watch('ngData', function() {
-                $('.gridStyle').trigger('resize');
-            });
+            cpo.$scope.ngRespondersOptions = {
+                data : 'ngData',
+                enableSorting : true,
+                useExternalSorting : true,
+                rowHeight : 35,
+                selectedItems : cpo.$scope.mySelections,
+                showSelectionCheckbox : true,
+                multiSelect : true,
+                selectWithCheckboxOnly : true,
+                enablePaging : false,
+                showFooter : false,
+                columnDefs : 'columnDefs'
+            };
+        },
+        PopulateRule : function(cpo) {
+
         },
         Controller : function($scope, $http, $cookieStore) {
             var arCtrl = this;
@@ -2751,13 +2713,7 @@ var ngSettings = {
             cpo.$cookieStore = $cookieStore;
             cpo.$scope.cpo = cpo;
 
-            arCtrl.ngData = [];
-
-            //reset autoresponder
-            ngSettings.Autoresponder._internal.ResetAutoresponder(cpo);
-
-            //set prefered number
-            ngSettings.Autoresponder._internal.SetFromNumber(cpo);
+            cpo.$scope.ngData = [];
 
             //populate scope
             ngSettings.Autoresponder.PopulateScope(cpo);
@@ -2772,9 +2728,18 @@ var ngSettings = {
             $scope.$watch('arCtrl.optFields', function() {
                 ngSettings.Autoresponder.Events.OptFieldsChange(cpo);
             }, true);
+            $scope.$watch('cpo.clickedKeyword', function() {
+
+            }, true);
             $scope.$watch('ngData', function() {
                 $('.gridStyle').trigger('resize');
             });
+
+            //reset autoresponder
+            ngSettings.Autoresponder._internal.ResetAutoresponder(cpo);
+
+            //set prefered number
+            ngSettings.Autoresponder._internal.SetFromNumber(cpo);
         }
     }
 };

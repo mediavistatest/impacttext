@@ -485,6 +485,9 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                     name : 'ngGrid',
                     files : ['js/plugins/nggrid/ng-grid-2.0.14.min.js']
                 }, {
+                    insertBefore : '#loadBefore',
+                    files : ['js/plugins/nggrid/ng-grid.css']
+                }, {
                     name : 'cgNotify',
                     files : ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/notify.js']
                 }, {
