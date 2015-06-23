@@ -4241,6 +4241,11 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     };
     if ($scope.controllerParent && $scope.controllerParent.PopulateSend) {
         $scope.$watch('controllerParent.clickedMessage', function(newValue, oldValue) {
+            
+            
+            console.log(newValue)
+              console.log(oldValue)
+            
             if (newValue !== null) {
                 $scope.controllerParent.PopulateSend($scope);
             }
