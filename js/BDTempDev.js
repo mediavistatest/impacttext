@@ -2337,7 +2337,7 @@ var ngSettings = {
                 cpo.arCtrl.termKeyword = '';
                 cpo.arCtrl.messageTxt = '';
 
-                cpo.$scope.ngData = [1];
+                cpo.$scope.ngData = [];
 
                 cpo.arCtrl.validFrom = new Date();
                 cpo.arCtrl.validUntil = null;
@@ -2624,6 +2624,18 @@ var ngSettings = {
             OptFieldsChange : function(cpo) {
                 ngSettings.Autoresponder._internal.MaxLengthCalc(cpo);
             },
+            AddNewRule_onClick: function(cpo){
+
+            },
+            ActivateRule_onClick: function(cpo){
+
+            },
+            DeactivateRule_onClick: function(cpo){
+
+            },
+            Delete_onClick: function(cpo){
+
+            },
             Save_onClick : function(cpo) {
                 if (cpo.arCtrl.autoresponderID) {
                     ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
@@ -2706,6 +2718,7 @@ var ngSettings = {
         Controller : function($scope, $http, $cookieStore) {
             var arCtrl = this;
             var cpo = ngSettings.Autoresponder;
+            //cpo.Events.ShowList(cpo);
 
             cpo.$scope = $scope;
             cpo.arCtrl = arCtrl;

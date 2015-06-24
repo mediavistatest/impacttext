@@ -16,4 +16,39 @@ Autoresponder
 </div>
 <br>
 <br>
-<!--START TABLE--><div class="gridStyle" ng-grid="ngRespondersOptions"></div>
+<!--START TABLE--><div class="gridStyle" ng-grid="ngRespondersOptions"></div><!--Bottom Actions -->
+<div class="row bottom-buttons">
+    <a ng-click="cpo.Events.AddNewRule_onClick()" ng-show="ngData&&ngData.length&&(ngData.length<5)" class="btn btn-add" style="float:left"><i class="fa fa-plus">
+    </i>
+    Add new rule ({{ngData?(ngData.length+1):1}})</a>
+    <a class="btn" ng-click="cpo.Events.ActivateRule_onClick()" ><i class="fa fa-plus-square-o">
+    </i>
+    Activate Rule</a>
+    <!--<a class="btn"><i class="fa fa-files-o"></i> Copy List</a>-->
+    <a class="btn" ng-click="cpo.Events.DeactivateRule_onClick()" ><i class="fa fa-minus-square-o">
+    </i>
+    Deactivate Rule</a>
+    <div class="btn-group dropup discard-btn">
+        <a data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false"><i class="fa fa-trash-o">
+        </i>
+        Delete</a>
+        <ul class="dropdown-menu dropdown-alerts">
+            <li>
+                Are you sure you want to delete the rule/rules?
+            </li>
+            <li>
+                &nbsp;
+            </li>
+            <li>
+                <span ng-click="cpo.Events.Delete_onClick()" class="discard-cancel" data-toggle="dropdown">
+                    <strong>
+                    Yes
+                    </strong></span>
+                &nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'">
+                    <strong>
+                    No
+                    </strong></span>
+            </li>
+        </ul>
+    </div>
+</div>
