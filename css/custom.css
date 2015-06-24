@@ -4595,14 +4595,11 @@ margin: 20px -15px 10px -15px;
     top: 90px;
 }
 
-/*.autoresponder .iphone-prev {
-    background: url(../img/iphone6-2.png)no-repeat 0 0;
-    height: 475px;
-    position: absolute;
-    width: 250px;
+.autoresponder .iphone-prev {
+    float: right;
     right: 0;
     top: 0;
-}*/
+}
 
 .autoresponder .settings-section {
     border-bottom:none;
