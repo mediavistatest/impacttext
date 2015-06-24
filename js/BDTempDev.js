@@ -2337,7 +2337,10 @@ var ngSettings = {
                 cpo.arCtrl.termKeyword = '';
                 cpo.arCtrl.messageTxt = '';
 
+                cpo.$scope.OptOutMsg = '';
+                cpo.$scope.mySelections = [];
                 cpo.$scope.ngData = [];
+                cpo.$scope.totalServerItems = 0;
 
                 cpo.arCtrl.validFrom = new Date();
                 cpo.arCtrl.validUntil = null;
@@ -2348,7 +2351,7 @@ var ngSettings = {
                 cpo.arCtrl.fromName = '';
                 cpo.arCtrl.maxLength = 160;
                 cpo.arCtrl.optOutMsg = '';
-                cpo.arCtrl.optFields = {
+                cpo.$scope.optFields = {
                     OptOutTxt1 : '',
                     OptOutTxt2 : '',
                     OptOutTxt3 : ''
@@ -2385,14 +2388,14 @@ var ngSettings = {
             },
             MaxLengthCalc : function(cpo) {
                 cpo.arCtrl.maxLength = 160;
-                cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - cpo.arCtrl.fromName.length;
-                cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - cpo.arCtrl.optFields.OptOutTxt1.length;
-                cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - cpo.arCtrl.optFields.OptOutTxt2.length;
-                cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - cpo.arCtrl.optFields.OptOutTxt3.length;
-                cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - (cpo.arCtrl.fromName.length > 0 ? 2 : 0);
-                cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - (cpo.arCtrl.optFields.OptOutTxt1.length > 0 ? 1 : 0);
-                cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - (cpo.arCtrl.optFields.OptOutTxt2.length > 0 ? 1 : 0);
-                cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - (cpo.arCtrl.optFields.OptOutTxt3.length > 0 ? 1 : 0);
+                // cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - cpo.arCtrl.fromName.length;
+                // cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - cpo.arCtrl.optFields.OptOutTxt1.length;
+                // cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - cpo.arCtrl.optFields.OptOutTxt2.length;
+                // cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - cpo.arCtrl.optFields.OptOutTxt3.length;
+                // cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - (cpo.arCtrl.fromName.length > 0 ? 2 : 0);
+                // cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - (cpo.arCtrl.optFields.OptOutTxt1.length > 0 ? 1 : 0);
+                // cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - (cpo.arCtrl.optFields.OptOutTxt2.length > 0 ? 1 : 0);
+                // cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - (cpo.arCtrl.optFields.OptOutTxt3.length > 0 ? 1 : 0);
             }
         },
         ServerRequests : {
@@ -2455,7 +2458,7 @@ var ngSettings = {
                     };
                     var $param = $.param(params);
 
-                    //POST
+                    // POST
                     cpo.$http.post(inspiniaNS.wsUrl + 'autoresponder_keyword_get', $param)
                     // success function
                     .success(function(result) {
@@ -2486,12 +2489,50 @@ var ngSettings = {
                             cpo.$scope.ngRespondersOptions.selectAll(false);
                         }, 100);
                     }
-                    // else {
-                    // ngSettings.Autoresponder._internal.ResetAutoresponder(cpo);
-                    // }
                 } else {
                     cpo.$scope.$broadcast('itError', {
                         message : 'autoresponder_keyword_get result error: ' + result.apitext
+                    });
+                }
+            },
+            GetKeywordActions : function(cpo, callback) {
+                if (cpo.$scope.main.accountInfo.companyID) {
+                    var params = {
+                        apikey : cpo.$scope.main.authToken,
+                        accountID : cpo.$scope.main.accountID,
+                        autoresponderkeywordid : parseInt(cpo.clickedKeyword.autoResponderKeywordID)
+                    };
+                    var $param = $.param(params);
+
+                    // POST
+                    cpo.$http.post(inspiniaNS.wsUrl + 'autoresponder_keyword_action_get', $param)
+                    // success function
+                    .success(function(result) {
+                        callback(cpo, result);
+                    })
+                    // error function
+                    .error(function(data, status, headers, config) {
+                        cpo.$scope.$broadcast('itError', {
+                            message : 'Error! ' + data.apitext
+                        });
+                        console.log('autoresponder_keyword_action_get: ' + data.apitext);
+                    });
+                } else {
+                    setTimeout(function() {
+                        ngSettings.Autoresponder.ServerRequests.GetKeywordActions(cpo, callback);
+                    }, 500);
+                }
+            },
+            GetKeywordActionsCallback : function(cpo, result) {
+                console.log(result.apidata)
+                if (result.apicode == 0) {
+                    if (result.apidata.length > 0) {
+                        cpo.keywordActionRules = result.apidata;
+                        cpo.PopulateRule(cpo);
+                    }
+                } else {
+                    cpo.$scope.$broadcast('itError', {
+                        message : 'autoresponder_keyword_actions_get result error: ' + result.apitext
                     });
                 }
             },
@@ -2599,8 +2640,9 @@ var ngSettings = {
                     if (cpo.arCtrl.fromNumber.autoResponderID !== '0') {
                         ngSettings.Autoresponder.ServerRequests.GetAutoresponder(cpo, ngSettings.Autoresponder.ServerRequests.GetAutoresponderCallback);
                     } else {
+                        ngSettings.Autoresponder._internal.ResetAutoresponder(cpo);
                         //TODO assign autoresponder to number
-                        alert('//TODO assign autoresponder to number')
+                        alert('//TODO assign autoresponder to DID')
                     }
 
                     //fill number name if needed
@@ -2624,16 +2666,16 @@ var ngSettings = {
             OptFieldsChange : function(cpo) {
                 ngSettings.Autoresponder._internal.MaxLengthCalc(cpo);
             },
-            AddNewRule_onClick: function(cpo){
+            AddNewRule_onClick : function(cpo) {
 
             },
-            ActivateRule_onClick: function(cpo){
+            ActivateRule_onClick : function(cpo) {
 
             },
-            DeactivateRule_onClick: function(cpo){
+            DeactivateRule_onClick : function(cpo) {
 
             },
-            Delete_onClick: function(cpo){
+            Delete_onClick : function(cpo) {
 
             },
             Save_onClick : function(cpo) {
@@ -2653,7 +2695,7 @@ var ngSettings = {
             },
             Autoresponder_onClick : function(cpo, row) {
                 cpo.clickedKeyword = row.entity;
-                console.log(cpo.clickedKeyword)
+                ngSettings.Autoresponder.ServerRequests.GetKeywordActions(cpo, ngSettings.Autoresponder.ServerRequests.GetKeywordActionsCallback);
                 cpo.Events.ShowRule(cpo);
             }
         },
@@ -2674,7 +2716,7 @@ var ngSettings = {
         }, {
             checked : true,
             canBeClicked : false,
-            field : '',
+            field : 'actionCount',
             displayName : 'Delays set'
         }, {
             checked : true,
@@ -2688,10 +2730,8 @@ var ngSettings = {
             displayName : 'Valid to'
         }],
         clickedKeyword : null,
+        keywordActionRules : [],
         PopulateScope : function(cpo) {
-            cpo.$scope.mySelections = [];
-            cpo.$scope.ngData = [];
-            cpo.$scope.totalServerItems = 0;
             cpo.$scope.sortOptions = cpo.sortOptions;
             cpo.$scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions(cpo.$scope.main.Settings);
             cpo.$scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
@@ -2713,7 +2753,7 @@ var ngSettings = {
             };
         },
         PopulateRule : function(cpo) {
-
+            console.log(cpo.clickedKeyword)
         },
         Controller : function($scope, $http, $cookieStore) {
             var arCtrl = this;
@@ -2725,8 +2765,6 @@ var ngSettings = {
             cpo.$http = $http;
             cpo.$cookieStore = $cookieStore;
             cpo.$scope.cpo = cpo;
-
-            cpo.$scope.ngData = [];
 
             //populate scope
             ngSettings.Autoresponder.PopulateScope(cpo);
