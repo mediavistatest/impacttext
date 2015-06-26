@@ -113,7 +113,7 @@ var ngInbox = {
                 return orderBy;
             },
             GetLocalDateTimeString : function(utcDateTime) {
-                var dateFormat = 'YYYY-mm-DD HH:MM:SS';
+                var dateOutputFormat = 'YYYY-mm-DD HH:MM:SS';
                 if (utcDateTime) {
                     var dateStr = '';
                     var resDate = '';
@@ -135,7 +135,7 @@ var ngInbox = {
                     var minutes;
                     var seconds;
 
-                    switch (dateFormat) {
+                    switch (dateOutputFormat) {
                     case 'YYYY-mm-DD HH:MM:SS' :
                         var year = '' + tmpDate.getFullYear();
                         var month = ('0' + (tmpDate.getMonth() + 1)).substr(-2);
@@ -146,7 +146,7 @@ var ngInbox = {
 
                         resDate = year + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds;
 
-                        console.log('resDate:' + resDate)
+                        // console.log('resDate:' + resDate)
                         break;
                     }
 
@@ -217,10 +217,10 @@ var ngInbox = {
                             if (data[i].hasOwnProperty(key)) {
                                 // console.log(key + ':' + data[i][key])
                                 if (ngInbox._internal.Methods.IsDate(data[i][key])) {
-                                    console.log(key + ':' + data[i][key])
-                                    console.log('BEFORE CONVERSION: ' + key + ':' + data[i][key]);
+                                    // console.log(key + ':' + data[i][key])
+                                    // console.log('BEFORE CONVERSION: ' + key + ':' + data[i][key]);
                                     data[i][key] = ngInbox._internal.Methods.GetLocalDateTimeString(data[i][key]);
-                                    console.log('AFTER CONVERSION: ' + key + ':' + data[i][key]);
+                                    // console.log('AFTER CONVERSION: ' + key + ':' + data[i][key]);
                                 }
                             }
                         }
@@ -230,10 +230,10 @@ var ngInbox = {
                         if (data.hasOwnProperty(key)) {
                             // console.log(key + ':' + ngInbox._internal.Methods.GetLocalDateTimeString(data[key]))
                             if (ngInbox._internal.Methods.IsDate(data[key])) {
-                                console.log(key + ':' + ngInbox._internal.Methods.GetLocalDateTimeString(data[key]))
-                                console.log('BEFORE CONVERSION: ' + key + ':' + data[key]);
+                                // console.log(key + ':' + ngInbox._internal.Methods.GetLocalDateTimeString(data[key]))
+                                // console.log('BEFORE CONVERSION: ' + key + ':' + data[key]);
                                 data[i][key] = ngInbox._internal.Methods.GetLocalDateTimeString(data[key]);
-                                console.log('AFTER CONVERSION: ' + key + ':' + data[key]);
+                                // console.log('AFTER CONVERSION: ' + key + ':' + data[key]);
                             }
                         }
                     }
@@ -2575,7 +2575,6 @@ var ngSettings = {
                 }
             },
             GetKeywordActionsCallback : function(cpo, result) {
-                console.log(result.apidata)
                 if (result.apicode == 0) {
                     if (result.apidata.length > 0) {
                         for (var i=0; i<result.apidata.length; i++)
@@ -2657,6 +2656,10 @@ var ngSettings = {
                 if (cpo.arCtrl.validUntil) {
                     params.enddate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
                 };
+                if (cpo.arCtrl.status){
+                    params.enddate = cpo.arCtrl.status;
+                }
+
 
                 var $param = $.param(params);
 
@@ -2695,7 +2698,7 @@ var ngSettings = {
                         ngSettings.Autoresponder.ServerRequests.GetAutoresponder(cpo, ngSettings.Autoresponder.ServerRequests.GetAutoresponderCallback);
                     } else {
                         //TODO assign autoresponder to number
-                        alert('//TODO assign autoresponder to DID')
+                        // alert('//TODO assign autoresponder to DID')
                     }
 
                     //fill number name if needed
@@ -2719,14 +2722,36 @@ var ngSettings = {
             OptFieldsChange : function(cpo) {
                 ngSettings.Autoresponder._internal.MaxLengthCalc(cpo);
             },
+            //New KEYWORD
             AddNewRule_onClick : function(cpo) {
 
             },
+            //ACTIVATE KEYWORD
             ActivateRule_onClick : function(cpo) {
-
+                var messageList;
+                if (cpo.$scope.mySelections) {
+                    messageList = cpo.$scope.mySelections;
+                } else {
+                    messageList = [cpo.clickedMessage];
+                }
+                
+                cpo.arCtrl.status = 'A';
+                for (var j = 0; j < messageList.length; j++) {
+                    ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
+                }
             },
+            //DEACTIVATE KEYWORD
             DeactivateRule_onClick : function(cpo) {
-
+                var messageList;
+                if (cpo.$scope.mySelections) {
+                    messageList = cpo.$scope.mySelections;
+                } else {
+                    messageList = [cpo.clickedMessage];
+                }
+                cpo.arCtrl.status = 'I';
+                for (var j = 0; j < messageList.length; j++) {
+                    ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
+                }
             },
             Delete_onClick : function(cpo) {
 
