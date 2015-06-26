@@ -2486,13 +2486,10 @@ var ngSettings = {
                 }
             },
             GetAutoresponderCallback : function(cpo, result) {
-                cpo.arCtrl.autoresponder = result.apidata[0];
                 if (result.apicode == 0) {
                     if (result.apidata.length > 0) {
                         cpo.arCtrl.autoresponder = result.apidata[0];
                         ngSettings.Autoresponder.ServerRequests.GetKeyword(cpo, ngSettings.Autoresponder.ServerRequests.GetKeywordCallback);
-                    } else {
-                        ngSettings.Autoresponder._internal.ResetAutoresponder(cpo);
                     }
                 } else {
                     cpo.$scope.$broadcast('itError', {
@@ -2581,9 +2578,11 @@ var ngSettings = {
                 console.log(result.apidata)
                 if (result.apicode == 0) {
                     if (result.apidata.length > 0) {
-                        cpo.keywordActionRules = result.apidata;
-                        cpo.PopulateRule(cpo);
+                        for (var i=0; i<result.apidata.length; i++)
+                        cpo.keywordActionRules[i] = result.apidata[i];
+                        cpo.keywordActionRules[i].checked = true;
                     }
+                    cpo.PopulateRule(cpo);
                 } else {
                     cpo.$scope.$broadcast('itError', {
                         message : 'autoresponder_keyword_actions_get result error: ' + result.apitext
@@ -2689,12 +2688,12 @@ var ngSettings = {
         },
         Events : {
             FromNumberChange : function(cpo) {
+                ngSettings.Autoresponder._internal.ResetAutoresponder(cpo);
                 if (cpo.arCtrl.fromNumber && cpo.arCtrl.fromNumber.DID) {
                     //list refresh
                     if (cpo.arCtrl.fromNumber.autoResponderID !== '0') {
                         ngSettings.Autoresponder.ServerRequests.GetAutoresponder(cpo, ngSettings.Autoresponder.ServerRequests.GetAutoresponderCallback);
                     } else {
-                        ngSettings.Autoresponder._internal.ResetAutoresponder(cpo);
                         //TODO assign autoresponder to number
                         alert('//TODO assign autoresponder to DID')
                     }
@@ -2784,7 +2783,13 @@ var ngSettings = {
             displayName : 'Valid to'
         }],
         clickedKeyword : null,
-        keywordActionRules : [],
+        keywordActionRules : [{
+            checked : false,
+        }, {
+            checked : false,
+        }, {
+            checked : false,
+        }],
         PopulateScope : function(cpo) {
             cpo.$scope.sortOptions = cpo.sortOptions;
             cpo.$scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions(cpo.$scope.main.Settings);
@@ -2812,7 +2817,7 @@ var ngSettings = {
         Controller : function($scope, $http, $cookieStore) {
             var arCtrl = this;
             var cpo = ngSettings.Autoresponder;
-            //cpo.Events.ShowList(cpo);
+            cpo.Events.ShowList(cpo);
 
             cpo.$scope = $scope;
             cpo.arCtrl = arCtrl;
