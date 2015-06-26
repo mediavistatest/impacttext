@@ -2,14 +2,14 @@
 Autoresponder
 </h2>
 <div class="top-buttons">
-    <a ng-click="cpo.Events.ShowList(cpo)" class="btn btn-back"><i class="fa fa-undo">
+    <a ng-click="cpo.Events.BackToRules_onClick(cpo)" class="btn btn-back"><i class="fa fa-undo">
     </i>
     Back to Rules</a>
 </div>
 <br>
 <br>
 <form name="autoresponderForm" novalidate>
-<!----------------------------------------------- Keyword section ---------------------------------------------------------->
+    <!----------------------------------------------- Keyword section ---------------------------------------------------------->
     <div class="settings-section">
         <div class="form-group clearfix">
             <label class="col-sm-2 control-label">
@@ -37,6 +37,18 @@ Autoresponder
         </div>
         <div class="form-group clearfix">
             <label class="col-sm-2 control-label">
+                From name:
+            </label>
+            <div class="col-sm-6">
+                <input type="text" name="SetFromName" placeholder="Enter from name." ng-model="arCtrl.fromName" class="form-control"  ng-trim="false">
+            </div>
+            <div class="col-sm-4">
+                <i class="fa fa-info-circle" tooltip='Enter term'>
+                </i>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label">
                 Trigger term:
             </label>
             <div class="col-sm-6">
@@ -45,6 +57,278 @@ Autoresponder
             <div class="col-sm-4">
                 <i class="fa fa-info-circle" tooltip='This is the term in the received message that will trigger this autoresponse.'>
                 </i>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label">
+                Valid from:
+            </label>
+            <div class="col-md-10">
+                <span class="label-icon"><i class="fa fa-calendar">
+                    </i></span>
+                <div class="btn-group datetimepicker-wrapper" >
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="arCtrl.validFrom" is-open="opened" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" ng-click = "opened = true" />
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="label-icon"><i class="fa fa-clock-o">
+                    </i></span>
+                <!-- Single button -->
+                <div class="btn-group timing" dropdown is-open="status.isopenHour">
+                    <input type="text" name="SetTimeHourFrom" placeholder="Hour" class="form-control" dropdown-toggle ng-init="SetTimeHourFrom='00'" ng-model='SetTimeHourFrom' readonly>
+                    <ul class="dropdown-menu time-pick" role="menu">
+                        <li>
+                            <span>
+                                Set hours
+                            </span>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourFrom = "00"'>
+                            00
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "01"'>
+                            01
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "02"'>
+                            02
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "03"'>
+                            03
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourFrom = "04"'>
+                            04
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "05"'>
+                            05
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "06"'>
+                            06
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "07"'>
+                            07
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourFrom = "08"'>
+                            08
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "09"'>
+                            09
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "10"'>
+                            10
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "11"'>
+                            11
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourFrom = "12"'>
+                            12
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "13"'>
+                            13
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "14"'>
+                            14
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "15"'>
+                            15
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourFrom = "16"'>
+                            16
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "17"'>
+                            17
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "18"'>
+                            18
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "19"'>
+                            19
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourFrom = "20"'>
+                            20
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "21"'>
+                            21
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "22"'>
+                            22
+                            </a>
+                            <a ng-click='SetTimeHourFrom = "23"'>
+                            23
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                &nbsp;:&nbsp;
+                <!-- Single button -->
+                <div class="btn-group timing" dropdown is-open="status.isopenMinute">
+                    <input type="text" name="SetTimeMinuteFrom" placeholder="Minute" class="form-control" dropdown-toggle ng-init="SetTimeMinuteFrom='00'" ng-model='SetTimeMinuteFrom' readonly>
+                    <ul class="dropdown-menu time-pick" role="menu">
+                        <li>
+                            <span>
+                                Set minutes
+                            </span>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeMinuteFrom = "00"'>
+                            00
+                            </a>
+                            <a ng-click='SetTimeMinuteFrom = "15"'>
+                            15
+                            </a>
+                            <a ng-click='SetTimeMinuteFrom = "30"'>
+                            30
+                            </a>
+                            <a ng-click='SetTimeMinuteFrom = "45"'>
+                            45
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label">
+                Valid until:
+            </label>
+            <div class="col-md-10">
+                <span class="label-icon"><i class="fa fa-calendar">
+                    </i></span>
+                <div class="btn-group datetimepicker-wrapper" >
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="arCtrl.validUntil" is-open="opened2" min-date="arCtrl.validFrom" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" ng-click = "opened2 = true" />
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="label-icon"><i class="fa fa-clock-o">
+                    </i></span>
+                <!-- Single button -->
+                <div class="btn-group timing" dropdown is-open="status.isopenHour2">
+                    <input type="text" name="SetTimeHourUntil" placeholder="Hour" class="form-control" dropdown-toggle ng-init="SetTimeHourUntil='00'" ng-model='SetTimeHourUntil' readonly>
+                    <ul class="dropdown-menu time-pick" role="menu">
+                        <li>
+                            <span>
+                                Set hours
+                            </span>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourUntil = "00"'>
+                            00
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "01"'>
+                            01
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "02"'>
+                            02
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "03"'>
+                            03
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourUntil = "04"'>
+                            04
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "05"'>
+                            05
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "06"'>
+                            06
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "07"'>
+                            07
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourUntil = "08"'>
+                            08
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "09"'>
+                            09
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "10"'>
+                            10
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "11"'>
+                            11
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourUntil = "12"'>
+                            12
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "13"'>
+                            13
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "14"'>
+                            14
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "15"'>
+                            15
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourUntil = "16"'>
+                            16
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "17"'>
+                            17
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "18"'>
+                            18
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "19"'>
+                            19
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeHourUntil = "20"'>
+                            20
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "21"'>
+                            21
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "22"'>
+                            22
+                            </a>
+                            <a ng-click='SetTimeHourUntil = "23"'>
+                            23
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                &nbsp;:&nbsp;
+                <!-- Single button -->
+                <div class="btn-group timing" dropdown is-open="status.isopenMinute2">
+                    <input type="text" name="SetTimeMinuteUntil" placeholder="Minute" class="form-control" dropdown-toggle ng-init="SetTimeMinuteUntil='00'" ng-model='SetTimeMinuteUntil' readonly>
+                    <ul class="dropdown-menu time-pick" role="menu">
+                        <li>
+                            <span>
+                                Set minutes
+                            </span>
+                        </li>
+                        <li>
+                            <a ng-click='SetTimeMinuteUntil = "00"'>
+                            00
+                            </a>
+                            <a ng-click='SetTimeMinuteUntil = "15"'>
+                            15
+                            </a>
+                            <a ng-click='SetTimeMinuteUntil = "30"'>
+                            30
+                            </a>
+                            <a ng-click='SetTimeMinuteUntil = "45"'>
+                            45
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="form-group clearfix">
@@ -63,13 +347,13 @@ Autoresponder
                 </label>
             </div>
         </div>
-<!--------------------------------------------------- Delays (actions) section ------------------------------------------------------------>
+        <!--------------------------------------------------- Delays (actions) repeating section ------------------------------------------------------------>
         <div class="form-group clearfix" style="position: relative" ng-repeat="actionRule in cpo.keywordActionRules">
             <br>
             <br>
             <div class="divider ng-scope"></div>
             <div ng-show="$index>0">
-                <input icheck type="checkbox" ng-init="actionRule.checked = ($index==0)" ng-model="actionRule.checked" >
+                <input icheck type="checkbox" ng-model="actionRule.checked" >
                 Define Delay {{$index}}
             </div>
             <div ng-show="actionRule.checked">
@@ -78,7 +362,7 @@ Autoresponder
                         <span ng-show="arCtrl.fromName">
                             {{arCtrl.fromName}}:
                         </span>
-                        {{arCtrl.messageTxt}} {{optFields.OptOutTxt1}}{{optFields.OptOutTxt2}}{{optFields.OptOutTxt3}}
+                        {{actionRule.messageTxt}} {{actionRule.optFields.OptOutTxt1}}{{actionRule.optFields.OptOutTxt2}}{{actionRule.optFields.OptOutTxt3}}
                     </div>
                 </div>
                 <div ng-show="$index>0" class="form-group clearfix">
@@ -90,7 +374,7 @@ Autoresponder
                             </i></span>
                         <!-- Single button -->
                         <div class="btn-group timing" dropdown is-open="status.isopenHour">
-                            <input type="text" name="SetTimeHourFrom" placeholder="Hour" class="form-control" dropdown-toggle ng-init="SetTimeHourFrom='00'" ng-model='SetTimeHourFrom' readonly>
+                            <input type="text" name="SetTimeHourFrom" placeholder="Hour" class="form-control" dropdown-toggle ng-model='actionRule.setTimeHourFrom' readonly>
                             <ul class="dropdown-menu time-pick" role="menu">
                                 <li>
                                     <span>
@@ -186,7 +470,7 @@ Autoresponder
                         &nbsp;:&nbsp;
                         <!-- Single button -->
                         <div class="btn-group timing" dropdown is-open="status.isopenMinute">
-                            <input type="text" name="SetTimeMinuteFrom" placeholder="Minute" class="form-control" dropdown-toggle ng-init="SetTimeMinuteFrom='00'" ng-model='SetTimeMinuteFrom' readonly>
+                            <input type="text" name="SetTimeMinuteFrom" placeholder="Minute" class="form-control" dropdown-toggle ng-model='actionRule.setTimeMinuteFrom' readonly>
                             <ul class="dropdown-menu time-pick" role="menu">
                                 <li>
                                     <span>
@@ -213,24 +497,12 @@ Autoresponder
                 </div>
                 <div class="form-group clearfix">
                     <label class="col-sm-2 control-label">
-                        From name:
-                    </label>
-                    <div class="col-sm-6">
-                        <input type="text" name="SetFromName" placeholder="Enter from name." ng-model="arCtrl.fromName" class="form-control"  ng-trim="false">
-                    </div>
-                    <div class="col-sm-4">
-                        <i class="fa fa-info-circle" tooltip='Enter term'>
-                        </i>
-                    </div>
-                </div>
-                <div class="form-group clearfix">
-                    <label class="col-sm-2 control-label">
                         Autoresponse Text:
                     </label>
                     <div class="col-sm-6">
-                        <textarea name="MessageTxt" class="form-control" ng-maxlength="{{ arCtrl.maxLength }}" rows="3" ng-model="arCtrl.messageTxt" ng-trim="false" required></textarea>
+                        <textarea name="MessageTxt" class="form-control" ng-maxlength="{{ arCtrl.maxLength }}" rows="3" ng-model="actionRule.messageTxt" ng-trim="false" required></textarea>
                         <div ng-hide="SendForm.$error.maxlength" class="text-counter">
-                            {{ 160 - ((arCtrl.fromName.length > 0 && arCtrl.fromName.length + 2 || arCtrl.fromName.length) + arCtrl.messageTxt.length + (optFields.OptOutTxt1.length > 0 && optFields.OptOutTxt1.length + 1 || optFields.OptOutTxt1.length) + (optFields.OptOutTxt3.length > 0 && optFields.OptOutTxt3.length + 1 || optFields.OptOutTxt3.length)) }} characters left.
+                            {{ 160 - ((arCtrl.fromName.length > 0 && arCtrl.fromName.length + 2 || arCtrl.fromName.length) + actionRule.messageTxt.length + (actionRule.optFields.OptOutTxt1.length > 0 && actionRule.optFields.OptOutTxt1.length + 1 || actionRule.optFields.OptOutTxt1.length) + (actionRule.optFields.OptOutTxt3.length > 0 && actionRule.optFields.OptOutTxt3.length + 1 || actionRule.optFields.OptOutTxt3.length)) }} characters left.
                         </div>
                         <div ng-show="SendForm.$error.maxlength" class="text-counter error">
                             Limit reached!
@@ -242,7 +514,7 @@ Autoresponder
                         Opt-out Message:
                     </label>
                     <div class="col-sm-6">
-                        <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="OptOutMsg">
+                        <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="actionRule.OptOutMsg">
                             <option value="standard">
                                 Standard
                             </option>
@@ -256,11 +528,11 @@ Autoresponder
                                 Write opt-out message
                             </option>
                         </select>
-                        <div class="animate-switch-container" ng-switch on="OptOutMsg">
-                            <textarea ng-switch-when="standard" ng-init="optFields.OptOutTxt1='Reply STOP to end msgs.'; optFields.OptOutTxt2=''; optFields.OptOutTxt3=''" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt1" ng-trim="false" readonly></textarea>
-                            <textarea ng-switch-when="custom" ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt2=main.Settings.defaultOptOutText; optFields.OptOutTxt3=''" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt2" ng-trim="false" readonly></textarea>
-                            <textarea ng-switch-when="noMessage" ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt2=''; optFields.OptOutTxt3=''" name="message" class="form-control opt-out disabled" rows="2" disabled></textarea>
-                            <textarea ng-switch-when="write" ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt2=''" placeholder="Write your opt-out message" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt3"  ng-trim="false" ></textarea>
+                        <div class="animate-switch-container" ng-switch on="actionRule.OptOutMsg">
+                            <textarea ng-switch-when="standard" ng-init="actionRule.optFields.OptOutTxt1='Reply STOP to end msgs.'; actionRule.optFields.OptOutTxt2=''; actionRule.optFields.OptOutTxt3=''" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="actionRule.optFields.OptOutTxt1" ng-trim="false" readonly></textarea>
+                            <textarea ng-switch-when="custom" ng-init="actionRule.optFields.OptOutTxt1=''; actionRule.optFields.OptOutTxt2=main.Settings.defaultOptOutText; actionRule.optFields.OptOutTxt3=''" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="actionRule.optFields.OptOutTxt2" ng-trim="false" readonly></textarea>
+                            <textarea ng-switch-when="noMessage" ng-init="actionRule.optFields.OptOutTxt1=''; actionRule.optFields.OptOutTxt2=''; actionRule.optFields.OptOutTxt3=''" name="message" class="form-control opt-out disabled" rows="2" disabled></textarea>
+                            <textarea ng-switch-when="write" ng-init="actionRule.optFields.OptOutTxt1=''; actionRule.optFields.OptOutTxt2=''" placeholder="Write your opt-out message" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="actionRule.optFields.OptOutTxt3"  ng-trim="false" ></textarea>
                         </div>
                     </div>
                     <div class="col-sm-4">
@@ -268,285 +540,14 @@ Autoresponder
                         </i>
                     </div>
                 </div>
-                <div class="form-group clearfix">
-                    <label class="col-sm-2 control-label">
-                        Valid from:
-                    </label>
-                    <div class="col-md-10">
-                        <span class="label-icon"><i class="fa fa-calendar">
-                            </i></span>
-                        <div class="btn-group datetimepicker-wrapper" >
-                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="arCtrl.validFrom" is-open="opened" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" ng-click = "opened = true" />
-                        </div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span class="label-icon"><i class="fa fa-clock-o">
-                            </i></span>
-                        <!-- Single button -->
-                        <div class="btn-group timing" dropdown is-open="status.isopenHour">
-                            <input type="text" name="SetTimeHourFrom" placeholder="Hour" class="form-control" dropdown-toggle ng-init="SetTimeHourFrom='00'" ng-model='SetTimeHourFrom' readonly>
-                            <ul class="dropdown-menu time-pick" role="menu">
-                                <li>
-                                    <span>
-                                        Set hours
-                                    </span>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourFrom = "00"'>
-                                    00
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "01"'>
-                                    01
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "02"'>
-                                    02
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "03"'>
-                                    03
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourFrom = "04"'>
-                                    04
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "05"'>
-                                    05
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "06"'>
-                                    06
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "07"'>
-                                    07
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourFrom = "08"'>
-                                    08
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "09"'>
-                                    09
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "10"'>
-                                    10
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "11"'>
-                                    11
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourFrom = "12"'>
-                                    12
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "13"'>
-                                    13
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "14"'>
-                                    14
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "15"'>
-                                    15
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourFrom = "16"'>
-                                    16
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "17"'>
-                                    17
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "18"'>
-                                    18
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "19"'>
-                                    19
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourFrom = "20"'>
-                                    20
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "21"'>
-                                    21
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "22"'>
-                                    22
-                                    </a>
-                                    <a ng-click='SetTimeHourFrom = "23"'>
-                                    23
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        &nbsp;:&nbsp;
-                        <!-- Single button -->
-                        <div class="btn-group timing" dropdown is-open="status.isopenMinute">
-                            <input type="text" name="SetTimeMinuteFrom" placeholder="Minute" class="form-control" dropdown-toggle ng-init="SetTimeMinuteFrom='00'" ng-model='SetTimeMinuteFrom' readonly>
-                            <ul class="dropdown-menu time-pick" role="menu">
-                                <li>
-                                    <span>
-                                        Set minutes
-                                    </span>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeMinuteFrom = "00"'>
-                                    00
-                                    </a>
-                                    <a ng-click='SetTimeMinuteFrom = "15"'>
-                                    15
-                                    </a>
-                                    <a ng-click='SetTimeMinuteFrom = "30"'>
-                                    30
-                                    </a>
-                                    <a ng-click='SetTimeMinuteFrom = "45"'>
-                                    45
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group clearfix">
-                    <label class="col-sm-2 control-label">
-                        Valid until:
-                    </label>
-                    <div class="col-md-10">
-                        <span class="label-icon"><i class="fa fa-calendar">
-                            </i></span>
-                        <div class="btn-group datetimepicker-wrapper" >
-                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="arCtrl.validUntil" is-open="opened2" min-date="arCtrl.validFrom" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" ng-click = "opened2 = true" />
-                        </div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span class="label-icon"><i class="fa fa-clock-o">
-                            </i></span>
-                        <!-- Single button -->
-                        <div class="btn-group timing" dropdown is-open="status.isopenHour2">
-                            <input type="text" name="SetTimeHourUntil" placeholder="Hour" class="form-control" dropdown-toggle ng-init="SetTimeHourUntil='00'" ng-model='SetTimeHourUntil' readonly>
-                            <ul class="dropdown-menu time-pick" role="menu">
-                                <li>
-                                    <span>
-                                        Set hours
-                                    </span>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourUntil = "00"'>
-                                    00
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "01"'>
-                                    01
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "02"'>
-                                    02
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "03"'>
-                                    03
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourUntil = "04"'>
-                                    04
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "05"'>
-                                    05
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "06"'>
-                                    06
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "07"'>
-                                    07
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourUntil = "08"'>
-                                    08
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "09"'>
-                                    09
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "10"'>
-                                    10
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "11"'>
-                                    11
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourUntil = "12"'>
-                                    12
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "13"'>
-                                    13
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "14"'>
-                                    14
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "15"'>
-                                    15
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourUntil = "16"'>
-                                    16
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "17"'>
-                                    17
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "18"'>
-                                    18
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "19"'>
-                                    19
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeHourUntil = "20"'>
-                                    20
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "21"'>
-                                    21
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "22"'>
-                                    22
-                                    </a>
-                                    <a ng-click='SetTimeHourUntil = "23"'>
-                                    23
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        &nbsp;:&nbsp;
-                        <!-- Single button -->
-                        <div class="btn-group timing" dropdown is-open="status.isopenMinute2">
-                            <input type="text" name="SetTimeMinuteUntil" placeholder="Minute" class="form-control" dropdown-toggle ng-init="SetTimeMinuteUntil='00'" ng-model='SetTimeMinuteUntil' readonly>
-                            <ul class="dropdown-menu time-pick" role="menu">
-                                <li>
-                                    <span>
-                                        Set minutes
-                                    </span>
-                                </li>
-                                <li>
-                                    <a ng-click='SetTimeMinuteUntil = "00"'>
-                                    00
-                                    </a>
-                                    <a ng-click='SetTimeMinuteUntil = "15"'>
-                                    15
-                                    </a>
-                                    <a ng-click='SetTimeMinuteUntil = "30"'>
-                                    30
-                                    </a>
-                                    <a ng-click='SetTimeMinuteUntil = "45"'>
-                                    45
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-</form><!-- end settings section -->
+</form>
 <br>
 <br>
 <br>
+<!------------------------------------------------ Bottom buttons -------------------------------------------------------------->
 <div class="col-sm-6 col-sm-offset-2">
     <button class="btn btn-send smaller right" ng-click="autoresponderForm.$valid && cpo.Events.Save_onClick(cpo)">
         <span><i class="fa fa-floppy-o">
