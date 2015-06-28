@@ -2416,7 +2416,9 @@ var ngSettings = {
                     },
                     setTimeHourFrom : '00',
                     setTimeMinuteFrom : '00',
-                    OptOutMsg : ''
+                    OptOutMsg : '',
+                    priority : '1',
+                    actionID : '1'
                 }, {
                     checked : false,
                     name : 'mvDelay1',
@@ -2430,7 +2432,9 @@ var ngSettings = {
                     },
                     setTimeHourFrom : '00',
                     setTimeMinuteFrom : '00',
-                    OptOutMsg : ''
+                    OptOutMsg : '',
+                    priority : '2',
+                    actionID : '1'
                 }, {
                     checked : false,
                     name : 'mvDelay2',
@@ -2444,7 +2448,9 @@ var ngSettings = {
                     },
                     setTimeHourFrom : '00',
                     setTimeMinuteFrom : '00',
-                    OptOutMsg : ''
+                    OptOutMsg : '',
+                    priority : '2',
+                    actionID : '1'
                 }];
             },
             SetFromNumber : function(cpo) {
@@ -2488,8 +2494,15 @@ var ngSettings = {
                 // cpo.arCtrl.maxLength = cpo.arCtrl.maxLength - (cpo.arCtrl.optFields.OptOutTxt3.length > 0 ? 1 : 0);
             },
             fillRule : function(rule, inAction) {
-                rule = inAction;
-                rule.checked = true;
+                //rule = inAction;
+                rule.checked = (inAction.status=='A');
+
+                var inParams = JSON.parse(inAction.parameters);
+
+                if (inParams.message){
+                    rule.messageTxt = inParams.message;
+                }
+
                 rule.optOutMsg = '';
                 rule.optFields = {
                     OptOutTxt1 : '',
@@ -2742,6 +2755,51 @@ var ngSettings = {
                     });
                 }
                 ngSettings.Autoresponder.FillAutoresponder(cpo);
+            },
+            AddAction : function(cpo, actionList, callback) {
+                for (var i = 0; i < actionList.length; i++) {
+                    var ruleParams = {
+                        message : cpo.$scope.arCtrl.fromName + ': ' + actionList[i].messageTxt + ' ' + actionList[i].optFields.OptOutTxt1 + actionList[i].optFields.OptOutTxt2 + actionList[i].optFields.OptOutTxt3
+                    };
+                    var params = {
+                        apikey : cpo.$scope.main.authToken,
+                        accountID : cpo.$scope.main.accountID,
+                        companyID : cpo.$scope.main.accountInfo.companyID,
+                        autoresponderkeywordid : cpo.clickedKeyword.autoResponderKeywordID,
+                        priority : actionList[i].priority,
+                        name : actionList[i].name,
+                        actionid : actionList[i].actionID,
+                        status : actionList[i].checked ? "A" : "I",
+                        parameters : JSON.stringify(ruleParams)
+                    };
+
+                    var $param = $.param(params);
+
+                    //POST
+                    cpo.$http.post(inspiniaNS.wsUrl + 'autoresponder_keyword_action_add', $param)
+                    // success function
+                    .success(function(result) {
+                        callback(cpo, result);
+                    })
+                    // error function
+                    .error(function(data, status, headers, config) {
+                        cpo.$scope.$broadcast('itError', {
+                            message : 'Error! ' + data.apitext
+                        });
+                        console.log('autoresponder_keyword_action_add: ' + data.apitext);
+                    });
+                }
+            },
+            AddActionCallback : function(cpo, result) {
+                if (result.apicode == 0) {
+                    cpo.$scope.$broadcast('itMessage', {
+                        message : 'Action added'
+                    });
+                } else {
+                    cpo.$scope.$broadcast('itError', {
+                        message : 'Error! ' + result.apitext
+                    });
+                }
             }
         },
         Events : {
@@ -2792,9 +2850,10 @@ var ngSettings = {
                     ngSettings.Autoresponder.ServerRequests.AddKeyword(cpo, ngSettings.Autoresponder.ServerRequests.AddKeywordCallback);
                 }
 
+                ngSettings.Autoresponder.ServerRequests.AddAction(cpo, cpo.keywordActionRules, ngSettings.Autoresponder.ServerRequests.AddActionCallback);
             },
             ShowList : function(cpo) {
-                cpo.list = true;
+                // cpo.list = true;
                 cpo.rule = false;
             },
             ShowRule : function(cpo) {
@@ -2884,12 +2943,11 @@ var ngSettings = {
         },
         PopulateRules : function(cpo) {
             console.log(cpo.clickedKeyword)
-            cpo.arCtrl.inactive = (cpo.clickedKeyword.status === "I")
+            cpo.arCtrl.inactive = (cpo.clickedKeyword.status === "I");
         },
         Controller : function($scope, $http, $cookieStore) {
             var arCtrl = this;
             var cpo = ngSettings.Autoresponder;
-            //cpo.Events.ShowList(cpo);
 
             cpo.$scope = $scope;
             cpo.arCtrl = arCtrl;
