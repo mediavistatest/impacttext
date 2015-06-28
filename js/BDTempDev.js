@@ -2727,7 +2727,7 @@ var ngSettings = {
                 var $param = $.param(params);
 
                 //POST
-                cpo.$http.post(inspiniaNS.wsUrl + 'keyword_modify', $param)
+                cpo.$http.post(inspiniaNS.wsUrl + 'autoresponder_keyword_modify', $param)
                 // success function
                 .success(function(result) {
                     callback(cpo, result);
@@ -2737,7 +2737,7 @@ var ngSettings = {
                     cpo.$scope.$broadcast('itError', {
                         message : 'Error! ' + data.apitext
                     });
-                    console.log('keyword_modify: ' + data.apitext);
+                    console.log('autoresponder_keyword_modify: ' + data.apitext);
                 });
             },
             ModifyKeywordCallback : function(cpo, result) {
@@ -2801,7 +2801,7 @@ var ngSettings = {
 
             },
             Save_onClick : function(cpo) {
-                if (cpo.arCtrl.autoresponderID) {
+                if (cpo.clickedKeyword.) {
                     ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
                 } else {
                     ngSettings.Autoresponder.ServerRequests.AddKeyword(cpo, ngSettings.Autoresponder.ServerRequests.AddKeywordCallback);
