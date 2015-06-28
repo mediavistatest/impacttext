@@ -2697,6 +2697,48 @@ var ngSettings = {
                 }
                 ngSettings.Autoresponder.FillAutoresponder(cpo);
             },
+            //TODO autoresponder_keyword_action_add
+            // Add : function(){
+            //
+            //
+            //
+            // var a = {
+            // "apidata" : [{
+            // "actionID" : "1",
+            // "actionName" : "send Message",
+            // "parms" : "message,delaymins"
+            // }, {
+            // "actionID" : "2",
+            // "actionName" : "Flag Incoming Message",
+            // "parms" : "status"
+            // }, {
+            // "actionID" : "3",
+            // "actionName" : "Add ANI to OptOut",
+            // "parms" : ""
+            // }, {
+            // "actionID" : "4",
+            // "actionName" : "Add ANI to Contact List",
+            // "parms" : "contactListID,sourceName,custom1,custom2,custom3,custom4,custom5,language"
+            // }, {
+            // "actionID" : "5",
+            // "actionName" : "Forward to Email Address",
+            // "parms" : "emailaddress,fromname,fromaddress,prefix"
+            // }],
+            // "apicount" : 5,
+            // "apicode" : 0,
+            // "apitext" : "",
+            // "apikey" : "d6112582da949ae5c5639a9a01de8e4f93d2f8e6af0cfdd83052822298e95dd0"
+            // }
+            //
+            //
+            //
+            //
+            // },
+            //
+            //
+            //
+            //
+            //TODO autoresponder_keyword_action_get
             ModifyKeyword : function(cpo, keywordList, callback) {
                 for (var i = 0; i < keywordList.length; i++) {
                     var params = {
