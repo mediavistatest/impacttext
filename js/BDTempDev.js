@@ -2706,12 +2706,21 @@ var ngSettings = {
                     accountID : cpo.$scope.main.accountID,
                     companyID : cpo.$scope.main.accountInfo.companyID,
                     didid : cpo.arCtrl.fromNumber.DIDID,
-                    keyword : cpo.arCtrl.termKeyword,
-                    fromname : cpo.arCtrl.fromName,
-                    message : cpo.arCtrl.messageTxt,
                     addtocontactlist : cpo.arCtrl.addToList ? 1 : 0,
                     optoutmessageid : 1
                     // ,sethttp : 1
+                };
+
+                if (cpo.arCtrl.termKeyword) {
+                    params.keyword = cpo.arCtrl.termKeyword;
+                };
+
+                if (cpo.arCtrl.message) {
+                    params.message = cpo.arCtrl.message;
+                };
+
+                if (cpo.arCtrl.fromName) {
+                    params.fromname = cpo.arCtrl.fromName;
                 };
 
                 if (cpo.arCtrl.validFrom) {
@@ -2721,7 +2730,7 @@ var ngSettings = {
                     params.enddate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
                 };
                 if (cpo.arCtrl.status) {
-                    params.enddate = cpo.arCtrl.status;
+                    params.status = cpo.arCtrl.status;
                 }
 
                 var $param = $.param(params);
@@ -2772,28 +2781,28 @@ var ngSettings = {
             },
             //ACTIVATE KEYWORD
             ActivateRule_onClick : function(cpo) {
-                var messageList;
-                if (cpo.$scope.ngRespondersOptions.selectedItems.length>0) {
-                    messageList = cpo.$scope.ngRespondersOptions.selectedItems;
+                var keywordList;
+                if (cpo.$scope.ngRespondersOptions.selectedItems.length > 0) {
+                    keywordList = cpo.$scope.ngRespondersOptions.selectedItems;
                 } else {
-                    messageList = [cpo.clickedMessage];
+                    keywordList = [cpo.clickedKeyword];
                 }
 
                 cpo.arCtrl.status = 'A';
-                for (var j = 0; j < messageList.length; j++) {
+                for (var j = 0; j < keywordList.length; j++) {
                     ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
                 }
             },
             //DEACTIVATE KEYWORD
             DeactivateRule_onClick : function(cpo) {
-                var messageList;
-                if (cpo.$scope.ngRespondersOptions.selectedItems.length>0) {
-                    messageList = cpo.$scope.ngRespondersOptions.selectedItems;
+                var keywordList;
+                if (cpo.$scope.ngRespondersOptions.selectedItems.length > 0) {
+                    keywordList = cpo.$scope.ngRespondersOptions.selectedItems;
                 } else {
-                    messageList = [cpo.clickedMessage];
+                    keywordList = [cpo.clickedKeyword];
                 }
                 cpo.arCtrl.status = 'I';
-                for (var j = 0; j < messageList.length; j++) {
+                for (var j = 0; j < keywordList.length; j++) {
                     ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
                 }
             },
@@ -2886,7 +2895,7 @@ var ngSettings = {
                 enableSorting : true,
                 useExternalSorting : true,
                 rowHeight : 35,
-                selectedItems :[],
+                selectedItems : [],
                 showSelectionCheckbox : true,
                 multiSelect : true,
                 selectWithCheckboxOnly : true,
