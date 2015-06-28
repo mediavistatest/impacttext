@@ -2388,7 +2388,6 @@ var ngSettings = {
             ResetList : function(cpo) {
                 cpo.arCtrl.autoresponderID = null;
                 cpo.arCtrl.autoresponderName = '';
-                cpo.arCtrl.termKeyword = '';
 
                 cpo.arCtrl.validFrom = new Date();
                 cpo.arCtrl.validUntil = null;
@@ -2658,26 +2657,22 @@ var ngSettings = {
                     apikey : cpo.$scope.main.authToken,
                     accountID : cpo.$scope.main.accountID,
                     companyID : cpo.$scope.main.accountInfo.companyID,
-                    didid : cpo.arCtrl.fromNumber.DIDID,
-                    keyword : cpo.arCtrl.termKeyword,
-                    fromname : cpo.arCtrl.fromName,
-                    message : cpo.arCtrl.messageTxt,
-                    addtocontactlist : cpo.arCtrl.addToList ? 1 : 0,
-                    optoutmessageid : 1
+                    autoresponderkeyword : cpo.clickedKeyword.autoResponderKeyword,
+                    autoresponderid : cpo.arCtrl.autoresponder.autoResponderID,
+                    status : cpo.arCtrl.inactive ? "I" : "A",
+                    startdate : cpo.clickedKeyword.startDate,
+                    name : cpo.clickedKeyword.name
                     // ,sethttp : 1
                 };
 
-                if (cpo.arCtrl.validFrom) {
-                    params.startdate = cpo.arCtrl.validFrom.toISOString().substring(0, 10) + ' 00:00:00';
-                };
-                if (cpo.arCtrl.validUntil) {
-                    params.enddate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
-                };
+                if (cpo.clickedKeyword.endDate) {
+                    params.enddate = cpo.clickedKeyword.endDate;
+                }
 
                 var $param = $.param(params);
 
                 //POST
-                cpo.$http.post(inspiniaNS.wsUrl + 'keyword_add', $param)
+                cpo.$http.post(inspiniaNS.wsUrl + 'autoresponder_keyword_add', $param)
                 // success function
                 .success(function(result) {
                     callback(cpo, result);
@@ -2687,7 +2682,7 @@ var ngSettings = {
                     cpo.$scope.$broadcast('itError', {
                         message : 'Error! ' + data.apitext
                     });
-                    console.log('keyword_add: ' + data.apitext);
+                    console.log('autoresponder_keyword_add: ' + data.apitext);
                 });
             },
             AddKeywordCallback : function(cpo, result) {
@@ -2700,6 +2695,7 @@ var ngSettings = {
                         message : 'Error! ' + result.apitext
                     });
                 }
+                ngSettings.Autoresponder.FillAutoresponder(cpo);
             },
             ModifyKeyword : function(cpo, keywordList, callback) {
                 for (var i = 0; i < keywordList.length; i++) {
@@ -2709,29 +2705,14 @@ var ngSettings = {
                         companyID : cpo.$scope.main.accountInfo.companyID,
                         autoresponderkeywordid : keywordList[i].autoResponderKeywordID,
                         name : keywordList[i].name,
-                        status : cpo.arCtrl.inactive?"I":"A",
+                        status : cpo.arCtrl.inactive ? "I" : "A",
                         startdate : keywordList[i].startDate,
-                        enddate : keywordList[i].endDate
+                        // autoresponderkeyword : 'newkeyword'
                     };
 
-                    // if (cpo.arCtrl.termKeyword) {
-                    // params.keyword = cpo.arCtrl.termKeyword;
-                    // };
-
-                    // if (cpo.arCtrl.message) {
-                    // params.message = cpo.arCtrl.message;
-                    // };
-
-                    // if (cpo.arCtrl.fromName) {
-                    // params.fromname = cpo.arCtrl.fromName;
-                    // };
-
-                    // if (cpo.arCtrl.validFrom) {
-                    // params.startdate = cpo.arCtrl.validFrom.toISOString().substring(0, 10) + ' 00:00:00';
-                    // };
-                    // if (cpo.arCtrl.validUntil) {
-                    // params.enddate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
-                    //};
+                    if (keywordList[i].endDate) {
+                        params.enddate = keywordList[i].endDate;
+                    }
 
                     var $param = $.param(params);
 
@@ -2778,7 +2759,10 @@ var ngSettings = {
             },
             //New KEYWORD
             AddNewRule_onClick : function(cpo) {
-
+                cpo.clickedKeyword = {};
+                // cpo.clickedKeyword.autoResponderKeyword = '';
+                ngSettings.Autoresponder._internal.ResetRules(cpo);
+                ngSettings.Autoresponder.Events.ShowRule(cpo);
             },
             //ACTIVATE KEYWORD
             ActivateRules_onClick : function(cpo) {
@@ -2794,7 +2778,20 @@ var ngSettings = {
 
             },
             Save_onClick : function(cpo) {
-                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, [cpo.clickedKeyword], ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
+                if (cpo.arCtrl.validFrom) {
+                    cpo.clickedKeyword.startDate = cpo.arCtrl.validFrom.toISOString().substring(0, 10) + ' 00:00:00';
+                };
+
+                if (cpo.arCtrl.validUntil) {
+                    cpo.clickedKeyword.endDate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
+                };
+
+                if (cpo.clickedKeyword.autoResponderKeywordID) {
+                    ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, [cpo.clickedKeyword], ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
+                } else {
+                    ngSettings.Autoresponder.ServerRequests.AddKeyword(cpo, ngSettings.Autoresponder.ServerRequests.AddKeywordCallback);
+                }
+
             },
             ShowList : function(cpo) {
                 cpo.list = true;

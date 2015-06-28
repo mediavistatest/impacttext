@@ -18,7 +18,7 @@ Autoresponder
 <br>
 <!--START TABLE--><div class="gridStyle" ng-grid="ngRespondersOptions"></div><!--Bottom Actions -->
 <div class="row bottom-buttons">
-    <a ng-click="cpo.Events.AddNewRule_onClick()" ng-show="ngData&&ngData.length&&(ngData.length<5)" class="btn btn-add" style="float:left"><i class="fa fa-plus">
+    <a ng-click="cpo.Events.AddNewRule_onClick(cpo)" ng-show="ngData&&ngData.length&&(ngData.length<5)" class="btn btn-add" style="float:left"><i class="fa fa-plus">
     </i>
     Add new rule ({{ngData?(ngData.length+1):1}})</a>
     <a class="btn" ng-click="cpo.Events.ActivateRules_onClick(cpo)" ><i class="fa fa-plus-square-o">
@@ -40,7 +40,7 @@ Autoresponder
                 &nbsp;
             </li>
             <li>
-                <span ng-click="cpo.Events.Delete_onClick()" class="discard-cancel" data-toggle="dropdown">
+                <span ng-click="cpo.Events.Delete_onClick(cpo)" class="discard-cancel" data-toggle="dropdown">
                     <strong>
                     Yes
                     </strong></span>
