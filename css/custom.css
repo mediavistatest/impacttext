@@ -4601,6 +4601,11 @@ margin: 20px -15px 10px -15px;
     top: 0;
 }
 
+.autoresponder .ruleRepeatDiv{
+    position: relative;
+    min-height: 430px;
+}
+
 .autoresponder .settings-section {
     border-bottom:none;
 }

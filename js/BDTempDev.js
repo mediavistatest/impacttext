@@ -2397,7 +2397,6 @@ var ngSettings = {
 
                 cpo.arCtrl.fromName = '';
 
-                cpo.$scope.mySelections = [];
                 cpo.$scope.ngData = [];
                 cpo.$scope.totalServerItems = 0;
 
@@ -2774,8 +2773,8 @@ var ngSettings = {
             //ACTIVATE KEYWORD
             ActivateRule_onClick : function(cpo) {
                 var messageList;
-                if (cpo.$scope.mySelections) {
-                    messageList = cpo.$scope.mySelections;
+                if (cpo.$scope.ngRespondersOptions.selectedItems.length>0) {
+                    messageList = cpo.$scope.ngRespondersOptions.selectedItems;
                 } else {
                     messageList = [cpo.clickedMessage];
                 }
@@ -2788,8 +2787,8 @@ var ngSettings = {
             //DEACTIVATE KEYWORD
             DeactivateRule_onClick : function(cpo) {
                 var messageList;
-                if (cpo.$scope.mySelections) {
-                    messageList = cpo.$scope.mySelections;
+                if (cpo.$scope.ngRespondersOptions.selectedItems.length>0) {
+                    messageList = cpo.$scope.ngRespondersOptions.selectedItems;
                 } else {
                     messageList = [cpo.clickedMessage];
                 }
@@ -2880,10 +2879,6 @@ var ngSettings = {
             }
         },
         PopulateScope : function(cpo) {
-            cpo.$scope.sortOptions = cpo.sortOptions;
-            cpo.$scope.pagingOptions = new ngInbox._internal.DataConstructors.PageOptions(cpo.$scope.main.Settings);
-            cpo.$scope.filterOptions = new ngInbox._internal.DataConstructors.FilterOptions();
-
             cpo.$scope.columnDefs = ngInbox._internal.Settings.GrepColumnDefs(cpo.columnDefs);
 
             cpo.$scope.ngRespondersOptions = {
@@ -2891,7 +2886,7 @@ var ngSettings = {
                 enableSorting : true,
                 useExternalSorting : true,
                 rowHeight : 35,
-                selectedItems : cpo.$scope.mySelections,
+                selectedItems :[],
                 showSelectionCheckbox : true,
                 multiSelect : true,
                 selectWithCheckboxOnly : true,
@@ -2906,7 +2901,7 @@ var ngSettings = {
         Controller : function($scope, $http, $cookieStore) {
             var arCtrl = this;
             var cpo = ngSettings.Autoresponder;
-            //cpo.Events.ShowList(cpo);
+            cpo.Events.ShowList(cpo);
 
             cpo.$scope = $scope;
             cpo.arCtrl = arCtrl;
@@ -2914,6 +2909,9 @@ var ngSettings = {
             cpo.$http = $http;
             cpo.$cookieStore = $cookieStore;
             cpo.$scope.cpo = cpo;
+
+            //reset autoresponder
+            ngSettings.Autoresponder._internal.ResetList(cpo);
 
             //populate scope
             ngSettings.Autoresponder.PopulateScope(cpo);
@@ -2934,9 +2932,6 @@ var ngSettings = {
             $scope.$watch('ngData', function() {
                 $('.gridStyle').trigger('resize');
             });
-
-            //reset autoresponder
-            ngSettings.Autoresponder._internal.ResetList(cpo);
 
             //set prefered number
             ngSettings.Autoresponder._internal.SetFromNumber(cpo);

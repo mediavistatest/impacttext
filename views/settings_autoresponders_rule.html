@@ -347,16 +347,16 @@ Autoresponder
                 </label>
             </div>
         </div>
+        <br>
+        <br>
         <!--------------------------------------------------- Delays (actions) repeating section ------------------------------------------------------------>
-        <div class="form-group clearfix" style="position: relative" ng-repeat="actionRule in cpo.keywordActionRules">
-            <br>
-            <br>
+        <div class="form-group clearfix" ng-repeat="actionRule in cpo.keywordActionRules">
             <div class="divider ng-scope"></div>
             <div ng-show="$index>0">
                 <input icheck type="checkbox" ng-model="actionRule.checked" >
                 Define Delay {{$index}}
             </div>
-            <div ng-show="actionRule.checked">
+            <div class="ruleRepeatDiv" ng-show="actionRule.checked">
                 <div class="iphone-prev">
                     <div class="message-cloud">
                         <span ng-show="arCtrl.fromName">
