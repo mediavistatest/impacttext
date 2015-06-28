@@ -2403,6 +2403,7 @@ var ngSettings = {
                 cpo.arCtrl.maxLength = 160;
             },
             ResetRules : function(cpo) {
+                cpo.arCtrl.inactive = false;
                 cpo.keywordActionRules = [{
                     checked : true,
                     name : 'mvDelay0',
@@ -2700,54 +2701,54 @@ var ngSettings = {
                     });
                 }
             },
-            ModifyKeyword : function(cpo, callback) {
-                var params = {
-                    apikey : cpo.$scope.main.authToken,
-                    accountID : cpo.$scope.main.accountID,
-                    companyID : cpo.$scope.main.accountInfo.companyID,
-                    didid : cpo.arCtrl.fromNumber.DIDID,
-                    addtocontactlist : cpo.arCtrl.addToList ? 1 : 0,
-                    optoutmessageid : 1
-                    // ,sethttp : 1
-                };
+            ModifyKeyword : function(cpo, keywordList, callback) {
+                for (var i = 0; i < keywordList.length; i++) {
+                    var params = {
+                        apikey : cpo.$scope.main.authToken,
+                        accountID : cpo.$scope.main.accountID,
+                        companyID : cpo.$scope.main.accountInfo.companyID,
+                        autoresponderkeywordid : keywordList[i].autoResponderKeywordID,
+                        name : keywordList[i].name,
+                        status : cpo.arCtrl.inactive?"I":"A",
+                        startdate : keywordList[i].startDate,
+                        enddate : keywordList[i].endDate
+                    };
 
-                if (cpo.arCtrl.termKeyword) {
-                    params.keyword = cpo.arCtrl.termKeyword;
-                };
+                    // if (cpo.arCtrl.termKeyword) {
+                    // params.keyword = cpo.arCtrl.termKeyword;
+                    // };
 
-                if (cpo.arCtrl.message) {
-                    params.message = cpo.arCtrl.message;
-                };
+                    // if (cpo.arCtrl.message) {
+                    // params.message = cpo.arCtrl.message;
+                    // };
 
-                if (cpo.arCtrl.fromName) {
-                    params.fromname = cpo.arCtrl.fromName;
-                };
+                    // if (cpo.arCtrl.fromName) {
+                    // params.fromname = cpo.arCtrl.fromName;
+                    // };
 
-                if (cpo.arCtrl.validFrom) {
-                    params.startdate = cpo.arCtrl.validFrom.toISOString().substring(0, 10) + ' 00:00:00';
-                };
-                if (cpo.arCtrl.validUntil) {
-                    params.enddate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
-                };
-                if (cpo.arCtrl.status) {
-                    params.status = cpo.arCtrl.status;
-                }
+                    // if (cpo.arCtrl.validFrom) {
+                    // params.startdate = cpo.arCtrl.validFrom.toISOString().substring(0, 10) + ' 00:00:00';
+                    // };
+                    // if (cpo.arCtrl.validUntil) {
+                    // params.enddate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
+                    //};
 
-                var $param = $.param(params);
+                    var $param = $.param(params);
 
-                //POST
-                cpo.$http.post(inspiniaNS.wsUrl + 'autoresponder_keyword_modify', $param)
-                // success function
-                .success(function(result) {
-                    callback(cpo, result);
-                })
-                // error function
-                .error(function(data, status, headers, config) {
-                    cpo.$scope.$broadcast('itError', {
-                        message : 'Error! ' + data.apitext
+                    //POST
+                    cpo.$http.post(inspiniaNS.wsUrl + 'autoresponder_keyword_modify', $param)
+                    // success function
+                    .success(function(result) {
+                        callback(cpo, result);
+                    })
+                    // error function
+                    .error(function(data, status, headers, config) {
+                        cpo.$scope.$broadcast('itError', {
+                            message : 'Error! ' + data.apitext
+                        });
+                        console.log('autoresponder_keyword_modify: ' + data.apitext);
                     });
-                    console.log('autoresponder_keyword_modify: ' + data.apitext);
-                });
+                }
             },
             ModifyKeywordCallback : function(cpo, result) {
                 if (result.apicode == 0) {
@@ -2759,12 +2760,12 @@ var ngSettings = {
                         message : 'Error! ' + result.apitext
                     });
                 }
+                ngSettings.Autoresponder.FillAutoresponder(cpo);
             }
         },
         Events : {
             BackToRules_onClick : function(cpo) {
                 ngSettings.Autoresponder.FillAutoresponder(cpo);
-                cpo.Events.ShowList(cpo);
             },
             FromNumberChange : function(cpo) {
                 ngSettings.Autoresponder.FillAutoresponder(cpo);
@@ -2780,41 +2781,20 @@ var ngSettings = {
 
             },
             //ACTIVATE KEYWORD
-            ActivateRule_onClick : function(cpo) {
-                var keywordList;
-                if (cpo.$scope.ngRespondersOptions.selectedItems.length > 0) {
-                    keywordList = cpo.$scope.ngRespondersOptions.selectedItems;
-                } else {
-                    keywordList = [cpo.clickedKeyword];
-                }
-
-                cpo.arCtrl.status = 'A';
-                for (var j = 0; j < keywordList.length; j++) {
-                    ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
-                }
+            ActivateRules_onClick : function(cpo) {
+                cpo.arCtrl.inactive = false;
+                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
             },
             //DEACTIVATE KEYWORD
-            DeactivateRule_onClick : function(cpo) {
-                var keywordList;
-                if (cpo.$scope.ngRespondersOptions.selectedItems.length > 0) {
-                    keywordList = cpo.$scope.ngRespondersOptions.selectedItems;
-                } else {
-                    keywordList = [cpo.clickedKeyword];
-                }
-                cpo.arCtrl.status = 'I';
-                for (var j = 0; j < keywordList.length; j++) {
-                    ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
-                }
+            DeactivateRules_onClick : function(cpo) {
+                cpo.arCtrl.inactive = true;
+                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
             },
             Delete_onClick : function(cpo) {
 
             },
             Save_onClick : function(cpo) {
-                if (cpo.clickedKeyword.) {
-                    ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
-                } else {
-                    ngSettings.Autoresponder.ServerRequests.AddKeyword(cpo, ngSettings.Autoresponder.ServerRequests.AddKeywordCallback);
-                }
+                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, [cpo.clickedKeyword], ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
             },
             ShowList : function(cpo) {
                 cpo.list = true;
@@ -2886,6 +2866,7 @@ var ngSettings = {
                 // ngSettings.Autoresponder.ServerRequests.GetKeyword(cpo, ngSettings.Autoresponder.ServerRequests.GetKeywordCallback);
                 // }
             }
+            cpo.Events.ShowList(cpo);
         },
         PopulateScope : function(cpo) {
             cpo.$scope.columnDefs = ngInbox._internal.Settings.GrepColumnDefs(cpo.columnDefs);
@@ -2906,11 +2887,12 @@ var ngSettings = {
         },
         PopulateRules : function(cpo) {
             console.log(cpo.clickedKeyword)
+            cpo.arCtrl.inactive = (cpo.clickedKeyword.status === "I")
         },
         Controller : function($scope, $http, $cookieStore) {
             var arCtrl = this;
             var cpo = ngSettings.Autoresponder;
-            cpo.Events.ShowList(cpo);
+            //cpo.Events.ShowList(cpo);
 
             cpo.$scope = $scope;
             cpo.arCtrl = arCtrl;
