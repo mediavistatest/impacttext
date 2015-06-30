@@ -2759,14 +2759,18 @@ var ngSettings = {
                         accountID : cpo.$scope.main.accountID,
                         companyID : cpo.$scope.main.accountInfo.companyID,
                         autoresponderkeywordid : keywordList[i].autoResponderKeywordID,
-                        name : keywordList[i].name,
                         status : cpo.arCtrl.status,
-                        startdate : keywordList[i].startDate,
+
                         // autoresponderkeyword : 'newkeyword'
                     };
 
-                    if (keywordList[i].endDate) {
-                        params.enddate = keywordList[i].endDate;
+                    if (cpo.arCtrl.status != 'D') {
+                        params.name = keywordList[i].name;
+                        params.startdate = keywordList[i].startDate;
+
+                        if (keywordList[i].endDate) {
+                            params.enddate = keywordList[i].endDate;
+                        }
                     }
 
                     var $param = $.param(params);
@@ -3023,14 +3027,13 @@ var ngSettings = {
             $scope.$watch('ngData', function() {
                 $('.gridStyle').trigger('resize');
             });
-             $scope.$watch('arCtrl.inactive', function() {
-                if(arCtrl.inactive){
+            $scope.$watch('arCtrl.inactive', function() {
+                if (arCtrl.inactive) {
                     arCtrl.status = 'I'
                 } else {
                     arCtrl.status = 'A'
                 }
-            });           
-
+            });
 
             //set prefered number
             ngSettings.Autoresponder._internal.SetFromNumber(cpo);
