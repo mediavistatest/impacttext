@@ -2418,7 +2418,8 @@ var ngSettings = {
                     setTimeMinuteFrom : '00',
                     OptOutMsg : '',
                     priority : '1',
-                    actionID : '1'
+                    actionID : '1',
+                    autoResponderKeyword : ''
                 }, {
                     checked : false,
                     name : 'mvDelay1',
@@ -2434,7 +2435,8 @@ var ngSettings = {
                     setTimeMinuteFrom : '00',
                     OptOutMsg : '',
                     priority : '2',
-                    actionID : '1'
+                    actionID : '1',
+                    autoResponderKeyword : ''
                 }, {
                     checked : false,
                     name : 'mvDelay2',
@@ -2450,7 +2452,8 @@ var ngSettings = {
                     setTimeMinuteFrom : '00',
                     OptOutMsg : '',
                     priority : '2',
-                    actionID : '1'
+                    actionID : '1',
+                    autoResponderKeyword : ''
                 }];
             },
             SetFromNumber : function(cpo) {
@@ -2703,55 +2706,15 @@ var ngSettings = {
                     cpo.$scope.$broadcast('itMessage', {
                         message : 'Autoresponder added'
                     });
+                    cpo.clickedKeyword.autoResponderKeywordID = result.apidata;
+                    ngSettings.Autoresponder.ServerRequests.AddActions(cpo, cpo.keywordActionRules, ngSettings.Autoresponder.ServerRequests.AddActionsCallback);
                 } else {
                     cpo.$scope.$broadcast('itError', {
                         message : 'Error! ' + result.apitext
                     });
                 }
                 ngSettings.Autoresponder.FillAutoresponder(cpo);
-            },
-            //TODO autoresponder_keyword_action_add
-            // Add : function(){
-            //
-            //
-            //
-            // var a = {
-            // "apidata" : [{
-            // "actionID" : "1",
-            // "actionName" : "send Message",
-            // "parms" : "message,delaymins"
-            // }, {
-            // "actionID" : "2",
-            // "actionName" : "Flag Incoming Message",
-            // "parms" : "status"
-            // }, {
-            // "actionID" : "3",
-            // "actionName" : "Add ANI to OptOut",
-            // "parms" : ""
-            // }, {
-            // "actionID" : "4",
-            // "actionName" : "Add ANI to Contact List",
-            // "parms" : "contactListID,sourceName,custom1,custom2,custom3,custom4,custom5,language"
-            // }, {
-            // "actionID" : "5",
-            // "actionName" : "Forward to Email Address",
-            // "parms" : "emailaddress,fromname,fromaddress,prefix"
-            // }],
-            // "apicount" : 5,
-            // "apicode" : 0,
-            // "apitext" : "",
-            // "apikey" : "d6112582da949ae5c5639a9a01de8e4f93d2f8e6af0cfdd83052822298e95dd0"
-            // }
-            //
-            //
-            //
-            //
-            // },
-            //
-            //
-            //
-            //
-            //TODO autoresponder_keyword_action_get
+            },            
             ModifyKeyword : function(cpo, keywordList, callback) {
                 for (var i = 0; i < keywordList.length; i++) {
                     var params = {
@@ -2759,14 +2722,13 @@ var ngSettings = {
                         accountID : cpo.$scope.main.accountID,
                         companyID : cpo.$scope.main.accountInfo.companyID,
                         autoresponderkeywordid : keywordList[i].autoResponderKeywordID,
-                        status : cpo.arCtrl.status,
-
-                        // autoresponderkeyword : 'newkeyword'
+                        status : cpo.arCtrl.status
                     };
 
                     if (cpo.arCtrl.status != 'D') {
                         params.name = keywordList[i].name;
                         params.startdate = keywordList[i].startDate;
+                        params.autoresponderkeyword = keywordList[i].autoResponderKeyword;
 
                         if (keywordList[i].endDate) {
                             params.enddate = keywordList[i].endDate;
@@ -2802,11 +2764,8 @@ var ngSettings = {
                 }
                 ngSettings.Autoresponder.FillAutoresponder(cpo);
             },
-            AddAction : function(cpo, actionList, callback) {
+            AddActions: function(cpo, actionList, callback) {
                 for (var i = 0; i < actionList.length; i++) {
-                    var ruleParams = {
-                        message : cpo.$scope.arCtrl.fromName + ': ' + actionList[i].messageTxt + ' ' + actionList[i].optFields.OptOutTxt1 + actionList[i].optFields.OptOutTxt2 + actionList[i].optFields.OptOutTxt3
-                    };
                     var params = {
                         apikey : cpo.$scope.main.authToken,
                         accountID : cpo.$scope.main.accountID,
@@ -2816,7 +2775,7 @@ var ngSettings = {
                         name : actionList[i].name,
                         actionid : actionList[i].actionID,
                         status : actionList[i].checked ? "A" : "I",
-                        parameters : JSON.stringify(ruleParams)
+                        parameters : JSON.stringify(actionList[i].ruleParams)
                     };
 
                     var $param = $.param(params);
@@ -2836,10 +2795,52 @@ var ngSettings = {
                     });
                 }
             },
-            AddActionCallback : function(cpo, result) {
+            AddActionsCallback : function(cpo, result) {
                 if (result.apicode == 0) {
                     cpo.$scope.$broadcast('itMessage', {
                         message : 'Action added'
+                    });
+                } else {
+                    cpo.$scope.$broadcast('itError', {
+                        message : 'Error! ' + result.apitext
+                    });
+                }
+            },
+            ModifyActions: function(cpo, actionList, callback) {
+                for (var i = 0; i < actionList.length; i++) {
+                    var params = {
+                        apikey : cpo.$scope.main.authToken,
+                        accountID : cpo.$scope.main.accountID,
+                        companyID : cpo.$scope.main.accountInfo.companyID,
+                        autoresponderkeywordid : cpo.clickedKeyword.autoResponderKeywordID,
+                        priority : actionList[i].priority,
+                        name : actionList[i].name,
+                        actionid : actionList[i].actionID,
+                        status : actionList[i].checked ? "A" : "I",
+                        parameters : JSON.stringify(actionList[i].ruleParams)
+                    };
+
+                    var $param = $.param(params);
+
+                    //POST
+                    cpo.$http.post(inspiniaNS.wsUrl + 'autoresponder_keyword_action_modify', $param)
+                    // success function
+                    .success(function(result) {
+                        callback(cpo, result);
+                    })
+                    // error function
+                    .error(function(data, status, headers, config) {
+                        cpo.$scope.$broadcast('itError', {
+                            message : 'Error! ' + data.apitext
+                        });
+                        console.log('autoresponder_keyword_action_modify: ' + data.apitext);
+                    });
+                }
+            },
+            ModifyActionsCallback : function(cpo, result) {
+                if (result.apicode == 0) {
+                    cpo.$scope.$broadcast('itMessage', {
+                        message : 'Action modified'
                     });
                 } else {
                     cpo.$scope.$broadcast('itError', {
@@ -2892,17 +2893,21 @@ var ngSettings = {
                 if (cpo.arCtrl.validUntil) {
                     cpo.clickedKeyword.endDate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
                 };
+                for (var i = 0; i < actionList.length; i++) {
+                    actionList[i].ruleParams = {
+                        message : cpo.$scope.arCtrl.fromName + ': ' + actionList[i].messageTxt + ' ' + actionList[i].optFields.OptOutTxt1 + actionList[i].optFields.OptOutTxt2 + actionList[i].optFields.OptOutTxt3
+                    };
+                }
 
                 if (cpo.clickedKeyword.autoResponderKeywordID) {
                     ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, [cpo.clickedKeyword], ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
+                    ngSettings.Autoresponder.ServerRequests.ModifyActions(cpo, cpo.keywordActionRules, ngSettings.Autoresponder.ServerRequests.ModifyActionsCallback);
                 } else {
                     ngSettings.Autoresponder.ServerRequests.AddKeyword(cpo, ngSettings.Autoresponder.ServerRequests.AddKeywordCallback);
                 }
-
-                ngSettings.Autoresponder.ServerRequests.AddAction(cpo, cpo.keywordActionRules, ngSettings.Autoresponder.ServerRequests.AddActionCallback);
             },
             ShowList : function(cpo) {
-                // cpo.list = true;
+                cpo.list = true;
                 cpo.rule = false;
             },
             ShowRule : function(cpo) {
