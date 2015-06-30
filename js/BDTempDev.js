@@ -3048,7 +3048,7 @@ var ngSettings = {
         }, {
             checked : true,
             canBeClicked : false,
-            field : 'actionCount',
+            field : 'actionActive',
             displayName : 'Delays set',
             cellTemplate : '<span class="label-icon"><i class="fa fa-clock-o" ng-show="row.getProperty(col.field)>1"><i class="fa fa-clock-o" ng-show="row.getProperty(col.field)>2"></i></span>'
         }, {
