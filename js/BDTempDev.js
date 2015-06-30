@@ -2518,6 +2518,84 @@ var ngSettings = {
             }
         },
         ServerRequests : {
+            AddAutoresponder : function(cpo, callback) {
+                if (cpo.$scope.main.accountInfo.companyID) {
+                    var params = {
+                        apikey : cpo.$scope.main.authToken,
+                        accountID : cpo.$scope.main.accountID,
+                        companyID : cpo.$scope.main.accountInfo.companyID,
+                        name : String(cpo.arCtrl.fromNumber.DID),
+                        // startdate : cpo.arCtrl.validFrom.toISOString().substring(0, 10) + ' 00:00:00',
+                        // ,sethttp : 1
+                    };
+
+                    var $param = $.param(params);
+
+                    //POST
+                    cpo.$http.post(inspiniaNS.wsUrl + 'autoresponder_add', $param)
+                    // success function
+                    .success(function(result) {
+                        callback(cpo, result);
+                    })
+                    // error function
+                    .error(function(data, status, headers, config) {
+                        // console.log(data)
+                        cpo.$scope.$broadcast('itError', {
+                            message : 'Error! ' + data.apitext
+                        });
+                        console.log('autoresponder_get: ' + data.apitext);
+                    });
+                } else {
+                    setTimeout(function() {
+                        ngSettings.Autoresponder.ServerRequests.AddAutoresponder(cpo, callback);
+                    }, 500);
+                }
+            },
+            AddAutoresponderCallback : function(cpo, result) {
+                if (result.apicode == 0) {
+                    if (result.apidata.length > 0) {
+                        cpo.arCtrl.autoresponder.autoResponderID = result.apidata;
+                        ngSettings.Autoresponder.ServerRequests.ModifyDID(cpo, ngSettings.Autoresponder.ServerRequests.ModifyDIDCallback);
+                    }
+                } else {
+                    cpo.$scope.$broadcast('itError', {
+                        message : 'Error! ' + result.apitext
+                    });
+                }
+            },
+            ModifyDID : function(cpo, callback) {
+                var params = {
+                    apikey : cpo.$scope.main.authToken,
+                    accountID : cpo.$scope.main.accountID,
+                    companyID : cpo.$scope.main.accountInfo.companyID,
+                    didid : cpo.arCtrl.fromNumber.DIDID,
+                    autoresponderid : cpo.arCtrl.autoresponder.autoResponderID,
+                    sethttp : 1
+                };
+                var $param = $.param(params);
+
+                cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param).success(function(result) {
+                    callback(cpo, result);
+                }).error(function(result) {
+                    cpo.$scope.$broadcast('itError', {
+                        message : 'Error! ' + result.apitext
+                    });
+                    console.log('ModifyDIDCallback: ' + result.apitext);
+                });
+            },
+            ModifyDIDCallback : function(cpo, result) {
+                if (result.apicode == 0) {
+                    cpo.arCtrl.fromNumber.autoResponderID = cpo.arCtrl.autoresponder.autoResponderID;
+                    cpo.$scope.$broadcast('itMessage', {
+                        message : 'Autoresponder attached to selected DID'
+                    });
+                } else {
+                    cpo.$scope.$broadcast('itError', {
+                        message : 'Error! ' + data.apitext
+                    });
+                }
+                ngSettings.Autoresponder.FillAutoresponder(cpo);
+            },
             GetAutoresponder : function(cpo, callback) {
                 if (cpo.$scope.main.accountInfo.companyID) {
                     var params = {
@@ -2552,10 +2630,10 @@ var ngSettings = {
             },
             GetAutoresponderCallback : function(cpo, result) {
                 if (result.apicode == 0) {
-                    if (result.apidata.length > 0) {
-                        cpo.arCtrl.autoresponder = result.apidata[0];
-                        ngSettings.Autoresponder.ServerRequests.GetKeyword(cpo, ngSettings.Autoresponder.ServerRequests.GetKeywordCallback);
-                    }
+                    //                     if (result.apidata.length > 0) {
+                    cpo.arCtrl.autoresponder = result.apidata[0];
+                    ngSettings.Autoresponder.ServerRequests.GetKeyword(cpo, ngSettings.Autoresponder.ServerRequests.GetKeywordCallback);
+                    //                     }
                 } else {
                     cpo.$scope.$broadcast('itError', {
                         message : 'Error! ' + result.apitext
@@ -2960,6 +3038,8 @@ var ngSettings = {
                 } else {
                     //TODO assign autoresponder to number
                     // alert('//TODO assign autoresponder to DID')
+                    ngSettings.Autoresponder.ServerRequests.AddAutoresponder(cpo, ngSettings.Autoresponder.ServerRequests.AddAutoresponderCallback);
+
                 }
 
                 //fill number name if needed
