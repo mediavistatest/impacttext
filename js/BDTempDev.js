@@ -2414,8 +2414,8 @@ var ngSettings = {
                         OptOutTxt2 : '',
                         OptOutTxt3 : ''
                     },
-                    setTimeHourFrom : '00',
-                    setTimeMinuteFrom : '00',
+                    delayTimeHour : '00',
+                    delayTimeMinute : '00',
                     OptOutMsg : '',
                     priority : '1',
                     actionID : '1',
@@ -2431,8 +2431,8 @@ var ngSettings = {
                         OptOutTxt2 : '',
                         OptOutTxt3 : ''
                     },
-                    setTimeHourFrom : '00',
-                    setTimeMinuteFrom : '00',
+                    delayTimeHour : '00',
+                    delayTimeMinute : '00',
                     OptOutMsg : '',
                     priority : '2',
                     actionID : '1',
@@ -2448,8 +2448,8 @@ var ngSettings = {
                         OptOutTxt2 : '',
                         OptOutTxt3 : ''
                     },
-                    setTimeHourFrom : '00',
-                    setTimeMinuteFrom : '00',
+                    delayTimeHour : '00',
+                    delayTimeMinute : '00',
                     OptOutMsg : '',
                     priority : '2',
                     actionID : '1',
@@ -2499,11 +2499,33 @@ var ngSettings = {
             fillRule : function(rule, inAction) {
                 //rule = inAction;
                 rule.checked = (inAction.status == 'A');
+                rule.autoResponderKeywordActionID = inAction.autoResponderKeywordActionID;
 
                 var inParams = JSON.parse(inAction.parameters);
 
                 if (inParams.message) {
                     rule.messageTxt = inParams.message;
+                }
+
+                if (inParams.delaymins) {
+                    rule.delayTimeMinute = inParams.delaymins % 60;
+                    switch (rule.delayTimeMinute) {
+                    case 0:
+                        rule.delayTimeHour = String(inParams.delaymins / 60);
+                        rule.delayTimeMinute = '00';
+                        break;
+                    default :
+                        rule.delayTimeHour = String((inParams.delaymins - rule.delayTimeMinute) / 60);
+                        rule.delayTimeMinute = String(rule.delayTimeMinute);
+                        break;
+                    }
+
+                    if (rule.delayTimeHour.length = 1) {
+                        rule.delayTimeHour = '0' + rule.delayTimeHour;
+                    }
+                } else {
+                    rule.delayTimeHour = '00';
+                    rule.delayTimeMinute = '00';
                 }
 
                 rule.optOutMsg = '';
@@ -2512,8 +2534,7 @@ var ngSettings = {
                     OptOutTxt2 : '',
                     OptOutTxt3 : ''
                 };
-                rule.setTimeHourFrom = '00';
-                rule.setTimeMinuteFrom = '00';
+
                 rule.OptOutMsg = '';
             }
         },
@@ -2630,10 +2651,10 @@ var ngSettings = {
             },
             GetAutoresponderCallback : function(cpo, result) {
                 if (result.apicode == 0) {
-                    //                     if (result.apidata.length > 0) {
-                    cpo.arCtrl.autoresponder = result.apidata[0];
-                    ngSettings.Autoresponder.ServerRequests.GetKeyword(cpo, ngSettings.Autoresponder.ServerRequests.GetKeywordCallback);
-                    //                     }
+                    if (result.apidata.length > 0) {
+                        cpo.arCtrl.autoresponder = result.apidata[0];
+                        ngSettings.Autoresponder.ServerRequests.GetKeyword(cpo, ngSettings.Autoresponder.ServerRequests.GetKeywordCallback);
+                    }
                 } else {
                     cpo.$scope.$broadcast('itError', {
                         message : 'Error! ' + result.apitext
@@ -2676,13 +2697,14 @@ var ngSettings = {
                     if (result.apidata.length > 0) {
                         cpo.$scope.ngData = result.apidata;
                         cpo.$scope.totalServerItems = result.apicount;
-                        if (!cpo.$scope.$$phase) {
-                            cpo.$scope.$apply();
-                        }
-                        setTimeout(function() {
-                            cpo.$scope.ngRespondersOptions.selectAll(false);
-                        }, 100);
+
                     }
+                    if (!cpo.$scope.$$phase) {
+                        cpo.$scope.$apply();
+                    }
+                    setTimeout(function() {
+                        cpo.$scope.ngRespondersOptions.selectAll(false);
+                    }, 100);
                 } else {
                     cpo.$scope.$broadcast('itError', {
                         message : 'autoresponder_keyword_get result error: ' + result.apitext
@@ -2785,14 +2807,14 @@ var ngSettings = {
                         message : 'Autoresponder added'
                     });
                     cpo.clickedKeyword.autoResponderKeywordID = result.apidata;
-                    ngSettings.Autoresponder.ServerRequests.AddActions(cpo, cpo.keywordActionRules, ngSettings.Autoresponder.ServerRequests.AddActionsCallback);
+                    ngSettings.Autoresponder.ServerRequests.ResolveActions(cpo, cpo.keywordActionRules);
                 } else {
                     cpo.$scope.$broadcast('itError', {
                         message : 'Error! ' + result.apitext
                     });
                 }
                 ngSettings.Autoresponder.FillAutoresponder(cpo);
-            },            
+            },
             ModifyKeyword : function(cpo, keywordList, callback) {
                 for (var i = 0; i < keywordList.length; i++) {
                     var params = {
@@ -2835,6 +2857,7 @@ var ngSettings = {
                     cpo.$scope.$broadcast('itMessage', {
                         message : 'Autoresponder modified'
                     });
+                    ngSettings.Autoresponder.ServerRequests.ResolveActions(cpo, cpo.keywordActionRules);
                 } else {
                     cpo.$scope.$broadcast('itError', {
                         message : 'Error! ' + result.apitext
@@ -2842,7 +2865,7 @@ var ngSettings = {
                 }
                 ngSettings.Autoresponder.FillAutoresponder(cpo);
             },
-            AddActions: function(cpo, actionList, callback) {
+            AddActions : function(cpo, actionList, callback) {
                 for (var i = 0; i < actionList.length; i++) {
                     var params = {
                         apikey : cpo.$scope.main.authToken,
@@ -2884,16 +2907,25 @@ var ngSettings = {
                     });
                 }
             },
-            ModifyActions: function(cpo, actionList, callback) {
+            ResolveActions : function(cpo, actionList) {
+                for (var i = 0; i < actionList.length; i++) {
+                    if (actionList[i].autoResponderKeywordActionID) {
+                        ngSettings.Autoresponder.ServerRequests.ModifyActions(cpo, [actionList[i]], ngSettings.Autoresponder.ServerRequests.ModifyActionsCallback);
+                    } else {
+                        ngSettings.Autoresponder.ServerRequests.AddActions(cpo, [actionList[i]], ngSettings.Autoresponder.ServerRequests.AddActionsCallback);
+                    }
+                }
+            },
+            ModifyActions : function(cpo, actionList, callback) {
                 for (var i = 0; i < actionList.length; i++) {
                     var params = {
                         apikey : cpo.$scope.main.authToken,
                         accountID : cpo.$scope.main.accountID,
                         companyID : cpo.$scope.main.accountInfo.companyID,
-                        autoresponderkeywordid : cpo.clickedKeyword.autoResponderKeywordID,
                         priority : actionList[i].priority,
                         name : actionList[i].name,
                         actionid : actionList[i].actionID,
+                        autoresponderkeywordactionid : parseInt(actionList[i].autoResponderKeywordActionID),
                         status : actionList[i].checked ? "A" : "I",
                         parameters : JSON.stringify(actionList[i].ruleParams)
                     };
@@ -2971,15 +3003,17 @@ var ngSettings = {
                 if (cpo.arCtrl.validUntil) {
                     cpo.clickedKeyword.endDate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
                 };
-                for (var i = 0; i < actionList.length; i++) {
-                    actionList[i].ruleParams = {
-                        message : cpo.$scope.arCtrl.fromName + ': ' + actionList[i].messageTxt + ' ' + actionList[i].optFields.OptOutTxt1 + actionList[i].optFields.OptOutTxt2 + actionList[i].optFields.OptOutTxt3
+
+                //TODO ruleParams
+                for (var i = 0; i < cpo.keywordActionRules.length; i++) {
+                    cpo.keywordActionRules[i].ruleParams = {
+                        message : cpo.$scope.arCtrl.fromName + ': ' + cpo.keywordActionRules[i].messageTxt + ' ' + cpo.keywordActionRules[i].optFields.OptOutTxt1 + cpo.keywordActionRules[i].optFields.OptOutTxt2 + cpo.keywordActionRules[i].optFields.OptOutTxt3,
+                        delaymins : parseInt(cpo.keywordActionRules[i].delayTimeHour) * 60 + parseInt(cpo.keywordActionRules[i].delayTimeMinute)
                     };
                 }
 
                 if (cpo.clickedKeyword.autoResponderKeywordID) {
                     ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, [cpo.clickedKeyword], ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
-                    ngSettings.Autoresponder.ServerRequests.ModifyActions(cpo, cpo.keywordActionRules, ngSettings.Autoresponder.ServerRequests.ModifyActionsCallback);
                 } else {
                     ngSettings.Autoresponder.ServerRequests.AddKeyword(cpo, ngSettings.Autoresponder.ServerRequests.AddKeywordCallback);
                 }
@@ -3015,7 +3049,8 @@ var ngSettings = {
             checked : true,
             canBeClicked : false,
             field : 'actionCount',
-            displayName : 'Delays set'
+            displayName : 'Delays set',
+            cellTemplate : '<span class="label-icon"><i class="fa fa-clock-o" ng-show="row.getProperty(col.field)>1"><i class="fa fa-clock-o" ng-show="row.getProperty(col.field)>2"></i></span>'
         }, {
             checked : true,
             canBeClicked : false,

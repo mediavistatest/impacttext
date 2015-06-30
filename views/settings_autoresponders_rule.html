@@ -373,8 +373,8 @@ Autoresponder
                         <span class="label-icon"><i class="fa fa-clock-o">
                             </i></span>
                         <!-- Single button -->
-                        <div class="btn-group timing" dropdown is-open="status.isopenHour">
-                            <input type="text" name="SetTimeHourFrom" placeholder="Hour" class="form-control" dropdown-toggle ng-model='actionRule.setTimeHourFrom' readonly>
+                        <div class="btn-group timing" dropdown is-open="actionRule.isopenHour">
+                            <input type="text" name="delayTimeHour" placeholder="Hour" class="form-control" dropdown-toggle ng-model='actionRule.delayTimeHour' readonly>
                             <ul class="dropdown-menu time-pick" role="menu">
                                 <li>
                                     <span>
@@ -382,86 +382,86 @@ Autoresponder
                                     </span>
                                 </li>
                                 <li>
-                                    <a ng-click='SetTimeHourFrom = "00"'>
+                                    <a ng-click='actionRule.delayTimeHour = "00"'>
                                     00
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "01"'>
+                                    <a ng-click='actionRule.delayTimeHour = "01"'>
                                     01
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "02"'>
+                                    <a ng-click='actionRule.delayTimeHour = "02"'>
                                     02
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "03"'>
+                                    <a ng-click='actionRule.delayTimeHour = "03"'>
                                     03
                                     </a>
                                 </li>
                                 <li>
-                                    <a ng-click='SetTimeHourFrom = "04"'>
+                                    <a ng-click='actionRule.delayTimeHour = "04"'>
                                     04
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "05"'>
+                                    <a ng-click='actionRule.delayTimeHour = "05"'>
                                     05
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "06"'>
+                                    <a ng-click='actionRule.delayTimeHour = "06"'>
                                     06
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "07"'>
+                                    <a ng-click='actionRule.delayTimeHour = "07"'>
                                     07
                                     </a>
                                 </li>
                                 <li>
-                                    <a ng-click='SetTimeHourFrom = "08"'>
+                                    <a ng-click='actionRule.delayTimeHour = "08"'>
                                     08
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "09"'>
+                                    <a ng-click='actionRule.delayTimeHour = "09"'>
                                     09
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "10"'>
+                                    <a ng-click='actionRule.delayTimeHour = "10"'>
                                     10
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "11"'>
+                                    <a ng-click='actionRule.delayTimeHour = "11"'>
                                     11
                                     </a>
                                 </li>
                                 <li>
-                                    <a ng-click='SetTimeHourFrom = "12"'>
+                                    <a ng-click='actionRule.delayTimeHour = "12"'>
                                     12
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "13"'>
+                                    <a ng-click='actionRule.delayTimeHour = "13"'>
                                     13
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "14"'>
+                                    <a ng-click='actionRule.delayTimeHour = "14"'>
                                     14
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "15"'>
+                                    <a ng-click='actionRule.delayTimeHour = "15"'>
                                     15
                                     </a>
                                 </li>
                                 <li>
-                                    <a ng-click='SetTimeHourFrom = "16"'>
+                                    <a ng-click='actionRule.delayTimeHour = "16"'>
                                     16
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "17"'>
+                                    <a ng-click='actionRule.delayTimeHour = "17"'>
                                     17
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "18"'>
+                                    <a ng-click='actionRule.delayTimeHour = "18"'>
                                     18
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "19"'>
+                                    <a ng-click='actionRule.delayTimeHour = "19"'>
                                     19
                                     </a>
                                 </li>
                                 <li>
-                                    <a ng-click='SetTimeHourFrom = "20"'>
+                                    <a ng-click='actionRule.delayTimeHour = "20"'>
                                     20
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "21"'>
+                                    <a ng-click='actionRule.delayTimeHour = "21"'>
                                     21
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "22"'>
+                                    <a ng-click='actionRule.delayTimeHour = "22"'>
                                     22
                                     </a>
-                                    <a ng-click='SetTimeHourFrom = "23"'>
+                                    <a ng-click='actionRule.delayTimeHour = "23"'>
                                     23
                                     </a>
                                 </li>
@@ -469,8 +469,8 @@ Autoresponder
                         </div>
                         &nbsp;:&nbsp;
                         <!-- Single button -->
-                        <div class="btn-group timing" dropdown is-open="status.isopenMinute">
-                            <input type="text" name="SetTimeMinuteFrom" placeholder="Minute" class="form-control" dropdown-toggle ng-model='actionRule.setTimeMinuteFrom' readonly>
+                        <div class="btn-group timing" dropdown is-open="actionRule.isopenMinute">
+                            <input type="text" name="delayTimeMinute" placeholder="Minute" class="form-control" dropdown-toggle ng-model='actionRule.delayTimeMinute' readonly>
                             <ul class="dropdown-menu time-pick" role="menu">
                                 <li>
                                     <span>
@@ -478,16 +478,16 @@ Autoresponder
                                     </span>
                                 </li>
                                 <li>
-                                    <a ng-click='SetTimeMinuteFrom = "00"'>
+                                    <a ng-click='actionRule.delayTimeMinute = "00"'>
                                     00
                                     </a>
-                                    <a ng-click='SetTimeMinuteFrom = "15"'>
+                                    <a ng-click='actionRule.delayTimeMinute = "15"'>
                                     15
                                     </a>
-                                    <a ng-click='SetTimeMinuteFrom = "30"'>
+                                    <a ng-click='actionRule.delayTimeMinute = "30"'>
                                     30
                                     </a>
-                                    <a ng-click='SetTimeMinuteFrom = "45"'>
+                                    <a ng-click='actionRule.delayTimeMinute = "45"'>
                                     45
                                     </a>
                                 </li>
