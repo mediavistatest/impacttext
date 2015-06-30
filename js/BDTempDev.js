@@ -2495,11 +2495,11 @@ var ngSettings = {
             },
             fillRule : function(rule, inAction) {
                 //rule = inAction;
-                rule.checked = (inAction.status=='A');
+                rule.checked = (inAction.status == 'A');
 
                 var inParams = JSON.parse(inAction.parameters);
 
-                if (inParams.message){
+                if (inParams.message) {
                     rule.messageTxt = inParams.message;
                 }
 
@@ -2760,7 +2760,7 @@ var ngSettings = {
                         companyID : cpo.$scope.main.accountInfo.companyID,
                         autoresponderkeywordid : keywordList[i].autoResponderKeywordID,
                         name : keywordList[i].name,
-                        status : cpo.arCtrl.inactive ? "I" : "A",
+                        status : cpo.arCtrl.status,
                         startdate : keywordList[i].startDate,
                         // autoresponderkeyword : 'newkeyword'
                     };
@@ -2867,15 +2867,18 @@ var ngSettings = {
             //ACTIVATE KEYWORD
             ActivateRules_onClick : function(cpo) {
                 cpo.arCtrl.inactive = false;
+                cpo.arCtrl.status = "A";
                 ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
             },
             //DEACTIVATE KEYWORD
             DeactivateRules_onClick : function(cpo) {
                 cpo.arCtrl.inactive = true;
+                cpo.arCtrl.status = "I";
                 ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
             },
             Delete_onClick : function(cpo) {
-
+                cpo.arCtrl.status = "D";
+                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
             },
             Save_onClick : function(cpo) {
                 if (cpo.arCtrl.validFrom) {
@@ -3020,6 +3023,14 @@ var ngSettings = {
             $scope.$watch('ngData', function() {
                 $('.gridStyle').trigger('resize');
             });
+             $scope.$watch('arCtrl.inactive', function() {
+                if(arCtrl.inactive){
+                    arCtrl.status = 'I'
+                } else {
+                    arCtrl.status = 'A'
+                }
+            });           
+
 
             //set prefered number
             ngSettings.Autoresponder._internal.SetFromNumber(cpo);
