@@ -3111,7 +3111,6 @@ var ngSettings = {
             };
         },
         PopulateRules : function(cpo) {
-            console.log(cpo.clickedKeyword)
             cpo.arCtrl.inactive = (cpo.clickedKeyword.status === "I");
         },
         Controller : function($scope, $http, $cookieStore) {
