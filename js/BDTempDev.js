@@ -2081,7 +2081,7 @@ var ngSettings = {
                 };
                 var $param = $.param(params);
 
-                cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param).success(function(data) {
+                cpo.$http.post(inspiniaNS.wsUrl + "did_modifyname", $param).success(function(data) {
                     if (data.apicode == 0) {
                         if ( typeof success == 'function') {
                             success(data);
@@ -2109,19 +2109,24 @@ var ngSettings = {
                 }
             },
             Save_onClick : function(cpo) {
+					 if(cpo.remainingSaveCount >= 0){
+						 cpo.remainingSaveCount += cpo.numCtrl.numbers.length;
+					 }else{
+						 cpo.remainingSaveCount = cpo.numCtrl.numbers.length;
+					 }
                 for (var j in cpo.numCtrl.numbers) {
-                    if (cpo.numCtrl.numbers[j].fromName && cpo.numCtrl.numbers[j].fromName != '') {
-                        ngSettings.NumberNames.ServerRequests.ModifyNumbers(cpo, cpo.numCtrl.numbers[j].DIDID, cpo.numCtrl.numbers[j].fromName, function(data) {
-                            cpo.$scope.$broadcast('itMessage', {
-                                message : 'ImpactText Number settings saved'
-                            });
-                        }, function(data) {
-                            cpo.$scope.$broadcast('itError', {
-                                message : 'Failed to save ImpactText Number settings!'
-                            });
-                            console.log('did_modify: ' + data.apitext);
-                        });
-                    }
+						ngSettings.NumberNames.ServerRequests.ModifyNumbers(cpo, cpo.numCtrl.numbers[j].DIDID, cpo.numCtrl.numbers[j].fromName, function(data) {
+							 cpo.remainingSaveCount--;
+							 cpo.saveSuccessCount++;
+
+							cpo.renderMessages();
+						}, function(data) {
+							 cpo.remainingSaveCount--;
+							 cpo.saveErrorCount++;
+
+							 cpo.renderMessages();
+							 console.log('did_modify: ' + data.apitext);
+						});
                 }
             }
         },
@@ -2129,6 +2134,8 @@ var ngSettings = {
             var numCtrl = this;
             var cpo = ngSettings.NumberNames;
             cpo.numCtrl = numCtrl;
+			   cpo.saveSuccessCount = 0;
+			   cpo.saveErrorCount = 0;
             cpo.$scope = $scope;
             cpo.$http = $http;
             cpo.$cookieStore = $cookieStore;
@@ -2180,6 +2187,31 @@ var ngSettings = {
             cpo.$scope.$on('$destroy', function() {
                 cpo.stopInterval();
             });
+
+			   cpo.renderMessages = function(){
+					if (cpo.remainingSaveCount == 0) {
+						// Display popup notifications
+						if (cpo.saveErrorCount > 0) {
+							if (cpo.saveSuccessCount > 0) {
+								cpo.$scope.$broadcast('itError', {
+									message : 'Failed to save ImpactText Number settings for some numbers (' + cpo.saveErrorCount + ')!'
+								});
+							} else {
+								cpo.$scope.$broadcast('itError', {
+									message : 'Failed to save ImpactText Number settings!'
+								});
+							}
+						} else {
+							cpo.$scope.$broadcast('itMessage', {
+								message : 'ImpactText Number settings saved'
+							});
+						}
+						// Reset counters
+						cpo.remainingSaveCount = 0;
+						cpo.saveErrorCount = 0;
+						cpo.saveSuccessCount = 0;
+					}
+				};
 
             cpo.getNumbers();
         }
@@ -2293,31 +2325,27 @@ var ngSettings = {
                 });
             },
             ModifyAccount : function(cpo, emails, callback) {
-                if (emails != '') {
-                    var params = {
-                        apikey : cpo.$scope.main.authToken,
-                        accountID : cpo.$scope.main.accountID,
-                        email2sms : emails,
-                        sethttp : 1
+				  var params = {
+						apikey : cpo.$scope.main.authToken,
+						accountID : cpo.$scope.main.accountID,
+						email2sms : emails,
+						sethttp : 1
 
-                    };
-                    var $param = $.param(params);
+				  };
+				  var $param = $.param(params);
 
-                    //POST
-                    cpo.$http.post(inspiniaNS.wsUrl + "account_modify", $param).success(function(data) {
-                        if (data.apicode == 0) {
-                            callback();
-                        } else {
-                            cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
-                        }
-                    }).error(
-                    //An error occurred with this request
-                    function(data, status, headers, config) {
-                        cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
-                    });
-                } else {
-                    callback();
-                }
+				  //POST
+				  cpo.$http.post(inspiniaNS.wsUrl + "account_modify", $param).success(function(data) {
+						if (data.apicode == 0) {
+							 callback();
+						} else {
+							 cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
+						}
+				  }).error(
+				  //An error occurred with this request
+				  function(data, status, headers, config) {
+						cpo.$scope.$broadcast('ModifyAccountEmail2SMSFailed');
+				  });
             }
         },
         Events : {
