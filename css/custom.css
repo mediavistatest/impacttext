@@ -4937,6 +4937,16 @@ ul.bar-legend {
     margin-left:10px;
 }
 
+.keyword-input {
+  position: relative;
+}
+.keyword-input button.btn.btn-search {
+  position: absolute;
+  right: -35px;
+  top: 6px;
+  font-size: 14px;
+}
+
 /*MEDIA QUERIES*/
 @media (max-width: 1375px) {
 

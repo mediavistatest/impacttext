@@ -1,0 +1,92 @@
+<h1>
+Settings
+</h1>
+<div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation" ng-controller="ngNumbersCtrl as numCtrl">
+    <div ng-controller="ngInboxNotifyCtrl">
+        <div class="settings-section">
+            <h2 class="section-title">
+            ImpactText Number
+            </h2>
+            <p>
+                Set your default ImpactText number and From Name. Your messages will automatically send from this number. 
+                <br><br>
+                If you have more than one ImpactText number, choose a preferred number and set From Names for all your numbers.
+            </p>
+            <br>
+            <!-- <div class="form-group clearfix">
+            <label class="col-sm-2 control-label">
+            ImpactText Number:</label>
+            <div class="col-sm-6">
+            <select class="form-control m-b" name="DefaultFromNumber" ng-model="DefaultFromNumber" ng-init="DefaultFromNumber='1'">
+            <option value="1" selected>
+            +14155942929
+            </option>
+            <option value="2">
+            +12248140018
+            </option>
+            <option value="3">
+            +18444500010
+            </option>
+            <option value="4">
+            +18007111701
+            </option>
+            </select>
+            </div>
+            <div class="col-sm-4">
+            <i class="fa fa-info-circle" tooltip='Messages will be by default sent from this From Number.'>
+            </i>
+            </div>
+            </div> -->
+            <div class="form-group clearfix">
+                    <div class="col-sm-1 check">
+                        
+                    </div>
+                    <div class="col-sm-3">
+                        <label>ImpactText Number</label>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Keyword</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <label>From Name</label>
+                    </div>
+                    <div class="col-sm-3">
+                       
+                    </div>
+                </div>
+
+            <div ng-repeat="Number in numCtrl.numbers track by Number.DIDID">
+                <div class="form-group clearfix">
+                    <div class="col-sm-1 check">
+                        <input type="checkbox" name="defaultNumber" ng-model="Number.prefered" ng-trim="false" ng-value="true" ng-change="cpo.Events.DefaultNumber_onChange(cpo, Number)">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" name="Number" ng-model="Number.DID" class="form-control" ng-trim="false" readonly>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="text" name="Keyword" ng-model="Number.keyword" class="form-control" ng-trim="false" readonly>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" name="Name" placeholder="Set your From Name here." ng-model="Number.fromName" class="form-control"  ng-trim="false">
+                    </div>
+                    <div class="col-sm-3" ng-show="Number.prefered">
+                        <i class="fa fa-info-circle" tooltip='Messages will automatically be sent from this From Name. This will count in your character limit.'>
+                        </i>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end settings section -->
+
+        <br>
+        <br>
+        <br>
+        <div class="col-sm-6 col-sm-offset-2">
+            <button class="btn btn-send smaller right" ng-click="cpo.Events.Save_onClick(cpo)">
+                <span><i class="fa fa-floppy-o">
+                    </i>
+                    Save changes</span>
+            </button>
+        </div>
+    </div>
+</div>
