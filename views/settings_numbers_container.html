@@ -38,41 +38,94 @@ Settings
             </div>
             </div> -->
             <div class="form-group clearfix">
-                    <div class="col-sm-1 check">
+                    <!--<div class="col-sm-1 check">
                         
                     </div>
                     <div class="col-sm-3">
                         <label>ImpactText Number</label>
                     </div>
-                    <div class="col-sm-2">
-                        <label>Keyword</label>
-                    </div>
+                    
                     <div class="col-sm-3">
                         <label>From Name</label>
-                    </div>
-                    <div class="col-sm-3">
+                    </div>-->
+
+                    <!--<br clear="all">
+
+                    <div class="col-sm-12">
+                        <label>Keyword</label>
+                    </div>-->
+
+                   <!-- <div class="col-sm-3">
                        
-                    </div>
+                    </div>-->
                 </div>
 
             <div ng-repeat="Number in numCtrl.numbers track by Number.DIDID">
                 <div class="form-group clearfix">
-                    <div class="col-sm-1 check">
-                        <input type="checkbox" name="defaultNumber" ng-model="Number.prefered" ng-trim="false" ng-value="true" ng-change="cpo.Events.DefaultNumber_onChange(cpo, Number)">
+                	<div class="col-sm-2 control-label message-type">
+                        <label>Set as default:</label>
+                    </div>  
+                    <div class="col-sm-6 check">
+                        <div class="radio"><input icheck type="checkbox" name="defaultNumber" ng-model="Number.prefered" ng-trim="false" ng-value="true" ng-change="cpo.Events.DefaultNumber_onChange(cpo, Number)"></div>
                     </div>
-                    <div class="col-sm-3">
+                </div>
+                <div class="form-group clearfix">
+                    <div class="col-sm-2 control-label double">
+                        <label>ImpactText Number:</label>
+                    </div>
+                    <div class="col-sm-6">
                         <input type="text" name="Number" ng-model="Number.DID" class="form-control" ng-trim="false" readonly>
-                    </div>
-                    <div class="col-sm-2">
-                        <input type="text" name="Keyword" ng-model="Number.keyword" class="form-control" ng-trim="false" readonly>
-                    </div>
-                    <div class="col-sm-3">
+                    </div> 
+
+                </div>
+                <div class="form-group clearfix">
+                    <div class="col-sm-2 control-label">
+                        <label>From Name:</label>
+                    </div>                  
+                    <div class="col-sm-6">
                         <input type="text" name="Name" placeholder="Set your From Name here." ng-model="Number.fromName" class="form-control"  ng-trim="false">
                     </div>
-                    <div class="col-sm-3" ng-show="Number.prefered">
+				</div>
+				<div class="form-group clearfix">
+
+                    <div class="col-sm-2 control-label">                	
+                        <label>Keyword(s):</label>
+                    </div>
+                    <div class="col-sm-6">
+						
+						<div class="keyword-input">
+						<input type="text" name="Keyword" ng-model="Number.keyword" class="form-control" ng-trim="false" readonly> 
+						</div>
+
+						<div class="keyword-input">
+                        <input type="text" name="Keyword2" ng-model="Number.keyword2" class="form-control" ng-trim="false" style="margin-top:10px" readonly>
+                        <button class="btn btn-search"><i class="fa fa-minus"></i></button>
+                        </div>
+
+                        <div class="keyword-input">
+                        <input type="text" name="Keyword3" ng-model="Number.keyword3" class="form-control" ng-trim="false" style="margin-top:10px" readonly>
+                        <button class="btn btn-search"><i class="fa fa-minus"></i></button>
+                        </div>
+
+                        <div class="keyword-input">
+                        <input type="text" name="Keyword4" ng-model="Number.keyword4" class="form-control" ng-trim="false" style="margin-top:10px" readonly>
+                        <button class="btn btn-search"><i class="fa fa-minus"></i></button>
+                        </div>
+
+                        <div class="keyword-input">
+                        <input type="text" name="Keyword5" ng-model="Number.keyword5" class="form-control" ng-trim="false" style="margin-top:10px" readonly>
+                        <button class="btn btn-search"><i class="fa fa-minus"></i></button>
+                        </div>
+
+                        <br>
+                        <a class=""> + Add keyword (0 remaining) </a>
+                    </div>
+                    <!--<div class="col-sm-3" ng-show="Number.prefered">
                         <i class="fa fa-info-circle" tooltip='Messages will automatically be sent from this From Name. This will count in your character limit.'>
                         </i>
-                    </div>
+                    </div>-->
+                </div>
+                    <hr class="clearfix">
                 </div>
             </div>
 
