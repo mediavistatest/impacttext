@@ -174,7 +174,7 @@ Send
                         {{dynamicContent[tag]}}
                     </button>
                 </div>
-                <textarea id="send-message-txtarea" name="MessageTxt" class="form-control" ng-maxlength="{{ maxLength }}" rows="3" ng-model="MessageTxt" ng-trim="false"></textarea>                
+                <textarea id="send-message-txtarea" name="MessageTxt" class="form-control" ng-maxlength="{{ maxLength }}" rows="3" ng-model="MessageTxt" ng-trim="false"></textarea>
 
 
 
@@ -245,7 +245,7 @@ Send
                 </select>
 
                 <div class="animate-switch-container" ng-switch on="OptOutMsg">
-                    <textarea ng-init="optFields.OptOutTxt1='Reply STOP to end msgs.'; optFields.OptOutTxt2=''; optFields.OptOutTxt3=''" ng-switch-when="standard" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt1" ng-trim="false" readonly></textarea>                    
+                    <textarea ng-init="optFields.OptOutTxt1='Reply STOP to end msgs.'; optFields.OptOutTxt2=''; optFields.OptOutTxt3=''" ng-switch-when="standard" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt1" ng-trim="false" readonly></textarea>
 
 
                      <textarea ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt2=main.Settings.defaultOptOutText; optFields.OptOutTxt3=''" ng-switch-when="custom" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt2" ng-trim="false" readonly></textarea>
@@ -417,7 +417,7 @@ Send
                             <span class="label-icon" title="End date"><i class="fa fa-power-off">
                                 </i></span>
                             <div class="btn-group datetimepicker-wrapper">
-                                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="sheduledDateTime.SetRecurringEndDate" is-open="sheduledDateTime.opened_recurring" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="false" close-text="Close" ng-click="openRecurring($event,sheduledDateTime)" ng-disabled="!sheduledDateTime.SetRecurringType" />
+                                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="sheduledDateTime.SetRecurringEndDate" is-open="sheduledDateTime.opened_recurring" min-date="sheduledDateTime.SetDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="false" close-text="Close" ng-click="openRecurring($event,sheduledDateTime)" ng-disabled="!sheduledDateTime.SetRecurringType" />
                             </div>
                         </div>
                     </div>
