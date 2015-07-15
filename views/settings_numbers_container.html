@@ -8,7 +8,7 @@ Settings
             ImpactText Number
             </h2>
             <p>
-                Set your default ImpactText number and From Name. Your messages will automatically send from this number. 
+                Set your default ImpactText number and From Name. Your messages will automatically send from this number.
                 <br><br>
                 If you have more than one ImpactText number, choose a preferred number and set From Names for all your numbers.
             </p>
@@ -39,12 +39,12 @@ Settings
             </div> -->
             <div class="form-group clearfix">
                     <!--<div class="col-sm-1 check">
-                        
+
                     </div>
                     <div class="col-sm-3">
                         <label>ImpactText Number</label>
                     </div>
-                    
+
                     <div class="col-sm-3">
                         <label>From Name</label>
                     </div>-->
@@ -56,7 +56,7 @@ Settings
                     </div>-->
 
                    <!-- <div class="col-sm-3">
-                       
+
                     </div>-->
                 </div>
 
@@ -64,7 +64,7 @@ Settings
                 <div class="form-group clearfix">
                 	<div class="col-sm-2 control-label message-type">
                         <label>Set as default:</label>
-                    </div>  
+                    </div>
                     <div class="col-sm-6 check">
                         <div class="radio"><input icheck type="checkbox" name="defaultNumber" ng-model="Number.prefered" ng-trim="false" ng-value="true" ng-change="cpo.Events.DefaultNumber_onChange(cpo, Number)"></div>
                     </div>
@@ -75,59 +75,45 @@ Settings
                     </div>
                     <div class="col-sm-6">
                         <input type="text" name="Number" ng-model="Number.DID" class="form-control" ng-trim="false" readonly>
-                    </div> 
+                    </div>
 
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-sm-2 control-label">
                         <label>From Name:</label>
-                    </div>                  
+                    </div>
                     <div class="col-sm-6">
                         <input type="text" name="Name" placeholder="Set your From Name here." ng-model="Number.fromName" class="form-control"  ng-trim="false">
                     </div>
 				</div>
-				<div class="form-group clearfix">
-
-                    <div class="col-sm-2 control-label">                	
-                        <label>Keyword(s):</label>
-                    </div>
-                    <div class="col-sm-6">
-						
-						<div class="keyword-input">
-						<input type="text" name="Keyword" ng-model="Number.keyword" class="form-control" ng-trim="false" readonly> 
+					<div class="form-group clearfix">
+						<div class="col-sm-2 control-label">
+							<label>Keyword(s):</label>
 						</div>
+						<div class="col-sm-6">
 
-						<div class="keyword-input">
-                        <input type="text" name="Keyword2" ng-model="Number.keyword2" class="form-control" ng-trim="false" style="margin-top:10px" readonly>
-                        <button class="btn btn-search"><i class="fa fa-minus"></i></button>
-                        </div>
+							<div class="keyword-input first">
+								<input type="text" name="Keywords[]" data-didid="{{Number.DIDID}}" data-keyword-id="{{numCtrl.keywords[Number.DIDID][0].accountKeywordID}}" data-keyword-original="{{::numCtrl.keywords[Number.DIDID][0].keyword}}" ng-model="numCtrl.keywords[Number.DIDID][0].keyword" class="form-control" ng-class="keyword_change_errors.keyword_id[numCtrl.keywords[Number.DIDID][0].accountKeywordID] ? 'error' : ''" ng-trim="false" autocomplete="off">
+								<small ng-if="keyword_change_errors.keyword_id[numCtrl.keywords[Number.DIDID][n+1].accountKeywordID]" class="error-hint">{{keyword_change_errors.keyword_id[numCtrl.keywords[Number.DIDID][0].accountKeywordID]}}</small>
+							</div>
 
-                        <div class="keyword-input">
-                        <input type="text" name="Keyword3" ng-model="Number.keyword3" class="form-control" ng-trim="false" style="margin-top:10px" readonly>
-                        <button class="btn btn-search"><i class="fa fa-minus"></i></button>
-                        </div>
+							<div ng-repeat="n in [numCtrl.keywords[Number.DIDID].length - 1] | makeRange">
+								<div class="keyword-input">
+									<input type="text" name="Keywords[]" data-didid="{{Number.DIDID}}" data-keyword-id="{{numCtrl.keywords[Number.DIDID][n+1].accountKeywordID}}" data-keyword-original="{{::numCtrl.keywords[Number.DIDID][n+1].keyword}}" ng-model="numCtrl.keywords[Number.DIDID][n+1].keyword" class="form-control" ng-class="keyword_change_errors.keyword_id[numCtrl.keywords[Number.DIDID][n+1].accountKeywordID] ? 'error' : ''" ng-trim="false" autocomplete="off">
+									<button class="btn btn-search" ng-click="cpo.removeKeyword(Number.DIDID, n+1, numCtrl.keywords[Number.DIDID][n+1].accountKeywordID, $event)"><i class="fa fa-minus"></i></button>
+									<small ng-if="keyword_change_errors.keyword_id[numCtrl.keywords[Number.DIDID][n+1].accountKeywordID]" class="error-hint">{{keyword_change_errors.keyword_id[numCtrl.keywords[Number.DIDID][n+1].accountKeywordID]}}</small>
+								</div>
+							</div>
+							<small ng-if="keyword_change_errors.did[Number.DID]" class="error-hint">{{keyword_change_errors.did[Number.DID]}}</small>
 
-                        <div class="keyword-input">
-                        <input type="text" name="Keyword4" ng-model="Number.keyword4" class="form-control" ng-trim="false" style="margin-top:10px" readonly>
-                        <button class="btn btn-search"><i class="fa fa-minus"></i></button>
-                        </div>
-
-                        <div class="keyword-input">
-                        <input type="text" name="Keyword5" ng-model="Number.keyword5" class="form-control" ng-trim="false" style="margin-top:10px" readonly>
-                        <button class="btn btn-search"><i class="fa fa-minus"></i></button>
-                        </div>
-
-                        <br>
-                        <a class=""> + Add keyword (0 remaining) </a>
-                    </div>
-                    <!--<div class="col-sm-3" ng-show="Number.prefered">
-                        <i class="fa fa-info-circle" tooltip='Messages will automatically be sent from this From Name. This will count in your character limit.'>
-                        </i>
-                    </div>-->
-                </div>
-                    <hr class="clearfix">
-                </div>
-            </div>
+							<p ng-click="cpo.addKeyword(Number.DIDID)" ng-if="main.accountInfo.sharedDIDKeywordMax - numCtrl.keywords[Number.DIDID].length" class="keyword-add"> + Add keyword ({{main.accountInfo.sharedDIDKeywordMax - numCtrl.keywords[Number.DIDID].length}} remaining) </p>
+							<!--<div class="col-sm-3" ng-show="Number.prefered">
+									<i class="fa fa-info-circle" tooltip='Messages will automatically be sent from this From Name. This will count in your character limit.'>
+									</i>
+							  </div>-->
+						</div>
+					</div>
+				</div>
 
         </div><!-- end settings section -->
 
@@ -141,5 +127,7 @@ Settings
                     Save changes</span>
             </button>
         </div>
+
+		 <div>{{keyword_change_errors}}</div>
     </div>
 </div>

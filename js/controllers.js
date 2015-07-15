@@ -162,7 +162,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 }
             });
         },
-        accountKeywordGet : function() {
+        accountKeywordGet : function(success, error) {
             $http.post(inspiniaNS.wsUrl + "accountkeyword_get", $.param({
                 sethttp : 1,
                 apikey : main.authToken,
@@ -187,22 +187,18 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                         if ($.grep(main.Settings.Numbers, function(member) {
                             return (member.DID == main.fromNumbers[number].DID && member.accountID == main.fromNumbers[number].accountID);
                         }).length == 0) {
-                            var keyword = '';
-                            var didKeyword = $.grep(main.keywords, function(keyword){
-                            return (keyword.DIDID == main.fromNumbers[number].DIDID);
-                            })[0];
-                            if (didKeyword) {
-                                keyword = didKeyword.keyword;
-                            }
-
-                            main.Settings.Numbers.push({
-                                accountID : main.accountID,
-                                DIDID : main.fromNumbers[number].DIDID,
-                                DID : main.fromNumbers[number].DID,
-                                keyword : keyword,
-                                prefered : false,
-                                name : ''
+                            var didKeywords = $.grep(main.keywords, function(keyword){
+                            	return (keyword.DIDID == main.fromNumbers[number].DIDID);
                             });
+
+									 main.Settings.Numbers.push({
+										 accountID : main.accountID,
+										 DIDID : main.fromNumbers[number].DIDID,
+										 DID : main.fromNumbers[number].DID,
+										 keywords : didKeywords,
+										 prefered : false,
+										 name : ''
+									 });
                         }
                     }
                 }
@@ -210,6 +206,10 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                     expires : 365,
                     expirationUnit : 'days'
                 });
+
+					if(typeof success == 'function'){
+						success();
+					}
             }).error(
             //An error occurred with this request
             function(data, status, headers, config) {
@@ -218,6 +218,10 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                     alert("An error occurred when getting keywords! Error code: " + data.apicode);
                     console.log(JSON.stringify(data));
                 }
+
+					if(typeof error == 'function'){
+						error();
+					}
             });
         },
         didGet : function(successFunction, errorFunction, $inScope) {
@@ -735,7 +739,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                         main.fromNumbersString += ',';
                     }
 
-                    main.Settings.Numbers[j].name = main.fromNumbers[j].fromName;
+						 if(typeof main.Settings.Numbers[j] !== 'undefined'){
+                   	main.Settings.Numbers[j].name = main.fromNumbers[j].fromName;
+						 }
                 }
             };
             var errorDidGet = function(data, status, headers, config, $inScope) {
@@ -5437,6 +5443,28 @@ function SearchByDateCtrl($scope, $http, $cookieStore, $state) {
         initDate : 'false'
     };
 }
+
+angular.module('inspinia').filter('makeRange', function() {
+	return function(input) {
+		var lowBound, highBound;
+		switch (input.length) {
+			case 1:
+				lowBound = 0;
+				highBound = parseInt(input[0]) - 1;
+				break;
+			case 2:
+				lowBound = parseInt(input[0]);
+				highBound = parseInt(input[1]);
+				break;
+			default:
+				return input;
+		}
+		var result = [];
+		for (var i = lowBound; i <= highBound; i++)
+			result.push(i);
+		return result;
+	};
+});
 
 
 angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);

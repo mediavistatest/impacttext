@@ -4249,7 +4249,7 @@ height: 31px;
     float: left;
     font-size: 12px;
 }
-.error {
+.error, .error-hint {
     color: #a94442;
 }
 .drop-btn {
@@ -4939,6 +4939,10 @@ ul.bar-legend {
 
 .keyword-input {
   position: relative;
+  margin-top: 10px;
+}
+.keyword-input.first {
+	margin-top: 0;
 }
 .keyword-input button.btn.btn-search {
   position: absolute;
@@ -4946,6 +4950,8 @@ ul.bar-legend {
   top: 6px;
   font-size: 14px;
 }
+.keyword-add { display: block; margin-top: 1em; color: #428BCA; cursor: pointer; }
+.keyword-add:hover { color: #2A6496; }
 
 /*MEDIA QUERIES*/
 @media (max-width: 1375px) {
