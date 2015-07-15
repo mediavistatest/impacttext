@@ -5084,30 +5084,25 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
     $scope.eventSources = [$scope.events];
     //$scope.eventSources = [];
 
-    var $param = $.param({
+    var $paramS = $.param({
         apikey : $scope.main.authToken,
         accountID : $scope.main.accountID,
         status : 'S',
         sethttp : 1
     });
 
+    // Scheduled messages
     //POST
-    $http.post(inspiniaNS.wsUrl + 'messages_outbound', $param)
+    $http.post(inspiniaNS.wsUrl + 'messages_outbound', $paramS)
     // success function
     .success(function(result) {
         if (result.apicode == 0) {
-            //$scope.events.slice(0, $scope.events.length);
             for (var event in result.apidata) {
                 var currentEvent = result.apidata[event];
                 var date = new Date(currentEvent.scheduledDate.substring(0, 10));
-                // var d = date.getDate();
-                // var m = date.getMonth();
-                // var y = date.getFullYear();
                 var callendarEvent = {
                     originalTitle : 'Scheduled',
                     no : 1,
-                    // start : new Date(y, m, d),
-                    // end : new Date(y, m, d),
                     start : date,
                     end : date,
                     url : '#/messages/messages_scheduled'
@@ -5127,8 +5122,8 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
                     callendarEvent.title = callendarEvent.originalTitle;
                     $scope.events.push(callendarEvent);
                 }
-
             }
+
             $scope.eventSources = [$scope.events];
         }
     })
@@ -5137,18 +5132,54 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
         console.log(ngInbox._internal.ErrorMsg);
     });
 
-    // /* message on eventClick */
-    // $scope.alertOnEventClick = function(event, allDay, jsEvent, view) {
-    // $scope.alertMessage = (event.title + ': Clicked ');
+    // //Recuring messages
+    // var $paramT = $.param({
+    // apikey : $scope.main.authToken,
+    // accountID : $scope.main.accountID,
+    // status : 'T',
+    // sethttp : 1
+    // });
+    //
+    // //POST
+    // $http.post(inspiniaNS.wsUrl + 'messages_outbound', $paramT)
+    // // success function
+    // .success(function(result) {
+    // if (result.apicode == 0) {
+    // for (var event in result.apidata) {
+    // var currentEvent = result.apidata[event];
+    // var date = new Date(currentEvent.scheduledDate.substring(0, 10));
+    // var callendarEvent = {
+    // originalTitle : 'Recuring',
+    // no : 1,
+    // start : date,
+    // end : date,
+    // url : '#/messages/messages_scheduled'
     // };
-    // /* message on Drop */
-    // $scope.alertOnDrop = function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
-    // $scope.alertMessage = (event.title + ': Droped to make dayDelta ' + dayDelta);
-    // };
-    // /* message on Resize */
-    // $scope.alertOnResize = function(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view) {
-    // $scope.alertMessage = (event.title + ': Resized to make dayDelta ' + minuteDelta);
-    // };
+    //
+    // var dateString = new Date(date).toISOString().substring(0, 10);
+    //
+    // var dayEvents = $.grep($scope.events, function(dayEvent) {
+    // var dayEventString = new Date(dayEvent.start).toISOString().substring(0, 10);
+    // return dayEventString == dateString;
+    // });
+    //
+    // if (dayEvents.length > 0) {
+    // dayEvents[0].no++;
+    // dayEvents[0].title = dayEvents[0].originalTitle + ' (' + dayEvents[0].no + ')';
+    // } else {
+    // callendarEvent.title = callendarEvent.originalTitle;
+    // $scope.events.push(callendarEvent);
+    // }
+    // }
+    //
+    // $scope.eventSources = [$scope.events];
+    // }
+    // })
+    // // error function
+    // .error(function(data, status, headers, config) {
+    // console.log(ngInbox._internal.ErrorMsg);
+    // });
+
 }
 
 function DashboardInboxCtrl($scope, $http, $cookieStore) {
@@ -5213,7 +5244,6 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
      * Data for Bar chart
      */
     $scope.barData = {
-        // labels : ["January", "February", "March", "April"],
         labels : [],
         datasets : [{
             label : "Received messages",
@@ -5271,18 +5301,7 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
         $scope.barData.datasets[2].data.push($scope.Recipients);
         $scope.barData.datasets[3].data.push($scope.OptOuts);
         $scope.barData.datasets[4].data.push($scope.Senders);
-
-        // $scope.StartDate = String(inData.apidata.startDateTime).substring(0, 10);
-        // $scope.EndDate = String(inData.apidata.endDateTime).substring(0, 10);
     };
-    //var updateBarOptions = function() {
-    //        barData[0].value = pCtrl.bucketOfMessages;
-    //        barData[1].value = pCtrl.messageCount;
-    //    };
-    //
-    //    $scope.$watch('pCtrl.messageCount', updateBarOptions, true);
-    //    //$scope.$watch('pCtrl.bucketOfMessages', updateDouhnutOptions, true);
-    //Date/time control
     $scope.StartDate = '';
     $scope.EndDate = '';
 
@@ -5299,10 +5318,6 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
         $scope.StartDate = null;
         $scope.EndDate = null;
     };
-    // Disable weekend selection
-    //$scope.disabled = function(date, mode) {
-    //  return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-    //};
     $scope.toggleMin = function() {
         $scope.minDate = $scope.minDate ? null : new Date();
     };
@@ -5324,36 +5339,6 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
         initDate : 'false'
     };
     $scope.showReport = function() {
-        // $scope.barData.labels
-
-        // var month = new Array();
-        // month[0] = "January";
-        // month[1] = "February";
-        // month[2] = "March";
-        // month[3] = "April";
-        // month[4] = "May";
-        // month[5] = "June";
-        // month[6] = "July";
-        // month[7] = "August";
-        // month[8] = "September";
-        // month[9] = "October";
-        // month[10] = "November";
-        // month[11] = "December";
-        //
-        // var monthsDiff = (parseInt($('#idEndDate').val().substring(0, 4)) - parseInt($('#idStartDate').val().substring(0, 4))) * 12 + (parseInt($('#idEndDate').val().substring(5, 7)) - parseInt($('#idStartDate').val().substring(5, 7))) + 1;
-        //
-        // if (monthsDiff >= 12) {
-        // $scope.barData.labels = month;
-        // } else {
-        // var month_mod12;
-        // var currentDate;
-        // for (var i = 0; i < monthsDiff; i++) {
-        // month_mod12 = ($scope.StartDate.getMonth()+1) % 12;
-        //
-        // $scope.barData.labels.push(month[$scope.StartDate.getMonth()]);
-        // $scope.StartDate.setMonth(month_mod12);
-        // }
-        // }
         var didid;
         if ($scope.selectedDID && $scope.selectedDID.DIDID) {
             didid = $scope.selectedDID.DIDID;
@@ -5365,7 +5350,7 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
 
         $scope.params = {
             startdatetime : $('#idStartDate').val() + ' 00:00:00',
-            enddatetime : $('#idEndDate').val() + ' 00:00:00',
+            enddatetime : $('#idEndDate').val() + ' 23:59:59',
             didid : didid,
             contactListID : contactListID
         };
@@ -5377,24 +5362,13 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
     $scope.selectedContactList = {
         contactListID : null
     };
-    // var callRequest = function(){
-    // // if ($scope.selectedContactList && $scope.selectedContactList.contactListID){
-    // $scope.showReport();
-    // // }else{
-    // // setTimeout(function(){
-    // // callRequest();
-    // // },500);
-    // // }
-    // };
-    // callRequest();
-    //
 
     function callRequest() {
         if ($scope.main.accountInfo.companyID) {
             $scope.today();
             $scope.params = {
                 startdatetime : $scope.StartDate.toISOString().substring(0, 10) + ' 00:00:00',
-                enddatetime : $scope.EndDate.toISOString().substring(0, 10) + ' 00:00:00'
+                enddatetime : $scope.EndDate.toISOString().substring(0, 10) + ' 23:59:59'
             };
             $scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
         } else {
