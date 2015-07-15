@@ -5245,7 +5245,7 @@ function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
      * Data for Bar chart
      */
     $scope.barData = {
-        labels : [],
+        labels : ['Statistics'],
         datasets : [{
             label : "Received messages",
             fillColor : "rgba(0,94,170,0.5)",
