@@ -3330,7 +3330,8 @@ function ngActivityLogListCtrl($scope, $http, $cookieStore) {
                 accountID : $cookieStore.get('inspinia_account_id'),
                 limit : pageSize,
                 offset : (page - 1) * pageSize,
-                orderby : orderBy
+                orderby : orderBy,
+					 editsonly : 1
             })).success(function(data) {
                 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
                 self.gettingData = false;
