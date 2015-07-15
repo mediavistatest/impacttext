@@ -708,9 +708,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
         }
         if (data.apicode == 0) {
             main.accountInfo = data.apidata[0];
-            
-                main.ServerRequests.autoresponderActionGet(); 
-                           
+
+                main.ServerRequests.autoresponderActionGet();
+
 
             main.ServerRequests.contactListsGet();
             var successDidGet = function(data, status, headers, config, $inScope) {
@@ -729,8 +729,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 
                 main.ServerRequests.accountKeywordGet();
 
-                
-                
+
+
 
 
                 for (var j in main.fromNumbers) {
