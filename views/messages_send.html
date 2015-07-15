@@ -538,7 +538,7 @@ Send
 
             </a>
 
-            <a class="btn btn-send right" ng-click="sendMessage(true)" ng-show="ScheduleCheck">
+            <a class="btn btn-send right" ng-click="sendMessage(true)" ng-show="ScheduleCheck" ng-disabled="!SendForm.$valid">
 
             <span><i class="fa fa-clock-o">
                 </i>

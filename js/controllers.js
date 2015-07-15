@@ -79,6 +79,10 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             var self = this;
             self.SetDate = new Date();
             self.SetTimeHour = '00';
+            self.SetTimeHour = String((new Date()).getHours() + 1);
+            if (self.SetTimeHour.length < 2) {
+                self.SetTimeHour = '0' + self.SetTimeHour;
+            }
             self.SetTimeMinute = '00';
             self.SetRecurringType = '';
             self.SetRecurringEndDate = new Date();
@@ -4533,22 +4537,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         var messageText;
         if ($scope.controllerParent) {
             $scope.controllerParent.Events.Send_onClick($scope);
-            // $scope.ToNumber = $scope.controllerParent.clickedMessage.con_lis;
-            // $scope.FromNumber = {
-            // DID : ''
-            // };
-            // $scope.FromNumber.DID = $scope.controllerParent.clickedMessage.DID;
-            // $scope.MessageTxt = $scope.controllerParent.clickedMessage.message;
-            // messageText = $scope.controllerParent.clickedMessage.message;
-            // $scope.SetDate = new Date($scope.controllerParent.clickedMessage.scheduledDate.substring(0, 4), $scope.controllerParent.clickedMessage.scheduledDate.substring(5, 7), $scope.controllerParent.clickedMessage.scheduledDate.substring(8, 10));
-            // $scope.SetTimeHour = $scope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
-            // $scope.SetTimeMinute = $scope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
-            // deletePreviousMessage = function(controllerParent) {
-            // ngInbox._internal.Methods.DeleteMessage(controllerParent);
-            // };
-            // } else {
-            // //Generate message text
-            // messageText = $scope.generateMessageText();
         }
 
         messageText = $scope.generateMessageText();
@@ -4568,7 +4556,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 }
                 //If time is not set and scheduled message sending is invoked, set time to midnight
                 if ( typeof currentDate.SetTimeHour == 'undefined' || currentDate.SetTimeHour == null || currentDate.SetTimeHour == '') {
-                    currentDate.SetTimeHour = "00";
+                    currentDate.SetTimeHour = String((new Date()).getHours() + 1);
+                    if (currentDate.SetTimeHour.length < 2) {
+                        currentDate.SetTimeHour = '0' + currentDate.SetTimeHour;
+                    }
                 }
                 if ( typeof currentDate.SetTimeMinute == 'undefined' || currentDate.SetTimeMinute == null || currentDate.SetTimeMinute == '') {
                     currentDate.SetTimeMinute = "00";
@@ -4808,7 +4799,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 function ScheduleRepeatCtrl($scope) {
     var srCtrl = this;
     $scope.$watch('sheduledDateTime.SetDate', function() {
-        if ($scope.sheduledDateTime.SetDate>$scope.sheduledDateTime.SetRecurringEndDate){
+        if ($scope.sheduledDateTime.SetDate > $scope.sheduledDateTime.SetRecurringEndDate) {
             $scope.sheduledDateTime.SetRecurringEndDate = new Date($scope.sheduledDateTime.SetDate);
         }
     }, true);
