@@ -20,6 +20,7 @@
  *  - notifyCtrl
  *  - translateCtrl
  */
+var mainObject;
 function setPagingDataSliced($scope, data, totalResultsCount) {
     $scope.ngData = data;
     $scope.totalServerItems = totalResultsCount;
@@ -57,6 +58,7 @@ function generateOrderByField(sortFields, sortOrders) {
  */
 function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     var main = this;
+    mainObject = this;
     //main.notify = notify;
     //console.log($scope.cNotify.notify)
     main.ipCookie = ipCookie;
@@ -187,18 +189,18 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                         if ($.grep(main.Settings.Numbers, function(member) {
                             return (member.DID == main.fromNumbers[number].DID && member.accountID == main.fromNumbers[number].accountID);
                         }).length == 0) {
-                            var didKeywords = $.grep(main.keywords, function(keyword){
-                            	return (keyword.DIDID == main.fromNumbers[number].DIDID);
+                            var didKeywords = $.grep(main.keywords, function(keyword) {
+                                return (keyword.DIDID == main.fromNumbers[number].DIDID);
                             });
 
-									 main.Settings.Numbers.push({
-										 accountID : main.accountID,
-										 DIDID : main.fromNumbers[number].DIDID,
-										 DID : main.fromNumbers[number].DID,
-										 keywords : didKeywords,
-										 prefered : false,
-										 name : ''
-									 });
+                            main.Settings.Numbers.push({
+                                accountID : main.accountID,
+                                DIDID : main.fromNumbers[number].DIDID,
+                                DID : main.fromNumbers[number].DID,
+                                keywords : didKeywords,
+                                prefered : false,
+                                name : main.fromNumbers[number].fromName
+                            });
                         }
                     }
                 }
@@ -207,9 +209,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                     expirationUnit : 'days'
                 });
 
-					if(typeof success == 'function'){
-						success();
-					}
+                if ( typeof success == 'function') {
+                    success();
+                }
             }).error(
             //An error occurred with this request
             function(data, status, headers, config) {
@@ -219,9 +221,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                     console.log(JSON.stringify(data));
                 }
 
-					if(typeof error == 'function'){
-						error();
-					}
+                if ( typeof error == 'function') {
+                    error();
+                }
             });
         },
         didGet : function(successFunction, errorFunction, $inScope) {
@@ -709,8 +711,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
         if (data.apicode == 0) {
             main.accountInfo = data.apidata[0];
 
-                main.ServerRequests.autoresponderActionGet();
-
+            main.ServerRequests.autoresponderActionGet();
 
             main.ServerRequests.contactListsGet();
             var successDidGet = function(data, status, headers, config, $inScope) {
@@ -729,19 +730,15 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 
                 main.ServerRequests.accountKeywordGet();
 
-
-
-
-
                 for (var j in main.fromNumbers) {
                     main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();
                     if (j < main.fromNumbers.length - 1) {
                         main.fromNumbersString += ',';
                     }
 
-						 if(typeof main.Settings.Numbers[j] !== 'undefined'){
-                   	main.Settings.Numbers[j].name = main.fromNumbers[j].fromName;
-						 }
+                    if ( typeof main.Settings.Numbers[j] !== 'undefined') {
+                        main.Settings.Numbers[j].name = main.fromNumbers[j].fromName;
+                    }
                 }
             };
             var errorDidGet = function(data, status, headers, config, $inScope) {
@@ -902,7 +899,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
     this.randomStacked = function() {
         this.stacked = [];
         var types = ['success', 'info', 'warning', 'danger'];
-        for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+        for (var i = 0,
+            n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
             var index = Math.floor((Math.random() * 4));
             this.stacked.push({
                 value : Math.floor((Math.random() * 30) + 1),
@@ -4323,12 +4321,17 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 $inScope.main.Settings.Numbers = [];
             }
 
-            for (var j in $inScope.main.fromNumbers) {
+            for (var j = 0; j < $inScope.main.fromNumbers.length; j++) {
                 $inScope.main.fromNumbersString = $inScope.main.fromNumbersString + ' +' + $inScope.main.fromNumbers[j].DID.toString();
                 if (j < $inScope.main.fromNumbers.length - 1) {
                     $inScope.main.fromNumbersString += ',';
                 }
-                $inScope.main.Settings.Numbers[j].name = $inScope.main.fromNumbers[j].fromName;
+                for (var k = 0; k < $inScope.main.Settings.Numbers.length; k++) {
+                    if ($inScope.main.Settings.Numbers[k].DIDID == $inScope.main.fromNumbers[j].DIDID) {
+                        $inScope.main.Settings.Numbers[k].name = $inScope.main.fromNumbers[j].fromName;
+                        break;
+                    }
+                }
             }
 
             if ($inScope.main.Settings.Numbers && $inScope.main.Settings.Numbers.length > 0 && $inScope.FromNumber && $inScope.FromNumber.DID) {
@@ -4578,48 +4581,49 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 }
             }
         }
-        // //Creating a api request data object
-        var requestData = {
-            sethttp : 1,
-            DID : $scope.FromNumber.DID,
-            message : messageText,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id')
-        };
-        if ($scope.SendToList && typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
-            if ($scope.ToList.constructor === Array) {
-                //Sending message to contact lists
-                requestData.contactListID = $scope.ToList[0].contactListID;
-                for (var i = 1; i < $scope.ToList.length; i++) {
-                    requestData.contactListID += "," + $scope.ToList[i].contactListID;
-                }
-            } else {
-                //Sending message to a single contact list
-                requestData.contactListID = $scope.ToList.contactListID;
-            }
-        } else if (!$scope.SendToList && typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
-            //Sending message to numbers. Add leading 1 to all numbers
-            var numberArray = $scope.ToNumber.split(',');
-            var toNumbers = '';
-            for (var idx in numberArray) {
-                var number = $.trim(numberArray[idx]);
-                if (number.length < 11) {
-                    number = '1' + number;
-                }
-                if (toNumbers != '') {
-                    toNumbers += ',';
-                }
-                toNumbers += number;
-            }
-            requestData.ANI = toNumbers;
-        }
+
         //Adding schedule date if one is specified
         for (var k = 0; k < $scope.ArrayScheduledDateTime.length; k++) {
-            var currentDateTime = $scope.ArrayScheduledDateTime[k];
-            if (scheduled) {
+            // //Creating a api request data object
+            var requestData = {
+                sethttp : 1,
+                DID : $scope.FromNumber.DID,
+                message : messageText,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                accountID : $cookieStore.get('inspinia_account_id')
+            };
+            if ($scope.SendToList && typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
+                if ($scope.ToList.constructor === Array) {
+                    //Sending message to contact lists
+                    requestData.contactListID = $scope.ToList[0].contactListID;
+                    for (var i = 1; i < $scope.ToList.length; i++) {
+                        requestData.contactListID += "," + $scope.ToList[i].contactListID;
+                    }
+                } else {
+                    //Sending message to a single contact list
+                    requestData.contactListID = $scope.ToList.contactListID;
+                }
+            } else if (!$scope.SendToList && typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
+                //Sending message to numbers. Add leading 1 to all numbers
+                var numberArray = $scope.ToNumber.split(',');
+                var toNumbers = '';
+                for (var idx in numberArray) {
+                    var number = $.trim(numberArray[idx]);
+                    if (number.length < 11) {
+                        number = '1' + number;
+                    }
+                    if (toNumbers != '') {
+                        toNumbers += ',';
+                    }
+                    toNumbers += number;
+                }
+                requestData.ANI = toNumbers;
+            }
+
+            var setTimezoneOffsetDate = function(currentInDate, hours, minutes) {
                 var timezoneOffsetMinutes = new Date().getTimezoneOffset();
-                var selectedDate = new Date(currentDateTime.SetDate.getFullYear(), currentDateTime.SetDate.getMonth(), currentDateTime.SetDate.getDate());
-                var scheduledTime = new Date(selectedDate.getTime() + 3600000 * parseInt(currentDateTime.SetTimeHour) + 60000 * (parseInt(currentDateTime.SetTimeMinute) + timezoneOffsetMinutes));
+                var selectedDate = new Date(currentInDate.getFullYear(), currentInDate.getMonth(), currentInDate.getDate());
+                var scheduledTime = new Date(selectedDate.getTime() + 3600000 * parseInt(hours) + 60000 * (parseInt(minutes) + timezoneOffsetMinutes));
                 //Date is in format MM/dd/yyyy
                 var dateParts = [];
                 dateParts[0] = scheduledTime.getFullYear();
@@ -4644,28 +4648,24 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 if (dateParts[4].length < 2) {
                     dateParts[4] = "0" + dateParts[4];
                 }
-                requestData.scheduledDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4];
+                return (dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4]);
+            };
 
-                requestData.recurringType = currentDateTime.SetRecurringType;
-                if (requestData.recurringType != '') {
-                    requestData.recurringStart = requestData.scheduledDate;
+            var currentDateTime = $scope.ArrayScheduledDateTime[k];
+            if (scheduled) {
+                requestData.scheduledDate = setTimezoneOffsetDate(currentDateTime.SetDate, currentDateTime.SetTimeHour, currentDateTime.SetTimeMinute);
+
+                requestData.recurringtype = currentDateTime.SetRecurringType;
+                if (requestData.recurringtype != '') {
+                    requestData.recurringstart = requestData.scheduledDate;
                     if (currentDateTime.SetRecurringEndDate != '' && currentDateTime.SetRecurringEndDate != null) {
-                        var recurringDateParts = [];
-                        recurringDateParts[0] = "" + (currentDateTime.SetRecurringEndDate.getMonth() + 1);
-                        recurringDateParts[1] = "" + currentDateTime.SetRecurringEndDate.getDate();
-                        if (recurringDateParts[0].length < 2) {
-                            recurringDateParts[0] = "0" + recurringDateParts[0];
-                        }
-                        if (recurringDateParts[1].length < 2) {
-                            recurringDateParts[1] = "0" + recurringDateParts[1];
-                        }
-                        requestData.recurringEnd = currentDateTime.SetRecurringEndDate.getFullYear() + "-" + recurringDateParts[0] + "-" + recurringDateParts[1] + " 23:59";
+                        requestData.recurringend = setTimezoneOffsetDate(currentDateTime.SetRecurringEndDate, '23', '59');
                     }
                 } else {
-                    delete requestData.recurringType;
+                    delete requestData.recurringtype;
                 }
-
             }
+
             //Send request to the server
             $http.post(inspiniaNS.wsUrl + "message_send", $.param(requestData)).success(
             //Successful request to the server
@@ -4714,6 +4714,9 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                         alert("An error occurred when sending your message! Error code: " + data.apicode);
                         alert(JSON.stringify(data));
                     }
+                } else {
+                    //Just non handled errors by optout are counted
+                    $scope.$broadcast("RequestError", data, 'message_send');
                 }
             });
         }
@@ -4800,6 +4803,15 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         value : 'M',
         label : 'Every month'
     }];
+}
+
+function ScheduleRepeatCtrl($scope) {
+    var srCtrl = this;
+    $scope.$watch('sheduledDateTime.SetDate', function() {
+        if ($scope.sheduledDateTime.SetDate>$scope.sheduledDateTime.SetRecurringEndDate){
+            $scope.sheduledDateTime.SetRecurringEndDate = new Date($scope.sheduledDateTime.SetDate);
+        }
+    }, true);
 }
 
 /**
@@ -5444,28 +5456,29 @@ function SearchByDateCtrl($scope, $http, $cookieStore, $state) {
     };
 }
 
-angular.module('inspinia').filter('makeRange', function() {
-	return function(input) {
-		var lowBound, highBound;
-		switch (input.length) {
-			case 1:
-				lowBound = 0;
-				highBound = parseInt(input[0]) - 1;
-				break;
-			case 2:
-				lowBound = parseInt(input[0]);
-				highBound = parseInt(input[1]);
-				break;
-			default:
-				return input;
-		}
-		var result = [];
-		for (var i = lowBound; i <= highBound; i++)
-			result.push(i);
-		return result;
-	};
-});
 
+angular.module('inspinia').filter('makeRange', function() {
+    return function(input) {
+        var lowBound,
+            highBound;
+        switch (input.length) {
+        case 1:
+            lowBound = 0;
+            highBound = parseInt(input[0]) - 1;
+            break;
+        case 2:
+            lowBound = parseInt(input[0]);
+            highBound = parseInt(input[1]);
+            break;
+        default:
+            return input;
+        }
+        var result = [];
+        for (var i = lowBound; i <= highBound; i++)
+            result.push(i);
+        return result;
+    };
+});
 
 angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
@@ -5499,6 +5512,7 @@ angular.module('inspinia').controller('ngInboxNotifyCtrl', ngInbox._internal.ngI
 angular.module('inspinia').controller('translateCtrl', translateCtrl);
 angular.module('inspinia').controller('imageCrop', imageCrop);
 angular.module('inspinia').controller('FormSendCtrl', ['$scope', '$cookieStore', '$http', FormSendCtrl]);
+angular.module('inspinia').controller('ScheduleRepeatCtrl', ['$scope', ScheduleRepeatCtrl]);
 angular.module('inspinia').controller('loginCtrl', ['$scope', '$cookieStore', '$http', '$window', loginCtrl]);
 angular.module('inspinia').controller('qrCtrl', qrCtrl);
 angular.module('inspinia').controller('ProfileCtrl', ['$scope', '$http', profile.Controller]);

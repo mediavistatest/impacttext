@@ -281,7 +281,7 @@ Send
         </div>
 
         <div ng-show="ScheduleCheck">
-            <div class="form-group clearfix" ng-repeat="sheduledDateTime in ArrayScheduledDateTime">
+            <div class="form-group clearfix" ng-repeat="sheduledDateTime in ArrayScheduledDateTime" ng-controller="ScheduleRepeatCtrl">
                 <div class="row">
 
                     <label class="col-sm-2 control-label">
@@ -417,7 +417,7 @@ Send
                             <span class="label-icon" title="End date"><i class="fa fa-power-off">
                                 </i></span>
                             <div class="btn-group datetimepicker-wrapper">
-                                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="sheduledDateTime.SetRecurringEndDate" is-open="sheduledDateTime.opened_recurring" min-date="sheduledDateTime.SetDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="false" close-text="Close" ng-click="openRecurring($event,sheduledDateTime)" ng-disabled="!sheduledDateTime.SetRecurringType" />
+                                <input type="text" class="form-control" ng-model="sheduledDateTime.SetRecurringEndDate" datepicker-popup="{{format}}" is-open="sheduledDateTime.opened_recurring" min-date="sheduledDateTime.SetDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" ng-click="openRecurring($event,sheduledDateTime)" ng-disabled="!sheduledDateTime.SetRecurringType"/>
                             </div>
                         </div>
                     </div>
