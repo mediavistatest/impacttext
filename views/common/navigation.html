@@ -43,13 +43,13 @@
                 </ul>
             </li>-->
             <li ng-class="{active: $state.includes('lists')}">
-                <a ui-sref="lists.view"><i class="fa fa-list"></i> <span class="nav-label">Contacts/Lists</span><!--<span class="fa arrow"></span>--></a>
-                <!--<ul class="nav nav-second-level" ng-class="{in: $state.includes('lists')}">
-                    <li ui-sref-active="active"><a ui-sref="lists.view">Lists</a></li>
-                    <li ui-sref-active="active"><a ui-sref="lists.add">Add list</a></li>
-                    <li ui-sref-active="active"><a ui-sref="lists.add_contact">Add Contact</a></li>
-                    <li ui-sref-active="active"><a ui-sref="lists.upload">Upload list (file)</a></li>
-                </ul>-->
+                <a href=""><i class="fa fa-list"></i> <span class="nav-label">Contacts/Lists</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('lists')}">
+                    <li ui-sref-active="active"><a ui-sref="lists.view">Manage Lists</a></li>
+                    <li ui-sref-active="active"><a ui-sref="lists.search">Search Contacts</a></li>
+                    <!--<li ui-sref-active="active"><a ui-sref="lists.add_contact">Add Contact</a></li>
+                    <li ui-sref-active="active"><a ui-sref="lists.upload">Upload list (file)</a></li>-->
+                </ul>
             </li>
             <li ng-class="{active: $state.includes('messages')}">
                 <a href=""><i class="fa fa-envelope"></i> <span class="nav-label">Messages </span> <span class="fa arrow"></span></a>

@@ -153,6 +153,22 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         //        ]);
         //    }
         //}
+    }).state('lists.search', {
+        url : "/lists_search",
+        templateUrl : "views/lists_search.html",
+        data : {
+            pageTitle : 'Search Contacts'
+        },
+        resolve : {
+            loadPlugin : function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    name : 'cgNotify',
+                    files : ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/notify.js']
+
+                }]);
+            }
+        }
+        
     }).state('lists.add', {
         url : "/lists_add",
         templateUrl : "views/lists_add.html",
