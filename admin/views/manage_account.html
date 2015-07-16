@@ -22,6 +22,17 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                 <i class="fa fa-info-circle" tooltip='Account Name'></i>
             </div>
         </div>
+
+		  <div class="form-group clearfix">
+			  <label class="col-sm-2 control-label">Product Package:</label>
+			  <div class="col-sm-6">
+				  <select name="ProductPackage" placeholder="Product Package" ng-model="ProductPackage" ng-options="package.productPackage as package.productPackage for package in ProductPackageList" class="form-control"></select>
+			  </div>
+			  <div class="col-sm-4">
+				  <i class="fa fa-info-circle" tooltip='Product Package'></i>
+			  </div>
+		  </div>
+
         <div class="form-group clearfix">
             <label class="col-sm-2 control-label">Billing Cycle:</label>
             <div class="col-sm-6">
@@ -63,6 +74,46 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                 <i class="fa fa-info-circle" tooltip='Email Address'></i>
             </div>
         </div>
+
+		  <div class="form-group clearfix">
+			  <label class="col-sm-2 control-label">Address:</label>
+			  <div class="col-sm-6">
+				  <input type="text" name="Address1" placeholder="Address" ng-model="Address1" class="form-control"  ng-trim="false">
+				  <input type="text" name="Address2" placeholder="Address" ng-model="Address2" class="form-control address-2"  ng-trim="false">
+			  </div>
+			  <div class="col-sm-4">
+				  <i class="fa fa-info-circle" tooltip='Address'></i>
+			  </div>
+		  </div>
+
+		  <div class="form-group clearfix">
+			  <label class="col-sm-2 control-label">City:</label>
+			  <div class="col-sm-3">
+				  <input type="text" name="City" placeholder="City" ng-model="City" class="form-control"  ng-trim="false">
+			  </div>
+			  <label class="col-sm-1 control-label">Zip:</label>
+			  <div class="col-sm-2">
+				  <input type="text" name="Zip" placeholder="Zip" ng-model="Zip" class="form-control"  ng-trim="false">
+			  </div>
+			  <div class="col-sm-4">
+				  <i class="fa fa-info-circle" tooltip='City / Zip Code'></i>
+			  </div>
+		  </div>
+
+		  <div class="form-group clearfix">
+			  <label class="col-sm-2 control-label">Country:</label>
+			  <div class="col-sm-3">
+				  <select name="Country" placeholder="Country" ng-model="Country" ng-options="country.code as country.name for country in CountriesList" class="form-control"></select>
+			  </div>
+			  <label class="col-sm-1 control-label">State:</label>
+			  <div class="col-sm-2">
+				  <input type="text" name="State" placeholder="State" ng-model="State" class="form-control"  ng-trim="false">
+			  </div>
+			  <div class="col-sm-4">
+				  <i class="fa fa-info-circle" tooltip='Country / State'></i>
+			  </div>
+		  </div>
+
         <div class="form-group clearfix">
             <label class="col-sm-2 control-label double">Primary SMS <br>Code:</label>
             <div class="col-sm-6">
