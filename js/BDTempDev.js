@@ -2198,33 +2198,35 @@ var ngSettings = {
                     cpo.remainingSaveCount = cpo.numCtrl.numbers.length;
                 }
 
+					 var duplicates = false;
+
+					 $('input[data-keyword-id]').removeClass('error');
+					 $('.error-hint').remove();
+					 var keyword_change_errors = [];
+
 					 var keyword_delete = [];
 					 var keyword_update = [];
 					 var keyword_add = [];
 
                 for (var j in cpo.numCtrl.numbers) {
                     if (j == 'keywords') continue;
-                    ngSettings.NumberNames.ServerRequests.ModifyNumbers(cpo, cpo.numCtrl.numbers[j].DIDID, cpo.numCtrl.numbers[j].fromName, function(data) {
-                        cpo.remainingSaveCount--;
-                        cpo.saveSuccessCount++;
 
-                        cpo.renderMessages();
-                    }, function(data) {
-                        cpo.remainingSaveCount--;
-                        cpo.saveErrorCount++;
-
-                        cpo.renderMessages();
-                        console.log('did_modify: ' + data.apitext);
-                    });
-
-                    $('input[data-keyword-id]').removeClass('error');
-                    $('.error-hint').remove();
-
+						  var did_keywords = [];
                     $('input[data-keyword-id][data-didid="' + cpo.numCtrl.numbers[j].DIDID + '"]').each(function(idx) {
                         var $keyword = $(this);
                         var keyword_id = $keyword.attr('data-keyword-id');
                         var keyword_value = $keyword.val();
                         var keyword_original = $keyword.attr('data-keyword-original');
+
+							   if(did_keywords.indexOf(keyword_value) != -1 && keyword_value != ''){
+									$(this).addClass('error').after('<small class="error-hint">Duplicate keyword</small>');
+									duplicates = true;
+									return;
+								}else{
+									if(keyword_value != ''){
+										did_keywords.push(keyword_value);
+									}
+								}
 
                         if (keyword_id != '') {
                             if (keyword_value != keyword_original) {
@@ -2250,15 +2252,30 @@ var ngSettings = {
                             }
                         }
                     });
+
+						  if(!duplicates){
+							  ngSettings.NumberNames.ServerRequests.ModifyNumbers(cpo, cpo.numCtrl.numbers[j].DIDID, cpo.numCtrl.numbers[j].fromName, function(data) {
+								  cpo.remainingSaveCount--;
+								  cpo.saveSuccessCount++;
+
+								  cpo.renderMessages();
+							  }, function(data) {
+								  cpo.remainingSaveCount--;
+								  cpo.saveErrorCount++;
+
+								  cpo.renderMessages();
+								  console.log('did_modify: ' + data.apitext);
+							  });
+						  }
                 }
+
+					 if(duplicates){ return; }
 
                 if (cpo.deleteKeywords.length > 0) {
                     for (var idx in cpo.deleteKeywords) {
 							   keyword_delete.push(cpo.deleteKeywords[idx].keyword_id);
                     }
                 }
-
-					 var keyword_change_errors = [];
 
 					 var keyword_delete_count = keyword_delete.length;
 					 var keyword_delete_current = 0;
