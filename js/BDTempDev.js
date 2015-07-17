@@ -2150,7 +2150,34 @@ var ngSettings = {
                         error(data, did);
                     }
                 });
-            }
+            },
+			   ModifyKeyword : function(cpo, keyword_id, keyword, success, error){
+					var params = {
+						apikey : cpo.$scope.main.authToken,
+						accountID : cpo.$scope.main.accountID,
+						companyID : cpo.$scope.main.accountInfo.companyID,
+						accountkeywordid : keyword_id,
+						keyword : keyword,
+						sethttp : 1
+					};
+					var $param = $.param(params);
+
+					cpo.$http.post(inspiniaNS.wsUrl + "accountkeyword_modify", $param).success(function(data) {
+						if (data.apicode == 0) {
+							if ( typeof success == 'function') {
+								success(data);
+							}
+						} else {
+							if ( typeof error == 'function') {
+								error(data, keyword_id);
+							}
+						}
+					}).error(function(data, status, headers, config) {
+						if ( typeof error == 'function') {
+							error(data, keyword_id);
+						}
+					});
+				}
         },
         Events : {
             /*DefaultNumber_onChange : function(cpo, Number) {
@@ -2163,17 +2190,20 @@ var ngSettings = {
              }
              },*/
             Save_onClick : function(cpo) {
+					 var $q = cpo.$q;
+
                 if (cpo.remainingSaveCount >= 0) {
                     cpo.remainingSaveCount += cpo.numCtrl.numbers.length;
                 } else {
                     cpo.remainingSaveCount = cpo.numCtrl.numbers.length;
                 }
 
-                var keyword_changes = [];
+					 var keyword_delete = [];
+					 var keyword_update = [];
+					 var keyword_add = [];
 
                 for (var j in cpo.numCtrl.numbers) {
-                    if (j == 'keywords')
-                        continue;
+                    if (j == 'keywords') continue;
                     ngSettings.NumberNames.ServerRequests.ModifyNumbers(cpo, cpo.numCtrl.numbers[j].DIDID, cpo.numCtrl.numbers[j].fromName, function(data) {
                         cpo.remainingSaveCount--;
                         cpo.saveSuccessCount++;
@@ -2203,23 +2233,20 @@ var ngSettings = {
                                         type : 'DELETE',
                                         keyword_id : keyword_id
                                     };
+											   keyword_delete.push(keyword_id);
                                 } else {
-                                    action = {
-                                        type : 'UPDATE',
-                                        keyword_id : keyword_id,
-                                        did : cpo.numCtrl.numbers[j].DID,
-                                        keyword_value : keyword_value
-                                    };
+											   keyword_update.push({
+													keyword_id : keyword_id,
+													keyword_value : keyword_value
+												});
                                 }
-                                keyword_changes.push(action);
                             }
                         } else if (keyword_value != '') {
                             if (keyword_value != keyword_original) {
-                                keyword_changes.push({
-                                    type : 'ADD',
-                                    did : cpo.numCtrl.numbers[j].DID,
-                                    keyword_value : keyword_value
-                                });
+										  keyword_add.push({
+											  did : cpo.numCtrl.numbers[j].DID,
+											  keyword_value : keyword_value
+										  });
                             }
                         }
                     });
@@ -2227,93 +2254,136 @@ var ngSettings = {
 
                 if (cpo.deleteKeywords.length > 0) {
                     for (var idx in cpo.deleteKeywords) {
-                        keyword_changes.push({
-                            type : 'DELETE',
-                            keyword_id : cpo.deleteKeywords[idx].keyword_id
-                        });
+							   keyword_delete.push(cpo.deleteKeywords[idx].keyword_id);
                     }
                 }
 
-                if (keyword_changes) {
-                    var keyword_changes_total = keyword_changes.length;
-                    var keyword_changes_count = 0;
-                    var keyword_change_errors_total = 0;
-                    var keyword_change_errors = [];
-                    for (var change in keyword_changes) {
-                        cpo.$scope.is_working = true;
-                        if (keyword_changes[change].type == 'DELETE') {
-                            ngSettings.NumberNames.ServerRequests.DeleteKeyword(cpo, keyword_changes[change].keyword_id,
-                            // success
-                            function() {
-                                keyword_changes_count++;
-                                cpo.checkKeywordChanges(keyword_changes_count, keyword_changes_total, keyword_change_errors_total, keyword_change_errors);
-                                // error
-                            }, function(data, keyword_id) {
-                                keyword_changes_count++;
-                                keyword_change_errors_total++;
-                                keyword_change_errors.push({
-                                    keyword_id : keyword_id,
-                                    message : 'Failed to delete keyword'
-                                });
-                                cpo.checkKeywordChanges(keyword_changes_count, keyword_changes_total, keyword_change_errors_total, keyword_change_errors);
-                            });
-                        } else if (keyword_changes[change].type == 'UPDATE') {
-                            var did = keyword_changes[change].did;
-                            ngSettings.NumberNames.ServerRequests.DeleteKeyword(cpo, keyword_changes[change].keyword_id,
-                            // success
-                            function(data, keyword_id) {
-                                ngSettings.NumberNames.ServerRequests.AddKeyword(cpo, did, keyword_changes[change].keyword_value,
-                                // success
-                                function() {
-                                    keyword_changes_count++;
-                                    cpo.checkKeywordChanges(keyword_changes_count, keyword_changes_total, keyword_change_errors_total, keyword_change_errors);
-                                },
-                                // error
-                                function(data) {
-                                    keyword_changes_count++;
-                                    keyword_change_errors_total++;
-                                    keyword_change_errors.push({
-                                        keyword_id : keyword_id,
-                                        message : 'Failed to update keyword'
-                                    });
-                                    cpo.checkKeywordChanges(keyword_changes_count, keyword_changes_total, keyword_change_errors_total, keyword_change_errors);
-                                });
-                                // error
-                            }, function(data, keyword_id) {
-                                keyword_changes_count++;
-                                keyword_change_errors_total++;
-                                keyword_change_errors.push({
-                                    keyword_id : keyword_id,
-                                    message : 'Failed to update keyword'
-                                });
-                                cpo.checkKeywordChanges(keyword_changes_count, keyword_changes_total, keyword_change_errors_total, keyword_change_errors);
-                            });
+					 var keyword_change_errors = [];
 
-                            keyword_changes_count++;
-                            cpo.checkKeywordChanges(keyword_changes_count, keyword_changes_total, keyword_change_errors_total, keyword_change_errors);
-                        } else if (keyword_changes[change].type == 'ADD') {
-                            ngSettings.NumberNames.ServerRequests.AddKeyword(cpo, keyword_changes[change].did, keyword_changes[change].keyword_value,
-                            // success
-                            function() {
-                                keyword_changes_count++;
-                                cpo.checkKeywordChanges(keyword_changes_count, keyword_changes_total, keyword_change_errors_total, keyword_change_errors);
-                            },
-                            // error
-                            function(data, did) {
-                                keyword_changes_count++;
-                                keyword_change_errors_total++;
-                                keyword_change_errors.push({
-                                    did : did,
-                                    message : 'Failed to add keyword(s)'
-                                });
-                                cpo.checkKeywordChanges(keyword_changes_count, keyword_changes_total, keyword_change_errors_total, keyword_change_errors);
-                            });
-                        }
-                    }
-                }
+					 var keyword_delete_count = keyword_delete.length;
+					 var keyword_delete_current = 0;
+
+					 // delete keywords
+					 var waitForKeywordDelete = $q.defer();
+					 if(keyword_delete_count > 0){
+						 for(var idx in keyword_delete){
+							 ngSettings.NumberNames.ServerRequests.DeleteKeyword(cpo, keyword_delete[idx],
+								 // success
+								 function(){
+									 keyword_delete_current++;
+									 if(keyword_delete_current == keyword_delete_count){
+										 waitForKeywordDelete.resolve();
+									 }
+								 },
+								 // error
+								 function(data, keyword_id){
+									 keyword_delete_current++;
+									 keyword_change_errors.push({
+										 keyword_id : keyword_id,
+										 message : 'Failed to delete keyword'
+									 });
+									 if(keyword_delete_current == keyword_delete_count){
+										 waitForKeywordDelete.resolve();
+									 }
+								 });
+						 }
+					 }else{
+						 waitForKeywordDelete.resolve();
+					 }
+
+					 // update keywords
+					 var keyword_update_count = keyword_update.length;
+					 var keyword_update_current = 0;
+					 var waitForKeywordUpdate = $q.defer();
+					 if(keyword_update_count > 0){
+						 waitForKeywordDelete.promise.then(function(){
+							 for(var idx in keyword_update){
+								 ngSettings.NumberNames.ServerRequests.ModifyKeyword(cpo, keyword_update[idx].keyword_id, keyword_update[idx].keyword_value,
+									 // success
+									 function(){
+										 keyword_update_current++;
+										 if(keyword_update_current == keyword_update_count){
+											 waitForKeywordUpdate.resolve();
+										 }
+									 },
+									 // error
+									 function(data, keyword_id){
+										 keyword_update_current++;
+										 keyword_change_errors.push({
+											 keyword_id : keyword_id,
+											 message : 'Failed to update keyword'
+										 });
+										 if(keyword_update_current == keyword_update_count){
+											 waitForKeywordUpdate.resolve();
+										 }
+									 });
+							 }
+						 });
+					 }else{
+						 waitForKeywordUpdate.resolve();
+					 }
+
+
+					 // add keywords
+					 var keyword_add_count = keyword_add.length;
+					 var keyword_add_current = 0;
+					 var waitForKeywordAdd = $q.defer();
+					 if(keyword_add_count > 0){
+						 waitForKeywordDelete.promise.then(function(){
+							 for(var idx in keyword_add){
+								 ngSettings.NumberNames.ServerRequests.AddKeyword(cpo, keyword_add[idx].did, keyword_add[idx].keyword_value,
+								 // success
+								 function(){
+									 keyword_add_current++;
+									 if(keyword_add_current == keyword_add_count){
+										 waitForKeywordAdd.resolve(keyword_change_errors);
+									 }
+								 },
+								 // error
+								 function(data, did){
+									 keyword_add_current++;
+									 keyword_change_errors.push({
+										 did : did,
+										 message : 'Failed to add keyword(s)'
+									 });
+									 if(keyword_add_current == keyword_add_count){
+										 waitForKeywordAdd.resolve(keyword_change_errors);
+									 }
+								 });
+							 }
+						 });
+					}else{
+						waitForKeywordAdd.resolve(keyword_change_errors);
+					}
+
+					waitForKeywordAdd.promise.then(function(keyword_change_errors){
+						if(keyword_change_errors.length > 0){
+							cpo.$scope.keyword_change_errors = {
+								keyword_id : {},
+								did : {}
+							};
+							for (var e in keyword_change_errors) {
+								if (keyword_change_errors[e].hasOwnProperty('keyword_id')) {
+									cpo.$scope.keyword_change_errors.keyword_id[keyword_change_errors[e].keyword_id] = keyword_change_errors[e].message;
+								} else if (keyword_change_errors[e].hasOwnProperty('did')) {
+									cpo.$scope.keyword_change_errors.did[keyword_change_errors[e].did] = keyword_change_errors[e].message;
+								}
+							}
+
+							cpo.$scope.$broadcast('itError', {
+								message : 'Failed to make some keyword changes!'
+							});
+						}
+
+						if(keyword_delete_count > 0 || keyword_update_count > 0 || keyword_add_count > 0){
+							setTimeout(function() {
+								cpo.getNumbers();
+							}, 500);
+						}
+					});
             }
         },
-        Controller : function($scope, $http, $cookieStore, $interval) {
+        Controller : function($scope, $http, $cookieStore, $interval, $q) {
             var numCtrl = this;
             var cpo = ngSettings.NumberNames;
             cpo.numCtrl = numCtrl;
@@ -2323,7 +2393,7 @@ var ngSettings = {
             cpo.$http = $http;
             cpo.$cookieStore = $cookieStore;
             cpo.$scope.cpo = cpo;
-            cpo.$scope.is_working = false;
+			   cpo.$q = $q;
 
             var stop;
             cpo.getNumbers = function(callback) {
@@ -2428,38 +2498,6 @@ var ngSettings = {
                     }
                 }
             };
-
-            cpo.checkKeywordChanges = function(keyword_changes_count, keyword_changes_total, keyword_change_errors_total, keyword_change_errors) {
-                if (keyword_changes_total > 0 && keyword_changes_count == keyword_changes_total) {
-                    //cpo.getNumbers(function(){
-                    if (keyword_change_errors_total > 0) {
-                        cpo.$scope.keyword_change_errors = {
-                            keyword_id : {},
-                            did : {}
-                        };
-                        for (var e in keyword_change_errors) {
-                            if (keyword_change_errors[e].hasOwnProperty('keyword_id')) {
-                                cpo.$scope.keyword_change_errors.keyword_id[keyword_change_errors[e].keyword_id] = keyword_change_errors[e].message;
-                            } else if (keyword_change_errors[e].hasOwnProperty('did')) {
-                                cpo.$scope.keyword_change_errors.did[keyword_change_errors[e].did] = keyword_change_errors[e].message;
-                            }
-                        }
-
-                        cpo.$scope.$broadcast('itError', {
-                            message : 'Failed to make some keyword changes!'
-                        });
-                    }
-
-                    cpo.$scope.is_working = false;
-                    //});
-                }
-            };
-
-            cpo.$scope.$watch('is_working', function(new_value, old_value) {
-                if (old_value === true && new_value === false) {
-                    cpo.getNumbers();
-                }
-            });
 
             cpo.getNumbers();
         }

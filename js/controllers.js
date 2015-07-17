@@ -5488,7 +5488,7 @@ angular.module('inspinia').controller('DashboardInboxCtrl', ['$scope', '$http', 
 angular.module('inspinia').controller('ReportsBarCtrl', ['$scope', '$http', '$cookieStore', '$state', ReportsBarCtrl]);
 angular.module('inspinia').controller('SearchByDateCtrl', ['$scope', '$http', '$cookieStore', '$state', SearchByDateCtrl]);
 angular.module('inspinia').controller('ngSettintsCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Settings.Controller]);
-angular.module('inspinia').controller('ngNumbersCtrl', ['$scope', '$http', '$cookieStore', '$interval', ngSettings.NumberNames.Controller]);
+angular.module('inspinia').controller('ngNumbersCtrl', ['$scope', '$http', '$cookieStore', '$interval', '$q', ngSettings.NumberNames.Controller]);
 angular.module('inspinia').controller('ngForwardEmailCtrl', ['$scope', '$http', '$cookieStore', ngSettings.ForwardEmails.Controller]);
 angular.module('inspinia').controller('ngEmail2SMSCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Email2SMS.Controller]);
 angular.module('inspinia').controller('ngAutoresponderCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Autoresponder.Controller]);
