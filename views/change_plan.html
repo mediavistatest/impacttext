@@ -1,0 +1,143 @@
+<h1>
+Change Plan
+</h1>
+<div class="col-md-12 content-holder animated fadeInRight change-plan" ng-class="animation">
+  <h2 class="section-title">Upgrade or Change Your Plan</h2>
+  <p>Use this tool to view other plan options and upgrade or change your plan.</p>
+
+  <br>
+  <h3>Current plan: <span class="blue">ImpactText2400</span></h3>
+  <br>
+
+  <p ng-show="ChangePlan=='TXT2400'"><strong>View and select new plan below</strong></p>
+  <p ng-hide="ChangePlan=='TXT2400'"><strong>Selected Plan</strong></p>
+  <div>
+      <select disable-search="true" class="form-control m-b" name="ChangePlan" ng-model="ChangePlan" ng-init="ChangePlan='TXT2400'">
+                    
+                    <option value="TXT500">
+                        ImpactText500
+                    </option>
+                    <option value="TXT1200">
+                        ImpactText1200
+                    </option>
+                    <option value="TXT2400">
+                        ImpactText2400
+                    </option>
+                    <option value="TXT5000">
+                        ImpactText5000
+                    </option>
+                    <option value="TXT11000">
+                        ImpactText11000
+                    </option>
+                    <option value="TXT30000">
+                        ImpactText30000
+                    </option>
+       </select>
+ 
+
+                <div class="animate-switch-container plan-desc" ng-switch on="ChangePlan">
+
+
+                    <div ng-switch-when="TXT500">
+                        <p><strong>ImpactText500</strong> is our entry-level plan which will allow you to test the platform and see the power of text messaging.</p>
+
+                        <ul>
+                        <li>Price/month: <strong>$19.99</strong></li>
+                        <li>Outgoing texts: <strong>500</strong></li>
+                        <li>Incoming texts: <strong>FREE</strong></li>
+                        <li>Additional texts: <strong>5.5¢ per text</strong></li>
+                        <li>Code type: <strong>Long code (dedicated)</strong></li>
+                        <li>Keywords: <strong>1</strong></li>
+                        </ul>
+</div>
+
+                    <div ng-switch-when="TXT1200">
+                        <p><strong>ImpactText1200</strong> is the perfect plan for you if you are new to texting and want to get your feet wet.</p>
+
+                        <ul>
+                        <li>Price/month: <strong>$39.99</strong></li>
+                        <li>Outgoing texts: <strong>1,200</strong></li>
+                        <li>Incoming texts: <strong>FREE</strong></li>
+                        <li>Additional texts: <strong>5¢ per text</strong></li>
+                        <li>Code type: <strong>Long code (dedicated)</strong></li>
+                        <li>Keywords: <strong>1</strong></li>
+                        </ul>
+                    </div>
+
+                    <div ng-switch-when="TXT2400">
+                        <p><strong>ImpactText2400</strong> is the right plan for you if you are sending frequent messages to a small group of contacts and want to take advantage of increased message throughput and an additional keyword.</p>
+
+                        <ul>
+                        <li>Price/month: <strong>$49.99</strong></li>
+                        <li>Outgoing texts: <strong>2,400</strong></li>
+                        <li>Incoming texts: <strong>FREE</strong></li>
+                        <li>Additional texts: <strong>3¢ per text</strong></li>
+                        <li>Code type: <strong>Short code (shared)</strong></li>
+                        <li>Keywords: <strong>2</strong></li>
+                        </ul>
+                    </div>
+
+                    <div ng-switch-when="TXT5000">
+                        <p><strong>ImpactText5000</strong> is recommended for those businesses that want to use autoresponders, message automation and increased message throughput with an additional keyword.</p>
+
+                        <ul>
+                        <li>Price/month: <strong>$99.99</strong></li>
+                        <li>Outgoing texts: <strong>5,000</strong></li>
+                        <li>Incoming texts: <strong>FREE</strong></li>
+                        <li>Additional texts: <strong>2.5¢ per text</strong></li>
+                        <li>Code type:<strong> Short code (shared)</strong></li>
+                        <li>Keywords: <strong>2</strong></li>
+                        </ul>
+                    </div>
+
+                    <div ng-switch-when="TXT11000">
+                        <p><strong>ImpactText11000</strong> is a high-volume plan designed for businesses that are sending frequent texts, using autoresponders and automated scheduling. It includes shared short code use with a total of 5 keywords.</p>
+
+                        <ul>
+                        <li>Price/month: <strong>$199.99</strong></li>
+                        <li>Outgoing texts: <strong>11,000</strong></li>
+                        <li>Incoming texts: <strong>FREE</strong></li>
+                        <li>Additional texts: <strong>2.5¢ per text</strong></li>
+                        <li>Code type: <strong>Short code (shared)</strong></li>
+                        <li>Keywords: <strong>5</strong></li>
+                        </ul>
+                    </div>
+
+                    <div ng-switch-when="TXT30000">
+                        <p><strong>ImpactText30000</strong> is our top tier high-volume plan designed for businesses that are sending frequent texts, using autoresponders and automated scheduling. It includes shared short code use as well as 5 keywords.</p>
+
+                        <ul>
+                        <li>Price/month: <strong>$499.99</strong></li>
+                        <li>Outgoing texts: <strong>30,000</strong></li>
+                        <li>Incoming texts: <strong>FREE</strong></li>
+                        <li>Additional texts: <strong>2.5¢ per text</strong></li>
+                        <li>Code type: <strong>Short code (shared)</strong></li>
+                        <li>Keywords: <strong>5</strong></li>
+                        </ul>
+                    </div>
+
+                    
+
+                    <div ng-hide="ChangePlan=='TXT2400'">
+                        <br>
+
+                    <a class="btn btn-send smaller ng-scope" ng-controller="notifyCtrl">
+                    <span>Submit</span>
+                    </a>
+
+                    
+
+                    <p class="small">
+                    <br>
+                    By changing your plan you agree to changes in monthly service charges and additional fees and taxes where applicable. Please note your plan change will be confirmed with ImpactText Customer Support. You will receive an email once your plan change is complete.</p>
+                    </div>
+
+                    
+                </div>
+  </div>
+
+
+
+
+
+</div>
