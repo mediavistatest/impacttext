@@ -4906,6 +4906,33 @@ function loginCtrl($scope, $cookieStore, $http, $window) {
             alert("Failed to sign in! Please try again.");
         });
     };
+
+	$scope.resetPassword = function(){
+		if ( typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
+			return;
+		}
+		if ( typeof $scope.emailaddress == 'undefined' || $scope.emailaddress == null || $scope.emailaddress == '') {
+			return;
+		}
+
+		// user_passwordresetrequest
+		$http.post(inspiniaNS.wsUrl + "user_passwordresetrequest", $.param({
+			user: $scope.username,
+			emailaddress: $scope.emailaddress
+		})).success(function(data){
+			if(data && data.hasOwnProperty('apicode') && data.apicode == 0){
+				alert("Reset password email sent. Please check your email.");
+			}else{
+				if(data && data.hasOwnProperty('apitext') && data.apitext != ''){
+					alert(data.apitext);
+				}else{
+					alert("Failed to send reset password email! Please try again.");
+				}
+			}
+		}).error(function(data){
+			alert("Failed to send reset password email! Please try again.");
+		});
+	};
 }
 
 /** QR GENERATOR **/

@@ -4947,6 +4947,35 @@ body.skin-3 {
 	background: url(../img/loading_24.gif) center no-repeat;
 }
 
+.forgot-password-link {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#forgot-password-wrapper {
+	margin-top: 15px;
+}
+
+#forgot-password-wrapper .form-group-email {
+	float: left;
+	width: 210px;
+	margin-right: 10px;
+}
+
+#forgot-password-wrapper .form-action {
+	float: left;
+	width: 100px;
+}
+
+#forgot-password-wrapper .form-action .btn {
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
 @media (min-width: 768px) {
   #page-wrapper {
     position: inherit;
