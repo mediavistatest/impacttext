@@ -27,7 +27,9 @@ function setPagingDataSliced($scope, data, totalResultsCount) {
     if (!$scope.$$phase) {
         $scope.$apply();
     }
-    $scope.ngOptions.selectAll(false);
+	 if(typeof $scope.ngOptions.selectAll == 'function'){
+		 $scope.ngOptions.selectAll(false);
+	 }
 }
 
 function generateOrderByField(sortFields, sortOrders) {
@@ -3114,83 +3116,96 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         if (orderBy == '') {
             orderBy = 'lastname asc';
         }
-        var data;
-        if (searchText) {
-            if (filterBy) {
-                var request = {
-                    sethttp : 1,
-                    apikey : $cookieStore.get('inspinia_auth_token'),
-                    accountID : $cookieStore.get('inspinia_account_id'),
-                    contactListID : $state.params.id,
-                    limit : pageSize,
-                    offset : (page - 1) * pageSize,
-                    orderby : orderBy
-                };
-                switch(filterBy) {
-                case "ANI":
-                    request.ANI = searchText;
-                    break;
-                case "firstName":
-                    request.firstName = searchText;
-                    break;
-                case "lastName":
-                    request.lastName = searchText;
-                    break;
-                case "emailAddress":
-                    request.emailAddress = searchText;
-                    break;
-                case "custom1":
-                    request.custom1 = searchText;
-                    break;
-                case "custom2":
-                    request.custom2 = searchText;
-                    break;
-                case "custom3":
-                    request.custom3 = searchText;
-                    break;
-                }
-                $http.post(inspiniaNS.wsUrl + "contact_get", $.param(request)).success(function(data) {
-                    $scope.getContactBlacklist(data.apidata, function() {
-                        $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-                    });
-                }).error(
-                //An error occurred with this request
-                function(data, status, headers, config) {
-                    //alert('Unexpected error occurred when trying to fetch contact lists!');
-                    if (status == 400) {
-                        if (data.apicode == 4) {
-                            //This is some invalid search field case
-                            $scope.$broadcast("SearchTextTooShort");
-                        } else {
-                            alert("An error occurred when getting contacts! Error code: " + data.apicode);
-                            alert(JSON.stringify(data));
-                        }
-                    }
-                });
-            }
-        } else {
-            $http.post(inspiniaNS.wsUrl + "contact_get", $.param({
-                sethttp : 1,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                contactListID : $state.params.id,
-                limit : pageSize,
-                offset : (page - 1) * pageSize,
-                orderby : orderBy
-            })).success(function(data) {
-                $scope.getContactBlacklist(data.apidata, function() {
-                    $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-                });
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to fetch contact lists!');
-                if (status == 400) {
-                    alert("An error occurred when getting contacts! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
-                }
-            });
-        }
+		  var i = setInterval(function() {
+			  if($scope.main.keywords) {
+				  clearInterval(i);
+
+				  var data;
+				  if (searchText) {
+					  if (filterBy) {
+						  var request = {
+							  sethttp : 1,
+							  apikey : $cookieStore.get('inspinia_auth_token'),
+							  accountID : $cookieStore.get('inspinia_account_id'),
+							  limit : pageSize,
+							  offset : (page - 1) * pageSize,
+							  orderby : orderBy
+						  };
+						  if($state.params.id && $state.params.id != ''){
+							  request['contactListID'] = $state.params.id;
+						  }
+						  switch(filterBy) {
+							  case "ANI":
+								  request.ANI = searchText;
+								  break;
+							  case "firstName":
+								  request.firstName = searchText;
+								  break;
+							  case "lastName":
+								  request.lastName = searchText;
+								  break;
+							  case "emailAddress":
+								  request.emailAddress = searchText;
+								  break;
+							  case "custom1":
+								  request.custom1 = searchText;
+								  break;
+							  case "custom2":
+								  request.custom2 = searchText;
+								  break;
+							  case "custom3":
+								  request.custom3 = searchText;
+								  break;
+						  }
+						  $http.post(inspiniaNS.wsUrl + "contact_get", $.param(request)).success(function(data) {
+							  $scope.getContactBlacklist(data.apidata, function() {
+								  $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+							  });
+						  }).error(
+							  //An error occurred with this request
+							  function(data, status, headers, config) {
+								  //alert('Unexpected error occurred when trying to fetch contact lists!');
+								  if (status == 400) {
+									  if (data.apicode == 4) {
+										  //This is some invalid search field case
+										  $scope.$broadcast("SearchTextTooShort");
+									  } else {
+										  alert("An error occurred when getting contacts! Error code: " + data.apicode);
+										  alert(JSON.stringify(data));
+									  }
+								  }
+							  });
+					  }
+				  } else {
+					  var params = {
+						  sethttp : 1,
+						  apikey : $cookieStore.get('inspinia_auth_token'),
+						  accountID : $cookieStore.get('inspinia_account_id'),
+						  limit : pageSize,
+						  offset : (page - 1) * pageSize,
+						  orderby : orderBy
+					  };
+					  if($state.params.id && $state.params.id != ''){
+						  params['contactListID'] = $state.params.id;
+					  }
+
+					  $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params))
+						  .success(function(data) {
+							  $scope.getContactBlacklist(data.apidata, function() {
+								  $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+							  });
+						  }).error(
+						  //An error occurred with this request
+						  function(data, status, headers, config) {
+							  //alert('Unexpected error occurred when trying to fetch contact lists!');
+							  if (status == 400) {
+								  alert("An error occurred when getting contacts! Error code: " + data.apicode);
+								  alert(JSON.stringify(data));
+							  }
+						  });
+				  }
+			  }
+		  }, 100);
     };
     //WHATCH
     $scope.$watch('pagingOptions', function() {
@@ -3213,7 +3228,6 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
             $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
         }
     }, true);
-    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
     //TABLE OPTIONS
     $scope.ngOptions = {
         data : 'ngData',
@@ -3268,15 +3282,50 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     $scope.refresh = function() {
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
     };
+	 $scope.refresh();
 
     $scope.export = function() {
-        $http.post(inspiniaNS.wsUrl + "contact_get", $.param({
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id'),
-            contactListID : $state.params.id,
-            export : "csv"
-        })).success(function(data) {
+		  var params = {
+			  sethttp : 1,
+			  apikey : $cookieStore.get('inspinia_auth_token'),
+			  accountID : $cookieStore.get('inspinia_account_id'),
+			  export : "csv"
+		  };
+		  if($state.params.id && $state.params.id != ''){
+			  params['contactListID'] = $state.params.id;
+		  }
+
+		 var filterBy = $scope.filterOptions.filterBy;
+		 var searchText = $scope.filterOptions.filterText;
+
+		 if(searchText != ''){
+			 switch(filterBy) {
+				 case "ANI":
+					 params.ANI = searchText;
+					 break;
+				 case "firstName":
+					 params.firstName = searchText;
+					 break;
+				 case "lastName":
+					 params.lastName = searchText;
+					 break;
+				 case "emailAddress":
+					 params.emailAddress = searchText;
+					 break;
+				 case "custom1":
+					 params.custom1 = searchText;
+					 break;
+				 case "custom2":
+					 params.custom2 = searchText;
+					 break;
+				 case "custom3":
+					 params.custom3 = searchText;
+					 break;
+			 }
+		 }
+
+        $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params))
+		  .success(function(data) {
             if (data.apicode == 0) {
                 window.location.href = data.apidata;
                 //window.open(data.apidata, "_blank");

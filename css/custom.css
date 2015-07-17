@@ -4514,6 +4514,10 @@ margin: 20px -15px 10px -15px;
     margin-bottom: 48px;
     margin-top: -78px;
 }
+.manage-list.list-search .top-buttons {
+	margin-bottom: 18px;
+	margin-top: -68px;
+}
 .manage-list-txt {
     margin-bottom: 50px;
 }
