@@ -1047,7 +1047,7 @@ var ngInbox = {
             checked : true,
             canBeClicked : true,
             field : 'sourceANI',
-            displayName : 'Contact',
+            displayName : 'From',
             cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
             checked : true,
@@ -1065,6 +1065,11 @@ var ngInbox = {
             canBeClicked : false,
             field : 'ContactLists',
             displayName : 'List'
+        },{
+            checked : false,
+            canBeClicked : false,
+            field : 'DID',
+            displayName : 'To'
         }],
         sortOptions : {
             fields : ['createdDate'],
