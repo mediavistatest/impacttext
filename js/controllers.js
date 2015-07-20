@@ -4706,9 +4706,15 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     delete requestData.recurringtype;
                 }
             }
+            
+            var action = 'message_send';
+            if (scheduled&&$scope.controllerParent){
+            	action = 'message_modify';
+            	requestData.outboundmessageid = $scope.controllerParent.clickedMessage.outboundMessageID;
+            }
 
             //Send request to the server
-            $http.post(inspiniaNS.wsUrl + "message_send", $.param(requestData)).success(
+            $http.post(inspiniaNS.wsUrl + action, $.param(requestData)).success(
             //Successful request to the server
             function(data, status, headers, config) {
                 if (data == null || typeof data.apicode == 'undefined') {
@@ -4722,7 +4728,11 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     if (scheduled) {
                         if ($scope.controllerParent) {
                             $scope.controllerParent.DontShowMessage = true;
-                            ngInbox._internal.Methods.DeleteMessage($scope.controllerParent);
+                            // this call is not needed since message_modify is introduced
+                            //ngInbox._internal.Methods.DeleteMessage($scope.controllerParent);
+                            $scope.controllerParent.$scope.getPagedDataAsync($scope.controllerParent);
+                    		$scope.controllerParent.Events.ShowList($scope.controllerParent);
+                            
                             $scope.$broadcast("ReschedulingMessageSucceeded", data.apidata);
                         } else {
                             $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
