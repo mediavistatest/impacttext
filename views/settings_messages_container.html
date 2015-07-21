@@ -29,10 +29,18 @@
 
 	<div class="settings-section-email2sms settings-section" ng-controller="ngEmail2SMSCtrl as e2sCtrl" ng-init="forceNotifyInit = true">
 		<h2 class="section-title">Email to SMS forwarding</h2>
-		<p>Register email addresses for Email to SMS forwarding</p>
+		<p>Setup Email to SMS forwarding</p>
 		<br />
 
 		<div class="form-group clearfix" ng-controller="notifyCtrl">
+			<label>Email to SMS Key:</label>
+			<div class="email2sms-key">
+				<input type="text" class="form-control" ng-model="main.accountInfo.email2SmsKey" readonly="readonly" />
+			</div>
+
+			<br />
+
+			<label>Email addresses:</label>
 			<!--div class="email2sms-list" ng-repeat="(key, value) in e2sCtrl.email2sms">
 				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[key]" />
 			</div-->

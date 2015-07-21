@@ -8420,7 +8420,7 @@ ul.bar-legend {
     padding-bottom: 0;
 }
 
-.email2sms-list {
+.email2sms-list, .email2sms-key {
     max-width: 500px;
     margin-bottom: 10px;
 }
