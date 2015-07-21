@@ -321,7 +321,6 @@ var ngInbox = {
                         console.log(ngInbox._internal.ErrorMsg);
                     });
                 }
-
             },
             GetThread : function(controllerParent, getFullThread, continueFunction) {
                 var pageSize = controllerParent.ThreadPageOptions.pageSize;
@@ -856,7 +855,6 @@ var ngInbox = {
 
                 controllerParent.mesageTextToExport = '';
                 callback();
-
             }
         },
         Settings : {
