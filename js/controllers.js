@@ -4155,6 +4155,13 @@ function notifyCtrl($scope, notify) {
             templateUrl : $scope.inspiniaTemplate
         });
     });
+    $scope.$on('GeneralError', function(text) {
+        notify({
+            message : text,
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    });
     $scope.$on('ModifyDIDForwardEmailSuccess', function(event, args) {
         $scope.ModifyDIDForwardEmailSuccessMsg();
     });

@@ -789,8 +789,10 @@ var ngInbox = {
                     for (var i = 0; i < controllerParent.$scope.mySelections.length; i++) {
                         ngInbox._internal.Methods.ExportMessage(controllerParent, controllerParent.$scope.mySelections[i], false, callback);
                     }
+                    ngInbox._internal.Methods.ExportToFile(controllerParent, callback);
+                } else{
+                    controllerParent.$scope.$broadcast('ErrorOnMsg','There are no selected messages');
                 }
-                ngInbox._internal.Methods.ExportToFile(controllerParent, callback);
             },
             ExportThread : function(controllerParent) {
                 ngInbox._internal.ErrorMsg = 'Exporting thread failed!';
@@ -979,6 +981,9 @@ var ngInbox = {
                     templateUrl : 'views/common/notify.html'
                 });
             };
+            $scope.$on('ErrorOnMsg', function(event, errorText){
+                $scope.ErrorOnMsg(errorText);
+            });
             $scope.$on('DeleteMessageSucceeded', function(event, args) {
                 if (!$scope.controllerParent.DontShowMessage) {
                     $scope.DeleteMsg();
