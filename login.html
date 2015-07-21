@@ -40,7 +40,21 @@
                 </form>
 
                 <br><br>
-                <a href="mailto:customersupport@impacttelecom.com?Subject=ImpactText%20Password%20Reset%20Request&Body=Please%20reset%20my%20password.%0AMy%20user%20name%3A%20{{username}}">Forgot password?</a><br>
+					 <a class="forgot-password-link" ng-click="show_forgot_password = !show_forgot_password">Forgot password?</a><br />
+					 <div id="forgot-password-wrapper" ng-show="show_forgot_password">
+						 <p>Please enter your username and e-mail address:</p>
+						 <form class="m-t clearfix" role="form">
+							 <div class="form-group">
+								 <input type="text" class="form-control" placeholder="Username" required="" ng-model="username">
+							 </div>
+							 <div class="form-group form-group-email">
+								 <input type="email" class="form-control" placeholder="Email address" required="" ng-model="emailaddress">
+							 </div>
+							 <div class="form-action">
+							    <button type="submit" class="btn btn-primary block full-width m-b" ng-click="resetPassword()">Send request</button>
+							 </div>
+						 </form>
+					 </div>
                 <br>
                 <p class="m-t"> <small>&copy;  2015 Impact Telecom. All rights reserved.</small> </p>
             </div>

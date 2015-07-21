@@ -66,7 +66,7 @@ superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', fun
 	$scope.totalServerItems = 0;
 	$scope.pagingOptions = {
 		pageSizes: [2, 5, 10, 20, 100],
-		pageSize: 5,
+		pageSize: 100,
 		currentPage: 1
 	};
 	// sort
@@ -228,7 +228,18 @@ superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', fun
 
 
 //Manage Account
-superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore, $routeParams, notify) {
+superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore, $routeParams, notify, $q) {
+	var waitForData = $q.defer();
+	var waitFor = ['PRODUCTPACKAGES', 'COUNTRIES'];
+	var doneWaitingFor = [];
+	function doneWaiting(){
+		for(var i in waitFor){
+			if(doneWaitingFor.indexOf(waitFor[i]) == -1){
+				return false;
+			}
+		}
+		return true;
+	}
 
 	$scope.smsCode = {};
 	$scope.smsCode.AccCode = 'Long';
@@ -238,6 +249,8 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 	$scope.accountId = typeof $routeParams.accountId == 'undefined' ? null : $routeParams.accountId;
 	$scope.DidList = [];
 	$scope.UsersList = [];
+	$scope.ProductPackageList = [];
+	$scope.CountriesList = [];
 
 	/*$scope.msg = 'Hello! This is a sample message!';
 	 $scope.template = '';
@@ -261,15 +274,25 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		var request = {
 			companyID: $scope.CompanyID,
 			accountName: $scope.AccountName,
+			productPackage: $scope.ProductPackage,
 			cycleGroupID: $scope.BillingCycle,
 			firstName: $scope.FirstName,
 			lastName: $scope.LastName,
 			emailAddress: $scope.EmailAddress,
+			address1: $scope.Address1,
+			city: $scope.City,
+			state: $scope.State,
+			zip: $scope.Zip,
+			country: $scope.Country,
 			externalAccountNumber: $scope.ExternalAccount,
 			primaryDID: $scope.PrimaryDID,
 			apikey: $cookieStore.get('inspinia_auth_token'),
 			sethttp: 1
 		};
+
+		if($scope.Address2){
+			request['address2'] = $scope.Address2;
+		}
 
 		var requestPage = "account_add";
 		//Checking if this is modify account request
@@ -308,10 +331,17 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 					if (data.apitext) {
 						var errorParamsMap = [];
 						errorParamsMap['accountname'] = "Account Name";
+						errorParamsMap['productpackage'] = "Product Package";
 						errorParamsMap['cyclegroupid'] = "Billing Cycle";
 						errorParamsMap['firstname'] = "First Name";
 						errorParamsMap['lastname'] = "Last Name";
 						errorParamsMap['emailaddress'] = "Email Address";
+						errorParamsMap['address1'] = "Address 1";
+						errorParamsMap['address2'] = "Address 2";
+						errorParamsMap['city'] = "City";
+						errorParamsMap['state'] = "State";
+						errorParamsMap['zip'] = "Zip code";
+						errorParamsMap['country'] = "Country";
 						errorParamsMap['primarydid'] = "Primary DID";
 						errorParamsMap['externalaccountnumber'] = "Extenral Account Number";
 						invalidParameter = data.apitext.split(':')[0];
@@ -333,12 +363,19 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 	$scope.resetAccount = function() {
 		$scope.accountId = null;
 		$scope.AccountName = null;
+		$scope.ProductPackage = null;
 		$scope.CompanyID = 1;
 		$scope.smsCode.AccCode = 'Long';
 		$scope.BillingCycle = null,
 			$scope.FirstName = null,
 			$scope.LastName = null,
 			$scope.EmailAddress = null,
+			$scope.Address1 = null,
+			$scope.Address2 = null,
+			$scope.City = null,
+			$scope.State = null,
+			$scope.Zip = null,
+			$scope.Country = null,
 			$scope.ExternalAccount = null,
 			$scope.PrimaryDID = null
 	};
@@ -356,10 +393,17 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			$scope.previousAccountData = {};
 		}
 		$scope.previousAccountData.accountName = $scope.AccountName;
+		$scope.previousAccountData.productPackage = $scope.ProductPackage;
 		$scope.previousAccountData.cycleGroupID = $scope.BillingCycle;
 		$scope.previousAccountData.firstName = $scope.FirstName;
 		$scope.previousAccountData.lastName = $scope.LastName;
 		$scope.previousAccountData.emailAddress = $scope.EmailAddress;
+		$scope.previousAccountData.address1 = $scope.Address1;
+		$scope.previousAccountData.address2 = $scope.Address2;
+		$scope.previousAccountData.city = $scope.City;
+		$scope.previousAccountData.state = $scope.State;
+		$scope.previousAccountData.zip = $scope.Zip;
+		$scope.previousAccountData.country = $scope.Country;
 		$scope.previousAccountData.externalAccountNumber = $scope.ExternalAccount;
 		$scope.previousAccountData.primaryDIDID = $scope.primaryDidId;
 		$scope.previousAccountData.status = $scope.accountStatus;
@@ -370,10 +414,17 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			return;
 		}
 		$scope.AccountName = accountData.accountName;
+		$scope.ProductPackage = accountData.productPackage;
 		$scope.BillingCycle = accountData.cycleGroupID;
 		$scope.FirstName = accountData.firstName;
 		$scope.LastName = accountData.lastName;
 		$scope.EmailAddress = accountData.emailAddress;
+		$scope.Address1 = accountData.address1;
+		$scope.Address2 = accountData.address2;
+		$scope.City = accountData.city;
+		$scope.State = accountData.state;
+		$scope.Zip = accountData.zip;
+		$scope.Country = accountData.country;
 		$scope.ExternalAccount = accountData.externalAccountNumber;
 		$scope.primaryDidId = accountData.primaryDIDID;
 		$scope.refreshPrimaryDID();
@@ -1047,10 +1098,72 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		);
 	};
 
-	$scope.refreshAccount();
-	$scope.refreshDidList();
-	$scope.refreshUsersList();
-	$scope.resetUserData();
+	$scope.loadProductPackages = function(){
+		var request = {
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			companyID: $scope.CompanyID,
+			status: 'A',
+			sethttp: 1
+		};
+		var requestPage = 'productpackage_get';
+
+		$http.post(
+			inspiniaAdminNS.wsUrl + requestPage, $.param(request)
+		).success(
+			function (data) {
+				$scope.ProductPackageList = data.apidata;
+				doneWaitingFor.push('PRODUCTPACKAGES');
+				if(doneWaiting()){
+					waitForData.resolve();
+				}
+			}
+		).error(
+				function(){
+					doneWaitingFor.push('PRODUCTPACKAGES');
+					if(doneWaiting()){
+						waitForData.resolve();
+					}
+				}
+		);
+	};
+
+	$scope.loadCountries = function(){
+		var request = {
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			sethttp: 1
+		};
+		var requestPage = 'countries_get';
+
+		$http.post(
+				inspiniaAdminNS.wsUrl + requestPage, $.param(request)
+			).success(
+			function (data) {
+				$scope.CountriesList = data.apidata;
+				doneWaitingFor.push('COUNTRIES');
+				if(doneWaiting()){
+					waitForData.resolve();
+				}
+			}
+		).error(
+			function(){
+				doneWaitingFor.push('COUNTRIES');
+				if(doneWaiting()){
+					waitForData.resolve();
+				}
+			}
+		);
+	};
+
+	$scope.loadProductPackages();
+	$scope.loadCountries();
+
+	waitForData.promise.then(function(){
+		doneWaitingFor = [];
+		$scope.refreshAccount();
+		$scope.refreshDidList();
+		$scope.refreshUsersList();
+		$scope.resetUserData();
+	});
 });
 
 

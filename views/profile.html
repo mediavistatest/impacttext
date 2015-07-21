@@ -3,65 +3,68 @@
     <h1>
     {{main.accountInfo.accountName}}
     </h1>
-
     <div class="animated fadeInRight" >
         <div class="col-sm-8">
             <div class="content-box clearfix">
                 <h2 class="blue">
                 Impact Plan Information
+
+                <a href="#/change_plan" class="btn btn-add change-plan-btn">Change Plan</a>
                 </h2>
+
+                
+                    
+                
+
                 <div class="col-md-6">
                     <ul>
                         <li>
                             <span class="li-label">
-                                ImpactText Account Number:</span>
+                            ImpactText Account Number:</span>
                             {{main.accountInfo.externalAccountNumber}}
                         </li>
                         <li>
                             <span class="li-label">
-                                ImpactText Plan:</span>
+                            ImpactText Plan:</span>
                             {{main.accountInfo.productPackage}}
                         </li>
-
                         <div ng-switch="main.accountInfo.cycleGroupID">
                             <li ng-switch-when="6">
                                 <span class="li-label">
-                                    Billing Cycle: 11</span>
+                                Billing Cycle: 11</span>
                             </li>
                             <li ng-switch-when="7">
                                 <span class="li-label">
-                                    Billing Cycle: 17</span>
+                                Billing Cycle: 17</span>
                             </li>
                             <li ng-switch-when="9">
                                 <span class="li-label">
-                                    Billing Cycle: 25</span>
+                                Billing Cycle: 25</span>
                             </li>
                             <li ng-switch-default>
                                 <span class="li-label">
-                                    Billing Cycle: 1</span>
+                                Billing Cycle: 1</span>
                             </li>
                         </div>
                         <li>
                             <span class="li-label">
-                                ImpactText Number(s):</span>
+                            ImpactText Number(s):</span>
                             {{main.fromNumbersString}}
                         </li>
-
                         <li>
                             <hr>
                         </li>
-
                         <li>
                             <span class="li-label">
-                                Messages used:</span>
+                            Messages used:</span>
                             <span class="blue-txt">
-                                {{pCtrl.messageCount}}</span>
+                            {{pCtrl.messageCount}}</span>
                         </li>
                         <li>
                             <span class="li-label">
-                                Messages available in plan:</span>
+                            Messages available in plan:</span>
                             <span class="blue-txt">
-                                {{pCtrl.bucketOfMessages - pCtrl.messageCount}}</span>
+                            {{pCtrl.bucketOfMessages - pCtrl.messageCount}}</span>
                         </li>
                     </ul>
                 </div>
@@ -71,13 +74,10 @@
                     <div>
                         <canvas doughnutchart legend=true options="pCtrl.doughnutOptions" data="pCtrl.doughnutData" height="140" responsive=true></canvas>
                     </div>
-
                     <!--<input ng-model="pCtrl.bucketOfMessages">-->
-
                 </div>
             </div>
         </div>
-
         <div class="col-sm-8">
             <div class="content-box">
                 <h2 class="green">
@@ -86,22 +86,20 @@
                 <ul>
                     <li>
                         <span class="li-label">
-                            First name:</span>
+                        First name:</span>
                         {{main.accountInfo.firstName}}
                     </li>
                     <li>
                         <span class="li-label">
-                            Last name:</span>
+                        Last name:</span>
                         {{main.accountInfo.lastName}}
                     </li>
                     <li>
                         <span class="li-label">
-                            Company Name:</span>
+                        Company Name:</span>
                         {{main.accountInfo.accountName}}
                     </li>
-
                     <li><hr></li>
-
                     <li><span class="li-label">Address 1:</span> {{main.accountInfo.address1}}</li>
                     <li><span class="li-label">Address 2:</span> {{main.accountInfo.address2}}</li>
                     <li><span class="li-label">City:</span> {{main.accountInfo.city}}</li>
