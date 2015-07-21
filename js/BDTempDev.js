@@ -836,7 +836,6 @@ var ngInbox = {
                 var txtDiv_ = document.createElement('div');
                 txtDiv_.setAttribute('id', 'itExportedMessagesText');
                 txtDiv_.innerText = controllerParent.mesageTextToExport;
-                document.getElementsByTagName("body")[0].appendChild(txtDiv_);
 
                 var link = document.createElement('a');
                 link.setAttribute('id', 'itExportedMessages');
@@ -846,11 +845,10 @@ var ngInbox = {
                 link.setAttribute('download', 'ExportedMessages.txt');
                 link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + txtDiv_.innerText);
 
-                document.getElementsByTagName("body")[0].appendChild(link);
+                txtDiv_.appendChild(link);
 
-                //link.click();
+				document.getElementsByTagName("body")[0].appendChild(txtDiv_);
                 ngFunctions.ElementClickByID('itExportedMessages');
-
                 document.getElementsByTagName("body")[0].removeChild(txtDiv_);
 
                 controllerParent.mesageTextToExport = '';
