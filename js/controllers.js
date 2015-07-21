@@ -27,9 +27,9 @@ function setPagingDataSliced($scope, data, totalResultsCount) {
     if (!$scope.$$phase) {
         $scope.$apply();
     }
-	 if(typeof $scope.ngOptions.selectAll == 'function'){
-		 $scope.ngOptions.selectAll(false);
-	 }
+    if ( typeof $scope.ngOptions.selectAll == 'function') {
+        $scope.ngOptions.selectAll(false);
+    }
 }
 
 function generateOrderByField(sortFields, sortOrders) {
@@ -2683,6 +2683,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
     //       {Name: "John", Age: 48, Position: 'Marketing manager', Status: 'deactive', Date: '09.10.2014'},
     //       {Name: "Berg", Age: 19, Position: 'UI/UX Designer', Status: 'active', Date: '12.11.2013'}
     //   ];
+    $scope.ngData=[];
     $scope.mySelections = [];
     $scope.filterOptions = {
         filterText : "",
@@ -3018,6 +3019,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     //       {Name: "John", Age: 48, Position: 'Marketing manager', Status: 'deactive', Date: '09.10.2014'},
     //       {Name: "Berg", Age: 19, Position: 'UI/UX Designer', Status: 'active', Date: '12.11.2013'}
     //   ];
+    $scope.ngData = [];
     $scope.main.contactListID = $state.params.id;
     $scope.mySelections = [];
     $scope.filterOptions = {
@@ -3116,96 +3118,95 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         if (orderBy == '') {
             orderBy = 'lastname asc';
         }
-		  var i = setInterval(function() {
-			  if($scope.main.keywords) {
-				  clearInterval(i);
+        var i = setInterval(function() {
+            if ($scope.main.keywords) {
+                clearInterval(i);
 
-				  var data;
-				  if (searchText) {
-					  if (filterBy) {
-						  var request = {
-							  sethttp : 1,
-							  apikey : $cookieStore.get('inspinia_auth_token'),
-							  accountID : $cookieStore.get('inspinia_account_id'),
-							  limit : pageSize,
-							  offset : (page - 1) * pageSize,
-							  orderby : orderBy
-						  };
-						  if($state.params.id && $state.params.id != ''){
-							  request['contactListID'] = $state.params.id;
-						  }
-						  switch(filterBy) {
-							  case "ANI":
-								  request.ANI = searchText;
-								  break;
-							  case "firstName":
-								  request.firstName = searchText;
-								  break;
-							  case "lastName":
-								  request.lastName = searchText;
-								  break;
-							  case "emailAddress":
-								  request.emailAddress = searchText;
-								  break;
-							  case "custom1":
-								  request.custom1 = searchText;
-								  break;
-							  case "custom2":
-								  request.custom2 = searchText;
-								  break;
-							  case "custom3":
-								  request.custom3 = searchText;
-								  break;
-						  }
-						  $http.post(inspiniaNS.wsUrl + "contact_get", $.param(request)).success(function(data) {
-							  $scope.getContactBlacklist(data.apidata, function() {
-								  $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-							  });
-						  }).error(
-							  //An error occurred with this request
-							  function(data, status, headers, config) {
-								  //alert('Unexpected error occurred when trying to fetch contact lists!');
-								  if (status == 400) {
-									  if (data.apicode == 4) {
-										  //This is some invalid search field case
-										  $scope.$broadcast("SearchTextTooShort");
-									  } else {
-										  alert("An error occurred when getting contacts! Error code: " + data.apicode);
-										  alert(JSON.stringify(data));
-									  }
-								  }
-							  });
-					  }
-				  } else {
-					  var params = {
-						  sethttp : 1,
-						  apikey : $cookieStore.get('inspinia_auth_token'),
-						  accountID : $cookieStore.get('inspinia_account_id'),
-						  limit : pageSize,
-						  offset : (page - 1) * pageSize,
-						  orderby : orderBy
-					  };
-					  if($state.params.id && $state.params.id != ''){
-						  params['contactListID'] = $state.params.id;
-					  }
+                var data;
+                if (searchText) {
+                    if (filterBy) {
+                        var request = {
+                            sethttp : 1,
+                            apikey : $cookieStore.get('inspinia_auth_token'),
+                            accountID : $cookieStore.get('inspinia_account_id'),
+                            limit : pageSize,
+                            offset : (page - 1) * pageSize,
+                            orderby : orderBy
+                        };
+                        if ($state.params.id && $state.params.id != '') {
+                            request['contactListID'] = $state.params.id;
+                        }
+                        switch(filterBy) {
+                        case "ANI":
+                            request.ANI = searchText;
+                            break;
+                        case "firstName":
+                            request.firstName = searchText;
+                            break;
+                        case "lastName":
+                            request.lastName = searchText;
+                            break;
+                        case "emailAddress":
+                            request.emailAddress = searchText;
+                            break;
+                        case "custom1":
+                            request.custom1 = searchText;
+                            break;
+                        case "custom2":
+                            request.custom2 = searchText;
+                            break;
+                        case "custom3":
+                            request.custom3 = searchText;
+                            break;
+                        }
+                        $http.post(inspiniaNS.wsUrl + "contact_get", $.param(request)).success(function(data) {
+                            $scope.getContactBlacklist(data.apidata, function() {
+                                $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+                            });
+                        }).error(
+                        //An error occurred with this request
+                        function(data, status, headers, config) {
+                            //alert('Unexpected error occurred when trying to fetch contact lists!');
+                            if (status == 400) {
+                                if (data.apicode == 4) {
+                                    //This is some invalid search field case
+                                    $scope.$broadcast("SearchTextTooShort");
+                                } else {
+                                    alert("An error occurred when getting contacts! Error code: " + data.apicode);
+                                    alert(JSON.stringify(data));
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    var params = {
+                        sethttp : 1,
+                        apikey : $cookieStore.get('inspinia_auth_token'),
+                        accountID : $cookieStore.get('inspinia_account_id'),
+                        limit : pageSize,
+                        offset : (page - 1) * pageSize,
+                        orderby : orderBy
+                    };
+                    if ($state.params.id && $state.params.id != '') {
+                        params['contactListID'] = $state.params.id;
+                    }
 
-					  $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params))
-						  .success(function(data) {
-							  $scope.getContactBlacklist(data.apidata, function() {
-								  $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-							  });
-						  }).error(
-						  //An error occurred with this request
-						  function(data, status, headers, config) {
-							  //alert('Unexpected error occurred when trying to fetch contact lists!');
-							  if (status == 400) {
-								  alert("An error occurred when getting contacts! Error code: " + data.apicode);
-								  alert(JSON.stringify(data));
-							  }
-						  });
-				  }
-			  }
-		  }, 100);
+                    $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
+                        $scope.getContactBlacklist(data.apidata, function() {
+                            $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+                        });
+                    }).error(
+                    //An error occurred with this request
+                    function(data, status, headers, config) {
+                        //alert('Unexpected error occurred when trying to fetch contact lists!');
+                        if (status == 400) {
+                            alert("An error occurred when getting contacts! Error code: " + data.apicode);
+                            alert(JSON.stringify(data));
+                        }
+                    });
+                }
+            }
+        }, 100);
     };
     //WHATCH
     $scope.$watch('pagingOptions', function() {
@@ -3279,53 +3280,55 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
             cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_contact({id:row.getProperty(\'contactID\')})"><i class="fa fa-pencil"></i> Edit Contact </a></div>'
         }]
     };
+    $scope.$watch('ngData', function() {
+        $('.gridStyle').trigger('resize');
+    });
     $scope.refresh = function() {
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
     };
-	 $scope.refresh();
+    $scope.refresh();
 
     $scope.export = function() {
-		  var params = {
-			  sethttp : 1,
-			  apikey : $cookieStore.get('inspinia_auth_token'),
-			  accountID : $cookieStore.get('inspinia_account_id'),
-			  export : "csv"
-		  };
-		  if($state.params.id && $state.params.id != ''){
-			  params['contactListID'] = $state.params.id;
-		  }
+        var params = {
+            sethttp : 1,
+            apikey : $cookieStore.get('inspinia_auth_token'),
+            accountID : $cookieStore.get('inspinia_account_id'),
+            export : "csv"
+        };
+        if ($state.params.id && $state.params.id != '') {
+            params['contactListID'] = $state.params.id;
+        }
 
-		 var filterBy = $scope.filterOptions.filterBy;
-		 var searchText = $scope.filterOptions.filterText;
+        var filterBy = $scope.filterOptions.filterBy;
+        var searchText = $scope.filterOptions.filterText;
 
-		 if(searchText != ''){
-			 switch(filterBy) {
-				 case "ANI":
-					 params.ANI = searchText;
-					 break;
-				 case "firstName":
-					 params.firstName = searchText;
-					 break;
-				 case "lastName":
-					 params.lastName = searchText;
-					 break;
-				 case "emailAddress":
-					 params.emailAddress = searchText;
-					 break;
-				 case "custom1":
-					 params.custom1 = searchText;
-					 break;
-				 case "custom2":
-					 params.custom2 = searchText;
-					 break;
-				 case "custom3":
-					 params.custom3 = searchText;
-					 break;
-			 }
-		 }
+        if (searchText != '') {
+            switch(filterBy) {
+            case "ANI":
+                params.ANI = searchText;
+                break;
+            case "firstName":
+                params.firstName = searchText;
+                break;
+            case "lastName":
+                params.lastName = searchText;
+                break;
+            case "emailAddress":
+                params.emailAddress = searchText;
+                break;
+            case "custom1":
+                params.custom1 = searchText;
+                break;
+            case "custom2":
+                params.custom2 = searchText;
+                break;
+            case "custom3":
+                params.custom3 = searchText;
+                break;
+            }
+        }
 
-        $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params))
-		  .success(function(data) {
+        $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
             if (data.apicode == 0) {
                 window.location.href = data.apidata;
                 //window.open(data.apidata, "_blank");
@@ -3380,7 +3383,7 @@ function ngActivityLogListCtrl($scope, $http, $cookieStore) {
                 limit : pageSize,
                 offset : (page - 1) * pageSize,
                 orderby : orderBy,
-					 editsonly : 1
+                editsonly : 1
             })).success(function(data) {
                 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
                 self.gettingData = false;
@@ -4204,6 +4207,13 @@ function notifyCtrl($scope, notify) {
             templateUrl : $scope.inspiniaTemplate
         });
     });
+    $scope.$on('GeneralError', function(text) {
+        notify({
+            message : text,
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    });
     $scope.$on('ModifyDIDForwardEmailSuccess', function(event, args) {
         $scope.ModifyDIDForwardEmailSuccessMsg();
     });
@@ -4707,8 +4717,14 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 }
             }
 
+            var action = 'message_send';
+            if (scheduled && $scope.controllerParent) {
+                action = 'message_modify';
+                requestData.outboundmessageid = $scope.controllerParent.clickedMessage.outboundMessageID;
+            }
+
             //Send request to the server
-            $http.post(inspiniaNS.wsUrl + "message_send", $.param(requestData)).success(
+            $http.post(inspiniaNS.wsUrl + action, $.param(requestData)).success(
             //Successful request to the server
             function(data, status, headers, config) {
                 if (data == null || typeof data.apicode == 'undefined') {
@@ -4722,7 +4738,11 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     if (scheduled) {
                         if ($scope.controllerParent) {
                             $scope.controllerParent.DontShowMessage = true;
-                            ngInbox._internal.Methods.DeleteMessage($scope.controllerParent);
+                            // this call is not needed since message_modify is introduced
+                            //ngInbox._internal.Methods.DeleteMessage($scope.controllerParent);
+                            $scope.controllerParent.$scope.getPagedDataAsync($scope.controllerParent);
+                            $scope.controllerParent.Events.ShowList($scope.controllerParent);
+
                             $scope.$broadcast("ReschedulingMessageSucceeded", data.apidata);
                         } else {
                             $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
@@ -4907,32 +4927,32 @@ function loginCtrl($scope, $cookieStore, $http, $window) {
         });
     };
 
-	$scope.resetPassword = function(){
-		if ( typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
-			return;
-		}
-		if ( typeof $scope.emailaddress == 'undefined' || $scope.emailaddress == null || $scope.emailaddress == '') {
-			return;
-		}
+    $scope.resetPassword = function() {
+        if ( typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
+            return;
+        }
+        if ( typeof $scope.emailaddress == 'undefined' || $scope.emailaddress == null || $scope.emailaddress == '') {
+            return;
+        }
 
-		// user_passwordresetrequest
-		$http.post(inspiniaNS.wsUrl + "user_passwordresetrequest", $.param({
-			user: $scope.username,
-			emailaddress: $scope.emailaddress
-		})).success(function(data){
-			if(data && data.hasOwnProperty('apicode') && data.apicode == 0){
-				alert("Reset password email sent. Please check your email.");
-			}else{
-				if(data && data.hasOwnProperty('apitext') && data.apitext != ''){
-					alert(data.apitext);
-				}else{
-					alert("Failed to send reset password email! Please try again.");
-				}
-			}
-		}).error(function(data){
-			alert("Failed to send reset password email! Please try again.");
-		});
-	};
+        // user_passwordresetrequest
+        $http.post(inspiniaNS.wsUrl + "user_passwordresetrequest", $.param({
+            user : $scope.username,
+            emailaddress : $scope.emailaddress
+        })).success(function(data) {
+            if (data && data.hasOwnProperty('apicode') && data.apicode == 0) {
+                alert("Reset password email sent. Please check your email.");
+            } else {
+                if (data && data.hasOwnProperty('apitext') && data.apitext != '') {
+                    alert(data.apitext);
+                } else {
+                    alert("Failed to send reset password email! Please try again.");
+                }
+            }
+        }).error(function(data) {
+            alert("Failed to send reset password email! Please try again.");
+        });
+    };
 }
 
 /** QR GENERATOR **/
