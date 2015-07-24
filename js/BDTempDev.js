@@ -75,6 +75,41 @@ var ngFunctions = {
             return inDate;
         }
     },
+    SetTimezoneOffsetDate : function(currentInDate, hours, minutes, seconds) {
+                var timezoneOffsetMinutes = new Date().getTimezoneOffset();
+                var selectedDate = new Date(currentInDate.getFullYear(), currentInDate.getMonth(), currentInDate.getDate());
+                var scheduledTime = new Date(selectedDate.getTime() + 3600000 * parseInt(hours) + 60000 * (parseInt(minutes) + timezoneOffsetMinutes) + 1000*seconds);
+                //Date is in format MM/dd/yyyy
+                var dateParts = [];
+                dateParts[0] = scheduledTime.getFullYear();
+                dateParts[1] = "" + (scheduledTime.getMonth() + 1);
+                //dateParts[1] = "" + scheduledTime.getMonth();
+                dateParts[2] = "" + scheduledTime.getDate();
+                dateParts[3] = "" + scheduledTime.getHours();
+                dateParts[4] = "" + scheduledTime.getMinutes();
+                dateParts[5] = "" + scheduledTime.getSeconds();
+                //Fix month
+                if (dateParts[1].length < 2) {
+                    dateParts[1] = "0" + dateParts[1];
+                }
+                //Fix day
+                if (dateParts[2].length < 2) {
+                    dateParts[2] = "0" + dateParts[2];
+                }
+                //Fix hours
+                if (dateParts[3].length < 2) {
+                    dateParts[3] = "0" + dateParts[3];
+                }
+                //Fix minutes
+                if (dateParts[4].length < 2) {
+                    dateParts[4] = "0" + dateParts[4];
+                }
+                //Fix seconds
+                if (dateParts[5].length < 2) {
+                    dateParts[5] = "0" + dateParts[5];
+                }
+                return (dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4] + ":" + dateParts[5]);
+        },
     ConvertObjectUTCDateTimePropsToLocalTime : function(objectToconvertDates) {
         var data = objectToconvertDates;
         if (data.length) {
@@ -277,8 +312,8 @@ var ngInbox = {
                     var page = controllerParent.$scope.pagingOptions.currentPage;
 
                     var searchText = controllerParent.$scope.filterOptions.filterText;
-                    var startDate = controllerParent.$scope.filterOptions.startDate;
-                    var endDate = controllerParent.$scope.filterOptions.endDate;
+                    var startDate = ngFunctions.SetTimezoneOffsetDate(controllerParent.$scope.filterOptions.startDate, '00', '00', '00');
+                    var endDate = ngFunctions.SetTimezoneOffsetDate(controllerParent.$scope.filterOptions.endDate, '23', '59', '59');
 
                     var params = {
                         apikey : controllerParent.$scope.main.authToken,
@@ -299,10 +334,10 @@ var ngInbox = {
                     }
 
                     if (startDate) {
-                        params.startDate = startDate.toISOString().substring(0, 10) + ' 00:00:00';
+                        params.startDate = startDate;
                     }
                     if (endDate) {
-                        params.endDate = endDate.toISOString().substring(0, 10) + ' 23:59:59';
+                        params.endDate = endDate;
                     }
 
                     var $param = $.param(params);
