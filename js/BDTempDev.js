@@ -302,8 +302,7 @@ var ngInbox = {
                         params.startDate = startDate.toISOString().substring(0, 10) + ' 00:00:00';
                     }
                     if (endDate) {
-                        params.endDate = endDate.toISOString().substring(0, 10) + ' 00:00:00';
-
+                        params.endDate = endDate.toISOString().substring(0, 10) + ' 23:59:59';
                     }
 
                     var $param = $.param(params);
@@ -839,8 +838,8 @@ var ngInbox = {
 
                 var link = document.createElement('a');
                 link.setAttribute('id', 'itExportedMessages');
-                var mimeType = 'application/octet-stream';
-                //'text/plain';
+                var mimeType = 'text/plain';
+                //'application/octet-stream';
 
                 link.setAttribute('download', 'ExportedMessages.txt');
                 link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + txtDiv_.innerText);
