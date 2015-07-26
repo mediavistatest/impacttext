@@ -690,15 +690,10 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
             };
             $scope.main.ServerRequests.contactModifyRequest(request, inScope, refresh, callback);
         },
-        forwardToMail : function(message) {
-            //Fix for '+' in some email clients
-            message = message.replace(/\ /g, '%20');
-
-            var $param = $.param({
-                subject : 'impact text',
-                body : message
-            });
-            window.location.href = 'mailto:?' + $param;
+        forwardToMail : function(messageObject) {
+        	var message = messageObject.message.replace(/\ /g, '%20');
+            var href = 'mailto:?subject=ImpactText%20-%20Forwarded%20SMS&body=From%20'+messageObject.DID +';%20'+messageObject.messageDate+';%20'+ message;
+            window.location.href = href;
         }
     };
 
