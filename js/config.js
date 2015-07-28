@@ -74,7 +74,38 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                     ]);
                 }
             }
-        }).state('lists', {
+        })
+		  .state('contacts', {
+			 url: "/contacts",
+			 templateUrl: "views/contacts.html",
+			 data: {
+				 pageTitle: 'Contacts'
+			 },
+			 resolve: {
+				 loadPlugin: function($ocLazyLoad) {
+					 return $ocLazyLoad.load([{
+						 name: 'cgNotify',
+						 files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/notify.js']
+					 },
+					 {
+						 name: 'ngGrid',
+						 files: ['js/plugins/nggrid/ng-grid-2.0.14.min.js']
+					 }, {
+						 insertBefore: '#loadBefore',
+						 files: ['js/plugins/nggrid/ng-grid.css']
+					 }, {
+						 files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+					 }, {
+						 files: ['js/plugins/nggrid/plugins/ng-grid-csv-export.js']
+					 }, {
+						 insertBefore: '#loadBefore',
+						 name: 'localytics.directives',
+						 files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+					 }]);
+				 }
+			 }
+		  })
+		  .state('lists', {
             abstract: true,
             url: "/lists",
             templateUrl: "views/common/content.html",
@@ -175,11 +206,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             //        ]);
             //    }
             //}
-        }).state('lists.search', {
-            url: "/lists_search",
-            templateUrl: "views/lists_search.html",
+        }).state('lists.segments', {
+            url: "/lists_segments",
+            templateUrl: "views/lists_segments.html",
             data: {
-                pageTitle: 'Search Contacts'
+                pageTitle: 'Manage Segments'
             },
             resolve: {
                 loadPlugin: function($ocLazyLoad) {
@@ -189,7 +220,36 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                     }]);
                 }
             }
-        }).state('lists.add', {
+        }).state('lists.add_segment', {
+			  url: "/lists_add_segment",
+			  templateUrl: "views/lists_add_segment.html",
+			  data: {
+				  pageTitle: 'Add Segment'
+			  },
+			  resolve: {
+				  loadPlugin: function($ocLazyLoad) {
+					  return $ocLazyLoad.load([{
+						  name: 'cgNotify',
+						  files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/notify.js']
+					  }]);
+				  }
+			  }
+		  }).state('lists.manage_segment', {
+			  url: "/lists_manage_segment",
+			  templateUrl: "views/lists_manage_segment.html",
+			  data: {
+				  pageTitle: 'Manage Segment'
+			  },
+			  resolve: {
+				  loadPlugin: function($ocLazyLoad) {
+					  return $ocLazyLoad.load([{
+						  name: 'cgNotify',
+						  files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/notify.js']
+					  }]);
+				  }
+			  }
+		  })
+		  .state('lists.add', {
             url: "/lists_add",
             templateUrl: "views/lists_add.html",
             data: {

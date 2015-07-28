@@ -42,15 +42,21 @@
                     <li ui-sref-active="active"><a ui-sref="lists.upload">Upload list (file)</a></li>
                 </ul>
             </li>-->
+
+			   <li ng-class="{active: $state.includes('contacts')}">
+				   <a ui-sref="contacts"><i class="fa fa-book"></i> <span class="nav-label">Contacts</span> </a>
+			   </li>
+
             <li ng-class="{active: $state.includes('lists')}">
-                <a href=""><i class="fa fa-list"></i> <span class="nav-label">Contacts/Lists</span><span class="fa arrow"></span></a>
+                <a href=""><i class="fa fa-list"></i> <span class="nav-label">Lists</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('lists')}">
                     <li ui-sref-active="active"><a ui-sref="lists.view">Manage Lists</a></li>
-                    <li ui-sref-active="active"><a ui-sref="lists.search">Search Contacts</a></li>
+                    <li ui-sref-active="active"><a ui-sref="lists.segments">Manage Segments</a></li>
                     <!--<li ui-sref-active="active"><a ui-sref="lists.add_contact">Add Contact</a></li>
                     <li ui-sref-active="active"><a ui-sref="lists.upload">Upload list (file)</a></li>-->
                 </ul>
             </li>
+
             <li ng-class="{active: $state.includes('messages')}">
                 <a href=""><i class="fa fa-envelope"></i> <span class="nav-label">Messages </span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('messages')}">

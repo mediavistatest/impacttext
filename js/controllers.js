@@ -3351,6 +3351,162 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 
 /**
  *
+ * CONTROLLER FOR LIST SEGMENTS
+ */
+function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
+	$scope.ngData = [];
+	$scope.mySelections = [];
+
+	$scope.filterOptions = {
+		filterText : '',
+		filterBy : ''
+	};
+	$scope.totalServerItems = 0;
+	$scope.pagingOptions = {
+		pageSizes : [10, 20, 50, 100],
+		pageSize : Number($scope.main.Settings.defaultPageSize),
+		currentPage : 1
+	};
+	// sort
+	$scope.sortOptions = {
+		fields : ['name'],
+		directions : ['ASC'],
+		useExternalSorting : true
+	};
+
+	//GET DATA
+	$scope.setPagingData = function(data, page, pageSize) {
+		var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+		$scope.ngData = pagedData;
+		$scope.totalServerItems = data.length;
+		if (!$scope.$$phase) {
+			$scope.$apply();
+		}
+	};
+	$scope.setPagingDataSliced = setPagingDataSliced;
+	$scope.getPagedDataAsync = function(pageSize, page, searchText, filterBy, sortFields, sortOrders) {
+		// TODO
+
+		if ( typeof page == 'undefined' || page == null || page == '') {
+			page = 0;
+		}
+		//Creating a sort options string
+		var orderBy = generateOrderByField(sortFields, sortOrders);
+		if (orderBy == '') {
+			orderBy = 'name asc';
+		}
+
+		if (searchText) {
+			if (filterBy) {
+				var request = {
+					sethttp : 1,
+					apikey : $cookieStore.get('inspinia_auth_token'),
+					accountID : $cookieStore.get('inspinia_account_id'),
+					limit : pageSize,
+					offset : (page - 1) * pageSize,
+					orderby : orderBy
+				};
+				if ($state.params.id && $state.params.id != '') {
+					request['contactListID'] = $state.params.id;
+				}
+				switch(filterBy) {
+					case "name":
+						request.name = searchText;
+						break;
+				}
+				/*$http.post(inspiniaNS.wsUrl + "contact_get", $.param(request)).success(function(data) {
+					$scope.getContactBlacklist(data.apidata, function() {
+						$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+					});
+				}).error(
+					//An error occurred with this request
+					function(data, status, headers, config) {
+						if (status == 400) {
+							if (data.apicode == 4) {
+								//This is some invalid search field case
+								$scope.$broadcast("SearchTextTooShort");
+							} else {
+								alert("An error occurred when getting segments! Error code: " + data.apicode);
+								alert(JSON.stringify(data));
+							}
+						}
+				});*/
+			}
+		} else {
+			var params = {
+				sethttp : 1,
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $cookieStore.get('inspinia_account_id'),
+				limit : pageSize,
+				offset : (page - 1) * pageSize,
+				orderby : orderBy
+			};
+			if ($state.params.id && $state.params.id != '') {
+				params['contactListID'] = $state.params.id;
+			}
+
+			/*$http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
+				$scope.getContactBlacklist(data.apidata, function() {
+					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+				});
+			}).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					//alert('Unexpected error occurred when trying to fetch contact lists!');
+					if (status == 400) {
+						alert("An error occurred when getting segments! Error code: " + data.apicode);
+						alert(JSON.stringify(data));
+					}
+			});*/
+		}
+	};
+
+	//WHATCH
+	$scope.$watch('pagingOptions', function() {
+		if (!self.poInit || self.gettingData) {
+			self.poInit = true;
+			return;
+		}
+		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
+	}, true);
+	$scope.$watch('sortOptions', function(newVal, oldVal) {
+		if (newVal !== oldVal) {
+			$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
+		}
+	}, true);
+
+	//TABLE OPTIONS
+	// TODO
+	$scope.ngOptions = {};
+
+	$scope.$watch('ngData', function() {
+		$('.gridStyle').trigger('resize');
+	});
+	$scope.refresh = function() {
+		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
+	};
+	$scope.refresh();
+
+	// EXPORT?
+	// TODO
+}
+
+function EditSegmentCtrl($scope, $http, $cookieStore, $window, $state) {
+	// TODO
+	$scope.saveSegment = function(){
+		console.log('TODO');
+	};
+}
+
+function AddSegmentCtrl($scope, $http, $cookieStore) {
+	// TODO
+	$scope.addSegment = function(){
+		console.log('TODO');
+	};
+}
+
+/**
+ *
  * CONTROLLER FOR ACTIVITY LOG VIEW TABLE
  */
 function ngActivityLogListCtrl($scope, $http, $cookieStore) {
@@ -5575,6 +5731,7 @@ angular.module('inspinia').controller('chartJsCtrl', chartJsCtrl);
 angular.module('inspinia').controller('GoogleMaps', GoogleMaps);
 angular.module('inspinia').controller('ngGridCtrl', ['$scope', '$http', '$cookieStore', ngGridCtrl]);
 angular.module('inspinia').controller('ngContactListCtrl', ['$scope', '$http', '$cookieStore', '$state', ngContactListCtrl]);
+angular.module('inspinia').controller('ngSegmentListCtrl', ['$scope', '$http', '$cookieStore', '$state', ngSegmentListCtrl]);
 angular.module('inspinia').controller('ngActivityLogListCtrl', ['$scope', '$http', '$cookieStore', ngActivityLogListCtrl]);
 angular.module('inspinia').controller('ngInboxListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.InboxList.Controller]);
 angular.module('inspinia').controller('ngSentListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.SentList.Controller]);
@@ -5584,6 +5741,8 @@ angular.module('inspinia').controller('ngDraftsListCtrl', ['$scope', '$http', '$
 angular.module('inspinia').controller('ngTrashListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.TrashList.Controller]);
 angular.module('inspinia').controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', 'filterFilter', 'FileUploader', AddListsCtrl]);
 angular.module('inspinia').controller('EditContactCtrl', ['$scope', '$http', '$cookieStore', '$window', '$state', EditContactCtrl]);
+angular.module('inspinia').controller('AddSegmentCtrl', ['$scope', '$http', '$cookieStore', AddSegmentCtrl]);
+angular.module('inspinia').controller('EditSegmentCtrl', ['$scope', '$http', '$cookieStore', '$window', '$state', EditSegmentCtrl]);
 angular.module('inspinia').controller('codeEditorCtrl', codeEditorCtrl);
 angular.module('inspinia').controller('nestableCtrl', nestableCtrl);
 angular.module('inspinia').controller('notifyCtrl', notifyCtrl);
