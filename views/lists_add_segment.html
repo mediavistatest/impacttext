@@ -1,0 +1,106 @@
+<h1>Lists</h1>
+
+<div class="col-md-12 content-holder animated fadeInRight add-list-contact" ng-class="animation" ng-controller="AddSegmentCtrl">
+	<h2 class="section-title">Add Segment</h2>
+	<div class="top-buttons">
+		<a ng-hide="controllerParent" href="#/lists/lists_segments" class="btn btn-back"><i class="fa fa-undo"></i> Back to Segments</a>
+	</div>
+
+	<div>
+		<br />
+
+		<form>
+
+
+			<!--SINGLE CONTACT -->
+			<div class="single-holder" >
+
+				<div class="form-group clearfix">
+
+					<label class="control-label">Phone number:</label>
+					<input type="text" name="PhoneNumber" placeholder="e.g. 1111111111" ng-model="PhoneNumber" class="form-control inline">
+
+				</div>
+
+				<div class="form-group clearfix">
+
+					<label class="control-label">First name:</label>
+					<input type="text" name="FirstNmae" placeholder="John" ng-model="FirstName" class="form-control inline">
+
+				</div>
+
+				<div class="form-group clearfix">
+
+					<label class="control-label">Last Name:</label>
+					<input type="text" name="LastName" placeholder="Doe" ng-model="LastName" class="form-control inline">
+
+				</div>
+
+				<div class="form-group clearfix">
+
+					<label class="control-label">Email address:</label>
+					<input type="text" name="Email" placeholder="name@domain.com" ng-model="Email" class="form-control inline">
+
+				</div>
+
+				<div class="form-group clearfix">
+
+					<label class="control-label">Source:</label>
+					<input type="text" name="ContactSource" placeholder="" ng-model="ContactSource" class="form-control inline">
+
+				</div>
+
+				<div class="form-group clearfix">
+
+					<label class="control-label">Custom field 1:</label>
+					<input type="text" name="CustomField1" placeholder="Custom text" ng-model="CustomField1" class="form-control inline">
+
+				</div>
+
+				<div class="form-group clearfix">
+
+					<label class="control-label">Custom field 2:</label>
+					<input type="text" name="CustomField2" placeholder="Custom text" ng-model="CustomField2" class="form-control inline">
+
+				</div>
+
+				<div class="form-group clearfix">
+
+					<label class="control-label">Custom field 3:</label>
+					<input type="text" name="CustomField3" placeholder="Custom text" ng-model="CustomField3" class="form-control inline">
+
+				</div>
+
+				<div class="form-group clearfix">
+
+					<label class="control-label">Custom field 4:</label>
+					<input type="text" name="CustomField4" placeholder="Custom text" ng-model="CustomField4" class="form-control inline">
+
+				</div>
+
+				<div class="form-group clearfix">
+
+					<label class="control-label">Custom field 5:</label>
+					<input type="text" name="CustomField5" placeholder="Custom text" ng-model="CustomField5" class="form-control inline">
+
+				</div>
+
+				<div class="form-group clearfix">
+
+					<label class="control-label">Language:</label>
+					<input type="text" name="Language" placeholder="" ng-model="Language" class="form-control inline">
+
+				</div>
+
+			</div><!-- END SINGLE -->
+
+
+			<br />
+			<a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="addSegment()">
+				<span><i class="fa fa-floppy-o"></i> Save</span>
+			</a>
+
+		</form>
+
+	</div>
+</div>
