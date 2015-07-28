@@ -3299,7 +3299,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
             sethttp : 1,
             apikey : $cookieStore.get('inspinia_auth_token'),
             accountID : $cookieStore.get('inspinia_account_id'),
-			   // TODO: send the list of selected contacts
+			   contactID : selected_ids,
             export : "csv"
         };
         if ($state.params.id && $state.params.id != '') {
