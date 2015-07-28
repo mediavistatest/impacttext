@@ -1,5 +1,4 @@
-<h1>Reports</h1>
-<div class="animated fadeInRight reports clearfix" ng-controller="ReportsBarCtrl">
+<div class="animated fadeInRight reports clearfix" >
     <div class="col-md-12">
         <div class="content-box clearfix">
             <div class="col-md-12">
@@ -8,13 +7,13 @@
                 <span class="label-icon"><span><i class="fa fa-calendar"></i>Choose date range:</span>
                 &nbsp;&nbsp;&nbsp;&nbsp; from</span>
                 <div class="btn-group datetimepicker-wrapper" >
-                    <input id="idStartDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="StartDate" is-open="opened" min-date="" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+                    <input id="idStartDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="rsCtrl.StartDate" is-open="opened" min-date="" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
                 </div>
                 <span class="label-icon">
                 &nbsp;&nbsp;&nbsp;&nbsp;to
                 </span>
                 <div class="btn-group datetimepicker-wrapper" >
-                    <input id="idEndDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="EndDate" is-open="opened2" min-date="StartDate" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open2($event)" />
+                    <input id="idEndDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="rsCtrl.EndDate" is-open="opened2" min-date="rsCtrl.StartDate" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open2($event)" />
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button class="btn btn-add" ng-click="showReport()">
@@ -37,15 +36,15 @@
             </div>
             <div class="col-sm-9">
                 <br>
-                <canvas barchart options="barOptions" data="barData" width="200" height="100" legend=true responsive=true></canvas>
+                <canvas barchart options="rsCtrl.barOptions" data="rsCtrl.barData" width="200" height="100" legend=true responsive=true></canvas>
             </div>
         </div>
     </div>
     <div class="col-md-15">
         <div class="content-box clearfix">
             <h2 class="blue">Sent messages</h2>
-            <p class="number-of" ng-model="SentMessages">
-            {{SentMessages}}
+            <p class="number-of" ng-model="rsCtrl.SentMessages">
+            {{rsCtrl.SentMessages}}
             </p>
             <p class="number-of-what">
             Messages
@@ -56,8 +55,8 @@
     <div class="col-md-15">
         <div class="content-box clearfix">
             <h2 class="orange">Received messages</h2>
-            <p class="number-of" ng-model="ReceivedMessages">
-            {{ReceivedMessages}}
+            <p class="number-of" ng-model="rsCtrl.ReceivedMessages">
+            {{rsCtrl.ReceivedMessages}}
             </p>
             <p class="number-of-what">
             Messages
@@ -68,8 +67,8 @@
     <div class="col-md-15" tooltip='This is the total number of unique people who received messages you sent.'>
         <div class="content-box clearfix">
             <h2 class="green">Recipients</h2>
-            <p class="number-of" ng-model="TotalContacts">
-            {{Recipients}}
+            <p class="number-of" ng-model="rsCtrl.Recipients">
+            {{rsCtrl.Recipients}}
             </p>
             <p class="number-of-what">
             Messages
@@ -80,8 +79,8 @@
     <div class="col-md-15">
         <div class="content-box clearfix">
             <h2 class="violet">Opt-outs</h2>
-            <p class="number-of" ng-model="TotalOptOuts">
-            {{OptOuts}}
+            <p class="number-of" ng-model="rsCtrl.OptOuts">
+            {{rsCtrl.OptOuts}}
             </p>
             <p class="number-of-what">
             Numbers
@@ -92,8 +91,8 @@
     <div class="col-md-15" tooltip='This is the total number of unique people who sent messages to you.'>
         <div class="content-box clearfix">
             <h2 class="grey">Senders</h2>
-            <p class="number-of" ng-model="NumberOfSenders">
-            {{Senders}}
+            <p class="number-of" ng-model="rsCtrl.Senders">
+            {{rsCtrl.Senders}}
             </p>
             <p class="number-of-what">
             Numbers

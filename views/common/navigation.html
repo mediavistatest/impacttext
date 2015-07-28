@@ -24,7 +24,7 @@
                     </ul>-->
                 </div>
                 <div class="logo-element">
-                    
+
                 </div>
             </li>
             <li ui-sref-active="active">
@@ -69,9 +69,6 @@
 						 <li ui-sref-active="active"><a ui-sref="tools.activity_log">Activity Log</a></li>
 				  	 </ul>
             </li>
-            <!-- <li ui-sref-active="active">
-                <a ui-sref="settings"><i class="fa fa-cog"></i> <span class="nav-label">Settings</span></a>
-            </li> -->
             <li ng-class="{active: $state.includes('settings')}">
                 <a href=""><i class="fa fa-cog"></i> <span class="nav-label">Settings </span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('settings')}">
@@ -81,9 +78,13 @@
                     <li ui-sref-active="active"><a ui-sref="settings.autoresponders">Autoresponders</a></li>
                     <li><a ui-sref="profile">Profile</a></li>
                 </ul>
-            </li>            
-            <li ui-sref-active="active">
-                <a ui-sref="reports"><i class="fa fa-bar-chart"></i> <span class="nav-label">Reports</span></a>
+            </li>
+            <li ng-class="{active: $state.includes('reports')}">
+                <a href=""><i class="fa fa-bar-chart"></i> <span class="nav-label">Reports </span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('reports')}">
+                    <li ui-sref-active="active"><a ui-sref="reports.new">View</a></li>
+                    <li ui-sref-active="active"><a ui-sref="reports.sheduled">Scheduled </a></li>
+                </ul>
             </li>
             <li ui-sref-active="active">
                 <a ui-sref="support"><i class="fa fa-life-ring"></i> <span class="nav-label">Support</span></a>
@@ -91,7 +92,6 @@
             <li>
                 <a href="https://myaccount.impacttelecom.com" target="_blank"><i class="fa fa-desktop"></i> <span class="nav-label">My Account</span></a>
             </li>
-
         </ul>
 
     </div>

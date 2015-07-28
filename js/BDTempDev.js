@@ -76,40 +76,40 @@ var ngFunctions = {
         }
     },
     SetTimezoneOffsetDate : function(currentInDate, hours, minutes, seconds) {
-                var timezoneOffsetMinutes = new Date().getTimezoneOffset();
-                var selectedDate = new Date(currentInDate.getFullYear(), currentInDate.getMonth(), currentInDate.getDate());
-                var scheduledTime = new Date(selectedDate.getTime() + 3600000 * parseInt(hours) + 60000 * (parseInt(minutes) + timezoneOffsetMinutes) + 1000*seconds);
-                //Date is in format MM/dd/yyyy
-                var dateParts = [];
-                dateParts[0] = scheduledTime.getFullYear();
-                dateParts[1] = "" + (scheduledTime.getMonth() + 1);
-                //dateParts[1] = "" + scheduledTime.getMonth();
-                dateParts[2] = "" + scheduledTime.getDate();
-                dateParts[3] = "" + scheduledTime.getHours();
-                dateParts[4] = "" + scheduledTime.getMinutes();
-                dateParts[5] = "" + scheduledTime.getSeconds();
-                //Fix month
-                if (dateParts[1].length < 2) {
-                    dateParts[1] = "0" + dateParts[1];
-                }
-                //Fix day
-                if (dateParts[2].length < 2) {
-                    dateParts[2] = "0" + dateParts[2];
-                }
-                //Fix hours
-                if (dateParts[3].length < 2) {
-                    dateParts[3] = "0" + dateParts[3];
-                }
-                //Fix minutes
-                if (dateParts[4].length < 2) {
-                    dateParts[4] = "0" + dateParts[4];
-                }
-                //Fix seconds
-                if (dateParts[5].length < 2) {
-                    dateParts[5] = "0" + dateParts[5];
-                }
-                return (dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4] + ":" + dateParts[5]);
-        },
+        var timezoneOffsetMinutes = new Date().getTimezoneOffset();
+        var selectedDate = new Date(currentInDate.getFullYear(), currentInDate.getMonth(), currentInDate.getDate());
+        var scheduledTime = new Date(selectedDate.getTime() + 3600000 * parseInt(hours) + 60000 * (parseInt(minutes) + timezoneOffsetMinutes) + 1000 * seconds);
+        //Date is in format MM/dd/yyyy
+        var dateParts = [];
+        dateParts[0] = scheduledTime.getFullYear();
+        dateParts[1] = "" + (scheduledTime.getMonth() + 1);
+        //dateParts[1] = "" + scheduledTime.getMonth();
+        dateParts[2] = "" + scheduledTime.getDate();
+        dateParts[3] = "" + scheduledTime.getHours();
+        dateParts[4] = "" + scheduledTime.getMinutes();
+        dateParts[5] = "" + scheduledTime.getSeconds();
+        //Fix month
+        if (dateParts[1].length < 2) {
+            dateParts[1] = "0" + dateParts[1];
+        }
+        //Fix day
+        if (dateParts[2].length < 2) {
+            dateParts[2] = "0" + dateParts[2];
+        }
+        //Fix hours
+        if (dateParts[3].length < 2) {
+            dateParts[3] = "0" + dateParts[3];
+        }
+        //Fix minutes
+        if (dateParts[4].length < 2) {
+            dateParts[4] = "0" + dateParts[4];
+        }
+        //Fix seconds
+        if (dateParts[5].length < 2) {
+            dateParts[5] = "0" + dateParts[5];
+        }
+        return (dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4] + ":" + dateParts[5]);
+    },
     ConvertObjectUTCDateTimePropsToLocalTime : function(objectToconvertDates) {
         var data = objectToconvertDates;
         if (data.length) {
@@ -881,7 +881,7 @@ var ngInbox = {
 
                 txtDiv_.appendChild(link);
 
-				document.getElementsByTagName("body")[0].appendChild(txtDiv_);
+                document.getElementsByTagName("body")[0].appendChild(txtDiv_);
                 ngFunctions.ElementClickByID('itExportedMessages');
                 document.getElementsByTagName("body")[0].removeChild(txtDiv_);
 
@@ -3597,5 +3597,354 @@ var ngSettings = {
             //set prefered number
             ngSettings.Autoresponder._internal.SetFromNumber(cpo);
         }
+    }
+};
+
+var ngReports = {
+    Scheduled : {
+        _internal : {
+            Today : function(cpo) {
+                var monthBeforeToday = new Date();
+                monthBeforeToday.setMonth(monthBeforeToday.getMonth() - 1);
+                cpo.rsCtrl.StartDate = monthBeforeToday;
+                cpo.rsCtrl.EndDate = new Date();
+            },
+            Clear : function(cpo) {
+                cpo.filterValues.StartDate = null;
+                cpo.filterValues.EndDate = null;
+            },
+            ToggleMin : function(cpo) {
+                cpo.filterValues.minDate = cpo.filterValues.minDate ? null : new Date();
+            },
+            Open : function(cpo, $event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                cpo.filterValues.opened = true;
+            },
+            Open2 : function(cpo, $event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                cpo.filterValues.opened2 = true;
+            }
+        },
+        ServerRequests : {
+            GetMessageStats : function(cpo, callback) {
+                if (cpo.$scope.main.accountInfo.companyID) {
+                    ngReports.Scheduled._internal.Today(cpo);
+                    // if (cpo.$scope.selectedDID && cpo.$scope.selectedDID.DIDID) {
+                    // didid = cpo.$scope.selectedDID.DIDID;
+                    // };
+                    // var contactListID;
+                    // if (cpo.$scope.selectedContactList && cpo.$scope.selectedContactList.contactListID) {
+                    // contactListID = cpo.$scope.selectedContactList.contactListID;
+                    // };
+
+                    // $scope.params = {
+                    // startdatetime : $('#idStartDate').val() + ' 00:00:00',
+                    // enddatetime : $('#idEndDate').val() + ' 23:59:59',
+                    // didid : didid,
+                    // contactListID : contactListID
+                    // };
+                    // $scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
+
+                    var params = {
+                        apikey : cpo.$scope.main.authToken,
+                        accountID : cpo.$scope.main.accountID,
+                        companyID : cpo.$scope.main.accountInfo.companyID,
+                        startdate : cpo.rsCtrl.StartDate.toISOString().substring(0, 10) + ' 00:00:00',
+                        enddate : cpo.rsCtrl.EndDate.toISOString().substring(0, 10) + ' 23:59:59',
+                        // ,sethttp : 1
+                    };
+
+                    var $param = $.param(params);
+
+                    //POST
+                    cpo.$http.post(inspiniaNS.wsUrl + 'reporting_getmessagestats', $param)
+                    // success function
+                    .success(function(result) {
+                        callback(cpo, result);
+                    })
+                    // error function
+                    .error(function(data, status, headers, config) {
+                        // console.log(data)
+                        cpo.$scope.$broadcast('itError', {
+                            message : 'Error! ' + data.apitext
+                        });
+                        console.log('reporting_getmessagestats: ' + data.apitext);
+                    });
+                } else {
+                    setTimeout(function() {
+                        ngReports.Scheduled.ServerRequests.GetMessageStats(cpo, callback);
+                    }, 500);
+                }
+            },
+            GetMessageStatsCallback : function(cpo, result) {
+                cpo.rsCtrl.SentMessages = result.apidata.totalMessagesDelivered;
+                cpo.rsCtrl.ReceivedMessages = result.apidata.totalReplies;
+                cpo.rsCtrl.Recipients = result.apidata.totalContacts;
+                cpo.rsCtrl.OptOuts = result.apidata.totalOptOuts;
+                cpo.rsCtrl.Senders = result.apidata.uniqueReplyAni;
+
+                cpo.rsCtrl.barData.datasets[0].data = [];
+                cpo.rsCtrl.barData.datasets[1].data = [];
+                cpo.rsCtrl.barData.datasets[2].data = [];
+                cpo.rsCtrl.barData.datasets[3].data = [];
+                cpo.rsCtrl.barData.datasets[4].data = [];
+                // cpo.barData.datasets[0].data.length = 0;
+                // cpo.barData.datasets[1].data.length = 0;
+                // cpo.barData.datasets[2].data.length = 0;
+                // cpo.barData.datasets[3].data.length = 0;
+                // cpo.barData.datasets[4].data.length = 0;
+
+                // cpo.$scope.barData.datasets[0].data.push(cpo.$scope.SentMessages);
+                // cpo.$scope.barData.datasets[1].data.push(cpo.$scope.ReceivedMessages);
+                // cpo.$scope.barData.datasets[2].data.push(cpo.$scope.Recipients);
+                // cpo.$scope.barData.datasets[3].data.push(cpo.$scope.OptOuts);
+                // cpo.$scope.barData.datasets[4].data.push(cpo.$scope.Senders);
+
+                cpo.rsCtrl.barData.datasets[0].data.push(cpo.rsCtrl.SentMessages);
+                cpo.rsCtrl.barData.datasets[1].data.push(cpo.rsCtrl.ReceivedMessages);
+                cpo.rsCtrl.barData.datasets[2].data.push(cpo.rsCtrl.Recipients);
+                cpo.rsCtrl.barData.datasets[3].data.push(cpo.rsCtrl.OptOuts);
+                cpo.rsCtrl.barData.datasets[4].data.push(cpo.rsCtrl.Senders);
+            }
+        },
+        // Name : 'Scheduled',
+        getListAction : 'reporting_getreport',
+        getListStatus : 'S',
+        // statusChangeAction : null, //'message_changeoutboundstatus',
+        // deleteMessagesChangeAction : 'message_deleteoutbound',
+        // primaryKey : 'outboundMessageID',
+        columnDefs : [
+        // {
+        // checked : true,
+        // canBeClicked : true,
+        // field : 'con_lis',
+        // displayName : 'Contact/List',
+        // cellTemplate : 'views/table/MessageTableTemplate.html'
+        // }, {
+        // checked : true,
+        // canBeClicked : true,
+        // field : 'message',
+        // displayName : 'Message',
+        // cellTemplate : 'views/table/MessageTableTemplate.html'
+        // }, {
+        // checked : true,
+        // canBeClicked : false,
+        // field : 'createdDate',
+        // displayName : 'Date created'
+        // }, {
+        // checked : true,
+        // canBeClicked : false,
+        // field : 'scheduledDate',
+        // displayName : 'Date scheduled'
+        // }, {
+        // button : 'Edit',
+        // checked : true,
+        // canBeClicked : false,
+        // cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ng-click="controllerParent.Events.Message_onClick(controllerParent,row)"><i class="fa fa-pencil"></i> Edit </a></div>'
+        // }
+        ],
+        barOptions : {
+            scaleBeginAtZero : true,
+            scaleShowGridLines : true,
+            scaleGridLineColor : "rgba(0,0,0,.05)",
+            scaleGridLineWidth : 1,
+            barShowStroke : true,
+            barStrokeWidth : 2,
+            barValueSpacing : 5,
+            barDatasetSpacing : 1
+        },
+        barData : {
+            labels : ['Statistics'],
+            datasets : [{
+                label : "Received messages",
+                fillColor : "rgba(0,94,170,0.5)",
+                strokeColor : "rgba(0,94,170,0.5)",
+                highlightFill : "rgba(0,94,170,0.8)",
+                highlightStroke : "rgba(0,94,170,1)",
+                data : []
+            }, {
+                label : "Sent messages",
+                fillColor : "rgba(227,111,30,0.5)",
+                strokeColor : "rgba(227,111,30,0.5)",
+                highlightFill : "rgba(227,111,30,0.8)",
+                highlightStroke : "rgba(227,111,30,1)",
+                data : []
+            }, {
+                label : "Recipients",
+                fillColor : "rgba(0,125,50,0.5)",
+                strokeColor : "rgba(0,125,50,0.5)",
+                highlightFill : "rgba(0,125,50,0.8)",
+                highlightStroke : "rgba(0,125,50,1)",
+                data : []
+            }, {
+                label : "Opt-outs",
+                fillColor : "rgba(159,74,156,0.5)",
+                strokeColor : "rgba(159,74,156,0.5)",
+                highlightFill : "rgba(159,74,156,0.8)",
+                highlightStroke : "rgba(159,74,156,1)",
+                data : []
+            }, {
+                label : "Senders",
+                fillColor : "rgba(159,159,159,0.5)",
+                strokeColor : "rgba(159,159,159,0.5)",
+                highlightFill : "rgba(159,159,159,0.8)",
+                highlightStroke : "rgba(159,159,159,1)",
+                data : []
+            }]
+        },
+        sortOptions : {
+            // fields : ['createdDate'],
+            // directions : ['DESC'],
+            // useExternalSorting : true
+        },
+        filterValues : {
+            StartDate : '',
+            EndDate : ''
+        },
+        dateOptions : {
+            formatYear : 'yy',
+            startingDay : 1,
+            showWeeks : 'false',
+            initDate : 'false'
+        },
+        // defaultSortField : 'scheduledDate',
+        errorMessage : 'Unexpected error occurred when trying to fetch scheduled reports list!',
+        //hashUrlviewMessage : 'messages.view_scheduled',
+        $scope : null,
+        $http : null,
+        $cookieStore : null,
+        clickedReport : null,
+        list : true,
+        view : false,
+        Events : {
+            Report_onClick : function(cpo, row) {
+                // inParent.clickedMessage = row.entity;
+                // inParent.Events.ShowView(inParent);
+            },
+            Show_onClick : function(cpo) {
+            },
+            ShowList : function(cpo) {
+                cpo.list = true;
+                cpo.view = false;
+            },
+            ShowView : function(cpo) {
+                ngReports.Scheduled.ServerRequests.GetMessageStats(cpo, ngReports.Scheduled.ServerRequests.GetMessageStatsCallback);
+                cpo.list = false;
+                cpo.view = true;
+            },
+            InitialiseEvents : function(cpo) {
+            }
+        },
+        Controller : function($scope, $http, $cookieStore) {
+            var rsCtrl = this;
+            var cpo = ngReports.Scheduled;
+
+            cpo.$scope = $scope;
+            cpo.$scope.cpo = cpo;
+            cpo.rsCtrl = rsCtrl;
+            cpo.$http = $http;
+            cpo.$cookieStore = $cookieStore;
+
+            rsCtrl.barData = cpo.barData;
+            rsCtrl.barOptions = cpo.barOptions;
+
+            // rsCtrl.StartDate = cpo.filterValues.StartDate;
+            // rsCtrl.EndDate = cpo.filterValues.EndDate;
+
+            ngReports.Scheduled._internal.Today(cpo);
+            ngReports.Scheduled._internal.ToggleMin(cpo);
+            cpo.$scope.dateOptions = cpo.dateOptions;
+            cpo.$scope.selectedDID = {
+                DIDID : null
+            };
+            cpo.$scope.selectedContactList = {
+                contactListID : null
+            };
+
+            cpo.$scope.SentMessages = '';
+            cpo.$scope.ReceivedMessages = '';
+            cpo.$scope.Recipients = '';
+            cpo.$scope.OptOuts = '';
+            cpo.$scope.Senders = '';
+
+            cpo.Events.ShowList(cpo);
+
+            // ngInbox._internal.Methods.PopulateScope(controllerParent);
+            cpo.Events.InitialiseEvents(cpo);
+        }
+        // ,
+        // PopulateSend : function($sendScope) {
+        // try {
+        // $sendScope.FromName = $sendScope.initial;
+        // $sendScope.MessageType = 'SMS';
+        //
+        // continueFunction = function() {
+        // $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
+        // return member.DID == $sendScope.controllerParent.clickedMessage.DID;
+        // })[0];
+        //
+        // $sendScope.FromName = $sendScope.FromNumber.fromName;
+        //
+        // if ($sendScope.controllerParent.ANIList) {
+        // $sendScope.SendToList = false;
+        // $sendScope.ToNumber = $sendScope.controllerParent.ANIList;
+        // $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
+        // } else {
+        // $sendScope.SendToList = true;
+        // $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+        // return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+        // })[0];
+        // $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.clickedMessage.contactListName;
+        // }
+        //
+        // $sendScope.OptOutMsg = '';
+        // $sendScope.OptOutTxt3 = $sendScope.initial;
+        // $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
+        // $sendScope.ScheduleCheck = true;
+        //
+        // $sendScope.RecurringTypes = [{
+        // value : '',
+        // label : "No"
+        // }, {
+        // value : 'D',
+        // label : 'Every day'
+        // }, {
+        // value : 'W',
+        // label : 'Every week'
+        // }, {
+        // value : 'M',
+        // label : 'Every month'
+        // }];
+        //
+        // // console.log('GetLocalDateTimeString: ' + ngInbox._internal.Methods.GetLocalDateTimeString($sendScope.controllerParent.clickedMessage.scheduledDate + ' UTC'))
+        // var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+        // // GetLocalDateTimeString
+        // // console.log($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10))
+        //
+        // scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm'));
+        // scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
+        // scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
+        // scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
+        // if ($sendScope.controllerParent.clickedMessage.recurringend != null) {
+        // scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+        // } else {
+        // scheduledDateTime.SetRecurringEndDate = new Date();
+        // }
+        // $sendScope.ArrayScheduledDateTime = [];
+        // $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
+        // };
+        //
+        // ngInbox._internal.Methods.GetANIorList($sendScope.controllerParent, continueFunction);
+        // } catch(e) {
+        // //TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
+        // console.log(e);
+        // }
+        //
+        // },
+        // PostSuccess : function(controllerParent, result) {
+        // ngInbox._internal.Methods.PostSuccess(controllerParent, result);
+        // }
     }
 };

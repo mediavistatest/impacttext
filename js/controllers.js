@@ -5605,3 +5605,4 @@ angular.module('inspinia').controller('ngNumbersCtrl', ['$scope', '$http', '$coo
 angular.module('inspinia').controller('ngForwardEmailCtrl', ['$scope', '$http', '$cookieStore', ngSettings.ForwardEmails.Controller]);
 angular.module('inspinia').controller('ngEmail2SMSCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Email2SMS.Controller]);
 angular.module('inspinia').controller('ngAutoresponderCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Autoresponder.Controller]);
+angular.module('inspinia').controller('ngReportsScheduledCtrl', ['$scope', '$http', '$cookieStore', ngReports.Scheduled.Controller]);
