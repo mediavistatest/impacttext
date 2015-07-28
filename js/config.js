@@ -220,7 +220,36 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                     }]);
                 }
             }
-        }).state('lists.add', {
+        }).state('lists.add_segment', {
+			  url: "/lists_add_segment",
+			  templateUrl: "views/lists_add_segment.html",
+			  data: {
+				  pageTitle: 'Add Segment'
+			  },
+			  resolve: {
+				  loadPlugin: function($ocLazyLoad) {
+					  return $ocLazyLoad.load([{
+						  name: 'cgNotify',
+						  files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/notify.js']
+					  }]);
+				  }
+			  }
+		  }).state('lists.manage_segment', {
+			  url: "/lists_manage_segment",
+			  templateUrl: "views/lists_manage_segment.html",
+			  data: {
+				  pageTitle: 'Manage Segment'
+			  },
+			  resolve: {
+				  loadPlugin: function($ocLazyLoad) {
+					  return $ocLazyLoad.load([{
+						  name: 'cgNotify',
+						  files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/notify.js']
+					  }]);
+				  }
+			  }
+		  })
+		  .state('lists.add', {
             url: "/lists_add",
             templateUrl: "views/lists_add.html",
             data: {

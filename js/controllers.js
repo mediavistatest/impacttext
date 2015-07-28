@@ -3410,29 +3410,11 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 					request['contactListID'] = $state.params.id;
 				}
 				switch(filterBy) {
-					case "ANI":
-						request.ANI = searchText;
-						break;
-					case "firstName":
-						request.firstName = searchText;
-						break;
-					case "lastName":
-						request.lastName = searchText;
-						break;
-					case "emailAddress":
-						request.emailAddress = searchText;
-						break;
-					case "custom1":
-						request.custom1 = searchText;
-						break;
-					case "custom2":
-						request.custom2 = searchText;
-						break;
-					case "custom3":
-						request.custom3 = searchText;
+					case "name":
+						request.name = searchText;
 						break;
 				}
-				$http.post(inspiniaNS.wsUrl + "contact_get", $.param(request)).success(function(data) {
+				/*$http.post(inspiniaNS.wsUrl + "contact_get", $.param(request)).success(function(data) {
 					$scope.getContactBlacklist(data.apidata, function() {
 						$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
 					});
@@ -3448,7 +3430,7 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 								alert(JSON.stringify(data));
 							}
 						}
-					});
+				});*/
 			}
 		} else {
 			var params = {
@@ -3463,7 +3445,7 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 				params['contactListID'] = $state.params.id;
 			}
 
-			$http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
+			/*$http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
 				$scope.getContactBlacklist(data.apidata, function() {
 					$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
 				});
@@ -3475,7 +3457,7 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 						alert("An error occurred when getting segments! Error code: " + data.apicode);
 						alert(JSON.stringify(data));
 					}
-			});
+			});*/
 		}
 	};
 
@@ -3507,6 +3489,20 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 
 	// EXPORT?
 	// TODO
+}
+
+function EditSegmentCtrl($scope, $http, $cookieStore, $window, $state) {
+	// TODO
+	$scope.saveSegment = function(){
+		console.log('TODO');
+	};
+}
+
+function AddSegmentCtrl($scope, $http, $cookieStore) {
+	// TODO
+	$scope.addSegment = function(){
+		console.log('TODO');
+	};
 }
 
 /**
@@ -5745,6 +5741,8 @@ angular.module('inspinia').controller('ngDraftsListCtrl', ['$scope', '$http', '$
 angular.module('inspinia').controller('ngTrashListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.TrashList.Controller]);
 angular.module('inspinia').controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', 'filterFilter', 'FileUploader', AddListsCtrl]);
 angular.module('inspinia').controller('EditContactCtrl', ['$scope', '$http', '$cookieStore', '$window', '$state', EditContactCtrl]);
+angular.module('inspinia').controller('AddSegmentCtrl', ['$scope', '$http', '$cookieStore', AddSegmentCtrl]);
+angular.module('inspinia').controller('EditSegmentCtrl', ['$scope', '$http', '$cookieStore', '$window', '$state', EditSegmentCtrl]);
 angular.module('inspinia').controller('codeEditorCtrl', codeEditorCtrl);
 angular.module('inspinia').controller('nestableCtrl', nestableCtrl);
 angular.module('inspinia').controller('notifyCtrl', notifyCtrl);
