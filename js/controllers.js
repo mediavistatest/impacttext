@@ -3284,10 +3284,22 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     $scope.refresh();
 
     $scope.export = function() {
+		  var selected_ids = [];
+		  for(var i in $scope.mySelections){
+			  selected_ids.push($scope.mySelections[i].contactID);
+		  }
+		  selected_ids = selected_ids.join();
+
+		  if($scope.mySelections.length == 0){
+			  $scope.$broadcast('ContactsNotSelectedError');
+			  return;
+		  }
+
         var params = {
             sethttp : 1,
             apikey : $cookieStore.get('inspinia_auth_token'),
             accountID : $cookieStore.get('inspinia_account_id'),
+			   // TODO: send the list of selected contacts
             export : "csv"
         };
         if ($state.params.id && $state.params.id != '') {
@@ -4104,6 +4116,13 @@ function notifyCtrl($scope, notify) {
             templateUrl : $scope.inspiniaTemplate
         });
     };
+	$scope.ContactsNotSelectedErrorMsg = function() {
+		notify({
+			message : 'There are no selected contacts!',
+			classes : 'alert-danger',
+			templateUrl : $scope.inspiniaTemplate
+		});
+	};
 
     //If SendingMessageSucceeded event is triggered, show related message
     $scope.$on('SendingMessageSucceeded', function(event, args) {
@@ -4221,6 +4240,9 @@ function notifyCtrl($scope, notify) {
     $scope.$on('ModifyAccountEmail2SMSFailed', function(event, args) {
         $scope.ModifyAccountEmail2SMSFailedMsg();
     });
+	 $scope.$on('ContactsNotSelectedError', function(event, args){
+		 $scope.ContactsNotSelectedErrorMsg();
+	 });
     //}
 }
 
