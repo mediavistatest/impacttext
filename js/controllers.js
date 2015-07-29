@@ -5492,163 +5492,163 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
     });
 }
 
-/**
- *
- * Reports
- */
-function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
-    /**
-     * Options for Bar chart
-     */
-    $scope.barOptions = {
-        scaleBeginAtZero : true,
-        scaleShowGridLines : true,
-        scaleGridLineColor : "rgba(0,0,0,.05)",
-        scaleGridLineWidth : 1,
-        barShowStroke : true,
-        barStrokeWidth : 2,
-        barValueSpacing : 5,
-        barDatasetSpacing : 1
-    };
-    /**
-     * Data for Bar chart
-     */
-    $scope.barData = {
-        labels : ['Statistics'],
-        datasets : [{
-            label : "Received messages",
-            fillColor : "rgba(0,94,170,0.5)",
-            strokeColor : "rgba(0,94,170,0.5)",
-            highlightFill : "rgba(0,94,170,0.8)",
-            highlightStroke : "rgba(0,94,170,1)",
-            data : []
-        }, {
-            label : "Sent messages",
-            fillColor : "rgba(227,111,30,0.5)",
-            strokeColor : "rgba(227,111,30,0.5)",
-            highlightFill : "rgba(227,111,30,0.8)",
-            highlightStroke : "rgba(227,111,30,1)",
-            data : []
-        }, {
-            label : "Recipients",
-            fillColor : "rgba(0,125,50,0.5)",
-            strokeColor : "rgba(0,125,50,0.5)",
-            highlightFill : "rgba(0,125,50,0.8)",
-            highlightStroke : "rgba(0,125,50,1)",
-            data : []
-        }, {
-            label : "Opt-outs",
-            fillColor : "rgba(159,74,156,0.5)",
-            strokeColor : "rgba(159,74,156,0.5)",
-            highlightFill : "rgba(159,74,156,0.8)",
-            highlightStroke : "rgba(159,74,156,1)",
-            data : []
-        }, {
-            label : "Senders",
-            fillColor : "rgba(159,159,159,0.5)",
-            strokeColor : "rgba(159,159,159,0.5)",
-            highlightFill : "rgba(159,159,159,0.8)",
-            highlightStroke : "rgba(159,159,159,1)",
-            data : []
-        }]
-    };
-
-    callback = function(inData) {
-        $scope.SentMessages = inData.apidata.totalMessagesDelivered;
-        $scope.ReceivedMessages = inData.apidata.totalReplies;
-        $scope.Recipients = inData.apidata.totalContacts;
-        $scope.OptOuts = inData.apidata.totalOptOuts;
-        $scope.Senders = inData.apidata.uniqueReplyAni;
-
-        $scope.barData.datasets[0].data = [];
-        $scope.barData.datasets[1].data = [];
-        $scope.barData.datasets[2].data = [];
-        $scope.barData.datasets[3].data = [];
-        $scope.barData.datasets[4].data = [];
-
-        $scope.barData.datasets[0].data.push($scope.SentMessages);
-        $scope.barData.datasets[1].data.push($scope.ReceivedMessages);
-        $scope.barData.datasets[2].data.push($scope.Recipients);
-        $scope.barData.datasets[3].data.push($scope.OptOuts);
-        $scope.barData.datasets[4].data.push($scope.Senders);
-    };
-    $scope.StartDate = '';
-    $scope.EndDate = '';
-
-    $scope.today = function() {
-        var monthBeforeToday = new Date();
-        monthBeforeToday.setMonth(monthBeforeToday.getMonth() - 1);
-        $scope.StartDate = monthBeforeToday;
-        $scope.EndDate = new Date();
-    };
-
-    $scope.today();
-
-    $scope.clear = function() {
-        $scope.StartDate = null;
-        $scope.EndDate = null;
-    };
-    $scope.toggleMin = function() {
-        $scope.minDate = $scope.minDate ? null : new Date();
-    };
-    $scope.toggleMin();
-    $scope.open = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        $scope.opened = true;
-    };
-    $scope.open2 = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        $scope.opened2 = true;
-    };
-    $scope.dateOptions = {
-        formatYear : 'yy',
-        startingDay : 1,
-        showWeeks : 'false',
-        initDate : 'false'
-    };
-    $scope.showReport = function() {
-        var didid;
-        if ($scope.selectedDID && $scope.selectedDID.DIDID) {
-            didid = $scope.selectedDID.DIDID;
-        };
-        var contactListID;
-        if ($scope.selectedContactList && $scope.selectedContactList.contactListID) {
-            contactListID = $scope.selectedContactList.contactListID;
-        };
-
-        $scope.params = {
-            startdatetime : $('#idStartDate').val() + ' 00:00:00',
-            enddatetime : $('#idEndDate').val() + ' 23:59:59',
-            didid : didid,
-            contactListID : contactListID
-        };
-        $scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
-    };
-    $scope.selectedDID = {
-        DIDID : null
-    };
-    $scope.selectedContactList = {
-        contactListID : null
-    };
-
-    function callRequest() {
-        if ($scope.main.accountInfo.companyID) {
-            $scope.today();
-            $scope.params = {
-                startdatetime : $scope.StartDate.toISOString().substring(0, 10) + ' 00:00:00',
-                enddatetime : $scope.EndDate.toISOString().substring(0, 10) + ' 23:59:59'
-            };
-            $scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
-        } else {
-            setTimeout(function() {
-                callRequest();
-            }, 500);
-        }
-    };
-    callRequest();
-}
+// /**
+// *
+// * Reports
+// */
+// function ReportsBarCtrl($scope, $http, $cookieStore, $state) {
+// /**
+// * Options for Bar chart
+// */
+// $scope.barOptions = {
+// scaleBeginAtZero : true,
+// scaleShowGridLines : true,
+// scaleGridLineColor : "rgba(0,0,0,.05)",
+// scaleGridLineWidth : 1,
+// barShowStroke : true,
+// barStrokeWidth : 2,
+// barValueSpacing : 5,
+// barDatasetSpacing : 1
+// };
+// /**
+// * Data for Bar chart
+// */
+// $scope.barData = {
+// labels : ['Statistics'],
+// datasets : [{
+// label : "Received messages",
+// fillColor : "rgba(0,94,170,0.5)",
+// strokeColor : "rgba(0,94,170,0.5)",
+// highlightFill : "rgba(0,94,170,0.8)",
+// highlightStroke : "rgba(0,94,170,1)",
+// data : []
+// }, {
+// label : "Sent messages",
+// fillColor : "rgba(227,111,30,0.5)",
+// strokeColor : "rgba(227,111,30,0.5)",
+// highlightFill : "rgba(227,111,30,0.8)",
+// highlightStroke : "rgba(227,111,30,1)",
+// data : []
+// }, {
+// label : "Recipients",
+// fillColor : "rgba(0,125,50,0.5)",
+// strokeColor : "rgba(0,125,50,0.5)",
+// highlightFill : "rgba(0,125,50,0.8)",
+// highlightStroke : "rgba(0,125,50,1)",
+// data : []
+// }, {
+// label : "Opt-outs",
+// fillColor : "rgba(159,74,156,0.5)",
+// strokeColor : "rgba(159,74,156,0.5)",
+// highlightFill : "rgba(159,74,156,0.8)",
+// highlightStroke : "rgba(159,74,156,1)",
+// data : []
+// }, {
+// label : "Senders",
+// fillColor : "rgba(159,159,159,0.5)",
+// strokeColor : "rgba(159,159,159,0.5)",
+// highlightFill : "rgba(159,159,159,0.8)",
+// highlightStroke : "rgba(159,159,159,1)",
+// data : []
+// }]
+// };
+//
+// callback = function(inData) {
+// $scope.SentMessages = inData.apidata.totalMessagesDelivered;
+// $scope.ReceivedMessages = inData.apidata.totalReplies;
+// $scope.Recipients = inData.apidata.totalContacts;
+// $scope.OptOuts = inData.apidata.totalOptOuts;
+// $scope.Senders = inData.apidata.uniqueReplyAni;
+//
+// $scope.barData.datasets[0].data = [];
+// $scope.barData.datasets[1].data = [];
+// $scope.barData.datasets[2].data = [];
+// $scope.barData.datasets[3].data = [];
+// $scope.barData.datasets[4].data = [];
+//
+// $scope.barData.datasets[0].data.push($scope.SentMessages);
+// $scope.barData.datasets[1].data.push($scope.ReceivedMessages);
+// $scope.barData.datasets[2].data.push($scope.Recipients);
+// $scope.barData.datasets[3].data.push($scope.OptOuts);
+// $scope.barData.datasets[4].data.push($scope.Senders);
+// };
+// $scope.StartDate = '';
+// $scope.EndDate = '';
+//
+// $scope.today = function() {
+// var monthBeforeToday = new Date();
+// monthBeforeToday.setMonth(monthBeforeToday.getMonth() - 1);
+// $scope.StartDate = monthBeforeToday;
+// $scope.EndDate = new Date();
+// };
+//
+// $scope.today();
+//
+// $scope.clear = function() {
+// $scope.StartDate = null;
+// $scope.EndDate = null;
+// };
+// $scope.toggleMin = function() {
+// $scope.minDate = $scope.minDate ? null : new Date();
+// };
+// $scope.toggleMin();
+// $scope.open = function($event) {
+// $event.preventDefault();
+// $event.stopPropagation();
+// $scope.opened = true;
+// };
+// $scope.open2 = function($event) {
+// $event.preventDefault();
+// $event.stopPropagation();
+// $scope.opened2 = true;
+// };
+// $scope.dateOptions = {
+// formatYear : 'yy',
+// startingDay : 1,
+// showWeeks : 'false',
+// initDate : 'false'
+// };
+// $scope.showReport = function() {
+// var didid;
+// if ($scope.selectedDID && $scope.selectedDID.DIDID) {
+// didid = $scope.selectedDID.DIDID;
+// };
+// var contactListID;
+// if ($scope.selectedContactList && $scope.selectedContactList.contactListID) {
+// contactListID = $scope.selectedContactList.contactListID;
+// };
+//
+// $scope.params = {
+// startdatetime : $('#idStartDate').val() + ' 00:00:00',
+// enddatetime : $('#idEndDate').val() + ' 23:59:59',
+// didid : didid,
+// contactListID : contactListID
+// };
+// $scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
+// };
+// $scope.selectedDID = {
+// DIDID : null
+// };
+// $scope.selectedContactList = {
+// contactListID : null
+// };
+//
+// function callRequest() {
+// if ($scope.main.accountInfo.companyID) {
+// $scope.today();
+// $scope.params = {
+// startdatetime : $scope.StartDate.toISOString().substring(0, 10) + ' 00:00:00',
+// enddatetime : $scope.EndDate.toISOString().substring(0, 10) + ' 23:59:59'
+// };
+// $scope.main.ServerRequests.reportingGetMessageStats($scope, callback);
+// } else {
+// setTimeout(function() {
+// callRequest();
+// }, 500);
+// }
+// };
+// callRequest();
+// }
 
 /*SEARCH BY DATE*/
 function SearchByDateCtrl($scope, $http, $cookieStore, $state) {
@@ -5757,7 +5757,7 @@ angular.module('inspinia').controller('ProfileCtrl', ['$scope', '$http', profile
 angular.module('inspinia').controller('DashboardBarCtrl', ['$scope', '$http', '$cookieStore', '$state', DashboardBarCtrl]);
 angular.module('inspinia').controller('DashboardCalendarCtrl', ['$scope', '$http', '$cookieStore', DashboardCalendarCtrl]);
 angular.module('inspinia').controller('DashboardInboxCtrl', ['$scope', '$http', '$cookieStore', DashboardInboxCtrl]);
-angular.module('inspinia').controller('ReportsBarCtrl', ['$scope', '$http', '$cookieStore', '$state', ReportsBarCtrl]);
+// angular.module('inspinia').controller('ReportsBarCtrl', ['$scope', '$http', '$cookieStore', '$state', ReportsBarCtrl]);
 angular.module('inspinia').controller('SearchByDateCtrl', ['$scope', '$http', '$cookieStore', '$state', SearchByDateCtrl]);
 angular.module('inspinia').controller('ngSettintsCtrl', ['$scope', '$http', '$cookieStore', ngSettings.Settings.Controller]);
 angular.module('inspinia').controller('ngNumbersCtrl', ['$scope', '$http', '$cookieStore', '$interval', '$q', ngSettings.NumberNames.Controller]);

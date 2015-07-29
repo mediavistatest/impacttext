@@ -16,19 +16,19 @@
                     <input id="idEndDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="rsCtrl.EndDate" is-open="rsCtrl.EndDateOpened" min-date="rsCtrl.StartDate" show-weeks="false" max-date="" datepicker-options="rsCtrl.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="cpo.Events.EndDate_onClick(cpo,$event)" />
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <button class="btn btn-add" ng-click="showReport()">
+                <button class="btn btn-add" ng-click="cpo.Events.ShowReport_onClick(cpo)">
                 Show report
                 </button>
                 <br>
                 <br>
                 <span class="label-icon"><span><i class="fa fa-phone"></i>Choose SMS code: &nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <select class="page-select" ng-model="selectedDID" ng-options="number.DID for number in main.Settings.Numbers" style="width: 165px; margin-left:12px">
+                <select class="page-select" ng-model="rsCtrl.selectedDID" ng-options="number.DID for number in main.Settings.Numbers" style="width: 165px; margin-left:12px">
                     <option value="" selected="selected" label="">All codes</option>
                 </select>
                 <br>
                 <br>
                 <span class="label-icon"><span><i class="glyphicon glyphicon-list-alt"></i>Choose contact list: &nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <select class="page-select" ng-model="selectedContactList" ng-options="list.contactListName for list in main.contactLists" style="width: 165px;">
+                <select class="page-select" ng-model="rsCtrl.selectedContactList" ng-options="list.contactListName for list in main.contactLists" style="width: 165px;">
                     <option value="" selected="selected" label="">All Contact lists</option>
                 </select>
                 <br>
