@@ -7,13 +7,13 @@
                 <span class="label-icon"><span><i class="fa fa-calendar"></i>Choose date range:</span>
                 &nbsp;&nbsp;&nbsp;&nbsp; from</span>
                 <div class="btn-group datetimepicker-wrapper" >
-                    <input id="idStartDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="rsCtrl.StartDate" is-open="opened" min-date="" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+                    <input id="idStartDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="rsCtrl.StartDate" is-open="rsCtrl.StartDateOpened" min-date="" show-weeks="false" max-date="" datepicker-options="rsCtrl.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="cpo.Events.StartDate_onClick(cpo,$event)" />
                 </div>
                 <span class="label-icon">
                 &nbsp;&nbsp;&nbsp;&nbsp;to
                 </span>
                 <div class="btn-group datetimepicker-wrapper" >
-                    <input id="idEndDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="rsCtrl.EndDate" is-open="opened2" min-date="rsCtrl.StartDate" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open2($event)" />
+                    <input id="idEndDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="rsCtrl.EndDate" is-open="rsCtrl.EndDateOpened" min-date="rsCtrl.StartDate" show-weeks="false" max-date="" datepicker-options="rsCtrl.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="cpo.Events.EndDate_onClick(cpo,$event)" />
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button class="btn btn-add" ng-click="showReport()">
