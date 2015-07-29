@@ -672,10 +672,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                     insertBefore : '#loadBefore',
                     files : ['js/plugins/nggrid/ng-grid.css']
                 }, {
+                    files : ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                }, {
+                    files : ['js/plugins/nggrid/plugins/ng-grid-csv-export.js']
+                }, {
                     name : 'cgNotify',
                     files : ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/notify.js']
-                }, {
-                    files : ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
                 }, {
                     insertBefore : '#loadBefore',
                     name : 'localytics.directives',

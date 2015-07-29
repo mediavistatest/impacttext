@@ -1,1 +1,44 @@
-<div>...under construction...</div>
+<div class="col-md-12 content-holder animated fadeInRight settings autoresponder" ng-class="animation">
+
+    <br />
+    <br />
+    <div class="btn-group dropup discard-btn">
+        <a data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false"><i class="fa fa-trash-o">
+        </i>
+        Delete</a>
+        <ul class="dropdown-menu dropdown-alerts">
+            <li>
+                Are you sure you want to delete the report/reports?
+            </li>
+            <li>
+                &nbsp;
+            </li>
+            <li>
+                <span ng-click="cpo.Events.Delete_onClick(cpo)" class="discard-cancel" data-toggle="dropdown">
+                    <strong>
+                    Yes
+                    </strong>
+                </span>
+                &nbsp;&nbsp;&nbsp;
+                <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'">
+                    <strong>
+                    No
+                    </strong>
+                </span>
+            </li>
+        </ul>
+    </div><!-- <div class="page-select-wrapper">
+    <strong>
+    Show:
+    </strong>
+    &nbsp;
+    <select class="page-select" ng-model="rsCtrl.pagingOptions.pageSize">
+    <option ng-repeat="size in rsCtrl.pagingOptions.pageSizes">
+    {{size}}
+    </option>
+    </select>
+    </div> --><!-- </div> -->
+    <br />
+    <br />
+    <div class="gridStyle" ng-grid="rsCtrl.ngReportsListOptions"></div>
+</div>
