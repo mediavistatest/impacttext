@@ -5202,7 +5202,7 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
             highlightStroke : "rgba(227,111,30,1)",
             data : []
         }, {
-            label : "Recipients",
+            label : "Contacts",
             fillColor : "rgba(0,125,50,0.5)",
             strokeColor : "rgba(0,125,50,0.5)",
             highlightFill : "rgba(0,125,50,0.8)",
@@ -5242,9 +5242,9 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
 
         $scope.SentMessages = inData.apidata.totalMessagesDelivered;
         $scope.ReceivedMessages = inData.apidata.totalReplies;
-        $scope.Recipients = inData.apidata.totalContacts;
+        $scope.Contacts = inData.apidata.totalContacts;
         $scope.OptOuts = inData.apidata.totalOptOuts;
-        $scope.Senders = inData.apidata.uniqueReplyAni;
+        $scope.ReceivedMessages = inData.apidata.uniqueReplyAni;
 
         $scope.barData.datasets[0].data = [];
         $scope.barData.datasets[1].data = [];
@@ -5258,9 +5258,9 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
 
         $scope.barData.datasets[0].data.push($scope.SentMessages);
         $scope.barData.datasets[1].data.push($scope.ReceivedMessages);
-        $scope.barData.datasets[2].data.push($scope.Recipients);
+        $scope.barData.datasets[2].data.push($scope.Contacts);
         $scope.barData.datasets[3].data.push($scope.OptOuts);
-        $scope.barData.datasets[4].data.push($scope.Senders);
+        $scope.barData.datasets[4].data.push($scope.ReceivedMessages);
 
         // $scope.StartDate = String(inData.apidata.startDateTime).substring(0, 10);
         // $scope.EndDate = String(inData.apidata.endDateTime).substring(0, 10);
@@ -5530,7 +5530,7 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
 // highlightStroke : "rgba(227,111,30,1)",
 // data : []
 // }, {
-// label : "Recipients",
+// label : "Contacts",
 // fillColor : "rgba(0,125,50,0.5)",
 // strokeColor : "rgba(0,125,50,0.5)",
 // highlightFill : "rgba(0,125,50,0.8)",
@@ -5556,9 +5556,9 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
 // callback = function(inData) {
 // $scope.SentMessages = inData.apidata.totalMessagesDelivered;
 // $scope.ReceivedMessages = inData.apidata.totalReplies;
-// $scope.Recipients = inData.apidata.totalContacts;
+// $scope.Contacts = inData.apidata.totalContacts;
 // $scope.OptOuts = inData.apidata.totalOptOuts;
-// $scope.Senders = inData.apidata.uniqueReplyAni;
+// $scope.ReceivedMessages = inData.apidata.uniqueReplyAni;
 //
 // $scope.barData.datasets[0].data = [];
 // $scope.barData.datasets[1].data = [];
@@ -5568,9 +5568,9 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
 //
 // $scope.barData.datasets[0].data.push($scope.SentMessages);
 // $scope.barData.datasets[1].data.push($scope.ReceivedMessages);
-// $scope.barData.datasets[2].data.push($scope.Recipients);
+// $scope.barData.datasets[2].data.push($scope.Contacts);
 // $scope.barData.datasets[3].data.push($scope.OptOuts);
-// $scope.barData.datasets[4].data.push($scope.Senders);
+// $scope.barData.datasets[4].data.push($scope.ReceivedMessages);
 // };
 // $scope.StartDate = '';
 // $scope.EndDate = '';

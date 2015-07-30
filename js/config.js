@@ -640,22 +640,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             }
         }
     }).
-    // state('reports', {
-    // url: "/reports",
-    // templateUrl: "views/reports.html",
-    // data: {
-    // pageTitle: 'Reports'
-    // },
-    // resolve: {
-    // loadPlugin: function($ocLazyLoad) {
-    // return $ocLazyLoad.load([{
-    // insertBefore: '#loadBefore',
-    // name: 'angles',
-    // files: ['js/plugins/chartJs/Chart.min.js', 'js/plugins/chartJs/angles.js']
-    // }]);
-    // }
-    // }
-    // }).
+    // Reports -------------------
     state('reports', {
         abstract : true,
         url : "/reports",
@@ -682,6 +667,10 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
                     insertBefore : '#loadBefore',
                     name : 'localytics.directives',
                     files : ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                }, {
+                    insertBefore : '#loadBefore',
+                    name : 'angles',
+                    files : ['js/plugins/chartJs/Chart.min.js', 'js/plugins/chartJs/angles.js']
                 }]);
             }
         }
@@ -690,33 +679,14 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         templateUrl : "views/reports_new.html",
         data : {
             pageTitle : 'View report'
-        },
-        resolve : {
-            loadPlugin : function($ocLazyLoad) {
-                return $ocLazyLoad.load([{
-                    name : 'cgNotify',
-                    files : ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/notify.js']
-                }, {
-                    insertBefore : '#loadBefore',
-                    name : 'angles',
-                    files : ['js/plugins/chartJs/Chart.min.js', 'js/plugins/chartJs/angles.js']
-                }]);
-            }
         }
-    }).state('reports.sheduled', {
-        url : "/reports_sheduled",
+    }).state('reports.scheduled', {
+        url : "/reports_scheduled",
         templateUrl : "views/reports_scheduled_container.html",
         data : {
-            pageTitle : 'Sheduled reports'
-        },
-        resolve : {
-            loadPlugin : function($ocLazyLoad) {
-                return $ocLazyLoad.load([{
-                    name : 'cgNotify',
-                    files : ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/notify.js']
-                }]);
-            }
+            pageTitle : 'Scheduled reports'
         }
+    // Support -------------------
     }).state('support', {
         url : "/support",
         templateUrl : "views/support.html",

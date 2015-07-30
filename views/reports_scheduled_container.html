@@ -1,7 +1,7 @@
 <h1>
 Reports - Scheduled
 </h1>
-<div ng-controller="ngReportsScheduledCtrl as rsCtrl">
+<div ng-controller="ngReportsScheduledCtrl as rsCtrl" ng-init="rsCtrl.scheduled = true">
     <div ng-controller="ngInboxNotifyCtrl">
         <div ng-show = "cpo.list" ng-include="'views/reports_scheduled.html'"></div>
         <div ng-show = "cpo.view" ng-include="'views/reports_view.html'"></div>

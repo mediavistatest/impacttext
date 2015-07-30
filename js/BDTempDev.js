@@ -2914,7 +2914,7 @@ var ngSettings = {
                         break;
                     }
 
-                    if (rule.delayTimeHour.length = 1) {
+                    if (rule.delayTimeHour.length == 1) {
                         rule.delayTimeHour = '0' + rule.delayTimeHour;
                     }
                 } else {
@@ -3433,15 +3433,15 @@ var ngSettings = {
                     cpo.clickedKeyword.endDate = DateTimeFix(cpo.arCtrl.validUntil, cpo.arCtrl.SetTimeHourUntil, cpo.arCtrl.SetTimeMinuteUntil);
                 };
 
-                //TODO ruleParams
                 for (var i = 0; i < cpo.keywordActionRules.length; i++) {
                     cpo.keywordActionRules[i].ruleParams = {
-                        message : cpo.$scope.arCtrl.fromName + cpo.$scope.arCtrl.fromName ? ': ' : '' + cpo.keywordActionRules[i].messageTxt + ' ' + cpo.keywordActionRules[i].optFields.OptOutTxt1 + cpo.keywordActionRules[i].optFields.OptOutTxt2 + cpo.keywordActionRules[i].optFields.OptOutTxt3,
+                        message : String(cpo.arCtrl.fromName + (cpo.arCtrl.fromName ? ': ' : '') + cpo.keywordActionRules[i].messageTxt + ' ' + cpo.keywordActionRules[i].optFields.OptOutTxt1 + cpo.keywordActionRules[i].optFields.OptOutTxt2 + cpo.keywordActionRules[i].optFields.OptOutTxt3),
                         delaymins : parseInt(cpo.keywordActionRules[i].delayTimeHour) * 60 + parseInt(cpo.keywordActionRules[i].delayTimeMinute)
                     };
                 }
 
                 if (cpo.clickedKeyword.autoResponderKeywordID) {
+                    cpo.arCtrl.status = cpo.clickedKeyword.status;
                     ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, [cpo.clickedKeyword], ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
                 } else {
                     ngSettings.Autoresponder.ServerRequests.AddKeyword(cpo, ngSettings.Autoresponder.ServerRequests.AddKeywordCallback);
@@ -3454,6 +3454,15 @@ var ngSettings = {
             ShowRule : function(cpo) {
                 cpo.list = false;
                 cpo.rule = true;
+                //fill number name if needed
+                if (cpo.$scope.main.Settings.Numbers && cpo.$scope.main.Settings.Numbers.length > 0 && cpo.arCtrl.fromNumber && cpo.arCtrl.fromNumber.DID) {
+                    var Number = $.grep(cpo.$scope.main.Settings.Numbers, function(member){
+                    return member.DID == cpo.arCtrl.fromNumber.DID;
+                    })[0];
+                    if (Number && Number.name != null && Number.name != '') {
+                        cpo.arCtrl.fromName = Number.name;
+                    }
+                }
             },
             Autoresponder_onClick : function(cpo, row) {
                 cpo.clickedKeyword = row.entity;
@@ -3500,24 +3509,17 @@ var ngSettings = {
                 if (cpo.arCtrl.fromNumber.autoResponderID !== '0') {
                     ngSettings.Autoresponder.ServerRequests.GetAutoresponder(cpo, ngSettings.Autoresponder.ServerRequests.GetAutoresponderCallback);
                 } else {
-                    //TODO assign autoresponder to number
-                    // alert('//TODO assign autoresponder to DID')
                     ngSettings.Autoresponder.ServerRequests.AddAutoresponder(cpo, ngSettings.Autoresponder.ServerRequests.AddAutoresponderCallback);
-
                 }
 
-                //fill number name if needed
-                if (cpo.$scope.main.Settings.Numbers && cpo.$scope.main.Settings.Numbers.length > 0 && cpo.arCtrl.fromNumber && cpo.arCtrl.fromNumber.DID) {
-                    var Number = $.grep(cpo.$scope.main.Settings.Numbers, function(member){
-                    return member.DID == cpo.arCtrl.fromNumber.DID;
-                    })[0];
-                    if (Number.name != null && Number.name != '') {
-                        cpo.arCtrl.fromName = Number.name;
-                    }
-                }
-                //get keywords
-                // if (cpo.arCtrl.fromNumber.DIDID) {
-                // ngSettings.Autoresponder.ServerRequests.GetKeyword(cpo, ngSettings.Autoresponder.ServerRequests.GetKeywordCallback);
+                // //fill number name if needed
+                // if (cpo.$scope.main.Settings.Numbers && cpo.$scope.main.Settings.Numbers.length > 0 && cpo.arCtrl.fromNumber && cpo.arCtrl.fromNumber.DID) {
+                // var Number = $.grep(cpo.$scope.main.Settings.Numbers, function(member){
+                // return member.DID == cpo.arCtrl.fromNumber.DID;
+                // })[0];
+                // if (Number && Number.name != null && Number.name != '') {
+                // cpo.arCtrl.fromName = Number.name;
+                // }
                 // }
             }
             cpo.Events.ShowList(cpo);
@@ -3560,6 +3562,7 @@ var ngSettings = {
             cpo.$scope = $scope;
             cpo.arCtrl = arCtrl;
             cpo.arCtrl.fromNumber = {};
+            cpo.arCtrl.fromName = '';
             cpo.$http = $http;
             cpo.$cookieStore = $cookieStore;
             cpo.$scope.cpo = cpo;
@@ -3619,7 +3622,7 @@ var ngReports = {
 
         },
         ServerRequests : {
-            GetMessageStats : function(cpo, callback) {
+            GetMessageStats : function(cpo, callback, scheduled) {
                 if (cpo.$scope.main.accountInfo.companyID) {
 
                     var params = {
@@ -3641,6 +3644,15 @@ var ngReports = {
                     if (cpo.rsCtrl.selectedContactList && cpo.rsCtrl.selectedContactList.contactListID) {
                         params.contactListID = cpo.rsCtrl.selectedContactList.contactListID;
                     };
+
+                    if (scheduled) {
+                        params.status = 'S';
+                        params.name = cpo.rsCtrl.Name;
+                        params.type = cpo.rsCtrl.SetRecurringType;
+                        //TODO
+                        params.reportdate
+                        params.email = cpo.rsCtrl.eMail;
+                    }
 
                     var $param = $.param(params);
 
@@ -3665,29 +3677,47 @@ var ngReports = {
                 }
             },
             GetMessageStatsCallback : function(cpo, result) {
-                cpo.rsCtrl.SentMessages = result.apidata.totalMessagesDelivered;
-                cpo.rsCtrl.ReceivedMessages = result.apidata.totalReplies;
-                cpo.rsCtrl.Recipients = result.apidata.totalContacts;
-                cpo.rsCtrl.OptOuts = result.apidata.totalOptOuts;
-                cpo.rsCtrl.Senders = result.apidata.uniqueReplyAni;
+                cpo.rsCtrl.Contacts = String(result.apidata.totalContacts);
+                cpo.rsCtrl.SentMessages = String(result.apidata.totalMessagesDelivered);
+                cpo.rsCtrl.ReceivedMessages = String(result.apidata.uniqueReplyAni);
+                cpo.rsCtrl.Replies = String(result.apidata.totalReplies);
+                cpo.rsCtrl.ManualReplies = String(result.apidata.totalManualReponsesDelivered);
+                cpo.rsCtrl.AutoresponderReplies = String(result.apidata.totalAutoRespondersDelivered);
+                cpo.rsCtrl.OptIns = String(result.apidata.totalOptIns);
+                cpo.rsCtrl.OptOuts = String(result.apidata.totalOptOuts);
+
+                var averageTime = Math.floor(result.apidata.replyAverage);
+                var seconds = Math.floor((result.apidata.replyAverage - Math.floor(result.apidata.replyAverage))*60);
+                var days = Math.floor(averageTime/1440);
+                averageTime = averageTime - days*1440;
+                var hours = Math.floor(averageTime/60);
+                var minutes = averageTime - hours*60;
+
+                cpo.rsCtrl.AverageReplyTime = 'Average reply time is '+days+' days, ' + hours+' hours, '+minutes+' minutes and '+seconds+' seconds';
 
                 cpo.rsCtrl.barData.datasets[0].data = [];
                 cpo.rsCtrl.barData.datasets[1].data = [];
                 cpo.rsCtrl.barData.datasets[2].data = [];
                 cpo.rsCtrl.barData.datasets[3].data = [];
                 cpo.rsCtrl.barData.datasets[4].data = [];
+                cpo.rsCtrl.barData.datasets[5].data = [];
+                cpo.rsCtrl.barData.datasets[6].data = [];
+                cpo.rsCtrl.barData.datasets[7].data = [];
 
-                cpo.rsCtrl.barData.datasets[0].data.push(cpo.rsCtrl.SentMessages);
-                cpo.rsCtrl.barData.datasets[1].data.push(cpo.rsCtrl.ReceivedMessages);
-                cpo.rsCtrl.barData.datasets[2].data.push(cpo.rsCtrl.Recipients);
-                cpo.rsCtrl.barData.datasets[3].data.push(cpo.rsCtrl.OptOuts);
-                cpo.rsCtrl.barData.datasets[4].data.push(cpo.rsCtrl.Senders);
+                cpo.rsCtrl.barData.datasets[0].data.push(cpo.rsCtrl.Contacts);
+                cpo.rsCtrl.barData.datasets[1].data.push(cpo.rsCtrl.SentMessages);
+                cpo.rsCtrl.barData.datasets[2].data.push(cpo.rsCtrl.ReceivedMessages);
+                cpo.rsCtrl.barData.datasets[3].data.push(cpo.rsCtrl.Replies);
+                cpo.rsCtrl.barData.datasets[4].data.push(cpo.rsCtrl.ManualReplies);
+                cpo.rsCtrl.barData.datasets[5].data.push(cpo.rsCtrl.AutoresponderReplies);
+                cpo.rsCtrl.barData.datasets[6].data.push(cpo.rsCtrl.OptIns);
+                cpo.rsCtrl.barData.datasets[7].data.push(cpo.rsCtrl.OptOuts);
             },
             GetReport : function(cpo, callback) {
                 if (cpo.$scope.main.accountInfo.companyID) {
                     ngReports.Scheduled._internal.Today(cpo);
-                    var pageSize = cpo.rsCtrl.pagingOptions.pageSize;
-                    var page = cpo.rsCtrl.pagingOptions.currentPage;
+                    // var pageSize = cpo.rsCtrl.pagingOptions.pageSize;
+                    // var page = cpo.rsCtrl.pagingOptions.currentPage;
 
                     var params = {
                         apikey : cpo.$scope.main.authToken,
@@ -3731,14 +3761,67 @@ var ngReports = {
                 setTimeout(function() {
                     cpo.rsCtrl.ngReportsListOptions.selectAll(false);
                 }, 1000);
+            },
+            DeleteScheduledReport : function(cpo, reportList, callback) {
+                if (cpo.$scope.main.accountInfo.companyID) {
+                    var reportHistoryID = new Array();
+
+                    var comaSeparatedReportsList;
+
+                    for (var i = 0; i < reportList.length; i++) {
+                        if (i == 0) {
+                            comaSeparatedReportsList = reportList[i].reportHistoryID;
+                        } else {
+                            comaSeparatedReportsList = comaSeparatedReportsList + ',' + reportList[i].reportHistoryID;
+                        }
+                    }
+
+                    var params = {
+                        apikey : cpo.$scope.main.authToken,
+                        accountID : cpo.$scope.main.accountID,
+                        companyID : cpo.$scope.main.accountInfo.companyID,
+                        reporthistoryid : comaSeparatedReportsList
+                    };
+                    var $param = $.param(params);
+
+                    //POST
+                    cpo.$http.post(inspiniaNS.wsUrl + 'reporting_deletescheduledreport', $param)
+                    // success function
+                    .success(function(result) {
+                        if (result.apicode == 0) {
+                            if (callback) {
+                                callback(cpo, result);
+                            }
+                        } else {
+                            cpo.$scope.$broadcast('itError', {
+                                message : 'reporting_deletescheduledreport: ' + result.apitext
+                            });
+                        }
+                    })
+                    // error function
+                    .error(function(data, status, headers, config) {
+                        // console.log(data)
+                        cpo.$scope.$broadcast('itError', {
+                            message : 'Error! ' + data.apitext
+                        });
+                    });
+                } else {
+                    setTimeout(function() {
+                        ngReports.Scheduled.ServerRequests.DeleteScheduledReport(cpo, reportList, callback);
+                    }, 500);
+                }
             }
+            // ,
+            // DeleteScheduledReportCallback : function(cpo, result) {
+            // cpo.Events.
+            // }
         },
         Events : {
             Report_onClick : function(cpo, row) {
                 cpo.clickedReport = row.entity;
                 cpo.PopulateView(cpo);
             },
-            BackToReports_onClick: function(cpo){
+            BackToReports_onClick : function(cpo) {
                 cpo.Events.ShowList(cpo);
             },
             ShowReport_onClick : function(cpo) {
@@ -3746,6 +3829,7 @@ var ngReports = {
             },
             ShowList : function(cpo) {
                 cpo.ServerRequests.GetReport(cpo, cpo.ServerRequests.GetReportCallback);
+                cpo.clickedReport = null;
                 cpo.list = true;
                 cpo.view = false;
             },
@@ -3762,6 +3846,20 @@ var ngReports = {
                 $event.preventDefault();
                 $event.stopPropagation();
                 cpo.rsCtrl.EndDateOpened = true;
+            },
+            ScheduledDate_onClick : function(cpo, $event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                cpo.rsCtrl.sheduledDateTimeOpened = true;
+            },
+            Delete_onClick : function(cpo) {
+                if (cpo.rsCtrl.ngReportsListOptions.selectedItems.length > 0) {
+                    cpo.ServerRequests.DeleteScheduledReport(cpo, cpo.rsCtrl.ngReportsListOptions.selectedItems, cpo.Events.ShowList);
+                } else {
+                    cpo.$scope.$broadcast('itError', {
+                        message : 'There are no selected reports!'
+                    });
+                }
             },
             InitialiseEvents : function(cpo) {
             }
@@ -3786,6 +3884,19 @@ var ngReports = {
             displayName : 'Date created',
             cellTemplate : 'views/table/ReportTableTemplate.html'
         }],
+        RecurringTypes : [{
+            value : 'C',
+            label : 'Custom'
+        }, {
+            value : 'D',
+            label : 'Every day'
+        }, {
+            value : 'W',
+            label : 'Every week'
+        }, {
+            value : 'M',
+            label : 'Every month'
+        }],
         barOptions : {
             scaleBeginAtZero : true,
             scaleShowGridLines : true,
@@ -3799,39 +3910,60 @@ var ngReports = {
         barData : {
             labels : ['Statistics'],
             datasets : [{
-                label : "Received messages",
+                label : "Contacts",
                 fillColor : "rgba(0,94,170,0.5)",
                 strokeColor : "rgba(0,94,170,0.5)",
                 highlightFill : "rgba(0,94,170,0.8)",
                 highlightStroke : "rgba(0,94,170,1)",
                 data : []
             }, {
-                label : "Sent messages",
+                label : "Sent Messages",
                 fillColor : "rgba(227,111,30,0.5)",
                 strokeColor : "rgba(227,111,30,0.5)",
                 highlightFill : "rgba(227,111,30,0.8)",
                 highlightStroke : "rgba(227,111,30,1)",
                 data : []
             }, {
-                label : "Recipients",
+                label : "Received Messages",
                 fillColor : "rgba(0,125,50,0.5)",
                 strokeColor : "rgba(0,125,50,0.5)",
                 highlightFill : "rgba(0,125,50,0.8)",
                 highlightStroke : "rgba(0,125,50,1)",
                 data : []
             }, {
-                label : "Opt-outs",
+                label : "Replies",
                 fillColor : "rgba(159,74,156,0.5)",
                 strokeColor : "rgba(159,74,156,0.5)",
                 highlightFill : "rgba(159,74,156,0.8)",
                 highlightStroke : "rgba(159,74,156,1)",
                 data : []
             }, {
-                label : "Senders",
+                label : "Manual Replies",
                 fillColor : "rgba(159,159,159,0.5)",
                 strokeColor : "rgba(159,159,159,0.5)",
                 highlightFill : "rgba(159,159,159,0.8)",
                 highlightStroke : "rgba(159,159,159,1)",
+                data : []
+            }, {
+                label : "Autoresponder Replies",
+                fillColor : "rgba(250,250,0,0.5)",
+                strokeColor : "rgba(250,250,0,0.5)",
+                highlightFill : "rgba(250,250,0,0.8)",
+                highlightStroke : "rgba(250,250,0,1)",
+                data : []
+            }, {
+                label : "Opt-Ins",
+                fillColor : "rgba(250,0,0,0.5)",
+                strokeColor : "rgba(250,0,0,0.5)",
+                highlightFill : "rgba(250,0,0,0.8)",
+                highlightStroke : "rgba(250,0,0,1)",
+                data : []
+            }, {
+                label : "Opt-Outs",
+                fillColor : "rgba(0,250,250,0.5)",
+                strokeColor : "rgba(0,250,250,0.5)",
+                highlightFill : "rgba(0,250,250,0.8)",
+                highlightStroke : "rgba(0,250,250,1)",
                 data : []
             }]
         },
@@ -3851,6 +3983,7 @@ var ngReports = {
             initDate : 'false'
         },
         errorMessage : 'Unexpected error occurred when trying to fetch scheduled reports list!',
+        format : 'MM/dd/yyyy',
         $scope : null,
         $http : null,
         $cookieStore : null,
@@ -3858,6 +3991,15 @@ var ngReports = {
         list : false,
         view : false,
         PopulateScope : function(cpo) {
+            cpo.rsCtrl.scheduled = false;
+            cpo.rsCtrl.format = cpo.format;
+
+            cpo.rsCtrl.sheduledDateTime = new Date();
+            cpo.rsCtrl.minDate = new Date();
+            cpo.rsCtrl.sheduledDateTimeOpened = false;
+            cpo.rsCtrl.SetTimeHour = '00';
+            cpo.rsCtrl.SetTimeMinute = '00';
+
             cpo.rsCtrl.ngData = [];
             cpo.rsCtrl.barData = cpo.barData;
             cpo.rsCtrl.barOptions = cpo.barOptions;
@@ -3865,6 +4007,10 @@ var ngReports = {
 
             cpo.rsCtrl.StartDateOpened = false;
             cpo.rsCtrl.EndDateOpened = false;
+
+            cpo.rsCtrl.SetRecurringType = 'M';
+            cpo.rsCtrl.Name = '';
+            cpo.rsCtrl.eMail = '';
 
             ngReports.Scheduled._internal.Today(cpo);
             cpo.rsCtrl.selectedDID = {
@@ -3874,11 +4020,16 @@ var ngReports = {
                 contactListID : null
             };
 
+            cpo.rsCtrl.Contacts = '';
             cpo.rsCtrl.SentMessages = '';
             cpo.rsCtrl.ReceivedMessages = '';
-            cpo.rsCtrl.Recipients = '';
+            cpo.rsCtrl.Replies = '';
+            cpo.rsCtrl.ManualReplies = '';
+            cpo.rsCtrl.AutoresponderReplies = '';
+            cpo.rsCtrl.OptIns = '';
             cpo.rsCtrl.OptOuts = '';
-            cpo.rsCtrl.Senders = '';
+
+            cpo.rsCtrl.AverageReplyTime = '';
 
             cpo.rsCtrl.columnDefs = ngInbox._internal.Settings.GrepColumnDefs(cpo.columnDefs);
             cpo.$scope.sortOptions = cpo.sortOptions;
@@ -3912,8 +4063,33 @@ var ngReports = {
             if (cpo.clickedReport.parameters.enddate) {
                 cpo.rsCtrl.EndDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.enddate.substring(0, 10), 'YYYY-DD-mm'));
             }
+            if (cpo.clickedReport.parameters.type) {
+                cpo.rsCtrl.SetRecurringType = cpo.clickedReport.parameters.type;
+            }
+            if (cpo.clickedReport.reportName) {
+                cpo.rsCtrl.Name = cpo.clickedReport.reportName;
+            }
+            if (cpo.clickedReport.scheduledData) {
+                if (cpo.clickedReport.scheduledData.runDate) {
+                    cpo.rsCtrl.sheduledDateTime = new Date(cpo.clickedReport.scheduledData.runDate.substring(0, 10));
+                    cpo.rsCtrl.SetTimeHour = cpo.clickedReport.scheduledData.runDate.substring(11, 13);
+                    cpo.rsCtrl.SetTimeMinute = cpo.clickedReport.scheduledData.runDate.substring(14, 16);
+                }
+            }
 
-            cpo.ServerRequests.GetMessageStats(cpo, cpo.ServerRequests.GetMessageStatsCallback)
+            // cpo.rsCtrl.selectedDID = {
+            // DIDID : null
+            // };
+            // cpo.rsCtrl.selectedContactList = {
+            // contactListID : null
+            // };
+            //
+            // cpo.rsCtrl.sheduledDateTime = new Date();
+            //
+
+            // cpo.rsCtrl.eMail = '';
+
+            cpo.ServerRequests.GetMessageStats(cpo, cpo.ServerRequests.GetMessageStatsCallback);
             cpo.Events.ShowView(cpo);
         },
         Controller : function($scope, $http, $cookieStore) {
@@ -3922,9 +4098,10 @@ var ngReports = {
 
             cpo.$scope = $scope;
             cpo.$scope.cpo = cpo;
-            cpo.rsCtrl = rsCtrl;
             cpo.$http = $http;
             cpo.$cookieStore = $cookieStore;
+
+            cpo.rsCtrl = rsCtrl;
 
             cpo.PopulateScope(cpo);
             cpo.Events.InitialiseEvents(cpo);

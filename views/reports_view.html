@@ -9,118 +9,240 @@
                         Choose date range:</span>
                     &nbsp;&nbsp;&nbsp;&nbsp; from</span>
                 <div class="btn-group datetimepicker-wrapper" >
-                    <input id="idStartDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="rsCtrl.StartDate" is-open="rsCtrl.StartDateOpened" min-date="" show-weeks="false" max-date="" datepicker-options="rsCtrl.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="cpo.Events.StartDate_onClick(cpo,$event)" />
+                    <input id="idStartDate" type="text" class="form-control" datepicker-popup="{{rsCtrl.format}}" ng-model="rsCtrl.StartDate" is-open="rsCtrl.StartDateOpened" min-date="" show-weeks="false" max-date="" datepicker-options="rsCtrl.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="cpo.Events.StartDate_onClick(cpo,$event)" />
                 </div>
                 <span class="label-icon">
                     &nbsp;&nbsp;&nbsp;&nbsp;to
                 </span>
                 <div class="btn-group datetimepicker-wrapper" >
-                    <input id="idEndDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="rsCtrl.EndDate" is-open="rsCtrl.EndDateOpened" min-date="rsCtrl.StartDate" show-weeks="false" max-date="" datepicker-options="rsCtrl.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="cpo.Events.EndDate_onClick(cpo,$event)" />
+                    <input id="idEndDate" type="text" class="form-control" datepicker-popup="{{rsCtrl.format}}" ng-model="rsCtrl.EndDate" is-open="rsCtrl.EndDateOpened" min-date="rsCtrl.StartDate" show-weeks="false" max-date="" datepicker-options="rsCtrl.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="cpo.Events.EndDate_onClick(cpo,$event)" />
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button class="btn btn-add" ng-click="cpo.Events.ShowReport_onClick(cpo)">
                     Show report
                 </button>
-                <a ng-show="cpo.clickedReport" ng-click="cpo.Events.BackToReports_onClick(cpo)" class="btn btn-back"><i class="fa fa-undo">
+                <button ng-show="rsCtrl.scheduled" class="btn btn-add" ng-click="cpo.Events.ScheduleReport_onClick(cpo)">
+                    Schedule report
+                </button>
+                <a ng-show="rsCtrl.scheduled" ng-click="cpo.Events.BackToReports_onClick(cpo)" class="btn btn-back"><i class="fa fa-undo">
                 </i>
                 Back to Reports</a>
                 <br>
                 <br>
                 <span class="label-icon"><span><i class="fa fa-phone">
                         </i>
-                        Choose SMS code: &nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <select class="page-select" ng-model="rsCtrl.selectedDID" ng-options="number.DID for number in main.Settings.Numbers" style="width: 165px; margin-left:12px">
+                        Choose SMS code: &nbsp;&nbsp;&nbsp;&nbsp;</span></span>
+                <select class="page-select" ng-model="rsCtrl.selectedDID" ng-options="number.DID for number in main.Settings.Numbers" style="width: 165px; margin-left:12px">
+                    <option value="" selected="selected" label="">
+                        All codes
+                    </option>
+                </select>
+                <br>
+                <br>
+                <span class="label-icon"><span><i class="glyphicon glyphicon-list-alt">
+                        </i>
+                        Choose contact list: &nbsp;&nbsp;&nbsp;&nbsp;</span></span>
+                <select class="page-select" ng-model="rsCtrl.selectedContactList" ng-options="list.contactListName for list in main.contactLists" style="width: 165px;">
+                    <option value="" selected="selected" label="">
+                        All Contact lists
+                    </option>
+                </select>
+                <br>
+                <br>
+                <span class="label-icon"><span><i class="fa fa-clock-o">
+                        </i>
+                        {{cpo.rsCtrl.AverageReplyTime}}</span></span>
+                <br>
+                <br>
+                <div ng-show="rsCtrl.scheduled">
+                    <span class="label-icon"><span><i class="fa fa-bar-chart">
+                            </i>
+                            Name:</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp; </span>
+                    <div class="btn-group datetimepicker-wrapper" >
+                        <input id="idName" type="text" class="form-control" placeholder="Report name..." ng-model="rsCtrl.Name" style="width: 300px;"/>
+                    </div>
+                    <br>
+                    <br>
+                    <span class="label-icon"><span><i class="fa fa-history">
+                            </i>
+                            Recur: &nbsp;&nbsp;&nbsp;&nbsp;</span></span>
+                    <select class="page-select" ng-model="rsCtrl.SetRecurringType" ng-options="item.value as item.label for item in cpo.RecurringTypes" style="width: 165px;">
                         <option value="" selected="selected" label="">
-                            All codes
+                            All Contact lists
                         </option>
                     </select>
                     <br>
                     <br>
-                    <span class="label-icon"><span><i class="glyphicon glyphicon-list-alt">
+                    <div class="row">
+                        <label class="col-sm-2 control-label">
+                            Schedule:
+                        </label>
+                        <div class="send-mesasge-schedule-row col-md-10">
+                            <div class="send-mesasge-schedule-field-wrapper">
+                                <span class="label-icon"><i class="fa fa-calendar">
+                                    </i></span>
+                                <div class="btn-group datetimepicker-wrapper" >
+                                    <input type="text" class="form-control" datepicker-popup="{{rsCtrl.format}}" ng-model="rsCtrl.sheduledDateTime" is-open="rsCtrl.sheduledDateTimeOpened" min-date="rsCtrl.minDate" show-weeks="false" datepicker-options="rsCtrl.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="cpo.Events.ScheduledDate_onClick(cpo,$event)" />
+                                </div>
+                            </div>
+
+                            <div class="send-mesasge-schedule-field-wrapper">
+                                <span class="label-icon"><i class="fa fa-clock-o">
+                                    </i></span>
+                                <div class="btn-group timing" dropdown is-open="status.isopenHour">
+                                    <input type="text" name="SetTimeHour" placeholder="Hour" class="form-control" dropdown-toggle ng-model="rsCtrl.SetTimeHour" readonly>
+                                    <ul class="dropdown-menu time-pick" role="menu">
+                                        <li>
+                                            <span>
+                                                Set hours
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <a ng-click='rsCtrl.SetTimeHour = "00"'>
+                                            00
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "01"'>
+                                            01
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "02"'>
+                                            02
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "03"'>
+                                            03
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a ng-click='rsCtrl.SetTimeHour = "04"'>
+                                            04
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "05"'>
+                                            05
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "06"'>
+                                            06
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "07"'>
+                                            07
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a ng-click='rsCtrl.SetTimeHour = "08"'>
+                                            08
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "09"'>
+                                            09
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "10"'>
+                                            10
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "11"'>
+                                            11
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a ng-click='rsCtrl.SetTimeHour = "12"'>
+                                            12
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "13"'>
+                                            13
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "14"'>
+                                            14
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "15"'>
+                                            15
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a ng-click='rsCtrl.SetTimeHour = "16"'>
+                                            16
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "17"'>
+                                            17
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "18"'>
+                                            18
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "19"'>
+                                            19
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a ng-click='rsCtrl.SetTimeHour = "20"'>
+                                            20
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "21"'>
+                                            21
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "22"'>
+                                            22
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeHour = "23"'>
+                                            23
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                &nbsp;:&nbsp;
+
+                                <div class="btn-group timing" dropdown is-open="status.isopenMinute">
+                                    <input type="text" name="SetTimeMinute" placeholder="Minute" class="form-control" dropdown-toggle ng-model="rsCtrl.SetTimeMinute" readonly>
+                                    <ul class="dropdown-menu time-pick" role="menu">
+                                        <li>
+                                            <span>
+                                                Set minutes
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <a ng-click='rsCtrl.SetTimeMinute = "00"'>
+                                            00
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeMinute = "15"'>
+                                            15
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeMinute = "30"'>
+                                            30
+                                            </a>
+                                            <a ng-click='rsCtrl.SetTimeMinute = "45"'>
+                                            45
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="label-icon"><span><i class="fa fa-envelope">
                             </i>
-                            Choose contact list: &nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <select class="page-select" ng-model="rsCtrl.selectedContactList" ng-options="list.contactListName for list in main.contactLists" style="width: 165px;">
-                            <option value="" selected="selected" label="">
-                                All Contact lists
-                            </option>
-                        </select>
-                        <br>
-                        <br>
+                            eMail:</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp; </span>
+                    <div class="btn-group datetimepicker-wrapper" >
+                        <input id="ideMail" type="text" class="form-control" placeholder="eMail ..." ng-model="rsCtrl.eMail" style="width: 300px;"/>
+                    </div>
+                    <br>
+                    <br>
+                </div>
+
+                <div class="col-sm-9">
+                    <br>
+                    <canvas barchart options="rsCtrl.barOptions" data="rsCtrl.barData" width="200" height="100" legend=true responsive=true></canvas>
+                </div>
             </div>
-            <div class="col-sm-9">
-                <br>
-                <canvas barchart options="rsCtrl.barOptions" data="rsCtrl.barData" width="200" height="100" legend=true responsive=true></canvas>
+        </div>
+        <div ng-repeat = "dataSet in cpo.rsCtrl.barData.datasets">
+            <div class="col-md-15">
+                <div class="content-box clearfix">
+                    <h2 style="background: {{dataSet.fillColor}}">
+                    {{dataSet.label}}
+                    </h2>
+                    <p class="number-of" >
+                        {{dataSet.data[0]}}
+                    </p>
+                    <br>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-15">
-        <div class="content-box clearfix">
-            <h2 class="blue">
-            Sent messages
-            </h2>
-            <p class="number-of" ng-model="rsCtrl.SentMessages">
-                {{rsCtrl.SentMessages}}
-            </p>
-            <p class="number-of-what">
-                Messages
-            </p>
-            <br>
-        </div>
-    </div>
-    <div class="col-md-15">
-        <div class="content-box clearfix">
-            <h2 class="orange">
-            Received messages
-            </h2>
-            <p class="number-of" ng-model="rsCtrl.ReceivedMessages">
-                {{rsCtrl.ReceivedMessages}}
-            </p>
-            <p class="number-of-what">
-                Messages
-            </p>
-            <br>
-        </div>
-    </div>
-    <div class="col-md-15" tooltip='This is the total number of unique people who received messages you sent.'>
-        <div class="content-box clearfix">
-            <h2 class="green">
-            Recipients
-            </h2>
-            <p class="number-of" ng-model="rsCtrl.Recipients">
-                {{rsCtrl.Recipients}}
-            </p>
-            <p class="number-of-what">
-                Messages
-            </p>
-            <br>
-        </div>
-    </div>
-    <div class="col-md-15">
-        <div class="content-box clearfix">
-            <h2 class="violet">
-            Opt-outs
-            </h2>
-            <p class="number-of" ng-model="rsCtrl.OptOuts">
-                {{rsCtrl.OptOuts}}
-            </p>
-            <p class="number-of-what">
-                Numbers
-            </p>
-            <br>
-        </div>
-    </div>
-    <div class="col-md-15" tooltip='This is the total number of unique people who sent messages to you.'>
-        <div class="content-box clearfix">
-            <h2 class="grey">
-            Senders
-            </h2>
-            <p class="number-of" ng-model="rsCtrl.Senders">
-                {{rsCtrl.Senders}}
-            </p>
-            <p class="number-of-what">
-                Numbers
-            </p>
-            <br>
-        </div>
-    </div>
-</div>
