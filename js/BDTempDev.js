@@ -3690,12 +3690,12 @@ var ngReports = {
             GetMessageStatsCallback : function(cpo, result) {
                 cpo.rsCtrl.Contacts = String(result.apidata.totalContacts);
                 cpo.rsCtrl.SentMessages = String(result.apidata.totalMessagesDelivered);
-                cpo.rsCtrl.ReceivedMessages = String(result.apidata.uniqueReplyAni);
-                cpo.rsCtrl.Replies = String(result.apidata.totalReplies);
-                cpo.rsCtrl.ManualReplies = String(result.apidata.totalManualReponsesDelivered);
+                cpo.rsCtrl.Responders = String(result.apidata.uniqueReplyAni);
+                cpo.rsCtrl.ReceivedMessages = String(result.apidata.totalReplies);
                 cpo.rsCtrl.AutoresponderReplies = String(result.apidata.totalAutoRespondersDelivered);
                 cpo.rsCtrl.OptIns = String(result.apidata.totalOptIns);
                 cpo.rsCtrl.OptOuts = String(result.apidata.totalOptOuts);
+                cpo.rsCtrl.Replies = String(result.apidata.totalManualReponsesDelivered);
 
                 var averageTime = Math.floor(result.apidata.replyAverage);
                 var seconds = Math.floor((result.apidata.replyAverage - Math.floor(result.apidata.replyAverage)) * 60);
@@ -3717,12 +3717,12 @@ var ngReports = {
 
                 cpo.rsCtrl.barData.datasets[0].data.push(cpo.rsCtrl.Contacts);
                 cpo.rsCtrl.barData.datasets[1].data.push(cpo.rsCtrl.SentMessages);
-                cpo.rsCtrl.barData.datasets[2].data.push(cpo.rsCtrl.ReceivedMessages);
-                cpo.rsCtrl.barData.datasets[3].data.push(cpo.rsCtrl.Replies);
+                cpo.rsCtrl.barData.datasets[2].data.push(cpo.rsCtrl.Responders);
+                cpo.rsCtrl.barData.datasets[3].data.push(cpo.rsCtrl.ReceivedMessages);
                 cpo.rsCtrl.barData.datasets[4].data.push(cpo.rsCtrl.AutoresponderReplies);
                 cpo.rsCtrl.barData.datasets[5].data.push(cpo.rsCtrl.OptIns);
                 cpo.rsCtrl.barData.datasets[6].data.push(cpo.rsCtrl.OptOuts);
-                cpo.rsCtrl.barData.datasets[7].data.push(cpo.rsCtrl.ManualReplies);
+                cpo.rsCtrl.barData.datasets[7].data.push(cpo.rsCtrl.Replies);
             },
             GetReport : function(cpo, callback) {
                 if (cpo.$scope.main.accountInfo.companyID) {
@@ -3984,14 +3984,14 @@ var ngReports = {
                 highlightStroke : "rgba(227,111,30,1)",
                 data : []
             }, {
-                label : "Received Messages",
+                label : "Responders",
                 fillColor : "rgba(0,125,50,0.5)",
                 strokeColor : "rgba(0,125,50,0.5)",
                 highlightFill : "rgba(0,125,50,0.8)",
                 highlightStroke : "rgba(0,125,50,1)",
                 data : []
             }, {
-                label : "Replies",
+                label : "Received Messages",
                 fillColor : "rgba(159,74,156,0.5)",
                 strokeColor : "rgba(159,74,156,0.5)",
                 highlightFill : "rgba(159,74,156,0.8)",
@@ -4019,7 +4019,7 @@ var ngReports = {
                 highlightStroke : "rgba(0,250,250,1)",
                 data : []
             },{
-                label : "Manual Replies",
+                label : "Replies",
                 fillColor : "rgba(159,159,159,0.5)",
                 strokeColor : "rgba(159,159,159,0.5)",
                 highlightFill : "rgba(159,159,159,0.8)",
@@ -4106,9 +4106,9 @@ var ngReports = {
 
             cpo.rsCtrl.Contacts = '';
             cpo.rsCtrl.SentMessages = '';
+            cpo.rsCtrl.Responders = '';
             cpo.rsCtrl.ReceivedMessages = '';
             cpo.rsCtrl.Replies = '';
-            cpo.rsCtrl.ManualReplies = '';
             cpo.rsCtrl.AutoresponderReplies = '';
             cpo.rsCtrl.OptIns = '';
             cpo.rsCtrl.OptOuts = '';
@@ -4157,10 +4157,6 @@ var ngReports = {
                     }
                 }
             }
-
-            // cpo.rsCtrl.selectedContactList = {
-            // contactListID : null
-            // };
 
             cpo.ServerRequests.GetMessageStats(cpo, cpo.ServerRequests.GetMessageStatsCallback);
         },

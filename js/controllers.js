@@ -4964,6 +4964,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         //Creating a api request data object
         var requestData = {
             sethttp : 1,
+            accountID : $scope.main.accountID,
+            companyID : $scope.main.accountInfo.companyID,
             message : messageText,
             apikey : $cookieStore.get('inspinia_auth_token')
         };
