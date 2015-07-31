@@ -8079,7 +8079,7 @@ ul.doughnut-legend {
 
 ul.bar-legend {
     position: absolute;
-    top: 40px;
+    /* top: 40px; */
     list-style: none;
 }
 
@@ -8221,9 +8221,9 @@ a table {
 }
 
 ul.bar-legend {
-    position: absolute;
-    top: 40px;
-    list-style: none;
+    /* position: absolute; */
+    /* top: 40px; */
+    /* list-style: none; */
     right: 30px;
 }
 

@@ -4852,7 +4852,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 var dateParts = [];
                 dateParts[0] = scheduledTime.getFullYear();
                 dateParts[1] = "" + (scheduledTime.getMonth() + 1);
-                //dateParts[1] = "" + scheduledTime.getMonth();
                 dateParts[2] = "" + scheduledTime.getDate();
                 dateParts[3] = "" + scheduledTime.getHours();
                 dateParts[4] = "" + scheduledTime.getMinutes();
