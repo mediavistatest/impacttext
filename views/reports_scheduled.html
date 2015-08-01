@@ -23,21 +23,14 @@
                 <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'">
                     <strong>
                     No
-                    </strong>
-                </span>
+                    </strong></span>
             </li>
         </ul>
-    </div><!-- <div class="page-select-wrapper">
-    <strong>
-    Show:
-    </strong>
-    &nbsp;
-    <select class="page-select" ng-model="rsCtrl.pagingOptions.pageSize">
-    <option ng-repeat="size in rsCtrl.pagingOptions.pageSizes">
-    {{size}}
-    </option>
-    </select>
-    </div> --><!-- </div> -->
+        &nbsp;
+        <button class="btn btn-add" ng-click="cpo.Events.Create_onClick(cpo)" style="float: right"><i class="fa fa-plus"></i>
+                            Create
+                        </button>
+    </div>
     <br />
     <br />
     <div class="gridStyle" ng-grid="rsCtrl.ngReportsListOptions"></div>
