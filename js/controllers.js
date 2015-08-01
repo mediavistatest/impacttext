@@ -21,36 +21,41 @@
  *  - translateCtrl
  */
 var mainObject;
+
+function empty(value) {
+	return typeof value == 'undefined' || value == null || value == "";
+}
+
 function setPagingDataSliced($scope, data, totalResultsCount) {
-    $scope.ngData = data;
-    $scope.totalServerItems = totalResultsCount;
-    if (!$scope.$$phase) {
-        $scope.$apply();
-    }
-    if ( typeof $scope.ngOptions.selectAll == 'function') {
-        $scope.ngOptions.selectAll(false);
-    }
+	$scope.ngData = data;
+	$scope.totalServerItems = totalResultsCount;
+	if (!$scope.$$phase) {
+		$scope.$apply();
+	}
+	if (typeof $scope.ngOptions.selectAll == 'function') {
+		$scope.ngOptions.selectAll(false);
+	}
 }
 
 function generateOrderByField(sortFields, sortOrders) {
-    if ( typeof sortFields == 'undefined' || sortFields == null) {
-        sortFields = [];
-    }
-    if ( typeof sortOrders == 'undefined' || sortOrders == null) {
-        sortOrders = [];
-    }
-    var orderBy = '';
-    for (var i in sortFields) {
-        if (sortFields[i] == '') {
-            continue;
-        }
-        var sortOrder = typeof sortOrders[i] == 'undefined' || sortOrders[i] == null ? 'asc' : sortOrders[i].toLowerCase();
-        if (orderBy != '') {
-            orderBy += ', ';
-        }
-        orderBy += sortFields[i].toLowerCase() + " " + sortOrder;
-    }
-    return orderBy;
+	if (typeof sortFields == 'undefined' || sortFields == null) {
+		sortFields = [];
+	}
+	if (typeof sortOrders == 'undefined' || sortOrders == null) {
+		sortOrders = [];
+	}
+	var orderBy = '';
+	for (var i in sortFields) {
+		if (sortFields[i] == '') {
+			continue;
+		}
+		var sortOrder = typeof sortOrders[i] == 'undefined' || sortOrders[i] == null ? 'asc' : sortOrders[i].toLowerCase();
+		if (orderBy != '') {
+			orderBy += ', ';
+		}
+		orderBy += sortFields[i].toLowerCase() + " " + sortOrder;
+	}
+	return orderBy;
 }
 
 /**
@@ -3491,6 +3496,34 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 	// TODO
 }
 
+function appendSingleContactFilter(contactFilter, logicalOperator, filterName, comparator, value) {
+	if (!empty(value) && !empty(comparator) && !empty(filterName)) {
+		if (!empty(contactFilter)) {
+			logicalOperator = empty(logicalOperator) ? " and " : " " + $.trim(logicalOperator) + " ";
+			contactFilter += logicalOperator;
+		}
+		contactFilter += filterName + comparator + "{" + value + "}";
+	}
+	return contactFilter;
+}
+
+function generateContactFilter(scope) {
+	var contactFilter = '';
+	contactFilter = appendSingleContactFilter(contactFilter, "and", "ani", scope.PhoneNumberComparator, scope.PhoneNumber);
+	contactFilter = appendSingleContactFilter(contactFilter, "and", "firstname", scope.FirstNameComparator, scope.FirstName);
+	contactFilter = appendSingleContactFilter(contactFilter, "and", "lastname", scope.LastNameComparator, scope.LastName);
+	contactFilter = appendSingleContactFilter(contactFilter, "and", "emailaddress", scope.EmailComparator, scope.Email);
+	contactFilter = appendSingleContactFilter(contactFilter, "and", "contactsource", scope.ContactSourceComparator, scope.ContactSource);
+	contactFilter = appendSingleContactFilter(contactFilter, "and", "custom1", scope.CustomField1Comparator, scope.CustomField1);
+	contactFilter = appendSingleContactFilter(contactFilter, "and", "custom2", scope.CustomField2Comparator, scope.CustomField2);
+	contactFilter = appendSingleContactFilter(contactFilter, "and", "custom3", scope.CustomField3Comparator, scope.CustomField3);
+	contactFilter = appendSingleContactFilter(contactFilter, "and", "custom4", scope.CustomField4Comparator, scope.CustomField4);
+	contactFilter = appendSingleContactFilter(contactFilter, "and", "custom5", scope.CustomField5Comparator, scope.CustomField5);
+	contactFilter = appendSingleContactFilter(contactFilter, "and", "language", scope.LanguageComparator, scope.Language);
+	return contactFilter;
+}
+
+
 function EditSegmentCtrl($scope, $http, $cookieStore, $window, $state) {
 	// TODO
 	$scope.saveSegment = function(){
@@ -3499,10 +3532,95 @@ function EditSegmentCtrl($scope, $http, $cookieStore, $window, $state) {
 }
 
 function AddSegmentCtrl($scope, $http, $cookieStore) {
-	// TODO
-	$scope.addSegment = function(){
-		console.log('TODO');
+	$scope.main.ServerRequests.contactListsGet();
+	$scope.availableComparators = ['=', '<', '>', '<=', '>='];
+
+	$scope.reset = function () {
+		$scope.SegmentName = '';
+		$scope.PhoneNumber = '';
+		$scope.PhoneNumberComparator = '=';
+		$scope.FirstName = '';
+		$scope.FirstNameComparator = '=';
+		$scope.LastName = '';
+		$scope.LastNameComparator = '=';
+		$scope.Email = '';
+		$scope.EmailComparator = '=';
+		$scope.ContactSource = '';
+		$scope.ContactSourceComparator = '=';
+		$scope.CustomField1 = '';
+		$scope.CustomField1Comparator = '=';
+		$scope.CustomField2 = '';
+		$scope.CustomField2Comparator = '=';
+		$scope.CustomField3 = '';
+		$scope.CustomField3Comparator = '=';
+		$scope.CustomField4 = '';
+		$scope.CustomField4Comparator = '=';
+		$scope.CustomField5 = '';
+		$scope.CustomField5Comparator = '=';
+		$scope.Language = '';
+		$scope.LanguageComparator = '=';
 	};
+
+	$scope.addSegment = function () {
+		//Checking input parameters
+		if (empty($scope.SegmentName)) {
+			//Segment name is mandatory
+			return;
+		}
+		if (empty($scope.FirstName) && empty($scope.LastName) && empty($scope.PhoneNumber) && empty($scope.Email) && empty($scope.ContactSource) &&
+			empty($scope.CustomField1) && empty($scope.CustomField2) && empty($scope.CustomField3) && empty($scope.CustomField4) && empty($scope.CustomField5)
+		) {
+			//If all fields are empty there is nothing to save
+			return;
+		}
+
+		//We have something to save. Generate contact selection string
+		var contactFilter = generateContactFilter($scope);
+		var requestParams = {
+			sethttp: 1,
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			accountID: $cookieStore.get('inspinia_account_id'),
+			companyID: $cookieStore.get('inspinia_company_id'),
+			contactSelectionName: $scope.SegmentName
+		};
+		if (!empty($scope.ContactList)) {
+			requestParams.contactListID = $scope.ContactList.contactListID;
+		}
+		if (!empty(contactFilter)) {
+			requestParams.contactFilter = contactFilter;
+		}
+		$http.post(inspiniaNS.wsUrl + "contactselection_add", $.param(requestParams)).success(
+			//Successful request to the server
+			function (data, status, headers, config) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					//This should never happen
+					alert("Unidentified error occurred when trying to add new segment!");
+					return;
+				}
+				if (data.apicode == 0) {
+					//Reset form and inform user about success
+					$scope.reset();
+					$scope.$broadcast("SegmentCreated", data.apidata);
+				} else {
+					alert("An error occurred when adding new segment! Error code: " + data.apicode);
+					alert(JSON.stringify(data));
+				}
+			}).error(
+			//An error occurred with this request
+			function (data, status, headers, config) {
+				//alert('Unexpected error occurred when trying to send message!');
+				if (status == 400) {
+					if (data.apicode == 1) {
+						$scope.$broadcast("DuplicateSegmentName", data.apidata);
+					} else {
+						alert("An error occurred when adding new segment! Error code: " + data.apicode);
+						alert(JSON.stringify(data));
+					}
+				}
+			});
+	};
+
+	$scope.reset();
 }
 
 /**
@@ -4279,6 +4397,19 @@ function notifyCtrl($scope, notify) {
 			templateUrl : $scope.inspiniaTemplate
 		});
 	};
+	$scope.SegmentCreatedMsg = function () {
+		notify({
+			message: 'Segment is successfully created.',
+			classes: 'alert-success'
+		});
+	};
+	$scope.DuplicateSegmentNameMsg = function () {
+		notify({
+			message: 'Segment with specified name already exists!',
+			classes: 'alert-danger',
+			templateUrl: $scope.inspiniaTemplate
+		});
+	};
 
     //If SendingMessageSucceeded event is triggered, show related message
     $scope.$on('SendingMessageSucceeded', function(event, args) {
@@ -4399,6 +4530,15 @@ function notifyCtrl($scope, notify) {
 	 $scope.$on('ContactsNotSelectedError', function(event, args){
 		 $scope.ContactsNotSelectedErrorMsg();
 	 });
+
+    //If ScopeCreated event is triggered, show related message
+    $scope.$on('SegmentCreated', function(event, args) {
+        $scope.SegmentCreatedMsg();
+    });
+    //If DuplicateSegmentName event is triggered, show related message
+    $scope.$on('DuplicateSegmentName', function(event, args) {
+        $scope.DuplicateSegmentNameMsg();
+    });
     //}
 }
 
