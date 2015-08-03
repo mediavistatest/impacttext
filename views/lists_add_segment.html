@@ -9,7 +9,7 @@
 	<div>
 		<br />
 
-		<form name="addSegmentForm">
+		<form name="add_segment_form">
 
 			<!--SINGLE SEGMENT -->
 			<div class="single-holder" >
@@ -20,9 +20,9 @@
 				</div>
 
 				<div class="form-group clearfix">
-					<label class="control-label">Apply to contact list:</label>
+					<label class="control-label">Apply to contact list: *</label>
 					<div class="chosen-wrapper">
-						<select chosen name="ContactList" data-placeholder="All contact lists" class="chosen-select form-control" ng-model="ContactList"
+						<select chosen name="ContactList" data-placeholder="All contact lists" class="chosen-select form-control" ng-model="ContactList" ng-required="true"
 								  ng-options="contactList.contactListName for contactList in main.contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists">
 						</select>
 					</div>
@@ -118,7 +118,7 @@
 
 
 			<br />
-			<a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="addSegment()" ng-disabled="!addSegmentForm.$valid">
+			<a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="addSegment()" ng-disabled="!add_segment_form.$valid">
 				<span><i class="fa fa-floppy-o"></i> Save</span>
 			</a>
 

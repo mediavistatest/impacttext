@@ -2335,7 +2335,7 @@ ul.bar-legend {
 
 
 .add-list-contact.segment .control-label {
-	min-width: 140px;
+	min-width: 150px;
 }
 
 .add-list-contact.segment .chosen-wrapper {
@@ -2363,6 +2363,10 @@ ul.bar-legend {
 	top: auto;
 }
 
+
+#segment-list-grid .ngHeaderText.ng-binding.colt0, #segment-list-grid .ngCellText.ng-scope.col0.colt0 {
+	text-align: left;
+}
 
 /*MEDIA QUERIES*/
 

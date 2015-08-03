@@ -13,6 +13,18 @@
 			You can also export your entire list by choosing the Export option at the bottom of the screen.
 		</p>
 	</div>
-	<div class="table-holder">
+
+	<div class="clearfix">
+		<!--input class="search-input" placeholder="Search by segment name" type="text" ng-model="filterOptions.filterText"-->
+		<div class="page-select-wrapper">
+			<strong>Show:</strong>&nbsp; <select class="page-select" ng-model="pagingOptions.pageSize">
+				<option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
+			</select>
+		</div>
 	</div>
+	<br>
+	<!--START TABLE-->
+	<div id="segment-list-grid" class="gridStyle" ng-grid="ngOptions"></div>
+
+
 </div>
