@@ -1577,7 +1577,16 @@ var ngInbox = {
                     // GetLocalDateTimeString
                     // console.log($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10))
 
-                    scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm'));
+                    var timezoneOffsetMinutes = new Date().getTimezoneOffset();
+                    //problem with timezone <0 when getting new date from shecdule date gets 1 day earlier because of negative time zone
+                    if (timezoneOffsetMinutes < 0) {
+                        scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm'));
+                    } else {
+                        var correctedDay = String(parseInt($sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10)) + 1);
+                        scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 8) + correctedDay, 'YYYY-DD-mm'));
+                    }
+
+
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
@@ -3937,7 +3946,7 @@ var ngReports = {
             field : 'parameters.reportdate',
             displayName : 'Report date',
             cellTemplate : 'views/table/ReportTableTemplate.html'
-        },{
+        }, {
             checked : true,
             canBeClicked : true,
             field : 'createdDate',
@@ -4018,7 +4027,7 @@ var ngReports = {
                 highlightFill : "rgba(0,250,250,0.8)",
                 highlightStroke : "rgba(0,250,250,1)",
                 data : []
-            },{
+            }, {
                 label : "Replies",
                 fillColor : "rgba(159,159,159,0.5)",
                 strokeColor : "rgba(159,159,159,0.5)",
