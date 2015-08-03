@@ -57,6 +57,7 @@ i.fa.fa-info-circle {
     position: absolute;
     left: 0;
     top: 9px;
+	 cursor: help;
 }
 .accordion-toggle {
     font-size: 24px;

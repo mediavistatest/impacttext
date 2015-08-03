@@ -231,7 +231,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
             }
         }
     }).state('lists.manage_segment', {
-        url : "/lists_manage_segment",
+        url : "/lists_manage_segment/:id",
         templateUrl : "views/lists_manage_segment.html",
         data : {
             pageTitle : 'Manage Segment'

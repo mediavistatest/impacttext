@@ -1,6 +1,6 @@
 <h1>Lists</h1>
 
-<div class="col-md-12 content-holder animated fadeInRight add-list-contact" ng-class="animation" ng-controller="AddSegmentCtrl">
+<div class="col-md-12 content-holder animated fadeInRight add-list-contact segment" ng-class="animation" ng-controller="AddSegmentCtrl">
 	<h2 class="section-title">Add Segment</h2>
 	<div class="top-buttons">
 		<a ng-hide="controllerParent" href="#/lists/lists_segments" class="btn btn-back"><i class="fa fa-undo"></i> Back to Segments</a>
@@ -9,99 +9,101 @@
 	<div>
 		<br />
 
-		<form>
+		<form name="addSegmentForm">
 
-			<!--SINGLE CONTACT -->
+			<!--SINGLE SEGMENT -->
 			<div class="single-holder" >
 
 				<div class="form-group clearfix">
-					<label class="control-label">Segment name:</label>
-					<input type="text" name="SegmentName" ng-model="SegmentName" class="form-control inline">
+					<label class="control-label">Segment name: *</label>
+					<input type="text" name="SegmentName" ng-model="SegmentName" ng-required="true" class="form-control inline">
 				</div>
 
 				<div class="form-group clearfix">
 					<label class="control-label">Apply to contact list:</label>
-					<select chosen name="ContactList" data-placeholder="All contact lists" class="chosen-select form-control" ng-model="ContactList"
-							  ng-options="contactList.contactListName for contactList in main.contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists">
-					</select>
+					<div class="chosen-wrapper">
+						<select chosen name="ContactList" data-placeholder="All contact lists" class="chosen-select form-control" ng-model="ContactList"
+								  ng-options="contactList.contactListName for contactList in main.contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists">
+						</select>
+					</div>
 				</div>
 
 				<div class="form-group clearfix">
 					<label class="control-label">Phone number:</label>
-					<select name="PhoneNumberComparator" class="form-control inline" ng-model="PhoneNumberComparator" ng-options="comparator for comparator in availableComparators"> </select>
-					<input type="text" name="PhoneNumber" placeholder="e.g. 1111111111" ng-model="PhoneNumber" class="form-control inline">
+					<select name="PhoneNumberComparator" class="form-control inline comparator" ng-model="PhoneNumberComparator" ng-options="comparator for comparator in availableComparators"> </select>
+					<input type="text" name="PhoneNumber" placeholder="e.g. 1111111111" ng-model="PhoneNumber" class="form-control inline with-comparator">
 
 				</div>
 
 				<div class="form-group clearfix">
 
 					<label class="control-label">First name:</label>
-					<select name="FirstNameComparator" class="form-control inline" ng-model="FirstNameComparator" ng-options="comparator for comparator in availableComparators"> </select>
-					<input type="text" name="FirstNmae" placeholder="John" ng-model="FirstName" class="form-control inline">
+					<select name="FirstNameComparator" class="form-control inline comparator" ng-model="FirstNameComparator" ng-options="comparator for comparator in availableComparators"> </select>
+					<input type="text" name="FirstName" placeholder="John" ng-model="FirstName" class="form-control inline with-comparator">
 
 				</div>
 
 				<div class="form-group clearfix">
 
 					<label class="control-label">Last Name:</label>
-					<select name="LastNameComparator" class="form-control inline" ng-model="LastNameComparator" ng-options="comparator for comparator in availableComparators"> </select>
-					<input type="text" name="LastName" placeholder="Doe" ng-model="LastName" class="form-control inline">
+					<select name="LastNameComparator" class="form-control inline comparator" ng-model="LastNameComparator" ng-options="comparator for comparator in availableComparators"> </select>
+					<input type="text" name="LastName" placeholder="Doe" ng-model="LastName" class="form-control inline with-comparator">
 
 				</div>
 
 				<div class="form-group clearfix">
 
 					<label class="control-label">Email address:</label>
-					<select name="EmailComparator" class="form-control inline" ng-model="EmailComparator" ng-options="comparator for comparator in availableComparators"> </select>
-					<input type="text" name="Email" placeholder="name@domain.com" ng-model="Email" class="form-control inline">
+					<select name="EmailComparator" class="form-control inline comparator" ng-model="EmailComparator" ng-options="comparator for comparator in availableComparators"> </select>
+					<input type="text" name="Email" placeholder="name@domain.com" ng-model="Email" class="form-control inline with-comparator">
 
 				</div>
 
 				<div class="form-group clearfix">
 
 					<label class="control-label">Source:</label>
-					<select name="ContactSourceComparator" class="form-control inline" ng-model="ContactSourceComparator" ng-options="comparator for comparator in availableComparators"> </select>
-					<input type="text" name="ContactSource" placeholder="" ng-model="ContactSource" class="form-control inline">
+					<select name="ContactSourceComparator" class="form-control inline comparator" ng-model="ContactSourceComparator" ng-options="comparator for comparator in availableComparators"> </select>
+					<input type="text" name="ContactSource" placeholder="" ng-model="ContactSource" class="form-control inline with-comparator">
 
 				</div>
 
 				<div class="form-group clearfix">
 
 					<label class="control-label">Custom field 1:</label>
-					<select name="CustomField1Comparator" class="form-control inline" ng-model="CustomField1Comparator" ng-options="comparator for comparator in availableComparators"> </select>
-					<input type="text" name="CustomField1" placeholder="Custom text" ng-model="CustomField1" class="form-control inline">
+					<select name="CustomField1Comparator" class="form-control inline comparator" ng-model="CustomField1Comparator" ng-options="comparator for comparator in availableComparators"> </select>
+					<input type="text" name="CustomField1" placeholder="Custom text" ng-model="CustomField1" class="form-control inline with-comparator">
 
 				</div>
 
 				<div class="form-group clearfix">
 
 					<label class="control-label">Custom field 2:</label>
-					<select name="CustomField2Comparator" class="form-control inline" ng-model="CustomField2Comparator" ng-options="comparator for comparator in availableComparators"> </select>
-					<input type="text" name="CustomField2" placeholder="Custom text" ng-model="CustomField2" class="form-control inline">
+					<select name="CustomField2Comparator" class="form-control inline comparator" ng-model="CustomField2Comparator" ng-options="comparator for comparator in availableComparators"> </select>
+					<input type="text" name="CustomField2" placeholder="Custom text" ng-model="CustomField2" class="form-control inline with-comparator">
 
 				</div>
 
 				<div class="form-group clearfix">
 
 					<label class="control-label">Custom field 3:</label>
-					<select name="CustomField3Comparator" class="form-control inline" ng-model="CustomField3Comparator" ng-options="comparator for comparator in availableComparators"> </select>
-					<input type="text" name="CustomField3" placeholder="Custom text" ng-model="CustomField3" class="form-control inline">
+					<select name="CustomField3Comparator" class="form-control inline comparator" ng-model="CustomField3Comparator" ng-options="comparator for comparator in availableComparators"> </select>
+					<input type="text" name="CustomField3" placeholder="Custom text" ng-model="CustomField3" class="form-control inline with-comparator">
 
 				</div>
 
 				<div class="form-group clearfix">
 
 					<label class="control-label">Custom field 4:</label>
-					<select name="CustomField4Comparator" class="form-control inline" ng-model="CustomField4Comparator" ng-options="comparator for comparator in availableComparators"> </select>
-					<input type="text" name="CustomField4" placeholder="Custom text" ng-model="CustomField4" class="form-control inline">
+					<select name="CustomField4Comparator" class="form-control inline comparator" ng-model="CustomField4Comparator" ng-options="comparator for comparator in availableComparators"> </select>
+					<input type="text" name="CustomField4" placeholder="Custom text" ng-model="CustomField4" class="form-control inline with-comparator">
 
 				</div>
 
 				<div class="form-group clearfix">
 
 					<label class="control-label">Custom field 5:</label>
-					<select name="CustomField5Comparator" class="form-control inline" ng-model="CustomField5Comparator" ng-options="comparator for comparator in availableComparators"> </select>
-					<input type="text" name="CustomField5" placeholder="Custom text" ng-model="CustomField5" class="form-control inline">
+					<select name="CustomField5Comparator" class="form-control inline comparator" ng-model="CustomField5Comparator" ng-options="comparator for comparator in availableComparators"> </select>
+					<input type="text" name="CustomField5" placeholder="Custom text" ng-model="CustomField5" class="form-control inline with-comparator">
 
 				</div>
 
@@ -116,7 +118,7 @@
 
 
 			<br />
-			<a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="addSegment()">
+			<a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="addSegment()" ng-disabled="!addSegmentForm.$valid">
 				<span><i class="fa fa-floppy-o"></i> Save</span>
 			</a>
 

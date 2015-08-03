@@ -577,7 +577,96 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                     }
                 }
             });
-        }
+        },
+		  getSegment : function(request, callback){
+			  $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param(request)).success(
+				  function (data, status, headers, config) {
+					  if (data == null || typeof data.apicode == 'undefined') {
+						  alert("Unidentified error occurred when trying to load the segment!");
+						  window.location.href = '/#/lists/lists_segments';
+						  return;
+					  }
+					  if (data.apicode == 0) {
+						  if(data.apidata == ""){
+							  alert("Unidentified error occurred when trying to load the segment!");
+							  window.location.href = '/#/lists/lists_segments';
+							  return;
+						  }
+
+						  if(typeof callback == 'function'){
+							  callback(data.apidata);
+						  }
+					  } else {
+						  alert("An error occurred when loading the segment! Error code: " + data.apicode);
+						  window.location.href = '/#/lists/lists_segments';
+					  }
+			  }).error(
+				  function (data, status, headers, config) {
+					  alert("An error occurred when loading the segment! Error code: " + data.apicode);
+					  window.location.href = '/#/lists/lists_segments';
+				  }
+			  );
+		  },
+		  addSegment : function(request, $inScope, callback){
+			  $http.post(inspiniaNS.wsUrl + "contactselection_add", $.param(request)).success(
+				  function (data, status, headers, config) {
+					  if (data == null || typeof data.apicode == 'undefined') {
+						  $inScope.$broadcast("SegmentCreateFail");
+						  return;
+					  }
+					  if (data.apicode == 0) {
+						  if(typeof callback == 'function'){
+							  callback(data.apidata);
+						  }
+					  } else {
+						  $inScope.$broadcast("SegmentCreateFail");
+					  }
+				  }).error(
+				  function (data, status, headers, config) {
+					  if (data.apicode == 1) {
+						  $inScope.$broadcast("DuplicateSegmentName", data.apidata);
+					  } else {
+						  $inScope.$broadcast("SegmentCreateFail");
+					  }
+				  });
+		  },
+		  saveSegment : function(request, $inScope, callback){
+			  $http.post(inspiniaNS.wsUrl + "contactselection_modify", $.param(request)).success(
+				  function (data, status, headers, config) {
+					  if (data == null || typeof data.apicode == 'undefined') {
+						  $inScope.$broadcast("SegmentSaveFail");
+						  return;
+					  }
+					  if (data.apicode == 0) {
+						  if(typeof callback == 'function'){
+							  callback(data.apidata);
+						  }
+					  } else {
+						  $inScope.$broadcast("SegmentSaveFail");
+					  }
+				  }).error(
+				  function (data, status, headers, config) {
+					  $inScope.$broadcast("SegmentSaveFail");
+				  }
+			  );
+		  },
+		  deleteSegment : function(request, $inScope, callback) {
+			  $http.post(inspiniaNS.wsUrl + "contactselection_delete", $.param(request)).success(
+				  function (data, status, headers, config) {
+					  if (data == null || typeof data.apicode == 'undefined' || data.apicode != 0) {
+						  $inScope.$broadcast("SegmentDeleteFail");
+						  return;
+					  }
+
+					  if(typeof callback == 'function'){
+						  callback();
+					  }
+				  }).error(
+				  function (data, status, headers, config) {
+					  $inScope.$broadcast("SegmentDeleteFail");
+				  }
+			  );
+		  }
     };
 
     main.CommonActions = {
@@ -3523,12 +3612,161 @@ function generateContactFilter(scope) {
 	return contactFilter;
 }
 
+function parseContactFilter(scope, data) {
+	if(!empty(data)){
+		var contactFilterText = data.contactfilter;
+		scope.SegmentName = data.contactselectionname;
+		scope.ContactList = {"contactListID": data.contactlistid};
 
+		if(!empty(contactFilterText)){
+			var contactFilterArray = contactFilterText.split(' and ');
+			for(var i in contactFilterArray){
+				var contactFilterItem = contactFilterArray[i];
+				var regex_string = '^(.*)(' + scope.availableComparators.join('|') + ')\{(.*)\}$';
+				var re = new RegExp(regex_string, 'i');
+				var match = contactFilterItem.match(re);
+				if(match.length == 4){
+					scope[scope.fields[match[1]] + 'Comparator'] = match[2];
+					scope[scope.fields[match[1]]] = match[3];
+				}
+			}
+		}else{
+			scope.reset();
+		}
+	}else{
+		scope.reset();
+	}
+}
+
+
+// TODO
 function EditSegmentCtrl($scope, $http, $cookieStore, $window, $state) {
-	// TODO
-	$scope.saveSegment = function(){
-		console.log('TODO');
+	$scope.disableFields = true;
+	$scope.fields = {
+		ani: "PhoneNumber",
+		firstname: "FirstName",
+		lastname: "LastName",
+		emailaddress: "Email",
+		contactsource: "ContactSource",
+		custom1: "CustomField1",
+		custom2: "CustomField2",
+		custom3: "CustomField3",
+		custom4: "CustomField4",
+		custom5: "CustomField5",
+		language: "Language"
 	};
+
+	$scope.availableComparators = ['=', '<', '>', '<=', '>='];
+
+	$scope.main.contactSegmentID = $state.params.id;
+
+	$scope.originalSegmentName = '';
+	$scope.originalContactListID = '';
+	$scope.originalContactFilterText = '';
+
+	$scope.main.ServerRequests.contactListsGet();
+	var i = setInterval(function(){
+		if(typeof $scope.main.contactLists !== 'undefined'){
+			clearInterval(i);
+
+			// Get segment data
+			$scope.main.ServerRequests.getSegment({
+				sethttp: 1,
+				apikey: $cookieStore.get('inspinia_auth_token'),
+				accountID: $cookieStore.get('inspinia_account_id'),
+				companyID: $cookieStore.get('inspinia_company_id'),
+				contactSelectionID: $scope.main.contactSegmentID
+			}, function(data){
+				/*data = {
+					contactfilter: 'ani={112156456456} and firstname>{asdjk}',
+					contactselectionname: 'Test segment 22',
+					contactlistid: '84'
+				};*/
+
+				parseContactFilter($scope, data);
+				$scope.originalContactFilterText = generateContactFilter($scope);
+				$scope.originalSegmentName = data.contactselectionname;
+				$scope.originalContactListID = data.contactlistid;
+				$scope.disableFields = false;
+			});
+
+			$scope.disableFields = false;
+		}
+	}, 100);
+
+	$scope.reset = function () {
+		$scope.SegmentName = '';
+		$scope.PhoneNumber = '';
+		$scope.PhoneNumberComparator = '=';
+		$scope.FirstName = '';
+		$scope.FirstNameComparator = '=';
+		$scope.LastName = '';
+		$scope.LastNameComparator = '=';
+		$scope.Email = '';
+		$scope.EmailComparator = '=';
+		$scope.ContactSource = '';
+		$scope.ContactSourceComparator = '=';
+		$scope.CustomField1 = '';
+		$scope.CustomField1Comparator = '=';
+		$scope.CustomField2 = '';
+		$scope.CustomField2Comparator = '=';
+		$scope.CustomField3 = '';
+		$scope.CustomField3Comparator = '=';
+		$scope.CustomField4 = '';
+		$scope.CustomField4Comparator = '=';
+		$scope.CustomField5 = '';
+		$scope.CustomField5Comparator = '=';
+		$scope.Language = '';
+		$scope.LanguageComparator = '=';
+	};
+
+	$scope.saveSegment = function() {
+		var contactFilterText = generateContactFilter($scope);
+
+		var params = {
+			sethttp: 1,
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			accountID: $cookieStore.get('inspinia_account_id'),
+			companyID: $cookieStore.get('inspinia_company_id'),
+			contactSelectionID: $scope.main.contactSegmentID,
+			modifyPending: $scope.ModifyPending
+		};
+
+		if($scope.originalSegmentName != $scope.SegmentName){
+			params['contactSelectionName'] = $scope.SegmentName;
+		}
+
+		if($scope.originalContactListID != $scope.ContactList.contactListID){
+			params['contactListID'] = $scope.ContactList.contactListID;
+		}
+
+		if($scope.originalContactFilterText != contactFilterText){
+			params['contactFilter'] = contactFilterText;
+		}
+
+		$scope.main.ServerRequests.saveSegment(params, $scope, function(data){
+			$scope.originalSegmentName = $scope.SegmentName;
+			$scope.originalContactListID = $scope.ContactList.contactListID;
+			$scope.originalContactFilterText = contactFilterText;
+
+			$scope.$broadcast("SegmentSaved");
+		});
+	};
+
+	$scope.deleteSegment = function() {
+		if(confirm('Are you sure you want to delete this segment?')){
+			$scope.main.ServerRequests.deleteSegment({
+				sethttp: 1,
+				apikey: $cookieStore.get('inspinia_auth_token'),
+				accountID: $cookieStore.get('inspinia_account_id'),
+				companyID: $cookieStore.get('inspinia_company_id'),
+				contactSelectionID: $scope.main.contactSegmentID
+			}, $scope, function(){
+				$state.go('lists.segments');
+				$window.scrollTo(0,0);
+			});
+		}
+	}
 }
 
 function AddSegmentCtrl($scope, $http, $cookieStore) {
@@ -3589,35 +3827,12 @@ function AddSegmentCtrl($scope, $http, $cookieStore) {
 		if (!empty(contactFilter)) {
 			requestParams.contactFilter = contactFilter;
 		}
-		$http.post(inspiniaNS.wsUrl + "contactselection_add", $.param(requestParams)).success(
-			//Successful request to the server
-			function (data, status, headers, config) {
-				if (data == null || typeof data.apicode == 'undefined') {
-					//This should never happen
-					alert("Unidentified error occurred when trying to add new segment!");
-					return;
-				}
-				if (data.apicode == 0) {
-					//Reset form and inform user about success
-					$scope.reset();
-					$scope.$broadcast("SegmentCreated", data.apidata);
-				} else {
-					alert("An error occurred when adding new segment! Error code: " + data.apicode);
-					alert(JSON.stringify(data));
-				}
-			}).error(
-			//An error occurred with this request
-			function (data, status, headers, config) {
-				//alert('Unexpected error occurred when trying to send message!');
-				if (status == 400) {
-					if (data.apicode == 1) {
-						$scope.$broadcast("DuplicateSegmentName", data.apidata);
-					} else {
-						alert("An error occurred when adding new segment! Error code: " + data.apicode);
-						alert(JSON.stringify(data));
-					}
-				}
-			});
+
+		$scope.main.ServerRequests.addSegment(requestParams, $scope, function(data){
+			//Reset form and inform user about success
+			$scope.reset();
+			$scope.$broadcast("SegmentCreated", data.apidata);
+		});
 	};
 
 	$scope.reset();
@@ -4403,11 +4618,44 @@ function notifyCtrl($scope, notify) {
 			classes: 'alert-success'
 		});
 	};
+	$scope.SegmentCreateFailMsg = function () {
+		notify({
+			message: 'Failed to create segment!',
+			classes: 'alert-danger',
+			templateUrl: $scope.inspiniaTemplate
+		});
+	};
 	$scope.DuplicateSegmentNameMsg = function () {
 		notify({
 			message: 'Segment with specified name already exists!',
 			classes: 'alert-danger',
 			templateUrl: $scope.inspiniaTemplate
+		});
+	};
+	$scope.SegmentSavedMsg = function () {
+		notify({
+			message: 'Segment is successfully saved.',
+			classes: 'alert-success'
+		});
+	};
+	$scope.SegmentSaveFailMsg = function () {
+		notify({
+			message: 'Failed to save segment!',
+			classes : 'alert-danger',
+			templateUrl : $scope.inspiniaTemplate
+		});
+	};
+	$scope.SegmentDeletedMsg = function () {
+		notify({
+			message: 'Segment deleted successfully!',
+			classes : 'alert-success'
+		});
+	};
+	$scope.SegmentDeleteFailMsg = function () {
+		notify({
+			message: 'Failed to delete segment!',
+			classes : 'alert-danger',
+			templateUrl : $scope.inspiniaTemplate
 		});
 	};
 
@@ -4535,10 +4783,26 @@ function notifyCtrl($scope, notify) {
     $scope.$on('SegmentCreated', function(event, args) {
         $scope.SegmentCreatedMsg();
     });
+	 $scope.$on('SegmentCreateFail', function(event, args) {
+		 $scope.SegmentCreateFailMsg();
+	 });
     //If DuplicateSegmentName event is triggered, show related message
     $scope.$on('DuplicateSegmentName', function(event, args) {
         $scope.DuplicateSegmentNameMsg();
     });
+	 $scope.$on('SegmentSaved', function(event, args) {
+		 $scope.SegmentSavedMsg();
+	 });
+	 $scope.$on('SegmentSaveFail', function(event, args) {
+		 $scope.SegmentSaveFailMsg();
+	 });
+	 $scope.$on('SegmentDeleted', function(event, args) {
+		 $scope.SegmentDeletedMsg();
+	 });
+	 $scope.$on('SegmentDeleteFail', function(event, args) {
+		 $scope.SegmentDeleteFailMsg();
+	 });
+
     //}
 }
 
