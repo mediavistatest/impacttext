@@ -1577,21 +1577,24 @@ var ngInbox = {
                     // GetLocalDateTimeString
                     // console.log($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10))
 
-                    var timezoneOffsetMinutes = new Date().getTimezoneOffset();
+                    //var timezoneOffsetMinutes = new Date().getTimezoneOffset();
                     //problem with timezone <0 when getting new date from shecdule date gets 1 day earlier because of negative time zone
-                    if (timezoneOffsetMinutes < 0) {
-                        scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm'));
-                    } else {
-                        var correctedDay = String(parseInt($sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10)) + 1);
-                        scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 8) + correctedDay, 'YYYY-DD-mm'));
-                    }
+                    scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
+                    
+                    
+                    // if (timezoneOffsetMinutes < 0) {
+                        // scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
+                    // } else {
+                        // var correctedDay = String(parseInt($sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10)) + 1);
+                        // scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 8) + correctedDay, 'YYYY-DD-mm'));
+                    // }
 
 
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
                     if ($sendScope.controllerParent.clickedMessage.recurringend != null) {
-                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10) + ' 00:00:00');
                     } else {
                         scheduledDateTime.SetRecurringEndDate = new Date();
                     }
@@ -1790,7 +1793,7 @@ var ngInbox = {
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
                     if ($sendScope.controllerParent.clickedMessage.recurringend != null) {
-                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10) + ' 00:00:00');
                     } else {
                         scheduledDateTime.SetRecurringEndDate = new Date();
                     }
