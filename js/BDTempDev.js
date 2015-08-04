@@ -219,7 +219,7 @@ var ngInbox = {
                     var minPart = utcDateTime.substring(14, 16);
                     var secPart = utcDateTime.substring(17, 19);
 
-                    var tmpDate = new Date(datePart);
+                    var tmpDate = new Date(datePart  + ' 00:00:00');
                     tmpDate.setUTCHours(hourPart);
                     tmpDate.setUTCMinutes(minPart);
                     tmpDate.setUTCSeconds(secPart);
@@ -1400,7 +1400,7 @@ var ngInbox = {
                     $sendScope.ScheduleCheck = false;
                     $sendScope.ArrayScheduledDateTime = [];
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
-                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + ' 00:00:00');
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
@@ -1788,7 +1788,7 @@ var ngInbox = {
                     }];
 
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
-                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + ' 00:00:00');
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
@@ -1929,7 +1929,7 @@ var ngInbox = {
                     $sendScope.ScheduleCheck = false;
 
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
-                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + ' 00:00:00');
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
@@ -3557,12 +3557,12 @@ var ngSettings = {
             cpo.arCtrl.inactive = (cpo.clickedKeyword.status === "I");
 
             if (cpo.clickedKeyword.startDate) {
-                cpo.arCtrl.validFrom = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.startDate.substring(0, 10), 'YYYY-DD-mm'));
+                cpo.arCtrl.validFrom = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.startDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
                 cpo.arCtrl.SetTimeHourFrom = cpo.clickedKeyword.startDate.substring(11, 13);
                 cpo.arCtrl.SetTimeMinuteFrom = cpo.clickedKeyword.startDate.substring(14, 16);
             }
             if (cpo.clickedKeyword.endDate) {
-                cpo.arCtrl.validUntil = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.endDate.substring(0, 10), 'YYYY-DD-mm'));
+                cpo.arCtrl.validUntil = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.endDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
                 cpo.arCtrl.SetTimeHourUntil = cpo.clickedKeyword.endDate.substring(11, 13);
                 cpo.arCtrl.SetTimeMinuteUntil = cpo.clickedKeyword.endDate.substring(14, 16);
             }
@@ -4132,10 +4132,10 @@ var ngReports = {
         },
         PopulateView : function(cpo) {
             if (cpo.clickedReport.parameters.startdate) {
-                cpo.rsCtrl.StartDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.startdate.substring(0, 10), 'YYYY-DD-mm'));
+                cpo.rsCtrl.StartDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.startdate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
             }
             if (cpo.clickedReport.parameters.enddate) {
-                cpo.rsCtrl.EndDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.enddate.substring(0, 10), 'YYYY-DD-mm'));
+                cpo.rsCtrl.EndDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.enddate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
             }
             if (cpo.clickedReport.parameters.type) {
                 cpo.rsCtrl.SetRecurringType = cpo.clickedReport.parameters.type;
@@ -4148,7 +4148,7 @@ var ngReports = {
             }
 
             if (cpo.clickedReport.parameters.reportdate) {
-                cpo.rsCtrl.sheduledDateTime = new Date(cpo.clickedReport.parameters.reportdate.substring(0, 10));
+                cpo.rsCtrl.sheduledDateTime = new Date(cpo.clickedReport.parameters.reportdate.substring(0, 10) + ' 00:00:00');
                 cpo.rsCtrl.SetTimeHour = cpo.clickedReport.parameters.reportdate.substring(11, 13);
                 cpo.rsCtrl.SetTimeMinute = cpo.clickedReport.parameters.reportdate.substring(14, 16);
             }
