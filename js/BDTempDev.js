@@ -3987,6 +3987,7 @@ var ngReports = {
                 strokeColor : "rgba(0,94,170,0.5)",
                 highlightFill : "rgba(0,94,170,0.8)",
                 highlightStroke : "rgba(0,94,170,1)",
+                tooltip:"Total number of unique contacts.",
                 data : []
             }, {
                 label : "Sent Messages",
@@ -3994,6 +3995,7 @@ var ngReports = {
                 strokeColor : "rgba(227,111,30,0.5)",
                 highlightFill : "rgba(227,111,30,0.8)",
                 highlightStroke : "rgba(227,111,30,1)",
+                tooltip:"Total number of messages sent.",
                 data : []
             }, {
                 label : "Responders",
@@ -4001,6 +4003,7 @@ var ngReports = {
                 strokeColor : "rgba(0,125,50,0.5)",
                 highlightFill : "rgba(0,125,50,0.8)",
                 highlightStroke : "rgba(0,125,50,1)",
+                tooltip:"Total number of unique phone numbers from which message replies were received.",
                 data : []
             }, {
                 label : "Received Messages",
@@ -4008,6 +4011,7 @@ var ngReports = {
                 strokeColor : "rgba(159,74,156,0.5)",
                 highlightFill : "rgba(159,74,156,0.8)",
                 highlightStroke : "rgba(159,74,156,1)",
+                tooltip:"Total number of incoming messages that were in reply to a sent message.",
                 data : []
             }, {
                 label : "Autoresponder Replies",
@@ -4015,6 +4019,7 @@ var ngReports = {
                 strokeColor : "rgba(250,250,0,0.5)",
                 highlightFill : "rgba(250,250,0,0.8)",
                 highlightStroke : "rgba(250,250,0,1)",
+                tooltip:"Total number of outgoing messages sent as a result of an autoresponder rule.",
                 data : []
             }, {
                 label : "Opt-Ins",
@@ -4022,6 +4027,7 @@ var ngReports = {
                 strokeColor : "rgba(250,0,0,0.5)",
                 highlightFill : "rgba(250,0,0,0.8)",
                 highlightStroke : "rgba(250,0,0,1)",
+                tooltip:"Total number of contacts who opted-in.",
                 data : []
             }, {
                 label : "Opt-Outs",
@@ -4029,6 +4035,7 @@ var ngReports = {
                 strokeColor : "rgba(0,250,250,0.5)",
                 highlightFill : "rgba(0,250,250,0.8)",
                 highlightStroke : "rgba(0,250,250,1)",
+                tooltip:"Total number of contacts who opted-out.",
                 data : []
             }, {
                 label : "Replies",
@@ -4036,6 +4043,7 @@ var ngReports = {
                 strokeColor : "rgba(159,159,159,0.5)",
                 highlightFill : "rgba(159,159,159,0.8)",
                 highlightStroke : "rgba(159,159,159,1)",
+                tooltip:"Total number of manually created messages that were sent in reply to a message received.",
                 data : []
             }]
         },

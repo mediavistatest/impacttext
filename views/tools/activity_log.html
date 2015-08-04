@@ -1,20 +1,17 @@
 <h1>Tools / {{$state.current.data.pageTitle}}</h1>
 <div class="col-md-12 content-holder animated fadeInRight activity-log-view" ng-class="animation" ng-controller="ngActivityLogListCtrl">
-	<h2 class="section-title">Activity log list</h2>
-	<div class="top-buttons"></div>
-	<p>Below is a list of all your logged activities.</p><br />
-
-	<div>
-		<div class="page-select-wrapper">
-			<strong>Show:</strong>&nbsp;
-			<select class="page-select" ng-model="pagingOptions.pageSize">
-				<option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
-			</select>
-		</div>
-	</div>
-
-	<div class="f-clear"></div>
-	<br />
-
-	<div class="gridStyle" ng-grid="ngOptions"></div>
+    <h2 class="section-title">Activity log list</h2>
+    <div class="top-buttons"></div>
+    <p>This is a list of your logged activities within the ImpactText portal.</p><br />
+    <div>
+        <div class="page-select-wrapper">
+            <strong>Show:</strong>&nbsp;
+            <select class="page-select" ng-model="pagingOptions.pageSize">
+                <option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="f-clear"></div>
+    <br />
+    <div class="gridStyle" ng-grid="ngOptions"></div>
 </div>
