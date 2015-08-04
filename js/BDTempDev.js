@@ -219,11 +219,21 @@ var ngInbox = {
                     var minPart = utcDateTime.substring(14, 16);
                     var secPart = utcDateTime.substring(17, 19);
 
-                    var tmpDate = new Date(datePart  + ' 00:00:00');
+                    var tmpDate = new Date(datePart);
+                    // console.log('GetLocalDateTimeString START')
+                    // console.log(datePart)
+                    
+                    // console.log(tmpDate)
+                    
+
+                    
                     tmpDate.setUTCHours(hourPart);
                     tmpDate.setUTCMinutes(minPart);
                     tmpDate.setUTCSeconds(secPart);
                     // dateStr = tmpDate.toLocaleDateString();
+
+// console.log(tmpDate)
+                    // console.log('GetLocalDateTimeString END')
 
                     var year;
                     var month;
@@ -1581,7 +1591,7 @@ var ngInbox = {
                     //problem with timezone <0 when getting new date from shecdule date gets 1 day earlier because of negative time zone
                     scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
                     
-                    
+                    console.log(scheduledDateTime.SetDate)
                     // if (timezoneOffsetMinutes < 0) {
                         // scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
                     // } else {
