@@ -1,6 +1,7 @@
 <h2 class="section-title">
 Autoresponder
 </h2>
+<br><br>
 <div class="top-buttons">
     <a ng-click="cpo.Events.BackToRules_onClick(cpo)" class="btn btn-back"><i class="fa fa-undo">
     </i>
@@ -65,20 +66,20 @@ Autoresponder
             </label>
             <div class="col-md-10">
                 <span class="label-icon"><i class="fa fa-calendar">
-                    </i></span>
+                </i></span>
                 <div class="btn-group datetimepicker-wrapper" >
                     <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="arCtrl.validFrom" is-open="opened" min-date="minDate" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" ng-click = "opened = true" />
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <span class="label-icon"><i class="fa fa-clock-o">
-                    </i></span>
+                </i></span>
                 <!-- Single button -->
                 <div class="btn-group timing" dropdown is-open="status.isopenHour">
                     <input type="text" name="cpo.arCtrl.SetTimeHourFrom" placeholder="Hour" class="form-control" dropdown-toggle ng-model='cpo.arCtrl.SetTimeHourFrom' readonly>
                     <ul class="dropdown-menu time-pick" role="menu">
                         <li>
                             <span>
-                                Set hours
+                            Set hours
                             </span>
                         </li>
                         <li>
@@ -174,7 +175,7 @@ Autoresponder
                     <ul class="dropdown-menu time-pick" role="menu">
                         <li>
                             <span>
-                                Set minutes
+                            Set minutes
                             </span>
                         </li>
                         <li>
@@ -201,20 +202,20 @@ Autoresponder
             </label>
             <div class="col-md-10">
                 <span class="label-icon"><i class="fa fa-calendar">
-                    </i></span>
+                </i></span>
                 <div class="btn-group datetimepicker-wrapper" >
                     <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="arCtrl.validUntil" is-open="opened2" min-date="arCtrl.validFrom" show-weeks="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" ng-click = "opened2 = true" />
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <span class="label-icon"><i class="fa fa-clock-o">
-                    </i></span>
+                </i></span>
                 <!-- Single button -->
                 <div class="btn-group timing" dropdown is-open="status.isopenHour2">
                     <input type="text" name="cpo.arCtrl.SetTimeHourUntil" placeholder="Hour" class="form-control" dropdown-toggle ng-model='cpo.arCtrl.SetTimeHourUntil' readonly>
                     <ul class="dropdown-menu time-pick" role="menu">
                         <li>
                             <span>
-                                Set hours
+                            Set hours
                             </span>
                         </li>
                         <li>
@@ -310,7 +311,7 @@ Autoresponder
                     <ul class="dropdown-menu time-pick" role="menu">
                         <li>
                             <span>
-                                Set minutes
+                            Set minutes
                             </span>
                         </li>
                         <li>
@@ -354,13 +355,13 @@ Autoresponder
             <div class="divider ng-scope"></div>
             <div ng-show="$index>0">
                 <input icheck type="checkbox" ng-model="actionRule.checked" >
-                Define Delay {{$index}}
+                Delay Rule {{$index}}
             </div>
             <div class="ruleRepeatDiv" ng-show="actionRule.checked">
                 <div class="iphone-prev">
                     <div class="message-cloud">
                         <span ng-show="arCtrl.fromName">
-                            {{arCtrl.fromName}}:
+                        {{arCtrl.fromName}}:
                         </span>
                         {{actionRule.messageTxt}} {{actionRule.optFields.OptOutTxt1}}{{actionRule.optFields.OptOutTxt2}}{{actionRule.optFields.OptOutTxt3}}
                     </div>
@@ -371,14 +372,14 @@ Autoresponder
                     </label>
                     <div class="col-md-10">
                         <span class="label-icon"><i class="fa fa-clock-o">
-                            </i></span>
+                        </i></span>
                         <!-- Single button -->
                         <div class="btn-group timing" dropdown is-open="actionRule.isopenHour">
                             <input type="text" name="delayTimeHour" placeholder="Hour" class="form-control" dropdown-toggle ng-model='actionRule.delayTimeHour' readonly>
                             <ul class="dropdown-menu time-pick" role="menu">
                                 <li>
                                     <span>
-                                        Set hours
+                                    Set hours
                                     </span>
                                 </li>
                                 <li>
@@ -474,7 +475,7 @@ Autoresponder
                             <ul class="dropdown-menu time-pick" role="menu">
                                 <li>
                                     <span>
-                                        Set minutes
+                                    Set minutes
                                     </span>
                                 </li>
                                 <li>
@@ -550,8 +551,8 @@ Autoresponder
 <!------------------------------------------------ Bottom buttons -------------------------------------------------------------->
 <div class="col-sm-6 col-sm-offset-2">
     <button class="btn btn-send smaller right" ng-click="autoresponderForm.$valid && cpo.Events.Save_onClick(cpo)" ng-disabled="!autoresponderForm.$valid">
-        <span><i class="fa fa-floppy-o">
-            </i>
-            Save changes</span>
+    <span><i class="fa fa-floppy-o">
+    </i>
+    Save changes</span>
     </button>
 </div>

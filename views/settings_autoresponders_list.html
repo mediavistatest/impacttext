@@ -2,53 +2,57 @@
 Autoresponder
 </h2>
 <p>
-    Autoresponders are automated text messages that are sent back in reply to incoming texts based on a rule you create. Each autoresponder is activated by a “trigger term” that initiates the process. For example, you could send a link to a coupon back to every incoming text that mentions the term SALE.
+Autoresponders are automated text messages that are sent back in reply to incoming texts based on a rule you create. Each autoresponder is activated by a “trigger term” that initiates the process. For example, you could send a link to a coupon back to every incoming text that mentions the term SALE. You can set up autoresponders for each short code or long code that is associated with your account.
 </p>
 <br>
-<br>
+
 <label class="control-label">
-    Manage rules for selected DID:
+    Manage rules for selected SMS code: <!--<i class="fa fa-info-circle" tooltip="You can set up to 5 custom autoresponder rules.
+Autoresponder messages can be sent on a timed schedule by using the Delay Rule option. For example, if you would like to send out an automatic message to anyone who texts the word SALE immediately and then again 2 days after that, set your Delay Rule to 48 hours.
+" style="position:initial"></i>-->
 </label>
+<p>You can set up to 5 custom autoresponder rules. Autoresponder messages can be sent on a timed schedule by using the Delay Rule option. For example, if you would like to send out an automatic message to anyone who texts the word SALE immediately and then again 2 days after that, set your Delay Rule to 48 hours.
+</p>
 <div class="form-group clearfix">
-    <div class="col-sm-6">
-        <select class="form-control m-b" name="FromNumber" ng-model="arCtrl.fromNumber" ng-options="fNumber.DID for fNumber in main.fromNumbers track by fNumber.DIDID" required ></select>
-    </div>
+    <div class="row col-sm-6">
+    <select class="form-control m-b" name="FromNumber" ng-model="arCtrl.fromNumber" ng-options="fNumber.DID for fNumber in main.fromNumbers track by fNumber.DIDID" required ></select>
+</div>
 </div>
 <br>
 <br>
 <!--START TABLE--><div class="gridStyle" ng-grid="ngRespondersOptions"></div><!--Bottom Actions -->
 <div class="row bottom-buttons">
-    <a ng-click="cpo.Events.AddNewRule_onClick(cpo)" ng-show="ngData&&arCtrl.fromNumber.autoResponderID&&(ngData.length<5)" class="btn btn-add" style="float:left"><i class="fa fa-plus">
+<a ng-click="cpo.Events.AddNewRule_onClick(cpo)" ng-show="ngData&&arCtrl.fromNumber.autoResponderID&&(ngData.length<5)" class="btn btn-add" style="float:left"><i class="fa fa-plus">
+</i>
+Add new rule ({{ngData?(ngData.length+1):1}})</a>
+<a class="btn" ng-click="cpo.Events.ActivateRules_onClick(cpo)" ><i class="fa fa-plus-square-o">
+</i>
+Activate Rule</a>
+<!--<a class="btn"><i class="fa fa-files-o"></i> Copy List</a>-->
+<a class="btn" ng-click="cpo.Events.DeactivateRules_onClick(cpo)" ><i class="fa fa-minus-square-o">
+</i>
+Deactivate Rule</a>
+<div class="btn-group dropup discard-btn">
+    <a data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false"><i class="fa fa-trash-o">
     </i>
-    Add new rule ({{ngData?(ngData.length+1):1}})</a>
-    <a class="btn" ng-click="cpo.Events.ActivateRules_onClick(cpo)" ><i class="fa fa-plus-square-o">
-    </i>
-    Activate Rule</a>
-    <!--<a class="btn"><i class="fa fa-files-o"></i> Copy List</a>-->
-    <a class="btn" ng-click="cpo.Events.DeactivateRules_onClick(cpo)" ><i class="fa fa-minus-square-o">
-    </i>
-    Deactivate Rule</a>
-    <div class="btn-group dropup discard-btn">
-        <a data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false"><i class="fa fa-trash-o">
-        </i>
-        Delete</a>
-        <ul class="dropdown-menu dropdown-alerts">
-            <li>
-                Are you sure you want to delete the rule/rules?
-            </li>
-            <li>
-                &nbsp;
-            </li>
-            <li>
-                <span ng-click="cpo.Events.Delete_onClick(cpo)" class="discard-cancel" data-toggle="dropdown">
-                    <strong>
-                    Yes
-                    </strong></span>
-                &nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'">
-                    <strong>
-                    No
-                    </strong></span>
-            </li>
-        </ul>
-    </div>
+    Delete</a>
+    <ul class="dropdown-menu dropdown-alerts">
+        <li>
+            Are you sure you want to delete the rule/rules?
+        </li>
+        <li>
+            &nbsp;
+        </li>
+        <li>
+            <span ng-click="cpo.Events.Delete_onClick(cpo)" class="discard-cancel" data-toggle="dropdown">
+            <strong>
+            Yes
+            </strong></span>
+            &nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'">
+            <strong>
+            No
+            </strong></span>
+        </li>
+    </ul>
+</div>
 </div>

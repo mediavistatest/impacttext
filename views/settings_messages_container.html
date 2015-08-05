@@ -1,67 +1,70 @@
 <h1>
-	{{$state.current.data.pageTitle}}
+{{$state.current.data.pageTitle}}
 </h1>
 <div class="col-md-12 content-holder animated fadeInRight settings" ng-class="animation">
-	<div ng-controller="ngForwardEmailCtrl as forwardCtrl">
-		<h2 class="section-title">SMS to Email forwarding</h2>
-		<p>Set if you wish to forward incoming SMS messages to email for each individual number.</p>
-		<br />
+    <div ng-controller="ngForwardEmailCtrl as forwardCtrl">
+        <h2 class="section-title">SMS to Email forwarding</h2>
+        <p>Here’s where you can set up your account to forward incoming text messages to designated email addresses. Simply enter the forwarding email address for each SMS code.</p>
+        <br />
+        <div class="form-group form-group-header clearfix" ng-controller="notifyCtrl" ng-init="forceNotifyInit = true">
+            <div class="col-sm-4"><label>ImpactText Number</label></div>
+            <div class="col-sm-4"><label>Forward Email Address</label></div>
+            <div class="col-sm-4"></div>
+        </div>
+        <div class="forward-email-number-list" ng-repeat="(key, value) in forwardCtrl.numbers">
+            <div class="form-group clearfix">
+                <div class="column-did col-sm-4">{{value.DID}}</div>
+                <div class="column-emailForwardAddress col-sm-4">
+                    <div ng-show="forwardCtrl.edit[key]"><input type="text" class="form-control" ng-model="value.emailForwardAddress" /></div>
+                    <div ng-show="!forwardCtrl.edit[key]">{{value.emailForwardAddress}}</div>
+                </div>
+                <div class="col-sm-4">
+                    <button ng-if="!forwardCtrl.edit[key]" class="btn" ng-click="forwardCtrl.edit[key] = true"><i class="fa fa-pencil"></i> Edit</button>
+                    <button ng-if="forwardCtrl.edit[key]" class="btn btn-primary" ng-click="cpo.Events.Save_onClick(cpo, key)"><i class="fa fa-floppy-o"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="settings-section-email2sms settings-section" ng-controller="ngEmail2SMSCtrl as e2sCtrl" ng-init="forceNotifyInit = true">
+        <h2 class="section-title">Email to SMS</h2>
+        <p>Did you know you can send also text messages from your email address? First you must register the email addresses from which you would like enable text message sending.</p>
+        <p>Emails from registered email addresses must be sent to the following email address:</p>
+        <p><strong>email2sms_text@impacttext.com</strong></p>
 
-		<div class="form-group form-group-header clearfix" ng-controller="notifyCtrl" ng-init="forceNotifyInit = true">
-			<div class="col-sm-4"><label>ImpactText Number</label></div>
-			<div class="col-sm-4"><label>Forward Email Address</label></div>
-			<div class="col-sm-4"></div>
-		</div>
-		<div class="forward-email-number-list" ng-repeat="(key, value) in forwardCtrl.numbers">
-			<div class="form-group clearfix">
-				<div class="column-did col-sm-4">{{value.DID}}</div>
-				<div class="column-emailForwardAddress col-sm-4">
-					<div ng-show="forwardCtrl.edit[key]"><input type="text" class="form-control" ng-model="value.emailForwardAddress" /></div>
-					<div ng-show="!forwardCtrl.edit[key]">{{value.emailForwardAddress}}</div>
-				</div>
-				<div class="col-sm-4">
-					<button ng-if="!forwardCtrl.edit[key]" class="btn" ng-click="forwardCtrl.edit[key] = true"><i class="fa fa-pencil"></i> Edit</button>
-					<button ng-if="forwardCtrl.edit[key]" class="btn btn-primary" ng-click="cpo.Events.Save_onClick(cpo, key)"><i class="fa fa-floppy-o"></i> Save</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="settings-section-email2sms settings-section" ng-controller="ngEmail2SMSCtrl as e2sCtrl" ng-init="forceNotifyInit = true">
-		<h2 class="section-title">Email to SMS forwarding</h2>
-		<p>Setup Email to SMS forwarding</p>
-		<br />
-
-		<div class="form-group clearfix" ng-controller="notifyCtrl">
-			<label>Email to SMS Key:</label>
-			<div class="email2sms-key">
-				<input type="text" class="form-control" ng-model="main.accountInfo.email2SmsKey" readonly="readonly" />
-			</div>
-
-			<br />
-
-			<label>Email addresses:</label>
-			<!--div class="email2sms-list" ng-repeat="(key, value) in e2sCtrl.email2sms">
-				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[key]" />
-			</div-->
-
-			<div class="email2sms-list">
-				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[0]" />
-			</div>
-			<div class="email2sms-list">
-				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[1]" />
-			</div>
-			<div class="email2sms-list">
-				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[2]" />
-			</div>
-			<div class="email2sms-list">
-				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[3]" />
-			</div>
-			<div class="email2sms-list">
-				<input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[4]" />
-			</div>
-
-			<button class="btn btn-primary" ng-click="cpo.Events.Save_onClick(cpo)"><i class="fa fa-floppy-o"></i> Save</button>
-		</div>
-	</div>
+        <div style="background:whitesmoke; padding:15px">
+        	<p>Please follow these instructions to set up your email to SMS.</p> 
+<p>The email subject must contain your Email to SMS Key, which can be found below.</p>
+<p>Line 1 must be the SMS code from which you are sending the text message.</p>
+<p>Line 2 must be the telephone number(s) you are sending the text to. You can send to up to 10 telephone numbers, separated by commas.</p>
+<p>All other lines of the email will be treated as the text of the message, beginning with line 3. Please do not insert any blank lines.</p>
+        </div>
+        <br />
+        <div class="form-group clearfix" ng-controller="notifyCtrl">
+            <label>Email to SMS Key:</label>
+            <div class="email2sms-key">
+                <input type="text" class="form-control" ng-model="main.accountInfo.email2SmsKey" readonly="readonly" />
+            </div>
+            <br />
+            <label>Email addresses:</label>
+            <!--div class="email2sms-list" ng-repeat="(key, value) in e2sCtrl.email2sms">
+            <input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[key]" />
+        </div-->
+        <div class="email2sms-list">
+            <input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[0]" />
+        </div>
+        <div class="email2sms-list">
+            <input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[1]" />
+        </div>
+        <div class="email2sms-list">
+            <input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[2]" />
+        </div>
+        <div class="email2sms-list">
+            <input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[3]" />
+        </div>
+        <div class="email2sms-list">
+            <input type="text" class="form-control" ng-model="e2sCtrl.newEmail2SMS[4]" />
+        </div>
+        <button class="btn btn-primary" ng-click="cpo.Events.Save_onClick(cpo)"><i class="fa fa-floppy-o"></i> Save</button>
+    </div>
+</div>
 </div>

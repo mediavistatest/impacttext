@@ -219,7 +219,7 @@ var ngInbox = {
                     var minPart = utcDateTime.substring(14, 16);
                     var secPart = utcDateTime.substring(17, 19);
 
-                    var tmpDate = new Date(datePart);
+                    var tmpDate = new Date(datePart  + ' 00:00:00');
                     tmpDate.setUTCHours(hourPart);
                     tmpDate.setUTCMinutes(minPart);
                     tmpDate.setUTCSeconds(secPart);
@@ -1400,7 +1400,7 @@ var ngInbox = {
                     $sendScope.ScheduleCheck = false;
                     $sendScope.ArrayScheduledDateTime = [];
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
-                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + ' 00:00:00');
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
@@ -1577,21 +1577,24 @@ var ngInbox = {
                     // GetLocalDateTimeString
                     // console.log($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10))
 
-                    var timezoneOffsetMinutes = new Date().getTimezoneOffset();
+                    //var timezoneOffsetMinutes = new Date().getTimezoneOffset();
                     //problem with timezone <0 when getting new date from shecdule date gets 1 day earlier because of negative time zone
-                    if (timezoneOffsetMinutes < 0) {
-                        scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm'));
-                    } else {
-                        var correctedDay = String(parseInt($sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10)) + 1);
-                        scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 8) + correctedDay, 'YYYY-DD-mm'));
-                    }
+                    scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
+                    
+                    
+                    // if (timezoneOffsetMinutes < 0) {
+                        // scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
+                    // } else {
+                        // var correctedDay = String(parseInt($sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10)) + 1);
+                        // scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 8) + correctedDay, 'YYYY-DD-mm'));
+                    // }
 
 
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
                     if ($sendScope.controllerParent.clickedMessage.recurringend != null) {
-                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10) + ' 00:00:00');
                     } else {
                         scheduledDateTime.SetRecurringEndDate = new Date();
                     }
@@ -1785,12 +1788,12 @@ var ngInbox = {
                     }];
 
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
-                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + ' 00:00:00');
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
                     if ($sendScope.controllerParent.clickedMessage.recurringend != null) {
-                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10));
+                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10) + ' 00:00:00');
                     } else {
                         scheduledDateTime.SetRecurringEndDate = new Date();
                     }
@@ -1926,7 +1929,7 @@ var ngInbox = {
                     $sendScope.ScheduleCheck = false;
 
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
-                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10));
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + ' 00:00:00');
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
@@ -3554,12 +3557,12 @@ var ngSettings = {
             cpo.arCtrl.inactive = (cpo.clickedKeyword.status === "I");
 
             if (cpo.clickedKeyword.startDate) {
-                cpo.arCtrl.validFrom = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.startDate.substring(0, 10), 'YYYY-DD-mm'));
+                cpo.arCtrl.validFrom = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.startDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
                 cpo.arCtrl.SetTimeHourFrom = cpo.clickedKeyword.startDate.substring(11, 13);
                 cpo.arCtrl.SetTimeMinuteFrom = cpo.clickedKeyword.startDate.substring(14, 16);
             }
             if (cpo.clickedKeyword.endDate) {
-                cpo.arCtrl.validUntil = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.endDate.substring(0, 10), 'YYYY-DD-mm'));
+                cpo.arCtrl.validUntil = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.endDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
                 cpo.arCtrl.SetTimeHourUntil = cpo.clickedKeyword.endDate.substring(11, 13);
                 cpo.arCtrl.SetTimeMinuteUntil = cpo.clickedKeyword.endDate.substring(14, 16);
             }
@@ -3984,6 +3987,7 @@ var ngReports = {
                 strokeColor : "rgba(0,94,170,0.5)",
                 highlightFill : "rgba(0,94,170,0.8)",
                 highlightStroke : "rgba(0,94,170,1)",
+                tooltip:"Total number of unique contacts.",
                 data : []
             }, {
                 label : "Sent Messages",
@@ -3991,6 +3995,7 @@ var ngReports = {
                 strokeColor : "rgba(227,111,30,0.5)",
                 highlightFill : "rgba(227,111,30,0.8)",
                 highlightStroke : "rgba(227,111,30,1)",
+                tooltip:"Total number of messages sent.",
                 data : []
             }, {
                 label : "Responders",
@@ -3998,6 +4003,7 @@ var ngReports = {
                 strokeColor : "rgba(0,125,50,0.5)",
                 highlightFill : "rgba(0,125,50,0.8)",
                 highlightStroke : "rgba(0,125,50,1)",
+                tooltip:"Total number of unique phone numbers from which message replies were received.",
                 data : []
             }, {
                 label : "Received Messages",
@@ -4005,6 +4011,7 @@ var ngReports = {
                 strokeColor : "rgba(159,74,156,0.5)",
                 highlightFill : "rgba(159,74,156,0.8)",
                 highlightStroke : "rgba(159,74,156,1)",
+                tooltip:"Total number of incoming messages that were in reply to a sent message.",
                 data : []
             }, {
                 label : "Autoresponder Replies",
@@ -4012,6 +4019,7 @@ var ngReports = {
                 strokeColor : "rgba(250,250,0,0.5)",
                 highlightFill : "rgba(250,250,0,0.8)",
                 highlightStroke : "rgba(250,250,0,1)",
+                tooltip:"Total number of outgoing messages sent as a result of an autoresponder rule.",
                 data : []
             }, {
                 label : "Opt-Ins",
@@ -4019,6 +4027,7 @@ var ngReports = {
                 strokeColor : "rgba(250,0,0,0.5)",
                 highlightFill : "rgba(250,0,0,0.8)",
                 highlightStroke : "rgba(250,0,0,1)",
+                tooltip:"Total number of contacts who opted-in.",
                 data : []
             }, {
                 label : "Opt-Outs",
@@ -4026,6 +4035,7 @@ var ngReports = {
                 strokeColor : "rgba(0,250,250,0.5)",
                 highlightFill : "rgba(0,250,250,0.8)",
                 highlightStroke : "rgba(0,250,250,1)",
+                tooltip:"Total number of contacts who opted-out.",
                 data : []
             }, {
                 label : "Replies",
@@ -4033,6 +4043,7 @@ var ngReports = {
                 strokeColor : "rgba(159,159,159,0.5)",
                 highlightFill : "rgba(159,159,159,0.8)",
                 highlightStroke : "rgba(159,159,159,1)",
+                tooltip:"Total number of manually created messages that were sent in reply to a message received.",
                 data : []
             }]
         },
@@ -4129,10 +4140,10 @@ var ngReports = {
         },
         PopulateView : function(cpo) {
             if (cpo.clickedReport.parameters.startdate) {
-                cpo.rsCtrl.StartDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.startdate.substring(0, 10), 'YYYY-DD-mm'));
+                cpo.rsCtrl.StartDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.startdate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
             }
             if (cpo.clickedReport.parameters.enddate) {
-                cpo.rsCtrl.EndDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.enddate.substring(0, 10), 'YYYY-DD-mm'));
+                cpo.rsCtrl.EndDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.enddate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
             }
             if (cpo.clickedReport.parameters.type) {
                 cpo.rsCtrl.SetRecurringType = cpo.clickedReport.parameters.type;
@@ -4145,7 +4156,7 @@ var ngReports = {
             }
 
             if (cpo.clickedReport.parameters.reportdate) {
-                cpo.rsCtrl.sheduledDateTime = new Date(cpo.clickedReport.parameters.reportdate.substring(0, 10));
+                cpo.rsCtrl.sheduledDateTime = new Date(cpo.clickedReport.parameters.reportdate.substring(0, 10) + ' 00:00:00');
                 cpo.rsCtrl.SetTimeHour = cpo.clickedReport.parameters.reportdate.substring(11, 13);
                 cpo.rsCtrl.SetTimeMinute = cpo.clickedReport.parameters.reportdate.substring(14, 16);
             }

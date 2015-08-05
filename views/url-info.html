@@ -2,118 +2,116 @@
     <head>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600,700' rel='stylesheet' type='text/css'>
             <style type="text/css">
-                body {
-                    font-family: Open Sans;
-                    margin: 0;
-                }
-                input {
-            background-color: #FFFFFF;
-            background-image: none;
-            border: 1px solid #e5e6e7;
-            border-radius: 1px;
-            color: inherit;
-            display: inline-block;
-            padding: 6px 12px;
-            transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-            width: 40%;
-            font-size: 14px;
-            }
-            input[type="button"] {
-                width:auto;
-                background: #005eaa;
-                color:white;
-            }
-            #output, #output2 {
-            background: whitesmoke;
-            font-size: 15px;
-            width: auto;
-            display: inline-block;
-            box-sizing: border-box;
-            }
-            
-            #output b {
-            display: block;
-            font-size: 15px;
-            }
-
-            #output2 b {
-            font-size: 15px;
-            }
-
-            #output a, #output2 a {
-            color: #005eaa;
-            font-size: 20px;
-            margin-top: 10px;
-            text-decoration: none;
-            }
-            #output span, #output2 span {
-                display: block;
-                padding: 20px 40px;
-            }
+                            body {
+                                font-family: Open Sans;
+                                margin: 0;
+                            }
+                            input {
+                        background-color: #FFFFFF;
+                        background-image: none;
+                        border: 1px solid #e5e6e7;
+                        border-radius: 1px;
+                        color: inherit;
+                        display: inline-block;
+                        padding: 6px 12px;
+                        transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+                        width: 40%;
+                        font-size: 14px;
+                        }
+                        input[type="button"] {
+                            width:auto;
+                            background: #005eaa;
+                            color:white;
+                        }
+                        #output, #output2 {
+                        background: whitesmoke;
+                        font-size: 15px;
+                        width: auto;
+                        display: inline-block;
+                        box-sizing: border-box;
+                        }
+                        
+                        #output b {
+                        display: block;
+                        font-size: 15px;
+                        }
+                        #output2 b {
+                        font-size: 15px;
+                        }
+                        #output a, #output2 a {
+                        color: #005eaa;
+                        font-size: 20px;
+                        margin-top: 10px;
+                        text-decoration: none;
+                        }
+                        #output span, #output2 span {
+                            display: block;
+                            padding: 20px 40px;
+                        }
             </style>
         </head>
         <script type="text/javascript">
-            //function makeShort()
-            //{
-            //var longUrl=document.getElementById("longurl").value;
-            //    var request = gapi.client.urlshortener.url.insert({
-            //    'resource': {
-            //    'longUrl': longUrl
-            //    }
-            //    });
-            //    request.execute(function(response)
-            //    {
-            //        if(response.id != null)
-            //        {
-            //            //str ="<b>Long URL:</b>"+longUrl+"<br>";
-            //            str ="<span><b>Short URL:</b> <a href='"+response.id+"' target='_blank'>"+response.id+"</a></span>";
-            //            document.getElementById("output").innerHTML = str;
-            //        }
-            //        else
-            //        {
-            //            alert("error: creating short url n"+ response.error);
-            //        }
-            //    });
-            //}
-            function getShortInfo()
-            {
-            var shortUrl=document.getElementById("shorturl").value;
-                var request = gapi.client.urlshortener.url.get({
-                'shortUrl': shortUrl,
-                'projection':'FULL'
-                });
-                request.execute(function(response)
-                {
-                    if(response.longUrl!= null)
+                    //function makeShort()
+                    //{
+                    //var longUrl=document.getElementById("longurl").value;
+                        //    var request = gapi.client.urlshortener.url.insert({
+                        //    'resource': {
+                        //    'longUrl': longUrl
+                        //    }
+                        //    });
+                        //    request.execute(function(response)
+                        //    {
+                            //        if(response.id != null)
+                            //        {
+                                //            //str ="<b>Long URL:</b>"+longUrl+"<br>";
+                                //            str ="<span><b>Short URL:</b> <a href='"+response.id+"' target='_blank'>"+response.id+"</a></span>";
+                                //            document.getElementById("output").innerHTML = str;
+                            //        }
+                            //        else
+                            //        {
+                                //            alert("error: creating short url n"+ response.error);
+                            //        }
+                        //    });
+                    //}
+                    function getShortInfo()
                     {
-                        //str ="<b>Long URL:</b>"+response.longUrl+"<br>";
-                        str ="<span><b>Created On:</b>"+response.created+"<br>";
-                        str +="<b>Short URL Clicks:</b>"+response.analytics.allTime.shortUrlClicks+"</span>";
-                        //str +="<b>Long URL Clicks:</b>"+response.analytics.allTime.longUrlClicks+"<br>";
-                        document.getElementById("output2").innerHTML = str;
+                    var shortUrl=document.getElementById("shorturl").value;
+                        var request = gapi.client.urlshortener.url.get({
+                        'shortUrl': shortUrl,
+                        'projection':'FULL'
+                        });
+                        request.execute(function(response)
+                        {
+                            if(response.longUrl!= null)
+                            {
+                                //str ="<b>Long URL:</b>"+response.longUrl+"<br>";
+                                str ="<span><b>Created On:</b>" +response.created+ "<br>";
+                                str +="<b>Short URL Clicks:</b>" +response.analytics.allTime.shortUrlClicks+ "</span>";
+                                //str +="<b>Long URL Clicks:</b>"+response.analytics.allTime.longUrlClicks+"<br>";
+                                document.getElementById("output2").innerHTML = str;
+                            }
+                            else
+                            {
+                                alert("error: "+response.error);
+                            }
+                        });
                     }
-                    else
+                    function load()
                     {
-                        alert("error: "+response.error);
+                        //Get your own Browser API Key from  https://code.google.com/apis/console/
+                        gapi.client.setApiKey('AIzaSyBq678yjQSVLEdVegaBS--vkgChfe6_w7I');
+                        gapi.client.load('urlshortener', 'v1',function(){document.getElementById("output").innerHTML="";});
                     }
-                });
-            }
-            function load()
-            {
-                //Get your own Browser API Key from  https://code.google.com/apis/console/
-                gapi.client.setApiKey('AIzaSyBq678yjQSVLEdVegaBS--vkgChfe6_w7I');
-                gapi.client.load('urlshortener', 'v1',function(){document.getElementById("output").innerHTML="";});
-            }
-            window.onload = load;
+                    window.onload = load;
         </script>
         <script src="https://apis.google.com/js/client.js"> </script>
         <body>
-           <!-- URL: <input type="text" id="longurl" name="url" placeholder="Insert long url" value="" />
-            <input type="button" value="Create Short" onclick="makeShort();" /> <br> <br>
+            <!-- URL: <input type="text" id="longurl" name="url" placeholder="Insert long url" value="" />
+                        <input type="button" value="Create Short" onclick="makeShort();" /> <br> <br>
             <div id="output"></div>-->
-            
-            URL: <input type="text" id="shorturl" name="url" placeholder="Insert short url" value="" />
-            <input type="button" value="Get Short  URL Info" onclick="getShortInfo();" /><br><br>
+
+            URL: <input type="text" id="shorturl" name="url" placeholder="Enter short URL you wish to track" value="" />
+            <input type="button" value="Track" onclick="getShortInfo();" /><br><br>
             <div id="output2"></div>
         </body>
     </html>
