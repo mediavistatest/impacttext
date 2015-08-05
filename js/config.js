@@ -203,7 +203,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         //    }
         //}
     }).state('lists.segments', {
-        url : "/lists_segments",
+        url : "/lists_segments/:id",
         templateUrl : "views/lists_segments.html",
         data : {
             pageTitle : 'Manage Segments'

@@ -308,10 +308,10 @@ h2.section-title {
 }
 
 .btn-send {
-    color: white;
-    background: #007d32;
-    width: 168px;
-    border: 1px solid #007d32;
+	color: white;
+	background: #007d32;
+	width: 168px;
+	border: 1px solid #007d32;
 }
 
 .right {
@@ -445,104 +445,54 @@ ul.alert.alert-danger {
 
 /****DATETIMEPICKER****/
 
-
 /*
-
 .datetimepicker{padding:4px;margin-top:1px;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;direction:ltr;width:320px}
-
 .datetimepicker.datetimepicker-rtl{direction:rtl}
-
 .datetimepicker.datetimepicker-rtl table tr td span{float:right}
-
 .datetimepicker-dropdown,.datetimepicker-dropdown-left{top:0;left:0}
-
 [class*=" datetimepicker-dropdown"]:before{content:'';display:inline-block;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:7px solid #ccc;border-bottom-color:rgba(0,0,0,0.2);position:absolute}
-
 [class*=" datetimepicker-dropdown"]:after{content:'';display:inline-block;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid #fff;position:absolute}
-
 [class*=" datetimepicker-dropdown-top"]:before{content:'';display:inline-block;border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #ccc;border-top-color:rgba(0,0,0,0.2);border-bottom:0}
-
 [class*=" datetimepicker-dropdown-top"]:after{content:'';display:inline-block;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid #fff;border-bottom:0}
-
 .datetimepicker-dropdown-bottom-left:before{top:-7px;right:6px}
-
 .datetimepicker-dropdown-bottom-left:after{top:-6px;right:7px}
-
 .datetimepicker-dropdown-bottom-right:before{top:-7px;left:6px}
-
 .datetimepicker-dropdown-bottom-right:after{top:-6px;left:7px}
-
 .datetimepicker-dropdown-top-left:before{bottom:-7px;right:6px}
-
 .datetimepicker-dropdown-top-left:after{bottom:-6px;right:7px}
-
 .datetimepicker-dropdown-top-right:before{bottom:-7px;left:6px}
-
 .datetimepicker-dropdown-top-right:after{bottom:-6px;left:7px}
-
 .datetimepicker > div{display:none}
-
 .datetimepicker.minutes div.datetimepicker-minutes{display:block}
-
 .datetimepicker.hours div.datetimepicker-hours{display:block}
-
 .datetimepicker.days div.datetimepicker-days{display:block}
-
 .datetimepicker.months div.datetimepicker-months{display:block}
-
 .datetimepicker.years div.datetimepicker-years{display:block}
-
 .datetimepicker table{margin:0}
-
 .datetimepicker .table td,.datetimepicker .table th{text-align:center;width:14.6%;height:20px;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;border:none}
-
 .datetimepicker .table-striped > tbody > tr:nth-child(odd) > td,.datetimepicker .table-striped > tbody > tr:nth-child(odd) > td,.datetimepicker .table-striped > tbody > tr:nth-child(odd) > td,.datetimepicker .table-striped > tbody > tr:nth-child(odd) > th,.datetimepicker .table-striped > tbody > tr:nth-child(odd){background-color:transparent}
-
 .datetimepicker table tr td.minute:hover{background:#eee;cursor:pointer}
-
 .datetimepicker table tr td.hour:hover{background:#eee;cursor:pointer}
-
 .datetimepicker table tr td.day:hover{background:#eee;cursor:pointer}
-
 .datetimepicker table tr td.past,.datetimepicker table tr td.future{color:#999}
-
 .datetimepicker table tr td.disabled,.datetimepicker table tr td.disabled:hover{background:none;color:#999;cursor:default}
-
 .datetimepicker table tr td.today,.datetimepicker table tr td.today:hover,.datetimepicker table tr td.today.disabled,.datetimepicker table tr td.today.disabled:hover{background-color:#fde19a;background-image:-moz-linear-gradient(top,#fdd49a,#fdf59a);background-image:-ms-linear-gradient(top,#fdd49a,#fdf59a);background-image:-webkit-gradient(linear,0 0,0 100%,from(#fdd49a),to(#fdf59a));background-image:-webkit-linear-gradient(top,#fdd49a,#fdf59a);background-image:-o-linear-gradient(top,#fdd49a,#fdf59a);background-image:linear-gradient(top,#fdd49a,#fdf59a);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a',endColorstr='#fdf59a',GradientType=0);border-color:#fdf59a #fdf59a #fbed50;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);filter:progid:DXImageTransform.Microsoft.gradient(enabled=false)}
-
 .datetimepicker table tr td.today:hover,.datetimepicker table tr td.today:hover:hover,.datetimepicker table tr td.today.disabled:hover,.datetimepicker table tr td.today.disabled:hover:hover,.datetimepicker table tr td.today:active,.datetimepicker table tr td.today:hover:active,.datetimepicker table tr td.today.disabled:active,.datetimepicker table tr td.today.disabled:hover:active,.datetimepicker table tr td.today.active,.datetimepicker table tr td.today:hover.active,.datetimepicker table tr td.today.disabled.active,.datetimepicker table tr td.today.disabled:hover.active,.datetimepicker table tr td.today.disabled,.datetimepicker table tr td.today:hover.disabled,.datetimepicker table tr td.today.disabled.disabled,.datetimepicker table tr td.today.disabled:hover.disabled,.datetimepicker table tr td.today[disabled],.datetimepicker table tr td.today:hover[disabled],.datetimepicker table tr td.today.disabled[disabled],.datetimepicker table tr td.today.disabled:hover[disabled]{background-color:#fdf59a}
-
 .datetimepicker table tr td.today:active,.datetimepicker table tr td.today:hover:active,.datetimepicker table tr td.today.disabled:active,.datetimepicker table tr td.today.disabled:hover:active,.datetimepicker table tr td.today.active,.datetimepicker table tr td.today:hover.active,.datetimepicker table tr td.today.disabled.active,.datetimepicker table tr td.today.disabled:hover.active{background-color:#fbf069 \9}
-
 .datetimepicker table tr td.active,.datetimepicker table tr td.active:hover,.datetimepicker table tr td.active.disabled,.datetimepicker table tr td.active.disabled:hover{background-color:#006dcc;background-image:-moz-linear-gradient(top,#08c,#04c);background-image:-ms-linear-gradient(top,#08c,#04c);background-image:-webkit-gradient(linear,0 0,0 100%,from(#08c),to(#04c));background-image:-webkit-linear-gradient(top,#08c,#04c);background-image:-o-linear-gradient(top,#08c,#04c);background-image:linear-gradient(top,#08c,#04c);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc',endColorstr='#0044cc',GradientType=0);border-color:#04c #04c #002a80;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);filter:progid:DXImageTransform.Microsoft.gradient(enabled=false);color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.25)}
-
 .datetimepicker table tr td.active:hover,.datetimepicker table tr td.active:hover:hover,.datetimepicker table tr td.active.disabled:hover,.datetimepicker table tr td.active.disabled:hover:hover,.datetimepicker table tr td.active:active,.datetimepicker table tr td.active:hover:active,.datetimepicker table tr td.active.disabled:active,.datetimepicker table tr td.active.disabled:hover:active,.datetimepicker table tr td.active.active,.datetimepicker table tr td.active:hover.active,.datetimepicker table tr td.active.disabled.active,.datetimepicker table tr td.active.disabled:hover.active,.datetimepicker table tr td.active.disabled,.datetimepicker table tr td.active:hover.disabled,.datetimepicker table tr td.active.disabled.disabled,.datetimepicker table tr td.active.disabled:hover.disabled,.datetimepicker table tr td.active[disabled],.datetimepicker table tr td.active:hover[disabled],.datetimepicker table tr td.active.disabled[disabled],.datetimepicker table tr td.active.disabled:hover[disabled]{background-color:#04c}
-
 .datetimepicker table tr td.active:active,.datetimepicker table tr td.active:hover:active,.datetimepicker table tr td.active.disabled:active,.datetimepicker table tr td.active.disabled:hover:active,.datetimepicker table tr td.active.active,.datetimepicker table tr td.active:hover.active,.datetimepicker table tr td.active.disabled.active,.datetimepicker table tr td.active.disabled:hover.active{background-color:#039 \9}
-
 .datetimepicker table tr td span{display:block;width:23%;height:54px;line-height:54px;float:left;margin:1%;cursor:pointer;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}
-
 .datetimepicker span.hour{height:26px;line-height:26px}
-
 .datetimepicker span.minute{height:26px;line-height:26px}
-
 .datetimepicker table tr td span:hover{background:#eee}
-
 .datetimepicker table tr td span.disabled,.datetimepicker table tr td span.disabled:hover{background:none;color:#999;cursor:default}
-
 .datetimepicker table tr td span.active,.datetimepicker table tr td span.active:hover,.datetimepicker table tr td span.active.disabled,.datetimepicker table tr td span.active.disabled:hover{background-color:#006dcc;background-image:-moz-linear-gradient(top,#08c,#04c);background-image:-ms-linear-gradient(top,#08c,#04c);background-image:-webkit-gradient(linear,0 0,0 100%,from(#08c),to(#04c));background-image:-webkit-linear-gradient(top,#08c,#04c);background-image:-o-linear-gradient(top,#08c,#04c);background-image:linear-gradient(top,#08c,#04c);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc',endColorstr='#0044cc',GradientType=0);border-color:#04c #04c #002a80;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);filter:progid:DXImageTransform.Microsoft.gradient(enabled=false);color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.25)}
-
 .datetimepicker table tr td span.active:hover,.datetimepicker table tr td span.active:hover:hover,.datetimepicker table tr td span.active.disabled:hover,.datetimepicker table tr td span.active.disabled:hover:hover,.datetimepicker table tr td span.active:active,.datetimepicker table tr td span.active:hover:active,.datetimepicker table tr td span.active.disabled:active,.datetimepicker table tr td span.active.disabled:hover:active,.datetimepicker table tr td span.active.active,.datetimepicker table tr td span.active:hover.active,.datetimepicker table tr td span.active.disabled.active,.datetimepicker table tr td span.active.disabled:hover.active,.datetimepicker table tr td span.active.disabled,.datetimepicker table tr td span.active:hover.disabled,.datetimepicker table tr td span.active.disabled.disabled,.datetimepicker table tr td span.active.disabled:hover.disabled,.datetimepicker table tr td span.active[disabled],.datetimepicker table tr td span.active:hover[disabled],.datetimepicker table tr td span.active.disabled[disabled],.datetimepicker table tr td span.active.disabled:hover[disabled]{background-color:#04c}
-
 .datetimepicker table tr td span.active:active,.datetimepicker table tr td span.active:hover:active,.datetimepicker table tr td span.active.disabled:active,.datetimepicker table tr td span.active.disabled:hover:active,.datetimepicker table tr td span.active.active,.datetimepicker table tr td span.active:hover.active,.datetimepicker table tr td span.active.disabled.active,.datetimepicker table tr td span.active.disabled:hover.active{background-color:#039 \9}
-
 .datetimepicker table tr td span.past,.datetimepicker table tr td span.future{color:#999}
-
 .datetimepicker thead tr:first-child th,.datetimepicker tfoot tr:first-child th{cursor:pointer}
-
 .datetimepicker thead tr:first-child th:hover,.datetimepicker tfoot tr:first-child th:hover{background:#eee}
-
-
 
 END DATETIME******/
 
@@ -861,7 +811,7 @@ button: disabled .ngPagerFirstTriangle {
 .top-buttons {
     text-align: right;
     margin-bottom: 20px;
-    margin-top: -70px;
+    margin-top: -50px;
 }
 
 .manage-list .top-buttons {
@@ -1097,10 +1047,9 @@ span.A {
     width: 110px;
     border: none;
 }
-
 .btn-send.smaller.delete {
-    background: #A00700;
-    margin-left: 5px;
+	background: #A00700;
+	margin-left: 5px;
 }
 
 .form-control, .single-line {
@@ -1388,7 +1337,7 @@ button.btn.btn-search:focus {
     color: #005eaa;
 }
 
-.manage-list .itTopPager {
+.manage-list .itTopPager, .segments-list .itTopPager {
     background-color: #FFF;
     padding: 0px;
     border-top: medium none;
@@ -1408,7 +1357,7 @@ button.btn.btn-search:focus {
     margin-right: 10px !important;
 }
 
-.manage-list .page-select-wrapper {
+.manage-list .page-select-wrapper, .segments-list .page-select-wrapper {
     position: absolute;
     top: 0;
     right: 30px;
@@ -1715,7 +1664,7 @@ i.fa.fa-info-circle {
     left: -5px;
     top: 10px;
     color: lightgrey;
-    cursor: help;
+	 cursor: help;
 }
 
 i.fa.fa-caret-down {
@@ -1766,13 +1715,13 @@ i.fa.fa-caret-down {
     position: relative;
 }
 
-.manage-list .page-select-wrapper {
+.manage-list .page-select-wrapper, .segments-list .page-select-wrapper {
     position: absolute;
     right: 0;
     top: -40px;
 }
 
-.manage-list .itTopPager {
+.manage-list .itTopPager, .segments-list .itTopPager {
     background-color: #FFF;
     padding: 0px;
     border-top: medium none;
@@ -1791,8 +1740,8 @@ i.fa.fa-caret-down {
 }
 
 .manage-list.list-search .top-buttons {
-    margin-bottom: 18px;
-    margin-top: -68px;
+	margin-bottom: 18px;
+	margin-top: -68px;
 }
 
 .manage-list-txt {
@@ -1844,21 +1793,13 @@ i.fa.fa-caret-down {
 
 
 /*.iphone-prev.ng-binding {
-
   position: absolute;
-
   width: 150px;
-
   height: 300px;
-
   background: whitesmoke;
-
   top: -500px;
-
   right: -300px;
-
   padding: 10px;
-
 }*/
 
 .iphone-prev {
@@ -2361,69 +2302,129 @@ ul.bar-legend {
 }
 
 .plan-desc {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: whitesmoke;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: whitesmoke;
 }
 
 .plan-desc ul {
-    padding-left: 0;
-    list-style: none;
+  padding-left: 0;
+  list-style: none;
 }
 
 .plan-desc ul li {
-    margin-bottom: 10px;
+  margin-bottom:10px;
 }
 
 .plan-desc .small {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .change-plan .blue {
-    background: none;
-    color: #005eaa;
+  background: none;
+  color: #005eaa;
 }
 
 .change-plan-btn {
-    position: absolute;
-    top: 7px;
-    right: 10px;
-    padding: 2px 7px;
-    background-color: #015598;
+  position: absolute;
+  top: 7px;
+  right: 10px;
+  padding: 2px 7px;
+  background-color: #015598;
 }
 
-.add-list-contact.segment .control-label {
-    min-width: 150px;
+.add-list-contact.segment .chosen-wrapper, .add-list-contact.segment .form-control {
+	display: inline-block;
+	width: 100%;
+	max-width: 607px;
 }
 
-.add-list-contact.segment .chosen-wrapper {
-    display: inline-block;
-    width: 100%;
-    max-width: 350px;
-}
-
-.add-list-contact.segment .form-control.inline.comparator {
-    width: 100px;
-    margin-right: 5px;
-}
-
-.add-list-contact.segment .form-control.inline {
-    max-width: 350px;
-}
-
-.add-list-contact.segment .form-control.inline.with-comparator {
-    width: 240px;
+.add-list-contact.segment .control-label, .segment-filters .segment-filter .operator {
+	width: 140px !important;
 }
 
 .add-list-contact.segment i.fa.fa-info-circle {
-    position: relative;
-    left: auto;
-    top: auto;
+	position: relative;
+	left: auto;
+	top: auto;
 }
+.add-list-contact.segment .ng-touched.ng-invalid {
+	border-color: #D3D3D3;
+	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+.add-list-contact.segment .ng-touched.ng-invalid:focus {
+	border-color: #d6ebf9;
+	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+.add-list-contact.segment .input-wrapper {
+	width: 100%;
+	max-width: 607px;
+	display: inline-block;
+	position: relative;
+}
+.add-list-contact.segment .input-wrapper.modify-pending {
+	position: relative;
+}
+.add-list-contact.segment .input-help {
+	font-size: 24px;
+	margin-left: 5px;
+	color: #d3d3d3;
+	vertical-align: middle;
+}
+.add-list-contact.segment .input-help:hover {
+	color: #2F4050;
+}
+.add-list-contact.segment small.error {
+	position: absolute;
+	bottom: -15px;
+	left: 0;
+	display: block;
+	font-size: 10px;
+}
+/*.add-list-contact.segment .input-error {
+	border-color: #D28080 !important;
+	background-color: #ffdfe3;
+	transition: border-color 0.15s ease-in-out 0s, background-color 0.15s ease-in-out 0s;
+}
+.add-list-contact.segment .input-error:focus {
+	border-color: #D28080;
+	background-color: transparent;
+}*/
+
 
 #segment-list-grid .ngHeaderText.ng-binding.colt0, #segment-list-grid .ngCellText.ng-scope.col0.colt0 {
-    text-align: left;
+	text-align: left;
 }
+
+.segment-filters { position: relative; }
+.segment-filters .segment-filter { margin-bottom: 5px; }
+.segment-filters .segment-filter label { margin-bottom: 0; }
+.segment-filters .segment-filter .operator,
+.segment-filters .segment-filter .field,
+.segment-filters .segment-filter .comparator,
+.segment-filters .segment-filter .value { vertical-align: middle; }
+.segment-filters .segment-filter .field, .segment-filters .segment-filter .value { max-width: 250px !important; }
+.segment-filters .segment-filter .comparator { max-width: 100px !important; }
+.segment-filters .add-filter { display: inline-block; font-size: 14px; margin: 10px 0 20px; }
+.segment-filters .remove-filter, .add-list-contact.segment .input-reset-btn { font-size: 24px; margin-left: 5px; color: #666; vertical-align: middle; }
+.segment-filters .remove-filter:hover, .add-list-contact.segment .input-reset-btn:hover { color: #a94442; }
+.add-list-contact.segment .segment-filters small.error { bottom: 5px; }
+
+.segments-list .gridStyle { clear: both; }
+.segments-list .ngCellText.col0, .segments-list .ngCellText.col0 a {
+	color: black;
+	font-weight: 700;
+	text-align: left;
+	float: none;
+	clear: both;
+	font-size: 13px;
+}
+
+.table-filter-toolbar .chosen-wrapper { float: left; margin-right: 5px; width: 100%; max-width: 200px; }
+.table-filter-toolbar .search-input { height: 34px; float: left; margin-bottom: 0; }
+.segments-list .page-select-wrapper { top: -30px; }
+.segments-list .itTopPager { top: -8px; }
+.segments-list .manage-list-txt { margin-bottom: 40px; }
 
 
 /*MEDIA QUERIES*/
