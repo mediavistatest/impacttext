@@ -1111,7 +1111,15 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
             fill : ["#1ab394", "#d7d7d7"]
         }
     };
-};
+
+	$scope.$watch('main.contactLists', function(newValue){
+		if(typeof newValue != 'undefined'){
+			$scope.main.contactListsFilter = $.extend([], $scope.main.contactLists);
+			$scope.main.contactListsFilter.unshift({contactListID: '0', contactListName: 'All contact lists'});
+			//$scope.main.contactListsFilter = $.extend({}, $scope.main.contactListsFilter);
+		}
+	}, true);
+}
 /**
  * dashboardFlotOne - simple controller for data
  * for Flot chart in Dashboard view
@@ -3509,6 +3517,7 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 			};
 			if ($state.params.id && $state.params.id != '') {
 				request['contactListID'] = $state.params.id;
+				$scope.ContactListFilter = {"contactListID": $state.params.id};
 			}
 			if(!empty(searchText)){
 				request.contactSelectionName = searchText;
@@ -3537,6 +3546,7 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 			};
 			if ($state.params.id && $state.params.id != '') {
 				params['contactListID'] = $state.params.id;
+				$scope.ContactListFilter = {"contactListID": $state.params.id};
 			}
 
 			$http.post(inspiniaNS.wsUrl + "contactselection_get", $.param(params)).success(function(data) {
@@ -3570,6 +3580,17 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 			$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
 		}
 	}, true);
+	$scope.$watch('ContactListFilter.contactListID', function(newValue, oldValue){
+		if(typeof newValue != 'undefined'){
+			if(newValue != oldValue){
+				if(newValue == 0){
+					$state.go('lists.segments', {id: ''});
+				}else{
+					$state.go('lists.segments', {id: newValue});
+				}
+			}
+		}
+	});
 
 	//TABLE OPTIONS
 	$scope.ngOptions = {

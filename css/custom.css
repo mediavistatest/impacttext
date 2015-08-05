@@ -2420,6 +2420,12 @@ ul.bar-legend {
 	font-size: 13px;
 }
 
+.table-filter-toolbar .chosen-wrapper { float: left; margin-right: 5px; width: 100%; max-width: 200px; }
+.table-filter-toolbar .search-input { height: 34px; float: left; margin-bottom: 0; }
+.segments-list .page-select-wrapper { top: -30px; }
+.segments-list .itTopPager { top: -8px; }
+.segments-list .manage-list-txt { margin-bottom: 40px; }
+
 
 /*MEDIA QUERIES*/
 

@@ -16,15 +16,21 @@
 		</div>
 	</div>
 
+	<div class="table-filter-toolbar clearfix">
+		<div class="input-wrapper chosen-wrapper">
+			<select chosen name="ContactListFilter" data-placeholder="All contact lists" class="chosen-select form-control" ng-model="ContactListFilter"
+					  ng-options="contactList.contactListName for contactList in main.contactListsFilter track by contactList.contactListID" lazy-load-options data-options="contactLists">
+			</select>
+		</div>
+
+		<input class="search-input" placeholder="Search by segment name" type="text" ng-model="filterOptions.filterText">
+	</div>
 	<div class="table-holder">
 		<div class="page-select-wrapper">
 			<strong>Show:</strong>&nbsp; <select class="page-select" ng-model="pagingOptions.pageSize">
 				<option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
 			</select>
 		</div>
-		<!--<div>
-			<input class="search-input" placeholder="Search by segment name" type="text" ng-model="filterOptions.filterText">
-		</div>-->
 
 		<br /><br />
 		<!--START TABLE-->

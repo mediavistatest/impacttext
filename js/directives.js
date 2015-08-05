@@ -302,6 +302,15 @@ function updateChosen($timeout) {
 
        }, true);
 
+		 $scope.$watch('main.contactListsFilter', function() {
+			 $timeout(function() {
+
+				 element.trigger('chosen:updated');
+
+			 }, 0, false);
+
+		 }, true);
+
        $scope.$watch('fromNumbers', function() {
 
            $timeout(function() {
