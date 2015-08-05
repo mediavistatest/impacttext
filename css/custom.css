@@ -1337,7 +1337,7 @@ button.btn.btn-search:focus {
     color: #005eaa;
 }
 
-.manage-list .itTopPager {
+.manage-list .itTopPager, .segments-list .itTopPager {
     background-color: #FFF;
     padding: 0px;
     border-top: medium none;
@@ -1357,7 +1357,7 @@ button.btn.btn-search:focus {
     margin-right: 10px !important;
 }
 
-.manage-list .page-select-wrapper {
+.manage-list .page-select-wrapper, .segments-list .page-select-wrapper {
     position: absolute;
     top: 0;
     right: 30px;
@@ -1715,13 +1715,13 @@ i.fa.fa-caret-down {
     position: relative;
 }
 
-.manage-list .page-select-wrapper {
+.manage-list .page-select-wrapper, .segments-list .page-select-wrapper {
     position: absolute;
     right: 0;
     top: -40px;
 }
 
-.manage-list .itTopPager {
+.manage-list .itTopPager, .segments-list .itTopPager {
     background-color: #FFF;
     padding: 0px;
     border-top: medium none;
@@ -2333,28 +2333,14 @@ ul.bar-legend {
   background-color: #015598;
 }
 
-
-.add-list-contact.segment .control-label {
-	min-width: 150px;
-}
-
-.add-list-contact.segment .chosen-wrapper {
+.add-list-contact.segment .chosen-wrapper, .add-list-contact.segment .form-control {
 	display: inline-block;
 	width: 100%;
-	max-width: 350px;
+	max-width: 607px;
 }
 
-.add-list-contact.segment .form-control.inline.comparator {
-	width: 100px;
-	margin-right: 5px;
-}
-
-.add-list-contact.segment .form-control.inline {
-	max-width: 350px;
-}
-
-.add-list-contact.segment .form-control.inline.with-comparator {
-	width: 240px;
+.add-list-contact.segment .control-label, .segment-filters .segment-filter .operator {
+	width: 140px !important;
 }
 
 .add-list-contact.segment i.fa.fa-info-circle {
@@ -2362,11 +2348,78 @@ ul.bar-legend {
 	left: auto;
 	top: auto;
 }
+.add-list-contact.segment .ng-touched.ng-invalid {
+	border-color: #D3D3D3;
+	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+.add-list-contact.segment .ng-touched.ng-invalid:focus {
+	border-color: #d6ebf9;
+	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+.add-list-contact.segment .input-wrapper {
+	width: 100%;
+	max-width: 607px;
+	display: inline-block;
+	position: relative;
+}
+.add-list-contact.segment .input-wrapper.modify-pending {
+	position: relative;
+}
+.add-list-contact.segment .input-help {
+	font-size: 24px;
+	margin-left: 5px;
+	color: #d3d3d3;
+	vertical-align: middle;
+}
+.add-list-contact.segment .input-help:hover {
+	color: #2F4050;
+}
+.add-list-contact.segment small.error {
+	position: absolute;
+	bottom: -15px;
+	left: 0;
+	display: block;
+	font-size: 10px;
+}
+/*.add-list-contact.segment .input-error {
+	border-color: #D28080 !important;
+	background-color: #ffdfe3;
+	transition: border-color 0.15s ease-in-out 0s, background-color 0.15s ease-in-out 0s;
+}
+.add-list-contact.segment .input-error:focus {
+	border-color: #D28080;
+	background-color: transparent;
+}*/
 
 
 #segment-list-grid .ngHeaderText.ng-binding.colt0, #segment-list-grid .ngCellText.ng-scope.col0.colt0 {
 	text-align: left;
 }
+
+.segment-filters { position: relative; }
+.segment-filters .segment-filter { margin-bottom: 5px; }
+.segment-filters .segment-filter label { margin-bottom: 0; }
+.segment-filters .segment-filter .operator,
+.segment-filters .segment-filter .field,
+.segment-filters .segment-filter .comparator,
+.segment-filters .segment-filter .value { vertical-align: middle; }
+.segment-filters .segment-filter .field, .segment-filters .segment-filter .value { max-width: 250px !important; }
+.segment-filters .segment-filter .comparator { max-width: 100px !important; }
+.segment-filters .add-filter { display: inline-block; font-size: 14px; margin: 10px 0 20px; }
+.segment-filters .remove-filter, .add-list-contact.segment .input-reset-btn { font-size: 24px; margin-left: 5px; color: #666; vertical-align: middle; }
+.segment-filters .remove-filter:hover, .add-list-contact.segment .input-reset-btn:hover { color: #a94442; }
+.add-list-contact.segment .segment-filters small.error { bottom: 5px; }
+
+.segments-list .gridStyle { clear: both; }
+.segments-list .ngCellText.col0, .segments-list .ngCellText.col0 a {
+	color: black;
+	font-weight: 700;
+	text-align: left;
+	float: none;
+	clear: both;
+	font-size: 13px;
+}
+
 
 /*MEDIA QUERIES*/
 

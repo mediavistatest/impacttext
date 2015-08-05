@@ -1,5 +1,5 @@
 <h1>Lists</h1>
-<div class="col-md-12 content-holder animated fadeInRight" ng-class="animation" ng-controller="ngSegmentListCtrl">
+<div class="col-md-12 content-holder animated fadeInRight segments-list" ng-class="animation" ng-controller="ngSegmentListCtrl">
 	<h2 class="section-title">Manage segments</h2>
 	<div class="top-buttons">
 		<a href="#/lists/lists_add_segment" class="btn btn-add"><i class="fa fa-plus"></i> Create segment</a>
@@ -14,17 +14,19 @@
 		</p>
 	</div>
 
-	<div class="clearfix">
-		<!--input class="search-input" placeholder="Search by segment name" type="text" ng-model="filterOptions.filterText"-->
+	<div class="table-holder">
 		<div class="page-select-wrapper">
 			<strong>Show:</strong>&nbsp; <select class="page-select" ng-model="pagingOptions.pageSize">
 				<option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
 			</select>
 		</div>
-	</div>
-	<br>
-	<!--START TABLE-->
-	<div id="segment-list-grid" class="gridStyle" ng-grid="ngOptions"></div>
+		<!--<div>
+			<input class="search-input" placeholder="Search by segment name" type="text" ng-model="filterOptions.filterText">
+		</div>-->
 
+		<br /><br />
+		<!--START TABLE-->
+		<div id="segment-list-grid" class="gridStyle" ng-grid="ngOptions"></div>
+	</div>
 
 </div>

@@ -63,7 +63,7 @@ function generateOrderByField(sortFields, sortOrders) {
  * Contains severals global data used in diferent view
  *
  */
-function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
+function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
     var main = this;
     mainObject = this;
     //main.notify = notify;
@@ -143,7 +143,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 }
             });
         },
-        contactListsGet : function() {
+        contactListsGet : function(callback) {
             //Read the data from the remote server. First read the contact lists.
             $http.post(inspiniaNS.wsUrl + "contactlist_get", $.param({
                 sethttp : 1,
@@ -157,6 +157,11 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 if (data == null || typeof data.apicode == 'undefined') {
                     //This should never happen
                     main.contactLists = [];
+
+						  if(typeof callback == 'function'){
+							  callback(main.contactLists);
+						  }
+
                     return;
                 }
                 if (data.apicode == 0) {
@@ -165,6 +170,10 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
                 } else {
                     main.contactLists = [];
                 }
+
+					 if(typeof callback == 'function'){
+						 callback(main.contactLists);
+					 }
             }).error(
             //An error occurred with this request
             function(data, status, headers, config) {
@@ -583,13 +592,13 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 				  function (data, status, headers, config) {
 					  if (data == null || typeof data.apicode == 'undefined') {
 						  alert("Unidentified error occurred when trying to load the segment!");
-						  window.location.href = '/#/lists/lists_segments';
+						  $state.go('lists.segments');
 						  return;
 					  }
 					  if (data.apicode == 0) {
 						  if(data.apidata == "" || data.apidata.length == 0){
 							  alert("Unidentified error occurred when trying to load the segment!");
-							  window.location.href = '/#/lists/lists_segments';
+							  $state.go('lists.segments');
 							  return;
 						  }
 
@@ -598,12 +607,12 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie) {
 						  }
 					  } else {
 						  alert("An error occurred when loading the segment! Error code: " + data.apicode);
-						  window.location.href = '/#/lists/lists_segments';
+						  $state.go('lists.segments');
 					  }
 			  }).error(
 				  function (data, status, headers, config) {
 					  alert("An error occurred when loading the segment! Error code: " + data.apicode);
-					  window.location.href = '/#/lists/lists_segments';
+					  $state.go('lists.segments');
 				  }
 			  );
 		  },
@@ -3573,12 +3582,14 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 		enablePaging : true,
 		showFooter : true,
 		totalServerItems : 'totalServerItems',
+		footerTemplate : 'views/table/footerTemplate.html',
 		pagingOptions : $scope.pagingOptions,
 		filterOptions : $scope.filterOptions,
 		primaryKey : 'contactSelectionID',
 		columnDefs : [{
 			field : 'contactSelectionName',
-			displayName : 'Name'
+			displayName : 'Name',
+			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})">{{row.entity.contactSelectionName}}</a></div>'
 		}, {
 			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})"><i class="fa fa-pencil"></i> Edit Segment </a></div>',
 			width: 150
@@ -3611,82 +3622,76 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 	};
 
 	$scope.refresh();
-
-	// EXPORT?
-	// TODO
 }
 
-function appendSingleContactFilter(contactFilter, logicalOperator, filterName, comparator, value) {
-	if (!empty(value) && !empty(comparator) && !empty(filterName)) {
-		if (!empty(contactFilter)) {
-			logicalOperator = empty(logicalOperator) ? " and " : " " + $.trim(logicalOperator) + " ";
-			contactFilter += logicalOperator;
-		}
-		contactFilter += filterName + comparator + "{" + value + "}";
-	}
-	return contactFilter;
-}
-
-function generateContactFilter(scope) {
-	var contactFilter = '';
-	contactFilter = appendSingleContactFilter(contactFilter, "and", "ani", scope.PhoneNumberComparator, scope.PhoneNumber);
-	contactFilter = appendSingleContactFilter(contactFilter, "and", "firstname", scope.FirstNameComparator, scope.FirstName);
-	contactFilter = appendSingleContactFilter(contactFilter, "and", "lastname", scope.LastNameComparator, scope.LastName);
-	contactFilter = appendSingleContactFilter(contactFilter, "and", "emailaddress", scope.EmailComparator, scope.Email);
-	contactFilter = appendSingleContactFilter(contactFilter, "and", "contactsource", scope.ContactSourceComparator, scope.ContactSource);
-	contactFilter = appendSingleContactFilter(contactFilter, "and", "custom1", scope.CustomField1Comparator, scope.CustomField1);
-	contactFilter = appendSingleContactFilter(contactFilter, "and", "custom2", scope.CustomField2Comparator, scope.CustomField2);
-	contactFilter = appendSingleContactFilter(contactFilter, "and", "custom3", scope.CustomField3Comparator, scope.CustomField3);
-	contactFilter = appendSingleContactFilter(contactFilter, "and", "custom4", scope.CustomField4Comparator, scope.CustomField4);
-	contactFilter = appendSingleContactFilter(contactFilter, "and", "custom5", scope.CustomField5Comparator, scope.CustomField5);
-	contactFilter = appendSingleContactFilter(contactFilter, "and", "language", scope.LanguageComparator, scope.Language);
-	return contactFilter;
-}
-
-function parseContactFilter(scope, data) {
+function parseContactFilter(data) {
+	var segmentFilters = [];
+	var contactFilters = [];
 	if(!empty(data)){
 		var contactFilterText = data.contactFilter;
-		scope.SegmentName = data.contactSelectionName;
-		scope.ContactList = {"contactListID": data.contactListID};
-
 		if(!empty(contactFilterText)){
-			var contactFilterArray = contactFilterText.split(' and '); // TODO: add or!!!
-			for(var i in contactFilterArray){
-				var contactFilterItem = contactFilterArray[i];
-				var regex_string = '^(.*)(' + scope.availableComparators.join('|') + ')\{(.*)\}$';
-				var re = new RegExp(regex_string, 'i');
-				var match = contactFilterItem.match(re);
-				if(match.length == 4){
-					scope[scope.fields[match[1]] + 'Comparator'] = match[2];
-					scope[scope.fields[match[1]]] = match[3];
+			contactFilters =  contactFilterText.match(/(.*?)(\W+?)\{(.*?)\}/g);
+			if(!empty(contactFilters)){
+				for (var i = 0; i < contactFilters.length; i++){
+					contactFilters[i] = contactFilters[i].trim();
 				}
 			}
-		}else{
-			scope.reset();
 		}
-	}else{
-		scope.reset();
 	}
+
+	if(!empty(contactFilters) && contactFilters.length > 0){
+		for(var i in contactFilters){
+			var contactFilter = contactFilters[i];
+			var operator = '';
+			if(contactFilter.indexOf('and ') === 0){
+				operator = 'and';
+				contactFilter = contactFilter.replace('and ', '');
+			}else if(contactFilter.indexOf('or ') === 0){
+				operator = 'or';
+				contactFilter.replace('');
+				contactFilter = contactFilter.replace('or ', '');
+			}
+
+			if(contactFilter != ''){
+				var match = contactFilter.match(/^(\w+)(.*)(?=\{)\{(.*)}$/i);
+				var newSegment = {};
+				if(match.length == 4){
+					newSegment = {field: match[1], comparator: match[2], value: match[3]};
+				}
+
+				if(operator != ''){
+					newSegment.operator = operator;
+				}
+
+				segmentFilters.push(newSegment);
+			}
+		}
+	}
+
+	return segmentFilters;
 }
 
 
-function EditSegmentCtrl($scope, $http, $cookieStore, $window, $state) {
+function EditSegmentCtrl($scope, $cookieStore, $window, $state) {
+	$window.scrollTo(0,0);
+
+	$scope.ContactFilter = "";
 	$scope.disableFields = true;
-	$scope.fields = {
-		ani: "PhoneNumber",
-		firstname: "FirstName",
-		lastname: "LastName",
-		emailaddress: "Email",
-		contactsource: "ContactSource",
-		custom1: "CustomField1",
-		custom2: "CustomField2",
-		custom3: "CustomField3",
-		custom4: "CustomField4",
-		custom5: "CustomField5",
+	$scope.availableComparators = ['- - -', '=', '<', '>', '<=', '>=', '<>'];
+	$scope.availableFields = {
+		ani: "Phone number",
+		firstname: "First name",
+		lastname: "Last name",
+		emailaddress: "Email address",
+		contactsource: "Source",
+		custom1: "Custom field 1",
+		custom2: "Custom field 2",
+		custom3: "Custom field 3",
+		custom4: "Custom field 4",
+		custom5: "Custom field 5",
 		language: "Language"
 	};
-
-	$scope.availableComparators = ['=', '<', '>', '<=', '>='];
+	$scope.availableFieldsKeys = Object.keys($scope.availableFields);
 
 	$scope.main.contactSegmentID = $state.params.id;
 
@@ -3694,98 +3699,127 @@ function EditSegmentCtrl($scope, $http, $cookieStore, $window, $state) {
 	$scope.originalContactListID = '';
 	$scope.originalContactFilterText = '';
 
-	$scope.main.ServerRequests.contactListsGet();
+	$scope.removeFilter = function(index){
+		if($scope.segmentFilters){
+			if($scope.segmentFilters.length == 1){
+				$scope.segmentFilters = [{field: '- - -', comparator: '- - -', value: ''}];
+			}else if($scope.segmentFilters.length > 1){
+				if(index == 0){
+					$scope.segmentFilters.shift();
+				}else{
+					$scope.segmentFilters.splice(index, 1);
+				}
+				delete $scope.segmentFilters[0].operator;
+			}
+		}
+	};
+
+	$scope.addFilter = function(){
+		$scope.segmentFilters.push({operator: 'and', field: '- - -', comparator: '- - -', value: ''});
+	};
+
 	var i = setInterval(function(){
-		if(typeof $scope.main.contactLists !== 'undefined'){
+		if($scope.main.accountInfo.companyID){
 			clearInterval(i);
 
-			// Get segment data
-			$scope.main.ServerRequests.getSegment({
+			$scope.main.ServerRequests.contactListsGet(function(){
+				// Get segment data
+				$scope.main.ServerRequests.getSegment({
+					sethttp: 1,
+					apikey: $cookieStore.get('inspinia_auth_token'),
+					accountID: $cookieStore.get('inspinia_account_id'),
+					companyID: $cookieStore.get('inspinia_company_id'),
+					contactSelectionID: $scope.main.contactSegmentID
+				}, function(data){
+					$scope.SegmentName = data.contactSelectionName;
+					$scope.ContactList = {"contactListID": data.contactListID};
+					$scope.segmentFilters = parseContactFilter(data);
+
+					$scope.originalSegmentName = data.contactSelectionName;
+					$scope.originalContactListID = data.contactListID;
+					$scope.originalContactFilterText = data.contactFilter;
+					$scope.disableFields = false;
+				});
+
+				$scope.disableFields = false;
+			});
+		}
+	}, 100);
+
+	$scope.$watch('segmentFilters', function(newValue){
+		$scope.ContactFilter = "";
+		if(typeof newValue != 'undefined' && newValue && newValue.length > 0){
+			var correct_count = 0;
+			for(var i in newValue){
+				var segmentFilter = newValue[i];
+				if(!empty(segmentFilter.field) && segmentFilter.field != '- - -'
+					&& !empty(segmentFilter.comparator) && segmentFilter.comparator != '- - -')
+				{
+					correct_count++;
+					if(correct_count > 1 && segmentFilter.operator){
+						$scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
+					}
+					$scope.ContactFilter += $.trim(segmentFilter.field) + $.trim(segmentFilter.comparator) + "{" + $.trim(segmentFilter.value) + "}";
+				}
+			}
+		}
+		$scope.ContactFilter = $.trim($scope.ContactFilter);
+	}, true);
+
+	$scope.resetContactListID = function(){
+		$scope.ContactList = {contactListID: "0"};
+		$('select[name="ContactList"]').val('').trigger('chosen:updated');
+	};
+
+	$scope.saveSegment = function() {
+		$scope.save_segment_form.$setSubmitted();
+
+		if($scope.save_segment_form.$valid){
+			//Checking input parameters
+			if (empty($scope.SegmentName)) {
+				//Segment name is mandatory
+				return;
+			}
+			if(empty($scope.ContactFilter)){
+				// If there are no filters
+				return;
+			}
+
+			var params = {
 				sethttp: 1,
 				apikey: $cookieStore.get('inspinia_auth_token'),
 				accountID: $cookieStore.get('inspinia_account_id'),
 				companyID: $cookieStore.get('inspinia_company_id'),
-				contactSelectionID: $scope.main.contactSegmentID
-			}, function(data){
-				/*data = {
-					contactfilter: 'ani={112156456456} and firstname>{asdjk}',
-					contactselectionname: 'Test segment 22',
-					contactlistid: '84'
-				};*/
+				contactSelectionID: $scope.main.contactSegmentID,
+				modifyPending: $scope.ModifyPending
+			};
 
-				parseContactFilter($scope, data);
-				$scope.originalContactFilterText = generateContactFilter($scope);
-				$scope.originalSegmentName = data.contactselectionname;
-				$scope.originalContactListID = data.contactlistid;
-				$scope.disableFields = false;
+			if($scope.originalSegmentName != $scope.SegmentName){
+				params['contactSelectionName'] = $scope.SegmentName;
+			}
+
+			params['contactListID'] = $scope.ContactList.contactListID;
+
+			if($scope.originalContactFilterText != $scope.ContactFilter){
+				params['contactFilter'] = $scope.ContactFilter;
+			}
+
+			// Set contactListID to 0 if contactList is not selected. If ContactListID=0 a global account-level contact search is conducted.
+			params['contactListID'] = (!empty($scope.ContactList)) ? $scope.ContactList.contactListID : "0";
+
+			$scope.main.ServerRequests.saveSegment(params, $scope, function(data){
+				$scope.originalSegmentName = $scope.SegmentName;
+				$scope.originalContactListID = $scope.ContactList.contactListID;
+				$scope.originalContactFilterText = $scope.ContactFilter;
+
+				$scope.ModifyPending = '';
+
+				$scope.save_segment_form.$setPristine();
+				$scope.save_segment_form.$setUntouched();
+
+				$scope.$broadcast("SegmentSaved");
 			});
-
-			$scope.disableFields = false;
 		}
-	}, 100);
-
-	$scope.reset = function () {
-		$scope.SegmentName = '';
-		$scope.PhoneNumber = '';
-		$scope.PhoneNumberComparator = '=';
-		$scope.FirstName = '';
-		$scope.FirstNameComparator = '=';
-		$scope.LastName = '';
-		$scope.LastNameComparator = '=';
-		$scope.Email = '';
-		$scope.EmailComparator = '=';
-		$scope.ContactSource = '';
-		$scope.ContactSourceComparator = '=';
-		$scope.CustomField1 = '';
-		$scope.CustomField1Comparator = '=';
-		$scope.CustomField2 = '';
-		$scope.CustomField2Comparator = '=';
-		$scope.CustomField3 = '';
-		$scope.CustomField3Comparator = '=';
-		$scope.CustomField4 = '';
-		$scope.CustomField4Comparator = '=';
-		$scope.CustomField5 = '';
-		$scope.CustomField5Comparator = '=';
-		$scope.Language = '';
-		$scope.LanguageComparator = '=';
-		$scope.ModifyPending = '';
-	};
-
-	$scope.saveSegment = function() {
-		var contactFilterText = generateContactFilter($scope);
-
-		var params = {
-			sethttp: 1,
-			apikey: $cookieStore.get('inspinia_auth_token'),
-			accountID: $cookieStore.get('inspinia_account_id'),
-			companyID: $cookieStore.get('inspinia_company_id'),
-			contactSelectionID: $scope.main.contactSegmentID,
-			modifyPending: $scope.ModifyPending
-		};
-
-		if($scope.originalSegmentName != $scope.SegmentName){
-			params['contactSelectionName'] = $scope.SegmentName;
-		}
-
-		params['contactListID'] = $scope.ContactList.contactListID;
-
-		if($scope.originalContactFilterText != contactFilterText){
-			params['contactFilter'] = contactFilterText;
-		}
-
-		$scope.main.ServerRequests.saveSegment(params, $scope, function(data){
-			$scope.originalSegmentName = $scope.SegmentName;
-			$scope.originalContactListID = $scope.ContactList.contactListID;
-			$scope.originalContactFilterText = contactFilterText;
-
-			$scope.ModifyPending = '';
-
-			$scope.save_segment_form.$setPristine();
-			$scope.save_segment_form.$setUntouched();
-			$window.scrollTo(0,0);
-
-			$scope.$broadcast("SegmentSaved");
-		});
 	};
 
 	$scope.deleteSegment = function() {
@@ -3801,83 +3835,126 @@ function EditSegmentCtrl($scope, $http, $cookieStore, $window, $state) {
 				$window.scrollTo(0,0);
 			});
 		}
-	}
+	};
 }
 
-function AddSegmentCtrl($scope, $http, $cookieStore, $window) {
-	$scope.main.ServerRequests.contactListsGet();
-	$scope.availableComparators = ['=', '<', '>', '<=', '>='];
+function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
+	$window.scrollTo(0,0);
+
+	$scope.ContactFilter = "";
+	$scope.availableComparators = ['- - -', '=', '<', '>', '<=', '>=', '<>'];
+	$scope.availableFields = {
+		ani: "Phone number",
+		firstname: "First name",
+		lastname: "Last name",
+		emailaddress: "Email address",
+		contactsource: "Source",
+		custom1: "Custom field 1",
+		custom2: "Custom field 2",
+		custom3: "Custom field 3",
+		custom4: "Custom field 4",
+		custom5: "Custom field 5",
+		language: "Language"
+	};
+	$scope.availableFieldsKeys = Object.keys($scope.availableFields);
+
+	$scope.resetContactListID = function(){
+		$scope.ContactList = {contactListID: "0"};
+		$('select[name="ContactList"]').val('').trigger('chosen:updated');
+	};
+
+	$scope.removeFilter = function(index){
+		if($scope.segmentFilters){
+			if($scope.segmentFilters.length == 1){
+				$scope.segmentFilters = [{field: '- - -', comparator: '- - -', value: ''}];
+			}else if($scope.segmentFilters.length > 1){
+				if(index == 0){
+					$scope.segmentFilters.shift();
+				}else{
+					$scope.segmentFilters.splice(index, 1);
+				}
+				delete $scope.segmentFilters[0].operator;
+			}
+		}
+	};
+
+	$scope.addFilter = function(){
+		$scope.segmentFilters.push({operator: 'and', field: '- - -', comparator: '- - -', value: ''});
+	};
 
 	$scope.reset = function () {
 		$scope.ContactList = null;
 		$scope.SegmentName = '';
-		$scope.PhoneNumber = '';
-		$scope.PhoneNumberComparator = '=';
-		$scope.FirstName = '';
-		$scope.FirstNameComparator = '=';
-		$scope.LastName = '';
-		$scope.LastNameComparator = '=';
-		$scope.Email = '';
-		$scope.EmailComparator = '=';
-		$scope.ContactSource = '';
-		$scope.ContactSourceComparator = '=';
-		$scope.CustomField1 = '';
-		$scope.CustomField1Comparator = '=';
-		$scope.CustomField2 = '';
-		$scope.CustomField2Comparator = '=';
-		$scope.CustomField3 = '';
-		$scope.CustomField3Comparator = '=';
-		$scope.CustomField4 = '';
-		$scope.CustomField4Comparator = '=';
-		$scope.CustomField5 = '';
-		$scope.CustomField5Comparator = '=';
-		$scope.Language = '';
-		$scope.LanguageComparator = '=';
+		$scope.segmentFilters = [{field: '- - -', comparator: '- - -', value: ''}];
 		$scope.add_segment_form.$setPristine();
 		$scope.add_segment_form.$setUntouched();
 		$window.scrollTo(0,0);
 	};
 
+	$scope.$watch('segmentFilters', function(newValue){
+		$scope.ContactFilter = "";
+		if(typeof newValue != 'undefined' && newValue && newValue.length > 0){
+			var correct_count = 0;
+			for(var i in newValue){
+				var segmentFilter = newValue[i];
+				if(!empty(segmentFilter.field) && segmentFilter.field != '- - -'
+				&& !empty(segmentFilter.comparator) && segmentFilter.comparator != '- - -')
+				{
+					correct_count++;
+					if(correct_count > 1 && segmentFilter.operator){
+						$scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
+					}
+					$scope.ContactFilter += $.trim(segmentFilter.field) + $.trim(segmentFilter.comparator) + "{" + $.trim(segmentFilter.value) + "}";
+				}
+			}
+		}
+		$scope.ContactFilter = $.trim($scope.ContactFilter);
+	}, true);
+
 	$scope.addSegment = function () {
-		//Checking input parameters
-		if (empty($scope.SegmentName)) {
-			//Segment name is mandatory
-			return;
-		}
-		if (empty($scope.FirstName) && empty($scope.LastName) && empty($scope.PhoneNumber) && empty($scope.Email) && empty($scope.ContactSource) &&
-			empty($scope.CustomField1) && empty($scope.CustomField2) && empty($scope.CustomField3) && empty($scope.CustomField4) && empty($scope.CustomField5)
-		) {
-			//If all fields are empty there is nothing to save
-			return;
-		}
+		$scope.add_segment_form.$setSubmitted();
 
-		//We have something to save. Generate contact selection string
-		var contactFilter = generateContactFilter($scope);
-		var requestParams = {
-			sethttp: 1,
-			apikey: $cookieStore.get('inspinia_auth_token'),
-			accountID: $cookieStore.get('inspinia_account_id'),
-			companyID: $cookieStore.get('inspinia_company_id'),
-			contactSelectionName: $scope.SegmentName
-		};
-		if (!empty($scope.ContactList)) {
-			requestParams.contactListID = $scope.ContactList.contactListID;
-		}
-		if (!empty(contactFilter)) {
-			requestParams.contactFilter = contactFilter;
-		}
+		if($scope.add_segment_form.$valid){
+			//Checking input parameters
+			if (empty($scope.SegmentName)) {
+				//Segment name is mandatory
+				return;
+			}
+			if(empty($scope.ContactFilter)){
+				// If there are no filters
+				return;
+			}
 
-		$scope.main.ServerRequests.addSegment(requestParams, $scope, function(data){
-			//Reset form and inform user about success
-			$scope.reset();
-			$scope.$broadcast("SegmentCreated", data.apidata);
-		});
+			//We have something to save.
+			var requestParams = {
+				sethttp: 1,
+				apikey: $cookieStore.get('inspinia_auth_token'),
+				accountID: $cookieStore.get('inspinia_account_id'),
+				companyID: $cookieStore.get('inspinia_company_id'),
+				contactSelectionName: $scope.SegmentName,
+				contactFilter: $scope.ContactFilter
+			};
+
+			// Set contactListID to 0 if contactList is not selected. If ContactListID=0 a global account-level contact search is conducted.
+			requestParams.contactListID = (!empty($scope.ContactList)) ? $scope.ContactList.contactListID : "0";
+
+			$scope.main.ServerRequests.addSegment(requestParams, $scope, function(data){
+				// Redirect to manage segment page
+				if(!empty(data)){
+					$state.go('lists.manage_segment', {id: data});
+				}else{
+					$state.go('lists.segments');
+				}
+			});
+		}
 	};
 
 	var i = setInterval(function(){
-		if(typeof $scope.main.contactLists !== 'undefined'){
+		if($scope.main.accountInfo.companyID){
 			clearInterval(i);
-			$scope.reset();
+			$scope.main.ServerRequests.contactListsGet(function(){
+				$scope.reset();
+			});
 		}
 	}, 100);
 }
@@ -6164,7 +6241,7 @@ angular.module('inspinia').filter('makeRange', function() {
     };
 });
 
-angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', MainCtrl]);
+angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', '$state', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
 angular.module('inspinia').controller('dashboardFlotTwo', dashboardFlotTwo);
 angular.module('inspinia').controller('dashboardMap', dashboardMap);
@@ -6190,8 +6267,8 @@ angular.module('inspinia').controller('ngDraftsListCtrl', ['$scope', '$http', '$
 angular.module('inspinia').controller('ngTrashListCtrl', ['$scope', '$http', '$cookieStore', ngInbox.TrashList.Controller]);
 angular.module('inspinia').controller('AddListsCtrl', ['$scope', '$http', '$cookieStore', 'filterFilter', 'FileUploader', AddListsCtrl]);
 angular.module('inspinia').controller('EditContactCtrl', ['$scope', '$http', '$cookieStore', '$window', '$state', EditContactCtrl]);
-angular.module('inspinia').controller('AddSegmentCtrl', ['$scope', '$http', '$cookieStore', '$window', AddSegmentCtrl]);
-angular.module('inspinia').controller('EditSegmentCtrl', ['$scope', '$http', '$cookieStore', '$window', '$state', EditSegmentCtrl]);
+angular.module('inspinia').controller('AddSegmentCtrl', ['$scope', '$state', '$cookieStore', '$window', AddSegmentCtrl]);
+angular.module('inspinia').controller('EditSegmentCtrl', ['$scope', '$cookieStore', '$window', '$state', EditSegmentCtrl]);
 angular.module('inspinia').controller('codeEditorCtrl', codeEditorCtrl);
 angular.module('inspinia').controller('nestableCtrl', nestableCtrl);
 angular.module('inspinia').controller('notifyCtrl', notifyCtrl);

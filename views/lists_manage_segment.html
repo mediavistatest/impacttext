@@ -3,111 +3,80 @@
 <div class="col-md-12 content-holder animated fadeInRight add-list-contact segment" ng-class="animation" ng-controller="EditSegmentCtrl">
 	<h2 class="section-title">Manage Segments</h2>
 	<div class="top-buttons">
-		<a ng-hide="controllerParent" href="#/lists/lists_segments" class="btn btn-back"><i class="fa fa-undo"></i> Back to Segments</a>
+		<a ng-hide="controllerParent" ui-sref="lists.segments" class="btn btn-back"><i class="fa fa-undo"></i> Back to Segments</a>
 	</div>
+
 	<div>
 		<br />
 
 		<form name="save_segment_form">
 
-
 			<!--SINGLE SEGMENT -->
 			<div class="single-holder" >
 
 				<div class="form-group clearfix">
-					<label class="control-label">Segment name: *</label>
-					<input type="text" name="SegmentName" ng-model="SegmentName" ng-required="true" class="form-control inline" ng-disabled="disableFields">
-				</div>
-
-				<div class="form-group clearfix">
-					<label class="control-label">Apply to contact list:</label>
-					<div class="chosen-wrapper">
-						<select chosen name="ContactList" data-placeholder="All contact lists" class="chosen-select form-control" ng-model="ContactList"
-								  ng-options="contactList.contactListName for contactList in main.contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists">
-						</select>
+					<label class="control-label">Segment name:</label>
+					<div class="input-wrapper">
+						<input type="text" name="SegmentName" ng-model="SegmentName" ng-required="true" class="form-control inline" ng-disabled="disableFields"
+								 ng-class="(save_segment_form.$submitted && save_segment_form.SegmentName.$error.required) ? 'input-error' : ''" />
+						<small class="error" ng-if="save_segment_form.$submitted && save_segment_form.SegmentName.$error.required"><i class="fa fa-arrow-up"></i> This is a required field!</small>
 					</div>
 				</div>
 
 				<div class="form-group clearfix">
-					<label class="control-label">Phone number:</label>
-					<select name="PhoneNumberComparator" class="form-control inline comparator" ng-model="PhoneNumberComparator" ng-options="comparator for comparator in availableComparators" ng-disabled="disableFields"> </select>
-					<input type="text" name="PhoneNumber" placeholder="e.g. 1111111111" ng-model="PhoneNumber" class="form-control inline with-comparator" ng-disabled="disableFields">
+					<label class="control-label">Apply to contact list:</label>
+					<div class="input-wrapper chosen-wrapper">
+						<select chosen name="ContactList" data-placeholder="All contact lists" class="chosen-select form-control" ng-model="ContactList"
+								  ng-options="contactList.contactListName for contactList in main.contactLists track by contactList.contactListID" lazy-load-options data-options="contactLists">
+						</select>
+						<small class="error" ng-if="save_segment_form.$submitted && save_segment_form.ContactList.$error.required"><i class="fa fa-arrow-up"></i> This is a required field!</small>
+					</div>
+					<a ng-click="resetContactListID()" class="input-reset-btn"><i class="fa fa-minus-circle"></i></a>
+				</div>
+
+				<div class="segment-filters">
+					<div class="segment-filter form-group clearfix" ng-repeat="segmentFilter in segmentFilters">
+						<select class="operator form-control inline" ng-if="segmentFilter.operator" ng-model="segmentFilter.operator">
+							<option value="and" ng-selected="segmentFilter.operator == 'and'">AND</option>
+							<option value="or" ng-selected="segmentFilter.operator == 'or'">OR</option>
+						</select>
+						<label class="control-label" ng-if="!segmentFilter.operator">Filter: </label>
+
+						<select name="field-{{$index}}" class="field form-control inline" ng-model="segmentFilter.field">
+							<option value="- - -">- - -</option>
+							<option ng-repeat="key in availableFieldsKeys" value="{{key}}" ng-selected="segmentFilter.field == key">{{availableFields[key]}}</option>
+						</select>
+
+						<select name="comparator-{{$index}}" class="comparator form-control inline" ng-model="segmentFilter.comparator"
+								  ng-options="comparator for comparator in availableComparators"> </select>
+
+						<input type="text" name="value-{{$index}}" ng-model="segmentFilter.value" class="value form-control inline with-comparator" />
+
+						<a ng-click="removeFilter($index)" class="remove-filter"><i class="fa fa-minus-circle"></i></a>
+					</div>
+					<small class="error" ng-if="save_segment_form.$submitted && !ContactFilter"><i class="fa fa-arrow-up"></i> You need to specify at least one filter option!</small>
+
+					<a ng-click="addFilter()" class="add-filter"><i class="fa fa-plus-circle"></i> Add filter</a>
 				</div>
 
 				<div class="form-group clearfix">
-					<label class="control-label">First name:</label>
-					<select name="FirstNameComparator" class="form-control inline comparator" ng-model="FirstNameComparator" ng-options="comparator for comparator in availableComparators" ng-disabled="disableFields"> </select>
-					<input type="text" name="FirstName" placeholder="John" ng-model="FirstName" class="form-control inline with-comparator" ng-disabled="disableFields">
-				</div>
-
-				<div class="form-group clearfix">
-					<label class="control-label">Last Name:</label>
-					<select name="LastNameComparator" class="form-control inline comparator" ng-model="LastNameComparator" ng-options="comparator for comparator in availableComparators" ng-disabled="disableFields"> </select>
-					<input type="text" name="LastName" placeholder="Doe" ng-model="LastName" class="form-control inline with-comparator" ng-disabled="disableFields">
-				</div>
-
-				<div class="form-group clearfix">
-					<label class="control-label">Email address:</label>
-					<select name="EmailComparator" class="form-control inline comparator" ng-model="EmailComparator" ng-options="comparator for comparator in availableComparators" ng-disabled="disableFields"> </select>
-					<input type="text" name="Email" placeholder="name@domain.com" ng-model="Email" class="form-control inline with-comparator" ng-disabled="disableFields">
-				</div>
-
-				<div class="form-group clearfix">
-					<label class="control-label">Source:</label>
-					<select name="ContactSourceComparator" class="form-control inline comparator" ng-model="ContactSourceComparator" ng-options="comparator for comparator in availableComparators" ng-disabled="disableFields"> </select>
-					<input type="text" name="ContactSource" placeholder="" ng-model="ContactSource" class="form-control inline with-comparator" ng-disabled="disableFields">
-				</div>
-
-				<div class="form-group clearfix">
-					<label class="control-label">Custom field 1:</label>
-					<select name="CustomField1Comparator" class="form-control inline comparator" ng-model="CustomField1Comparator" ng-options="comparator for comparator in availableComparators" ng-disabled="disableFields"> </select>
-					<input type="text" name="CustomField1" placeholder="Custom text" ng-model="CustomField1" class="form-control inline with-comparator" ng-disabled="disableFields">
-				</div>
-
-				<div class="form-group clearfix">
-					<label class="control-label">Custom field 2:</label>
-					<select name="CustomField2Comparator" class="form-control inline comparator" ng-model="CustomField2Comparator" ng-options="comparator for comparator in availableComparators" ng-disabled="disableFields"> </select>
-					<input type="text" name="CustomField2" placeholder="Custom text" ng-model="CustomField2" class="form-control inline with-comparator" ng-disabled="disableFields">
-				</div>
-
-				<div class="form-group clearfix">
-					<label class="control-label">Custom field 3:</label>
-					<select name="CustomField3Comparator" class="form-control inline comparator" ng-model="CustomField3Comparator" ng-options="comparator for comparator in availableComparators" ng-disabled="disableFields"> </select>
-					<input type="text" name="CustomField3" placeholder="Custom text" ng-model="CustomField3" class="form-control inline with-comparator" ng-disabled="disableFields">
-				</div>
-
-				<div class="form-group clearfix">
-					<label class="control-label">Custom field 4:</label>
-					<select name="CustomField4Comparator" class="form-control inline comparator" ng-model="CustomField4Comparator" ng-options="comparator for comparator in availableComparators" ng-disabled="disableFields"> </select>
-					<input type="text" name="CustomField4" placeholder="Custom text" ng-model="CustomField4" class="form-control inline with-comparator" ng-disabled="disableFields">
-				</div>
-
-				<div class="form-group clearfix">
-					<label class="control-label">Custom field 5:</label>
-					<select name="CustomField5Comparator" class="form-control inline comparator" ng-model="CustomField5Comparator" ng-options="comparator for comparator in availableComparators" ng-disabled="disableFields"> </select>
-					<input type="text" name="CustomField5" placeholder="Custom text" ng-model="CustomField5" class="form-control inline with-comparator" ng-disabled="disableFields">
-				</div>
-
-				<div class="form-group clearfix">
-					<label class="control-label">Language:</label>
-					<input type="text" name="Language" placeholder="" ng-model="Language" class="form-control inline" ng-disabled="disableFields">
-				</div>
-
-				<div class="form-group clearfix">
-					<label class="control-label">Modify pending: *</label>
-					<select type="text" class="form-control inline comparator" name="ModifyPending" ng-model="ModifyPending" ng-required="true">
-						<option value=""></option>
-						<option value="Y">Yes</option>
-						<option value="N">No</option>
-					</select>
-					<i class="fa fa-info-circle" tooltip="Modify pending outbound messages and scheduled messages with new contact selection options?"></i>
+					<label class="control-label">Modify pending:</label>
+					<div class="input-wrapper modify-pending">
+						<select type="text" class="form-control inline comparator" name="ModifyPending" ng-model="ModifyPending" ng-required="true">
+							<option value="">- - -</option>
+							<option value="Y">Yes</option>
+							<option value="N">No</option>
+						</select>
+						<small class="error" ng-if="save_segment_form.$submitted && save_segment_form.ModifyPending.$error.required"><i class="fa fa-arrow-up"></i> This is a required field!</small>
+					</div>
+					<i class="fa fa-info-circle input-help" tooltip="Modify pending outbound messages and scheduled messages with new contact selection options?"></i>
 				</div>
 
 			</div><!-- END SINGLE -->
 
 
 			<br />
-			<a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="saveSegment()" ng-disabled="disableFields || !save_segment_form.$valid">
+			<a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="saveSegment()" ng-disabled="disableFields">
 				<span><i class="fa fa-floppy-o"></i> Save</span>
 			</a>
 			<a class="btn btn-send delete smaller" ng-click="deleteSegment()" ng-disabled="disableFields">
