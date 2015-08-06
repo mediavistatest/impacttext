@@ -54,7 +54,7 @@
 
 						<a ng-click="removeFilter($index)" class="remove-filter"><i class="fa fa-minus-circle"></i></a>
 					</div>
-					<small class="error" ng-if="save_segment_form.$submitted && !ContactFilter"><i class="fa fa-arrow-up"></i> You need to specify at least one filter option!</small>
+					<small class="error" ng-if="(save_segment_form.$submitted || previewError) && !ContactFilter"><i class="fa fa-arrow-up"></i> You need to specify at least one filter option!</small>
 
 					<a ng-click="addFilter()" class="add-filter"><i class="fa fa-plus-circle"></i> Add filter</a>
 				</div>
@@ -90,7 +90,7 @@
 
 	</div>
 
-	<div id="segment-preview-wrapper" ng-controller="PreviewSegmentCtrl" ng-show="showPreview">
+	<div id="segment-preview-wrapper" ng-controller="PreviewSegmentCtrl">
 		<div ng-show="loading">
 			<div class="loading">Loading preview ...</div>
 		</div>
@@ -108,7 +108,7 @@
 			<div id="segment-contacts-grid" class="gridStyle" ng-grid="ngOptions"></div>
 
 			<!--Bottom Actions -->
-			<div class="bottom-table-toolbar">
+			<div class="bottom-table-toolbar" ng-if="totalServerItems">
 				<a class="btn" ng-click="export()"><i class="fa fa-file-excel-o"></i> Export all contacts</a>
 			</div>
 		</div>
