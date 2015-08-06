@@ -2381,16 +2381,6 @@ ul.bar-legend {
 	display: block;
 	font-size: 10px;
 }
-/*.add-list-contact.segment .input-error {
-	border-color: #D28080 !important;
-	background-color: #ffdfe3;
-	transition: border-color 0.15s ease-in-out 0s, background-color 0.15s ease-in-out 0s;
-}
-.add-list-contact.segment .input-error:focus {
-	border-color: #D28080;
-	background-color: transparent;
-}*/
-
 
 #segment-list-grid .ngHeaderText.ng-binding.colt0, #segment-list-grid .ngCellText.ng-scope.col0.colt0 {
 	text-align: left;
@@ -2409,6 +2399,7 @@ ul.bar-legend {
 .segment-filters .remove-filter, .add-list-contact.segment .input-reset-btn { font-size: 24px; margin-left: 5px; color: #666; vertical-align: middle; }
 .segment-filters .remove-filter:hover, .add-list-contact.segment .input-reset-btn:hover { color: #a94442; }
 .add-list-contact.segment .segment-filters small.error { bottom: 5px; }
+.add-list-contact.segment .btn-preview { padding-left: 20px; padding-right: 20px; margin-right: 5px; }
 
 .segments-list .gridStyle { clear: both; }
 .segments-list .ngCellText.col0, .segments-list .ngCellText.col0 a {
@@ -2425,6 +2416,20 @@ ul.bar-legend {
 .segments-list .page-select-wrapper { top: -30px; }
 .segments-list .itTopPager { top: -8px; }
 .segments-list .manage-list-txt { margin-bottom: 40px; }
+
+#segment-preview-wrapper { margin-top: 40px; padding-top: 30px; border-top: 1px solid #eee; }
+#segment-preview-wrapper .ngHeaderText.colt0, #segment-preview-wrapper .ngCellText.colt0 { text-align: left; }
+#segment-preview-wrapper .ngCellText.colt0 { font-weight: bold; }
+#segment-preview-wrapper .ngCellText { cursor: default; }
+#segment-preview-wrapper .ngFooterPanel.itTopPager { display: none; }
+#segment-preview-wrapper .bottom-table-toolbar {
+	float: left;
+	margin-top: -32px;
+	z-index: 10;
+	position: relative;
+}
+#segment-preview-wrapper .section-title { margin: 0 0 5px 0; padding: 0; }
+#segment-preview-wrapper .page-select-wrapper { margin-top: -50px; }
 
 
 /*MEDIA QUERIES*/

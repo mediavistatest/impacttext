@@ -1270,6 +1270,12 @@ var ngInbox = {
             displayName : 'Contact/List',
             cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
+			  checked : true,
+			  canBeClicked : false,
+			  field : 'contactSelectionName',
+			  displayName : 'Segment',
+			  cellTemplate : 'views/table/MessageTableTemplate.html'
+		  }, {
             checked : true,
             canBeClicked : true,
             field : 'message',
