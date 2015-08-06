@@ -184,6 +184,40 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 }
             });
         },
+		  contactSegmentsGet : function(callback){
+			  $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param({
+				  sethttp : 1,
+				  apikey : $cookieStore.get('inspinia_auth_token'),
+				  accountID : $cookieStore.get('inspinia_account_id'),
+				  orderby : 'contactSelectionName asc'
+			  })).success(function(data) {
+				  if (data == null || typeof data.apicode == 'undefined') {
+					  main.contactSegments = [];
+
+					  if(typeof callback == 'function'){
+						  callback(main.contactSegments);
+					  }
+
+					  return;
+				  }
+				  if (data.apicode == 0) {
+					  //Reading contact lists
+					  main.contactSegments = data.apidata;
+				  } else {
+					  main.contactSegments = [];
+				  }
+
+				  if(typeof callback == 'function'){
+					  callback(main.contactSegments);
+				  }
+			  }).error(
+				  function(data, status, headers, config) {
+					  if (status == 400) {
+						  alert("An error occurred when getting contact segments! Error code: " + data.apicode);
+						  alert(JSON.stringify(data));
+					  }
+				  });
+		  },
         accountKeywordGet : function(success, error) {
             $http.post(inspiniaNS.wsUrl + "accountkeyword_get", $.param({
                 sethttp : 1,
@@ -818,6 +852,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
             main.ServerRequests.autoresponderActionGet();
 
             main.ServerRequests.contactListsGet();
+            main.ServerRequests.contactSegmentsGet();
             var successDidGet = function(data, status, headers, config, $inScope) {
                 main.fromNumbersString = '';
                 if (data == null || typeof data.apicode == 'undefined') {
@@ -3701,6 +3736,26 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
 	$scope.ContactFilter = "";
 	$scope.disableFields = true;
 
+
+	$scope.DateOpened = [];
+	$scope.open = function($event, index) {
+		$event.preventDefault();
+		$event.stopPropagation();
+		$scope.DateOpened[index] = true;
+	};
+	$scope.clear = function() {
+		for (var i in $scope.segmentFilters) {
+			$scope.segmentFilters[i].value = null;
+		}
+	};
+	$scope.dateOptions = {
+		formatYear : 'yy',
+		startingDay : 1,
+		showWeeks : 'false'
+	};
+	$scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+	$scope.format = $scope.formats[0];
+
 	$scope.availableComparators = {
 		'- - -': ['- - -'],
 		ani: ['- - -', '=', '<>'],
@@ -3713,7 +3768,9 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
 		custom3: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
 		custom4: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
 		custom5: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		language: ['- - -', '=', '<>']
+		language: ['- - -', '=', '<>'],
+		createddate: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+		statusdate: ['- - -', '=', '<', '>', '<=', '>=', '<>']
 	};
 
 	$scope.availableFields = {
@@ -3727,7 +3784,9 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
 		custom3: "Custom field 3",
 		custom4: "Custom field 4",
 		custom5: "Custom field 5",
-		language: "Language"
+		language: "Language",
+		createddate: "Created date",
+		statusdate: "Modified date"
 	};
 	$scope.availableFieldsKeys = Object.keys($scope.availableFields);
 
@@ -3739,6 +3798,7 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
 
 	$scope.segmentFieldChange = function(index){
 		$scope.segmentFilters[index].comparator = '- - -';
+		$scope.segmentFilters[index].value = '';
 	};
 
 	$scope.removeFilter = function(index){
@@ -3909,6 +3969,25 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
 	$scope.previewError = false;
 	$scope.ContactFilter = "";
 
+	$scope.DateOpened = [];
+	$scope.open = function($event, index) {
+		$event.preventDefault();
+		$event.stopPropagation();
+		$scope.DateOpened[index] = true;
+	};
+	$scope.clear = function() {
+		for (var i in $scope.segmentFilters) {
+			$scope.segmentFilters[i].value = null;
+		}
+	};
+	$scope.dateOptions = {
+		formatYear : 'yy',
+		startingDay : 1,
+		showWeeks : 'false'
+	};
+	$scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+	$scope.format = $scope.formats[0];
+
 	$scope.availableComparators = {
 		'- - -': ['- - -'],
 		ani: ['- - -', '=', '<>'],
@@ -3921,7 +4000,9 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
 		custom3: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
 		custom4: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
 		custom5: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		language: ['- - -', '=', '<>']
+		language: ['- - -', '=', '<>'],
+		createddate: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+		statusdate: ['- - -', '=', '<', '>', '<=', '>=', '<>']
 	};
 
 	$scope.availableFields = {
@@ -3935,12 +4016,15 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
 		custom3: "Custom field 3",
 		custom4: "Custom field 4",
 		custom5: "Custom field 5",
-		language: "Language"
+		language: "Language",
+		createddate: "Created date",
+		statusdate: "Modified date"
 	};
 	$scope.availableFieldsKeys = Object.keys($scope.availableFields);
 
 	$scope.segmentFieldChange = function(index){
 		$scope.segmentFilters[index].comparator = '- - -';
+		$scope.segmentFilters[index].value = '';
 	};
 
 	$scope.resetContactListID = function(){
@@ -4137,7 +4221,7 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http){
 					contactfilter: $scope.ContactFilter
 				};
 
-				if(!empty($scope.ContactList) && $scope.ContactList.hasOwnProperty('contactListID')){
+				if(!empty($scope.ContactList) && $scope.ContactList.hasOwnProperty('contactListID') && $scope.ContactList.contactListID != 0){
 					params['contactlistid'] = $scope.ContactList.contactListID;
 				}
 
@@ -4241,7 +4325,7 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http){
 			contactfilter: $scope.ContactFilter,
 			export : "csv"
 		};
-		if(!empty($scope.ContactList) && $scope.ContactList.hasOwnProperty('contactListID')){
+		if(!empty($scope.ContactList) && $scope.ContactList.hasOwnProperty('contactListID') && $scope.ContactList.contactListID != 0){
 			params['contactlistid'] = $scope.ContactList.contactListID;
 		}
 
@@ -5432,18 +5516,35 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         OptOutTxt2 : '',
         OptOutTxt3 : ''
     };
+
     $scope.contactLists = [];
-    function setContactLists() {
+	 $scope.contactSegments = [];
+	 $scope.contactGroups = [];
+    function setContactListsAndSegments() {
         if ($scope.main.contactLists) {
-            $scope.contactLists = $scope.main.contactLists;
+				$scope.contactLists = $scope.main.contactLists;
+			   for(var i in $scope.contactLists){
+					$scope.contactGroups.push({id: $scope.contactLists[i].contactListID, name: $scope.contactLists[i].contactListName, group: 'Lists' });
+				}
+
+				if($scope.contactSegments){
+					$scope.contactSegments = $scope.main.contactSegments;
+					for(var i in $scope.contactSegments){
+						$scope.contactGroups.push({id: $scope.contactSegments[i].contactSelectionID, name: $scope.contactSegments[i].contactSelectionName, group: 'Segments' });
+					}
+				}else{
+					setTimeout(function() {
+						setContactListsAndSegments();
+					}, 500);
+				}
         } else {
             setTimeout(function() {
-                setContactLists();
+					setContactListsAndSegments();
             }, 500);
         }
     }
 
-    setContactLists();
+	setContactListsAndSegments();
 
     $scope.fromNumbers = [];
     //send form initial states
@@ -5643,13 +5744,24 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
             if ($scope.SendToList && typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
                 if ($scope.ToList.constructor === Array) {
                     //Sending message to contact lists
-                    requestData.contactListID = $scope.ToList[0].contactListID;
-                    for (var i = 1; i < $scope.ToList.length; i++) {
-                        requestData.contactListID += "," + $scope.ToList[i].contactListID;
-                    }
+						  if($scope.ToList[0].group == 'Lists'){
+							  requestData.contactListID = $scope.ToList[0].id;
+							  for (var i = 1; i < $scope.ToList.length; i++) {
+								  requestData.contactListID += "," + $scope.ToList[i].id;
+							  }
+						  }else if($scope.ToList[0].group == 'Segments'){
+							  requestData.contactSelectionID = $scope.ToList[0].id;
+							  for (var i = 1; i < $scope.ToList.length; i++) {
+								  requestData.contactSelectionID += "," + $scope.ToList[i].id;
+							  }
+						  }
                 } else {
                     //Sending message to a single contact list
-                    requestData.contactListID = $scope.ToList.contactListID;
+						  if($scope.ToList.group == 'Lists'){
+                    		requestData.contactListID = $scope.ToList.id;
+						  }else if($scope.ToList.group == 'Segments'){
+							  requestData.contactSelectionID = $scope.ToList.id;
+						  }
                 }
             } else if (!$scope.SendToList && typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
                 //Sending message to numbers. Add leading 1 to all numbers

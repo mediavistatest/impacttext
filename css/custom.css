@@ -663,6 +663,9 @@ input.search-input {
     display: inline-block;
 }
 
+.datetimepicker-wrapper tbody td { min-width: 30px; }
+.datetimepicker-wrapper tbody td .btn { padding: 4px 8px; }
+
 .datetimepicker-wrapper > input {
     margin-bottom: 0 !important;
     width: 130px;
@@ -2380,6 +2383,11 @@ ul.bar-legend {
 	left: 0;
 	display: block;
 	font-size: 10px;
+}
+
+.add-list-contact.segment .datetimepicker-wrapper {
+	width: 100%;
+	max-width: 250px !important;
 }
 
 #segment-list-grid .ngHeaderText.ng-binding.colt0, #segment-list-grid .ngCellText.ng-scope.col0.colt0 {
