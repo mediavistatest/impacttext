@@ -61,6 +61,7 @@ var profile = {
 var ngFunctions = {
     ConvertDateToYYYYmmDD : function(inDate, inFormat) {
         var tmpDate = new Date(inDate);
+
         if (isNaN(tmpDate)) {
             var dateInYYYYmmDD;
             switch (inFormat) {
@@ -74,6 +75,22 @@ var ngFunctions = {
         } else {
             return inDate;
         }
+    },
+    newDateWrapper : function(inDate) {
+        
+        // console.log(inDate)
+
+        var timezoneOffsetMinutes = new Date().getTimezoneOffset();
+        if (inDate) {
+            var result = new Date(inDate + ' 00:00:00');
+            if (result == 'Invalid Date') {
+                result = new Date(inDate + 'T00:00:00');
+                result.setUTCMinutes(-timezoneOffsetMinutes);
+            }
+        }
+        // console.log(result)
+        return result;
+        
     },
     SetTimezoneOffsetDate : function(currentInDate, hours, minutes, seconds) {
         var timezoneOffsetMinutes = new Date().getTimezoneOffset();
@@ -220,21 +237,10 @@ var ngInbox = {
                     var secPart = utcDateTime.substring(17, 19);
 
                     var tmpDate = new Date(datePart);
-                    // console.log('GetLocalDateTimeString START')
-                    // console.log(datePart)
-                    
-                    // console.log(tmpDate)
-                    
-
-                    
                     tmpDate.setUTCHours(hourPart);
                     tmpDate.setUTCMinutes(minPart);
                     tmpDate.setUTCSeconds(secPart);
                     // dateStr = tmpDate.toLocaleDateString();
-
-// console.log(tmpDate)
-                    // console.log('GetLocalDateTimeString END')
-
                     var year;
                     var month;
                     var day;
@@ -1280,12 +1286,12 @@ var ngInbox = {
             displayName : 'Contact/List',
             cellTemplate : 'views/table/MessageTableTemplate.html'
         }, {
-			  checked : true,
-			  canBeClicked : false,
-			  field : 'contactSelectionName',
-			  displayName : 'Segment',
-			  cellTemplate : 'views/table/MessageTableTemplate.html'
-		  }, {
+            checked : true,
+            canBeClicked : false,
+            field : 'contactSelectionName',
+            displayName : 'Segment',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
+        }, {
             checked : true,
             canBeClicked : true,
             field : 'message',
@@ -1406,9 +1412,9 @@ var ngInbox = {
                     $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
                     return member.DID == $sendScope.controllerParent.clickedMessage.DID;
                     })[0];
-						  $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
-							  return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
-						  })[0];
+                    $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                    return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                    })[0];
 
                     $sendScope.OptOutMsg = '';
                     $sendScope.OptOutTxt3 = $sendScope.initial;
@@ -1416,7 +1422,14 @@ var ngInbox = {
                     $sendScope.ScheduleCheck = false;
                     $sendScope.ArrayScheduledDateTime = [];
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
+
+                    // console.log('______________________-----------------------------_____________________')
+                    // console.log($sendScope.controllerParent.clickedMessage.scheduledDate)
+
                     scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + ' 00:00:00');
+
+                    // console.log(scheduledDateTime.SetDate)
+
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
@@ -1563,9 +1576,9 @@ var ngInbox = {
                         $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
                     } else {
                         $sendScope.SendToList = true;
-							   $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
-							   return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
-							   })[0];
+                        $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                        return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                        })[0];
                     }
 
                     $sendScope.OptOutMsg = '';
@@ -1592,18 +1605,18 @@ var ngInbox = {
                     // GetLocalDateTimeString
                     // console.log($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10))
 
-                    //var timezoneOffsetMinutes = new Date().getTimezoneOffset();
                     //problem with timezone <0 when getting new date from shecdule date gets 1 day earlier because of negative time zone
-                    scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
+
+                    // console.log('______________________-----------------------------_____________________')
+                    // console.log($sendScope.controllerParent.clickedMessage.scheduledDate)
+
+                    // console.log(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm'))
+
+                    //                    scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
+
+                    scheduledDateTime.SetDate = ngFunctions.newDateWrapper(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm'));
                     
                     console.log(scheduledDateTime.SetDate)
-                    // if (timezoneOffsetMinutes < 0) {
-                        // scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
-                    // } else {
-                        // var correctedDay = String(parseInt($sendScope.controllerParent.clickedMessage.scheduledDate.substring(8, 10)) + 1);
-                        // scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 8) + correctedDay, 'YYYY-DD-mm'));
-                    // }
-
 
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
@@ -1777,9 +1790,9 @@ var ngInbox = {
                         $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
                     } else {
                         $sendScope.SendToList = true;
-							   $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
-								   return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
-							   })[0];
+                        $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                        return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                        })[0];
                     }
 
                     $sendScope.OptOutMsg = '';
@@ -4001,7 +4014,7 @@ var ngReports = {
                 strokeColor : "rgba(0,94,170,0.5)",
                 highlightFill : "rgba(0,94,170,0.8)",
                 highlightStroke : "rgba(0,94,170,1)",
-                tooltip:"Total number of unique contacts.",
+                tooltip : "Total number of unique contacts.",
                 data : []
             }, {
                 label : "Sent Messages",
@@ -4009,7 +4022,7 @@ var ngReports = {
                 strokeColor : "rgba(227,111,30,0.5)",
                 highlightFill : "rgba(227,111,30,0.8)",
                 highlightStroke : "rgba(227,111,30,1)",
-                tooltip:"Total number of messages sent.",
+                tooltip : "Total number of messages sent.",
                 data : []
             }, {
                 label : "Responders",
@@ -4017,7 +4030,7 @@ var ngReports = {
                 strokeColor : "rgba(0,125,50,0.5)",
                 highlightFill : "rgba(0,125,50,0.8)",
                 highlightStroke : "rgba(0,125,50,1)",
-                tooltip:"Total number of unique phone numbers from which message replies were received.",
+                tooltip : "Total number of unique phone numbers from which message replies were received.",
                 data : []
             }, {
                 label : "Received Messages",
@@ -4025,7 +4038,7 @@ var ngReports = {
                 strokeColor : "rgba(159,74,156,0.5)",
                 highlightFill : "rgba(159,74,156,0.8)",
                 highlightStroke : "rgba(159,74,156,1)",
-                tooltip:"Total number of incoming messages that were in reply to a sent message.",
+                tooltip : "Total number of incoming messages that were in reply to a sent message.",
                 data : []
             }, {
                 label : "Autoresponder Replies",
@@ -4033,7 +4046,7 @@ var ngReports = {
                 strokeColor : "rgba(250,250,0,0.5)",
                 highlightFill : "rgba(250,250,0,0.8)",
                 highlightStroke : "rgba(250,250,0,1)",
-                tooltip:"Total number of outgoing messages sent as a result of an autoresponder rule.",
+                tooltip : "Total number of outgoing messages sent as a result of an autoresponder rule.",
                 data : []
             }, {
                 label : "Opt-Ins",
@@ -4041,7 +4054,7 @@ var ngReports = {
                 strokeColor : "rgba(250,0,0,0.5)",
                 highlightFill : "rgba(250,0,0,0.8)",
                 highlightStroke : "rgba(250,0,0,1)",
-                tooltip:"Total number of contacts who opted-in.",
+                tooltip : "Total number of contacts who opted-in.",
                 data : []
             }, {
                 label : "Opt-Outs",
@@ -4049,7 +4062,7 @@ var ngReports = {
                 strokeColor : "rgba(0,250,250,0.5)",
                 highlightFill : "rgba(0,250,250,0.8)",
                 highlightStroke : "rgba(0,250,250,1)",
-                tooltip:"Total number of contacts who opted-out.",
+                tooltip : "Total number of contacts who opted-out.",
                 data : []
             }, {
                 label : "Replies",
@@ -4057,7 +4070,7 @@ var ngReports = {
                 strokeColor : "rgba(159,159,159,0.5)",
                 highlightFill : "rgba(159,159,159,0.8)",
                 highlightStroke : "rgba(159,159,159,1)",
-                tooltip:"Total number of manually created messages that were sent in reply to a message received.",
+                tooltip : "Total number of manually created messages that were sent in reply to a message received.",
                 data : []
             }]
         },
