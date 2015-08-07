@@ -3299,7 +3299,13 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
                         case "custom3":
                             request.custom3 = searchText;
                             break;
-                        }
+						  		case "custom4":
+							  		request.custom4 = searchText;
+							  		break;
+								case "custom5":
+									request.custom5 = searchText;
+									break;
+								}
                         $http.post(inspiniaNS.wsUrl + "contact_get", $.param(request)).success(function(data) {
                             $scope.getContactBlacklist(data.apidata, function() {
                                 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
@@ -3478,6 +3484,12 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
             case "custom3":
                 params.custom3 = searchText;
                 break;
+				case "custom4":
+					params.custom4 = searchText;
+					break;
+				case "custom5":
+					params.custom5 = searchText;
+					break;
             }
         }
 
