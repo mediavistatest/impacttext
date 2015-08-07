@@ -529,7 +529,7 @@ var ngInbox = {
                                             var currentPhoneNumber_ = tmpANIList_.substring(0, commaPosition_);
 
                                             var tmpANI_ = tmpANIList_.substring(0, commaPosition_);
-                                            tmpANIList = tmpANIList_.substring(commaPosition_ + 1);
+                                            tmpANIList = tmpANIList_.substring(commaPosition + 1);
                                             if (tmpANI_.length == 11) {
                                                 tmpANIForSending_ = tmpANI_;
                                                 tmpANI_ = tmpANI_.substring(1);
