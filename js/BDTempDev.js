@@ -523,7 +523,7 @@ var ngInbox = {
                                             var currentPhoneNumber_ = tmpANIList_.substring(0, commaPosition_);
 
                                             var tmpANI_ = tmpANIList_.substring(0, commaPosition_);
-                                            tmpANIList = tmpANIList_.substring(commaPosition + 1);
+                                            tmpANIList = tmpANIList_.substring(commaPosition_ + 1);
                                             if (tmpANI_.length == 11) {
                                                 tmpANIForSending_ = tmpANI_;
                                                 tmpANI_ = tmpANI_.substring(1);
@@ -1406,14 +1406,9 @@ var ngInbox = {
                     $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
                     return member.DID == $sendScope.controllerParent.clickedMessage.DID;
                     })[0];
-
-						 $sendScope.ToList = $.grep($sendScope.contactGroups, function(member) {
-							 if($sendScope.controllerParent.clickedMessage.contactSelectionID > 0){
-								 return (member.group == 'Segments' && member.id == $sendScope.controllerParent.clickedMessage.contactSelectionID);
-							 }else{
-								 return (member.group == 'Lists' && member.id == $sendScope.controllerParent.clickedMessage.contactListID);
-							 }
-						 })[0];
+						  $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+							  return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+						  })[0];
 
                     $sendScope.OptOutMsg = '';
                     $sendScope.OptOutTxt3 = $sendScope.initial;
@@ -1568,20 +1563,9 @@ var ngInbox = {
                         $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
                     } else {
                         $sendScope.SendToList = true;
-
-                        $sendScope.ToList = $.grep($sendScope.contactGroups, function(member) {
-									if($sendScope.controllerParent.clickedMessage.contactSelectionID > 0){
-										return (member.group == 'Segments' && member.id == $sendScope.controllerParent.clickedMessage.contactSelectionID);
-									}else{
-										return (member.group == 'Lists' && member.id == $sendScope.controllerParent.clickedMessage.contactListID);
-									}
-                        })[0];
-
-							   if($sendScope.controllerParent.clickedMessage.contactSelectionID > 0){
-									$sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.clickedMessage.contactSelectionName;
-								}else{
-									$sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.clickedMessage.contactListName;
-								}
+							   $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+							   return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+							   })[0];
                     }
 
                     $sendScope.OptOutMsg = '';
@@ -1793,19 +1777,9 @@ var ngInbox = {
                         $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
                     } else {
                         $sendScope.SendToList = true;
-							  $sendScope.ToList = $.grep($sendScope.contactGroups, function(member) {
-								  if($sendScope.controllerParent.clickedMessage.contactSelectionID > 0){
-									  return (member.group == 'Segments' && member.id == $sendScope.controllerParent.clickedMessage.contactSelectionID);
-								  }else{
-									  return (member.group == 'Lists' && member.id == $sendScope.controllerParent.clickedMessage.contactListID);
-								  }
-							  })[0];
-
-							  if($sendScope.controllerParent.clickedMessage.contactSelectionID > 0){
-								  $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.clickedMessage.contactSelectionName;
-							  }else{
-								  $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.clickedMessage.contactListName;
-							  }
+							   $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+								   return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+							   })[0];
                     }
 
                     $sendScope.OptOutMsg = '';

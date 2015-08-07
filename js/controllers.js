@@ -5630,8 +5630,9 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.dateOptions = {
         formatYear : 'yy',
         startingDay : 1,
-        showWeeks : 'false',
-        initDate : 'false'
+        showWeeks : 'false'
+		  // comented out because of an error that prevents datepicker from working properly
+        //initDate : 'false'
     };
     $scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
