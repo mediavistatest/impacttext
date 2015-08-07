@@ -3646,7 +3646,11 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
 			field : 'contactSelectionName',
 			displayName : 'Name',
 			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})">{{row.entity.contactSelectionName}}</a></div>'
-		}, {
+		}, /*{
+			field : 'contactListID',
+			displayName : 'List ID',
+			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})">{{row.entity.contactListID}}</a></div>'
+		}, */{
 			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})"><i class="fa fa-pencil"></i> Edit Segment </a></div>',
 			width: 150
 		}, {
@@ -3866,6 +3870,11 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
 					if(correct_count > 1 && segmentFilter.operator){
 						$scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
 					}
+
+					if((segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate') && !empty(segmentFilter.value)){
+						segmentFilter.value = ngFunctions.ConvertDateToMySqlDate(segmentFilter.value);
+					}
+
 					$scope.ContactFilter += $.trim(segmentFilter.field) + $.trim(segmentFilter.comparator) + "{" + $.trim(segmentFilter.value) + "}";
 				}
 			}
@@ -3933,6 +3942,7 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
 
 				$scope.$broadcast("SegmentSaved");
 
+				$scope.main.ServerRequests.contactSegmentsGet();
 				$scope.previewSegment();
 			});
 		}
@@ -3949,6 +3959,7 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
 			}, $scope, function(){
 				$state.go('lists.segments');
 				$window.scrollTo(0,0);
+				$scope.main.ServerRequests.contactSegmentsGet();
 			});
 		}
 	};
@@ -4073,6 +4084,10 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
 					if(correct_count > 1 && segmentFilter.operator){
 						$scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
 					}
+
+					if((segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate') && !empty(segmentFilter.value)){
+						segmentFilter.value = ngFunctions.ConvertDateToMySqlDate(segmentFilter.value);
+					}
 					$scope.ContactFilter += $.trim(segmentFilter.field) + $.trim(segmentFilter.comparator) + "{" + $.trim(segmentFilter.value) + "}";
 				}
 			}
@@ -4108,6 +4123,7 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
 			requestParams.contactListID = (!empty($scope.ContactList)) ? $scope.ContactList.contactListID : "0";
 
 			$scope.main.ServerRequests.addSegment(requestParams, $scope, function(data){
+				$scope.main.ServerRequests.contactSegmentsGet();
 				// Redirect to manage segment page
 				if(!empty(data)){
 					$state.go('lists.manage_segment', {id: data});
