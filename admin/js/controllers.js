@@ -55,7 +55,10 @@ superAdmin.controller('mainController', function($scope) {
 });
 
 // Account List
-superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', function($scope, $cookieStore, $http) {
+superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', '$location', '$window', function($scope, $cookieStore, $http, $location, $window) {
+	var base_url = $location.absUrl();
+	var dashboard_url = base_url.replace('/admin/#', '/#') + "dashboard";
+
 	var self = this;
 	$scope.mySelections = [];
 	$scope.filterOptions = {
@@ -118,8 +121,46 @@ superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', fun
 					field: '',
 					displayName: '',
 					cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="#/manage_account/{{row.entity.accountID}}" class="btn"><i class="fa fa-pencil"></i> Manage Account </a></div>'
+				},
+				{
+					field: '',
+					displayName: '',
+					cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a ng-click="enterAccount(row.entity.accountID, row.entity.companyID)" class="btn"><i class="fa fa-external-link"></i> Enter Account </a></div>',
+					width: 130
 				}
 			]
+	};
+
+	$scope.enterAccount = function(account_id, company_id){
+		$http.post(inspiniaAdminNS.wsUrl + "account_adminlogin", $.param({
+			apikey: $cookieStore.get('inspinia_auth_token'),
+			accountid : account_id
+		})).success(
+			function(data) {
+				if (data == null || typeof data.apicode == 'undefined') {
+					alert("Unknown error occurred when trying to sign in! Please try again.");
+					return;
+				}
+				if (data.apicode == 0) {
+					if ( typeof data.apidata != 'undefined' && data.apidata != null && data.apidata != null != '') {
+						document.cookie = 'inspinia_auth_token' + '="' + data.apidata.apikey + '";path=/';
+						document.cookie = 'inspinia_account_id' + '="' + account_id + '";path=/';
+						document.cookie = 'inspinia_company_id' + '="' + company_id + '";path=/';
+						$window.open(dashboard_url, "_blank");
+					}else{
+						alert("Failed to sign in! Please try again.");
+					}
+				} else {
+					if(data.apitext != ''){
+						alert(data.apitext);
+					}else{
+						alert("An error occurred when trying to sign in. Error code: " + data.apicode);
+					}
+				}
+		}).error(
+			function() {
+				alert("Failed to sign in! Please try again.");
+		});
 	};
 
 	$scope.setPagingDataSliced = setPagingDataSliced;

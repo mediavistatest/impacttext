@@ -214,7 +214,7 @@ i.fa.fa-info-circle {
     color: green;
     font-weight: 700;
 }
-.ngCellText.ng-scope.col5.colt5 {
+.ngCellText.ng-scope.col5.colt5, .ngCellText.ng-scope.col6.colt6 {
     text-align: right;
 }
 .ngCanvas, .ngRow {
