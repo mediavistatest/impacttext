@@ -707,8 +707,11 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 				notify("Please enter the valid long code.");
 				return;
 			}
-			if ($scope.smsCode.LongCode.length != 11) {
-				notify("Long code length must be 11 characters!");
+			if($scope.smsCode.LongCode[0] == '1' && $scope.smsCode.LongCode.length != 11){
+				notify("Long code that starts with '1' must be 11 characters long!");
+				return;
+			}else if($scope.smsCode.LongCode[0] != '1' && $scope.smsCode.LongCode.length != 10){
+				notify("Long code length must be 10 characters!");
 				return;
 			}
 			if (typeof $scope.smsCode.LongCodeName == 'undefined' || $scope.smsCode.LongCodeName == null || $.trim($scope.smsCode.LongCodeName) == '') {
