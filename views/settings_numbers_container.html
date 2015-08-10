@@ -66,7 +66,7 @@ Settings
                         <label>Set as default:</label>
                     </div>
                     <div class="col-sm-6 check">
-                        <div class="radio"><input icheck type="checkbox" name="defaultNumber" ng-model="Number.prefered" ng-trim="false" ng-value="true" ng-change="cpo.Events.DefaultNumber_onChange(cpo, Number)"></div>
+                        <div class="radio"><input icheck type="radio" name="defaultNumber" ng-model="numCtrl.defaultNumber" ng-trim="false" value="{{Number.DIDID}}"></div>
                     </div>
                 </div>
                 <div class="form-group clearfix">

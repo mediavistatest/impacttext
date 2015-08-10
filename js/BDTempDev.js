@@ -2294,19 +2294,53 @@ var ngSettings = {
                         error(data, keyword_id);
                     }
                 });
-            }
+            },
+			   SetDefault : function(cpo, success, error){
+					var didid = cpo.numCtrl.defaultNumber;
+					if(!empty(didid)){
+						var params = {
+							apikey : cpo.$scope.main.authToken,
+							accountID : cpo.$scope.main.accountID,
+							companyID : cpo.$scope.main.accountInfo.companyID,
+							didid : didid,
+							sethttp : 1
+						};
+						var $param = $.param(params);
+
+						cpo.$http.post(inspiniaNS.wsUrl + "did_setprimary", $param).success(function(data) {
+							if (data.apicode == 0) {
+								if ( typeof success == 'function') {
+									success(data);
+								}
+							} else {
+								if ( typeof error == 'function') {
+									error(data, didid);
+								}
+							}
+						}).error(function(data, status, headers, config) {
+							if ( typeof error == 'function') {
+								error(data, didid);
+							}
+						});
+					}
+				}
         },
         Events : {
-            /*DefaultNumber_onChange : function(cpo, Number) {
-             if (Number.prefered) {
-             for (var N in cpo.numCtrl.numbers) {
-             if (cpo.numCtrl.numbers[N].DID != Number.DID) {
-             cpo.numCtrl.numbers[N].prefered = false;
-             }
-             }
-             }
-             },*/
             Save_onClick : function(cpo) {
+					 ngSettings.NumberNames.ServerRequests.SetDefault(cpo, function(){
+						 for(var i in cpo.numCtrl.numbers){
+							 cpo.numCtrl.numbers[i].prefered = (cpo.numCtrl.numbers[i].DIDID == cpo.numCtrl.defaultNumber);
+						 }
+
+						 cpo.$scope.$broadcast('itMessage', {
+							 message : 'Default ImpactText Number succesfully set.'
+						 });
+					 }, function(){
+						 cpo.$scope.$broadcast('itError', {
+							 message : 'Failed to set the default ImpactText Number!'
+						 });
+					 });
+
                 var $q = cpo.$q;
 
                 if (cpo.remainingSaveCount >= 0) {
@@ -2530,6 +2564,7 @@ var ngSettings = {
             cpo.$cookieStore = $cookieStore;
             cpo.$scope.cpo = cpo;
             cpo.$q = $q;
+			   cpo.numCtrl.defaultNumber = '';
 
             var stop;
             cpo.getNumbers = function(callback) {
@@ -2542,8 +2577,11 @@ var ngSettings = {
                     if (cpo.$scope.main.accountInfo.companyID) {
                         cpo.stopInterval();
 
+							   cpo.numCtrl.defaultNumber = cpo.$scope.main.accountInfo.primaryDIDID;
+
                         numCtrl.numbers = [];
                         numCtrl.keywords = {};
+
                         cpo.$scope.main.ServerRequests.accountKeywordGet(function() {
                             cpo.ServerRequests.GetNumbers(cpo,
                             // success
@@ -2565,9 +2603,20 @@ var ngSettings = {
 
                                     numCtrl.numbers.keywords = numCtrl.keywords[number.DIDID];
                                 }
+										  for(var n in numCtrl.keywords){
+											  numCtrl.keywords[n].splice(2);
+										  }
+
+										  for(var i in cpo.numCtrl.numbers){
+											  cpo.numCtrl.numbers[i].prefered = (cpo.numCtrl.numbers[i].DIDID == cpo.numCtrl.defaultNumber);
+										  }
                             },
                             // error
                             function(data) {
+										  for(var i in cpo.numCtrl.numbers){
+											  cpo.numCtrl.numbers[i].prefered = (cpo.numCtrl.numbers[i].DIDID == cpo.numCtrl.defaultNumber);
+										  }
+
                                 cpo.$scope.$broadcast('itError', {
                                     message : 'Failed to get ImpactText Number!'
                                 });
