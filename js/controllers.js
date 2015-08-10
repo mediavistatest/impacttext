@@ -496,13 +496,13 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                     if (callback) {
                         callback([]);
                     }
-                    console.log(JSON.stringify(data));
+                    //console.log(JSON.stringify(data));
                 }
             }).error(function(data, status, headers, config) {
                 if (callback) {
                     callback([]);
                 }
-                console.log(JSON.stringify(data));
+                //console.log(JSON.stringify(data));
             });
         },
         contactBlacklistAddRequest : function(request, $inScope, refresh, callback) {
@@ -3377,6 +3377,69 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         }
     }, true);
     //TABLE OPTIONS
+
+	 $scope.columnDefs = [{
+		 inSettings : false,
+		 field : '',
+		 width : 30
+		 //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 canBeClicked : true,
+		 field : 'ANI',
+		 displayName : 'ANI'
+		 //cellTemplate: 'views/table/ListNameTemplate.html'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 canBeClicked : true,
+		 field : 'lastName',
+		 displayName : 'Name',
+		 cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 canBeClicked : true,
+		 field : 'emailAddress',
+		 displayName : 'Email'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 field : 'custom1',
+		 displayName : 'Field 1'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 field : 'custom2',
+		 displayName : 'Field 2'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 field : 'custom3',
+		 displayName : 'Field 3'
+	 }, {
+		 inSettings : true,
+		 checked : false,
+		 field : 'custom4',
+		 displayName : 'Field 4'
+	 }, {
+		 inSettings : true,
+		 checked : false,
+		 field : 'custom5',
+		 displayName : 'Field 5'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 field : 'status',
+		 displayName : 'Status',
+		 cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
+	 }, {
+		 inSettings : false,
+		 checked : true,
+		 cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_contact({id:row.getProperty(\'contactID\')})"><i class="fa fa-pencil"></i> Edit Contact </a></div>'
+	 }];
+
     $scope.ngOptions = {
         data : 'ngData',
         enableSorting : true,
@@ -3395,38 +3458,9 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         pagingOptions : $scope.pagingOptions,
         //filterOptions : $scope.filterOptions,
         primaryKey : 'contactID',
-        columnDefs : [{
-            field : '',
-            width : 30
-            //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
-        }, {
-            field : 'ANI',
-            displayName : 'ANI'
-            //cellTemplate: 'views/table/ListNameTemplate.html'
-        }, {
-            field : 'lastName',
-            displayName : 'Name',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
-        }, {
-            field : 'emailAddress',
-            displayName : 'Email'
-        }, {
-            field : 'custom1',
-            displayName : 'Field 1'
-        }, {
-            field : 'custom2',
-            displayName : 'Field 2'
-        }, {
-            field : 'custom3',
-            displayName : 'Field 3'
-        }, {
-            field : 'status',
-            displayName : 'Status',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
-        }, {
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_contact({id:row.getProperty(\'contactID\')})"><i class="fa fa-pencil"></i> Edit Contact </a></div>'
-        }]
+		  columnDefs: 'columnDefs'
     };
+
     $scope.$watch('ngData', function() {
         $('.gridStyle').trigger('resize');
     });
@@ -3505,6 +3539,60 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
             alert(JSON.stringify(data));
         });
     };
+
+	$scope.columnSettings = {
+		columnDefs : $.extend([], $scope.columnDefs),
+		ColumnUp_onClick : function(index) {
+			$scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index - 1, 1, $scope.columnSettings.columnDefs[index])[0];
+		},
+		ColumnDown_onClick : function(index) {
+			$scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index + 1, 1, $scope.columnSettings.columnDefs[index])[0];
+		},
+		UpdateColumns : function(refresh) {
+			$scope.columnSettings.SetCookie();
+			$scope.columnDefs = $.extend([], $scope.columnSettings.GrepColumnDefs($scope.columnSettings.columnDefs));
+			if(refresh){
+				$scope.refresh();
+			}
+		},
+		GrepColumnDefs : function(columnDefs) {
+			return $.grep(columnDefs, function(member) {
+				return (member.canBeClicked || (!member.canBeClicked && member.checked));
+			});
+		},
+		GetCookie : function() {
+			var columnDefsCookie = $scope.main.ipCookie('itContactsColumnDefs');
+			if (columnDefsCookie == null) {
+				columnDefsCookie = [];
+				$scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
+					expires : 365,
+					expirationUnit : 'days'
+				});
+			}
+			return columnDefsCookie;
+		},
+		SetCookie : function() {
+			var columnDefsCookie = [{columnDefs : $scope.columnSettings.columnDefs}];
+			$scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
+				expires : 365,
+				expirationUnit : 'days'
+			});
+		},
+		DefaultColumns : function() {
+			var columnDefsCookie = [];
+			$scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
+				expires : 365,
+				expirationUnit : 'days'
+			});
+			location.reload();
+		}
+	};
+
+	var cookie = $scope.columnSettings.GetCookie();
+	if (cookie != null && cookie.length != 0) {
+		$scope.columnSettings.columnDefs = cookie[0].columnDefs;
+	}
+	$scope.columnSettings.UpdateColumns();
 }
 
 /**

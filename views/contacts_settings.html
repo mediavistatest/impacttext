@@ -1,0 +1,35 @@
+<h2 class="section-title">
+	Column settings
+</h2>
+<div ng-repeat="(index, column) in columnSettings.columnDefs">
+	<div ng-if="column.inSettings">
+		<div class="divider ng-scope"></div>
+		<h3 ng-show="column.displayName">
+			{{column.displayName}}
+		</h3>
+		<h3 ng-show="column.button">
+			{{column.button}}
+		</h3>
+		<button title="Up" class="btn" ng-disabled="index==1" ng-click="columnSettings.ColumnUp_onClick(index)">
+			<i class="fa fa-arrow-up">
+			</i>
+		</button>
+		<button title="Down" class="btn" ng-disabled="index==columnSettings.columns.length-2" ng-click="columnSettings.ColumnDown_onClick(index)">
+			<i class="fa fa-arrow-down">
+			</i>
+		</button>
+		<label ng-hide="column.canBeClicked">
+			<input type="checkbox" ng-model="column.checked" >
+			</input>display
+		</label>
+	</div>
+</div>
+<div class="divider ng-scope"></div>
+
+<a class="btn left" style="background: none;margin-bottom: 10px; width:100%" ng-click="columnSettings.DefaultColumns()">
+	<span> Default</span>
+</a>
+
+<a class="btn btn-send left" ng-click="columnSettings.UpdateColumns(true)">
+	<span> Save</span>
+</a>

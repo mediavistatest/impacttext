@@ -1,5 +1,5 @@
 <h1>Contacts</h1>
-<div class="col-md-12 content-holder animated fadeInRight manage-list list-search" ng-class="animation" ng-controller="ngContactListCtrl">
+<div id="manageContactsWrapper" class="col-md-12 content-holder animated fadeInRight manage-list list-search" ng-class="animation" ng-controller="ngContactListCtrl">
     <h2 class="section-title">Manage contacts</h2>
     <div class="top-buttons">
         <a href="#/lists/lists_add_contact" class="btn btn-add"><i class="fa fa-plus"></i> Add contact(s)</a>&nbsp;
@@ -16,6 +16,15 @@
             <select class="page-select" ng-model="pagingOptions.pageSize">
                 <option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
             </select>
+
+			  <div class="btn-group dropdown discard-btn column-settings-btn">
+				  <button data-toggle="dropdown" class="btn dropdown-toggle" aria-expanded="false">
+					  <i class="fa fa-cog"></i>
+				  </button>
+				  <div class="dropdown-menu dropdown-list dropdown-alerts column-settings" ng-click="$event.stopPropagation()">
+					  <div ng-include="'views/contacts_settings.html'" ></div>
+				  </div>
+			  </div>
         </div>
         <div>
             <!--<button class="btn btn-success" data-toggle="button" ng-click="filterStatusO()">Opted out</button>-->
