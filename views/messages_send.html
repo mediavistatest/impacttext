@@ -156,7 +156,7 @@
                 Schedule for later </label>
         </div>
         <div ng-show="ScheduleCheck">
-            <div ng-show="ScheduleCheck&&!SendForm.$valid">All dates should be in future on reccuring and schedule messages</div>
+            <div ng-show="ScheduleCheck&&!SendForm.$valid" class="error-box">All dates should be in future on reccuring and schedule messages</div>
             <div class="form-group clearfix" ng-repeat="sheduledDateTime in ArrayScheduledDateTime" ng-controller="ScheduleRepeatCtrl">
                 <div class="row">
                     <label class="col-sm-2 control-label">

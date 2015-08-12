@@ -2442,6 +2442,13 @@ ul.bar-legend {
 #manageContactsWrapper .column-settings-btn { margin-left: 5px; vertical-align: top; }
 #manageContactsWrapper .column-settings-btn > .btn { padding-bottom: 5px; }
 
+.error-box {
+    color: #a94442;
+    padding: 5px 15px;
+    background-color: #fadcdb;
+    margin-bottom: 15px;
+}
+
 /*MEDIA QUERIES*/
 
 @media (max-width: 1375px) {
