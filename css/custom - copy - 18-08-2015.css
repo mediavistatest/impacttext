@@ -2449,10 +2449,6 @@ ul.bar-legend {
     margin-bottom: 15px;
 }
 
-.top-buttons .btn {
-    margin-bottom:5px;
-}
-
 /*MEDIA QUERIES*/
 
 @media (max-width: 1375px) {
@@ -2462,44 +2458,6 @@ ul.bar-legend {
         padding: 10px 15px;
         margin-bottom: 0;
     }
-}
-
-/*NEW CSS 18.08.2015.*/
-@media (max-width: 1024px) {
-    .iphone-prev {
-    background: url(../img/iphone6-2.png)no-repeat 0 0;
-    height: 475px;
-    position: absolute;
-    width: 200px;
-    right: 20px;
-    top: 90px;
-    background-size: 200px;
-
-}
-
-.message-cloud.ng-binding {
-    padding: 10px;
-    width: 145px;
-    background: whitesmoke;
-    border-radius: 10px;
-    position: absolute;
-    top: 110px;
-    left: 30px;
-}
-
-.btn-send {
-    color: white;
-    background: #007d32;
-    width: auto;
-    border: 1px solid #007d32;
-}
-
-/*.messages-inbox .page-select-wrapper {
-    float: none;
-    display: block;
-    margin-top: 10px;
-}*/
-
 }
 
 @media (min-width: 768px) {
