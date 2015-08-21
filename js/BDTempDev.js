@@ -1148,7 +1148,7 @@ var ngInbox = {
             field : 'ContactLists',
             displayName : 'List'
         }, {
-            checked : false,
+            checked : true,
             canBeClicked : false,
             field : 'DID',
             displayName : 'To'

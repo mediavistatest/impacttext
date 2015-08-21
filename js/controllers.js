@@ -827,9 +827,14 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
             };
             $scope.main.ServerRequests.contactModifyRequest(request, inScope, refresh, callback);
         },
-        forwardToMail : function(messageObject) {
-        	var message = messageObject.message.replace(/\ /g, '%20');
-            var href = 'mailto:?subject=ImpactText%20-%20Forwarded%20SMS&body=From%20'+messageObject.DID +';%20'+messageObject.messageDate+';%20'+ message;
+        // forwardToMail : function(messageObject) {
+        	// var message = messageObject.message.replace(/\ /g, '%20');
+            // var href = 'mailto:?subject=ImpactText%20-%20Forwarded%20SMS&body=From%20'+messageObject.DID +';%20'+messageObject.messageDate+';%20'+ message;
+            // window.location.href = href;
+        // }
+        forwardToMail : function(from, to, date, inMessage) {
+            var message = inMessage.replace(/\ /g, '%20');
+            var href = 'mailto:?subject=ImpactText%20-%20Forwarded%20SMS&body=From%20'+from +';%20To%20'+to+';%20'+date+';%20'+ message;
             window.location.href = href;
         }
     };
