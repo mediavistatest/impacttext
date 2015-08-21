@@ -77,7 +77,7 @@ var ngFunctions = {
         }
     },
     newDateWrapper : function(inDate) {
-        
+
         // console.log(inDate)
 
         var timezoneOffsetMinutes = new Date().getTimezoneOffset();
@@ -90,7 +90,7 @@ var ngFunctions = {
         }
         // console.log(result)
         return result;
-        
+
     },
     SetTimezoneOffsetDate : function(currentInDate, hours, minutes, seconds) {
         var timezoneOffsetMinutes = new Date().getTimezoneOffset();
@@ -170,15 +170,16 @@ var ngFunctions = {
             t.click();
         }
     },
-	 ConvertDateToMySqlDate : function(date){
-		 if(typeof date == 'object'){
-			 var yyyy = date.getFullYear().toString();
-			 var mm = (date.getMonth()+1).toString(); // getMonth() is zero-based
-			 var dd  = date.getDate().toString();
-			 return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]);
-		 }
-		 return date;
-	 }
+    ConvertDateToMySqlDate : function(date) {
+        if ( typeof date == 'object') {
+            var yyyy = date.getFullYear().toString();
+            var mm = (date.getMonth() + 1).toString();
+            // getMonth() is zero-based
+            var dd = date.getDate().toString();
+            return yyyy + '-' + (mm[1] ? mm : "0" + mm[0]) + '-' + (dd[1] ? dd : "0" + dd[0]);
+        }
+        return date;
+    }
 };
 
 var ngInbox = {
@@ -597,8 +598,12 @@ var ngInbox = {
 
                                 }
                             }
-                        } else if (controllerParent.clickedMessage.contactListName) {
-                            continueFunction(controllerParent);
+                        } else {
+                            controllerParent.ANIList = '';
+                            controllerParent.ANIListForSending = '';
+                            if (controllerParent.clickedMessage.contactListName) {
+                                continueFunction(controllerParent);
+                            }
                         }
                     }
                 } catch(e) {
@@ -1466,13 +1471,13 @@ var ngInbox = {
             field : 'con_lis',
             displayName : 'Contact/List',
             cellTemplate : 'views/table/MessageTableTemplate.html'
-		  }, {
-			  checked : true,
-			  canBeClicked : false,
-			  field : 'contactSelectionName',
-			  displayName : 'Segment',
-			  cellTemplate : 'views/table/MessageTableTemplate.html'
-		  }, {
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : 'contactSelectionName',
+            displayName : 'Segment',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
+        }, {
             checked : true,
             canBeClicked : true,
             field : 'message',
@@ -1630,8 +1635,6 @@ var ngInbox = {
                     //                    scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
 
                     scheduledDateTime.SetDate = ngFunctions.newDateWrapper(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm'));
-                    
-                    console.log(scheduledDateTime.SetDate)
 
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
@@ -1650,7 +1653,6 @@ var ngInbox = {
                 //TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
                 console.log(e);
             }
-
         },
         PostSuccess : function(controllerParent, result) {
             ngInbox._internal.Methods.PostSuccess(controllerParent, result);
@@ -1669,13 +1671,13 @@ var ngInbox = {
             field : 'con_lis',
             displayName : 'Contact/List',
             cellTemplate : 'views/table/MessageTableTemplate.html'
-		  }, {
-			  checked : true,
-			  canBeClicked : false,
-			  field : 'contactSelectionName',
-			  displayName : 'Segment',
-			  cellTemplate : 'views/table/MessageTableTemplate.html'
-		  }, {
+        }, {
+            checked : true,
+            canBeClicked : false,
+            field : 'contactSelectionName',
+            displayName : 'Segment',
+            cellTemplate : 'views/table/MessageTableTemplate.html'
+        }, {
             checked : true,
             canBeClicked : true,
             field : 'message',
@@ -2295,51 +2297,51 @@ var ngSettings = {
                     }
                 });
             },
-			   SetDefault : function(cpo, success, error){
-					var didid = cpo.numCtrl.defaultNumber;
-					if(!empty(didid)){
-						var params = {
-							apikey : cpo.$scope.main.authToken,
-							accountID : cpo.$scope.main.accountID,
-							companyID : cpo.$scope.main.accountInfo.companyID,
-							didid : didid,
-							sethttp : 1
-						};
-						var $param = $.param(params);
+            SetDefault : function(cpo, success, error) {
+                var didid = cpo.numCtrl.defaultNumber;
+                if (!empty(didid)) {
+                    var params = {
+                        apikey : cpo.$scope.main.authToken,
+                        accountID : cpo.$scope.main.accountID,
+                        companyID : cpo.$scope.main.accountInfo.companyID,
+                        didid : didid,
+                        sethttp : 1
+                    };
+                    var $param = $.param(params);
 
-						cpo.$http.post(inspiniaNS.wsUrl + "did_setprimary", $param).success(function(data) {
-							if (data.apicode == 0) {
-								if ( typeof success == 'function') {
-									success(data);
-								}
-							} else {
-								if ( typeof error == 'function') {
-									error(data, didid);
-								}
-							}
-						}).error(function(data, status, headers, config) {
-							if ( typeof error == 'function') {
-								error(data, didid);
-							}
-						});
-					}
-				}
+                    cpo.$http.post(inspiniaNS.wsUrl + "did_setprimary", $param).success(function(data) {
+                        if (data.apicode == 0) {
+                            if ( typeof success == 'function') {
+                                success(data);
+                            }
+                        } else {
+                            if ( typeof error == 'function') {
+                                error(data, didid);
+                            }
+                        }
+                    }).error(function(data, status, headers, config) {
+                        if ( typeof error == 'function') {
+                            error(data, didid);
+                        }
+                    });
+                }
+            }
         },
         Events : {
             Save_onClick : function(cpo) {
-					 ngSettings.NumberNames.ServerRequests.SetDefault(cpo, function(){
-						 for(var i in cpo.numCtrl.numbers){
-							 cpo.numCtrl.numbers[i].prefered = (cpo.numCtrl.numbers[i].DIDID == cpo.numCtrl.defaultNumber);
-						 }
+                ngSettings.NumberNames.ServerRequests.SetDefault(cpo, function() {
+                    for (var i in cpo.numCtrl.numbers) {
+                        cpo.numCtrl.numbers[i].prefered = (cpo.numCtrl.numbers[i].DIDID == cpo.numCtrl.defaultNumber);
+                    }
 
-						 cpo.$scope.$broadcast('itMessage', {
-							 message : 'Default ImpactText Number succesfully set.'
-						 });
-					 }, function(){
-						 cpo.$scope.$broadcast('itError', {
-							 message : 'Failed to set the default ImpactText Number!'
-						 });
-					 });
+                    cpo.$scope.$broadcast('itMessage', {
+                        message : 'Default ImpactText Number succesfully set.'
+                    });
+                }, function() {
+                    cpo.$scope.$broadcast('itError', {
+                        message : 'Failed to set the default ImpactText Number!'
+                    });
+                });
 
                 var $q = cpo.$q;
 
@@ -2564,7 +2566,7 @@ var ngSettings = {
             cpo.$cookieStore = $cookieStore;
             cpo.$scope.cpo = cpo;
             cpo.$q = $q;
-			   cpo.numCtrl.defaultNumber = '';
+            cpo.numCtrl.defaultNumber = '';
 
             var stop;
             cpo.getNumbers = function(callback) {
@@ -2577,7 +2579,7 @@ var ngSettings = {
                     if (cpo.$scope.main.accountInfo.companyID) {
                         cpo.stopInterval();
 
-							   cpo.numCtrl.defaultNumber = cpo.$scope.main.accountInfo.primaryDIDID;
+                        cpo.numCtrl.defaultNumber = cpo.$scope.main.accountInfo.primaryDIDID;
 
                         numCtrl.numbers = [];
                         numCtrl.keywords = {};
@@ -2603,19 +2605,19 @@ var ngSettings = {
 
                                     numCtrl.numbers.keywords = numCtrl.keywords[number.DIDID];
                                 }
-										  for(var n in numCtrl.keywords){
-											  numCtrl.keywords[n].splice(2);
-										  }
+                                for (var n in numCtrl.keywords) {
+                                    numCtrl.keywords[n].splice(2);
+                                }
 
-										  for(var i in cpo.numCtrl.numbers){
-											  cpo.numCtrl.numbers[i].prefered = (cpo.numCtrl.numbers[i].DIDID == cpo.numCtrl.defaultNumber);
-										  }
+                                for (var i in cpo.numCtrl.numbers) {
+                                    cpo.numCtrl.numbers[i].prefered = (cpo.numCtrl.numbers[i].DIDID == cpo.numCtrl.defaultNumber);
+                                }
                             },
                             // error
                             function(data) {
-										  for(var i in cpo.numCtrl.numbers){
-											  cpo.numCtrl.numbers[i].prefered = (cpo.numCtrl.numbers[i].DIDID == cpo.numCtrl.defaultNumber);
-										  }
+                                for (var i in cpo.numCtrl.numbers) {
+                                    cpo.numCtrl.numbers[i].prefered = (cpo.numCtrl.numbers[i].DIDID == cpo.numCtrl.defaultNumber);
+                                }
 
                                 cpo.$scope.$broadcast('itError', {
                                     message : 'Failed to get ImpactText Number!'
