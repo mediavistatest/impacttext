@@ -24,7 +24,7 @@ Autoresponder messages can be sent on a timed schedule by using the Delay Rule o
 <div class="row bottom-buttons">
 <a ng-click="cpo.Events.AddNewRule_onClick(cpo)" ng-show="ngData&&arCtrl.fromNumber.autoResponderID&&(ngData.length<5)" class="btn btn-add" style="float:left"><i class="fa fa-plus">
 </i>
-Add new rule ({{ngData?(ngData.length+1):1}})</a>
+Add new rule ({{ngData?(5-ngData.length):5}} left)</a>
 <a class="btn" ng-click="cpo.Events.ActivateRules_onClick(cpo)" ><i class="fa fa-plus-square-o">
 </i>
 Activate Rule</a>

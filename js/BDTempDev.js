@@ -2887,6 +2887,7 @@ var ngSettings = {
     Autoresponder : {
         _internal : {
             ResetList : function(cpo) {
+                cpo.clickedKeyword = null;
                 cpo.arCtrl.autoresponderID = null;
                 cpo.arCtrl.autoresponderName = '';
 
@@ -3358,12 +3359,18 @@ var ngSettings = {
                     });
                 }
             },
-            ModifyKeywordCallback : function(cpo, result) {
+            ModifyKeywordCallback : function(cpo, result, onlyKeywordModification) {
+                if (typeof onlyKeywordModification == undefined){
+                    onlyKeywordModification = false;
+                }
+
                 if (result.apicode == 0) {
                     cpo.$scope.$broadcast('itMessage', {
                         message : 'Autoresponder modified'
                     });
-                    ngSettings.Autoresponder.ServerRequests.ResolveActions(cpo, cpo.keywordActionRules);
+                    if (cpo.keywordActionRules && !onlyKeywordModification) {
+                        ngSettings.Autoresponder.ServerRequests.ResolveActions(cpo, cpo.keywordActionRules);
+                    }
                 } else {
                     cpo.$scope.$broadcast('itError', {
                         message : 'Error! ' + result.apitext
@@ -3489,17 +3496,26 @@ var ngSettings = {
             ActivateRules_onClick : function(cpo) {
                 cpo.arCtrl.inactive = false;
                 cpo.arCtrl.status = "A";
-                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
+                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, function(cpo, result){
+                    ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback(cpo, result, true);
+                    ngSettings.Autoresponder.FillAutoresponder(cpo);
+                });
             },
             //DEACTIVATE KEYWORD
             DeactivateRules_onClick : function(cpo) {
                 cpo.arCtrl.inactive = true;
                 cpo.arCtrl.status = "I";
-                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
+                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, function(cpo, result){
+                    ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback(cpo, result, true);
+                    ngSettings.Autoresponder.FillAutoresponder(cpo);
+                });
             },
             Delete_onClick : function(cpo) {
                 cpo.arCtrl.status = "D";
-                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback);
+                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, function(cpo, result){
+                    ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback(cpo, result, true);
+                    ngSettings.Autoresponder.FillAutoresponder(cpo);
+                });
             },
             Save_onClick : function(cpo) {
                 var DateTimeFix = function(currentDateTime, currentHour, currentMinute) {
