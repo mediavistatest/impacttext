@@ -6532,6 +6532,7 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
     $http.post(inspiniaNS.wsUrl + 'messages_inbound', $paramInbound)
     // success function
     .success(function(result) {
+        ngFunctions.ConvertObjectUTCDateTimePropsToLocalTime(result.apidata);
         $scope.InboxResults = result.apidata;
         //iCtrl.Message = result.apidata.message;
     })
@@ -6542,6 +6543,7 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
     $http.post(inspiniaNS.wsUrl + 'messages_outbound', $paramOutbound)
     // success function
     .success(function(result) {
+        ngFunctions.ConvertObjectUTCDateTimePropsToLocalTime(result.apidata);
         $scope.SentResults = result.apidata;
         //iCtrl.Message = result.apidata.message;
     })
