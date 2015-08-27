@@ -1841,6 +1841,7 @@ i.fa.fa-caret-down {
     position: absolute;
     top: 110px;
     left: 30px;
+    word-wrap: break-word;
 }
 
 #text {
