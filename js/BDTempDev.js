@@ -917,6 +917,17 @@ var ngInbox = {
 
                 controllerParent.mesageTextToExport = '';
                 callback();
+            },
+            FillSendToField : function($sendScope) {
+                var group = 'Lists';
+                var id = $sendScope.controllerParent.clickedMessage.contactListID;
+                if ($sendScope.controllerParent.clickedMessage.contactSelectionID && $sendScope.controllerParent.clickedMessage.contactSelectionID != '0' && $sendScope.controllerParent.clickedMessage.contactSelectionID != 0) {
+                    group = 'Segments';
+                    id = $sendScope.controllerParent.clickedMessage.contactSelectionID;
+                }
+                $sendScope.ToList = $.grep($sendScope.contactGroups, function(member) {
+                return (member.group == group && member.id == id);
+                })[0];
             }
         },
         Settings : {
@@ -1426,9 +1437,10 @@ var ngInbox = {
                     $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
                     return member.DID == $sendScope.controllerParent.clickedMessage.DID;
                     })[0];
-                    $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
-                    return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
-                    })[0];
+                    // $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                    // return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                    // })[0];
+                    ngInbox._internal.Methods.FillSendToField($sendScope);
 
                     $sendScope.OptOutMsg = '';
                     $sendScope.OptOutTxt3 = $sendScope.initial;
@@ -1596,9 +1608,7 @@ var ngInbox = {
                         $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
                     } else {
                         $sendScope.SendToList = true;
-                        $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
-                        return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
-                        })[0];
+                        ngInbox._internal.Methods.FillSendToField($sendScope);
                     }
 
                     $sendScope.OptOutMsg = '';
@@ -1813,9 +1823,10 @@ var ngInbox = {
                         $sendScope.controllerParent.clickedMessage.con_lis = $sendScope.controllerParent.ANIList;
                     } else {
                         $sendScope.SendToList = true;
-                        $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
-                        return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
-                        })[0];
+                        // $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                        // return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                        // })[0];
+                        ngInbox._internal.Methods.FillSendToField($sendScope);
                     }
 
                     $sendScope.OptOutMsg = '';
@@ -1967,9 +1978,11 @@ var ngInbox = {
                 $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function(member) {
                 return member.DID == $sendScope.controllerParent.clickedMessage.DID;
                 })[0];
-                $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
-                return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
-                })[0];
+                // $sendScope.ToList = $.grep($sendScope.contactLists, function(member) {
+                // return member.contactListID == $sendScope.controllerParent.clickedMessage.contactListID;
+                // })[0];
+                ngInbox._internal.Methods.FillSendToField($sendScope);
+
                 $sendScope.MessageTxt = $sendScope.controllerParent.clickedMessage.message;
                 continueFunction = function() {
                     $sendScope.ToNumber = $sendScope.controllerParent.ANIList;
@@ -3360,7 +3373,7 @@ var ngSettings = {
                 }
             },
             ModifyKeywordCallback : function(cpo, result, onlyKeywordModification) {
-                if (typeof onlyKeywordModification == undefined){
+                if ( typeof onlyKeywordModification == undefined) {
                     onlyKeywordModification = false;
                 }
 
@@ -3496,7 +3509,7 @@ var ngSettings = {
             ActivateRules_onClick : function(cpo) {
                 cpo.arCtrl.inactive = false;
                 cpo.arCtrl.status = "A";
-                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, function(cpo, result){
+                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, function(cpo, result) {
                     ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback(cpo, result, true);
                     ngSettings.Autoresponder.FillAutoresponder(cpo);
                 });
@@ -3505,14 +3518,14 @@ var ngSettings = {
             DeactivateRules_onClick : function(cpo) {
                 cpo.arCtrl.inactive = true;
                 cpo.arCtrl.status = "I";
-                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, function(cpo, result){
+                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, function(cpo, result) {
                     ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback(cpo, result, true);
                     ngSettings.Autoresponder.FillAutoresponder(cpo);
                 });
             },
             Delete_onClick : function(cpo) {
                 cpo.arCtrl.status = "D";
-                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, function(cpo, result){
+                ngSettings.Autoresponder.ServerRequests.ModifyKeyword(cpo, cpo.$scope.ngRespondersOptions.selectedItems, function(cpo, result) {
                     ngSettings.Autoresponder.ServerRequests.ModifyKeywordCallback(cpo, result, true);
                     ngSettings.Autoresponder.FillAutoresponder(cpo);
                 });
