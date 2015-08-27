@@ -3474,25 +3474,45 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     };
     $scope.refresh();
 
-    $scope.export = function() {
-		  var selected_ids = [];
-		  for(var i in $scope.mySelections){
-			  selected_ids.push($scope.mySelections[i].contactID);
-		  }
-		  selected_ids = selected_ids.join();
+	 $scope.exportAll = function() {
+		 $scope.export(true);
+	 };
 
-		  if($scope.mySelections.length == 0){
-			  $scope.$broadcast('ContactsNotSelectedError');
-			  return;
+	/**
+	 *
+	 * @param bool all Export all
+	 */
+    $scope.export = function(all) {
+		  if(empty(all)){ all = false; }
+
+		  if(all){
+			  var params = {
+				  sethttp : 1,
+				  apikey : $cookieStore.get('inspinia_auth_token'),
+				  accountID : $cookieStore.get('inspinia_account_id'),
+				  export : "csv"
+			  };
+		  }else{
+			  var selected_ids = [];
+			  for(var i in $scope.mySelections){
+				  selected_ids.push($scope.mySelections[i].contactID);
+			  }
+			  selected_ids = selected_ids.join();
+
+			  if($scope.mySelections.length == 0){
+				  $scope.$broadcast('ContactsNotSelectedError');
+				  return;
+			  }
+
+			  var params = {
+				  sethttp : 1,
+				  apikey : $cookieStore.get('inspinia_auth_token'),
+				  accountID : $cookieStore.get('inspinia_account_id'),
+				  contactID : selected_ids,
+				  export : "csv"
+			  };
 		  }
 
-        var params = {
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id'),
-			   contactID : selected_ids,
-            export : "csv"
-        };
         if ($state.params.id && $state.params.id != '') {
             params['contactListID'] = $state.params.id;
         }
