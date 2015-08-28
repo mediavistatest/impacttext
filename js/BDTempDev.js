@@ -3594,6 +3594,9 @@ var ngSettings = {
                 };
 
                 for (var i = 0; i < cpo.keywordActionRules.length; i++) {
+                    if (!cpo.keywordActionRules[i].messageTxt){
+                        cpo.keywordActionRules[i].messageTxt = '';
+                    }
                     cpo.keywordActionRules[i].ruleParams = {
                         message : String(cpo.arCtrl.fromName + (cpo.arCtrl.fromName ? ': ' : '') + cpo.keywordActionRules[i].messageTxt + ' ' + cpo.keywordActionRules[i].optFields.OptOutTxt1 + cpo.keywordActionRules[i].optFields.OptOutTxt2 + cpo.keywordActionRules[i].optFields.OptOutTxt3),
                         delaymins : parseInt(cpo.keywordActionRules[i].delayTimeHour) * 60 + parseInt(cpo.keywordActionRules[i].delayTimeMinute)
