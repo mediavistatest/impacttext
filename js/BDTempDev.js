@@ -128,38 +128,38 @@ var ngFunctions = {
         return (dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4] + ":" + dateParts[5]);
     },
     ConvertObjectUTCDateTimePropsToLocalTime : function(objectToconvertDates) {
-        // var data = objectToconvertDates;
+                // var data = objectToconvertDates;
         // if (data.length) {
-        // for (var i = 0; i < data.length; i++) {
-        // for (var key in data[i]) {
-        // if (data[i].hasOwnProperty(key)) {
-        // // console.log(key + ':' + data[i][key])
-        // if (ngInbox._internal.Methods.IsDate(data[i][key])) {
-        // // console.log(key + ':' + data[i][key])
-        // // console.log('BEFORE CONVERSION: ' + key + ':' + data[i][key]);
-        // data[i][key] = ngInbox._internal.Methods.GetLocalDateTimeString(data[i][key]);
-        // // console.log('AFTER CONVERSION: ' + key + ':' + data[i][key]);
-        // }
-        // }
-        // }
-        // }
+            // for (var i = 0; i < data.length; i++) {
+                // for (var key in data[i]) {
+                    // if (data[i].hasOwnProperty(key)) {
+                        // // console.log(key + ':' + data[i][key])
+                        // if (ngInbox._internal.Methods.IsDate(data[i][key])) {
+                            // // console.log(key + ':' + data[i][key])
+                            // // console.log('BEFORE CONVERSION: ' + key + ':' + data[i][key]);
+                            // data[i][key] = ngInbox._internal.Methods.GetLocalDateTimeString(data[i][key]);
+                            // // console.log('AFTER CONVERSION: ' + key + ':' + data[i][key]);
+                        // }
+                    // }
+                // }
+            // }
         // } else {
-        // for (var key in data) {
-        // if (data.hasOwnProperty(key)) {
-        // // console.log(key + ':' + ngInbox._internal.Methods.GetLocalDateTimeString(data[key]))
-        // if (ngInbox._internal.Methods.IsDate(data[key])) {
-        // // console.log(key + ':' + ngInbox._internal.Methods.GetLocalDateTimeString(data[key]))
-        // // console.log('BEFORE CONVERSION: ' + key + ':' + data[key]);
-        // data[i][key] = ngInbox._internal.Methods.GetLocalDateTimeString(data[key]);
-        // // console.log('AFTER CONVERSION: ' + key + ':' + data[key]);
-        // }
-        // }
-        // }
+            // for (var key in data) {
+                // if (data.hasOwnProperty(key)) {
+                    // // console.log(key + ':' + ngInbox._internal.Methods.GetLocalDateTimeString(data[key]))
+                    // if (ngInbox._internal.Methods.IsDate(data[key])) {
+                        // // console.log(key + ':' + ngInbox._internal.Methods.GetLocalDateTimeString(data[key]))
+                        // // console.log('BEFORE CONVERSION: ' + key + ':' + data[key]);
+                        // data[i][key] = ngInbox._internal.Methods.GetLocalDateTimeString(data[key]);
+                        // // console.log('AFTER CONVERSION: ' + key + ':' + data[key]);
+                    // }
+                // }
+            // }
         // }
         // return data;
 
         var data = objectToconvertDates;
-        if (data) {
+        if (data){
             if (data.length) {
                 for (var i = 0; i < data.length; i++) {
                     ngFunctions.ConvertObjectUTCDateTimePropsToLocalTime(data[i]);
@@ -1472,7 +1472,7 @@ var ngInbox = {
                     // console.log('______________________-----------------------------_____________________')
                     // console.log($sendScope.controllerParent.clickedMessage.scheduledDate)
 
-                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + ' 00:00:00');
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + 'T00:00:00');
 
                     // console.log(scheduledDateTime.SetDate)
 
@@ -1662,7 +1662,7 @@ var ngInbox = {
 
                     // console.log(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm'))
 
-                    //                    scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
+                    //                    scheduledDateTime.SetDate = new Date(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm') + 'T00:00:00');
 
                     scheduledDateTime.SetDate = ngFunctions.newDateWrapper(ngFunctions.ConvertDateToYYYYmmDD($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10), 'YYYY-DD-mm'));
 
@@ -1670,7 +1670,7 @@ var ngInbox = {
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
                     if ($sendScope.controllerParent.clickedMessage.recurringend != null) {
-                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10) + ' 00:00:00');
+                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10) + 'T00:00:00');
                     } else {
                         scheduledDateTime.SetRecurringEndDate = new Date();
                     }
@@ -1869,12 +1869,12 @@ var ngInbox = {
                     }];
 
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
-                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + ' 00:00:00');
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + 'T00:00:00');
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     scheduledDateTime.SetRecurringType = $sendScope.controllerParent.clickedMessage.recurringtype;
                     if ($sendScope.controllerParent.clickedMessage.recurringend != null) {
-                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10) + ' 00:00:00');
+                        scheduledDateTime.SetRecurringEndDate = new Date($sendScope.controllerParent.clickedMessage.recurringend.substring(0, 10) + 'T00:00:00');
                     } else {
                         scheduledDateTime.SetRecurringEndDate = new Date();
                     }
@@ -2012,7 +2012,7 @@ var ngInbox = {
                     $sendScope.ScheduleCheck = false;
 
                     var scheduledDateTime = new $sendScope.main.DataConstructors.ScheduledDateTime();
-                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + ' 00:00:00');
+                    scheduledDateTime.SetDate = new Date($sendScope.controllerParent.clickedMessage.scheduledDate.substring(0, 10) + 'T00:00:00');
                     scheduledDateTime.SetTimeHour = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(11, 13);
                     scheduledDateTime.SetTimeMinute = $sendScope.controllerParent.clickedMessage.scheduledDate.substring(14, 16);
                     $sendScope.ArrayScheduledDateTime.push(scheduledDateTime);
@@ -3085,7 +3085,7 @@ var ngSettings = {
                         accountID : cpo.$scope.main.accountID,
                         companyID : cpo.$scope.main.accountInfo.companyID,
                         name : String(cpo.arCtrl.fromNumber.DID)
-                        // startdate : cpo.arCtrl.validFrom.toISOString().substring(0, 10) + ' 00:00:00',
+                        // startdate : cpo.arCtrl.validFrom.toISOString().substring(0, 10) + 'T00:00:00',
                         // ,sethttp : 1
                     };
 
@@ -3584,12 +3584,12 @@ var ngSettings = {
                 };
 
                 if (cpo.arCtrl.validFrom) {
-                    // cpo.clickedKeyword.startDate = cpo.arCtrl.validFrom.toISOString().substring(0, 10) + ' 00:00:00';
+                    // cpo.clickedKeyword.startDate = cpo.arCtrl.validFrom.toISOString().substring(0, 10) + 'T00:00:00';
                     cpo.clickedKeyword.startDate = DateTimeFix(cpo.arCtrl.validFrom, cpo.arCtrl.SetTimeHourFrom, cpo.arCtrl.SetTimeMinuteFrom);
                 };
 
                 if (cpo.arCtrl.validUntil) {
-                    // cpo.clickedKeyword.endDate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + ' 00:00:00';
+                    // cpo.clickedKeyword.endDate = cpo.arCtrl.validUntil.toISOString().substring(0, 10) + 'T00:00:00';
                     cpo.clickedKeyword.endDate = DateTimeFix(cpo.arCtrl.validUntil, cpo.arCtrl.SetTimeHourUntil, cpo.arCtrl.SetTimeMinuteUntil);
                 };
 
@@ -3705,12 +3705,12 @@ var ngSettings = {
             cpo.arCtrl.inactive = (cpo.clickedKeyword.status === "I");
 
             if (cpo.clickedKeyword.startDate) {
-                cpo.arCtrl.validFrom = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.startDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
+                cpo.arCtrl.validFrom = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.startDate.substring(0, 10), 'YYYY-DD-mm') + 'T00:00:00');
                 cpo.arCtrl.SetTimeHourFrom = cpo.clickedKeyword.startDate.substring(11, 13);
                 cpo.arCtrl.SetTimeMinuteFrom = cpo.clickedKeyword.startDate.substring(14, 16);
             }
             if (cpo.clickedKeyword.endDate) {
-                cpo.arCtrl.validUntil = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.endDate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
+                cpo.arCtrl.validUntil = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedKeyword.endDate.substring(0, 10), 'YYYY-DD-mm') + 'T00:00:00');
                 cpo.arCtrl.SetTimeHourUntil = cpo.clickedKeyword.endDate.substring(11, 13);
                 cpo.arCtrl.SetTimeMinuteUntil = cpo.clickedKeyword.endDate.substring(14, 16);
             }
@@ -4288,10 +4288,10 @@ var ngReports = {
         },
         PopulateView : function(cpo) {
             if (cpo.clickedReport.parameters.startdate) {
-                cpo.rsCtrl.StartDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.startdate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
+                cpo.rsCtrl.StartDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.startdate.substring(0, 10), 'YYYY-DD-mm') + 'T00:00:00');
             }
             if (cpo.clickedReport.parameters.enddate) {
-                cpo.rsCtrl.EndDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.enddate.substring(0, 10), 'YYYY-DD-mm') + ' 00:00:00');
+                cpo.rsCtrl.EndDate = new Date(ngFunctions.ConvertDateToYYYYmmDD(cpo.clickedReport.parameters.enddate.substring(0, 10), 'YYYY-DD-mm') + 'T00:00:00');
             }
             if (cpo.clickedReport.parameters.type) {
                 cpo.rsCtrl.SetRecurringType = cpo.clickedReport.parameters.type;
@@ -4304,7 +4304,7 @@ var ngReports = {
             }
 
             if (cpo.clickedReport.parameters.reportdate) {
-                cpo.rsCtrl.sheduledDateTime = new Date(cpo.clickedReport.parameters.reportdate.substring(0, 10) + ' 00:00:00');
+                cpo.rsCtrl.sheduledDateTime = new Date(cpo.clickedReport.parameters.reportdate.substring(0, 10) + 'T00:00:00');
                 cpo.rsCtrl.SetTimeHour = cpo.clickedReport.parameters.reportdate.substring(11, 13);
                 cpo.rsCtrl.SetTimeMinute = cpo.clickedReport.parameters.reportdate.substring(14, 16);
             }
