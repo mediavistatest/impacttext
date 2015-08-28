@@ -128,30 +128,50 @@ var ngFunctions = {
         return (dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4] + ":" + dateParts[5]);
     },
     ConvertObjectUTCDateTimePropsToLocalTime : function(objectToconvertDates) {
+        // var data = objectToconvertDates;
+        // if (data.length) {
+        // for (var i = 0; i < data.length; i++) {
+        // for (var key in data[i]) {
+        // if (data[i].hasOwnProperty(key)) {
+        // // console.log(key + ':' + data[i][key])
+        // if (ngInbox._internal.Methods.IsDate(data[i][key])) {
+        // // console.log(key + ':' + data[i][key])
+        // // console.log('BEFORE CONVERSION: ' + key + ':' + data[i][key]);
+        // data[i][key] = ngInbox._internal.Methods.GetLocalDateTimeString(data[i][key]);
+        // // console.log('AFTER CONVERSION: ' + key + ':' + data[i][key]);
+        // }
+        // }
+        // }
+        // }
+        // } else {
+        // for (var key in data) {
+        // if (data.hasOwnProperty(key)) {
+        // // console.log(key + ':' + ngInbox._internal.Methods.GetLocalDateTimeString(data[key]))
+        // if (ngInbox._internal.Methods.IsDate(data[key])) {
+        // // console.log(key + ':' + ngInbox._internal.Methods.GetLocalDateTimeString(data[key]))
+        // // console.log('BEFORE CONVERSION: ' + key + ':' + data[key]);
+        // data[i][key] = ngInbox._internal.Methods.GetLocalDateTimeString(data[key]);
+        // // console.log('AFTER CONVERSION: ' + key + ':' + data[key]);
+        // }
+        // }
+        // }
+        // }
+        // return data;
+
         var data = objectToconvertDates;
-        if (data.length) {
-            for (var i = 0; i < data.length; i++) {
-                for (var key in data[i]) {
-                    if (data[i].hasOwnProperty(key)) {
-                        // console.log(key + ':' + data[i][key])
-                        if (ngInbox._internal.Methods.IsDate(data[i][key])) {
-                            // console.log(key + ':' + data[i][key])
-                            // console.log('BEFORE CONVERSION: ' + key + ':' + data[i][key]);
-                            data[i][key] = ngInbox._internal.Methods.GetLocalDateTimeString(data[i][key]);
-                            // console.log('AFTER CONVERSION: ' + key + ':' + data[i][key]);
-                        }
-                    }
+        if (data) {
+            if (data.length) {
+                for (var i = 0; i < data.length; i++) {
+                    ngFunctions.ConvertObjectUTCDateTimePropsToLocalTime(data[i]);
                 }
-            }
-        } else {
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                    // console.log(key + ':' + ngInbox._internal.Methods.GetLocalDateTimeString(data[key]))
-                    if (ngInbox._internal.Methods.IsDate(data[key])) {
-                        // console.log(key + ':' + ngInbox._internal.Methods.GetLocalDateTimeString(data[key]))
-                        // console.log('BEFORE CONVERSION: ' + key + ':' + data[key]);
-                        data[i][key] = ngInbox._internal.Methods.GetLocalDateTimeString(data[key]);
-                        // console.log('AFTER CONVERSION: ' + key + ':' + data[key]);
+            } else {
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        if (ngInbox._internal.Methods.IsDate(data[key])) {
+                            data[key] = ngInbox._internal.Methods.GetLocalDateTimeString(data[key]);
+                        } else if ( typeof data[key] === 'object') {
+                            ngFunctions.ConvertObjectUTCDateTimePropsToLocalTime(data[key]);
+                        }
                     }
                 }
             }
