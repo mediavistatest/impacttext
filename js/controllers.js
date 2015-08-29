@@ -858,6 +858,39 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
 
             main.ServerRequests.contactListsGet();
             main.ServerRequests.contactSegmentsGet();
+            
+            main.contactGroups = [];
+			function setContactListsAndSegments() {
+				if (main.contactLists) {
+					for (var i in main.contactLists) {
+						main.contactGroups.push({
+							id : main.contactLists[i].contactListID,
+							name : main.contactLists[i].contactListName,
+							group : 'Lists'
+						});
+					}
+
+					if (main.contactSegments) {
+						for (var i in main.contactSegments) {
+							main.contactGroups.push({
+								id : main.contactSegments[i].contactSelectionID,
+								name : main.contactSegments[i].contactSelectionName,
+								group : 'Segments'
+							});
+						}
+					} else {
+						setTimeout(function() {
+							setContactListsAndSegments();
+						}, 200);
+					}
+				} else {
+					setTimeout(function() {
+						setContactListsAndSegments();
+					}, 200);
+				}
+			}
+			setContactListsAndSegments();
+            
             var successDidGet = function(data, status, headers, config, $inScope) {
                 main.fromNumbersString = '';
                 if (data == null || typeof data.apicode == 'undefined') {
