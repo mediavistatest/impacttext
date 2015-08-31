@@ -2454,6 +2454,14 @@ ul.bar-legend {
     margin-bottom:5px;
 }
 
+.schedule-reports .timing ul {
+    width:190px;
+}
+
+.schedule-reports .timing ul li {
+    margin:0;
+}
+
 /*MEDIA QUERIES*/
 
 @media (max-width: 1375px) {

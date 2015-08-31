@@ -1,8 +1,14 @@
 <div class="col-md-12 content-holder animated fadeInRight settings autoresponder" ng-class="animation">
-
+    <br><br>
+    <p>Here are all your scheduled reports. To add a new report, click or tap Create. To stop a scheduled report, select the report and click or tap Delete.</p>
     <br />
-    <br />
+    
+    <button class="btn btn-add" ng-click="cpo.Events.Create_onClick(cpo)" ><i class="fa fa-plus"></i>
+                            Create Scheduled Report
+                        </button>
     <div class="btn-group dropup discard-btn">
+        
+        
         <a data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false"><i class="fa fa-trash-o">
         </i>
         Delete</a>
@@ -27,9 +33,7 @@
             </li>
         </ul>
         &nbsp;
-        <button class="btn btn-add" ng-click="cpo.Events.Create_onClick(cpo)" style="float: right"><i class="fa fa-plus"></i>
-                            Create
-                        </button>
+        
     </div>
     <br />
     <br />
