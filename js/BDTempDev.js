@@ -3796,14 +3796,16 @@ var ngReports = {
 					};
 					if (cpo.rsCtrl.StartDate && (!cpo.rsCtrl.scheduled || cpo.rsCtrl.SetRecurringType == 'C')) {
 						params.startdate = ngFunctions.SetTimezoneOffsetDate(cpo.rsCtrl.StartDate, '00', '00', '00');
-					} else {
-						params.startdate = '';
 					}
+					// else {
+						// params.startdate = '';
+					// }
 					if (cpo.rsCtrl.EndDate && (!cpo.rsCtrl.scheduled || cpo.rsCtrl.SetRecurringType == 'C')) {
 						params.enddate = ngFunctions.SetTimezoneOffsetDate(cpo.rsCtrl.EndDate, '23', '59', '59');
-					} else {
-						params.enddate = '';
 					}
+					// else {
+						// params.enddate = '';
+					// }
 					if (cpo.rsCtrl.selectedDID && cpo.rsCtrl.selectedDID.DIDID) {
 						params.didid = cpo.rsCtrl.selectedDID.DIDID;
 					}
@@ -4263,7 +4265,7 @@ var ngReports = {
 				totalServerItems : 'rsCtrl.totalServerItems',
 				filterOptions : cpo.rsCtrl.filterOptions,
 				columnDefs : 'rsCtrl.columnDefs',
-			};			
+			};
 		},
 		ClearView : function(cpo) {
 			cpo.rsCtrl.sheduledDateTime = new Date();
@@ -4355,7 +4357,7 @@ var ngReports = {
 					}
 				}
 			}
-		
+
 
 			if (!cpo.rsCtrl.scheduled) {
 				cpo.ServerRequests.GetMessageStats(cpo, cpo.ServerRequests.GetMessageStatsCallback);
