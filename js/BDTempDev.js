@@ -3876,7 +3876,6 @@ var ngReports = {
 		ServerRequests : {
 			GetMessageStats : function(cpo, callback, scheduled) {
 				if (cpo.$scope.main.accountInfo.companyID) {
-
 					var params = {
 						apikey : cpo.$scope.main.authToken,
 						accountID : cpo.$scope.main.accountID,
@@ -3886,27 +3885,17 @@ var ngReports = {
 					if (cpo.rsCtrl.StartDate && (!cpo.rsCtrl.scheduled || cpo.rsCtrl.SetRecurringType == 'C')) {
 						params.startdate = ngFunctions.SetTimezoneOffsetDate(cpo.rsCtrl.StartDate, '00', '00', '00');
 					}
-					// else {
-					// params.startdate = '';
-					// }
 					if (cpo.rsCtrl.EndDate && (!cpo.rsCtrl.scheduled || cpo.rsCtrl.SetRecurringType == 'C')) {
 						params.enddate = ngFunctions.SetTimezoneOffsetDate(cpo.rsCtrl.EndDate, '23', '59', '59');
 					}
-					// else {
-					// params.enddate = '';
-					// }
 					if (cpo.rsCtrl.selectedDID && cpo.rsCtrl.selectedDID.DIDID) {
 						params.didid = cpo.rsCtrl.selectedDID.DIDID;
 					}
-					// if (cpo.rsCtrl.selectedContactList && cpo.rsCtrl.selectedContactList.contactListID) {
-					// params.contactListID = cpo.rsCtrl.selectedContactList.contactListID;
-					// };
 					if (cpo.rsCtrl.selectedContactGroup && cpo.rsCtrl.selectedContactGroup.id) {
 						if (cpo.rsCtrl.selectedContactGroup.group == 'Lists') {
 							params.contactListID = cpo.rsCtrl.selectedContactGroup.id;
 						} else if (cpo.rsCtrl.selectedContactGroup.group == 'Segments') {
 							params.contactselectionid = cpo.rsCtrl.selectedContactGroup.id;
-							//params.contactfilter= 'custom5={'+cpo.rsCtrl.selectedContactGroup.name+'}';
 						}
 					}
 					if (cpo.rsCtrl.sheduledDateTime) {
