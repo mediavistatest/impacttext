@@ -62,20 +62,20 @@ var profile = {
 			CodeType : 'Short code (shared)',
 			Keywords : '5'
 		}];
-		
+
 		pCtrl.SelectedPlan = pCtrl.PlansArray[0];
 		pCtrl.CurrentPlan = pCtrl.PlansArray[0];
-		
-		var SetPlan = function(){
-			if ($scope.main.accountInfo && $scope.main.accountInfo.productPackage){
-				for (var i=0; i<pCtrl.PlansArray.length; i++){
-					if (pCtrl.PlansArray[i].Value == String($scope.main.accountInfo.productPackage)){
+
+		var SetPlan = function() {
+			if ($scope.main.accountInfo && $scope.main.accountInfo.productPackage) {
+				for (var i = 0; i < pCtrl.PlansArray.length; i++) {
+					if (pCtrl.PlansArray[i].Value == String($scope.main.accountInfo.productPackage)) {
 						pCtrl.SelectedPlan = pCtrl.PlansArray[i];
 						pCtrl.CurrentPlan = pCtrl.PlansArray[i];
 					}
 				}
-			} else{
-				setTimeout(function(){
+			} else {
+				setTimeout(function() {
 					SetPlan();
 				}, 200);
 			}
@@ -135,14 +135,14 @@ var profile = {
 		.error(function(data, status, headers, config) {
 			console.log('reporting_getbom error');
 		});
-		
-		pCtrl.Submit = function(){
+
+		pCtrl.Submit = function() {
 			var to = 'customersupport@impacttelecom.com';
-			var inMessage = 'Please, change my plan from '+pCtrl.CurrentPlan.Name + ' to '+ pCtrl.SelectedPlan.Name +'. Thank you.';
-						
+			var inMessage = 'Please, change my plan from ' + pCtrl.CurrentPlan.Name + ' to ' + pCtrl.SelectedPlan.Name + '. Thank you.';
+
 			var message = inMessage.replace(/\ /g, '%20');
-            var href = 'mailto:'+to+'?subject=Plan%20change%20request%20for%20'+$scope.main.accountInfo.firstName + '%20' + $scope.main.accountInfo.lastName+'&body='+ message;
-            window.location.href = href;
+			var href = 'mailto:' + to + '?subject=Plan%20change%20request%20for%20' + $scope.main.accountInfo.firstName + '%20' + $scope.main.accountInfo.lastName + '&body=' + message;
+			window.location.href = href;
 		};
 	}
 };
@@ -4212,17 +4212,17 @@ var ngReports = {
 			cellTemplate : 'views/table/ReportTableTemplate.html'
 		}],
 		RecurringTypes : [{
-			value : 'C',
-			label : 'Custom'
-		}, {
 			value : 'D',
-			label : 'Every day'
+			label : 'Daily'
 		}, {
 			value : 'W',
-			label : 'Every week'
+			label : 'Weekly'
 		}, {
 			value : 'M',
-			label : 'Every month'
+			label : 'Monthly'
+		}, {
+			value : 'C',
+			label : 'Custom'
 		}],
 		barOptions : {
 			scaleBeginAtZero : true,
