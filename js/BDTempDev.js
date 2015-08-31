@@ -1,69 +1,86 @@
 var profile = {
-    PlansArray:[{
-        Value: 'TXT500',
-        Name: 'ImpactText500',
-        Desc: 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
-        Price: '$19.99',
-        Outgoing: '500',
-        Incoming: 'FREE',
-        Additional: '5.5¢ per text',
-        CodeType: 'Long code (dedicated)',
-        Keywords: '1'
-    },{
-        Value: 'TXT1200',
-        Name: 'ImpactText1200',
-        Desc: 'is the perfect plan for you if you are new to texting and want to get your feet wet.',
-        Price: '$39.99',
-        Outgoing: '1,200',
-        Incoming: 'FREE',
-        Additional: '5¢ per text',
-        CodeType: 'Long code (dedicated)',
-        Keywords: '1'
-    },{
-        Value: 'TXT2400',
-        Name: 'ImpactText2400',
-        Desc: 'is the right plan for you if you are sending frequent messages to a small group of contacts and want to take advantage of increased message throughput and an additional keyword.',
-        Price: '$49.99',
-        Outgoing: '2,400',
-        Incoming: 'FREE',
-        Additional: '3¢ per text',
-        CodeType: 'Short code (shared)',
-        Keywords: '2'
-    },{
-        Value: 'TXT5000',
-        Name: 'ImpactText5000',
-        Desc: 'is recommended for those businesses that want to use autoresponders, message automation and increased message throughput with an additional keyword.',
-        Price: '$99.99',
-        Outgoing: '5,000',
-        Incoming: 'FREE',
-        Additional: '2.5¢ per text',
-        CodeType: 'Short code (shared)',
-        Keywords: '2'
-    },{
-        Value: 'TXT11000',
-        Name: 'ImpactText11000',
-        Desc: 'is a high-volume plan designed for businesses that are sending frequent texts, using autoresponders and automated scheduling. It includes shared short code use with a total of 5 keywords.',
-        Price: '$199.99',
-        Outgoing: '11,000',
-        Incoming: 'FREE',
-        Additional: '2.5¢ per text',
-        CodeType: 'Short code (shared)',
-        Keywords: '5'
-    },{
-        Value: 'TXT30000',
-        Name: 'ImpactText30000',
-        Desc: 'is our top tier high-volume plan designed for businesses that are sending frequent texts, using autoresponders and automated scheduling. It includes shared short code use as well as 5 keywords.',
-        Price: '$499.99',
-        Outgoing: '30,000',
-        Incoming: 'FREE',
-        Additional: '2.5¢ per text',
-        CodeType: 'Short code (shared)',
-        Keywords: '5'
-    }],
 	Controller : function($scope, $http) {
 		var pCtrl = this;
-		pCtrl.PlansArray = profile.PlansArray;
-		pCtrl.ChangePlan = pCtrl.PlansArray[0];
+		pCtrl.PlansArray = [{
+			Value : 'TXT500',
+			Name : 'ImpactText500',
+			Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
+			Price : '$19.99',
+			Outgoing : '500',
+			Incoming : 'FREE',
+			Additional : '5.5¢ per text',
+			CodeType : 'Long code (dedicated)',
+			Keywords : '1'
+		}, {
+			Value : 'TXT1200',
+			Name : 'ImpactText1200',
+			Desc : 'is the perfect plan for you if you are new to texting and want to get your feet wet.',
+			Price : '$39.99',
+			Outgoing : '1,200',
+			Incoming : 'FREE',
+			Additional : '5¢ per text',
+			CodeType : 'Long code (dedicated)',
+			Keywords : '1'
+		}, {
+			Value : 'TXT2400',
+			Name : 'ImpactText2400',
+			Desc : 'is the right plan for you if you are sending frequent messages to a small group of contacts and want to take advantage of increased message throughput and an additional keyword.',
+			Price : '$49.99',
+			Outgoing : '2,400',
+			Incoming : 'FREE',
+			Additional : '3¢ per text',
+			CodeType : 'Short code (shared)',
+			Keywords : '2'
+		}, {
+			Value : 'TXT5000',
+			Name : 'ImpactText5000',
+			Desc : 'is recommended for those businesses that want to use autoresponders, message automation and increased message throughput with an additional keyword.',
+			Price : '$99.99',
+			Outgoing : '5,000',
+			Incoming : 'FREE',
+			Additional : '2.5¢ per text',
+			CodeType : 'Short code (shared)',
+			Keywords : '2'
+		}, {
+			Value : 'TXT11000',
+			Name : 'ImpactText11000',
+			Desc : 'is a high-volume plan designed for businesses that are sending frequent texts, using autoresponders and automated scheduling. It includes shared short code use with a total of 5 keywords.',
+			Price : '$199.99',
+			Outgoing : '11,000',
+			Incoming : 'FREE',
+			Additional : '2.5¢ per text',
+			CodeType : 'Short code (shared)',
+			Keywords : '5'
+		}, {
+			Value : 'TXT30000',
+			Name : 'ImpactText30000',
+			Desc : 'is our top tier high-volume plan designed for businesses that are sending frequent texts, using autoresponders and automated scheduling. It includes shared short code use as well as 5 keywords.',
+			Price : '$499.99',
+			Outgoing : '30,000',
+			Incoming : 'FREE',
+			Additional : '2.5¢ per text',
+			CodeType : 'Short code (shared)',
+			Keywords : '5'
+		}];
+		
+		pCtrl.SelectedPlan = pCtrl.PlansArray[0];
+		pCtrl.CurrentPlan = pCtrl.PlansArray[0];
+		
+		var SetPlan = function(){
+			if ($scope.main.accountInfo && $scope.main.accountInfo.productPackage){
+				for (var i=0; i<pCtrl.PlansArray.length; i++){
+					if (pCtrl.PlansArray[i].Value == String($scope.main.accountInfo.productPackage)){
+						pCtrl.SelectedPlan = pCtrl.PlansArray[i];
+						pCtrl.CurrentPlan = pCtrl.PlansArray[i];
+					}
+				}
+			} else{
+				setTimeout(function(){
+					SetPlan();
+				}, 200);
+			}
+		};
+		SetPlan();
 
 		pCtrl.bucketOfMessages = null;
 		pCtrl.messageCount = null;
@@ -118,6 +135,15 @@ var profile = {
 		.error(function(data, status, headers, config) {
 			console.log('reporting_getbom error');
 		});
+		
+		pCtrl.Submit = function(){
+			var to = 'customersupport@impacttelecom.com';
+			var inMessage = 'Please, change my plan from '+pCtrl.CurrentPlan.Name + ' to '+ pCtrl.SelectedPlan.Name +'. Thank you.';
+						
+			var message = inMessage.replace(/\ /g, '%20');
+            var href = 'mailto:'+to+'?subject=Plan%20change%20request%20for%20'+$scope.main.accountInfo.firstName + '%20' + $scope.main.accountInfo.lastName+'&body='+ message;
+            window.location.href = href;
+		};
 	}
 };
 
@@ -3861,25 +3887,25 @@ var ngReports = {
 						params.startdate = ngFunctions.SetTimezoneOffsetDate(cpo.rsCtrl.StartDate, '00', '00', '00');
 					}
 					// else {
-						// params.startdate = '';
+					// params.startdate = '';
 					// }
 					if (cpo.rsCtrl.EndDate && (!cpo.rsCtrl.scheduled || cpo.rsCtrl.SetRecurringType == 'C')) {
 						params.enddate = ngFunctions.SetTimezoneOffsetDate(cpo.rsCtrl.EndDate, '23', '59', '59');
 					}
 					// else {
-						// params.enddate = '';
+					// params.enddate = '';
 					// }
 					if (cpo.rsCtrl.selectedDID && cpo.rsCtrl.selectedDID.DIDID) {
 						params.didid = cpo.rsCtrl.selectedDID.DIDID;
 					}
 					// if (cpo.rsCtrl.selectedContactList && cpo.rsCtrl.selectedContactList.contactListID) {
-						// params.contactListID = cpo.rsCtrl.selectedContactList.contactListID;
+					// params.contactListID = cpo.rsCtrl.selectedContactList.contactListID;
 					// };
-					if (cpo.rsCtrl.selectedContactGroup && cpo.rsCtrl.selectedContactGroup.id){
-						if (cpo.rsCtrl.selectedContactGroup.group == 'Lists'){
+					if (cpo.rsCtrl.selectedContactGroup && cpo.rsCtrl.selectedContactGroup.id) {
+						if (cpo.rsCtrl.selectedContactGroup.group == 'Lists') {
 							params.contactListID = cpo.rsCtrl.selectedContactGroup.id;
-						} else if (cpo.rsCtrl.selectedContactGroup.group == 'Segments'){
-						    params.contactselectionid = cpo.rsCtrl.selectedContactGroup.id;
+						} else if (cpo.rsCtrl.selectedContactGroup.group == 'Segments') {
+							params.contactselectionid = cpo.rsCtrl.selectedContactGroup.id;
 							//params.contactfilter= 'custom5={'+cpo.rsCtrl.selectedContactGroup.name+'}';
 						}
 					}
@@ -4413,24 +4439,23 @@ var ngReports = {
 			}
 
 			if (cpo.clickedReport.parameters.contactselectionid) {
-                for (var group in cpo.$scope.main.contactGroups) {
-                    if (cpo.$scope.main.contactGroups[group].group == 'Segments' && cpo.$scope.main.contactGroups[group].id == cpo.clickedReport.parameters.contactselectionid) {
-                        cpo.rsCtrl.selectedContactGroup = cpo.$scope.main.contactGroups[group];
-                        break;
-                    }
-                }
-            }
+				for (var group in cpo.$scope.main.contactGroups) {
+					if (cpo.$scope.main.contactGroups[group].group == 'Segments' && cpo.$scope.main.contactGroups[group].id == cpo.clickedReport.parameters.contactselectionid) {
+						cpo.rsCtrl.selectedContactGroup = cpo.$scope.main.contactGroups[group];
+						break;
+					}
+				}
+			}
 			// if (cpo.clickedReport.parameters.contactfilter){
-				// var filter_ = cpo.clickedReport.parameters.contactfilter;
-				// var name_=filter_.substring(filter_.lastIndexOf("{")+1,filter_.lastIndexOf("}"));
-				// for (var group in cpo.$scope.main.contactGroups) {
-					// if (cpo.$scope.main.contactGroups[group].group == 'Segments' && cpo.$scope.main.contactGroups[group].name == name_) {
-						// cpo.rsCtrl.selectedContactGroup = cpo.$scope.main.contactGroups[group];
-						// break;
-					// }
-				// }
+			// var filter_ = cpo.clickedReport.parameters.contactfilter;
+			// var name_=filter_.substring(filter_.lastIndexOf("{")+1,filter_.lastIndexOf("}"));
+			// for (var group in cpo.$scope.main.contactGroups) {
+			// if (cpo.$scope.main.contactGroups[group].group == 'Segments' && cpo.$scope.main.contactGroups[group].name == name_) {
+			// cpo.rsCtrl.selectedContactGroup = cpo.$scope.main.contactGroups[group];
+			// break;
 			// }
-
+			// }
+			// }
 
 			if (!cpo.rsCtrl.scheduled) {
 				cpo.ServerRequests.GetMessageStats(cpo, cpo.ServerRequests.GetMessageStatsCallback);

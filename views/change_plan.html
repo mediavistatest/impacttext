@@ -13,80 +13,80 @@ Change Plan
     <h3>
     Current plan:
     <span class="blue">
-        ImpactText2400
+        {{pCtrl.CurrentPlan.Name}}
     </span>
     </h3>
     <br>
 
-    <p ng-show="ChangePlan=='TXT2400'">
+    <p ng-show="pCtrl.CurrentPlan==pCtrl.SelectedPlan">
         <strong>
         View and select new plan below
         </strong>
     </p>
-    <p ng-hide="ChangePlan=='TXT2400'">
+    <p ng-hide="pCtrl.CurrentPlan==pCtrl.SelectedPlan">
         <strong>
         Selected Plan
         </strong>
     </p>
     <div>
-        <select ng-options="plan.Value for plan in pCtrl.PlansArray" disable-search="true" class="form-control m-b" name="ChangePlan">
-        </select>{{pCtrl.PlansArray}}
+        <select ng-options="plan.Name for plan in pCtrl.PlansArray" disable-search="true" class="form-control m-b" ng-model="pCtrl.SelectedPlan">
+        </select>
 
         <div class="animate-switch-container plan-desc" >
 
             <div >
                 <p>
                     <strong>
-                    ImpactText500
+                    {{pCtrl.SelectedPlan.Name}} 
                     </strong>
-                    is our entry-level plan which will allow you to test the platform and see the power of text messaging.
+                    {{pCtrl.SelectedPlan.Desc}}
                 </p>
 
                 <ul>
                     <li>
                         Price/month:
                         <strong>
-                        $19.99
+                        {{pCtrl.SelectedPlan.Price}}
                         </strong>
                     </li>
                     <li>
                         Outgoing texts:
                         <strong>
-                        500
+                        {{pCtrl.SelectedPlan.Outgoing}}
                         </strong>
                     </li>
                     <li>
                         Incoming texts:
                         <strong>
-                        FREE
+                        {{pCtrl.SelectedPlan.Incoming}}
                         </strong>
                     </li>
                     <li>
                         Additional texts:
                         <strong>
-                        5.5¢ per text
+                        {{pCtrl.SelectedPlan.Additional}}
                         </strong>
                     </li>
                     <li>
                         Code type:
                         <strong>
-                        Long code (dedicated)
+                        {{pCtrl.SelectedPlan.CodeType}}
                         </strong>
                     </li>
                     <li>
                         Keywords:
                         <strong>
-                        1
+                        {{pCtrl.SelectedPlan.Keywords}}
                         </strong>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <div ng-hide="ChangePlan=='TXT2400'">
+        <div ng-hide="pCtrl.CurrentPlan==pCtrl.SelectedPlan">
             <br>
 
-            <a class="btn btn-send smaller ng-scope" ng-controller="notifyCtrl">
+            <a class="btn btn-send smaller ng-scope" ng-controller="notifyCtrl" ng-click="pCtrl.Submit()">
             <span>
                 Submit
             </span>
