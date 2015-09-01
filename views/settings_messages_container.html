@@ -7,18 +7,18 @@
         <p>Here’s where you can set up your account to forward incoming text messages to designated email addresses. Simply enter the forwarding email address for each SMS code.</p>
         <br />
         <div class="form-group form-group-header clearfix" ng-controller="notifyCtrl" ng-init="forceNotifyInit = true">
-            <div class="col-sm-4"><label>ImpactText Number</label></div>
-            <div class="col-sm-4"><label>Forward Email Address</label></div>
-            <div class="col-sm-4"></div>
+            <div class="col-md-4"><label>ImpactText Number</label></div>
+            <div class="col-md-4"><label>Forward Email Address</label></div>
+            <div class="col-md-4"></div>
         </div>
         <div class="forward-email-number-list" ng-repeat="(key, value) in forwardCtrl.numbers">
             <div class="form-group clearfix">
-                <div class="column-did col-sm-4">{{value.DID}}</div>
-                <div class="column-emailForwardAddress col-sm-4">
+                <div class="column-did col-md-4">{{value.DID}}</div>
+                <div class="column-emailForwardAddress col-md-4">
                     <div ng-show="forwardCtrl.edit[key]"><input type="text" class="form-control" ng-model="value.emailForwardAddress" /></div>
                     <div ng-show="!forwardCtrl.edit[key]">{{value.emailForwardAddress}}</div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-md-4">
                     <button ng-if="!forwardCtrl.edit[key]" class="btn" ng-click="forwardCtrl.edit[key] = true"><i class="fa fa-pencil"></i> Edit</button>
                     <button ng-if="forwardCtrl.edit[key]" class="btn btn-primary" ng-click="cpo.Events.Save_onClick(cpo, key)"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>

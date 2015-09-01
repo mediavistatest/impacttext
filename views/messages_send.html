@@ -1,5 +1,5 @@
 <h1> Send </h1>
-<div class="col-md-12 content-holder animated fadeInRight send-messages" ng-class="animation" ng-controller="FormSendCtrl" >
+<div class="content-holder clearfix animated fadeInRight send-messages" ng-class="animation" ng-controller="FormSendCtrl" >
     <div class="iphone-prev">
         <div class="message-cloud">
             <span ng-show="FromName">
@@ -24,6 +24,7 @@
             </p>
         </div>
     </div>
+    <br>
 
     <form name="SendForm" novalidate role="form">
         <!-- MESSAGES -->
@@ -77,7 +78,7 @@
                 <input type="text" name="FromName" placeholder="Your Company Name" ng-model="FromName" class="form-control"  ng-trim="false">
                 <div class="loading-32" ng-if="FromNameLoading"></div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 tip">
                 <i class="fa fa-info-circle" tooltip='This will count in your character limit.'> </i>
             </div>
         </div>
@@ -93,7 +94,7 @@
                 </div>
                 <a ng-app class="" ng-class="{true: 'addBtn', false: 'addBtn'}[SendToList]" ng-click="SendToList = !SendToList"> {{SendToList && 'Or click here to add numbers manually' || 'Or select from an existing list or segment.'}} </a>
             </div>
-            <div class="col-md-4 col-sm-3">
+            <div class="col-md-4 col-sm-3 tip">
                 <i ng-show="!SendToList" class="fa fa-info-circle" tooltip='Enter a phone number starting with the area code. Separate multiple numbers with a comma.'> </i>
                 <div ng-show="PhoneNumberArrayValidator.PhoneNumbers.errorMessage && !SendToList" class="right-side-message error">
                     {{PhoneNumberArrayValidator.PhoneNumbers.errorMessage}}
@@ -146,12 +147,15 @@
                     <textarea ng-init="optFields.OptOutTxt1=''; optFields.OptOutTxt2=''" ng-switch-when="write" placeholder="Write your opt-out message" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="optFields.OptOutTxt3"  ng-trim="false" ></textarea>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 tip">
                 <i class="fa fa-info-circle" tooltip='This will count in your character limit.'> </i>
             </div>
         </div>
+        
+        <br>
+        
         <div class="form-group clearfix">
-            <label class="col-sm-6 col-sm-offset-2 checkbox">
+            <label class="col-sm-6 col-md-offset-2 checkbox">
                 <input icheck type="checkbox" value="schedule" ng-model="ScheduleCheck">
                 Schedule for later </label>
         </div>
@@ -296,7 +300,7 @@
         <br>
         <br>
         <br>
-        <div class="col-sm-6 col-sm-offset-2" ng-controller="notifyCtrl">
+        <div class="col-md-6 col-md-offset-2" ng-controller="notifyCtrl">
             <a class="btn" ng-click="saveDraft()"><i class="fa fa-pencil"> </i> Save as draft</a>
             <div class="btn-group dropup discard-btn">
                 <a data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false"><i class="fa fa-times"> </i> Discard</a>
@@ -322,6 +326,7 @@
                 Send now</span> </a>
             <a class="btn btn-send right" ng-click="sendMessage(true)" ng-show="ScheduleCheck" ng-disabled="!SendForm.$valid"> <span><i class="fa fa-clock-o"> </i>
                 Schedule</span> </a>
+            
         </div>
     </form>
 </div>

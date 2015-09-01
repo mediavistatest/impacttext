@@ -947,6 +947,7 @@ span.O, span.I {
     border-radius: 50%;
     margin: 0 auto;
     font-size: 11px;
+    text-align: center;
 }
 
 span.I {
@@ -959,6 +960,7 @@ span.I {
     border-radius: 50%;
     margin: 0 auto;
     font-size: 11px;
+    text-align: center;
 }
 
 span.B {
@@ -971,6 +973,7 @@ span.B {
     border-radius: 50%;
     margin: 0 auto;
     font-size: 11px;
+    text-align: center;
 }
 
 span.A {
@@ -983,6 +986,7 @@ span.A {
     border-radius: 50%;
     margin: 0 auto;
     font-size: 11px;
+    text-align: center;
 }
 
 .ngCellText a.linkclass {
@@ -1077,6 +1081,7 @@ span.A {
 
 .add-list-contact .radio label {
     font-weight: 600;
+    margin-bottom: 5px;
 }
 
 .upload-holder {
@@ -1947,13 +1952,12 @@ ul.bar-legend span {
 }
 
 .divider {
-    height: 2px;
+    height: 1px;
     width: 100%;
     display: block;
-    /* for use on default inline elements like span */
-    margin: 9px 0;
+    margin: 20px 0;
     overflow: hidden;
-    background-color: #858585;
+    background-color: #ccc;
 }
 
 .dropdown h2 {
@@ -2462,6 +2466,37 @@ ul.bar-legend {
     margin:0;
 }
 
+.footer {
+position: initial;
+margin-top:60px;
+}
+
+.footer img {
+    margin-bottom: 20px;
+}
+
+#page-wrapper {
+    padding-bottom: 0;
+}
+
+.send-messages .btn, .btn {
+    margin-bottom:5px;
+}
+
+.dropdown-menu.column-settings  {
+    left: -129px;
+}
+
+.btn.tab-style {
+    margin-bottom: 0;
+}
+
+.reply-box .control-label {
+    text-align: left;
+}
+
+
+
 /*MEDIA QUERIES*/
 
 @media (max-width: 1375px) {
@@ -2471,6 +2506,13 @@ ul.bar-legend {
         padding: 10px 15px;
         margin-bottom: 0;
     }
+}
+
+@media (max-width: 1200px) {
+.send-messages .btn-send {
+    width: auto;
+}
+
 }
 
 /*NEW CSS 18.08.2015.*/
@@ -2483,7 +2525,15 @@ ul.bar-legend {
     right: 20px;
     top: 90px;
     background-size: 200px;
+        
 
+}
+    .messages .page-select-wrapper {
+    float: none;
+}
+    
+    .btn.tab-style {
+    padding:5px 10px;
 }
 
 .message-cloud.ng-binding {
@@ -2496,11 +2546,17 @@ ul.bar-legend {
     left: 30px;
 }
 
-.btn-send {
+.send-messages .btn-send {
     color: white;
     background: #007d32;
     width: auto;
     border: 1px solid #007d32;
+    float: none;
+}
+    
+.control-label, .control-label.message-type {
+    width: 100%;
+    text-align: left;
 }
 
 /*.messages-inbox .page-select-wrapper {
@@ -2510,6 +2566,57 @@ ul.bar-legend {
 }*/
 
 }
+@media (max-width: 768px) {
+    .iphone-prev {
+    display:none;
+    }
+    
+    .form-group {
+    position: relative;
+    }
+    
+    .form-group .tip {
+    position: absolute;
+    top: 40px;
+    right: -30px;
+}
+    .itTopPager .ngPagerControl {
+    margin-right: 10px !important;
+    display: none;
+}
+    .manage-list .page-select-wrapper, .segments-list .page-select-wrapper {
+    left: 0;
+}
+    
+    .manage-list.list-search .top-buttons {
+    margin-top: 0;
+    text-align: left;
+}
+    
+    .form-control.inline {
+    max-width: 100%;
+}
+    
+    .top-buttons {
+    margin: 0 0 20px 0;
+    text-align: left;
+}
+    .manage-list .top-buttons {
+    text-align: left;
+    /* margin-bottom: 48px; */
+    /* margin-top: -78px; */
+    margin: 0 0 20px 0;
+}
+    .btn.tab-style {
+    padding: 5px 4px;
+    margin-right: 0;
+}
+    .reports ul.bar-legend {
+    position: initial;
+}
+    
+}
+
 
 @media (min-width: 768px) {
     .col-sm-15 {
@@ -2539,4 +2646,30 @@ ul.bar-legend {
         width: 20%;
         float: left;
     }
+}
+
+@media (max-width:480px) {
+.dashboard-table td, .dashboard-table th {
+    padding: 0 5px;
+    border-bottom: 1px solid whitesmoke;
+    height: 30px;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.dashboard .content-box {
+    height: auto;
+}
+
+ul.bar-legend {
+    position: initial;
+}
+    
+    .page-select-wrapper {
+    float: none;
+}
+    .btn.tab-style {
+    width:100%;
+}
+
 }
