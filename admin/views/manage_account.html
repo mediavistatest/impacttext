@@ -5,37 +5,37 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
     <form class="clearfix">
         <h2>Account Information</h2>
         <!--<div class="form-group clearfix">
-            <label class="col-sm-2 control-label">Company ID:</label>
-            <div class="col-sm-6">
+            <label class="col-md-2 control-label">Company ID:</label>
+            <div class="col-md-6">
                 <input type="text" name="CompanyID" placeholder="Company ID" ng-model="CompanyID" class="form-control"  ng-trim="false">
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-4">
                 <i class="fa fa-info-circle" tooltip='Company ID'></i>
             </div>
         </div>-->
         <div class="form-group clearfix">
-            <label class="col-sm-2 control-label">Account Name:</label>
-            <div class="col-sm-6">
+            <label class="col-md-2 control-label">Account Name:</label>
+            <div class="col-md-6">
                 <input type="text" name="AccountName" placeholder="Account Name" ng-model="AccountName" class="form-control"  ng-trim="false">
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-4 tip">
                 <i class="fa fa-info-circle" tooltip='Account Name'></i>
             </div>
         </div>
 
 		  <div class="form-group clearfix">
-			  <label class="col-sm-2 control-label">Product Package:</label>
-			  <div class="col-sm-6">
+			  <label class="col-md-2 control-label double">Product Package:</label>
+			  <div class="col-md-6">
 				  <select name="ProductPackage" placeholder="Product Package" ng-model="ProductPackage" ng-options="package.productPackage as package.productPackage for package in ProductPackageList" class="form-control"></select>
 			  </div>
-			  <div class="col-sm-4">
+			  <div class="col-md-4 tip">
 				  <i class="fa fa-info-circle" tooltip='Product Package'></i>
 			  </div>
 		  </div>
 
         <div class="form-group clearfix">
-            <label class="col-sm-2 control-label">Billing Cycle:</label>
-            <div class="col-sm-6">
+            <label class="col-md-2 control-label">Billing Cycle:</label>
+            <div class="col-md-6">
                 <select name="BillingCycle" placeholder="Billing Cycle" ng-model="BillingCycle" class="form-control">
                     <option value="3">1</option>
                     <option value="6">11</option>
@@ -43,96 +43,96 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <option value="9">25</option>
                 </select>
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-4 tip">
                 <i class="fa fa-info-circle" tooltip='Billing Cycle'></i>
             </div>
         </div>
         <div class="form-group clearfix">
-            <label class="col-sm-2 control-label">First Name:</label>
-            <div class="col-sm-6">
+            <label class="col-md-2 control-label">First Name:</label>
+            <div class="col-md-6">
                 <input type="text" name="FirstName" placeholder="First Name" ng-model="FirstName" class="form-control"  ng-trim="false">
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-4 tip">
                 <i class="fa fa-info-circle" tooltip='First Name'></i>
             </div>
         </div>
         <div class="form-group clearfix">
-            <label class="col-sm-2 control-label">Last Name:</label>
-            <div class="col-sm-6">
+            <label class="col-md-2 control-label">Last Name:</label>
+            <div class="col-md-6">
                 <input type="text" name="LastName" placeholder="Last Name" ng-model="LastName" class="form-control"  ng-trim="false">
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-4 tip">
                 <i class="fa fa-info-circle" tooltip='Last Name'></i>
             </div>
         </div>
         <div class="form-group clearfix">
-            <label class="col-sm-2 control-label">Email Address:</label>
-            <div class="col-sm-6">
+            <label class="col-md-2 control-label">Email Address:</label>
+            <div class="col-md-6">
                 <input type="text" name="EmailAddress" placeholder="Email Address" ng-model="EmailAddress" class="form-control"  ng-trim="false">
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-4 tip">
                 <i class="fa fa-info-circle" tooltip='Email Address'></i>
             </div>
         </div>
 
 		  <div class="form-group clearfix">
-			  <label class="col-sm-2 control-label">Address:</label>
-			  <div class="col-sm-6">
+			  <label class="col-md-2 control-label">Address:</label>
+			  <div class="col-md-6">
 				  <input type="text" name="Address1" placeholder="Address" ng-model="Address1" class="form-control"  ng-trim="false">
 				  <input type="text" name="Address2" placeholder="Address" ng-model="Address2" class="form-control address-2"  ng-trim="false">
 			  </div>
-			  <div class="col-sm-4">
+			  <div class="col-md-4 tip">
 				  <i class="fa fa-info-circle" tooltip='Address'></i>
 			  </div>
 		  </div>
 
 		  <div class="form-group clearfix">
-			  <label class="col-sm-2 control-label">City:</label>
-			  <div class="col-sm-3">
+			  <label class="col-md-2 control-label">City:</label>
+			  <div class="col-md-3">
 				  <input type="text" name="City" placeholder="City" ng-model="City" class="form-control"  ng-trim="false">
 			  </div>
-			  <label class="col-sm-1 control-label">Zip:</label>
-			  <div class="col-sm-2">
+			  <label class="col-md-1 control-label">Zip:</label>
+			  <div class="col-md-2">
 				  <input type="text" name="Zip" placeholder="Zip" ng-model="Zip" class="form-control"  ng-trim="false">
 			  </div>
-			  <div class="col-sm-4">
+			  <div class="col-md-4 tip">
 				  <i class="fa fa-info-circle" tooltip='City / Zip Code'></i>
 			  </div>
 		  </div>
 
 		  <div class="form-group clearfix">
-			  <label class="col-sm-2 control-label">Country:</label>
-			  <div class="col-sm-3">
+			  <label class="col-md-2 control-label">Country:</label>
+			  <div class="col-md-3">
 				  <select name="Country" placeholder="Country" ng-model="Country" ng-options="country.code as country.name for country in CountriesList" class="form-control"></select>
 			  </div>
-			  <label class="col-sm-1 control-label">State:</label>
-			  <div class="col-sm-2">
+			  <label class="col-md-1 control-label">State:</label>
+			  <div class="col-md-2">
 				  <input type="text" name="State" placeholder="State" ng-model="State" class="form-control"  ng-trim="false">
 			  </div>
-			  <div class="col-sm-4">
+			  <div class="col-md-4 tip">
 				  <i class="fa fa-info-circle" tooltip='Country / State'></i>
 			  </div>
 		  </div>
 
         <div class="form-group clearfix">
-            <label class="col-sm-2 control-label double">Primary SMS <br>Code:</label>
-            <div class="col-sm-6">
+            <label class="col-md-2 control-label double">Primary SMS Code:</label>
+            <div class="col-md-6">
                 <input type="text" name="PrimaryDID" placeholder="Primary SMS Code" ng-model="PrimaryDID" class="form-control"  ng-trim="false">
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-4 tip">
                 <i class="fa fa-info-circle" tooltip='Primary SMS Code'></i>
             </div>
         </div>
         <div class="form-group clearfix">
-            <label class="col-sm-2 control-label double">External Account Number:</label>
-            <div class="col-sm-6">
+            <label class="col-md-2 control-label triple">External Account Number:</label>
+            <div class="col-md-6">
                 <input type="text" name="ExternalAccount" placeholder="External Account Number" ng-model="ExternalAccount" class="form-control"  ng-trim="false">
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-4 tip ">
                 <i class="fa fa-info-circle" tooltip='External Account Number'></i>
             </div>
         </div><br>
-        <div class="account-bottom-buttons col-sm-6 col-sm-offset-2">
+        <div class="account-bottom-buttons col-md-6 col-md-offset-2">
                 <!-- Cancel button -->
                 <div class="btn-group dropup left" dropdown ng-show="accountId && accountStatus == 'A'">
                     <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle>
@@ -172,7 +172,7 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
         </accordion-heading>
         <div class="clearfix">
             <div class="col-md-8">
-            <div class="radio col-sm-8 col-sm-offset-3">
+            <div class="radio col-md-8 col-md-offset-3">
 
             <label> <input type="radio" value="Long" ng-model="smsCode.AccCode"> Long Code </label>
 
@@ -183,29 +183,29 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                 <!--START LONG CODE-->
                     <div ng-show="smsCode.AccCode == 'Long'">
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">Long Code:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label">Long Code:</label>
+                        <div class="col-md-8">
                             <input type="text" name="LongCode" placeholder="Long Code" ng-model="smsCode.LongCode" class="form-control"  ng-trim="false" ng-disabled="smsCode.selectedDidId">
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='Long Code'></i>
                         </div>
                     </div>
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">Long Code Name:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label double">Long Code Name:</label>
+                        <div class="col-md-8">
                             <input type="text" name="LongCodeName" placeholder="Long Code Name" ng-model="smsCode.LongCodeName" class="form-control"  ng-trim="false">
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='Long Code Name'></i>
                         </div>
                     </div>
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">Keyword:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label">Keyword:</label>
+                        <div class="col-md-8">
                             <input type="text" name="LongKeyword" placeholder="Long Code Keyword" ng-model="smsCode.LongKeyword" class="form-control"  ng-init="smsCode.LongKeyword='YES'" ng-disabled="true">
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='Long Keyword'></i>
                         </div>
                     </div>
@@ -214,40 +214,40 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                     <!--START SHORT CODE-->
                     <div ng-show="smsCode.AccCode == 'Short'">
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">Short Code:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label">Short Code:</label>
+                        <div class="col-md-8">
                             <input type="text" name="ShortCode" placeholder="Short Code" ng-model="smsCode.ShortCode" class="form-control" ng-disabled="true"  ng-trim="false">
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='Short Code'></i>
                         </div>
                     </div>
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">Short Code Name:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label">Short Code Name:</label>
+                        <div class="col-md-8">
                             <input type="text" name="ShortCodeName" placeholder="Short Code Name" ng-model="smsCode.ShortCodeName" class="form-control"  ng-trim="false">
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1">
                             <i class="fa fa-info-circle" tooltip='Short Code Name'></i>
                         </div>
                     </div>
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">Keyword:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label">Keyword:</label>
+                        <div class="col-md-8">
                             <input type="text" name="ShortKeyword" placeholder="Short Code Keyword" ng-model="smsCode.ShortKeyword" class="form-control" ng-disabled="true">
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='Short Keyword'></i>
                         </div>
                     </div>
                     </div>
                     <!--END SHORT CODE-->
-                    <!--<div class="checkbox col-sm-8 col-sm-offset-3">
+                    <!--<div class="checkbox col-md-8 col-md-offset-3">
                         <label>
                             <input type="checkbox"> Set this code as the primary code for the account
                         </label>
                     </div>-->
-                    <div class="bottom-buttons col-sm-8 col-sm-offset-3">
+                    <div class="bottom-buttons col-md-8 col-md-offset-3">
                         <!-- Cancel DID button -->
                         <div class="btn-group dropup left" dropdown ng-show="smsCode.selectedDidId && smsCode.status == 'A'">
                             <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle>
@@ -295,62 +295,62 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
             <div class="clearfix">
                 <div class="col-md-8">
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">User Name:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label">User Name:</label>
+                        <div class="col-md-8">
                             <input type="text" name="UserName" placeholder="User Name" ng-model="userData.UserName" class="form-control" ng-disabled="userData.selectedUserId" ng-trim="false">
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='User Name'></i>
                         </div>
                     </div>
                     <div class="form-group clearfix" ng-hide="userData.selectedUserId">
-                        <label class="col-sm-3 control-label">User Password:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label">User Password:</label>
+                        <div class="col-md-8">
                             <input type="text" name="UserPassword" placeholder="User Password" ng-model="userData.UserPassword" class="form-control"  ng-trim="false">
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='User Password'></i>
                         </div>
                     </div>
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">Email Address:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label">Email Address:</label>
+                        <div class="col-md-8">
                             <input type="text" name="UserEmail" placeholder="User Email" ng-model="userData.UserEmail" class="form-control"  ng-trim="false">
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='User Email'></i>
                         </div>
                     </div>
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">First Name:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label">First Name:</label>
+                        <div class="col-md-8">
                             <input type="text" name="UserFirstName" placeholder="User First Name" ng-model="userData.UserFirstName" class="form-control"  ng-trim="false">
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='User First Name'></i>
                         </div>
                     </div>
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">Last Name:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label">Last Name:</label>
+                        <div class="col-md-8">
                             <input type="text" name="UserLastName" placeholder="User Last Name" ng-model="userData.UserLastName" class="form-control"  ng-trim="false">
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='User Last Name'></i>
                         </div>
                     </div>
                     <div class="form-group clearfix">
-                        <label class="col-sm-3 control-label">Role:</label>
-                        <div class="col-sm-8">
+                        <label class="col-md-3 control-label">Role:</label>
+                        <div class="col-md-8">
                             <select name="Role" placeholder="Role" ng-model="userData.Role" class="form-control">
                                 <option value="accountadmin" selected>Admin</option>
                             </select>
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='User Roles'></i>
                         </div>
                     </div>
-                    <div class="bottom-buttons col-sm-8 col-sm-offset-3">
+                    <div class="bottom-buttons col-md-8 col-md-offset-3">
                         <!-- Deactivate user button -->
                         <div class="btn-group dropup left" dropdown>
                             <button type="button" class="btn delete-btn dropdown-toggle" dropdown-toggle ng-show="userData.selectedUserId && userData.active == 1">

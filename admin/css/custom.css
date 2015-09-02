@@ -49,7 +49,10 @@ h2 {
     vertical-align: middle;
     line-height: 34px;
 }
-.content-holder label.double {
+/*.content-holder label.double {
+    line-height: 17px;
+}*/
+.content-holder label.triple {
     line-height: 17px;
 }
 i.fa.fa-info-circle {
@@ -334,3 +337,48 @@ button.btn.btn-search {
 }
 
 .address-2 { margin-top: 15px; }
+
+.btn {
+margin-bottom:5px;
+}
+
+.navbar.navbar-default img {
+    margin-top: 15px;
+    float: left;
+    margin-right: 30px;
+}
+
+.navbar.navbar-default p {
+    margin-top: 35px;
+    font-size: 15px;
+    color: #b4ecca;
+    float: left;
+}
+
+@media (max-width:1200px) {
+.content-holder label.double {
+    line-height: 17px;
+}
+}
+@media (max-width:992px) {
+.form-group {
+    position: relative;
+}
+
+.form-group .tip {
+    position: absolute;
+    top: 40px;
+    right: -30px;
+}
+    
+    .content-holder label {
+    text-align: left;
+    }
+    
+    .content-holder label.double {
+    line-height: 34px;
+}
+    .bottom-buttons {
+    margin-bottom: 30px;
+}
+}
