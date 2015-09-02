@@ -2495,6 +2495,9 @@ margin-top:60px;
     text-align: left;
 }
 
+.forward-email-number-list.ng-scope div:nth-child(3) {
+    text-align: right;
+}
 
 
 /*MEDIA QUERIES*/
@@ -2567,25 +2570,27 @@ margin-top:60px;
 
 }
 @media (max-width: 768px) {
-    .iphone-prev {
-    display:none;
-    }
-    
-    .form-group {
-    position: relative;
-    }
-    
-    .form-group .tip {
-    position: absolute;
-    top: 40px;
-    right: -30px;
+   
+    .segment-filters .segment-filter .field, .segment-filters .segment-filter .value {
+    max-width: 250px !important;
+    width: auto !important;
 }
+    
     .itTopPager .ngPagerControl {
     margin-right: 10px !important;
     display: none;
 }
     .manage-list .page-select-wrapper, .segments-list .page-select-wrapper {
     left: 0;
+}
+    .segments-list .page-select-wrapper {
+    position: initial;
+    float: left;
+    margin-top: 10px;
+}
+    .add-list-contact.segment .control-label, .segment-filters .segment-filter .operator {
+    width: 100% !important;
+        margin-bottom: 5px;
 }
     
     .manage-list.list-search .top-buttons {
@@ -2614,9 +2619,31 @@ margin-top:60px;
     .reports ul.bar-legend {
     position: initial;
 }
+    .main-logo {
+    margin-bottom: 0;
+    /* margin: 10px; */
+    /* width: 100%; */
+    padding: 15px 5px;
+    /* margin-top: 15px; */
+}
     
 }
 
+@media (max-width:767px) {
+     .iphone-prev {
+    display:none;
+    }
+    
+    .form-group {
+    position: relative;
+    }
+    
+    .form-group .tip {
+    position: absolute;
+    top: 40px;
+    right: -30px;
+}
+}
 
 @media (min-width: 768px) {
     .col-sm-15 {
@@ -2632,6 +2659,10 @@ margin-top:60px;
     .navbar-header {
         display: block;
     }
+    .forward-email-number-list.ng-scope div:nth-child(3) {
+    text-align: left;
+}
+
 }
 
 @media (min-width: 992px) {
