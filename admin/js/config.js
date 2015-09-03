@@ -54,6 +54,6 @@ inspiniaAdminNS.wsUrl = "http://tlsionweb01.excel.com/mercury/cmp/";
 inspiniaAdminNS.developmentEnvironment = true; //this MUST be set to false when moving to production
 
 if((window.location.href.indexOf('portal.impacttext.com') > -1) || (window.location.href.indexOf('54.152.199.114') > -1)){
-	inspiniaNS.wsUrl = 'http://api.impacttext.com/';
+	inspiniaAdminNS.wsUrl = 'http://api.impacttext.com/';
 	inspiniaAdminNS.developmentEnvironment = false; //this MUST be set to false when moving to production
 }
