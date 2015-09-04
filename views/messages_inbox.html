@@ -1,27 +1,41 @@
-<h1>Messages </h1>
+<h1>
+Messages
+</h1>
 <div class="tab-navigation animated fadeInRight">
-    <a ui-sref-active="active" ui-sref="messages.inbox" class="btn tab-style active"><i class="fa fa-inbox"></i> Inbox</a>
-    <a ui-sref-active="active" ui-sref="messages.sent" class="btn tab-style"><i class="fa fa-share-square"></i> Sent</a>
-    <a ui-sref-active="active" ui-sref="messages.scheduled" class="btn tab-style"><i class="fa fa-clock-o"></i> Scheduled</a>
-	<a ui-sref-active="active" ui-sref="messages.recurring" class="btn tab-style"><i class="fa fa-history"></i> Recurring</a>
-    <a ui-sref-active="active" ui-sref="messages.drafts" class="btn tab-style"><i class="fa fa-pencil-square"></i> Drafts</a>
-    <a ui-sref-active="active" ui-sref="messages.trash" class="btn tab-style"><i class="fa fa-trash-o"></i> Trash</a>
+    <a ui-sref-active="active" ui-sref="messages.inbox" class="btn tab-style active"><i class="fa fa-inbox">
+    </i>
+    Inbox</a>
+    <a ui-sref-active="active" ui-sref="messages.sent" class="btn tab-style"><i class="fa fa-share-square">
+    </i>
+    Sent</a>
+    <a ui-sref-active="active" ui-sref="messages.scheduled" class="btn tab-style"><i class="fa fa-clock-o">
+    </i>
+    Scheduled</a>
+    <a ui-sref-active="active" ui-sref="messages.recurring" class="btn tab-style"><i class="fa fa-history">
+    </i>
+    Recurring</a>
+    <a ui-sref-active="active" ui-sref="messages.drafts" class="btn tab-style"><i class="fa fa-pencil-square">
+    </i>
+    Drafts</a>
+    <a ui-sref-active="active" ui-sref="messages.trash" class="btn tab-style"><i class="fa fa-trash-o">
+    </i>
+    Trash</a>
 </div>
 <div class="col-md-12 content-holder animated fadeInRight messages messages-inbox" ng-class="animation">
-    <h2 class="section-title">Inbox
-    	<!--<button title="Column settings" class="btn pull-right" ng-click="controllerParent.Events.Settings_onClick(controllerParent)">
-            <i class="fa fa-cog"></i>
-        </button>-->
+    <h2 class="section-title">
+    Inbox <!--<button title="Column settings" class="btn pull-right" ng-click="controllerParent.Events.Settings_onClick(controllerParent)">
+    <i class="fa fa-cog"></i>
+    </button>-->
 
     <div class="btn-group dropdown discard-btn pull-right">
-            <button data-toggle="dropdown" class="btn dropdown-toggle" aria-expanded="false">
-                <i class="fa fa-cog"></i>
-            </button>
-            <div class="dropdown-menu dropdown-list dropdown-alerts column-settings" ng-click="$event.stopPropagation()">
-                <div ng-include="'views/messages_settings.html'" ></div>
-            </div>
+        <button data-toggle="dropdown" class="btn dropdown-toggle" aria-expanded="false">
+            <i class="fa fa-cog">
+            </i>
+        </button>
+        <div class="dropdown-menu dropdown-list dropdown-alerts column-settings" ng-click="$event.stopPropagation()">
+            <div ng-include="'views/messages_settings.html'" ></div>
+        </div>
     </div>
-
 
     </h2>
     <div class="top-buttons">
@@ -32,7 +46,8 @@
         </select>-->
         <div class="btn-group dropdown discard-btn">
             <button data-toggle="dropdown" class="btn dropdown-toggle read-unread" aria-expanded="false">
-                {{controllerParent.getListStatus=='U' && 'Unread messages' || controllerParent.getListStatus=='R' && 'Read Messages'}} <i class="fa fa-caret-down"></i>
+                {{controllerParent.getListStatus=='U' && 'Unread messages' || controllerParent.getListStatus=='R' && 'Read Messages'}} <i class="fa fa-caret-down">
+                </i>
             </button>
             <div class="dropdown-menu dropdown-list dropdown-alerts">
                 <button class="btn drop-btn" ng-click="controllerParent.getListStatus='U'">
@@ -44,10 +59,14 @@
             </div>
         </div><!-- end-read unread -->
         <button class="btn" ng-click="MarkAsReadMessages(controllerParent)" ng-show="controllerParent.getListStatus=='U'">
-            <i class="fa fa-eye"></i> Mark as read
+            <i class="fa fa-eye">
+            </i>
+            Mark as read
         </button>
         <button class="btn" ng-click="MarkAsUnreadMessages(controllerParent)" ng-hide="controllerParent.getListStatus=='U'">
-            <i class="fa fa-eye"></i> Mark as unread
+            <i class="fa fa-eye">
+            </i>
+            Mark as unread
         </button>
         <div class="btn-group dropdown discard-btn">
             <button data-toggle="dropdown" class="btn btn-discard dropdown-toggle" aria-expanded="false">
@@ -61,43 +80,57 @@
                     &nbsp;
                 </li>
                 <li>
-                    <span class="discard-cancel" data-toggle="dropdown"><strong ng-click="DeleteMessages(controllerParent)">Yes</strong></span>
-                    &nbsp;&nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>No</strong></span>
+                    <span class="discard-cancel" data-toggle="dropdown"><strong ng-click="DeleteMessages(controllerParent)">
+                        Yes</strong></span>
+                    &nbsp;&nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>
+                        No</strong></span>
                 </li>
             </ul>
         </div>
         <button class="btn" ng-click="ExportMessages(controllerParent)">
-            <i class="fa fa-file-text"></i> Export messages to text file
+            <i class="fa fa-file-text">
+            </i>
+            Export messages to text file
         </button>
         <div class="page-select-wrapper">
-            <strong>Show:</strong>&nbsp;
+            <strong>
+            Show:</strong>
+            &nbsp;
             <select class="page-select" ng-model="pagingOptions.pageSize">
-                <option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
+                <option ng-repeat="size in pagingOptions.pageSizes">
+                    {{size}}
+                </option>
             </select>
         </div>
     </div><!-- end top button -->
     <div ng-controller="SearchByDateCtrl">
 
-            <input ng-model="filterOptions.filterText" class="search-input" placeholder="Search by contact number, name, email or custom field" type="text">
+        <input ng-model="filterOptions.filterText" class="search-input" placeholder="Search by contact number, name, email or custom field" type="text">
 
-            <span class="label-icon">
-            &nbsp;&nbsp;&nbsp;<i class="fa fa-calendar"></i>
-            </span>
-            <div class="btn-group datetimepicker-wrapper" >
-                <input ng-model="filterOptions.startDate" id="idStartDate" type="text" class="form-control" datepicker-popup="{{format}}" is-open="opened" min-date="" show-weeks="false" max-date="filterOptions.endDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
-            </div>
-            <span class="label-icon">
+        <span class="label-icon">
+            &nbsp;&nbsp;&nbsp;<i class="fa fa-calendar">
+            </i>
+        </span>
+        <div class="btn-group datetimepicker-wrapper" >
+            <input ng-model="filterOptions.startDate" id="idStartDate" type="text" class="form-control" datepicker-popup="{{format}}" is-open="opened" min-date="" show-weeks="false" max-date="filterOptions.endDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+        </div>
+        <span class="label-icon">
             &nbsp; to
-            </span>
-            <div class="btn-group datetimepicker-wrapper" >
-                <input ng-model="filterOptions.endDate" id="idEndDate" type="text" class="form-control" datepicker-popup="{{format}}" is-open="opened2" min-date="filterOptions.startDate" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open2($event)" />
-            </div>
+        </span>
+        <div class="btn-group datetimepicker-wrapper" >
+            <input ng-model="filterOptions.endDate" id="idEndDate" type="text" class="form-control" datepicker-popup="{{format}}" is-open="opened2" min-date="filterOptions.startDate" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open2($event)" />
+        </div>
 
-            <button class="btn btn-search" ng-click="getPagedDataAsync(controllerParent)" ng-controller="notifyCtrl">
-            <i class="fa fa-search"></i>
-            </button>
-            <!-- end search by -->
-    <br>
-    <!--START TABLE-->
-    <div class="gridStyle" ng-grid="ngOptions"></div>
-</div>
+        <button class="btn btn-search" ng-click="getPagedDataAsync(controllerParent)" ng-controller="notifyCtrl" ng-disabled="(filterOptions.filterText!=''&&filterOptions.filterText.length<3)">
+            <i class="fa fa-search">
+            </i>
+        </button>
+        <!-- end search by -->
+        <br>
+        <div ng-show="(filterOptions.filterText!=''&&filterOptions.filterText.length<3)" class="text-counter error" style="float: left;">
+            If present, search term has to be at least 3 characters long
+        </div>
+        <br>
+        <!--START TABLE-->
+        <div class="gridStyle" ng-grid="ngOptions"></div>
+    </div>
