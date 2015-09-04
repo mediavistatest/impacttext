@@ -23,39 +23,39 @@
 var mainObject;
 
 function empty(value) {
-	return typeof value == 'undefined' || value == null || value == "";
+    return typeof value == 'undefined' || value == null || value == "";
 }
 
 function setPagingDataSliced($scope, data, totalResultsCount) {
-	$scope.ngData = data;
-	$scope.totalServerItems = totalResultsCount;
-	if (!$scope.$$phase) {
-		$scope.$apply();
-	}
-	if (typeof $scope.ngOptions.selectAll == 'function') {
-		$scope.ngOptions.selectAll(false);
-	}
+    $scope.ngData = data;
+    $scope.totalServerItems = totalResultsCount;
+    if (!$scope.$$phase) {
+        $scope.$apply();
+    }
+    if ( typeof $scope.ngOptions.selectAll == 'function') {
+        $scope.ngOptions.selectAll(false);
+    }
 }
 
 function generateOrderByField(sortFields, sortOrders) {
-	if (typeof sortFields == 'undefined' || sortFields == null) {
-		sortFields = [];
-	}
-	if (typeof sortOrders == 'undefined' || sortOrders == null) {
-		sortOrders = [];
-	}
-	var orderBy = '';
-	for (var i in sortFields) {
-		if (sortFields[i] == '') {
-			continue;
-		}
-		var sortOrder = typeof sortOrders[i] == 'undefined' || sortOrders[i] == null ? 'asc' : sortOrders[i].toLowerCase();
-		if (orderBy != '') {
-			orderBy += ', ';
-		}
-		orderBy += sortFields[i].toLowerCase() + " " + sortOrder;
-	}
-	return orderBy;
+    if ( typeof sortFields == 'undefined' || sortFields == null) {
+        sortFields = [];
+    }
+    if ( typeof sortOrders == 'undefined' || sortOrders == null) {
+        sortOrders = [];
+    }
+    var orderBy = '';
+    for (var i in sortFields) {
+        if (sortFields[i] == '') {
+            continue;
+        }
+        var sortOrder = typeof sortOrders[i] == 'undefined' || sortOrders[i] == null ? 'asc' : sortOrders[i].toLowerCase();
+        if (orderBy != '') {
+            orderBy += ', ';
+        }
+        orderBy += sortFields[i].toLowerCase() + " " + sortOrder;
+    }
+    return orderBy;
 }
 
 /**
@@ -144,6 +144,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
             });
         },
         contactListsGet : function(callback) {
+            main.contactLists = [];
+
             //Read the data from the remote server. First read the contact lists.
             $http.post(inspiniaNS.wsUrl + "contactlist_get", $.param({
                 sethttp : 1,
@@ -156,11 +158,10 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
             function(data, status, headers, config) {
                 if (data == null || typeof data.apicode == 'undefined') {
                     //This should never happen
-                    main.contactLists = [];
 
-						  if(typeof callback == 'function'){
-							  callback(main.contactLists);
-						  }
+                    if ( typeof callback == 'function') {
+                        callback(main.contactLists);
+                    }
 
                     return;
                 }
@@ -171,9 +172,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                     main.contactLists = [];
                 }
 
-					 if(typeof callback == 'function'){
-						 callback(main.contactLists);
-					 }
+                if ( typeof callback == 'function') {
+                    callback(main.contactLists);
+                }
             }).error(
             //An error occurred with this request
             function(data, status, headers, config) {
@@ -184,40 +185,41 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 }
             });
         },
-		  contactSegmentsGet : function(callback){
-			  $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param({
-				  sethttp : 1,
-				  apikey : $cookieStore.get('inspinia_auth_token'),
-				  accountID : $cookieStore.get('inspinia_account_id'),
-				  orderby : 'contactSelectionName asc'
-			  })).success(function(data) {
-				  if (data == null || typeof data.apicode == 'undefined') {
-					  main.contactSegments = [];
+        contactSegmentsGet : function(callback) {
+            main.contactSegments = [];
 
-					  if(typeof callback == 'function'){
-						  callback(main.contactSegments);
-					  }
+            $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param({
+                sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                accountID : $cookieStore.get('inspinia_account_id'),
+                orderby : 'contactSelectionName asc'
+            })).success(function(data) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    main.contactSegments = [];
 
-					  return;
-				  }
-				  if (data.apicode == 0) {
-					  //Reading contact lists
-					  main.contactSegments = data.apidata;
-				  } else {
-					  main.contactSegments = [];
-				  }
+                    if ( typeof callback == 'function') {
+                        callback(main.contactSegments);
+                    }
 
-				  if(typeof callback == 'function'){
-					  callback(main.contactSegments);
-				  }
-			  }).error(
-				  function(data, status, headers, config) {
-					  if (status == 400) {
-						  alert("An error occurred when getting contact segments! Error code: " + data.apicode);
-						  alert(JSON.stringify(data));
-					  }
-				  });
-		  },
+                    return;
+                }
+                if (data.apicode == 0) {
+                    //Reading contact lists
+                    main.contactSegments = data.apidata;
+                } else {
+                    main.contactSegments = [];
+                }
+
+                if ( typeof callback == 'function') {
+                    callback(main.contactSegments);
+                }
+            }).error(function(data, status, headers, config) {
+                if (status == 400) {
+                    alert("An error occurred when getting contact segments! Error code: " + data.apicode);
+                    alert(JSON.stringify(data));
+                }
+            });
+        },
         accountKeywordGet : function(success, error) {
             $http.post(inspiniaNS.wsUrl + "accountkeyword_get", $.param({
                 sethttp : 1,
@@ -621,95 +623,87 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 }
             });
         },
-		  getSegment : function(request, callback){
-			  $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param(request)).success(
-				  function (data, status, headers, config) {
-					  if (data == null || typeof data.apicode == 'undefined') {
-						  alert("Unidentified error occurred when trying to load the segment!");
-						  $state.go('lists.segments');
-						  return;
-					  }
-					  if (data.apicode == 0) {
-						  if(data.apidata == "" || data.apidata.length == 0){
-							  alert("Unidentified error occurred when trying to load the segment!");
-							  $state.go('lists.segments');
-							  return;
-						  }
+        getSegment : function(request, callback) {
+            $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param(request)).success(function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    alert("Unidentified error occurred when trying to load the segment!");
+                    $state.go('lists.segments');
+                    return;
+                }
+                if (data.apicode == 0) {
+                    if (data.apidata == "" || data.apidata.length == 0) {
+                        alert("Unidentified error occurred when trying to load the segment!");
+                        $state.go('lists.segments');
+                        return;
+                    }
 
-						  if(typeof callback == 'function'){
-							  callback(data.apidata[0]);
-						  }
-					  } else {
-						  alert("An error occurred when loading the segment! Error code: " + data.apicode);
-						  $state.go('lists.segments');
-					  }
-			  }).error(
-				  function (data, status, headers, config) {
-					  alert("An error occurred when loading the segment! Error code: " + data.apicode);
-					  $state.go('lists.segments');
-				  }
-			  );
-		  },
-		  addSegment : function(request, $inScope, callback){
-			  $http.post(inspiniaNS.wsUrl + "contactselection_add", $.param(request)).success(
-				  function (data, status, headers, config) {
-					  if (data == null || typeof data.apicode == 'undefined') {
-						  $inScope.$broadcast("SegmentCreateFail");
-						  return;
-					  }
-					  if (data.apicode == 0) {
-						  if(typeof callback == 'function'){
-							  callback(data.apidata);
-						  }
-					  } else {
-						  $inScope.$broadcast("SegmentCreateFail");
-					  }
-				  }).error(
-				  function (data, status, headers, config) {
-					  if (data.apicode == 1) {
-						  $inScope.$broadcast("DuplicateSegmentName", data.apidata);
-					  } else {
-						  $inScope.$broadcast("SegmentCreateFail");
-					  }
-				  });
-		  },
-		  saveSegment : function(request, $inScope, callback){
-			  $http.post(inspiniaNS.wsUrl + "contactselection_modify", $.param(request)).success(
-				  function (data, status, headers, config) {
-					  if (data == null || typeof data.apicode == 'undefined') {
-						  $inScope.$broadcast("SegmentSaveFail");
-						  return;
-					  }
-					  if (data.apicode == 0) {
-						  if(typeof callback == 'function'){
-							  callback(data.apidata);
-						  }
-					  } else {
-						  $inScope.$broadcast("SegmentSaveFail");
-					  }
-				  }).error(
-				  function (data, status, headers, config) {
-					  $inScope.$broadcast("SegmentSaveFail");
-				  }
-			  );
-		  },
-		  deleteSegment : function(request, $inScope, callback) {
-			  $http.post(inspiniaNS.wsUrl + "contactselection_delete", $.param(request)).success(
-				  function (data, status, headers, config) {
-					  if (data == null || typeof data.apicode == 'undefined' || data.apicode != 0) {
-						  $inScope.$broadcast("SegmentDeleteFail");
-						  return;
-					  }
+                    if ( typeof callback == 'function') {
+                        callback(data.apidata[0]);
+                    }
+                } else {
+                    alert("An error occurred when loading the segment! Error code: " + data.apicode);
+                    $state.go('lists.segments');
+                }
+            }).error(function(data, status, headers, config) {
+                alert("An error occurred when loading the segment! Error code: " + data.apicode);
+                $state.go('lists.segments');
+            });
+        },
+        addSegment : function(request, $inScope, callback) {
+            $http.post(inspiniaNS.wsUrl + "contactselection_add", $.param(request)).success(function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    $inScope.$broadcast("SegmentCreateFail");
+                    return;
+                }
+                if (data.apicode == 0) {
+                    if ( typeof callback == 'function') {
+                        callback(data.apidata);
+                    }
+                } else {
+                    $inScope.$broadcast("SegmentCreateFail");
+                }
+            }).error(function(data, status, headers, config) {
+                if (data.apicode == 1) {
+                    $inScope.$broadcast("DuplicateSegmentName", data.apidata);
+                } else {
+                    $inScope.$broadcast("SegmentCreateFail");
+                }
+            });
+        },
+        saveSegment : function(request, $inScope, callback) {
+            $http.post(inspiniaNS.wsUrl + "contactselection_modify", $.param(request)).success(function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    $inScope.$broadcast("SegmentSaveFail");
+                    return;
+                }
+                if (data.apicode == 0) {
+                    if ( typeof callback == 'function') {
+                        callback(data.apidata);
+                    }
+                } else {
+                    $inScope.$broadcast("SegmentSaveFail");
+                }
+                $scope.main.CommonActions.setContactListsAndSegments();
+            }).error(function(data, status, headers, config) {
+                $inScope.$broadcast("SegmentSaveFail");
+            });
+        },
+        deleteSegment : function(request, $inScope, callback) {
+            $http.post(inspiniaNS.wsUrl + "contactselection_delete", $.param(request)).success(function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined' || data.apicode != 0) {
+                    $inScope.$broadcast("SegmentDeleteFail");
+                    return;
+                }
 
-					  if(typeof callback == 'function'){
-						  callback();
-					  }
-				  }).error(
-				  function (data, status, headers, config) {
-					  $inScope.$broadcast("SegmentDeleteFail");
-				  }
-			  );
-		  }
+                if ( typeof callback == 'function') {
+                    callback();
+                }
+
+                $scope.main.CommonActions.setContactListsAndSegments();
+            }).error(function(data, status, headers, config) {
+                $inScope.$broadcast("SegmentDeleteFail");
+            });
+        }
     };
 
     main.CommonActions = {
@@ -828,14 +822,49 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
             $scope.main.ServerRequests.contactModifyRequest(request, inScope, refresh, callback);
         },
         // forwardToMail : function(messageObject) {
-        	// var message = messageObject.message.replace(/\ /g, '%20');
-            // var href = 'mailto:?subject=ImpactText%20-%20Forwarded%20SMS&body=From%20'+messageObject.DID +';%20'+messageObject.messageDate+';%20'+ message;
-            // window.location.href = href;
+        // var message = messageObject.message.replace(/\ /g, '%20');
+        // var href = 'mailto:?subject=ImpactText%20-%20Forwarded%20SMS&body=From%20'+messageObject.DID +';%20'+messageObject.messageDate+';%20'+ message;
+        // window.location.href = href;
         // }
         forwardToMail : function(from, to, date, inMessage) {
             var message = inMessage.replace(/\ /g, '%20');
-            var href = 'mailto:?subject=ImpactText%20-%20Forwarded%20SMS&body=From%20'+from +';%20To%20'+to+';%20'+date+';%20'+ message;
+            var href = 'mailto:?subject=ImpactText%20-%20Forwarded%20SMS&body=From%20' + from + ';%20To%20' + to + ';%20' + date + ';%20' + message;
             window.location.href = href;
+        },
+        setContactListsAndSegments : function() {
+            main.ServerRequests.contactListsGet();
+            main.ServerRequests.contactSegmentsGet();
+
+            var sCLS = function() {
+                main.contactGroups = [];
+                if (main.contactLists && main.contactLists.length > 0) {
+                    for (var i in main.contactLists) {
+                        main.contactGroups.push({
+                            id : main.contactLists[i].contactListID,
+                            name : main.contactLists[i].contactListName,
+                            group : 'Lists'
+                        });
+                    }
+                    if (main.contactSegments && main.contactSegments.length > 0) {
+                        for (var i in main.contactSegments) {
+                            main.contactGroups.push({
+                                id : main.contactSegments[i].contactSelectionID,
+                                name : main.contactSegments[i].contactSelectionName,
+                                group : 'Segments'
+                            });
+                        }
+                    } else {
+                        setTimeout(function() {
+                            sCLS();
+                        }, 500);
+                    }
+                } else {
+                    setTimeout(function() {
+                       sCLS();
+                    }, 500);
+                }
+            };
+            sCLS();
         }
     };
 
@@ -856,41 +885,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
 
             main.ServerRequests.autoresponderActionGet();
 
-            main.ServerRequests.contactListsGet();
-            main.ServerRequests.contactSegmentsGet();
-            
-            main.contactGroups = [];
-			function setContactListsAndSegments() {
-				if (main.contactLists) {
-					for (var i in main.contactLists) {
-						main.contactGroups.push({
-							id : main.contactLists[i].contactListID,
-							name : main.contactLists[i].contactListName,
-							group : 'Lists'
-						});
-					}
+            main.CommonActions.setContactListsAndSegments();
 
-					if (main.contactSegments) {
-						for (var i in main.contactSegments) {
-							main.contactGroups.push({
-								id : main.contactSegments[i].contactSelectionID,
-								name : main.contactSegments[i].contactSelectionName,
-								group : 'Segments'
-							});
-						}
-					} else {
-						setTimeout(function() {
-							setContactListsAndSegments();
-						}, 200);
-					}
-				} else {
-					setTimeout(function() {
-						setContactListsAndSegments();
-					}, 200);
-				}
-			}
-			setContactListsAndSegments();
-            
             var successDidGet = function(data, status, headers, config, $inScope) {
                 main.fromNumbersString = '';
                 if (data == null || typeof data.apicode == 'undefined') {
@@ -1185,14 +1181,18 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         }
     };
 
-	$scope.$watch('main.contactLists', function(newValue){
-		if(typeof newValue != 'undefined'){
-			$scope.main.contactListsFilter = $.extend([], $scope.main.contactLists);
-			$scope.main.contactListsFilter.unshift({contactListID: '0', contactListName: 'All contact lists'});
-			//$scope.main.contactListsFilter = $.extend({}, $scope.main.contactListsFilter);
-		}
-	}, true);
+    $scope.$watch('main.contactLists', function(newValue) {
+        if ( typeof newValue != 'undefined') {
+            $scope.main.contactListsFilter = $.extend([], $scope.main.contactLists);
+            $scope.main.contactListsFilter.unshift({
+                contactListID : '0',
+                contactListName : 'All contact lists'
+            });
+            //$scope.main.contactListsFilter = $.extend({}, $scope.main.contactListsFilter);
+        }
+    }, true);
 }
+
 /**
  * dashboardFlotOne - simple controller for data
  * for Flot chart in Dashboard view
@@ -2862,7 +2862,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
     //       {Name: "John", Age: 48, Position: 'Marketing manager', Status: 'deactive', Date: '09.10.2014'},
     //       {Name: "Berg", Age: 19, Position: 'UI/UX Designer', Status: 'active', Date: '12.11.2013'}
     //   ];
-    $scope.ngData=[];
+    $scope.ngData = [];
     $scope.mySelections = [];
     $scope.filterOptions = {
         filterText : "",
@@ -3147,6 +3147,7 @@ function ngGridCtrl($scope, $http, $cookieStore) {
                 console.log(JSON.stringify(data));
             }
             $scope.refresh();
+            $scope.main.CommonActions.setContactListsAndSegments();
         }).error(
         //An error occurred with this request
         function(data, status, headers, config) {
@@ -3337,13 +3338,13 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
                         case "custom3":
                             request.custom3 = searchText;
                             break;
-						  		case "custom4":
-							  		request.custom4 = searchText;
-							  		break;
-								case "custom5":
-									request.custom5 = searchText;
-									break;
-								}
+                        case "custom4":
+                            request.custom4 = searchText;
+                            break;
+                        case "custom5":
+                            request.custom5 = searchText;
+                            break;
+                        }
                         $http.post(inspiniaNS.wsUrl + "contact_get", $.param(request)).success(function(data) {
                             $scope.getContactBlacklist(data.apidata, function() {
                                 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
@@ -3416,67 +3417,67 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     }, true);
     //TABLE OPTIONS
 
-	 $scope.columnDefs = [{
-		 inSettings : false,
-		 field : '',
-		 width : 30
-		 //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
-	 }, {
-		 inSettings : true,
-		 checked : true,
-		 canBeClicked : true,
-		 field : 'ANI',
-		 displayName : 'Phone Number'
-		 //cellTemplate: 'views/table/ListNameTemplate.html'
-	 }, {
-		 inSettings : true,
-		 checked : true,
-		 canBeClicked : true,
-		 field : 'lastName',
-		 displayName : 'Name',
-		 cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
-	 }, {
-		 inSettings : true,
-		 checked : true,
-		 canBeClicked : true,
-		 field : 'emailAddress',
-		 displayName : 'Email'
-	 }, {
-		 inSettings : true,
-		 checked : true,
-		 field : 'custom1',
-		 displayName : 'Field 1'
-	 }, {
-		 inSettings : true,
-		 checked : true,
-		 field : 'custom2',
-		 displayName : 'Field 2'
-	 }, {
-		 inSettings : true,
-		 checked : true,
-		 field : 'custom3',
-		 displayName : 'Field 3'
-	 }, {
-		 inSettings : true,
-		 checked : false,
-		 field : 'custom4',
-		 displayName : 'Field 4'
-	 }, {
-		 inSettings : true,
-		 checked : false,
-		 field : 'custom5',
-		 displayName : 'Field 5'
-	 }, {
-		 inSettings : true,
-		 checked : true,
-		 field : 'status',
-		 displayName : 'Status',
-		 cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
-	 }, {
-		 inSettings : false,
-		 checked : true,
-		 cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_contact({id:row.getProperty(\'contactID\')})"><i class="fa fa-pencil"></i> Edit Contact </a></div>'
-	 }];
+    $scope.columnDefs = [{
+        inSettings : false,
+        field : '',
+        width : 30
+        //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
+    }, {
+        inSettings : true,
+        checked : true,
+        canBeClicked : true,
+        field : 'ANI',
+        displayName : 'Phone Number'
+        //cellTemplate: 'views/table/ListNameTemplate.html'
+    }, {
+        inSettings : true,
+        checked : true,
+        canBeClicked : true,
+        field : 'lastName',
+        displayName : 'Name',
+        cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
+    }, {
+        inSettings : true,
+        checked : true,
+        canBeClicked : true,
+        field : 'emailAddress',
+        displayName : 'Email'
+    }, {
+        inSettings : true,
+        checked : true,
+        field : 'custom1',
+        displayName : 'Field 1'
+    }, {
+        inSettings : true,
+        checked : true,
+        field : 'custom2',
+        displayName : 'Field 2'
+    }, {
+        inSettings : true,
+        checked : true,
+        field : 'custom3',
+        displayName : 'Field 3'
+    }, {
+        inSettings : true,
+        checked : false,
+        field : 'custom4',
+        displayName : 'Field 4'
+    }, {
+        inSettings : true,
+        checked : false,
+        field : 'custom5',
+        displayName : 'Field 5'
+    }, {
+        inSettings : true,
+        checked : true,
+        field : 'status',
+        displayName : 'Status',
+        cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
+    }, {
+        inSettings : false,
+        checked : true,
+        cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_contact({id:row.getProperty(\'contactID\')})"><i class="fa fa-pencil"></i> Edit Contact </a></div>'
+    }];
 
     $scope.ngOptions = {
         data : 'ngData',
@@ -3496,7 +3497,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         pagingOptions : $scope.pagingOptions,
         //filterOptions : $scope.filterOptions,
         primaryKey : 'contactID',
-		  columnDefs: 'columnDefs'
+        columnDefs : 'columnDefs'
     };
 
     $scope.$watch('ngData', function() {
@@ -3507,44 +3508,46 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     };
     $scope.refresh();
 
-	 $scope.exportAll = function() {
-		 $scope.export(true);
-	 };
+    $scope.exportAll = function() {
+        $scope.export(true);
+    };
 
-	/**
-	 *
-	 * @param bool all Export all
-	 */
+    /**
+     *
+     * @param bool all Export all
+     */
     $scope.export = function(all) {
-		  if(empty(all)){ all = false; }
+        if (empty(all)) {
+            all = false;
+        }
 
-		  if(all){
-			  var params = {
-				  sethttp : 1,
-				  apikey : $cookieStore.get('inspinia_auth_token'),
-				  accountID : $cookieStore.get('inspinia_account_id'),
-				  export : "csv"
-			  };
-		  }else{
-			  var selected_ids = [];
-			  for(var i in $scope.mySelections){
-				  selected_ids.push($scope.mySelections[i].contactID);
-			  }
-			  selected_ids = selected_ids.join();
+        if (all) {
+            var params = {
+                sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                accountID : $cookieStore.get('inspinia_account_id'),
+                export : "csv"
+            };
+        } else {
+            var selected_ids = [];
+            for (var i in $scope.mySelections) {
+                selected_ids.push($scope.mySelections[i].contactID);
+            }
+            selected_ids = selected_ids.join();
 
-			  if($scope.mySelections.length == 0){
-				  $scope.$broadcast('ContactsNotSelectedError');
-				  return;
-			  }
+            if ($scope.mySelections.length == 0) {
+                $scope.$broadcast('ContactsNotSelectedError');
+                return;
+            }
 
-			  var params = {
-				  sethttp : 1,
-				  apikey : $cookieStore.get('inspinia_auth_token'),
-				  accountID : $cookieStore.get('inspinia_account_id'),
-				  contactID : selected_ids,
-				  export : "csv"
-			  };
-		  }
+            var params = {
+                sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                accountID : $cookieStore.get('inspinia_account_id'),
+                contactID : selected_ids,
+                export : "csv"
+            };
+        }
 
         if ($state.params.id && $state.params.id != '') {
             params['contactListID'] = $state.params.id;
@@ -3576,12 +3579,12 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
             case "custom3":
                 params.custom3 = searchText;
                 break;
-				case "custom4":
-					params.custom4 = searchText;
-					break;
-				case "custom5":
-					params.custom5 = searchText;
-					break;
+            case "custom4":
+                params.custom4 = searchText;
+                break;
+            case "custom5":
+                params.custom5 = searchText;
+                break;
             }
         }
 
@@ -3598,59 +3601,61 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         });
     };
 
-	$scope.columnSettings = {
-		columnDefs : $.extend([], $scope.columnDefs),
-		ColumnUp_onClick : function(index) {
-			$scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index - 1, 1, $scope.columnSettings.columnDefs[index])[0];
-		},
-		ColumnDown_onClick : function(index) {
-			$scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index + 1, 1, $scope.columnSettings.columnDefs[index])[0];
-		},
-		UpdateColumns : function(refresh) {
-			$scope.columnSettings.SetCookie();
-			$scope.columnDefs = $.extend([], $scope.columnSettings.GrepColumnDefs($scope.columnSettings.columnDefs));
-			if(refresh){
-				$scope.refresh();
-			}
-		},
-		GrepColumnDefs : function(columnDefs) {
-			return $.grep(columnDefs, function(member) {
-				return (member.canBeClicked || (!member.canBeClicked && member.checked));
-			});
-		},
-		GetCookie : function() {
-			var columnDefsCookie = $scope.main.ipCookie('itContactsColumnDefs');
-			if (columnDefsCookie == null) {
-				columnDefsCookie = [];
-				$scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
-					expires : 365,
-					expirationUnit : 'days'
-				});
-			}
-			return columnDefsCookie;
-		},
-		SetCookie : function() {
-			var columnDefsCookie = [{columnDefs : $scope.columnSettings.columnDefs}];
-			$scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
-				expires : 365,
-				expirationUnit : 'days'
-			});
-		},
-		DefaultColumns : function() {
-			var columnDefsCookie = [];
-			$scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
-				expires : 365,
-				expirationUnit : 'days'
-			});
-			location.reload();
-		}
-	};
+    $scope.columnSettings = {
+        columnDefs : $.extend([], $scope.columnDefs),
+        ColumnUp_onClick : function(index) {
+            $scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index - 1, 1, $scope.columnSettings.columnDefs[index])[0];
+        },
+        ColumnDown_onClick : function(index) {
+            $scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index + 1, 1, $scope.columnSettings.columnDefs[index])[0];
+        },
+        UpdateColumns : function(refresh) {
+            $scope.columnSettings.SetCookie();
+            $scope.columnDefs = $.extend([], $scope.columnSettings.GrepColumnDefs($scope.columnSettings.columnDefs));
+            if (refresh) {
+                $scope.refresh();
+            }
+        },
+        GrepColumnDefs : function(columnDefs) {
+            return $.grep(columnDefs, function(member) {
+                return (member.canBeClicked || (!member.canBeClicked && member.checked));
+            });
+        },
+        GetCookie : function() {
+            var columnDefsCookie = $scope.main.ipCookie('itContactsColumnDefs');
+            if (columnDefsCookie == null) {
+                columnDefsCookie = [];
+                $scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
+                    expires : 365,
+                    expirationUnit : 'days'
+                });
+            }
+            return columnDefsCookie;
+        },
+        SetCookie : function() {
+            var columnDefsCookie = [{
+                columnDefs : $scope.columnSettings.columnDefs
+            }];
+            $scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
+                expires : 365,
+                expirationUnit : 'days'
+            });
+        },
+        DefaultColumns : function() {
+            var columnDefsCookie = [];
+            $scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
+                expires : 365,
+                expirationUnit : 'days'
+            });
+            location.reload();
+        }
+    };
 
-	var cookie = $scope.columnSettings.GetCookie();
-	if (cookie != null && cookie.length != 0) {
-		$scope.columnSettings.columnDefs = cookie[0].columnDefs;
-	}
-	$scope.columnSettings.UpdateColumns();
+    var cookie = $scope.columnSettings.GetCookie();
+    if (cookie != null && cookie.length != 0) {
+        $scope.columnSettings.columnDefs = cookie[0].columnDefs;
+    }
+    $scope.columnSettings.UpdateColumns();
 }
 
 /**
@@ -3658,862 +3663,901 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
  * CONTROLLER FOR LIST SEGMENTS
  */
 function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
-	$scope.ngData = [];
-	$scope.mySelections = [];
+    $scope.ngData = [];
+    $scope.mySelections = [];
 
-	$scope.filterOptions = {
-		filterText : "",
-		externalFilter : 'searchText',
-		useExternalFilter : true
-	};
-	$scope.totalServerItems = 0;
-	$scope.pagingOptions = {
-		pageSizes : [10, 20, 50, 100],
-		pageSize : Number($scope.main.Settings.defaultPageSize),
-		currentPage : 1
-	};
-	// sort
-	$scope.sortOptions = {
-		fields : ['contactselectionname'],
-		directions : ['ASC'],
-		useExternalSorting : true
-	};
+    $scope.filterOptions = {
+        filterText : "",
+        externalFilter : 'searchText',
+        useExternalFilter : true
+    };
+    $scope.totalServerItems = 0;
+    $scope.pagingOptions = {
+        pageSizes : [10, 20, 50, 100],
+        pageSize : Number($scope.main.Settings.defaultPageSize),
+        currentPage : 1
+    };
+    // sort
+    $scope.sortOptions = {
+        fields : ['contactselectionname'],
+        directions : ['ASC'],
+        useExternalSorting : true
+    };
 
-	//GET DATA
-	$scope.setPagingData = function(data, page, pageSize) {
-		var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-		$scope.ngData = pagedData;
-		$scope.totalServerItems = data.length;
-		if (!$scope.$$phase) {
-			$scope.$apply();
-		}
-	};
-	$scope.setPagingDataSliced = setPagingDataSliced;
-	$scope.getPagedDataAsync = function(pageSize, page, searchText, sortFields, sortOrders) {
-		if ( typeof page == 'undefined' || page == null || page == '') {
-			page = 0;
-		}
-		//Creating a sort options string
-		var orderBy = generateOrderByField(sortFields, sortOrders);
-		if (orderBy == '') {
-			orderBy = 'contactSelectionName asc';
-		}
+    //GET DATA
+    $scope.setPagingData = function(data, page, pageSize) {
+        var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+        $scope.ngData = pagedData;
+        $scope.totalServerItems = data.length;
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    };
+    $scope.setPagingDataSliced = setPagingDataSliced;
+    $scope.getPagedDataAsync = function(pageSize, page, searchText, sortFields, sortOrders) {
+        if ( typeof page == 'undefined' || page == null || page == '') {
+            page = 0;
+        }
+        //Creating a sort options string
+        var orderBy = generateOrderByField(sortFields, sortOrders);
+        if (orderBy == '') {
+            orderBy = 'contactSelectionName asc';
+        }
 
-		if (searchText) {
-			var request = {
-				sethttp : 1,
-				apikey : $cookieStore.get('inspinia_auth_token'),
-				accountID : $cookieStore.get('inspinia_account_id'),
-				limit : pageSize,
-				offset : (page - 1) * pageSize,
-				orderby : orderBy
-			};
-			if ($state.params.id && $state.params.id != '') {
-				request['contactListID'] = $state.params.id;
-				$scope.ContactListFilter = {"contactListID": $state.params.id};
-			}
-			if(!empty(searchText)){
-				request.contactSelectionName = searchText;
-			}
+        if (searchText) {
+            var request = {
+                sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                accountID : $cookieStore.get('inspinia_account_id'),
+                limit : pageSize,
+                offset : (page - 1) * pageSize,
+                orderby : orderBy
+            };
+            if ($state.params.id && $state.params.id != '') {
+                request['contactListID'] = $state.params.id;
+                $scope.ContactListFilter = {
+                    "contactListID" : $state.params.id
+                };
+            }
+            if (!empty(searchText)) {
+                request.contactSelectionName = searchText;
+            }
 
-			$http.post(inspiniaNS.wsUrl + "contactselection_get", $.param(request)).success(function(data) {
-				$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-			}).error(
-				function(data, status, headers, config) {
-					if (status == 400) {
-						if (data.apicode == 4) {
-							$scope.$broadcast("SearchTextTooShort");
-						} else {
-							alert("An error occurred when getting segments! Error code: " + data.apicode);
-						}
-					}
-			});
-		} else {
-			var params = {
-				sethttp : 1,
-				apikey : $cookieStore.get('inspinia_auth_token'),
-				accountID : $cookieStore.get('inspinia_account_id'),
-				limit : pageSize,
-				offset : (page - 1) * pageSize,
-				orderby : orderBy
-			};
-			if ($state.params.id && $state.params.id != '') {
-				params['contactListID'] = $state.params.id;
-				$scope.ContactListFilter = {"contactListID": $state.params.id};
-			}
+            $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param(request)).success(function(data) {
+                $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+            }).error(function(data, status, headers, config) {
+                if (status == 400) {
+                    if (data.apicode == 4) {
+                        $scope.$broadcast("SearchTextTooShort");
+                    } else {
+                        alert("An error occurred when getting segments! Error code: " + data.apicode);
+                    }
+                }
+            });
+        } else {
+            var params = {
+                sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                accountID : $cookieStore.get('inspinia_account_id'),
+                limit : pageSize,
+                offset : (page - 1) * pageSize,
+                orderby : orderBy
+            };
+            if ($state.params.id && $state.params.id != '') {
+                params['contactListID'] = $state.params.id;
+                $scope.ContactListFilter = {
+                    "contactListID" : $state.params.id
+                };
+            }
 
-			$http.post(inspiniaNS.wsUrl + "contactselection_get", $.param(params)).success(function(data) {
-				$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-			}).error(
-				function(data, status, headers, config) {
-					if (status == 400) {
-						alert("An error occurred when getting segments! Error code: " + data.apicode);
-					}
-			});
-		}
-	};
+            $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param(params)).success(function(data) {
+                $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+            }).error(function(data, status, headers, config) {
+                if (status == 400) {
+                    alert("An error occurred when getting segments! Error code: " + data.apicode);
+                }
+            });
+        }
+    };
 
-	//WHATCH
-	$scope.$watch('pagingOptions', function() {
-		if (!self.poInit || self.gettingData) {
-			self.poInit = true;
-			return;
-		}
-		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
-	}, true);
-	$scope.$watch('filterOptions', function() {
-		if (!self.foInit || self.gettingData) {
-			self.foInit = true;
-			return;
-		}
-		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
-	}, true);
-	$scope.$watch('sortOptions', function(newVal, oldVal) {
-		if (newVal !== oldVal) {
-			$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
-		}
-	}, true);
-	$scope.$watch('ContactListFilter.contactListID', function(newValue, oldValue){
-		if(typeof newValue != 'undefined'){
-			if(newValue != oldValue){
-				if(newValue == 0){
-					$state.go('lists.segments', {id: ''});
-				}else{
-					$state.go('lists.segments', {id: newValue});
-				}
-			}
-		}
-	});
+    //WHATCH
+    $scope.$watch('pagingOptions', function() {
+        if (!self.poInit || self.gettingData) {
+            self.poInit = true;
+            return;
+        }
+        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+    }, true);
+    $scope.$watch('filterOptions', function() {
+        if (!self.foInit || self.gettingData) {
+            self.foInit = true;
+            return;
+        }
+        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+    }, true);
+    $scope.$watch('sortOptions', function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+            $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+        }
+    }, true);
+    $scope.$watch('ContactListFilter.contactListID', function(newValue, oldValue) {
+        if ( typeof newValue != 'undefined') {
+            if (newValue != oldValue) {
+                if (newValue == 0) {
+                    $state.go('lists.segments', {
+                        id : ''
+                    });
+                } else {
+                    $state.go('lists.segments', {
+                        id : newValue
+                    });
+                }
+            }
+        }
+    });
 
-	//TABLE OPTIONS
-	$scope.ngOptions = {
-		data : 'ngData',
-		enableSorting : true,
-		useExternalSorting : true,
-		sortInfo : $scope.sortOptions,
-		rowHeight : 35,
-		showSelectionCheckbox : false,
-		enablePaging : true,
-		showFooter : true,
-		totalServerItems : 'totalServerItems',
-		footerTemplate : 'views/table/footerTemplate.html',
-		pagingOptions : $scope.pagingOptions,
-		filterOptions : $scope.filterOptions,
-		primaryKey : 'contactSelectionID',
-		columnDefs : [{
-			field : 'contactSelectionName',
-			displayName : 'Name',
-			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})">{{row.entity.contactSelectionName}}</a></div>'
-		}, /*{
-			field : 'contactListID',
-			displayName : 'List ID',
-			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})">{{row.entity.contactListID}}</a></div>'
-		}, */{
-			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})"><i class="fa fa-pencil"></i> Edit Segment </a></div>',
-			width: 150
-		}, {
-			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ng-click="deleteSegment(row.getProperty(\'contactSelectionID\'))"><i class="fa fa-trash"></i> Delete Segment </a></div>',
-			width: 150
-		}]
-	};
+    //TABLE OPTIONS
+    $scope.ngOptions = {
+        data : 'ngData',
+        enableSorting : true,
+        useExternalSorting : true,
+        sortInfo : $scope.sortOptions,
+        rowHeight : 35,
+        showSelectionCheckbox : false,
+        enablePaging : true,
+        showFooter : true,
+        totalServerItems : 'totalServerItems',
+        footerTemplate : 'views/table/footerTemplate.html',
+        pagingOptions : $scope.pagingOptions,
+        filterOptions : $scope.filterOptions,
+        primaryKey : 'contactSelectionID',
+        columnDefs : [{
+            field : 'contactSelectionName',
+            displayName : 'Name',
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})">{{row.entity.contactSelectionName}}</a></div>'
+        }, /*{
+         field : 'contactListID',
+         displayName : 'List ID',
+         cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})">{{row.entity.contactListID}}</a></div>'
+         }, */
+        {
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})"><i class="fa fa-pencil"></i> Edit Segment </a></div>',
+            width : 150
+        }, {
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ng-click="deleteSegment(row.getProperty(\'contactSelectionID\'))"><i class="fa fa-trash"></i> Delete Segment </a></div>',
+            width : 150
+        }]
+    };
 
-	$scope.$watch('ngData', function() {
-		$('.gridStyle').trigger('resize');
-	});
-	$scope.refresh = function() {
-		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
-	};
+    $scope.$watch('ngData', function() {
+        $('.gridStyle').trigger('resize');
+    });
+    $scope.refresh = function() {
+        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
+    };
 
-	$scope.deleteSegment = function(contactSegmentID) {
-		if(confirm('Are you sure you want to delete this segment?')){
-			$scope.main.ServerRequests.deleteSegment({
-				sethttp: 1,
-				apikey: $cookieStore.get('inspinia_auth_token'),
-				accountID: $cookieStore.get('inspinia_account_id'),
-				companyID: $cookieStore.get('inspinia_company_id'),
-				contactSelectionID: contactSegmentID
-			}, $scope, function(){
-				$scope.$broadcast('SegmentDeleted');
-				$scope.refresh();
-			});
-		}
-	};
+    $scope.deleteSegment = function(contactSegmentID) {
+        if (confirm('Are you sure you want to delete this segment?')) {
+            $scope.main.ServerRequests.deleteSegment({
+                sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                accountID : $cookieStore.get('inspinia_account_id'),
+                companyID : $cookieStore.get('inspinia_company_id'),
+                contactSelectionID : contactSegmentID
+            }, $scope, function() {
+                $scope.$broadcast('SegmentDeleted');
+                $scope.refresh();
+                $scope.main.CommonActions.setContactListsAndSegments();
+            });
+        }
+    };
 
-	$scope.refresh();
+    $scope.refresh();
 }
 
 function parseContactFilter(data) {
-	var segmentFilters = [];
-	var contactFilters = [];
-	if(!empty(data)){
-		var contactFilterText = data.contactFilter;
-		if(!empty(contactFilterText)){
-			contactFilters =  contactFilterText.match(/(.*?)(\W+?)\{(.*?)\}/g);
-			if(!empty(contactFilters)){
-				for (var i = 0; i < contactFilters.length; i++){
-					contactFilters[i] = contactFilters[i].trim();
-				}
-			}
-		}
-	}
+    var segmentFilters = [];
+    var contactFilters = [];
+    if (!empty(data)) {
+        var contactFilterText = data.contactFilter;
+        if (!empty(contactFilterText)) {
+            contactFilters = contactFilterText.match(/(.*?)(\W+?)\{(.*?)\}/g);
+            if (!empty(contactFilters)) {
+                for (var i = 0; i < contactFilters.length; i++) {
+                    contactFilters[i] = contactFilters[i].trim();
+                }
+            }
+        }
+    }
 
-	if(!empty(contactFilters) && contactFilters.length > 0){
-		for(var i in contactFilters){
-			var contactFilter = contactFilters[i];
-			var operator = '';
-			if(contactFilter.indexOf('and ') === 0){
-				operator = 'and';
-				contactFilter = contactFilter.replace('and ', '');
-			}else if(contactFilter.indexOf('or ') === 0){
-				operator = 'or';
-				contactFilter.replace('');
-				contactFilter = contactFilter.replace('or ', '');
-			}
+    if (!empty(contactFilters) && contactFilters.length > 0) {
+        for (var i in contactFilters) {
+            var contactFilter = contactFilters[i];
+            var operator = '';
+            if (contactFilter.indexOf('and ') === 0) {
+                operator = 'and';
+                contactFilter = contactFilter.replace('and ', '');
+            } else if (contactFilter.indexOf('or ') === 0) {
+                operator = 'or';
+                contactFilter.replace('');
+                contactFilter = contactFilter.replace('or ', '');
+            }
 
-			if(contactFilter != ''){
-				var match = contactFilter.match(/^(\w+)(.*)(?=\{)\{(.*)}$/i);
-				var newSegment = {};
-				if(match.length == 4){
-					newSegment = {field: match[1], comparator: match[2], value: match[3]};
-				}
+            if (contactFilter != '') {
+                var match = contactFilter.match(/^(\w+)(.*)(?=\{)\{(.*)}$/i);
+                var newSegment = {};
+                if (match.length == 4) {
+                    newSegment = {
+                        field : match[1],
+                        comparator : match[2],
+                        value : match[3]
+                    };
+                }
 
-				if(operator != ''){
-					newSegment.operator = operator;
-				}
+                if (operator != '') {
+                    newSegment.operator = operator;
+                }
 
-				segmentFilters.push(newSegment);
-			}
-		}
-	}
+                segmentFilters.push(newSegment);
+            }
+        }
+    }
 
-	return segmentFilters;
+    return segmentFilters;
 }
 
-
 function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
-	$window.scrollTo(0,0);
-	$scope.showPreview = false;
-	$scope.previewError = false;
+    $window.scrollTo(0, 0);
+    $scope.showPreview = false;
+    $scope.previewError = false;
 
-	$scope.ContactFilter = "";
-	$scope.disableFields = true;
+    $scope.ContactFilter = "";
+    $scope.disableFields = true;
 
+    $scope.DateOpened = [];
+    $scope.open = function($event, index) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.DateOpened[index] = true;
+    };
+    $scope.clear = function() {
+        for (var i in $scope.segmentFilters) {
+            $scope.segmentFilters[i].value = null;
+        }
+    };
+    $scope.dateOptions = {
+        formatYear : 'yy',
+        startingDay : 1,
+        showWeeks : 'false'
+    };
+    $scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    $scope.format = $scope.formats[0];
 
-	$scope.DateOpened = [];
-	$scope.open = function($event, index) {
-		$event.preventDefault();
-		$event.stopPropagation();
-		$scope.DateOpened[index] = true;
-	};
-	$scope.clear = function() {
-		for (var i in $scope.segmentFilters) {
-			$scope.segmentFilters[i].value = null;
-		}
-	};
-	$scope.dateOptions = {
-		formatYear : 'yy',
-		startingDay : 1,
-		showWeeks : 'false'
-	};
-	$scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-	$scope.format = $scope.formats[0];
+    $scope.availableComparators = {
+        '- - -' : ['- - -'],
+        ani : ['- - -', '=', '<>'],
+        firstname : ['- - -', '=', '<>'],
+        lastname : ['- - -', '=', '<>'],
+        emailaddress : ['- - -', '=', '<>'],
+        contactsource : ['- - -', '=', '<>'],
+        custom1 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom2 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom3 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom4 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom5 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        language : ['- - -', '=', '<>'],
+        createddate : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        statusdate : ['- - -', '=', '<', '>', '<=', '>=', '<>']
+    };
 
-	$scope.availableComparators = {
-		'- - -': ['- - -'],
-		ani: ['- - -', '=', '<>'],
-		firstname: ['- - -', '=', '<>'],
-		lastname: ['- - -', '=', '<>'],
-		emailaddress: ['- - -', '=', '<>'],
-		contactsource: ['- - -', '=', '<>'],
-		custom1: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		custom2: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		custom3: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		custom4: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		custom5: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		language: ['- - -', '=', '<>'],
-		createddate: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		statusdate: ['- - -', '=', '<', '>', '<=', '>=', '<>']
-	};
+    $scope.availableFields = {
+        ani : "Phone number",
+        firstname : "First name",
+        lastname : "Last name",
+        emailaddress : "Email address",
+        contactsource : "Source",
+        custom1 : "Custom field 1",
+        custom2 : "Custom field 2",
+        custom3 : "Custom field 3",
+        custom4 : "Custom field 4",
+        custom5 : "Custom field 5",
+        language : "Language",
+        createddate : "Created date",
+        statusdate : "Modified date"
+    };
+    $scope.availableFieldsKeys = Object.keys($scope.availableFields);
 
-	$scope.availableFields = {
-		ani: "Phone number",
-		firstname: "First name",
-		lastname: "Last name",
-		emailaddress: "Email address",
-		contactsource: "Source",
-		custom1: "Custom field 1",
-		custom2: "Custom field 2",
-		custom3: "Custom field 3",
-		custom4: "Custom field 4",
-		custom5: "Custom field 5",
-		language: "Language",
-		createddate: "Created date",
-		statusdate: "Modified date"
-	};
-	$scope.availableFieldsKeys = Object.keys($scope.availableFields);
+    $scope.main.contactSegmentID = $state.params.id;
 
-	$scope.main.contactSegmentID = $state.params.id;
+    $scope.originalSegmentName = '';
+    $scope.originalContactListID = '';
+    $scope.originalContactFilterText = '';
 
-	$scope.originalSegmentName = '';
-	$scope.originalContactListID = '';
-	$scope.originalContactFilterText = '';
+    $scope.segmentFieldChange = function(index) {
+        $scope.segmentFilters[index].comparator = '- - -';
+        $scope.segmentFilters[index].value = '';
+    };
 
-	$scope.segmentFieldChange = function(index){
-		$scope.segmentFilters[index].comparator = '- - -';
-		$scope.segmentFilters[index].value = '';
-	};
+    $scope.removeFilter = function(index) {
+        if ($scope.segmentFilters) {
+            if ($scope.segmentFilters.length == 1) {
+                $scope.segmentFilters = [{
+                    field : '- - -',
+                    comparator : '- - -',
+                    value : ''
+                }];
+            } else if ($scope.segmentFilters.length > 1) {
+                if (index == 0) {
+                    $scope.segmentFilters.shift();
+                } else {
+                    $scope.segmentFilters.splice(index, 1);
+                }
+                delete $scope.segmentFilters[0].operator;
+            }
+        }
+    };
 
-	$scope.removeFilter = function(index){
-		if($scope.segmentFilters){
-			if($scope.segmentFilters.length == 1){
-				$scope.segmentFilters = [{field: '- - -', comparator: '- - -', value: ''}];
-			}else if($scope.segmentFilters.length > 1){
-				if(index == 0){
-					$scope.segmentFilters.shift();
-				}else{
-					$scope.segmentFilters.splice(index, 1);
-				}
-				delete $scope.segmentFilters[0].operator;
-			}
-		}
-	};
+    $scope.addFilter = function() {
+        $scope.segmentFilters.push({
+            operator : 'and',
+            field : '- - -',
+            comparator : '- - -',
+            value : ''
+        });
+    };
 
-	$scope.addFilter = function(){
-		$scope.segmentFilters.push({operator: 'and', field: '- - -', comparator: '- - -', value: ''});
-	};
+    var i = setInterval(function() {
+        if ($scope.main.accountInfo.companyID) {
+            clearInterval(i);
 
-	var i = setInterval(function(){
-		if($scope.main.accountInfo.companyID){
-			clearInterval(i);
+            $scope.main.ServerRequests.contactListsGet(function() {
+                // Get segment data
+                $scope.main.ServerRequests.getSegment({
+                    sethttp : 1,
+                    apikey : $cookieStore.get('inspinia_auth_token'),
+                    accountID : $cookieStore.get('inspinia_account_id'),
+                    companyID : $cookieStore.get('inspinia_company_id'),
+                    contactSelectionID : $scope.main.contactSegmentID
+                }, function(data) {
+                    $scope.SegmentName = data.contactSelectionName;
+                    $scope.ContactList = {
+                        "contactListID" : data.contactListID
+                    };
+                    $scope.segmentFilters = parseContactFilter(data);
+                    $scope.generateContactFilter();
+                    $scope.previewSegment();
 
-			$scope.main.ServerRequests.contactListsGet(function(){
-				// Get segment data
-				$scope.main.ServerRequests.getSegment({
-					sethttp: 1,
-					apikey: $cookieStore.get('inspinia_auth_token'),
-					accountID: $cookieStore.get('inspinia_account_id'),
-					companyID: $cookieStore.get('inspinia_company_id'),
-					contactSelectionID: $scope.main.contactSegmentID
-				}, function(data){
-					$scope.SegmentName = data.contactSelectionName;
-					$scope.ContactList = {"contactListID": data.contactListID};
-					$scope.segmentFilters = parseContactFilter(data);
-					$scope.generateContactFilter();
-					$scope.previewSegment();
+                    $scope.originalSegmentName = data.contactSelectionName;
+                    $scope.originalContactListID = data.contactListID;
+                    $scope.originalContactFilterText = data.contactFilter;
+                    $scope.disableFields = false;
+                });
 
-					$scope.originalSegmentName = data.contactSelectionName;
-					$scope.originalContactListID = data.contactListID;
-					$scope.originalContactFilterText = data.contactFilter;
-					$scope.disableFields = false;
-				});
+                $scope.disableFields = false;
+            });
+        }
+    }, 100);
 
-				$scope.disableFields = false;
-			});
-		}
-	}, 100);
+    $scope.generateContactFilter = function(segmentFilters) {
+        if ( typeof segmentFilters == 'undefined') {
+            segmentFilters = $scope.segmentFilters;
+        }
+        $scope.ContactFilter = "";
+        if ( typeof segmentFilters != 'undefined' && segmentFilters.length > 0) {
+            var correct_count = 0;
+            for (var i in segmentFilters) {
+                var segmentFilter = segmentFilters[i];
+                if (!empty(segmentFilter.field) && segmentFilter.field != '- - -' && !empty(segmentFilter.comparator) && segmentFilter.comparator != '- - -') {
+                    correct_count++;
+                    if (correct_count > 1 && segmentFilter.operator) {
+                        $scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
+                    }
 
-	$scope.generateContactFilter = function(segmentFilters){
-		if(typeof segmentFilters == 'undefined') {
-			segmentFilters = $scope.segmentFilters;
-		}
-		$scope.ContactFilter = "";
-		if(typeof segmentFilters != 'undefined' && segmentFilters.length > 0){
-			var correct_count = 0;
-			for(var i in segmentFilters){
-				var segmentFilter = segmentFilters[i];
-				if(!empty(segmentFilter.field) && segmentFilter.field != '- - -'
-					&& !empty(segmentFilter.comparator) && segmentFilter.comparator != '- - -')
-				{
-					correct_count++;
-					if(correct_count > 1 && segmentFilter.operator){
-						$scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
-					}
+                    if ((segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate') && !empty(segmentFilter.value)) {
+                        segmentFilter.value = ngFunctions.ConvertDateToMySqlDate(segmentFilter.value);
+                    }
 
-					if((segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate') && !empty(segmentFilter.value)){
-						segmentFilter.value = ngFunctions.ConvertDateToMySqlDate(segmentFilter.value);
-					}
+                    $scope.ContactFilter += $.trim(segmentFilter.field) + $.trim(segmentFilter.comparator) + "{" + $.trim(segmentFilter.value) + "}";
+                }
+            }
+            $scope.ContactFilter = $.trim($scope.ContactFilter);
+        }
+    };
 
-					$scope.ContactFilter += $.trim(segmentFilter.field) + $.trim(segmentFilter.comparator) + "{" + $.trim(segmentFilter.value) + "}";
-				}
-			}
-			$scope.ContactFilter = $.trim($scope.ContactFilter);
-		}
-	};
+    $scope.$watch('segmentFilters', function(newValue) {
+        $scope.ContactFilter = "";
+        if ( typeof newValue != 'undefined' && newValue && newValue.length > 0) {
+            $scope.generateContactFilter(newValue);
+        }
+    }, true);
 
-	$scope.$watch('segmentFilters', function(newValue){
-		$scope.ContactFilter = "";
-		if(typeof newValue != 'undefined' && newValue && newValue.length > 0){
-			$scope.generateContactFilter(newValue);
-		}
-	}, true);
+    $scope.resetContactListID = function() {
+        $scope.ContactList = {
+            contactListID : "0"
+        };
+        $('select[name="ContactList"]').val('').trigger('chosen:updated');
+    };
 
-	$scope.resetContactListID = function(){
-		$scope.ContactList = {contactListID: "0"};
-		$('select[name="ContactList"]').val('').trigger('chosen:updated');
-	};
+    $scope.saveSegment = function() {
+        $scope.save_segment_form.$setSubmitted();
 
-	$scope.saveSegment = function() {
-		$scope.save_segment_form.$setSubmitted();
+        if ($scope.save_segment_form.$valid) {
+            //Checking input parameters
+            if (empty($scope.SegmentName)) {
+                //Segment name is mandatory
+                return;
+            }
+            if (empty($scope.ContactFilter)) {
+                // If there are no filters
+                return;
+            }
 
-		if($scope.save_segment_form.$valid){
-			//Checking input parameters
-			if (empty($scope.SegmentName)) {
-				//Segment name is mandatory
-				return;
-			}
-			if(empty($scope.ContactFilter)){
-				// If there are no filters
-				return;
-			}
+            var params = {
+                sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                accountID : $cookieStore.get('inspinia_account_id'),
+                companyID : $cookieStore.get('inspinia_company_id'),
+                contactSelectionID : $scope.main.contactSegmentID,
+                modifyPending : $scope.ModifyPending
+            };
 
-			var params = {
-				sethttp: 1,
-				apikey: $cookieStore.get('inspinia_auth_token'),
-				accountID: $cookieStore.get('inspinia_account_id'),
-				companyID: $cookieStore.get('inspinia_company_id'),
-				contactSelectionID: $scope.main.contactSegmentID,
-				modifyPending: $scope.ModifyPending
-			};
+            if ($scope.originalSegmentName != $scope.SegmentName) {
+                params['contactSelectionName'] = $scope.SegmentName;
+            }
 
-			if($scope.originalSegmentName != $scope.SegmentName){
-				params['contactSelectionName'] = $scope.SegmentName;
-			}
+            params['contactListID'] = $scope.ContactList.contactListID;
 
-			params['contactListID'] = $scope.ContactList.contactListID;
+            if ($scope.originalContactFilterText != $scope.ContactFilter) {
+                params['contactFilter'] = $scope.ContactFilter;
+            }
 
-			if($scope.originalContactFilterText != $scope.ContactFilter){
-				params['contactFilter'] = $scope.ContactFilter;
-			}
+            // Set contactListID to 0 if contactList is not selected. If ContactListID=0 a global account-level contact search is conducted.
+            params['contactListID'] = (!empty($scope.ContactList)) ? $scope.ContactList.contactListID : "0";
 
-			// Set contactListID to 0 if contactList is not selected. If ContactListID=0 a global account-level contact search is conducted.
-			params['contactListID'] = (!empty($scope.ContactList)) ? $scope.ContactList.contactListID : "0";
+            $scope.main.ServerRequests.saveSegment(params, $scope, function(data) {
+                $scope.originalSegmentName = $scope.SegmentName;
+                $scope.originalContactListID = $scope.ContactList.contactListID;
+                $scope.originalContactFilterText = $scope.ContactFilter;
 
-			$scope.main.ServerRequests.saveSegment(params, $scope, function(data){
-				$scope.originalSegmentName = $scope.SegmentName;
-				$scope.originalContactListID = $scope.ContactList.contactListID;
-				$scope.originalContactFilterText = $scope.ContactFilter;
+                $scope.ModifyPending = '';
 
-				$scope.ModifyPending = '';
+                $scope.save_segment_form.$setPristine();
+                $scope.save_segment_form.$setUntouched();
 
-				$scope.save_segment_form.$setPristine();
-				$scope.save_segment_form.$setUntouched();
+                $scope.$broadcast("SegmentSaved");
 
-				$scope.$broadcast("SegmentSaved");
+                $scope.main.ServerRequests.contactSegmentsGet();
+                $scope.previewSegment();
+                $scope.main.CommonActions.setContactListsAndSegments();
 
-				$scope.main.ServerRequests.contactSegmentsGet();
-				$scope.previewSegment();
-			});
-		}
-	};
+            });
+        }
+    };
 
-	$scope.deleteSegment = function() {
-		if(confirm('Are you sure you want to delete this segment?')){
-			$scope.main.ServerRequests.deleteSegment({
-				sethttp: 1,
-				apikey: $cookieStore.get('inspinia_auth_token'),
-				accountID: $cookieStore.get('inspinia_account_id'),
-				companyID: $cookieStore.get('inspinia_company_id'),
-				contactSelectionID: $scope.main.contactSegmentID
-			}, $scope, function(){
-				$state.go('lists.segments');
-				$window.scrollTo(0,0);
-				$scope.main.ServerRequests.contactSegmentsGet();
-			});
-		}
-	};
+    $scope.deleteSegment = function() {
+        if (confirm('Are you sure you want to delete this segment?')) {
+            $scope.main.ServerRequests.deleteSegment({
+                sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                accountID : $cookieStore.get('inspinia_account_id'),
+                companyID : $cookieStore.get('inspinia_company_id'),
+                contactSelectionID : $scope.main.contactSegmentID
+            }, $scope, function() {
+                $state.go('lists.segments');
+                $window.scrollTo(0, 0);
+                $scope.main.ServerRequests.contactSegmentsGet();
+                $scope.main.CommonActions.setContactListsAndSegments();
+            });
+        }
+    };
 
-	$scope.previewSegment = function(){
-		if(!empty($scope.ContactFilter)){
-			$scope.showPreview = true;
-			$scope.$broadcast('ShowPreview');
-		}else{
-			$scope.previewError = true;
-		}
-	};
+    $scope.previewSegment = function() {
+        if (!empty($scope.ContactFilter)) {
+            $scope.showPreview = true;
+            $scope.$broadcast('ShowPreview');
+        } else {
+            $scope.previewError = true;
+        }
+    };
 }
 
 function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
-	$window.scrollTo(0,0);
-	$scope.showPreview = false;
-	$scope.previewError = false;
-	$scope.ContactFilter = "";
+    $window.scrollTo(0, 0);
+    $scope.showPreview = false;
+    $scope.previewError = false;
+    $scope.ContactFilter = "";
 
-	$scope.DateOpened = [];
-	$scope.open = function($event, index) {
-		$event.preventDefault();
-		$event.stopPropagation();
-		$scope.DateOpened[index] = true;
-	};
-	$scope.clear = function() {
-		for (var i in $scope.segmentFilters) {
-			$scope.segmentFilters[i].value = null;
-		}
-	};
-	$scope.dateOptions = {
-		formatYear : 'yy',
-		startingDay : 1,
-		showWeeks : 'false'
-	};
-	$scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-	$scope.format = $scope.formats[0];
+    $scope.DateOpened = [];
+    $scope.open = function($event, index) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.DateOpened[index] = true;
+    };
+    $scope.clear = function() {
+        for (var i in $scope.segmentFilters) {
+            $scope.segmentFilters[i].value = null;
+        }
+    };
+    $scope.dateOptions = {
+        formatYear : 'yy',
+        startingDay : 1,
+        showWeeks : 'false'
+    };
+    $scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    $scope.format = $scope.formats[0];
 
-	$scope.availableComparators = {
-		'- - -': ['- - -'],
-		ani: ['- - -', '=', '<>'],
-		firstname: ['- - -', '=', '<>'],
-		lastname: ['- - -', '=', '<>'],
-		emailaddress: ['- - -', '=', '<>'],
-		contactsource: ['- - -', '=', '<>'],
-		custom1: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		custom2: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		custom3: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		custom4: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		custom5: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		language: ['- - -', '=', '<>'],
-		createddate: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-		statusdate: ['- - -', '=', '<', '>', '<=', '>=', '<>']
-	};
+    $scope.availableComparators = {
+        '- - -' : ['- - -'],
+        ani : ['- - -', '=', '<>'],
+        firstname : ['- - -', '=', '<>'],
+        lastname : ['- - -', '=', '<>'],
+        emailaddress : ['- - -', '=', '<>'],
+        contactsource : ['- - -', '=', '<>'],
+        custom1 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom2 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom3 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom4 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom5 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        language : ['- - -', '=', '<>'],
+        createddate : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        statusdate : ['- - -', '=', '<', '>', '<=', '>=', '<>']
+    };
 
-	$scope.availableFields = {
-		ani: "Phone number",
-		firstname: "First name",
-		lastname: "Last name",
-		emailaddress: "Email address",
-		contactsource: "Source",
-		custom1: "Custom field 1",
-		custom2: "Custom field 2",
-		custom3: "Custom field 3",
-		custom4: "Custom field 4",
-		custom5: "Custom field 5",
-		language: "Language",
-		createddate: "Created date",
-		statusdate: "Modified date"
-	};
-	$scope.availableFieldsKeys = Object.keys($scope.availableFields);
+    $scope.availableFields = {
+        ani : "Phone number",
+        firstname : "First name",
+        lastname : "Last name",
+        emailaddress : "Email address",
+        contactsource : "Source",
+        custom1 : "Custom field 1",
+        custom2 : "Custom field 2",
+        custom3 : "Custom field 3",
+        custom4 : "Custom field 4",
+        custom5 : "Custom field 5",
+        language : "Language",
+        createddate : "Created date",
+        statusdate : "Modified date"
+    };
+    $scope.availableFieldsKeys = Object.keys($scope.availableFields);
 
-	$scope.segmentFieldChange = function(index){
-		$scope.segmentFilters[index].comparator = '- - -';
-		$scope.segmentFilters[index].value = '';
-	};
+    $scope.segmentFieldChange = function(index) {
+        $scope.segmentFilters[index].comparator = '- - -';
+        $scope.segmentFilters[index].value = '';
+    };
 
-	$scope.resetContactListID = function(){
-		$scope.ContactList = {contactListID: "0"};
-		$('select[name="ContactList"]').val('').trigger('chosen:updated');
-	};
+    $scope.resetContactListID = function() {
+        $scope.ContactList = {
+            contactListID : "0"
+        };
+        $('select[name="ContactList"]').val('').trigger('chosen:updated');
+    };
 
-	$scope.removeFilter = function(index){
-		if($scope.segmentFilters){
-			if($scope.segmentFilters.length == 1){
-				$scope.segmentFilters = [{field: '- - -', comparator: '- - -', value: ''}];
-			}else if($scope.segmentFilters.length > 1){
-				if(index == 0){
-					$scope.segmentFilters.shift();
-				}else{
-					$scope.segmentFilters.splice(index, 1);
-				}
-				delete $scope.segmentFilters[0].operator;
-			}
-		}
-	};
+    $scope.removeFilter = function(index) {
+        if ($scope.segmentFilters) {
+            if ($scope.segmentFilters.length == 1) {
+                $scope.segmentFilters = [{
+                    field : '- - -',
+                    comparator : '- - -',
+                    value : ''
+                }];
+            } else if ($scope.segmentFilters.length > 1) {
+                if (index == 0) {
+                    $scope.segmentFilters.shift();
+                } else {
+                    $scope.segmentFilters.splice(index, 1);
+                }
+                delete $scope.segmentFilters[0].operator;
+            }
+        }
+    };
 
-	$scope.addFilter = function(){
-		$scope.segmentFilters.push({operator: 'and', field: '- - -', comparator: '- - -', value: ''});
-	};
+    $scope.addFilter = function() {
+        $scope.segmentFilters.push({
+            operator : 'and',
+            field : '- - -',
+            comparator : '- - -',
+            value : ''
+        });
+    };
 
-	$scope.reset = function () {
-		$scope.ContactList = null;
-		$scope.SegmentName = '';
-		$scope.segmentFilters = [{field: '- - -', comparator: '- - -', value: ''}];
-		$scope.add_segment_form.$setPristine();
-		$scope.add_segment_form.$setUntouched();
-		$window.scrollTo(0,0);
-	};
+    $scope.reset = function() {
+        $scope.ContactList = null;
+        $scope.SegmentName = '';
+        $scope.segmentFilters = [{
+            field : '- - -',
+            comparator : '- - -',
+            value : ''
+        }];
+        $scope.add_segment_form.$setPristine();
+        $scope.add_segment_form.$setUntouched();
+        $window.scrollTo(0, 0);
+    };
 
-	$scope.$watch('segmentFilters', function(newValue){
-		$scope.ContactFilter = "";
-		if(typeof newValue != 'undefined' && newValue && newValue.length > 0){
-			var correct_count = 0;
-			for(var i in newValue){
-				var segmentFilter = newValue[i];
-				if(!empty(segmentFilter.field) && segmentFilter.field != '- - -'
-				&& !empty(segmentFilter.comparator) && segmentFilter.comparator != '- - -')
-				{
-					correct_count++;
-					if(correct_count > 1 && segmentFilter.operator){
-						$scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
-					}
+    $scope.$watch('segmentFilters', function(newValue) {
+        $scope.ContactFilter = "";
+        if ( typeof newValue != 'undefined' && newValue && newValue.length > 0) {
+            var correct_count = 0;
+            for (var i in newValue) {
+                var segmentFilter = newValue[i];
+                if (!empty(segmentFilter.field) && segmentFilter.field != '- - -' && !empty(segmentFilter.comparator) && segmentFilter.comparator != '- - -') {
+                    correct_count++;
+                    if (correct_count > 1 && segmentFilter.operator) {
+                        $scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
+                    }
 
-					if((segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate') && !empty(segmentFilter.value)){
-						segmentFilter.value = ngFunctions.ConvertDateToMySqlDate(segmentFilter.value);
-					}
-					$scope.ContactFilter += $.trim(segmentFilter.field) + $.trim(segmentFilter.comparator) + "{" + $.trim(segmentFilter.value) + "}";
-				}
-			}
-		}
-		$scope.ContactFilter = $.trim($scope.ContactFilter);
-	}, true);
+                    if ((segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate') && !empty(segmentFilter.value)) {
+                        segmentFilter.value = ngFunctions.ConvertDateToMySqlDate(segmentFilter.value);
+                    }
+                    $scope.ContactFilter += $.trim(segmentFilter.field) + $.trim(segmentFilter.comparator) + "{" + $.trim(segmentFilter.value) + "}";
+                }
+            }
+        }
+        $scope.ContactFilter = $.trim($scope.ContactFilter);
+    }, true);
 
-	$scope.addSegment = function () {
-		$scope.add_segment_form.$setSubmitted();
+    $scope.addSegment = function() {
+        $scope.add_segment_form.$setSubmitted();
 
-		if($scope.add_segment_form.$valid){
-			//Checking input parameters
-			if (empty($scope.SegmentName)) {
-				//Segment name is mandatory
-				return;
-			}
-			if(empty($scope.ContactFilter)){
-				// If there are no filters
-				return;
-			}
+        if ($scope.add_segment_form.$valid) {
+            //Checking input parameters
+            if (empty($scope.SegmentName)) {
+                //Segment name is mandatory
+                return;
+            }
+            if (empty($scope.ContactFilter)) {
+                // If there are no filters
+                return;
+            }
 
-			//We have something to save.
-			var requestParams = {
-				sethttp: 1,
-				apikey: $cookieStore.get('inspinia_auth_token'),
-				accountID: $cookieStore.get('inspinia_account_id'),
-				companyID: $cookieStore.get('inspinia_company_id'),
-				contactSelectionName: $scope.SegmentName,
-				contactFilter: $scope.ContactFilter
-			};
+            //We have something to save.
+            var requestParams = {
+                sethttp : 1,
+                apikey : $cookieStore.get('inspinia_auth_token'),
+                accountID : $cookieStore.get('inspinia_account_id'),
+                companyID : $cookieStore.get('inspinia_company_id'),
+                contactSelectionName : $scope.SegmentName,
+                contactFilter : $scope.ContactFilter
+            };
 
-			// Set contactListID to 0 if contactList is not selected. If ContactListID=0 a global account-level contact search is conducted.
-			requestParams.contactListID = (!empty($scope.ContactList)) ? $scope.ContactList.contactListID : "0";
+            // Set contactListID to 0 if contactList is not selected. If ContactListID=0 a global account-level contact search is conducted.
+            requestParams.contactListID = (!empty($scope.ContactList)) ? $scope.ContactList.contactListID : "0";
 
-			$scope.main.ServerRequests.addSegment(requestParams, $scope, function(data){
-				$scope.main.ServerRequests.contactSegmentsGet();
-				// Redirect to manage segment page
-				if(!empty(data)){
-					$state.go('lists.manage_segment', {id: data});
-				}else{
-					$state.go('lists.segments');
-				}
-			});
-		}
-	};
+            $scope.main.ServerRequests.addSegment(requestParams, $scope, function(data) {
+                $scope.main.ServerRequests.contactSegmentsGet();
+                // Redirect to manage segment page
+                if (!empty(data)) {
+                    $state.go('lists.manage_segment', {
+                        id : data
+                    });
+                } else {
+                    $state.go('lists.segments');
+                }
+            });
+        }
+    };
 
-	$scope.previewSegment = function(){
-		if(!empty($scope.ContactFilter)){
-			$scope.showPreview = true;
-			$scope.$broadcast('ShowPreview');
-		}else{
-			$scope.previewError = true;
-		}
-	};
+    $scope.previewSegment = function() {
+        if (!empty($scope.ContactFilter)) {
+            $scope.showPreview = true;
+            $scope.$broadcast('ShowPreview');
+        } else {
+            $scope.previewError = true;
+        }
+    };
 
-	var i = setInterval(function(){
-		if($scope.main.accountInfo.companyID){
-			clearInterval(i);
-			$scope.main.ServerRequests.contactListsGet(function(){
-				$scope.reset();
-			});
-		}
-	}, 100);
+    var i = setInterval(function() {
+        if ($scope.main.accountInfo.companyID) {
+            clearInterval(i);
+            $scope.main.ServerRequests.contactListsGet(function() {
+                $scope.reset();
+            });
+        }
+    }, 100);
 }
 
-function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http){
-	$scope.loading = true;
-	$scope.ngData = [];
-	$scope.totalServerItems = 0;
-	$scope.pagingOptions = {
-		pageSizes : [10, 20, 50, 100],
-		pageSize : Number($scope.main.Settings.defaultPageSize),
-		currentPage : 1
-	};
-	// sort
-	$scope.sortOptions = {
-		fields : ['lastName'],
-		directions : ['ASC'],
-		useExternalSorting : true
-	};
+function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
+    $scope.loading = true;
+    $scope.ngData = [];
+    $scope.totalServerItems = 0;
+    $scope.pagingOptions = {
+        pageSizes : [10, 20, 50, 100],
+        pageSize : Number($scope.main.Settings.defaultPageSize),
+        currentPage : 1
+    };
+    // sort
+    $scope.sortOptions = {
+        fields : ['lastName'],
+        directions : ['ASC'],
+        useExternalSorting : true
+    };
 
-	//GET DATA
-	$scope.setPagingData = function(data, page, pageSize) {
-		var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-		$scope.ngData = pagedData;
-		$scope.totalServerItems = data.length;
-		if (!$scope.$$phase) {
-			$scope.$apply();
-		}
-	};
-	$scope.setPagingDataSliced = setPagingDataSliced;
-	$scope.getContactBlacklist = function(contactData, callback) {
-		$scope.contactBlacklist = [];
-		$scope.contactBlacklistGetTotalCount = -1;
-		if ($scope.main.Settings && $scope.main.Settings.hasOwnProperty('Numbers') && $scope.main.Settings.Numbers) {
-			$scope.contactBlacklistGetTotalCount = $scope.main.Settings.Numbers.length;
-			for (var i in $scope.main.Settings.Numbers) {
-				var did = $scope.main.Settings.Numbers[i].DID;
-				$scope.main.ServerRequests.contactBlacklistGetRequest({
-					apikey : $scope.main.authToken,
-					accountID : $scope.main.accountID,
-					companyID : $scope.main.accountInfo.companyID,
-					DID : did,
-					sethttp : 1
-				}, function(blacklistData) {
-					$scope.contactBlacklistGetTotalCount--;
-					for (var blockedContactIdx in blacklistData) {
-						var found = $.inArray(blacklistData[blockedContactIdx], $scope.contactBlacklist);
-						if (found == -1) {
-							$scope.contactBlacklist.push(blacklistData[blockedContactIdx]);
-							for (var j in contactData) {
-								if (contactData[j].ANI == blacklistData[blockedContactIdx]) {
-									contactData[j].status = 'B';
-								}
-							}
-						}
-					}
-					if ($scope.contactBlacklistGetTotalCount == 0 && typeof callback == 'function') {
-						callback();
-					}
-				});
-			}
-		}
-	};
+    //GET DATA
+    $scope.setPagingData = function(data, page, pageSize) {
+        var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+        $scope.ngData = pagedData;
+        $scope.totalServerItems = data.length;
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    };
+    $scope.setPagingDataSliced = setPagingDataSliced;
+    $scope.getContactBlacklist = function(contactData, callback) {
+        $scope.contactBlacklist = [];
+        $scope.contactBlacklistGetTotalCount = -1;
+        if ($scope.main.Settings && $scope.main.Settings.hasOwnProperty('Numbers') && $scope.main.Settings.Numbers) {
+            $scope.contactBlacklistGetTotalCount = $scope.main.Settings.Numbers.length;
+            for (var i in $scope.main.Settings.Numbers) {
+                var did = $scope.main.Settings.Numbers[i].DID;
+                $scope.main.ServerRequests.contactBlacklistGetRequest({
+                    apikey : $scope.main.authToken,
+                    accountID : $scope.main.accountID,
+                    companyID : $scope.main.accountInfo.companyID,
+                    DID : did,
+                    sethttp : 1
+                }, function(blacklistData) {
+                    $scope.contactBlacklistGetTotalCount--;
+                    for (var blockedContactIdx in blacklistData) {
+                        var found = $.inArray(blacklistData[blockedContactIdx], $scope.contactBlacklist);
+                        if (found == -1) {
+                            $scope.contactBlacklist.push(blacklistData[blockedContactIdx]);
+                            for (var j in contactData) {
+                                if (contactData[j].ANI == blacklistData[blockedContactIdx]) {
+                                    contactData[j].status = 'B';
+                                }
+                            }
+                        }
+                    }
+                    if ($scope.contactBlacklistGetTotalCount == 0 && typeof callback == 'function') {
+                        callback();
+                    }
+                });
+            }
+        }
+    };
 
-	$scope.getPagedDataAsync = function(pageSize, page, sortFields, sortOrders) {
-		if ( typeof page == 'undefined' || page == null || page == '') {
-			page = 0;
-		}
-		//Creating a sort options string
-		var orderBy = generateOrderByField(sortFields, sortOrders);
-		if (orderBy == '') {
-			orderBy = 'lastname asc';
-		}
-		var i = setInterval(function() {
-			if ($scope.main.keywords) {
-				clearInterval(i);
+    $scope.getPagedDataAsync = function(pageSize, page, sortFields, sortOrders) {
+        if ( typeof page == 'undefined' || page == null || page == '') {
+            page = 0;
+        }
+        //Creating a sort options string
+        var orderBy = generateOrderByField(sortFields, sortOrders);
+        if (orderBy == '') {
+            orderBy = 'lastname asc';
+        }
+        var i = setInterval(function() {
+            if ($scope.main.keywords) {
+                clearInterval(i);
 
-				var data;
-				var params = {
-					sethttp : 1,
-					apikey : $cookieStore.get('inspinia_auth_token'),
-					accountID : $cookieStore.get('inspinia_account_id'),
-					limit : pageSize,
-					offset : (page - 1) * pageSize,
-					orderby : orderBy,
-					contactfilter: $scope.ContactFilter
-				};
+                var data;
+                var params = {
+                    sethttp : 1,
+                    apikey : $cookieStore.get('inspinia_auth_token'),
+                    accountID : $cookieStore.get('inspinia_account_id'),
+                    limit : pageSize,
+                    offset : (page - 1) * pageSize,
+                    orderby : orderBy,
+                    contactfilter : $scope.ContactFilter
+                };
 
-				if(!empty($scope.ContactList) && $scope.ContactList.hasOwnProperty('contactListID') && $scope.ContactList.contactListID != 0){
-					params['contactlistid'] = $scope.ContactList.contactListID;
-				}
+                if (!empty($scope.ContactList) && $scope.ContactList.hasOwnProperty('contactListID') && $scope.ContactList.contactListID != 0) {
+                    params['contactlistid'] = $scope.ContactList.contactListID;
+                }
 
-				$http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
-					$scope.getContactBlacklist(data.apidata, function() {
-						$scope.setPagingDataSliced($scope, data.apidata, data.apicount);
-						$scope.loading = false;
-					});
-				}).error(
-					//An error occurred with this request
-					function(data, status, headers, config) {
-						//alert('Unexpected error occurred when trying to fetch contact lists!');
-						if (status == 400) {
-							alert("An error occurred when getting contacts! Error code: " + data.apicode);
-							alert(JSON.stringify(data));
-						}
-						$scope.loading = false;
-				});
-			}
-		}, 100);
-	};
+                $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
+                    $scope.getContactBlacklist(data.apidata, function() {
+                        $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
+                        $scope.loading = false;
+                    });
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    //alert('Unexpected error occurred when trying to fetch contact lists!');
+                    if (status == 400) {
+                        alert("An error occurred when getting contacts! Error code: " + data.apicode);
+                        alert(JSON.stringify(data));
+                    }
+                    $scope.loading = false;
+                });
+            }
+        }, 100);
+    };
 
-	//WHATCH
-	$scope.$watch('pagingOptions', function() {
-		if($scope.showPreview){
-			if (!self.poInit || self.gettingData) {
-				self.poInit = true;
-				return;
-			}
-			$scope.refresh();
-		}
-	}, true);
-	$scope.$watch('sortOptions', function(newVal, oldVal) {
-		if ($scope.showPreview && newVal !== oldVal) {
-			$scope.refresh();
-		}
-	}, true);
+    //WHATCH
+    $scope.$watch('pagingOptions', function() {
+        if ($scope.showPreview) {
+            if (!self.poInit || self.gettingData) {
+                self.poInit = true;
+                return;
+            }
+            $scope.refresh();
+        }
+    }, true);
+    $scope.$watch('sortOptions', function(newVal, oldVal) {
+        if ($scope.showPreview && newVal !== oldVal) {
+            $scope.refresh();
+        }
+    }, true);
 
-	//TABLE OPTIONS
-	$scope.ngOptions = {
-		data : 'ngData',
-		enableSorting : true,
-		useExternalSorting : true,
-		sortInfo : $scope.sortOptions,
-		rowHeight : 35,
-		selectedItems : $scope.mySelections,
-		enablePaging : true,
-		showFooter : true,
-		footerTemplate : 'views/table/footerTemplate.html',
-		totalServerItems : 'totalServerItems',
-		pagingOptions : $scope.pagingOptions,
-		primaryKey : 'contactID',
-		columnDefs : [{
-			field : 'ANI',
-			displayName : 'Phone Number'
-		}, {
-			field : 'lastName',
-			displayName : 'Name',
-			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
-		}, {
-			field : 'emailAddress',
-			displayName : 'Email'
-		}, {
-			field : 'custom1',
-			displayName : 'Field 1'
-		}, {
-			field : 'custom2',
-			displayName : 'Field 2'
-		}, {
-			field : 'custom3',
-			displayName : 'Field 3'
-		}, {
-			field : 'status',
-			displayName : 'Status',
-			cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
-		}]
-	};
-	$scope.$watch('ngData', function() {
-		$('.gridStyle').trigger('resize');
-	});
-	$scope.refresh = function() {
-		$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.sortOptions.fields, $scope.sortOptions.directions);
-	};
+    //TABLE OPTIONS
+    $scope.ngOptions = {
+        data : 'ngData',
+        enableSorting : true,
+        useExternalSorting : true,
+        sortInfo : $scope.sortOptions,
+        rowHeight : 35,
+        selectedItems : $scope.mySelections,
+        enablePaging : true,
+        showFooter : true,
+        footerTemplate : 'views/table/footerTemplate.html',
+        totalServerItems : 'totalServerItems',
+        pagingOptions : $scope.pagingOptions,
+        primaryKey : 'contactID',
+        columnDefs : [{
+            field : 'ANI',
+            displayName : 'Phone Number'
+        }, {
+            field : 'lastName',
+            displayName : 'Name',
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
+        }, {
+            field : 'emailAddress',
+            displayName : 'Email'
+        }, {
+            field : 'custom1',
+            displayName : 'Field 1'
+        }, {
+            field : 'custom2',
+            displayName : 'Field 2'
+        }, {
+            field : 'custom3',
+            displayName : 'Field 3'
+        }, {
+            field : 'status',
+            displayName : 'Status',
+            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
+        }]
+    };
+    $scope.$watch('ngData', function() {
+        $('.gridStyle').trigger('resize');
+    });
+    $scope.refresh = function() {
+        $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.sortOptions.fields, $scope.sortOptions.directions);
+    };
 
-	$scope.$on('ShowPreview', function(event, args) {
-		$scope.loading = true;
-		$scope.refresh();
-	});
+    $scope.$on('ShowPreview', function(event, args) {
+        $scope.loading = true;
+        $scope.refresh();
+    });
 
-	$scope.export = function() {
-		var orderBy = generateOrderByField($scope.sortOptions.fields, $scope.sortOptions.directions);
-		if (orderBy == '') {
-			orderBy = 'lastname asc';
-		}
+    $scope.export = function() {
+        var orderBy = generateOrderByField($scope.sortOptions.fields, $scope.sortOptions.directions);
+        if (orderBy == '') {
+            orderBy = 'lastname asc';
+        }
 
-		var params = {
-			sethttp : 1,
-			apikey : $cookieStore.get('inspinia_auth_token'),
-			accountID : $cookieStore.get('inspinia_account_id'),
-			orderby : orderBy,
-			contactfilter: $scope.ContactFilter,
-			export : "csv"
-		};
-		if(!empty($scope.ContactList) && $scope.ContactList.hasOwnProperty('contactListID') && $scope.ContactList.contactListID != 0){
-			params['contactlistid'] = $scope.ContactList.contactListID;
-		}
+        var params = {
+            sethttp : 1,
+            apikey : $cookieStore.get('inspinia_auth_token'),
+            accountID : $cookieStore.get('inspinia_account_id'),
+            orderby : orderBy,
+            contactfilter : $scope.ContactFilter,
+            export : "csv"
+        };
+        if (!empty($scope.ContactList) && $scope.ContactList.hasOwnProperty('contactListID') && $scope.ContactList.contactListID != 0) {
+            params['contactlistid'] = $scope.ContactList.contactListID;
+        }
 
-		$http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
-			if (data.apicode == 0) {
-				window.location.href = data.apidata;
-			}
-		}).error(
-			//An error occurred with this request
-			function(data, status, headers, config) {
-				alert("An error occurred when exporting contacts! Error code: " + data.apicode);
-				alert(JSON.stringify(data));
-		});
-	};
+        $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
+            if (data.apicode == 0) {
+                window.location.href = data.apidata;
+            }
+        }).error(
+        //An error occurred with this request
+        function(data, status, headers, config) {
+            alert("An error occurred when exporting contacts! Error code: " + data.apicode);
+            alert(JSON.stringify(data));
+        });
+    };
 }
 
 /**
@@ -4773,6 +4817,7 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
                 alert("An error occurred when adding contact list! Error code: " + data.apicode);
                 alert(JSON.stringify(data));
             }
+            $scope.main.CommonActions.setContactListsAndSegments();
         }).error(
         //An error occurred with this request
         function(data, status, headers, config) {
@@ -5283,59 +5328,59 @@ function notifyCtrl($scope, notify) {
             templateUrl : $scope.inspiniaTemplate
         });
     };
-	$scope.ContactsNotSelectedErrorMsg = function() {
-		notify({
-			message : 'There are no selected contacts!',
-			classes : 'alert-danger',
-			templateUrl : $scope.inspiniaTemplate
-		});
-	};
-	$scope.SegmentCreatedMsg = function () {
-		notify({
-			message: 'Segment is successfully created.',
-			classes: 'alert-success'
-		});
-	};
-	$scope.SegmentCreateFailMsg = function () {
-		notify({
-			message: 'Failed to create segment!',
-			classes: 'alert-danger',
-			templateUrl: $scope.inspiniaTemplate
-		});
-	};
-	$scope.DuplicateSegmentNameMsg = function () {
-		notify({
-			message: 'Segment with specified name already exists!',
-			classes: 'alert-danger',
-			templateUrl: $scope.inspiniaTemplate
-		});
-	};
-	$scope.SegmentSavedMsg = function () {
-		notify({
-			message: 'Segment is successfully saved.',
-			classes: 'alert-success'
-		});
-	};
-	$scope.SegmentSaveFailMsg = function () {
-		notify({
-			message: 'Failed to save segment!',
-			classes : 'alert-danger',
-			templateUrl : $scope.inspiniaTemplate
-		});
-	};
-	$scope.SegmentDeletedMsg = function () {
-		notify({
-			message: 'Segment deleted successfully!',
-			classes : 'alert-success'
-		});
-	};
-	$scope.SegmentDeleteFailMsg = function () {
-		notify({
-			message: 'Failed to delete segment!',
-			classes : 'alert-danger',
-			templateUrl : $scope.inspiniaTemplate
-		});
-	};
+    $scope.ContactsNotSelectedErrorMsg = function() {
+        notify({
+            message : 'There are no selected contacts!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    };
+    $scope.SegmentCreatedMsg = function() {
+        notify({
+            message : 'Segment is successfully created.',
+            classes : 'alert-success'
+        });
+    };
+    $scope.SegmentCreateFailMsg = function() {
+        notify({
+            message : 'Failed to create segment!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    };
+    $scope.DuplicateSegmentNameMsg = function() {
+        notify({
+            message : 'Segment with specified name already exists!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    };
+    $scope.SegmentSavedMsg = function() {
+        notify({
+            message : 'Segment is successfully saved.',
+            classes : 'alert-success'
+        });
+    };
+    $scope.SegmentSaveFailMsg = function() {
+        notify({
+            message : 'Failed to save segment!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    };
+    $scope.SegmentDeletedMsg = function() {
+        notify({
+            message : 'Segment deleted successfully!',
+            classes : 'alert-success'
+        });
+    };
+    $scope.SegmentDeleteFailMsg = function() {
+        notify({
+            message : 'Failed to delete segment!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    };
 
     //If SendingMessageSucceeded event is triggered, show related message
     $scope.$on('SendingMessageSucceeded', function(event, args) {
@@ -5453,33 +5498,33 @@ function notifyCtrl($scope, notify) {
     $scope.$on('ModifyAccountEmail2SMSFailed', function(event, args) {
         $scope.ModifyAccountEmail2SMSFailedMsg();
     });
-	 $scope.$on('ContactsNotSelectedError', function(event, args){
-		 $scope.ContactsNotSelectedErrorMsg();
-	 });
+    $scope.$on('ContactsNotSelectedError', function(event, args) {
+        $scope.ContactsNotSelectedErrorMsg();
+    });
 
     //If ScopeCreated event is triggered, show related message
     $scope.$on('SegmentCreated', function(event, args) {
         $scope.SegmentCreatedMsg();
     });
-	 $scope.$on('SegmentCreateFail', function(event, args) {
-		 $scope.SegmentCreateFailMsg();
-	 });
+    $scope.$on('SegmentCreateFail', function(event, args) {
+        $scope.SegmentCreateFailMsg();
+    });
     //If DuplicateSegmentName event is triggered, show related message
     $scope.$on('DuplicateSegmentName', function(event, args) {
         $scope.DuplicateSegmentNameMsg();
     });
-	 $scope.$on('SegmentSaved', function(event, args) {
-		 $scope.SegmentSavedMsg();
-	 });
-	 $scope.$on('SegmentSaveFail', function(event, args) {
-		 $scope.SegmentSaveFailMsg();
-	 });
-	 $scope.$on('SegmentDeleted', function(event, args) {
-		 $scope.SegmentDeletedMsg();
-	 });
-	 $scope.$on('SegmentDeleteFail', function(event, args) {
-		 $scope.SegmentDeleteFailMsg();
-	 });
+    $scope.$on('SegmentSaved', function(event, args) {
+        $scope.SegmentSavedMsg();
+    });
+    $scope.$on('SegmentSaveFail', function(event, args) {
+        $scope.SegmentSaveFailMsg();
+    });
+    $scope.$on('SegmentDeleted', function(event, args) {
+        $scope.SegmentDeletedMsg();
+    });
+    $scope.$on('SegmentDeleteFail', function(event, args) {
+        $scope.SegmentDeleteFailMsg();
+    });
 
     //}
 }
@@ -5657,7 +5702,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 var Number = $.grep($inScope.main.Settings.Numbers, function(member){
                 return member.DID == $inScope.FromNumber.DID;
                 })[0];
-                if (typeof Number != 'undefined' && Number.name != null && Number.name != '') {
+                if ( typeof Number != 'undefined' && Number.name != null && Number.name != '') {
                     $inScope.FromName = Number.name;
                 }
             }
@@ -5692,33 +5737,41 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     };
 
     $scope.contactLists = [];
-	 $scope.contactSegments = [];
-	 $scope.contactGroups = [];
+    $scope.contactSegments = [];
+    $scope.contactGroups = [];
     function setContactListsAndSegments() {
         if ($scope.main.contactLists) {
-				$scope.contactLists = $scope.main.contactLists;
-			   for(var i in $scope.contactLists){
-					$scope.contactGroups.push({id: $scope.contactLists[i].contactListID, name: $scope.contactLists[i].contactListName, group: 'Lists' });
-				}
+            $scope.contactLists = $scope.main.contactLists;
+            for (var i in $scope.contactLists) {
+                $scope.contactGroups.push({
+                    id : $scope.contactLists[i].contactListID,
+                    name : $scope.contactLists[i].contactListName,
+                    group : 'Lists'
+                });
+            }
 
-				if($scope.contactSegments){
-					$scope.contactSegments = $scope.main.contactSegments;
-					for(var i in $scope.contactSegments){
-						$scope.contactGroups.push({id: $scope.contactSegments[i].contactSelectionID, name: $scope.contactSegments[i].contactSelectionName, group: 'Segments' });
-					}
-				}else{
-					setTimeout(function() {
-						setContactListsAndSegments();
-					}, 500);
-				}
+            if ($scope.contactSegments) {
+                $scope.contactSegments = $scope.main.contactSegments;
+                for (var i in $scope.contactSegments) {
+                    $scope.contactGroups.push({
+                        id : $scope.contactSegments[i].contactSelectionID,
+                        name : $scope.contactSegments[i].contactSelectionName,
+                        group : 'Segments'
+                    });
+                }
+            } else {
+                setTimeout(function() {
+                    setContactListsAndSegments();
+                }, 500);
+            }
         } else {
             setTimeout(function() {
-					setContactListsAndSegments();
+                setContactListsAndSegments();
             }, 500);
         }
     }
 
-	setContactListsAndSegments();
+    setContactListsAndSegments();
 
     $scope.fromNumbers = [];
     //send form initial states
@@ -5805,7 +5858,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         formatYear : 'yy',
         startingDay : 1,
         showWeeks : 'false'
-		  // comented out because of an error that prevents datepicker from working properly
+        // comented out because of an error that prevents datepicker from working properly
         //initDate : 'false'
     };
     $scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
@@ -5919,24 +5972,24 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
             if ($scope.SendToList && typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
                 if ($scope.ToList.constructor === Array) {
                     //Sending message to contact lists
-						  if($scope.ToList[0].group == 'Lists'){
-							  requestData.contactListID = $scope.ToList[0].id;
-							  for (var i = 1; i < $scope.ToList.length; i++) {
-								  requestData.contactListID += "," + $scope.ToList[i].id;
-							  }
-						  }else if($scope.ToList[0].group == 'Segments'){
-							  requestData.contactSelectionID = $scope.ToList[0].id;
-							  for (var i = 1; i < $scope.ToList.length; i++) {
-								  requestData.contactSelectionID += "," + $scope.ToList[i].id;
-							  }
-						  }
+                    if ($scope.ToList[0].group == 'Lists') {
+                        requestData.contactListID = $scope.ToList[0].id;
+                        for (var i = 1; i < $scope.ToList.length; i++) {
+                            requestData.contactListID += "," + $scope.ToList[i].id;
+                        }
+                    } else if ($scope.ToList[0].group == 'Segments') {
+                        requestData.contactSelectionID = $scope.ToList[0].id;
+                        for (var i = 1; i < $scope.ToList.length; i++) {
+                            requestData.contactSelectionID += "," + $scope.ToList[i].id;
+                        }
+                    }
                 } else {
                     //Sending message to a single contact list
-						  if($scope.ToList.group == 'Lists'){
-                    		requestData.contactListID = $scope.ToList.id;
-						  }else if($scope.ToList.group == 'Segments'){
-							  requestData.contactSelectionID = $scope.ToList.id;
-						  }
+                    if ($scope.ToList.group == 'Lists') {
+                        requestData.contactListID = $scope.ToList.id;
+                    } else if ($scope.ToList.group == 'Segments') {
+                        requestData.contactSelectionID = $scope.ToList.id;
+                    }
                 }
             } else if (!$scope.SendToList && typeof $scope.ToNumber != 'undefined' && $scope.ToNumber != null && $scope.ToNumber != '') {
                 //Sending message to numbers. Add leading 1 to all numbers
