@@ -501,12 +501,11 @@ Autoresponder
                         Autoresponse Text:
                     </label>
                     <div class="col-sm-6">
-                        <textarea name="MessageTxt" class="form-control" ng-maxlength="{{ arCtrl.maxLength }}" rows="3" ng-model="actionRule.messageTxt" ng-trim="false" ng-required="actionRule.checked"></textarea>
-                        <div ng-hide="SendForm.$error.maxlength" class="text-counter">
-                            <!--{{ 160 - ((arCtrl.fromName.length > 0 && arCtrl.fromName.length + 2 || arCtrl.fromName.length) + actionRule.messageTxt.length + (actionRule.optFields.OptOutTxt1.length > 0 && actionRule.optFields.OptOutTxt1.length + 1 || actionRule.optFields.OptOutTxt1.length) + (actionRule.optFields.OptOutTxt3.length > 0 && actionRule.optFields.OptOutTxt3.length + 1 || actionRule.optFields.OptOutTxt3.length)) }} characters left.-->
-                            {{ 160 - ((arCtrl.fromName.length > 0 && arCtrl.fromName.length + 2 || arCtrl.fromName.length) + actionRule.messageTxt.length + (actionRule.optFields.OptOutTxt1.length > 0 && actionRule.optFields.OptOutTxt1.length + 1 || actionRule.optFields.OptOutTxt1.length)  + (actionRule.optFields.OptOutTxt2.length > 0 && actionRule.optFields.OptOutTxt2.length + 1 || actionRule.optFields.OptOutTxt2.length)+ (actionRule.optFields.OptOutTxt3.length > 0 && actionRule.optFields.OptOutTxt3.length + 1 || actionRule.optFields.OptOutTxt3.length)) }} characters left.
+                        <textarea name="{{'MessageTxt'+$index}}" class="form-control" ng-maxlength="{{arCtrl.maxLength - ((arCtrl.fromName.length > 0 && arCtrl.fromName.length + 2 || arCtrl.fromName.length) + (actionRule.optFields.OptOutTxt1.length > 0 && actionRule.optFields.OptOutTxt1.length + 1 || actionRule.optFields.OptOutTxt1.length)  + (actionRule.optFields.OptOutTxt2.length > 0 && actionRule.optFields.OptOutTxt2.length + 1 || actionRule.optFields.OptOutTxt2.length)+ (actionRule.optFields.OptOutTxt3.length > 0 && actionRule.optFields.OptOutTxt3.length + 1 || actionRule.optFields.OptOutTxt3.length))}}" rows="3" ng-model="actionRule.messageTxt" ng-trim="false" ng-required="actionRule.checked"></textarea>
+                        <div ng-hide="autoresponderForm['MessageTxt'+$index].$error.maxlength" class="text-counter">
+                            {{arCtrl.maxLength - ((arCtrl.fromName.length > 0 && arCtrl.fromName.length + 2 || arCtrl.fromName.length) + actionRule.messageTxt.length + (actionRule.optFields.OptOutTxt1.length > 0 && actionRule.optFields.OptOutTxt1.length + 1 || actionRule.optFields.OptOutTxt1.length)  + (actionRule.optFields.OptOutTxt2.length > 0 && actionRule.optFields.OptOutTxt2.length + 1 || actionRule.optFields.OptOutTxt2.length)+ (actionRule.optFields.OptOutTxt3.length > 0 && actionRule.optFields.OptOutTxt3.length + 1 || actionRule.optFields.OptOutTxt3.length))}} characters left.
                         </div>
-                        <div ng-show="SendForm.$error.maxlength" class="text-counter error">
+                        <div ng-show="autoresponderForm['MessageTxt'+$index].$error.maxlength" class="text-counter error">
                             Limit reached!
                         </div>
                     </div>
