@@ -2444,6 +2444,7 @@ ul.bar-legend {
 #segment-preview-wrapper .section-title { margin: 0 0 5px 0; padding: 0; }
 #segment-preview-wrapper .page-select-wrapper { margin-top: -50px; }
 
+#manageContactsWrapper { position: relative; z-index: 1; }
 #manageContactsWrapper .column-settings-btn { margin-left: 5px; vertical-align: top; }
 #manageContactsWrapper .column-settings-btn > .btn { padding-bottom: 5px; }
 
