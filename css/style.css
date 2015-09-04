@@ -4971,6 +4971,18 @@ body.skin-3 {
 	padding-bottom: 7px;
 }
 
+#reset-password-form .form-group {
+	text-align: left;
+}
+#reset-password-form .error {
+	display: none;
+}
+#reset-password-form input.invalid {
+	border-color: red;
+}
+#reset-password-error-title, #reset-password-success { display: none; }
+#reset-password-success { color: green; }
+
 @media (min-width: 768px) {
   #page-wrapper {
     position: inherit;
