@@ -4822,6 +4822,16 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
         //An error occurred with this request
         function(data, status, headers, config) {
             //alert('Unexpected error occurred when trying to send message!');
+			   if(status == 422){
+					if (data.apicode == 4) {
+						$scope.$broadcast("DuplicateContactListName", data.apidata);
+					} else {
+						alert("An error occurred when sending your message! Error code: " + data.apicode);
+						alert(JSON.stringify(data));
+					}
+					return;
+				}
+
             if (status == 400) {
                 if (data.apicode == 1) {
                     $scope.$broadcast("DuplicateContactListName", data.apidata);
