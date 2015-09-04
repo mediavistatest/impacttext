@@ -461,11 +461,14 @@ var ngInbox = {
                         sethttp : 1
                     };
 
-                    if (String(searchText).length > 3) {
+                    // if (String(searchText).length > 3) {
+                    // params.search = String(searchText).toLowerCase();
+                    // } else {
+                    // if (String(searchText).length != 0)
+                    // return;
+                    // }
+                    if (searchText) {
                         params.search = String(searchText).toLowerCase();
-                    } else {
-                        if (String(searchText).length != 0)
-                            return;
                     }
 
                     if (startDate) {
@@ -570,9 +573,9 @@ var ngInbox = {
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
                 }, true);
 
-                controllerParent.$scope.$watch('filterOptions', function() {
-                    controllerParent.$scope.getPagedDataAsync(controllerParent);
-                }, true);
+                // controllerParent.$scope.$watch('filterOptions', function() {
+                // controllerParent.$scope.getPagedDataAsync(controllerParent);
+                // }, true);
 
                 controllerParent.$scope.$watch('sortOptions.fields', function() {
                     controllerParent.$scope.getPagedDataAsync(controllerParent);
@@ -606,7 +609,7 @@ var ngInbox = {
                     footerTemplate : 'views/table/footerTemplate.html',
                     totalServerItems : 'totalServerItems',
                     pagingOptions : controllerParent.$scope.pagingOptions, //'pagingOptions',
-                    filterOptions : controllerParent.$scope.filterOptions, //'filterOptions',
+                    //filterOptions : controllerParent.$scope.filterOptions, //'filterOptions',
                     columnDefs : 'columnDefs', //controllerParent.columnDefs,
                     primaryKey : controllerParent.primaryKey
                 };

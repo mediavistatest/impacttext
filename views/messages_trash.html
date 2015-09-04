@@ -88,7 +88,7 @@
                 <input ng-model="filterOptions.endDate" id="idEndDate" type="text" class="form-control" datepicker-popup="{{format}}" is-open="opened2" min-date="filterOptions.startDate" show-weeks="false" max-date="" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open2($event)" />
             </div>
 
-            <button class="btn btn-search" ng-click="getPagedDataAsync(controllerParent)" ng-controller="notifyCtrl">
+            <button class="btn btn-search" ng-click="getPagedDataAsync(controllerParent)" ng-controller="notifyCtrl" ng-disabled="(filterOptions.filterText!=''&&filterOptions.filterText.length<3)">
             <i class="fa fa-search"></i>
             </button>
 
@@ -97,6 +97,10 @@
     </div>
 
 	<br>
+        <div ng-show="(filterOptions.filterText!=''&&filterOptions.filterText.length<3)" class="text-counter error" style="float: left;">
+            If present, search term has to be at least 3 characters long
+        </div>
+        <br>
 
 	<!--START TABLE-->
 	<div class="gridStyle" ng-grid="ngOptions"></div>
