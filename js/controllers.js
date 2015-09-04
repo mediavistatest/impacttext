@@ -3426,7 +3426,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 		 checked : true,
 		 canBeClicked : true,
 		 field : 'ANI',
-		 displayName : 'ANI'
+		 displayName : 'Phone Number'
 		 //cellTemplate: 'views/table/ListNameTemplate.html'
 	 }, {
 		 inSettings : true,
@@ -4450,7 +4450,7 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http){
 		primaryKey : 'contactID',
 		columnDefs : [{
 			field : 'ANI',
-			displayName : 'ANI'
+			displayName : 'Phone Number'
 		}, {
 			field : 'lastName',
 			displayName : 'Name',
