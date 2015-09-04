@@ -4435,16 +4435,6 @@ var ngReports = {
                     }
                 }
             }
-            // if (cpo.clickedReport.parameters.contactfilter){
-            // var filter_ = cpo.clickedReport.parameters.contactfilter;
-            // var name_=filter_.substring(filter_.lastIndexOf("{")+1,filter_.lastIndexOf("}"));
-            // for (var group in cpo.$scope.main.contactGroups) {
-            // if (cpo.$scope.main.contactGroups[group].group == 'Segments' && cpo.$scope.main.contactGroups[group].name == name_) {
-            // cpo.rsCtrl.selectedContactGroup = cpo.$scope.main.contactGroups[group];
-            // break;
-            // }
-            // }
-            // }
 
             if (!cpo.rsCtrl.scheduled) {
                 cpo.ServerRequests.GetMessageStats(cpo, cpo.ServerRequests.GetMessageStatsCallback);
