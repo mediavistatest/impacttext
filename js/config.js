@@ -693,6 +693,35 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpPr
         data : {
             pageTitle : 'Support'
         }
+    // Account -------------------
+    }).state('account', {
+        url : "/account",
+        templateUrl : "views/account.html",
+        data : {
+            pageTitle : 'My account'
+        },
+        resolve : {
+            loadPlugin : function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    name : 'ngGrid',
+                    files : ['js/plugins/nggrid/ng-grid-2.0.14.min.js']
+                }, {
+                    insertBefore : '#loadBefore',
+                    files : ['js/plugins/nggrid/ng-grid.css']
+                }, {
+                    files : ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                }, {
+                    files : ['js/plugins/nggrid/plugins/ng-grid-csv-export.js']
+                }, {
+                    insertBefore : '#loadBefore',
+                    name : 'localytics.directives',
+                    files : ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                },{
+                    name : 'cgNotify',
+                    files : ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/notify.js']
+                }]);
+            }
+        }
     });
     //Setting defaults for http requests
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
