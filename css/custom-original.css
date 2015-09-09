@@ -1,64 +1,5 @@
-@font-face {
-	font-family: 'icomoon';
-	src:url('../fonts/icomoon.eot?l7m6fn');
-	src:url('../fonts/icomoon.eot?#iefixl7m6fn') format('embedded-opentype'),
-		url('../fonts/icomoon.ttf?l7m6fn') format('truetype'),
-		url('../fonts/icomoon.woff?l7m6fn') format('woff'),
-		url('../fonts/icomoon.svg?l7m6fn#icomoon') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-
-[class^="icon-"], [class*=" icon-"] {
-	font-family: 'icomoon';
-	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	line-height: 1;
-
-	/* Better Font Rendering =========== */
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-
-.icon-compose:before {
-	content: "\e600";
-}
-.icon-contacts:before {
-	content: "\e601";
-}
-.icon-dashboard:before {
-	content: "\e602";
-}
-.icon-messages:before {
-	content: "\e603";
-}
-.icon-myAccount:before {
-	content: "\e604";
-}
-.icon-reports:before {
-	content: "\e605";
-}
-.icon-settings:before {
-	content: "\e606";
-}
-.icon-support:before {
-	content: "\e607";
-}
-.icon-tools:before {
-	content: "\e608";
-}
-
-
-
-body {
-font-family: Montserrat, sans-serif;
-}
-
 .logo-name img {
-    margin: 0 auto 30px auto;
+    margin: 0 auto 60px auto;
 }
 
 .loginscreen.middle-box {
@@ -96,32 +37,30 @@ font-family: Montserrat, sans-serif;
 }
 
 .main-logo {
-   margin: 0 auto 30px auto;
+    margin-bottom: 30px;
 }
 
 nav.navbar-default.navbar-static-side {
-    background: #2269d1;
+    background: #005faa;
 }
-
-nav.navbar-default.navbar-static-side.ng-scope {}
 
 .nav > li.active {
     border-left: 0;
-    background: #297fe5 !important;
+    background: #0570c5 !important;
 }
 
 .navbar-default .nav > li > a:hover, .navbar-default .nav > li > a:focus {
-    background-color: #297fe5;
-    color: #ffd731;
+    background-color: #0570c5;
+    color: white;
 }
 
 .nav-header {
     padding: 15px 25px;
-    background: #2269d1;
+    background: #005faa;
 }
 
 .navbar-static-top {
-    background: none;
+    background: white;
     height: 74px;
     padding-top: 7px;
 }
@@ -136,23 +75,8 @@ nav.navbar-default.navbar-static-side.ng-scope {}
 }
 
 .blue {
-    background: #2269d1;
-    color: #318ffa;
-}
-
-.blue-light {
-    background: #297fe5;
-    color: #47b4f9;
-}
-
-.yellow {
-    background: #ffd731;
-    color: #d5a113;
-}
-
-.orange {
-    background: #ff9700;
-    color: #c67504;
+    background: #005eaa;
+    color: #93daff;
 }
 
 .green {
@@ -161,7 +85,7 @@ nav.navbar-default.navbar-static-side.ng-scope {}
 }
 
 body {
-    background-color: #2269d1;
+    background-color: #005eaa;
 }
 
 .nav > li > a {
@@ -181,14 +105,6 @@ body {
     padding: 14px 20px 14px 35px;
 }
 
-.nav > li:hover > a {
-    color: #ffd731;
-}
-
-.nav > li.active > a, .nav > li.active > a:active, .nav > li.active > a:hover {
-    color: #ffd731;
-}
-
 .nav-second-level li a {
     padding: 7px 10px 7px 10px;
     padding-left: 67px;
@@ -199,15 +115,13 @@ body {
 }
 
 .profile-element .img-circle {
-    border-radius: 0;
+    border-radius: 50%;
     float: left;
     margin-right: 10px;
-    width: 32px;
-    margin-top: 5px;
 }
 
 .profile-element.clearfix {
-    background: #297fe5;
+    background: #0570c5;
     padding: 20px 25px 20px 18px;
     margin: 0 -25px;
 }
@@ -250,29 +164,24 @@ body {
     padding: 14px 20px 14px 15px;
 }
 
-.nav.navbar-right > li > a {
-    color: #2269d1;
-}
-
 .nav-second-level li.active a, .nav-second-level li.active a:hover, .nav-second-level li.active a:focus {
     background-color: #0570C5;
     color: #93DAFF;
 }
 
 .highlighted-btn {
-    background: white;
+    background: #e46f1f;
     border-radius: 5px;
     margin: 10px 15px 15px 15px;
-    padding: 10px 0 10px 15px !important;
-    color: #2269d1 !important;
+    padding: 10px 0 10px 20px !important;
 }
 
 .highlighted-btn:hover {
-    background: #ed8a06 !important;
+    background: #d5671c !important;
 }
 
 .highlighted-btn i {
-    color: #2269d1 !important;
+    color: white !important;
 }
 
 .count-info.bell .label {
@@ -372,9 +281,9 @@ h2.section-title {
 
 .btn-discard {
     color: white;
-    background: #297fe5;
+    background: #acacac;
     border: none;
-    border: 1px solid #297fe5;
+    border: 1px solid #acacac;
 }
 
 .btn-discard:hover {
@@ -383,7 +292,7 @@ h2.section-title {
 
 .btn-add {
     color: white;
-    background: #2269d1;
+    background: #005eaa;
     border: none;
     font-size: 13px;
 }
@@ -400,9 +309,9 @@ h2.section-title {
 
 .btn-send {
 	color: white;
-    background: #ff9700;
-    width: 168px;
-    border: 1px solid #ff9700;
+	background: #007d32;
+	width: 168px;
+	border: 1px solid #007d32;
 }
 
 .right {
@@ -423,7 +332,7 @@ h2.section-title {
 
 a.addBtn {
     border: none;
-    color: #2269d1;
+    color: #005eaa;
     display: block;
     margin-top: -10px;
     font-size: 13px;
@@ -440,7 +349,7 @@ a.addBtn {
     box-shadow: none;
     color: #999c9c;
     font-size: 14px;
-    font-family: Montserrat, sans-serif;
+    font-family: Open Sans, sans-serif;
     line-height: normal;
     border-radius: 0;
 }
@@ -465,8 +374,8 @@ a.addBtn {
 }
 
 .active.active {
-    background-color: #2269d1 !important;
-    background: #2269d1 !important;
+    background-color: #005eaa !important;
+    background: #005eaa !important;
     border-radius: 0 !important;
 }
 
@@ -523,7 +432,7 @@ label.checkbox {
 }
 
 .discard-cancel:hover {
-    color: #2269d1;
+    color: #005eaa;
     cursor: pointer;
 }
 
@@ -603,7 +512,7 @@ END DATETIME******/
 .ngHeaderScroller {
     background: white;
     border: none;
-    color: #2269d1;
+    color: #005eaa;
     text-align: center;
 }
 
@@ -637,7 +546,7 @@ END DATETIME******/
 .ngHeaderScroller {
     background: white;
     border: none;
-    color: #2269d1;
+    color: #005eaa;
     text-align: center;
 }
 
@@ -781,7 +690,7 @@ input.search-input {
 }
 
 .datetimepicker-wrapper .btn:active {
-    background: #2269d1;
+    background: #005eaa;
 }
 
 .datetimepicker-wrapper .btn-default[disabled] {
@@ -789,8 +698,8 @@ input.search-input {
 }
 
 .datetimepicker-wrapper .active.active {
-    background-color: #2269d1 !important;
-    background: #2269d1 !important;
+    background-color: #005eaa !important;
+    background: #005eaa !important;
     border-radius: 0 !important;
     color: white !important;
     box-shadow: none;
@@ -819,7 +728,7 @@ input.search-input {
     height: 0;
     border-style: solid;
     border-width: 5px 0 5px 8.7px;
-    border-color: transparent transparent transparent #2269d1;
+    border-color: transparent transparent transparent #005eaa;
     margin-left: -1px;
 }
 
@@ -828,13 +737,13 @@ input.search-input {
     height: 0;
     border-style: solid;
     border-width: 5px 0 5px 8.7px;
-    border-color: transparent transparent transparent #2269d1;
+    border-color: transparent transparent transparent #005eaa;
     margin-left: -1px;
 }
 
 .ngPagerLastBar {
     width: 10px;
-    border-left: 2px solid #2269d1;
+    border-left: 2px solid #005eaa;
     margin-top: -6px;
     height: 12px;
     margin-left: 1px;
@@ -845,13 +754,13 @@ input.search-input {
     height: 0;
     border-style: solid;
     border-width: 5px 8.7px 5px 0;
-    border-color: transparent #2269d1 transparent transparent;
+    border-color: transparent #005eaa transparent transparent;
     margin-left: 2px;
 }
 
 .ngPagerFirstBar {
     width: 10px;
-    border-left: 2px solid #2269d1;
+    border-left: 2px solid #005eaa;
     margin-top: -6px;
     height: 12px;
     margin-left: -3px;
@@ -866,7 +775,7 @@ input.search-input {
 button.ngPagerButton {
     border: none;
     background: white;
-    color: #2269d1;
+    color: #005eaa;
 }
 
 button: disabled .ngPagerFirstBar {
@@ -947,13 +856,13 @@ strong {
 }
 
 .btn-back {
-    color: #2269d1;
-    border-color: #2269d1;
+    color: #005eaa;
+    border-color: #005eaa;
 }
 
 .btn-back:hover, .btn-back:active {
-    color: #2269d1;
-    border-color: #2269d1;
+    color: #005eaa;
+    border-color: #005eaa;
     background: whitesmoke;
 }
 
@@ -1141,11 +1050,10 @@ span.A {
 
 .btn-send.smaller {
     color: white;
-    background: #ff9700;
-    width: auto;
+    background: #007d32;
+    width: 110px;
     border: none;
 }
-
 .btn-send.smaller.delete {
 	background: #A00700;
 	margin-left: 5px;
@@ -1232,7 +1140,7 @@ body {
     border-bottom-right-radius: 0 !important;
     border: 1px solid lightgrey;
     background: white !important;
-    color: #2269d1;
+    color: #005eaa;
     box-shadow: none;
     border-bottom: none;
     position: relative;
@@ -1259,7 +1167,7 @@ body {
 
 .view-from-number {
     font-size: 18px;
-    color: #2269d1;
+    color: #005eaa;
 }
 
 .view-from-number span {
@@ -1289,7 +1197,7 @@ body {
 
 a.back-btn {
     border: none;
-    color: #2269d1;
+    color: #005eaa;
 }
 
 .messages .open > .dropdown-menu.dropdown-list {
@@ -1337,7 +1245,7 @@ a.back-btn {
 
 .activebtn, .activebtn:focus, .activebtn:active {
     border-color: lightgrey;
-    color: #2269d1;
+    color: #005eaa;
     background: whitesmoke;
     outline: none;
 }
@@ -1352,44 +1260,15 @@ a.back-btn {
     background-color: whitesmoke !important;
     background: whitesmoke !important;
     border-radius: 3px !important;
-    color: #2269d1;
+    color: #005eaa;
     box-shadow: none;
 }
 
-a.navbar-minimalize {
-    color: gold;
-    border: none;
-    font-size: 20px;
-    position: absolute;
-    left: -15px;
-    top: -10px;
+.btn.btn-primary {
+    background-color: #e36f1e;
+    border-color: #e36f1e;
+    color: #FFFFFF;
 }
-
-.mini-navbar a.navbar-minimalize {
-    color: gold;
-    border: none;
-    font-size: 20px;
-    position: static;
-    margin: 0 15px;
-}
-
-a.navbar-minimalize:hover, a.navbar-minimalize:active {
-    color: #d5a113;
-    border: none;
-    font-size: 20px;
-    background:none;
-}
-
-
-.navbar-header {
-display:block;
-}
-
-.mini-navbar .main-logo {
-    margin: 15px auto 0 auto;
-    padding: 5px;
-}
-
 
 .manage-list .chosen-container, .messages .chosen-container {
     position: relative;
@@ -1445,7 +1324,7 @@ button.btn.btn-search {
     top: -2px;
     font-size: 20px;
     border: none;
-    color: #2269d1;
+    color: #005eaa;
     margin-left: 5px;
 }
 
@@ -1456,14 +1335,14 @@ button.btn.btn-search:hover {
 button.btn.btn-search:active {
     box-shadow: none;
     outline: none;
-    color: #2269d1;
+    color: #005eaa;
     top: -1px;
 }
 
 button.btn.btn-search:focus {
     box-shadow: none;
     outline: none;
-    color: #2269d1;
+    color: #005eaa;
 }
 
 .manage-list .itTopPager, .segments-list .itTopPager {
@@ -1552,7 +1431,7 @@ button.btn.btn-search:focus {
 }
 
 .drop-btn:hover {
-    color: #2269d1;
+    color: #005eaa;
 }
 
 i.fa.fa-caret-down {
@@ -1577,7 +1456,7 @@ button.read-unread {
 .content-box h2 {
     margin-top: 0;
     padding: 10px 15px;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 15px;
     position: relative;
 }
@@ -1598,7 +1477,7 @@ span.li-label {
 }
 
 .blue-txt {
-    color: #2269d1;
+    color: #005eaa;
 }
 
 .ngSelectionCheckbox {
@@ -1653,10 +1532,6 @@ span.li-label {
     color: #9f4a9c;
 }
 
-.gold-txt {
-    color: gold;
-}
-
 h3.sub-h2 {
     font-size: 18px;
     font-weight: 300;
@@ -1687,7 +1562,7 @@ ul.dashboard-li li {
 
 thead {
     background: whitesmoke;
-    color: grey;
+    color: #005eaa;
     font-weight: 300 !important;
 }
 
@@ -1764,7 +1639,7 @@ form.contact-us {
 
 p.nav-title {
     font-size: 12px;
-    color: #2269d1;
+    color: #005eaa;
     text-transform: uppercase;
 }
 
@@ -1960,7 +1835,7 @@ i.fa.fa-caret-down {
 }
 
 .btn-send:active {
-    background: #c67009;
+    background: #015924;
 }
 
 .message-cloud.ng-binding {
@@ -2135,7 +2010,7 @@ ul.bar-legend span {
 
 .blue-2 {
     background: #93daff;
-    color: #2269d1;
+    color: #005eaa;
 }
 
 a table {
@@ -2352,7 +2227,7 @@ ul.bar-legend {
 }
 
 .dashboard-li a:hover {
-    color: #2269d1;
+    color: #005eaa;
 }
 
 .support .three-col a.btn.view-more.right {
@@ -2455,7 +2330,7 @@ ul.bar-legend {
 
 .change-plan .blue {
   background: none;
-  color: #2269d1;
+  color: #005eaa;
 }
 
 .change-plan-btn {
@@ -2625,84 +2500,6 @@ margin-top:60px;
     text-align: right;
 }
 
-.gray-bg {
-    background: #ebf2fc url(../img/background.png) no-repeat;
-    background-position-y: 150px;
-    background-position-x: right;
-}
-
-.icon.icon-compose {
-    font-size: 25px;
-    display: block;
-    float: left;
-    margin-right: 5px;
-}
-
-.nav .icon {
-    font-size: 23px;
-    float: left;
-    margin: -2px 11px 0 -5px;
-    display: block;
-    width: 25px;
-    text-align: center;
-}
-
-.navbar-static-side .nav > li.active > a i, .navbar-static-side .nav > li:hover > a i {
-    color: gold;
-    font-size: 15px;
-    margin-right: 10px;
-    width: 17px;
-}
-
-.nav-second-level li.active a, .nav-second-level li.active a:hover, .nav-second-level li.active a:focus {
-    background-color: #297fe5;
-    color: gold;
-}
-
-body.mini-navbar .navbar-default .nav li a span.icon {
-    display: block;
-    float: none;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.loginscreen .form-control, .loginscreen  .single-line {
-    background-color: #2269D1;
-    border: none;
-    color: white;
-}
-
-.loginscreen .btn.btn-primary {
-    background-color: #FF9700;
-    border-color: transparent;
-    color: #FFFFFF;
-    width: auto !important;
-    margin: 0 auto;
-    padding: 5px 8px;
-}
-
-.forgot-password-link {
-    color:black;
-}
-
-.loginscreen ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color:   lightblue!important;
-}
-.loginscreen :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color:    lightblue !important;
-   opacity:  1;
-}
-.loginscreen ::-moz-placeholder { /* Mozilla Firefox 19+ */
-   color:    lightblue !important;
-   opacity:  1;
-}
-.loginscreen :-ms-input-placeholder { /* Internet Explorer 10-11 */
-   color:    lightblue !important;
-}
-
-.loginscreen .gray-bg {
-    background-position-y: 50px;
-}
 
 /*MEDIA QUERIES*/
 
@@ -2755,7 +2552,9 @@ body.mini-navbar .navbar-default .nav li a span.icon {
 
 .send-messages .btn-send {
     color: white;
+    background: #007d32;
     width: auto;
+    border: 1px solid #007d32;
     float: none;
 }
     
