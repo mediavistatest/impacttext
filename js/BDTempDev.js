@@ -4480,9 +4480,9 @@ var ngAccount = {
 				// success function
 				.success(function(result) {
 					if (result.apicode == 0) {
-						cpo.$scope.$broadcast('itMessage', {
-							message : 'Token generated.'
-						});
+						// cpo.$scope.$broadcast('itMessage', {
+							// message : 'Token generated.'
+						// });
 						if (callback) {
 							callback(cpo, result);
 						}
@@ -4505,7 +4505,7 @@ var ngAccount = {
 			}
 		},
 		CreateTokenCallback : function(cpo, result) {
-			var myLoginUrl = cpo.myLoginUrl + '?token=' + result.apidata;
+			var myLoginUrl = inspiniaNS.maUrl + '?token=' + result.apidata;
 			$('#myAccountLogin').attr('href', myLoginUrl);
 			cpo.token = result.apidata;
 		}
@@ -4517,7 +4517,7 @@ var ngAccount = {
 		MyLogin : function(cpo) {
 		}
 	},
-	myLoginUrl : 'http://dalmw01.matrixvalue.com:83/us/MyAccount/LogOn',
+	// myLoginUrl : 'http://dalmw01.matrixvalue.com:83/us/MyAccount/LogOn',
 	token : '',
 	Controller : function($scope, $http) {
 		var maCtrl = this;
@@ -4529,5 +4529,7 @@ var ngAccount = {
 
 		cpo.maCtrl = maCtrl;
 		cpo.maCtrl.token = '';
+
+		cpo.ServerRequests.CreateToken(cpo, cpo.ServerRequests.CreateTokenCallback);
 	}
 };
