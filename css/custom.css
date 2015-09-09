@@ -2500,6 +2500,27 @@ margin-top:60px;
     text-align: right;
 }
 
+.account .highlighted-btn {
+    background: #e46f1f;
+    border-radius: 5px;
+    margin: 10px 15px 15px 15px;
+    padding: 10px !important;
+    margin: 0 auto;
+    width: 150px;
+    display: block;
+    text-align: center;
+    color: white;
+    margin-bottom: 200px;
+}
+
+.account .footer {
+    bottom: 0;
+    position: absolute;
+}
+
+#page-wrapper.account {
+	min-height: 900px;
+}
 
 /*MEDIA QUERIES*/
 
@@ -2626,6 +2647,11 @@ margin-top:60px;
     /* width: 100%; */
     padding: 15px 5px;
     /* margin-top: 15px; */
+}
+
+.account .footer {
+    bottom: 0;
+    position: static;
 }
     
 }
