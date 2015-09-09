@@ -102,8 +102,17 @@
 			<p>Segment contact list preview</p>
 			<div class="page-select-wrapper">
 				<strong>Show:</strong>&nbsp; <select class="page-select" ng-model="pagingOptions.pageSize">
-				<option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
-			</select>
+					<option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
+				</select>
+
+				<div class="btn-group dropdown discard-btn column-settings-btn">
+					<button data-toggle="dropdown" class="btn dropdown-toggle" aria-expanded="false">
+						<i class="fa fa-cog"></i>
+					</button>
+					<div class="dropdown-menu dropdown-list dropdown-alerts column-settings" ng-click="$event.stopPropagation()">
+						<div ng-include="'views/contacts_settings.html'" ></div>
+					</div>
+				</div>
 			</div>
 
 			<br />

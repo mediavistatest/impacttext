@@ -2445,8 +2445,8 @@ ul.bar-legend {
 #segment-preview-wrapper .page-select-wrapper { margin-top: -50px; }
 
 #manageContactsWrapper { position: relative; z-index: 1; }
-#manageContactsWrapper .column-settings-btn { margin-left: 5px; vertical-align: top; }
-#manageContactsWrapper .column-settings-btn > .btn { padding-bottom: 5px; }
+.manage-list .column-settings-btn, #segment-preview-wrapper .column-settings-btn { margin-left: 5px; vertical-align: top; }
+.manage-list .column-settings-btn > .btn, #segment-preview-wrapper .column-settings-btn > .btn { padding-bottom: 5px; }
 
 .error-box {
     color: #a94442;

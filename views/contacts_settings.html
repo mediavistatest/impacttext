@@ -10,11 +10,11 @@
 		<h3 ng-show="column.button">
 			{{column.button}}
 		</h3>
-		<button title="Up" class="btn" ng-disabled="index==1" ng-click="columnSettings.ColumnUp_onClick(index)">
+		<button title="Up" class="btn" ng-disabled="columnSettings.GetTrueIndex(index) == 0" ng-click="columnSettings.ColumnUp_onClick(index)">
 			<i class="fa fa-arrow-up">
 			</i>
 		</button>
-		<button title="Down" class="btn" ng-disabled="index==columnSettings.columns.length-2" ng-click="columnSettings.ColumnDown_onClick(index)">
+		<button title="Down" class="btn" ng-disabled="columnSettings.GetTrueIndex(index) == columnSettings.GetTotal() - 1" ng-click="columnSettings.ColumnDown_onClick(index)">
 			<i class="fa fa-arrow-down">
 			</i>
 		</button>

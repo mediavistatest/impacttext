@@ -3648,7 +3648,24 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
                 expirationUnit : 'days'
             });
             location.reload();
-        }
+        },
+		 GetTrueIndex : function(index){
+			 var true_index = -1;
+			 for(var i in $scope.columnSettings.columnDefs){
+				 var column = $scope.columnSettings.columnDefs[i];
+				 if(column.inSettings) true_index++;
+				 if(i == index) break;
+			 }
+			 return true_index;
+		 },
+		 GetTotal : function(){
+			 var true_index = 0;
+			 for(var i in $scope.columnSettings.columnDefs){
+				 var column = $scope.columnSettings.columnDefs[i];
+				 if(column.inSettings) true_index++;
+			 }
+			 return true_index;
+		 }
     };
 
     var cookie = $scope.columnSettings.GetCookie();
@@ -4479,6 +4496,53 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
     }, true);
 
     //TABLE OPTIONS
+	 $scope.columnDefs = [{
+		 inSettings : true,
+		 checked : true,
+		 canBeClicked : true,
+		 field : 'ANI',
+		 displayName : 'Phone Number'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 field : 'lastName',
+		 displayName : 'Name',
+		 cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 field : 'emailAddress',
+		 displayName : 'Email'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 field : 'custom1',
+		 displayName : 'Field 1'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 field : 'custom2',
+		 displayName : 'Field 2'
+	 }, {
+		 inSettings : true,
+		 checked : true,
+		 field : 'custom3',
+		 displayName : 'Field 3'
+	 }, {
+		 inSettings : true,
+		 checked : false,
+		 field : 'custom4',
+		 displayName : 'Field 4'
+	 }, {
+		 inSettings : true,
+		 checked : false,
+		 field : 'custom5',
+		 displayName : 'Field 5'
+	 }, {
+		 field : 'status',
+		 displayName : 'Status',
+		 cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
+	 }];
     $scope.ngOptions = {
         data : 'ngData',
         enableSorting : true,
@@ -4492,30 +4556,7 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
         totalServerItems : 'totalServerItems',
         pagingOptions : $scope.pagingOptions,
         primaryKey : 'contactID',
-        columnDefs : [{
-            field : 'ANI',
-            displayName : 'Phone Number'
-        }, {
-            field : 'lastName',
-            displayName : 'Name',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
-        }, {
-            field : 'emailAddress',
-            displayName : 'Email'
-        }, {
-            field : 'custom1',
-            displayName : 'Field 1'
-        }, {
-            field : 'custom2',
-            displayName : 'Field 2'
-        }, {
-            field : 'custom3',
-            displayName : 'Field 3'
-        }, {
-            field : 'status',
-            displayName : 'Status',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
-        }]
+        columnDefs : 'columnDefs'
     };
     $scope.$watch('ngData', function() {
         $('.gridStyle').trigger('resize');
@@ -4558,6 +4599,79 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
             alert(JSON.stringify(data));
         });
     };
+
+	$scope.columnSettings = {
+		columnDefs : $.extend([], $scope.columnDefs),
+		ColumnUp_onClick : function(index) {
+			$scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index - 1, 1, $scope.columnSettings.columnDefs[index])[0];
+		},
+		ColumnDown_onClick : function(index) {
+			$scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index + 1, 1, $scope.columnSettings.columnDefs[index])[0];
+		},
+		UpdateColumns : function(refresh) {
+			$scope.columnSettings.SetCookie();
+			$scope.columnDefs = $.extend([], $scope.columnSettings.GrepColumnDefs($scope.columnSettings.columnDefs));
+			if (refresh) {
+				$scope.refresh();
+			}
+		},
+		GrepColumnDefs : function(columnDefs) {
+			return $.grep(columnDefs, function(member) {
+				return (member.canBeClicked || (!member.canBeClicked && member.checked));
+			});
+		},
+		GetCookie : function() {
+			var columnDefsCookie = $scope.main.ipCookie('itSegmentContactsColumnDefs');
+			if (columnDefsCookie == null) {
+				columnDefsCookie = [];
+				$scope.main.ipCookie('itSegmentContactsColumnDefs', columnDefsCookie, {
+					expires : 365,
+					expirationUnit : 'days'
+				});
+			}
+			return columnDefsCookie;
+		},
+		SetCookie : function() {
+			var columnDefsCookie = [{
+				columnDefs : $scope.columnSettings.columnDefs
+			}];
+			$scope.main.ipCookie('itSegmentContactsColumnDefs', columnDefsCookie, {
+				expires : 365,
+				expirationUnit : 'days'
+			});
+		},
+		DefaultColumns : function() {
+			var columnDefsCookie = [];
+			$scope.main.ipCookie('itSegmentContactsColumnDefs', columnDefsCookie, {
+				expires : 365,
+				expirationUnit : 'days'
+			});
+			location.reload();
+		},
+		GetTrueIndex : function(index){
+			var true_index = -1;
+			for(var i in $scope.columnSettings.columnDefs){
+				var column = $scope.columnSettings.columnDefs[i];
+				if(column.inSettings) true_index++;
+				if(i == index) break;
+			}
+			return true_index;
+		},
+		GetTotal : function(){
+			var true_index = 0;
+			for(var i in $scope.columnSettings.columnDefs){
+				var column = $scope.columnSettings.columnDefs[i];
+				if(column.inSettings) true_index++;
+			}
+			return true_index;
+		}
+	};
+
+	var cookie = $scope.columnSettings.GetCookie();
+	if (cookie != null && cookie.length != 0) {
+		$scope.columnSettings.columnDefs = cookie[0].columnDefs;
+	}
+	$scope.columnSettings.UpdateColumns();
 }
 
 /**
