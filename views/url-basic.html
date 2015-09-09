@@ -44,34 +44,8 @@
                 display: block;
                 padding: 20px 40px;
             }
-            .btn-send {
-    color: #FFF;
-    background: #007D32 none repeat scroll 0% 0%;
-    
-    border: 1px solid #007D32;
-    padding: 5px 10px;
-    font-size: 14px;
-}
-
-.btn-send {
-    cursor: pointer;
-}
-
             </style>
         </head>
-        <script src="https://apis.google.com/js/client.js"></script>
-    <script>
-      function auth() {
-        var config = {
-          'client_id': '647754619695-31mj85j3l1nnvsn5stqbupj602ku1g29.apps.googleusercontent.com',
-          'scope': 'https://www.googleapis.com/auth/urlshortener'
-        };
-        gapi.auth.authorize(config, function() {
-          console.log('login complete');
-          console.log(gapi.auth.getToken());
-        });
-      }
-    </script>
         <script type="text/javascript">
             function makeShort()
             {
@@ -128,8 +102,6 @@
         </script>
         <script src="https://apis.google.com/js/client.js"> </script>
         <body>
-        <button onclick="auth();" class="btn btn-send">Authorize</button> <br><br>
-
             URL: <input type="text" id="longurl" name="url" placeholder="Enter website address you wish to shorten" value="" />
             <input type="button" value="Shorten" onclick="makeShort();" /> <br/> <br/>
             <!--URL: <input type="text" id="shorturl" name="url" placeholder="Insert short url" value="" /> <br/>
