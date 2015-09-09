@@ -80,10 +80,14 @@ Messages
                     &nbsp;
                 </li>
                 <li>
-                    <span class="discard-cancel" data-toggle="dropdown"><strong ng-click="DeleteMessages(controllerParent)">
-                        Yes</strong></span>
-                    &nbsp;&nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'"><strong>
-                        No</strong></span>
+                    <span class="discard-cancel" data-toggle="dropdown">
+                        <strong ng-click="DeleteMessages(controllerParent)">
+                        Yes
+                        </strong></span>
+                    &nbsp;&nbsp;&nbsp;&nbsp; <span class="discard-cancel" data-toggle="dropdown" ng-click="animation = 'FadeInLeft'">
+                        <strong>
+                        No
+                        </strong></span>
                 </li>
             </ul>
         </div>
@@ -94,7 +98,8 @@ Messages
         </button>
         <div class="page-select-wrapper">
             <strong>
-            Show:</strong>
+            Show:
+            </strong>
             &nbsp;
             <select class="page-select" ng-model="pagingOptions.pageSize">
                 <option ng-repeat="size in pagingOptions.pageSizes">
@@ -105,8 +110,15 @@ Messages
     </div><!-- end top button -->
     <div ng-controller="SearchByDateCtrl">
 
-        <input ng-model="filterOptions.filterText" class="search-input" placeholder="Search by message text" type="text">
-
+        <input ng-model="filterOptions.filterText" class="search-input" placeholder="Search term" type="text">
+        <select chosen data-placeholder="search by" disable-search="true" ng-model="filterOptions.filterBy">
+            <option value="search">
+                Message
+            </option>
+            <option value="sourceani">
+                From No.
+            </option>
+        </select>
         <span class="label-icon">
             &nbsp;&nbsp;&nbsp;<i class="fa fa-calendar">
             </i>

@@ -318,6 +318,7 @@ var ngInbox = {
 				var monthAfterToday = new Date();
 				monthAfterToday.setMonth(monthAfterToday.getMonth() + 1);
 				self.endDate = monthAfterToday;
+				self.filterBy = 'search';
 			}
 		},
 		Methods : {
@@ -468,7 +469,14 @@ var ngInbox = {
 					// return;
 					// }
 					if (searchText) {
-						params.search = String(searchText).toLowerCase();
+						switch(controllerParent.$scope.filterOptions.filterBy) {
+						case 'search':
+							params.search = String(searchText).toLowerCase();
+							break;
+						case 'sourceani':
+							params.sourceani = String(searchText).toLowerCase();
+							break;
+						}
 					}
 
 					if (startDate) {
@@ -484,6 +492,11 @@ var ngInbox = {
 					controllerParent.$http.post(inspiniaNS.wsUrl + controllerParent.getListAction, $param)
 					// success function
 					.success(function(result) {
+						if (result.apicode != 0 && result.apicode !=7) {
+							controllerParent.$scope.$broadcast('itError', {
+								message : 'Error! ' + result.apitext
+							});
+						}
 						var fixedApiData = ngFunctions.ConvertObjectUTCDateTimePropsToLocalTime(result.apidata);
 						result.apidata = fixedApiData;
 						controllerParent.PostSuccess(controllerParent, result);
@@ -491,6 +504,9 @@ var ngInbox = {
 					// error function
 					.error(function(data, status, headers, config) {
 						console.log(ngInbox._internal.ErrorMsg);
+						controllerParent.$scope.$broadcast('itError', {
+							message : 'Error! ' + data.apitext
+						});
 					});
 				}
 			},
@@ -4481,7 +4497,7 @@ var ngAccount = {
 				.success(function(result) {
 					if (result.apicode == 0) {
 						// cpo.$scope.$broadcast('itMessage', {
-							// message : 'Token generated.'
+						// message : 'Token generated.'
 						// });
 						if (callback) {
 							callback(cpo, result);
