@@ -444,7 +444,7 @@ var ngInbox = {
 						controllerParent.getDataBlocked = false;
 					}, ngInbox._internal.getDataTimeout);
 
-					var pageSize = controllerParent.$scope.pagingOptions.pageSize;
+					var pageSize = Number(String(controllerParent.$scope.pagingOptions.pageSize).trim());
 					var page = controllerParent.$scope.pagingOptions.currentPage;
 
 					var searchText = controllerParent.$scope.filterOptions.filterText;
