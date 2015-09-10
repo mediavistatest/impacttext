@@ -2,134 +2,131 @@
     <head>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600,700' rel='stylesheet' type='text/css'>
             <style type="text/css">
-                body {
-                    font-family: Open Sans;
-                    margin: 0;
-                }
-                input {
-            background-color: #FFFFFF;
-            background-image: none;
-            border: 1px solid #e5e6e7;
-            border-radius: 1px;
-            color: inherit;
-            display: inline-block;
-            padding: 6px 12px;
-            transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-            width: 40%;
-            font-size: 14px;
-            }
-            input[type="button"] {
-                width:auto;
-                background: #005eaa;
-                color:white;
-            }
-            #output {
-            background: whitesmoke;
-            font-size: 15px;
-            width: auto;
-            display: inline-block;
-            box-sizing: border-box;
-            }
-            #output b {
-            display: block;
-            font-size: 15px;
-            }
-            #output a {
-            color: #005eaa;
-            font-size: 20px;
-            margin-top: 10px;
-            text-decoration: none;
-            }
-            #output span {
-                display: block;
-                padding: 20px 40px;
+                            body {
+                                font-family: Open Sans;
+                                margin: 0;
+                            }
+                            input {
+                        background-color: #FFFFFF;
+                        background-image: none;
+                        border: 1px solid #e5e6e7;
+                        border-radius: 1px;
+                        color: inherit;
+                        display: inline-block;
+                        padding: 6px 12px;
+                        transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+                        width: 40%;
+                        font-size: 14px;
+                        }
+                        input[type="button"] {
+                            width:auto;
+                            background: #005eaa;
+                            color:white;
+                        }
+                        #output {
+                        background: whitesmoke;
+                        font-size: 15px;
+                        width: auto;
+                        display: inline-block;
+                        box-sizing: border-box;
+                        }
+                        #output b {
+                        display: block;
+                        font-size: 15px;
+                        }
+                        #output a {
+                        color: #005eaa;
+                        font-size: 20px;
+                        margin-top: 10px;
+                        text-decoration: none;
+                        }
+                        #output span {
+                            display: block;
+                            padding: 20px 40px;
+                        }
+                        .btn-send {
+                color: #FFF;
+                background: #007D32 none repeat scroll 0% 0%;
+                
+                border: 1px solid #007D32;
+                padding: 5px 10px;
+                font-size: 14px;
             }
             .btn-send {
-    color: #FFF;
-    background: #007D32 none repeat scroll 0% 0%;
-    
-    border: 1px solid #007D32;
-    padding: 5px 10px;
-    font-size: 14px;
-}
-
-.btn-send {
-    cursor: pointer;
-}
-
+                cursor: pointer;
+            }
             </style>
         </head>
         <script src="https://apis.google.com/js/client.js"></script>
-    <script>
-      function auth() {
-        var config = {
-          'client_id': '647754619695-31mj85j3l1nnvsn5stqbupj602ku1g29.apps.googleusercontent.com',
-          'scope': 'https://www.googleapis.com/auth/urlshortener'
-        };
-        gapi.auth.authorize(config, function() {
-          console.log('login complete');
-          console.log(gapi.auth.getToken());
-        });
-      }
-    </script>
+        <script>
+            function auth() {
+                var config = {
+                'client_id': '1031091914122-2msfm57in1nniivpg8hljg33e0v45e1l.apps.googleusercontent.com',
+                'scope': 'https://www.googleapis.com/auth/urlshortener'
+                };
+                gapi.auth.authorize(config, function() {
+                console.log('login complete');
+                console.log(gapi.auth.getToken());
+                });
+            }
+        </script>
         <script type="text/javascript">
-            function makeShort()
-            {
-            var longUrl=document.getElementById("longurl").value;
-                var request = gapi.client.urlshortener.url.insert({
-                'resource': {
-                'longUrl': longUrl
-                }
-                });
-                request.execute(function(response)
-                {
-                    if(response.id != null)
+                    function makeShort()
                     {
-                        //str ="<b>Long URL:</b>"+longUrl+"<br>";
-                        str ="<span><b>Short URL:</b> <a href='"+response.id+"' target='_blank'>"+response.id+"</a></span>";
-                        document.getElementById("output").innerHTML = str;
+                    var longUrl=document.getElementById("longurl").value;
+                        var request = gapi.client.urlshortener.url.insert({
+                        'resource': {
+                        'longUrl': longUrl
+                        }
+                        });
+                        request.execute(function(response)
+                        {
+                            if(response.id != null)
+                            {
+                                //str ="<b>Long URL:</b>"+longUrl+"<br>";
+                                str ="<span><b>Short URL:</b> <a href='"+response.id+"' target='_blank'>"+response.id+"</a></span>";
+                                document.getElementById("output").innerHTML = str;
+                            }
+                            else
+                            {
+                                alert("error: creating short url n"+ response.error);
+                            }
+                        });
                     }
-                    else
+                    function getShortInfo()
                     {
-                        alert("error: creating short url n"+ response.error);
+                    var shortUrl=document.getElementById("shorturl").value;
+                        var request = gapi.client.urlshortener.url.get({
+                        'shortUrl': shortUrl,
+                        'projection':'FULL'
+                        });
+                        request.execute(function(response)
+                        {
+                            if(response.longUrl!= null)
+                            {
+                                str ="<b>Long URL:</b>"+response.longUrl+"<br>";
+                                str +="<b>Create On:</b>"+response.created+"<br>";
+                                str +="<b>Short URL Clicks:</b>"+response.analytics.allTime.shortUrlClicks+"<br>";
+                                str +="<b>Long URL Clicks:</b>"+response.analytics.allTime.longUrlClicks+"<br>";
+                                document.getElementById("output").innerHTML = str;
+                            }
+                            else
+                            {
+                                alert("error: "+response.error);
+                            }
+                        });
                     }
-                });
-            }
-            function getShortInfo()
-            {
-            var shortUrl=document.getElementById("shorturl").value;
-                var request = gapi.client.urlshortener.url.get({
-                'shortUrl': shortUrl,
-                'projection':'FULL'
-                });
-                request.execute(function(response)
-                {
-                    if(response.longUrl!= null)
+                    function load()
                     {
-                        str ="<b>Long URL:</b>"+response.longUrl+"<br>";
-                        str +="<b>Create On:</b>"+response.created+"<br>";
-                        str +="<b>Short URL Clicks:</b>"+response.analytics.allTime.shortUrlClicks+"<br>";
-                        str +="<b>Long URL Clicks:</b>"+response.analytics.allTime.longUrlClicks+"<br>";
-                        document.getElementById("output").innerHTML = str;
+                        //Get your own Browser API Key from  https://code.google.com/apis/console/
+                        gapi.client.setApiKey('AIzaSyBpwHtCdntDfjxd2z7AKFKbboHAGRkZ6BI');
+                        gapi.client.load('urlshortener', 'v1',function(){document.getElementById("output").innerHTML="";});
                     }
-                    else
-                    {
-                        alert("error: "+response.error);
-                    }
-                });
-            }
-            function load()
-            {
-                //Get your own Browser API Key from  https://code.google.com/apis/console/
-                gapi.client.setApiKey('AIzaSyBhu_eYng5nR_JmIoPX9wCwtdlXAXjMQqc');
-                gapi.client.load('urlshortener', 'v1',function(){document.getElementById("output").innerHTML="";});
-            }
-            window.onload = load;
+                    window.onload = load;
         </script>
         <script src="https://apis.google.com/js/client.js"> </script>
         <body>
-        <button onclick="auth();" class="btn btn-send">Authorize</button> <br><br>
-
+            <button onclick="auth();" class="btn btn-send">Authorize</button> <br><br>
             URL: <input type="text" id="longurl" name="url" placeholder="Enter website address you wish to shorten" value="" />
             <input type="button" value="Shorten" onclick="makeShort();" /> <br/> <br/>
             <!--URL: <input type="text" id="shorturl" name="url" placeholder="Insert short url" value="" /> <br/>
