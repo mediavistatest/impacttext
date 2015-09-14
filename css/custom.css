@@ -1359,25 +1359,24 @@ a.back-btn {
 a.navbar-minimalize {
     color: gold;
     border: none;
-    font-size: 20px;
-    position: absolute;
-    left: -15px;
-    top: -10px;
+    font-size: 18px;
+    /* position: absolute; */
+    /* left: -15px; */
+    /* top: -10px; */
+    background-color: #297fe5;
+    margin-left: 15px;
+    margin-top: 10px;
+    padding: 5px 7px;
+    display: none;
 }
 
-.mini-navbar a.navbar-minimalize {
-    color: gold;
-    border: none;
-    font-size: 20px;
-    position: static;
-    margin: 0 15px;
-}
 
-a.navbar-minimalize:hover, a.navbar-minimalize:active {
+
+a.navbar-minimalize:hover, a.navbar-minimalize:active, a.navbar-minimalize:focus {
     color: #d5a113;
     border: none;
     font-size: 20px;
-    background:none;
+    background:#58b8f9;
 }
 
 
@@ -2785,6 +2784,12 @@ body.mini-navbar .nav-header {
     display: block;
     margin-top: 10px;
 }*/
+    
+    @media (max-width:991px) {
+    a.navbar-minimalize {
+    display: block;
+}
+    }
 
 }
 @media (max-width: 768px) {
