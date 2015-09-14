@@ -54,7 +54,7 @@
 
 
 body {
-font-family: Montserrat, sans-serif;
+font-family: Open Sans, sans-serif;
 }
 
 .logo-name img {
@@ -137,17 +137,17 @@ nav.navbar-default.navbar-static-side.ng-scope {}
 
 .blue {
     background: #2269d1;
-    color: #318ffa;
+    color: #54a0fc;
 }
 
 .blue-light {
     background: #297fe5;
-    color: #47b4f9;
+    color: #58b8f9;
 }
 
 .yellow {
     background: #ffd731;
-    color: #d5a113;
+    color: #bf9e13;
 }
 
 .orange {
@@ -169,7 +169,7 @@ body {
 }
 
 .navbar-static-side .nav > li > a i {
-    color: #93daff;
+    color: white;
     font-size: 15px;
     margin-right: 10px;
     width: 17px;
@@ -440,7 +440,7 @@ a.addBtn {
     box-shadow: none;
     color: #999c9c;
     font-size: 14px;
-    font-family: Montserrat, sans-serif;
+    font-family: Open Sans, sans-serif;
     line-height: normal;
     border-radius: 0;
 }
@@ -498,7 +498,7 @@ label.checkbox {
     z-index: 9999;
     max-width: 400px;
     text-align: center;
-    background-color: #007d32;
+    background-color: #2269d1;
     color: white;
     padding: 15px 25px;
     border: none;
@@ -510,7 +510,7 @@ label.checkbox {
     visibility: hidden;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-    background: rgba(0, 124, 51, .7);
+    background: rgba(34, 105, 209, .7);
 }
 
 .dropup.discard-btn .dropdown-menu {
@@ -1029,7 +1029,7 @@ ul.dropdown-menu.time-pick span {
 }
 
 span.O, span.I {
-    background: #ef5352;
+    background: #ff9700;
     color: white;
     width: 20px;
     display: block;
@@ -1042,7 +1042,7 @@ span.O, span.I {
 }
 
 span.I {
-    background: #e46f1f;
+    background: #297fe5;
     color: white;
     width: 20px;
     display: block;
@@ -1055,7 +1055,7 @@ span.I {
 }
 
 span.B {
-    background: #efac59;
+    background: #ffd731;
     color: white;
     width: 20px;
     display: block;
@@ -1068,7 +1068,7 @@ span.B {
 }
 
 span.A {
-    background: #39b96a;
+    background: #ff9700;
     color: white;
     width: 20px;
     display: block;
@@ -1617,8 +1617,8 @@ span.li-label {
 }
 
 .orange {
-    background: #e36f1e;
-    color: #fbd3a8;
+    background: #ff9700;
+    color: #c67009;
 }
 
 .dashboard-table td, .dashboard-table th {
@@ -2187,7 +2187,7 @@ ul.bar-legend {
     width: 80%;
     height: auto;
     padding: 10px;
-    background: #dcf3fd;
+    background: #ebf2fc;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -2202,7 +2202,7 @@ ul.bar-legend {
     right: 39px;
     border-style: solid;
     border-width: 15px 13px 0;
-    border-color: #dcf3fd transparent;
+    border-color: #ebf2fc transparent;
     display: block;
     width: 0;
     z-index: 1;
@@ -2463,7 +2463,7 @@ ul.bar-legend {
   top: 7px;
   right: 10px;
   padding: 2px 7px;
-  background-color: #015598;
+  background-color: #c67009;
 }
 
 .add-list-contact.segment .chosen-wrapper, .add-list-contact.segment .form-control {
@@ -2628,7 +2628,7 @@ margin-top:60px;
 .gray-bg {
     background: #ebf2fc url(../img/background.png) no-repeat;
     background-position-y: 150px;
-    background-position-x: right;
+    background-position-x: 50%;
 }
 
 .icon.icon-compose {
@@ -2703,6 +2703,22 @@ body.mini-navbar .navbar-default .nav li a span.icon {
 .loginscreen .gray-bg {
     background-position-y: 50px;
 }
+
+
+body.mini-navbar .nav-header {
+    padding: 0;
+    background-color: #2269D1;
+}
+
+
+
+
+
+
+
+
+
+
 
 /*MEDIA QUERIES*/
 
