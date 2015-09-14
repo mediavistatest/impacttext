@@ -24,7 +24,7 @@
 	<!--SINGLE CONTACT -->
 	<div class="single-holder" ng-show="UploadType == 'single'">
 
-	<p>Add a single contact to this contact list. Please enter the contact information below.</p><br>
+	<p>Add a single contact to this contact list. Please enter the contact information below. <a href="http://www.impacttext.com/support/how-to/contacts-and-lists" target="_blank">Learn more.</a></p><br>
 
 	<div class="form-group clearfix">
 
@@ -94,13 +94,16 @@
 <!-- UPLOAD CONTACT-->
 <div class="upload-holder" ng-show="UploadType == 'upload'">
 
-<p>Upload a CSV file with phone numbers you wish to add to this contact list. Phone numbers must begin with a 1 followed by the area code (11 digits total). Your file must be in .csv format no larger than 1MB. Duplicate numbers will automatically be removed.</p><br>
+<p>Upload a CSV file with phone numbers you wish to add to a contact list. Phone numbers must begin with a 1 followed by the area code (11 digits total). Your file must be in .csv format no larger than 1MB. Duplicate numbers will automatically be removed.</p><br>
 	<div class="form-group clearfix">
 
 		<!--<input type="file" name="ListUpload" placeholder="Supported formats: CSV, XLS(X), TXT" ng-model="ListUpload" class="form-control">-->
 		<input type="file" id="csvFile" nv-file-select="" uploader="fileUploader" />
 		<small><br>Your list must begin with the phone number in column A and contain no headers. The following fields are optional: first name, last name, email, custom field 1, custom field 2, custom field 3, custom field 4, custom field 5, blank column, list name. You can use custom fields to collect information about each contact’s preferences, or to segment lists for campaigns. Please download a sample file showing the correct format <a href="/files/example.csv" download>here</a></small>
 	</div>
+	
+	<p>Please be sure to select a list. If your file does not contain list names, the contacts will automatically be added to this list. <a href="http://www.impacttext.com/support/how-to/contacts-and-lists" target="_blank">Learn more.</a> </p>
+	
 
 	<form method="POST" action=""></form>
 
