@@ -286,7 +286,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 	$scope.smsCode.AccCode = 'Long';
 	$scope.smsCode.ShortCode = '766337';
 	$scope.smsCode.ShortKeyword = 'Automatically Generated';
-	$scope.CompanyID = 1;
+	$scope.CompanyID = 2;
 	$scope.accountId = typeof $routeParams.accountId == 'undefined' ? null : $routeParams.accountId;
 	$scope.DidList = [];
 	$scope.UsersList = [];
@@ -417,7 +417,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.accountId = null;
 		$scope.AccountName = null;
 		$scope.ProductPackage = null;
-		$scope.CompanyID = 1;
+		$scope.CompanyID = 2;
 		$scope.smsCode.AccCode = 'Long';
 		$scope.BillingCycle = null,
 			$scope.FirstName = null,
