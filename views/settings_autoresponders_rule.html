@@ -1,7 +1,8 @@
 <h2 class="section-title">
 Autoresponders
 </h2>
-<br><br>
+<br>
+<br>
 <div class="top-buttons">
     <a ng-click="cpo.Events.BackToRules_onClick(cpo)" class="btn btn-back"><i class="fa fa-undo">
     </i>
@@ -335,215 +336,221 @@ Autoresponders
         <div class="form-group clearfix">
             <div class="col-sm-6 col-sm-offset-2">
                 <label class="checkbox">
-                    <input type="checkbox" value="yes" ng-model="arCtrl.addToList">
-                    Add sender to Opt-in list
+                    <input type="checkbox" ng-model="cpo.AddToListKeywordActionRule.checked">
+                    Add sender to Contact list
                 </label>
             </div>
+            <div class="col-sm-6 col-sm-offset-2" ng-show="cpo.AddToListKeywordActionRule.checked">
+                <span class="label-icon"><span><i class="glyphicon glyphicon-list-alt">
+                </i>
+                Choose contact list: &nbsp;&nbsp;&nbsp;&nbsp;</span></span>
+            <select class="page-select" ng-model="cpo.AddToListKeywordActionRule.selectedList" ng-options="list.contactListName for list in main.contactLists track by list.contactListID" style="width: 165px;"></select>
         </div>
-        <div class="form-group clearfix">
-            <div class="col-sm-6 col-sm-offset-2">
-                <label class="checkbox">
-                    <input type="checkbox" value="yes" ng-model="arCtrl.inactive">
-                    Make rule inactive
+    </div>
+    <div class="form-group clearfix">
+        <div class="col-sm-6 col-sm-offset-2">
+            <label class="checkbox">
+                <input type="checkbox" value="yes" ng-model="arCtrl.inactive">
+                Make rule inactive
+            </label>
+        </div>
+    </div>
+    <br>
+    <br>
+    <!--------------------------------------------------- Delays (actions) repeating section ------------------------------------------------------------>
+    <div class="form-group clearfix" ng-repeat="actionRule in cpo.keywordActionRules">
+        <div class="divider ng-scope"></div>
+        <div ng-show="$index>0">
+            <input icheck type="checkbox" ng-model="actionRule.checked" >
+            Delay Rule {{$index}}
+        </div>
+        <div class="ruleRepeatDiv" ng-show="actionRule.checked">
+            <div class="iphone-prev">
+                <div class="message-cloud">
+                    <span ng-show="arCtrl.fromName">
+                    {{arCtrl.fromName}}:
+                    </span>
+                    {{actionRule.messageTxt}} {{actionRule.optFields.OptOutTxt1}}{{actionRule.optFields.OptOutTxt2}}{{actionRule.optFields.OptOutTxt3}}
+                </div>
+            </div>
+            <div ng-show="$index>0" class="form-group clearfix">
+                <label class="col-sm-2 control-label">
+                    Delay:
                 </label>
+                <div class="col-md-10">
+                    <span class="label-icon"><i class="fa fa-clock-o">
+                    </i></span>
+                    <!-- Single button -->
+                    <div class="btn-group timing" dropdown is-open="actionRule.isopenHour">
+                        <input type="text" name="delayTimeHour" placeholder="Hour" class="form-control" dropdown-toggle ng-model='actionRule.delayTimeHour' readonly>
+                        <ul class="dropdown-menu time-pick" role="menu">
+                            <li>
+                                <span>
+                                Set hours
+                                </span>
+                            </li>
+                            <li>
+                                <a ng-click='actionRule.delayTimeHour = "00"'>
+                                00
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "01"'>
+                                01
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "02"'>
+                                02
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "03"'>
+                                03
+                                </a>
+                            </li>
+                            <li>
+                                <a ng-click='actionRule.delayTimeHour = "04"'>
+                                04
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "05"'>
+                                05
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "06"'>
+                                06
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "07"'>
+                                07
+                                </a>
+                            </li>
+                            <li>
+                                <a ng-click='actionRule.delayTimeHour = "08"'>
+                                08
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "09"'>
+                                09
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "10"'>
+                                10
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "11"'>
+                                11
+                                </a>
+                            </li>
+                            <li>
+                                <a ng-click='actionRule.delayTimeHour = "12"'>
+                                12
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "13"'>
+                                13
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "14"'>
+                                14
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "15"'>
+                                15
+                                </a>
+                            </li>
+                            <li>
+                                <a ng-click='actionRule.delayTimeHour = "16"'>
+                                16
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "17"'>
+                                17
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "18"'>
+                                18
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "19"'>
+                                19
+                                </a>
+                            </li>
+                            <li>
+                                <a ng-click='actionRule.delayTimeHour = "20"'>
+                                20
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "21"'>
+                                21
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "22"'>
+                                22
+                                </a>
+                                <a ng-click='actionRule.delayTimeHour = "23"'>
+                                23
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    &nbsp;:&nbsp;
+                    <!-- Single button -->
+                    <div class="btn-group timing" dropdown is-open="actionRule.isopenMinute">
+                        <input type="text" name="delayTimeMinute" placeholder="Minute" class="form-control" dropdown-toggle ng-model='actionRule.delayTimeMinute' readonly>
+                        <ul class="dropdown-menu time-pick" role="menu">
+                            <li>
+                                <span>
+                                Set minutes
+                                </span>
+                            </li>
+                            <li>
+                                <a ng-click='actionRule.delayTimeMinute = "00"'>
+                                00
+                                </a>
+                                <a ng-click='actionRule.delayTimeMinute = "15"'>
+                                15
+                                </a>
+                                <a ng-click='actionRule.delayTimeMinute = "30"'>
+                                30
+                                </a>
+                                <a ng-click='actionRule.delayTimeMinute = "45"'>
+                                45
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
-        <br>
-        <br>
-        <!--------------------------------------------------- Delays (actions) repeating section ------------------------------------------------------------>
-        <div class="form-group clearfix" ng-repeat="actionRule in cpo.keywordActionRules">
-            <div class="divider ng-scope"></div>
-            <div ng-show="$index>0">
-                <input icheck type="checkbox" ng-model="actionRule.checked" >
-                Delay Rule {{$index}}
+            <div class="form-group clearfix">
+                <label class="col-sm-2 control-label">
+                    Autoresponse Text:
+                </label>
+                <div class="col-sm-6">
+                    <textarea name="{{'MessageTxt'+$index}}" class="form-control" ng-maxlength="{{arCtrl.maxLength - ((arCtrl.fromName.length > 0 && arCtrl.fromName.length + 2 || arCtrl.fromName.length) + (actionRule.optFields.OptOutTxt1.length > 0 && actionRule.optFields.OptOutTxt1.length + 1 || actionRule.optFields.OptOutTxt1.length)  + (actionRule.optFields.OptOutTxt2.length > 0 && actionRule.optFields.OptOutTxt2.length + 1 || actionRule.optFields.OptOutTxt2.length)+ (actionRule.optFields.OptOutTxt3.length > 0 && actionRule.optFields.OptOutTxt3.length + 1 || actionRule.optFields.OptOutTxt3.length))}}" rows="3" ng-model="actionRule.messageTxt" ng-trim="false" ng-required="actionRule.checked"></textarea>
+                    <div ng-hide="autoresponderForm['MessageTxt'+$index].$error.maxlength" class="text-counter">
+                        {{arCtrl.maxLength - ((arCtrl.fromName.length > 0 && arCtrl.fromName.length + 2 || arCtrl.fromName.length) + actionRule.messageTxt.length + (actionRule.optFields.OptOutTxt1.length > 0 && actionRule.optFields.OptOutTxt1.length + 1 || actionRule.optFields.OptOutTxt1.length)  + (actionRule.optFields.OptOutTxt2.length > 0 && actionRule.optFields.OptOutTxt2.length + 1 || actionRule.optFields.OptOutTxt2.length)+ (actionRule.optFields.OptOutTxt3.length > 0 && actionRule.optFields.OptOutTxt3.length + 1 || actionRule.optFields.OptOutTxt3.length))}} characters left.
+                    </div>
+                    <div ng-show="autoresponderForm['MessageTxt'+$index].$error.maxlength" class="text-counter error">
+                        Limit reached!
+                    </div>
+                </div>
             </div>
-            <div class="ruleRepeatDiv" ng-show="actionRule.checked">
-                <div class="iphone-prev">
-                    <div class="message-cloud">
-                        <span ng-show="arCtrl.fromName">
-                        {{arCtrl.fromName}}:
-                        </span>
-                        {{actionRule.messageTxt}} {{actionRule.optFields.OptOutTxt1}}{{actionRule.optFields.OptOutTxt2}}{{actionRule.optFields.OptOutTxt3}}
+            <div class="form-group clearfix">
+                <label class="col-sm-2 control-label">
+                    Opt-out Message:
+                </label>
+                <div class="col-sm-6">
+                    <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="actionRule.OptOutMsg">
+                        <option value="standard">
+                            Standard
+                        </option>
+                        <option value="custom">
+                            Custom opt-out message
+                        </option>
+                        <option value="noMessage">
+                            No opt-out message
+                        </option>
+                        <option value="write">
+                            Write opt-out message
+                        </option>
+                    </select>
+                    <div class="animate-switch-container" ng-switch on="actionRule.OptOutMsg">
+                        <textarea ng-switch-when="standard" ng-init="actionRule.optFields.OptOutTxt1='Reply STOP to end msgs.'; actionRule.optFields.OptOutTxt2=''; actionRule.optFields.OptOutTxt3=''" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="actionRule.optFields.OptOutTxt1" ng-trim="false" readonly></textarea>
+                        <textarea ng-switch-when="custom" ng-init="actionRule.optFields.OptOutTxt1=''; actionRule.optFields.OptOutTxt2=main.Settings.defaultOptOutText; actionRule.optFields.OptOutTxt3=''" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="actionRule.optFields.OptOutTxt2" ng-trim="false" readonly></textarea>
+                        <textarea ng-switch-when="noMessage" ng-init="actionRule.optFields.OptOutTxt1=''; actionRule.optFields.OptOutTxt2=''; actionRule.optFields.OptOutTxt3=''" name="message" class="form-control opt-out disabled" rows="2" disabled></textarea>
+                        <textarea ng-switch-when="write" ng-init="actionRule.optFields.OptOutTxt1=''; actionRule.optFields.OptOutTxt2=''" placeholder="Write your opt-out message" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="actionRule.optFields.OptOutTxt3"  ng-trim="false" ></textarea>
                     </div>
                 </div>
-                <div ng-show="$index>0" class="form-group clearfix">
-                    <label class="col-sm-2 control-label">
-                        Delay:
-                    </label>
-                    <div class="col-md-10">
-                        <span class="label-icon"><i class="fa fa-clock-o">
-                        </i></span>
-                        <!-- Single button -->
-                        <div class="btn-group timing" dropdown is-open="actionRule.isopenHour">
-                            <input type="text" name="delayTimeHour" placeholder="Hour" class="form-control" dropdown-toggle ng-model='actionRule.delayTimeHour' readonly>
-                            <ul class="dropdown-menu time-pick" role="menu">
-                                <li>
-                                    <span>
-                                    Set hours
-                                    </span>
-                                </li>
-                                <li>
-                                    <a ng-click='actionRule.delayTimeHour = "00"'>
-                                    00
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "01"'>
-                                    01
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "02"'>
-                                    02
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "03"'>
-                                    03
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='actionRule.delayTimeHour = "04"'>
-                                    04
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "05"'>
-                                    05
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "06"'>
-                                    06
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "07"'>
-                                    07
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='actionRule.delayTimeHour = "08"'>
-                                    08
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "09"'>
-                                    09
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "10"'>
-                                    10
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "11"'>
-                                    11
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='actionRule.delayTimeHour = "12"'>
-                                    12
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "13"'>
-                                    13
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "14"'>
-                                    14
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "15"'>
-                                    15
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='actionRule.delayTimeHour = "16"'>
-                                    16
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "17"'>
-                                    17
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "18"'>
-                                    18
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "19"'>
-                                    19
-                                    </a>
-                                </li>
-                                <li>
-                                    <a ng-click='actionRule.delayTimeHour = "20"'>
-                                    20
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "21"'>
-                                    21
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "22"'>
-                                    22
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeHour = "23"'>
-                                    23
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        &nbsp;:&nbsp;
-                        <!-- Single button -->
-                        <div class="btn-group timing" dropdown is-open="actionRule.isopenMinute">
-                            <input type="text" name="delayTimeMinute" placeholder="Minute" class="form-control" dropdown-toggle ng-model='actionRule.delayTimeMinute' readonly>
-                            <ul class="dropdown-menu time-pick" role="menu">
-                                <li>
-                                    <span>
-                                    Set minutes
-                                    </span>
-                                </li>
-                                <li>
-                                    <a ng-click='actionRule.delayTimeMinute = "00"'>
-                                    00
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeMinute = "15"'>
-                                    15
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeMinute = "30"'>
-                                    30
-                                    </a>
-                                    <a ng-click='actionRule.delayTimeMinute = "45"'>
-                                    45
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group clearfix">
-                    <label class="col-sm-2 control-label">
-                        Autoresponse Text:
-                    </label>
-                    <div class="col-sm-6">
-                        <textarea name="{{'MessageTxt'+$index}}" class="form-control" ng-maxlength="{{arCtrl.maxLength - ((arCtrl.fromName.length > 0 && arCtrl.fromName.length + 2 || arCtrl.fromName.length) + (actionRule.optFields.OptOutTxt1.length > 0 && actionRule.optFields.OptOutTxt1.length + 1 || actionRule.optFields.OptOutTxt1.length)  + (actionRule.optFields.OptOutTxt2.length > 0 && actionRule.optFields.OptOutTxt2.length + 1 || actionRule.optFields.OptOutTxt2.length)+ (actionRule.optFields.OptOutTxt3.length > 0 && actionRule.optFields.OptOutTxt3.length + 1 || actionRule.optFields.OptOutTxt3.length))}}" rows="3" ng-model="actionRule.messageTxt" ng-trim="false" ng-required="actionRule.checked"></textarea>
-                        <div ng-hide="autoresponderForm['MessageTxt'+$index].$error.maxlength" class="text-counter">
-                            {{arCtrl.maxLength - ((arCtrl.fromName.length > 0 && arCtrl.fromName.length + 2 || arCtrl.fromName.length) + actionRule.messageTxt.length + (actionRule.optFields.OptOutTxt1.length > 0 && actionRule.optFields.OptOutTxt1.length + 1 || actionRule.optFields.OptOutTxt1.length)  + (actionRule.optFields.OptOutTxt2.length > 0 && actionRule.optFields.OptOutTxt2.length + 1 || actionRule.optFields.OptOutTxt2.length)+ (actionRule.optFields.OptOutTxt3.length > 0 && actionRule.optFields.OptOutTxt3.length + 1 || actionRule.optFields.OptOutTxt3.length))}} characters left.
-                        </div>
-                        <div ng-show="autoresponderForm['MessageTxt'+$index].$error.maxlength" class="text-counter error">
-                            Limit reached!
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group clearfix">
-                    <label class="col-sm-2 control-label">
-                        Opt-out Message:
-                    </label>
-                    <div class="col-sm-6">
-                        <select chosen data-placeholder="Select opt-out message..." disable-search="true" class="form-control m-b" name="OptOutMsg" ng-model="actionRule.OptOutMsg">
-                            <option value="standard">
-                                Standard
-                            </option>
-                            <option value="custom">
-                                Custom opt-out message
-                            </option>
-                            <option value="noMessage">
-                                No opt-out message
-                            </option>
-                            <option value="write">
-                                Write opt-out message
-                            </option>
-                        </select>
-                        <div class="animate-switch-container" ng-switch on="actionRule.OptOutMsg">
-                            <textarea ng-switch-when="standard" ng-init="actionRule.optFields.OptOutTxt1='Reply STOP to end msgs.'; actionRule.optFields.OptOutTxt2=''; actionRule.optFields.OptOutTxt3=''" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="actionRule.optFields.OptOutTxt1" ng-trim="false" readonly></textarea>
-                            <textarea ng-switch-when="custom" ng-init="actionRule.optFields.OptOutTxt1=''; actionRule.optFields.OptOutTxt2=main.Settings.defaultOptOutText; actionRule.optFields.OptOutTxt3=''" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="actionRule.optFields.OptOutTxt2" ng-trim="false" readonly></textarea>
-                            <textarea ng-switch-when="noMessage" ng-init="actionRule.optFields.OptOutTxt1=''; actionRule.optFields.OptOutTxt2=''; actionRule.optFields.OptOutTxt3=''" name="message" class="form-control opt-out disabled" rows="2" disabled></textarea>
-                            <textarea ng-switch-when="write" ng-init="actionRule.optFields.OptOutTxt1=''; actionRule.optFields.OptOutTxt2=''" placeholder="Write your opt-out message" name="message" class="form-control opt-out animate-switch" rows="2" ng-model="actionRule.optFields.OptOutTxt3"  ng-trim="false" ></textarea>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 tip">
-                        <i class="fa fa-info-circle" tooltip='This will count in your character limit.'>
-                        </i>
-                    </div>
+                <div class="col-sm-4 tip">
+                    <i class="fa fa-info-circle" tooltip='This will count in your character limit.'>
+                    </i>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </form>
 <br>
 <br>
