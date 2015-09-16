@@ -429,6 +429,51 @@ button.btn.btn-search {
     border:1px solid #297fe5;
 }
 
+.gray-bg {
+    background: #ebf2fc url(../../img/background.png) no-repeat;
+    background-position-y: 150px;
+    background-position-x: 50%;
+}
+
+.loginscreen .form-control, .loginscreen  .single-line {
+    background-color: #2269D1;
+    border: none;
+    color: white;
+}
+
+.loginscreen .btn.btn-primary {
+    background-color: #FF9700;
+    border-color: transparent;
+    color: #FFFFFF;
+    width: auto !important;
+    margin: 0 auto;
+    padding: 5px 8px;
+}
+
+.loginscreen ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:   lightblue!important;
+}
+.loginscreen :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    lightblue !important;
+   opacity:  1;
+}
+.loginscreen ::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    lightblue !important;
+   opacity:  1;
+}
+.loginscreen :-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:    lightblue !important;
+}
+
+a.logout-btn {
+    float: right;
+    margin-top: 35px;
+    color: white;
+}
+a.logout-btn:hover {
+    color: lightblue;
+    text-decoration: none;
+}
 @media (max-width:1200px) {
     .content-holder label.double {
         line-height: 17px;
