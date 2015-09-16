@@ -355,6 +355,16 @@ margin-bottom:5px;
     float: left;
 }
 
+a.logout-btn {
+    float: right;
+    margin-top: 35px;
+    color: white;
+}
+a.logout-btn:hover {
+    color: #b4ecca;
+    text-decoration: none;
+}
+
 @media (max-width:1200px) {
 .content-holder label.double {
     line-height: 17px;
