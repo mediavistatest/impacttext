@@ -828,7 +828,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         // }
         forwardToMail : function(from, to, date, inMessage) {
             var message = inMessage.replace(/\ /g, '%20');
-            var href = 'mailto:?subject=ImpactText%20-%20Forwarded%20SMS&body=From%20' + from + ';%20To%20' + to + ';%20' + date + ';%20' + message;
+            var href = 'mailto:?subject=CentralMessage%20-%20Forwarded%20SMS&body=From%20' + from + ';%20To%20' + to + ';%20' + date + ';%20' + message;
             window.location.href = href;
         },
         setContactListsAndSegments : function() {
