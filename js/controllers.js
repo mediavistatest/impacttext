@@ -823,7 +823,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         },
         // forwardToMail : function(messageObject) {
         // var message = messageObject.message.replace(/\ /g, '%20');
-        // var href = 'mailto:?subject=ImpactText%20-%20Forwarded%20SMS&body=From%20'+messageObject.DID +';%20'+messageObject.messageDate+';%20'+ message;
+        // var href = 'mailto:?subject=CentralMessage%20-%20Forwarded%20SMS&body=From%20'+messageObject.DID +';%20'+messageObject.messageDate+';%20'+ message;
         // window.location.href = href;
         // }
         forwardToMail : function(from, to, date, inMessage) {
