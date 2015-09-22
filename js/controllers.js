@@ -4790,7 +4790,7 @@ function ngActivityLogListCtrl($scope, $http, $cookieStore) {
             width : 150
         }, {
             field : 'request',
-            displayName : 'Short description'
+            displayName : 'Action'
         }]
     };
 
