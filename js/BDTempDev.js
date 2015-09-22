@@ -3769,7 +3769,6 @@ var ngSettings = {
                 if (!cpo.AddToListKeywordActionRule.selectedList.contactListID) {
                     cpo.AddToListKeywordActionRule.selectedList = cpo.$scope.main.contactLists[0];
                 }
-                console.log(Number(cpo.AddToListKeywordActionRule.selectedList.contactListID))
 
                 cpo.AddToListKeywordActionRule.ruleParams = {
                     contactlistid : Number(cpo.AddToListKeywordActionRule.selectedList.contactListID)
