@@ -558,7 +558,7 @@ Autoresponders
 <!------------------------------------------------ Bottom buttons -------------------------------------------------------------->
 <div class="row">
     <div class="col-sm-6 ">
-        <button class="btn btn-send smaller " ng-click="autoresponderForm.$valid && cpo.Events.Save_onClick(cpo)" ng-disabled="!autoresponderForm.$valid">
+        <button class="btn btn-send smaller " ng-click="autoresponderForm.$valid && cpo.Events.Save_onClick(cpo)" ng-disabled="(!autoresponderForm.$valid || (cpo.AddToListKeywordActionRule.checked && cpo.AddToListKeywordActionRule.selectedList && !cpo.AddToListKeywordActionRule.selectedList.contactListID))">
             <span><i class="fa fa-floppy-o">
                 </i>
                 Save changes</span>
