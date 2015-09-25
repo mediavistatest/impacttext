@@ -3964,7 +3964,7 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
         custom5 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
         language : ['- - -', '=', '<>'],
         createddate : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        statusdate : ['- - -', '=', '<', '>', '<=', '>=', '<>']
+		  updateddate : ['- - -', '=', '<', '>', '<=', '>=', '<>']
     };
 
     $scope.availableFields = {
@@ -3980,7 +3980,7 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
         custom5 : "Custom field 5",
         language : "Language",
         createddate : "Created date",
-        statusdate : "Modified date"
+		  updateddate : "Modified date"
     };
     $scope.availableFieldsKeys = Object.keys($scope.availableFields);
 
@@ -4070,7 +4070,7 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
                         $scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
                     }
 
-                    if ((segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate') && !empty(segmentFilter.value)) {
+                    if ((segmentFilter.field == 'createddate' || segmentFilter.field == 'updateddate') && !empty(segmentFilter.value)) {
                         segmentFilter.value = ngFunctions.ConvertDateToMySqlDate(segmentFilter.value);
                     }
 
@@ -4217,7 +4217,7 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
         custom5 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
         language : ['- - -', '=', '<>'],
         createddate : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        statusdate : ['- - -', '=', '<', '>', '<=', '>=', '<>']
+		  updateddate : ['- - -', '=', '<', '>', '<=', '>=', '<>']
     };
 
     $scope.availableFields = {
@@ -4233,7 +4233,7 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
         custom5 : "Custom field 5",
         language : "Language",
         createddate : "Created date",
-        statusdate : "Modified date"
+		  updateddate : "Modified date"
     };
     $scope.availableFieldsKeys = Object.keys($scope.availableFields);
 
@@ -4302,7 +4302,7 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
                         $scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
                     }
 
-                    if ((segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate') && !empty(segmentFilter.value)) {
+                    if ((segmentFilter.field == 'createddate' || segmentFilter.field == 'updateddate') && !empty(segmentFilter.value)) {
                         segmentFilter.value = ngFunctions.ConvertDateToMySqlDate(segmentFilter.value);
                     }
                     $scope.ContactFilter += $.trim(segmentFilter.field) + $.trim(segmentFilter.comparator) + "{" + $.trim(segmentFilter.value) + "}";

@@ -50,8 +50,8 @@
 						<select name="comparator-{{$index}}" class="comparator form-control inline" ng-model="segmentFilter.comparator"
 								  ng-options="comparator for comparator in availableComparators[segmentFilter.field]"> </select>
 
-						<input ng-if="segmentFilter.field != 'createddate' && segmentFilter.field != 'statusdate'" type="text" name="value-{{$index}}" ng-model="segmentFilter.value" class="value form-control inline with-comparator" />
-						<div ng-if="segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate'" class="btn-group datetimepicker-wrapper">
+						<input ng-if="segmentFilter.field != 'createddate' && segmentFilter.field != 'updateddate'" type="text" name="value-{{$index}}" ng-model="segmentFilter.value" class="value form-control inline with-comparator" />
+						<div ng-if="segmentFilter.field == 'createddate' || segmentFilter.field == 'updateddate'" class="btn-group datetimepicker-wrapper">
 							<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="segmentFilter.value" is-open="DateOpened[$index]" datepicker-options="dateOptions" close-text="Close" ng-click="open($event, $index)" />
 						</div>
 
