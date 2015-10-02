@@ -1,17 +1,13 @@
 <h1>Contacts</h1>
-
 <div class="col-md-12 content-holder animated fadeInRight add-list-contact segment" ng-class="animation" ng-controller="EditSegmentCtrl">
-	<h2 class="section-title">Manage Segments</h2>
-	<div class="top-buttons">
-		<a ng-hide="controllerParent" ui-sref="lists.segments" class="btn btn-back"><i class="fa fa-undo"></i> Back to Segments</a>
-	</div>
-
-	<div>
-		<br />
-
-		<form name="save_segment_form">
-
-			<!--SINGLE SEGMENT -->
+    <h2 class="section-title">Manage Segments</h2>
+    <div class="top-buttons">
+        <a ng-hide="controllerParent" ui-sref="lists.segments" class="btn btn-back"><i class="fa fa-undo"></i> Back to Segments</a>
+    </div>
+    <div>
+        <br />
+        <form name="save_segment_form">
+           <!--SINGLE SEGMENT -->
 			<div class="single-holder" >
 
 				<div class="form-group clearfix">
@@ -50,8 +46,8 @@
 						<select name="comparator-{{$index}}" class="comparator form-control inline" ng-model="segmentFilter.comparator"
 								  ng-options="comparator for comparator in availableComparators[segmentFilter.field]"> </select>
 
-						<input ng-if="segmentFilter.field != 'createddate' && segmentFilter.field != 'statusdate'" type="text" name="value-{{$index}}" ng-model="segmentFilter.value" class="value form-control inline with-comparator" />
-						<div ng-if="segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate'" class="btn-group datetimepicker-wrapper">
+						<input ng-if="segmentFilter.field != 'createddate' && segmentFilter.field != 'updateddate'" type="text" name="value-{{$index}}" ng-model="segmentFilter.value" class="value form-control inline with-comparator" />
+						<div ng-if="segmentFilter.field == 'createddate' || segmentFilter.field == 'updateddate'" class="btn-group datetimepicker-wrapper">
 							<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="segmentFilter.value" is-open="DateOpened[$index]" datepicker-options="dateOptions" close-text="Close" ng-click="open($event, $index)" />
 						</div>
 
@@ -76,45 +72,37 @@
 				</div>
 
 			</div><!-- END SINGLE -->
-
-
-			<br />
-			<a class="btn btn-preview smaller" ng-click="previewSegment()" ng-disabled="disableFields">
-				<span><i class="fa fa-eye"></i> Preview contacts</span>
-			</a>
-			<a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="saveSegment()" ng-disabled="disableFields">
-				<span><i class="fa fa-floppy-o"></i> Save</span>
-			</a>
-			<a class="btn btn-send delete smaller" ng-click="deleteSegment()" ng-disabled="disableFields">
-				<span><i class="fa fa-trash"></i> Delete</span>
-			</a>
-
-		</form>
-
-	</div>
-
-	<div id="segment-preview-wrapper" ng-controller="PreviewSegmentCtrl">
-		<div ng-show="loading">
-			<div class="loading">Loading preview ...</div>
-		</div>
-		<div class="table-holder" ng-show="!loading">
-			<h2 class="section-title">Preview contacts</h2>
-			<p>Segment contact list preview</p>
-			<div class="page-select-wrapper">
-				<strong>Show:</strong>&nbsp; <select class="page-select" ng-model="pagingOptions.pageSize">
-				<option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
-			</select>
-			</div>
-
-			<br />
-			<!--START TABLE-->
-			<div id="segment-contacts-grid" class="gridStyle" ng-grid="ngOptions"></div>
-
-			<!--Bottom Actions -->
-			<div class="bottom-table-toolbar" ng-if="totalServerItems">
-				<a class="btn" ng-click="export()"><i class="fa fa-file-excel-o"></i> Export all contacts</a>
-			</div>
-		</div>
-	</div>
-
-</div>
+                <br />
+                <a class="btn btn-preview smaller" ng-click="previewSegment()" ng-disabled="disableFields">
+                <span><i class="fa fa-eye"></i> Preview contacts</span>
+                </a>
+                <a class="btn btn-send smaller" ng-controller="notifyCtrl" ng-click="saveSegment()" ng-disabled="disableFields">
+                <span><i class="fa fa-floppy-o"></i> Save</span>
+                </a>
+                <a class="btn btn-send delete smaller" ng-click="deleteSegment()" ng-disabled="disableFields">
+                <span><i class="fa fa-trash"></i> Delete</span>
+                </a>
+            </form>
+        </div>
+        <div id="segment-preview-wrapper" ng-controller="PreviewSegmentCtrl">
+            <div ng-show="loading">
+                <div class="loading">Loading preview ...</div>
+            </div>
+            <div class="table-holder" ng-show="!loading">
+                <h2 class="section-title">Preview contacts</h2>
+                <p>Segment contact list preview</p>
+                <div class="page-select-wrapper">
+                    <strong>Show:</strong>&nbsp; <select class="page-select" ng-model="pagingOptions.pageSize">
+                        <option ng-repeat="size in pagingOptions.pageSizes">{{size}}</option>
+                    </select>
+                </div>
+                <br />
+                <!--START TABLE-->
+                <div id="segment-contacts-grid" class="gridStyle" ng-grid="ngOptions"></div>
+                <!--Bottom Actions -->
+                <div class="bottom-table-toolbar" ng-if="totalServerItems">
+                    <a class="btn" ng-click="export()"><i class="fa fa-file-excel-o"></i> Export all contacts</a>
+                </div>
+            </div>
+        </div>
+    </div>

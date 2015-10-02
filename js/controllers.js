@@ -1,24 +1,45 @@
 /*
+ 
  * Functions (controllers)
+ 
  *  - MainCtrl
+ 
  *  - dashboardFlotOne
+ 
  *  - dashboardFlotTwo
+ 
  *  - dashboardMap
+ 
  *  - flotChartCtrl
+ 
  *  - rickshawChartCtrl
+ 
  *  - sparklineChartCtrl
+ 
  *  - widgetFlotChart
+ 
  *  - modalDemoCtrl
+ 
  *  - ionSlider
+ 
  *  - wizardCtrl
+ 
  *  - CalendarCtrl
+ 
  *  - chartJsCtrl
+ 
  *  - GoogleMaps
+ 
  *  - ngGridCtrl
+ 
  *  - codeEditorCtrl
+ 
  *  - nestableCtrl
+ 
  *  - notifyCtrl
+ 
  *  - translateCtrl
+ 
  */
 var mainObject;
 
@@ -32,16 +53,16 @@ function setPagingDataSliced($scope, data, totalResultsCount) {
     if (!$scope.$$phase) {
         $scope.$apply();
     }
-    if ( typeof $scope.ngOptions.selectAll == 'function') {
+    if (typeof $scope.ngOptions.selectAll == 'function') {
         $scope.ngOptions.selectAll(false);
     }
 }
 
 function generateOrderByField(sortFields, sortOrders) {
-    if ( typeof sortFields == 'undefined' || sortFields == null) {
+    if (typeof sortFields == 'undefined' || sortFields == null) {
         sortFields = [];
     }
-    if ( typeof sortOrders == 'undefined' || sortOrders == null) {
+    if (typeof sortOrders == 'undefined' || sortOrders == null) {
         sortOrders = [];
     }
     var orderBy = '';
@@ -57,11 +78,14 @@ function generateOrderByField(sortFields, sortOrders) {
     }
     return orderBy;
 }
-
 /**
+ 
  * MainCtrl - controller
+ 
  * Contains severals global data used in diferent view
+ 
  *
+ 
  */
 function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
     var main = this;
@@ -71,18 +95,17 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
     main.ipCookie = ipCookie;
     // settings
     main.Settings = {
-        defaultOptOutText : 'Reply STOP to end msgs.',
-        defaultPageSize : '10',
-        Numbers : [
-        // {
-        // DID : '',
-        // name : ''
-        // }
+        defaultOptOutText: 'Reply STOP to end msgs.',
+        defaultPageSize: '10',
+        Numbers: [
+            // {
+            // DID : '',
+            // name : ''
+            // }
         ]
     };
-
     main.DataConstructors = {
-        ScheduledDateTime : function() {
+        ScheduledDateTime: function() {
             var self = this;
             self.SetDate = new Date();
             self.SetTimeHour = '00';
@@ -97,7 +120,6 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
             self.opened_recurring = false;
         }
     };
-
     var settingsCookie = main.ipCookie('itSettings');
     if (settingsCookie != null) {
         for (setting in settingsCookie) {
@@ -109,98 +131,90 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
     main.companyInfo = {};
     main.authToken = $cookieStore.get('inspinia_auth_token');
     main.accountID = $cookieStore.get('inspinia_account_id');
-
     main.fromNumbersString = '';
     //Server request logic here
     main.ServerRequests = {
-        autoresponderActionGet : function() {
+        autoresponderActionGet: function() {
             $http.post(inspiniaNS.wsUrl + "autoresponder_action_get", $.param({
-                sethttp : 1,
-                apikey : main.authToken,
-                accountID : main.accountID
+                sethttp: 1,
+                apikey: main.authToken,
+                accountID: main.accountID
             })).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    main.autoresponder_action_get = [];
-                    return;
-                }
-                if (data.apicode == 0) {
-                    //Reading contact lists
-                    main.autoresponder_action_get = data.apidata;
-                } else {
-                    main.autoresponder_action_get = [];
-                }
-                // console.log(main.autoresponder_action_get)
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to fetch contact lists!');
-                if (status == 400) {
-                    alert("An error occurred when getting contact lists! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
-                }
-            });
+                //Successful request to the server
+                function(data, status, headers, config) {
+                    if (data == null || typeof data.apicode == 'undefined') {
+                        //This should never happen
+                        main.autoresponder_action_get = [];
+                        return;
+                    }
+                    if (data.apicode == 0) {
+                        //Reading contact lists
+                        main.autoresponder_action_get = data.apidata;
+                    } else {
+                        main.autoresponder_action_get = [];
+                    }
+                    // console.log(main.autoresponder_action_get)
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    //alert('Unexpected error occurred when trying to fetch contact lists!');
+                    if (status == 400) {
+                        alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+                        alert(JSON.stringify(data));
+                    }
+                });
         },
-        contactListsGet : function(callback) {
+        contactListsGet: function(callback) {
             main.contactLists = [];
-
             //Read the data from the remote server. First read the contact lists.
             $http.post(inspiniaNS.wsUrl + "contactlist_get", $.param({
-                sethttp : 1,
-                apikey : main.authToken,
-                accountID : main.accountID,
-                companyID : main.accountInfo.companyID,
-                status : 'A'
+                sethttp: 1,
+                apikey: main.authToken,
+                accountID: main.accountID,
+                companyID: main.accountInfo.companyID,
+                status: 'A'
             })).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-
-                    if ( typeof callback == 'function') {
+                //Successful request to the server
+                function(data, status, headers, config) {
+                    if (data == null || typeof data.apicode == 'undefined') {
+                        //This should never happen
+                        if (typeof callback == 'function') {
+                            callback(main.contactLists);
+                        }
+                        return;
+                    }
+                    if (data.apicode == 0) {
+                        //Reading contact lists
+                        main.contactLists = data.apidata;
+                    } else {
+                        main.contactLists = [];
+                    }
+                    if (typeof callback == 'function') {
                         callback(main.contactLists);
                     }
-
-                    return;
-                }
-                if (data.apicode == 0) {
-                    //Reading contact lists
-                    main.contactLists = data.apidata;
-                } else {
-                    main.contactLists = [];
-                }
-
-                if ( typeof callback == 'function') {
-                    callback(main.contactLists);
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to fetch contact lists!');
-                if (status == 400) {
-                    alert("An error occurred when getting contact lists! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
-                }
-            });
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    //alert('Unexpected error occurred when trying to fetch contact lists!');
+                    if (status == 400) {
+                        alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+                        alert(JSON.stringify(data));
+                    }
+                });
         },
-        contactSegmentsGet : function(callback) {
+        contactSegmentsGet: function(callback) {
             main.contactSegments = [];
-
             $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param({
-                sethttp : 1,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                orderby : 'contactSelectionName asc'
+                sethttp: 1,
+                apikey: $cookieStore.get('inspinia_auth_token'),
+                accountID: $cookieStore.get('inspinia_account_id'),
+                orderby: 'contactSelectionName asc'
             })).success(function(data) {
                 if (data == null || typeof data.apicode == 'undefined') {
                     main.contactSegments = [];
-
-                    if ( typeof callback == 'function') {
+                    if (typeof callback == 'function') {
                         callback(main.contactSegments);
                     }
-
                     return;
                 }
                 if (data.apicode == 0) {
@@ -209,8 +223,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 } else {
                     main.contactSegments = [];
                 }
-
-                if ( typeof callback == 'function') {
+                if (typeof callback == 'function') {
                     callback(main.contactSegments);
                 }
             }).error(function(data, status, headers, config) {
@@ -220,75 +233,71 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 }
             });
         },
-        accountKeywordGet : function(success, error) {
+        accountKeywordGet: function(success, error) {
             $http.post(inspiniaNS.wsUrl + "accountkeyword_get", $.param({
-                sethttp : 1,
-                apikey : main.authToken,
-                accountID : main.accountID,
-                companyID : main.accountInfo.companyID
+                sethttp: 1,
+                apikey: main.authToken,
+                accountID: main.accountID,
+                companyID: main.accountInfo.companyID
             })).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                // console.log('keywords')
-                // console.log(data)
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    main.fromNumbers = [];
-                    return;
-                }
-                if (data.apicode == 0) {
-                    //Reading contact lists
-                    main.keywords = data.apidata;
-                    main.Settings.Numbers = new Array();
-
-                    for (var number in main.fromNumbers) {
-                        if ($.grep(main.Settings.Numbers, function(member) {
-                            return (member.DID == main.fromNumbers[number].DID && member.accountID == main.fromNumbers[number].accountID);
-                        }).length == 0) {
-                            var didKeywords = $.grep(main.keywords, function(keyword) {
-                                return (keyword.DIDID == main.fromNumbers[number].DIDID);
-                            });
-
-                            main.Settings.Numbers.push({
-                                accountID : main.accountID,
-                                DIDID : main.fromNumbers[number].DIDID,
-                                DID : main.fromNumbers[number].DID,
-                                keywords : didKeywords,
-                                prefered : false,
-                                name : main.fromNumbers[number].fromName
-                            });
+                //Successful request to the server
+                function(data, status, headers, config) {
+                    // console.log('keywords')
+                    // console.log(data)
+                    if (data == null || typeof data.apicode == 'undefined') {
+                        //This should never happen
+                        main.fromNumbers = [];
+                        return;
+                    }
+                    if (data.apicode == 0) {
+                        //Reading contact lists
+                        main.keywords = data.apidata;
+                        main.Settings.Numbers = new Array();
+                        for (var number in main.fromNumbers) {
+                            if ($.grep(main.Settings.Numbers, function(member) {
+                                    return (member.DID == main.fromNumbers[number].DID && member.accountID == main.fromNumbers[number].accountID);
+                                }).length == 0) {
+                                var didKeywords = $.grep(main.keywords, function(keyword) {
+                                    return (keyword.DIDID == main.fromNumbers[number].DIDID);
+                                });
+                                main.Settings.Numbers.push({
+                                    accountID: main.accountID,
+                                    DIDID: main.fromNumbers[number].DIDID,
+                                    DID: main.fromNumbers[number].DID,
+                                    keywords: didKeywords,
+                                    prefered: false,
+                                    name: main.fromNumbers[number].fromName
+                                });
+                            }
                         }
                     }
-                }
-                main.ipCookie('itSettings', main.Settings, {
-                    expires : 365,
-                    expirationUnit : 'days'
+                    main.ipCookie('itSettings', main.Settings, {
+                        expires: 365,
+                        expirationUnit: 'days'
+                    });
+                    if (typeof success == 'function') {
+                        success();
+                    }
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    //alert('Unexpected error occurred when trying to fetch DIDs!');
+                    if (status == 400) {
+                        alert("An error occurred when getting keywords! Error code: " + data.apicode);
+                        console.log(JSON.stringify(data));
+                    }
+                    if (typeof error == 'function') {
+                        error();
+                    }
                 });
-
-                if ( typeof success == 'function') {
-                    success();
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to fetch DIDs!');
-                if (status == 400) {
-                    alert("An error occurred when getting keywords! Error code: " + data.apicode);
-                    console.log(JSON.stringify(data));
-                }
-
-                if ( typeof error == 'function') {
-                    error();
-                }
-            });
         },
-        didGet : function(successFunction, errorFunction, $inScope) {
+        didGet: function(successFunction, errorFunction, $inScope) {
             if (main.accountInfo.companyID) {
                 $http.post(inspiniaNS.wsUrl + "did_get", $.param({
-                    sethttp : 1,
-                    apikey : main.authToken,
-                    accountID : main.accountID,
-                    companyID : main.accountInfo.companyID
+                    sethttp: 1,
+                    apikey: main.authToken,
+                    accountID: main.accountID,
+                    companyID: main.accountInfo.companyID
                 })).success(function(data, status, headers, config) {
                     successFunction(data, status, headers, config, $inScope);
                 }).error(function(data, status, headers, config) {
@@ -300,195 +309,190 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 }, 500);
             }
         },
-        contactModifyRequest : function(request, $inScope, refresh, callback) {
+        contactModifyRequest: function(request, $inScope, refresh, callback) {
             //Send request to the server
             $http.post(inspiniaNS.wsUrl + "contact_modify", $.param(request)).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    alert("Unidentified error occurred when editing contact!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    $scope.$broadcast("RequestSuccess", data, 'Contact modified');
-                } else {
+                //Successful request to the server
+                function(data, status, headers, config) {
+                    if (data == null || typeof data.apicode == 'undefined') {
+                        //This should never happen
+                        alert("Unidentified error occurred when editing contact!");
+                        return;
+                    }
+                    if (data.apicode == 0) {
+                        $scope.$broadcast("RequestSuccess", data, 'Contact modified');
+                    } else {
+                        $scope.$broadcast("RequestError", data, 'contact_modify');
+                        console.log(JSON.stringify(data));
+                    }
+                    if (refresh) {
+                        if (callback) {
+                            callback();
+                        }
+                    }
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    // //alert('Unexpected error occurred when trying to send message!');
+                    // if (status == 400) {
+                    // if (data.apicode == 4) {
+                    // $scope.$broadcast("InvalidANI");
+                    // } else {
+                    // alert("An error occurred when changing your contact! Error code: " + data.apicode);
+                    // console.log(JSON.stringify(data));
+                    // }
+                    // }
+                    // // }
                     $scope.$broadcast("RequestError", data, 'contact_modify');
                     console.log(JSON.stringify(data));
-                }
-                if (refresh) {
-                    if (callback) {
-                        callback();
-                    }
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                // //alert('Unexpected error occurred when trying to send message!');
-                // if (status == 400) {
-                // if (data.apicode == 4) {
-                // $scope.$broadcast("InvalidANI");
-                // } else {
-                // alert("An error occurred when changing your contact! Error code: " + data.apicode);
-                // console.log(JSON.stringify(data));
-                // }
-                // }
-                // // }
-                $scope.$broadcast("RequestError", data, 'contact_modify');
-                console.log(JSON.stringify(data));
-            });
+                });
         },
-        contactOptOutAddRequest : function(request, $inScope, refresh, callback) {
+        contactOptOutAddRequest: function(request, $inScope, refresh, callback) {
             $http.post(inspiniaNS.wsUrl + "optout_add", $.param(request)).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    alert("Unidentified error occurred when trying to opt out contact!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    $scope.$broadcast("RequestSuccess", data, 'Contact opt out');
-                } else {
+                //Successful request to the server
+                function(data, status, headers, config) {
+                    if (data == null || typeof data.apicode == 'undefined') {
+                        //This should never happen
+                        alert("Unidentified error occurred when trying to opt out contact!");
+                        return;
+                    }
+                    if (data.apicode == 0) {
+                        $scope.$broadcast("RequestSuccess", data, 'Contact opt out');
+                    } else {
+                        $scope.$broadcast("RequestError", data, 'optout_add');
+                        console.log(JSON.stringify(data));
+                    }
+                    if (refresh) {
+                        if (callback) {
+                            callback();
+                        }
+                    }
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    // //alert('Unexpected error occurred when trying to send message!');
+                    // if (status == 400) {
+                    // if (data.apicode == 4) {
+                    // //This is an error saying there is nothing to change
+                    // //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                    // $window.location.reload();
+                    // } else {
+                    // alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
+                    // console.log(JSON.stringify(data));
+                    // }
+                    // }
+                    // // }
                     $scope.$broadcast("RequestError", data, 'optout_add');
                     console.log(JSON.stringify(data));
-                }
-                if (refresh) {
-                    if (callback) {
-                        callback();
-                    }
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                // //alert('Unexpected error occurred when trying to send message!');
-                // if (status == 400) {
-                // if (data.apicode == 4) {
-                // //This is an error saying there is nothing to change
-                // //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                // $window.location.reload();
-                // } else {
-                // alert("An error occurred when trying to opt out contact! Error code: " + data.apicode);
-                // console.log(JSON.stringify(data));
-                // }
-                // }
-                // // }
-                $scope.$broadcast("RequestError", data, 'optout_add');
-                console.log(JSON.stringify(data));
-            });
+                });
         },
-        contactOptoutUndoRequest : function(request, $inScope, refresh, callback) {
+        contactOptoutUndoRequest: function(request, $inScope, refresh, callback) {
             $http.post(inspiniaNS.wsUrl + "optout_undo", $.param(request)).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    alert("Unidentified error occurred when trying to undo opt out contact!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    $scope.$broadcast("RequestSuccess", data, 'Contact opt in');
-                } else {
+                //Successful request to the server
+                function(data, status, headers, config) {
+                    if (data == null || typeof data.apicode == 'undefined') {
+                        //This should never happen
+                        alert("Unidentified error occurred when trying to undo opt out contact!");
+                        return;
+                    }
+                    if (data.apicode == 0) {
+                        $scope.$broadcast("RequestSuccess", data, 'Contact opt in');
+                    } else {
+                        $scope.$broadcast("RequestError", data, 'optout_undo');
+                        console.log(JSON.stringify(data));
+                    }
+                    if (refresh) {
+                        if (callback) {
+                            callback();
+                        }
+                    }
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    //alert('Unexpected error occurred when trying to send message!');
+                    // if (status == 400) {
+                    // if (data.apicode == 4) {
+                    // //This is an error saying there is nothing to change
+                    // //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
+                    // $window.location.reload();
+                    // } else {
+                    // alert("An error occurred when trying to undo opt out contact! Error code: " + data.apicode);
+                    // console.log(JSON.stringify(data));
+                    // }
+                    // }
+                    // // }
                     $scope.$broadcast("RequestError", data, 'optout_undo');
                     console.log(JSON.stringify(data));
-                }
-                if (refresh) {
-                    if (callback) {
-                        callback();
-                    }
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to send message!');
-                // if (status == 400) {
-                // if (data.apicode == 4) {
-                // //This is an error saying there is nothing to change
-                // //$window.location.href = "/#/lists/lists_manage/" + $scope.main.contactListID;//$inScope.contactListID;
-                // $window.location.reload();
-                // } else {
-                // alert("An error occurred when trying to undo opt out contact! Error code: " + data.apicode);
-                // console.log(JSON.stringify(data));
-                // }
-                // }
-                // // }
-                $scope.$broadcast("RequestError", data, 'optout_undo');
-                console.log(JSON.stringify(data));
-            });
+                });
         },
-        reportingGetMessageStats : function(inScope, callback) {
+        reportingGetMessageStats: function(inScope, callback) {
             var param = {
-                apikey : main.authToken,
-                accountID : main.accountID,
-                companyID : main.accountInfo.companyID
+                apikey: main.authToken,
+                accountID: main.accountID,
+                companyID: main.accountInfo.companyID
             };
-
             if (inScope.params && inScope.params.startdatetime) {
                 param.startdate = inScope.params.startdatetime;
             }
-
             if (inScope.params && inScope.params.enddatetime) {
                 param.enddate = inScope.params.enddatetime;
             }
-
             if (inScope.params && inScope.params.didid) {
                 param.didid = inScope.params.didid;
             }
             if (inScope.params && inScope.params.contactListID) {
                 param.contactListID = inScope.params.contactListID;
             }
-
             $http.post(inspiniaNS.wsUrl + "reporting_getmessagestats", $.param(param)).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    alert("Unidentified error occurred when trying to reporting get message stats!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    $scope.$broadcast("RequestSuccess", data);
-                } else {
-                    $scope.$broadcast("RequestError", data, 'reporting_getmessagestats');
+                //Successful request to the server
+                function(data, status, headers, config) {
+                    if (data == null || typeof data.apicode == 'undefined') {
+                        //This should never happen
+                        alert("Unidentified error occurred when trying to reporting get message stats!");
+                        return;
+                    }
+                    if (data.apicode == 0) {
+                        $scope.$broadcast("RequestSuccess", data);
+                    } else {
+                        $scope.$broadcast("RequestError", data, 'reporting_getmessagestats');
+                        console.log(JSON.stringify(data));
+                    }
+                    callback(data);
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    $scope.$broadcast("RequestError", data, 'optout_undo');
                     console.log(JSON.stringify(data));
-                }
-                callback(data);
-
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                $scope.$broadcast("RequestError", data, 'optout_undo');
-                console.log(JSON.stringify(data));
-            });
+                });
         },
-        getCustomOptOutMessage : function() {
+        getCustomOptOutMessage: function() {
             var param = {
-                sethttp : 1,
-                apikey : main.authToken,
-                accountID : main.accountID
+                sethttp: 1,
+                apikey: main.authToken,
+                accountID: main.accountID
             };
             $http.post(inspiniaNS.wsUrl + "optoutsignature_get", $.param(param)).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    alert("Unidentified error occurred when trying to get !");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    if ( typeof data.apidata != 'undefined' && data.apidata != null && data.apidata.length > 0) {
-                        main.Settings.defaultOptOutText = data.apidata[0].optOutSignatureText;
-                        main.Settings.defaultOptOutTextId = data.apidata[0].optOutSignatureID;
+                //Successful request to the server
+                function(data, status, headers, config) {
+                    if (data == null || typeof data.apicode == 'undefined') {
+                        //This should never happen
+                        alert("Unidentified error occurred when trying to get !");
+                        return;
                     }
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                $scope.$broadcast("RequestError", data, 'optout_undo');
-                console.log(JSON.stringify(data));
-            });
+                    if (data.apicode == 0) {
+                        if (typeof data.apidata != 'undefined' && data.apidata != null && data.apidata.length > 0) {
+                            main.Settings.defaultOptOutText = data.apidata[0].optOutSignatureText;
+                            main.Settings.defaultOptOutTextId = data.apidata[0].optOutSignatureID;
+                        }
+                    }
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    $scope.$broadcast("RequestError", data, 'optout_undo');
+                    console.log(JSON.stringify(data));
+                });
         },
-        contactBlacklistGetRequest : function(request, callback) {
+        contactBlacklistGetRequest: function(request, callback) {
             $http.post(inspiniaNS.wsUrl + "blacklist_get", $.param(request)).success(function(data, status, headers, config) {
                 if (data.hasOwnProperty('apicode') && data.apicode == 0) {
                     if (callback) {
@@ -507,7 +511,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 //console.log(JSON.stringify(data));
             });
         },
-        contactBlacklistAddRequest : function(request, $inScope, refresh, callback) {
+        contactBlacklistAddRequest: function(request, $inScope, refresh, callback) {
             $http.post(inspiniaNS.wsUrl + "blacklist_add", $.param(request)).success(function(data) {
                 if ($inScope.contactBlacklistAddTotalCount > 0) {
                     $inScope.contactBlacklistAddTotalCount--;
@@ -516,7 +520,6 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                     } else {
                         $inScope.contactBlacklistAddErrorCount++;
                     }
-
                     if ($inScope.contactBlacklistAddTotalCount == 0) {
                         // Display popup notifications
                         if ($inScope.contactBlacklistAddErrorCount > 0) {
@@ -532,7 +535,6 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                         $inScope.contactBlacklistAddTotalCount = 0;
                         $inScope.contactBlacklistAddSuccessCount = 0;
                         $inScope.contactBlacklistAddErrorCount = 0;
-
                         // Refresh
                         if (refresh && typeof callback == 'function') {
                             callback();
@@ -543,7 +545,6 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 if ($inScope.contactBlacklistAddTotalCount > 0) {
                     $inScope.contactBlacklistAddTotalCount--;
                     $inScope.contactBlacklistAddErrorCount++;
-
                     if ($inScope.contactBlacklistAddTotalCount == 0) {
                         // Display popup notifications
                         if ($inScope.contactBlacklistAddSuccessCount > 0) {
@@ -551,12 +552,10 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                         } else {
                             $scope.$broadcast("RequestError", data, 'Could not block contacts');
                         }
-
                         // Reset conters
                         $inScope.contactBlacklistAddTotalCount = 0;
                         $inScope.contactBlacklistAddSuccessCount = 0;
                         $inScope.contactBlacklistAddErrorCount = 0;
-
                         // Refresh
                         if (refresh && typeof callback == 'function') {
                             callback();
@@ -565,7 +564,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 }
             });
         },
-        contactBlacklistDeleteRequest : function(request, $inScope, refresh, callback) {
+        contactBlacklistDeleteRequest: function(request, $inScope, refresh, callback) {
             $http.post(inspiniaNS.wsUrl + "blacklist_delete", $.param(request)).success(function(data) {
                 if ($inScope.contactBlacklistDeleteTotalCount > 0) {
                     $inScope.contactBlacklistDeleteTotalCount--;
@@ -574,7 +573,6 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                     } else {
                         $inScope.contactBlacklistDeleteErrorCount++;
                     }
-
                     if ($inScope.contactBlacklistDeleteTotalCount == 0) {
                         // Display popup notifications
                         if ($inScope.contactBlacklistDeleteErrorCount > 0) {
@@ -590,7 +588,6 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                         $inScope.contactBlacklistDeleteTotalCount = 0;
                         $inScope.contactBlacklistDeleteSuccessCount = 0;
                         $inScope.contactBlacklistDeleteErrorCount = 0;
-
                         // Refresh
                         if (refresh && typeof callback == 'function') {
                             callback();
@@ -601,7 +598,6 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 if ($inScope.contactBlacklistDeleteTotalCount > 0) {
                     $inScope.contactBlacklistDeleteTotalCount--;
                     $inScope.contactBlacklistDeleteErrorCount++;
-
                     if ($inScope.contactBlacklistDeleteTotalCount == 0) {
                         // Display popup notifications
                         if ($inScope.contactBlacklistDeleteSuccessCount > 0) {
@@ -609,12 +605,10 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                         } else {
                             $scope.$broadcast("RequestError", data, 'Could not unblock contacts');
                         }
-
                         // Reset conters
                         $inScope.contactBlacklistDeleteTotalCount = 0;
                         $inScope.contactBlacklistDeleteSuccessCount = 0;
                         $inScope.contactBlacklistDeleteErrorCount = 0;
-
                         // Refresh
                         if (refresh && typeof callback == 'function') {
                             callback();
@@ -623,7 +617,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 }
             });
         },
-        getSegment : function(request, callback) {
+        getSegment: function(request, callback) {
             $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param(request)).success(function(data, status, headers, config) {
                 if (data == null || typeof data.apicode == 'undefined') {
                     alert("Unidentified error occurred when trying to load the segment!");
@@ -636,8 +630,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                         $state.go('lists.segments');
                         return;
                     }
-
-                    if ( typeof callback == 'function') {
+                    if (typeof callback == 'function') {
                         callback(data.apidata[0]);
                     }
                 } else {
@@ -649,14 +642,14 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 $state.go('lists.segments');
             });
         },
-        addSegment : function(request, $inScope, callback) {
+        addSegment: function(request, $inScope, callback) {
             $http.post(inspiniaNS.wsUrl + "contactselection_add", $.param(request)).success(function(data, status, headers, config) {
                 if (data == null || typeof data.apicode == 'undefined') {
                     $inScope.$broadcast("SegmentCreateFail");
                     return;
                 }
                 if (data.apicode == 0) {
-                    if ( typeof callback == 'function') {
+                    if (typeof callback == 'function') {
                         callback(data.apidata);
                     }
                 } else {
@@ -670,14 +663,14 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 }
             });
         },
-        saveSegment : function(request, $inScope, callback) {
+        saveSegment: function(request, $inScope, callback) {
             $http.post(inspiniaNS.wsUrl + "contactselection_modify", $.param(request)).success(function(data, status, headers, config) {
                 if (data == null || typeof data.apicode == 'undefined') {
                     $inScope.$broadcast("SegmentSaveFail");
                     return;
                 }
                 if (data.apicode == 0) {
-                    if ( typeof callback == 'function') {
+                    if (typeof callback == 'function') {
                         callback(data.apidata);
                     }
                 } else {
@@ -688,31 +681,27 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 $inScope.$broadcast("SegmentSaveFail");
             });
         },
-        deleteSegment : function(request, $inScope, callback) {
+        deleteSegment: function(request, $inScope, callback) {
             $http.post(inspiniaNS.wsUrl + "contactselection_delete", $.param(request)).success(function(data, status, headers, config) {
                 if (data == null || typeof data.apicode == 'undefined' || data.apicode != 0) {
                     $inScope.$broadcast("SegmentDeleteFail");
                     return;
                 }
-
-                if ( typeof callback == 'function') {
+                if (typeof callback == 'function') {
                     callback();
                 }
-
                 $scope.main.CommonActions.setContactListsAndSegments();
             }).error(function(data, status, headers, config) {
                 $inScope.$broadcast("SegmentDeleteFail");
             });
         }
     };
-
     main.CommonActions = {
-        makeListFromSelection : function(contactList) {
+        makeListFromSelection: function(contactList) {
             var params_;
             var ANIlist_ = '';
             var ContactIDList_ = '';
-
-            if ( typeof contactList === 'string') {
+            if (typeof contactList === 'string') {
                 ANIlist_ = contactList;
             } else {
                 for (var i = 0; i < contactList.length; i++) {
@@ -725,19 +714,17 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                     }
                 }
             }
-
             params_ = {
-                ANIList : ANIlist_,
-                ContactIDList : ContactIDList_
+                ANIList: ANIlist_,
+                ContactIDList: ContactIDList_
             };
             return params_;
         },
-        blockContact : function(inScope, inContactList, refresh, callback) {
+        blockContact: function(inScope, inContactList, refresh, callback) {
             //FS#18 - Lists i Inbox - bug! START
             //earlier there was request to optout all contacts that are blocked but api now doesn't allow that so this is commented out
             //$scope.main.CommonActions.optOutContact(inScope, inContactList, refresh, callback);
             //FS#18 - Lists i Inbox - bug! END
-
             //Uncomment block when multi ani and contact list support is added to contact_modify request
             // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             // $scope.main.CommonActions.changeContactStatus('I', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
@@ -746,18 +733,18 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 for (var j in main.Settings.Numbers) {
                     var did = main.Settings.Numbers[j].DID;
                     $scope.main.ServerRequests.contactBlacklistAddRequest({
-                        sethttp : 1,
-                        apikey : main.authToken,
-                        accountID : main.accountID,
-                        companyID : main.accountInfo.companyID,
-                        ANI : inContactList[i].ANI,
-                        DID : did
+                        sethttp: 1,
+                        apikey: main.authToken,
+                        accountID: main.accountID,
+                        companyID: main.accountInfo.companyID,
+                        ANI: inContactList[i].ANI,
+                        DID: did
                     }, inScope, refresh, callback);
                 }
                 //$scope.main.CommonActions.changeContactStatus('I', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
             }
         },
-        unblockContact : function(inScope, inContactList, refresh, callback) {
+        unblockContact: function(inScope, inContactList, refresh, callback) {
             //Uncomment block when multi ani and contact list support is added to contact_modify request
             // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             // $scope.main.CommonActions.changeContactStatus('A', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
@@ -766,58 +753,56 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 for (var j in main.Settings.Numbers) {
                     var did = main.Settings.Numbers[j].DID;
                     $scope.main.ServerRequests.contactBlacklistDeleteRequest({
-                        sethttp : 1,
-                        apikey : main.authToken,
-                        accountID : main.accountID,
-                        companyID : main.accountInfo.companyID,
-                        ANI : inContactList[i].ANI,
-                        DID : did
+                        sethttp: 1,
+                        apikey: main.authToken,
+                        accountID: main.accountID,
+                        companyID: main.accountInfo.companyID,
+                        ANI: inContactList[i].ANI,
+                        DID: did
                     }, inScope, refresh, callback);
                 }
                 //$scope.main.CommonActions.changeContactStatus('A', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
             }
-
         },
-        deleteContact : function(inScope, inContactList, refresh, callback) {
+        deleteContact: function(inScope, inContactList, refresh, callback) {
             //Uncomment block when multi ani and contact list support is added to contact_modify request
             // var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             // $scope.main.CommonActions.changeContactStatus('D', commaSeparatedAniList_.ContactIDList, commaSeparatedAniList_.ANIList, inScope, refresh, callback);
-
             for (var i = 0; i < inContactList.length; i++) {
                 $scope.main.CommonActions.changeContactStatus('D', inContactList[i].contactID, inContactList[i].ANI, inScope, refresh, callback);
             }
         },
-        optOutContact : function(inScope, inContactList, refresh, callback) {
+        optOutContact: function(inScope, inContactList, refresh, callback) {
             var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             var request = {
                 // sethttp : 1,
-                apikey : main.authToken,
-                accountID : main.accountID,
-                companyID : main.accountInfo.companyID,
-                ANI : commaSeparatedAniList_.ANIList
+                apikey: main.authToken,
+                accountID: main.accountID,
+                companyID: main.accountInfo.companyID,
+                ANI: commaSeparatedAniList_.ANIList
             };
             $scope.main.ServerRequests.contactOptOutAddRequest(request, inScope, refresh, callback);
         },
-        optInContact : function(inScope, inContactList, refresh, callback) {
+        optInContact: function(inScope, inContactList, refresh, callback) {
             var commaSeparatedAniList_ = $scope.main.CommonActions.makeListFromSelection(inContactList);
             var request = {
                 // sethttp : 1,
-                apikey : main.authToken,
-                accountID : main.accountID,
-                companyID : main.accountInfo.companyID,
-                ANI : commaSeparatedAniList_.ANIList
+                apikey: main.authToken,
+                accountID: main.accountID,
+                companyID: main.accountInfo.companyID,
+                ANI: commaSeparatedAniList_.ANIList
             };
             $scope.main.ServerRequests.contactOptoutUndoRequest(request, inScope, refresh, callback);
         },
-        changeContactStatus : function(inStatus, inContactId, inANI, inScope, refresh, callback) {
+        changeContactStatus: function(inStatus, inContactId, inANI, inScope, refresh, callback) {
             var request = {
-                sethttp : 1,
-                apikey : main.authToken,
-                accountID : main.accountID,
-                companyID : main.accountInfo.companyID,
-                contactID : inContactId,
-                ANI : inANI,
-                status : inStatus
+                sethttp: 1,
+                apikey: main.authToken,
+                accountID: main.accountID,
+                companyID: main.accountInfo.companyID,
+                contactID: inContactId,
+                ANI: inANI,
+                status: inStatus
             };
             $scope.main.ServerRequests.contactModifyRequest(request, inScope, refresh, callback);
         },
@@ -826,31 +811,30 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         // var href = 'mailto:?subject=CentralMessage%20-%20Forwarded%20SMS&body=From%20'+messageObject.DID +';%20'+messageObject.messageDate+';%20'+ message;
         // window.location.href = href;
         // }
-        forwardToMail : function(from, to, date, inMessage) {
+        forwardToMail: function(from, to, date, inMessage) {
             var message = inMessage.replace(/\ /g, '%20');
             var href = 'mailto:?subject=CentralMessage%20-%20Forwarded%20SMS&body=From%20' + from + ';%20To%20' + to + ';%20' + date + ';%20' + message;
             window.location.href = href;
         },
-        setContactListsAndSegments : function() {
+        setContactListsAndSegments: function() {
             main.ServerRequests.contactListsGet();
             main.ServerRequests.contactSegmentsGet();
-
             var sCLS = function() {
                 main.contactGroups = [];
                 if (main.contactLists && main.contactLists.length > 0) {
                     for (var i in main.contactLists) {
                         main.contactGroups.push({
-                            id : main.contactLists[i].contactListID,
-                            name : main.contactLists[i].contactListName,
-                            group : 'Lists'
+                            id: main.contactLists[i].contactListID,
+                            name: main.contactLists[i].contactListName,
+                            group: 'Lists'
                         });
                     }
                     if (main.contactSegments && main.contactSegments.length > 0) {
                         for (var i in main.contactSegments) {
                             main.contactGroups.push({
-                                id : main.contactSegments[i].contactSelectionID,
-                                name : main.contactSegments[i].contactSelectionName,
-                                group : 'Segments'
+                                id: main.contactSegments[i].contactSelectionID,
+                                name: main.contactSegments[i].contactSelectionName,
+                                group: 'Segments'
                             });
                         }
                     } else {
@@ -860,167 +844,173 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                     }
                 } else {
                     setTimeout(function() {
-                       sCLS();
+                        sCLS();
                     }, 500);
                 }
             };
             sCLS();
         }
     };
-
     $http.post(inspiniaNS.wsUrl + "account_get", $.param({
-        apikey : main.authToken,
-        accountID : main.accountID,
-        sethttp : 1
-    }))
-    //Successful request to the server
-    .success(function(data, status, headers, config) {
-        if (data == null || typeof data.apicode == 'undefined') {
-            //This should never happen
-            alert("Unidentified error occurred when getting account info!");
-            return;
-        }
-        if (data.apicode == 0) {
-            main.accountInfo = data.apidata[0];
-
-            main.ServerRequests.autoresponderActionGet();
-
-            main.CommonActions.setContactListsAndSegments();
-
-            var successDidGet = function(data, status, headers, config, $inScope) {
-                main.fromNumbersString = '';
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    main.fromNumbers = [];
-                    return;
-                }
-                if (data.apicode == 0) {
-                    main.fromNumbers = data.apidata;
-                } else {
-                    main.fromNumbers = [];
-                    main.Settings.Numbers = [];
-                }
-
-                main.ServerRequests.accountKeywordGet();
-
-                for (var j in main.fromNumbers) {
-                    main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();
-                    if (j < main.fromNumbers.length - 1) {
-                        main.fromNumbersString += ',';
+            apikey: main.authToken,
+            accountID: main.accountID,
+            sethttp: 1
+        }))
+        //Successful request to the server
+        .success(function(data, status, headers, config) {
+            if (data == null || typeof data.apicode == 'undefined') {
+                //This should never happen
+                alert("Unidentified error occurred when getting account info!");
+                return;
+            }
+            if (data.apicode == 0) {
+                main.accountInfo = data.apidata[0];
+                main.ServerRequests.autoresponderActionGet();
+                main.CommonActions.setContactListsAndSegments();
+                var successDidGet = function(data, status, headers, config, $inScope) {
+                    main.fromNumbersString = '';
+                    if (data == null || typeof data.apicode == 'undefined') {
+                        //This should never happen
+                        main.fromNumbers = [];
+                        return;
                     }
-
-                    if ( typeof main.Settings.Numbers[j] !== 'undefined') {
-                        main.Settings.Numbers[j].name = main.fromNumbers[j].fromName;
+                    if (data.apicode == 0) {
+                        main.fromNumbers = data.apidata;
+                    } else {
+                        main.fromNumbers = [];
+                        main.Settings.Numbers = [];
                     }
-                }
-            };
-            var errorDidGet = function(data, status, headers, config, $inScope) {
-                if (status == 400) {
-                    alert("An error occurred when getting DID! Error code: " + data.apicode);
-                    console.log(JSON.stringify(data));
-                }
-            };
-            main.ServerRequests.didGet(successDidGet, errorDidGet, $scope);
-            main.ServerRequests.getCustomOptOutMessage();
-            // } else {
-            // alert("Error occured while getting account info!");
-        } else {
-            $scope.$broadcast("RequestError", data, 'account_get');
-        }
-    })
-    //An error occurred with this request
-    .error(function(data, status, headers, config) {
-        if (status != 401) {
-            alert("Error occurred while getting account info!");
-        }
-    });
-
+                    main.ServerRequests.accountKeywordGet();
+                    for (var j in main.fromNumbers) {
+                        main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();
+                        if (j < main.fromNumbers.length - 1) {
+                            main.fromNumbersString += ',';
+                        }
+                        if (typeof main.Settings.Numbers[j] !== 'undefined') {
+                            main.Settings.Numbers[j].name = main.fromNumbers[j].fromName;
+                        }
+                    }
+                };
+                var errorDidGet = function(data, status, headers, config, $inScope) {
+                    if (status == 400) {
+                        alert("An error occurred when getting DID! Error code: " + data.apicode);
+                        console.log(JSON.stringify(data));
+                    }
+                };
+                main.ServerRequests.didGet(successDidGet, errorDidGet, $scope);
+                main.ServerRequests.getCustomOptOutMessage();
+                // } else {
+                // alert("Error occured while getting account info!");
+            } else {
+                $scope.$broadcast("RequestError", data, 'account_get');
+            }
+        })
+        //An error occurred with this request
+        .error(function(data, status, headers, config) {
+            if (status != 401) {
+                alert("Error occurred while getting account info!");
+            }
+        });
     /**
+     
      * slideInterval - Interval for bootstrap Carousel, in milliseconds:
+     
      */
     this.slideInterval = 5000;
     /**
+     
      * states - Data used in Advanced Form view for Chosen plugin
+     
      */
     this.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
     /**
+     
      * persons - Data used in Tables view for Data Tables plugin
+     
      */
     this.persons = [{
-        id : '1',
-        firstName : 'Impact',
-        lastName : 'Telecom'
+        id: '1',
+        firstName: 'Impact',
+        lastName: 'Telecom'
     }, {
-        id : '2',
-        firstName : 'Sandra',
-        lastName : 'Jackson'
+        id: '2',
+        firstName: 'Sandra',
+        lastName: 'Jackson'
     }, {
-        id : '3',
-        firstName : 'John',
-        lastName : 'Underwood'
+        id: '3',
+        firstName: 'John',
+        lastName: 'Underwood'
     }, {
-        id : '4',
-        firstName : 'Chris',
-        lastName : 'Johnatan'
+        id: '4',
+        firstName: 'Chris',
+        lastName: 'Johnatan'
     }, {
-        id : '5',
-        firstName : 'Kim',
-        lastName : 'Rosowski'
+        id: '5',
+        firstName: 'Kim',
+        lastName: 'Rosowski'
     }];
     /**
+     
      * Lists - Data used in Tables view for Data Tables plugin
+     
      */
     this.Lists = [{
-        Id : '1',
-        ListName : 'BMW',
-        DateCreated : 'Feb 15, 2015.',
-        Members : '10200',
-        OptOuts : '125',
-        LastSent : 'Feb 20 1:56 PM'
+        Id: '1',
+        ListName: 'BMW',
+        DateCreated: 'Feb 15, 2015.',
+        Members: '10200',
+        OptOuts: '125',
+        LastSent: 'Feb 20 1:56 PM'
     }, {
-        Id : '2',
-        ListName : 'Mercedes',
-        DateCreated : 'Feb 19, 2015.',
-        Members : '8400',
-        OptOuts : '15',
-        LastSent : 'Feb 20 8:43 PM'
+        Id: '2',
+        ListName: 'Mercedes',
+        DateCreated: 'Feb 19, 2015.',
+        Members: '8400',
+        OptOuts: '15',
+        LastSent: 'Feb 20 8:43 PM'
     }, {
-        Id : '3',
-        ListName : 'Nestle',
-        DateCreated : 'Feb 11, 2015.',
-        Members : '2600',
-        OptOuts : '11',
-        LastSent : 'Feb 22 2:56 PM'
+        Id: '3',
+        ListName: 'Nestle',
+        DateCreated: 'Feb 11, 2015.',
+        Members: '2600',
+        OptOuts: '11',
+        LastSent: 'Feb 22 2:56 PM'
     }, {
-        Id : '4',
-        ListName : 'Private',
-        DateCreated : 'Feb 1, 2015.',
-        Members : '23',
-        OptOuts : '0',
-        LastSent : 'Feb 25 3:59 PM'
+        Id: '4',
+        ListName: 'Private',
+        DateCreated: 'Feb 1, 2015.',
+        Members: '23',
+        OptOuts: '0',
+        LastSent: 'Feb 25 3:59 PM'
     }, {
-        Id : '5',
-        ListName : 'Audi',
-        DateCreated : 'Feb 6, 2015.',
-        Members : '987',
-        OptOuts : '88',
-        LastSent : 'Feb 9 9:00 AM'
+        Id: '5',
+        ListName: 'Audi',
+        DateCreated: 'Feb 6, 2015.',
+        Members: '987',
+        OptOuts: '88',
+        LastSent: 'Feb 9 9:00 AM'
     }];
     /**
+     
      * check's - Few variables for checkbox input used in iCheck plugin. Only for demo purpose
+     
      */
     this.checkOne = true;
     this.checkTwo = true;
     this.checkThree = true;
     this.checkFour = true;
     /**
+     
      * knobs - Few variables for knob plugin used in Advanced Plugins view
+     
      */
     this.knobOne = 75;
     this.knobTwo = 25;
     this.knobThree = 50;
     /**
+     
      * Variables used for Ui Elements view
+     
      */
     this.bigTotalItems = 175;
     this.bigCurrentPage = 1;
@@ -1028,575 +1018,1701 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
     this.singleModel = 1;
     this.radioModel = 'Middle';
     this.checkModel = {
-        left : false,
-        middle : true,
-        right : false
+        left: false,
+        middle: true,
+        right: false
     };
     /**
+     
      * groups - used for Collapse panels in Tabs and Panels view
+     
      */
     this.groups = [{
-        title : 'Dynamic Group Header - 1',
-        content : 'Dynamic Group Body - 1'
+        title: 'Dynamic Group Header - 1',
+        content: 'Dynamic Group Body - 1'
     }, {
-        title : 'Dynamic Group Header - 2',
-        content : 'Dynamic Group Body - 2'
+        title: 'Dynamic Group Header - 2',
+        content: 'Dynamic Group Body - 2'
     }];
     /**
+     
      * alerts - used for dynamic alerts in Notifications and Tooltips view
+     
      */
     this.alerts = [{
-        type : 'danger',
-        msg : 'Oh snap! Change a few things up and try submitting again.'
+        type: 'danger',
+        msg: 'Oh snap! Change a few things up and try submitting again.'
     }, {
-        type : 'success',
-        msg : 'Well done! You successfully read this important alert message.'
+        type: 'success',
+        msg: 'Well done! You successfully read this important alert message.'
     }, {
-        type : 'info',
-        msg : 'OK, You are done a great job man.'
+        type: 'info',
+        msg: 'OK, You are done a great job man.'
     }];
     /**
+     
      * addAlert, closeAlert  - used to manage alerts in Notifications and Tooltips view
+     
      */
     this.addAlert = function() {
         this.alerts.push({
-            msg : 'Another alert!'
+            msg: 'Another alert!'
         });
     };
     this.closeAlert = function(index) {
         this.alerts.splice(index, 1);
     };
     /**
+     
      * randomStacked - used for progress bar (stacked type) in Badges adn Labels view
+     
      */
     this.randomStacked = function() {
         this.stacked = [];
         var types = ['success', 'info', 'warning', 'danger'];
         for (var i = 0,
-            n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+                n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
             var index = Math.floor((Math.random() * 4));
             this.stacked.push({
-                value : Math.floor((Math.random() * 30) + 1),
-                type : types[index]
+                value: Math.floor((Math.random() * 30) + 1),
+                type: types[index]
             });
         }
     };
     /**
+     
      * initial run for random stacked value
+     
      */
     this.randomStacked();
     /**
+     
      * summernoteText - used for Summernote plugin
+     
      */
     this.summernoteText = ['<h3>Hello Jonathan! </h3>', '<p>dummy text of the printing and typesetting industry. <strong>Lorem Ipsum has been the dustrys</strong> standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more', 'recently with</p>'].join('');
     /**
+     
      * General variables for Peity Charts
+     
      * used in many view so this is in Main controller
+     
      */
     this.BarChart = {
-        data : [5, 3, 9, 6, 5, 9, 7, 3, 5, 2, 4, 7, 3, 2, 7, 9, 6, 4, 5, 7, 3, 2, 1, 0, 9, 5, 6, 8, 3, 2, 1],
-        options : {
-            fill : ["#1ab394", "#d7d7d7"],
-            width : 100
+        data: [5, 3, 9, 6, 5, 9, 7, 3, 5, 2, 4, 7, 3, 2, 7, 9, 6, 4, 5, 7, 3, 2, 1, 0, 9, 5, 6, 8, 3, 2, 1],
+        options: {
+            fill: ["#1ab394", "#d7d7d7"],
+            width: 100
         }
     };
     this.BarChart2 = {
-        data : [5, 3, 9, 6, 5, 9, 7, 3, 5, 2],
-        options : {
-            fill : ["#1ab394", "#d7d7d7"]
+        data: [5, 3, 9, 6, 5, 9, 7, 3, 5, 2],
+        options: {
+            fill: ["#1ab394", "#d7d7d7"]
         }
     };
     this.BarChart3 = {
-        data : [5, 3, 2, -1, -3, -2, 2, 3, 5, 2],
-        options : {
-            fill : ["#1ab394", "#d7d7d7"]
+        data: [5, 3, 2, -1, -3, -2, 2, 3, 5, 2],
+        options: {
+            fill: ["#1ab394", "#d7d7d7"]
         }
     };
     this.LineChart = {
-        data : [5, 9, 7, 3, 5, 2, 5, 3, 9, 6, 5, 9, 4, 7, 3, 2, 9, 8, 7, 4, 5, 1, 2, 9, 5, 4, 7],
-        options : {
-            fill : '#1ab394',
-            stroke : '#169c81',
-            width : 64
+        data: [5, 9, 7, 3, 5, 2, 5, 3, 9, 6, 5, 9, 4, 7, 3, 2, 9, 8, 7, 4, 5, 1, 2, 9, 5, 4, 7],
+        options: {
+            fill: '#1ab394',
+            stroke: '#169c81',
+            width: 64
         }
     };
     this.LineChart2 = {
-        data : [3, 2, 9, 8, 47, 4, 5, 1, 2, 9, 5, 4, 7],
-        options : {
-            fill : '#1ab394',
-            stroke : '#169c81',
-            width : 64
+        data: [3, 2, 9, 8, 47, 4, 5, 1, 2, 9, 5, 4, 7],
+        options: {
+            fill: '#1ab394',
+            stroke: '#169c81',
+            width: 64
         }
     };
     this.LineChart3 = {
-        data : [5, 3, 2, -1, -3, -2, 2, 3, 5, 2],
-        options : {
-            fill : '#1ab394',
-            stroke : '#169c81',
-            width : 64
+        data: [5, 3, 2, -1, -3, -2, 2, 3, 5, 2],
+        options: {
+            fill: '#1ab394',
+            stroke: '#169c81',
+            width: 64
         }
     };
     this.LineChart4 = {
-        data : [5, 3, 9, 6, 5, 9, 7, 3, 5, 2],
-        options : {
-            fill : '#1ab394',
-            stroke : '#169c81',
-            width : 64
+        data: [5, 3, 9, 6, 5, 9, 7, 3, 5, 2],
+        options: {
+            fill: '#1ab394',
+            stroke: '#169c81',
+            width: 64
         }
     };
     this.PieChart = {
-        data : [1, 5],
-        options : {
-            fill : ["#1ab394", "#d7d7d7"]
+        data: [1, 5],
+        options: {
+            fill: ["#1ab394", "#d7d7d7"]
         }
     };
     this.PieChart2 = {
-        data : [226, 360],
-        options : {
-            fill : ["#1ab394", "#d7d7d7"]
+        data: [226, 360],
+        options: {
+            fill: ["#1ab394", "#d7d7d7"]
         }
     };
     this.PieChart3 = {
-        data : [0.52, 1.561],
-        options : {
-            fill : ["#1ab394", "#d7d7d7"]
+        data: [0.52, 1.561],
+        options: {
+            fill: ["#1ab394", "#d7d7d7"]
         }
     };
     this.PieChart4 = {
-        data : [1, 4],
-        options : {
-            fill : ["#1ab394", "#d7d7d7"]
+        data: [1, 4],
+        options: {
+            fill: ["#1ab394", "#d7d7d7"]
         }
     };
     this.PieChart5 = {
-        data : [226, 134],
-        options : {
-            fill : ["#1ab394", "#d7d7d7"]
+        data: [226, 134],
+        options: {
+            fill: ["#1ab394", "#d7d7d7"]
         }
     };
     this.PieChart6 = {
-        data : [0.52, 1.041],
-        options : {
-            fill : ["#1ab394", "#d7d7d7"]
+        data: [0.52, 1.041],
+        options: {
+            fill: ["#1ab394", "#d7d7d7"]
         }
     };
-
     $scope.$watch('main.contactLists', function(newValue) {
-        if ( typeof newValue != 'undefined') {
+        if (typeof newValue != 'undefined') {
             $scope.main.contactListsFilter = $.extend([], $scope.main.contactLists);
             $scope.main.contactListsFilter.unshift({
-                contactListID : '0',
-                contactListName : 'All contact lists'
+                contactListID: '0',
+                contactListName: 'All contact lists'
             });
             //$scope.main.contactListsFilter = $.extend({}, $scope.main.contactListsFilter);
         }
     }, true);
 }
-
 /**
+ 
  * dashboardFlotOne - simple controller for data
+ 
  * for Flot chart in Dashboard view
+ 
  */
 function dashboardFlotOne() {
-    var data1 = [[0, 4], [1, 8], [2, 5], [3, 10], [4, 4], [5, 16], [6, 5], [7, 11], [8, 6], [9, 11], [10, 30], [11, 10], [12, 13], [13, 4], [14, 3], [15, 3], [16, 6]];
-    var data2 = [[0, 1], [1, 0], [2, 2], [3, 0], [4, 1], [5, 3], [6, 1], [7, 5], [8, 2], [9, 3], [10, 2], [11, 1], [12, 0], [13, 2], [14, 8], [15, 0], [16, 0]];
+    var data1 = [
+        [0, 4],
+        [1, 8],
+        [2, 5],
+        [3, 10],
+        [4, 4],
+        [5, 16],
+        [6, 5],
+        [7, 11],
+        [8, 6],
+        [9, 11],
+        [10, 30],
+        [11, 10],
+        [12, 13],
+        [13, 4],
+        [14, 3],
+        [15, 3],
+        [16, 6]
+    ];
+    var data2 = [
+        [0, 1],
+        [1, 0],
+        [2, 2],
+        [3, 0],
+        [4, 1],
+        [5, 3],
+        [6, 1],
+        [7, 5],
+        [8, 2],
+        [9, 3],
+        [10, 2],
+        [11, 1],
+        [12, 0],
+        [13, 2],
+        [14, 8],
+        [15, 0],
+        [16, 0]
+    ];
     var options = {
-        series : {
-            lines : {
-                show : false,
-                fill : true
+        series: {
+            lines: {
+                show: false,
+                fill: true
             },
-            splines : {
-                show : true,
-                tension : 0.4,
-                lineWidth : 1,
-                fill : 0.4
+            splines: {
+                show: true,
+                tension: 0.4,
+                lineWidth: 1,
+                fill: 0.4
             },
-            points : {
-                radius : 0,
-                show : true
+            points: {
+                radius: 0,
+                show: true
             },
-            shadowSize : 2,
-            grow : {
-                stepMode : "linear",
-                stepDirection : "up",
-                steps : 80
+            shadowSize: 2,
+            grow: {
+                stepMode: "linear",
+                stepDirection: "up",
+                steps: 80
             }
         },
-        grow : {
-            stepMode : "linear",
-            stepDirection : "up",
-            steps : 80
+        grow: {
+            stepMode: "linear",
+            stepDirection: "up",
+            steps: 80
         },
-        grid : {
-            hoverable : true,
-            clickable : true,
-            tickColor : "#d5d5d5",
-            borderWidth : 1,
-            color : '#d5d5d5'
+        grid: {
+            hoverable: true,
+            clickable: true,
+            tickColor: "#d5d5d5",
+            borderWidth: 1,
+            color: '#d5d5d5'
         },
-        colors : ["#1ab394", "#464f88"],
-        xaxis : {
+        colors: ["#1ab394", "#464f88"],
+        xaxis: {},
+        yaxis: {
+            ticks: 4
         },
-        yaxis : {
-            ticks : 4
-        },
-        tooltip : false
+        tooltip: false
     };
     /**
+     
      * Definition of variables
+     
      * Flot chart
+     
      */
     this.flotData = [data1, data2];
     this.flotOptions = options;
 }
-
 /**
+ 
  * dashboardFlotTwo - simple controller for data
+ 
  * for Flot chart in Dashboard view
+ 
  */
 function dashboardFlotTwo() {
-    var data1 = [[gd(2012, 1, 1), 7], [gd(2012, 1, 2), 6], [gd(2012, 1, 3), 4], [gd(2012, 1, 4), 8], [gd(2012, 1, 5), 9], [gd(2012, 1, 6), 7], [gd(2012, 1, 7), 5], [gd(2012, 1, 8), 4], [gd(2012, 1, 9), 7], [gd(2012, 1, 10), 8], [gd(2012, 1, 11), 9], [gd(2012, 1, 12), 6], [gd(2012, 1, 13), 4], [gd(2012, 1, 14), 5], [gd(2012, 1, 15), 11], [gd(2012, 1, 16), 8], [gd(2012, 1, 17), 8], [gd(2012, 1, 18), 11], [gd(2012, 1, 19), 11], [gd(2012, 1, 20), 6], [gd(2012, 1, 21), 6], [gd(2012, 1, 22), 8], [gd(2012, 1, 23), 11], [gd(2012, 1, 24), 13], [gd(2012, 1, 25), 7], [gd(2012, 1, 26), 9], [gd(2012, 1, 27), 9], [gd(2012, 1, 28), 8], [gd(2012, 1, 29), 5], [gd(2012, 1, 30), 8], [gd(2012, 1, 31), 25]];
-    var data2 = [[gd(2012, 1, 1), 800], [gd(2012, 1, 2), 500], [gd(2012, 1, 3), 600], [gd(2012, 1, 4), 700], [gd(2012, 1, 5), 500], [gd(2012, 1, 6), 456], [gd(2012, 1, 7), 800], [gd(2012, 1, 8), 589], [gd(2012, 1, 9), 467], [gd(2012, 1, 10), 876], [gd(2012, 1, 11), 689], [gd(2012, 1, 12), 700], [gd(2012, 1, 13), 500], [gd(2012, 1, 14), 600], [gd(2012, 1, 15), 700], [gd(2012, 1, 16), 786], [gd(2012, 1, 17), 345], [gd(2012, 1, 18), 888], [gd(2012, 1, 19), 888], [gd(2012, 1, 20), 888], [gd(2012, 1, 21), 987], [gd(2012, 1, 22), 444], [gd(2012, 1, 23), 999], [gd(2012, 1, 24), 567], [gd(2012, 1, 25), 786], [gd(2012, 1, 26), 666], [gd(2012, 1, 27), 888], [gd(2012, 1, 28), 900], [gd(2012, 1, 29), 178], [gd(2012, 1, 30), 555], [gd(2012, 1, 31), 993]];
+    var data1 = [
+        [gd(2012, 1, 1), 7],
+        [gd(2012, 1, 2), 6],
+        [gd(2012, 1, 3), 4],
+        [gd(2012, 1, 4), 8],
+        [gd(2012, 1, 5), 9],
+        [gd(2012, 1, 6), 7],
+        [gd(2012, 1, 7), 5],
+        [gd(2012, 1, 8), 4],
+        [gd(2012, 1, 9), 7],
+        [gd(2012, 1, 10), 8],
+        [gd(2012, 1, 11), 9],
+        [gd(2012, 1, 12), 6],
+        [gd(2012, 1, 13), 4],
+        [gd(2012, 1, 14), 5],
+        [gd(2012, 1, 15), 11],
+        [gd(2012, 1, 16), 8],
+        [gd(2012, 1, 17), 8],
+        [gd(2012, 1, 18), 11],
+        [gd(2012, 1, 19), 11],
+        [gd(2012, 1, 20), 6],
+        [gd(2012, 1, 21), 6],
+        [gd(2012, 1, 22), 8],
+        [gd(2012, 1, 23), 11],
+        [gd(2012, 1, 24), 13],
+        [gd(2012, 1, 25), 7],
+        [gd(2012, 1, 26), 9],
+        [gd(2012, 1, 27), 9],
+        [gd(2012, 1, 28), 8],
+        [gd(2012, 1, 29), 5],
+        [gd(2012, 1, 30), 8],
+        [gd(2012, 1, 31), 25]
+    ];
+    var data2 = [
+        [gd(2012, 1, 1), 800],
+        [gd(2012, 1, 2), 500],
+        [gd(2012, 1, 3), 600],
+        [gd(2012, 1, 4), 700],
+        [gd(2012, 1, 5), 500],
+        [gd(2012, 1, 6), 456],
+        [gd(2012, 1, 7), 800],
+        [gd(2012, 1, 8), 589],
+        [gd(2012, 1, 9), 467],
+        [gd(2012, 1, 10), 876],
+        [gd(2012, 1, 11), 689],
+        [gd(2012, 1, 12), 700],
+        [gd(2012, 1, 13), 500],
+        [gd(2012, 1, 14), 600],
+        [gd(2012, 1, 15), 700],
+        [gd(2012, 1, 16), 786],
+        [gd(2012, 1, 17), 345],
+        [gd(2012, 1, 18), 888],
+        [gd(2012, 1, 19), 888],
+        [gd(2012, 1, 20), 888],
+        [gd(2012, 1, 21), 987],
+        [gd(2012, 1, 22), 444],
+        [gd(2012, 1, 23), 999],
+        [gd(2012, 1, 24), 567],
+        [gd(2012, 1, 25), 786],
+        [gd(2012, 1, 26), 666],
+        [gd(2012, 1, 27), 888],
+        [gd(2012, 1, 28), 900],
+        [gd(2012, 1, 29), 178],
+        [gd(2012, 1, 30), 555],
+        [gd(2012, 1, 31), 993]
+    ];
     var dataset = [{
-        label : "Number of orders",
-        grow : {
-            stepMode : "linear"
+        label: "Number of orders",
+        grow: {
+            stepMode: "linear"
         },
-        data : data2,
-        color : "#1ab394",
-        bars : {
-            show : true,
-            align : "center",
-            barWidth : 24 * 60 * 60 * 600,
-            lineWidth : 0
+        data: data2,
+        color: "#1ab394",
+        bars: {
+            show: true,
+            align: "center",
+            barWidth: 24 * 60 * 60 * 600,
+            lineWidth: 0
         }
     }, {
-        label : "Payments",
-        grow : {
-            stepMode : "linear"
+        label: "Payments",
+        grow: {
+            stepMode: "linear"
         },
-        data : data1,
-        yaxis : 2,
-        color : "#464f88",
-        lines : {
-            lineWidth : 1,
-            show : true,
-            fill : true,
-            fillColor : {
-                colors : [{
-                    opacity : 0.2
+        data: data1,
+        yaxis: 2,
+        color: "#464f88",
+        lines: {
+            lineWidth: 1,
+            show: true,
+            fill: true,
+            fillColor: {
+                colors: [{
+                    opacity: 0.2
                 }, {
-                    opacity : 0.2
+                    opacity: 0.2
                 }]
             }
         }
     }];
     var options = {
-        grid : {
-            hoverable : true,
-            clickable : true,
-            tickColor : "#d5d5d5",
-            borderWidth : 0,
-            color : '#d5d5d5'
+        grid: {
+            hoverable: true,
+            clickable: true,
+            tickColor: "#d5d5d5",
+            borderWidth: 0,
+            color: '#d5d5d5'
         },
-        colors : ["#1ab394", "#464f88"],
-        tooltip : true,
-        xaxis : {
-            mode : "time",
-            tickSize : [3, "day"],
-            tickLength : 0,
-            axisLabel : "Date",
-            axisLabelUseCanvas : true,
-            axisLabelFontSizePixels : 12,
-            axisLabelFontFamily : 'Arial',
-            axisLabelPadding : 10,
-            color : "#d5d5d5"
+        colors: ["#1ab394", "#464f88"],
+        tooltip: true,
+        xaxis: {
+            mode: "time",
+            tickSize: [3, "day"],
+            tickLength: 0,
+            axisLabel: "Date",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Arial',
+            axisLabelPadding: 10,
+            color: "#d5d5d5"
         },
-        yaxes : [{
-            position : "left",
-            max : 1070,
-            color : "#d5d5d5",
-            axisLabelUseCanvas : true,
-            axisLabelFontSizePixels : 12,
-            axisLabelFontFamily : 'Arial',
-            axisLabelPadding : 3
+        yaxes: [{
+            position: "left",
+            max: 1070,
+            color: "#d5d5d5",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Arial',
+            axisLabelPadding: 3
         }, {
-            position : "right",
-            clolor : "#d5d5d5",
-            axisLabelUseCanvas : true,
-            axisLabelFontSizePixels : 12,
-            axisLabelFontFamily : ' Arial',
-            axisLabelPadding : 67
+            position: "right",
+            clolor: "#d5d5d5",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: ' Arial',
+            axisLabelPadding: 67
         }],
-        legend : {
-            noColumns : 1,
-            labelBoxBorderColor : "#d5d5d5",
-            position : "nw"
+        legend: {
+            noColumns: 1,
+            labelBoxBorderColor: "#d5d5d5",
+            position: "nw"
         }
     };
+
     function gd(year, month, day) {
         return new Date(year, month - 1, day).getTime();
     }
-
     /**
+     
      * Definition of variables
+     
      * Flot chart
+     
      */
     this.flotData = dataset;
     this.flotOptions = options;
 }
-
 /**
+ 
  * dashboardMap - data for Map plugin
+ 
  * used in Dashboard 2 view
+ 
  */
 function dashboardMap() {
     var data = {
-        "US" : 298,
-        "SA" : 200,
-        "DE" : 220,
-        "FR" : 540,
-        "CN" : 120,
-        "AU" : 760,
-        "BR" : 550,
-        "IN" : 200,
-        "GB" : 120
+        "US": 298,
+        "SA": 200,
+        "DE": 220,
+        "FR": 540,
+        "CN": 120,
+        "AU": 760,
+        "BR": 550,
+        "IN": 200,
+        "GB": 120
     };
     this.data = data;
 }
-
 /**
+ 
  * flotChartCtrl - Controller for data for All flot chart
+ 
  * used in Flot chart view
+ 
  */
 function flotChartCtrl() {
     /**
+     
      * Bar Chart Options
+     
      */
     var barOptions = {
-        series : {
-            bars : {
-                show : true,
-                barWidth : 0.6,
-                fill : true,
-                fillColor : {
-                    colors : [{
-                        opacity : 0.8
+        series: {
+            bars: {
+                show: true,
+                barWidth: 0.6,
+                fill: true,
+                fillColor: {
+                    colors: [{
+                        opacity: 0.8
                     }, {
-                        opacity : 0.8
+                        opacity: 0.8
                     }]
                 }
             }
         },
-        xaxis : {
-            tickDecimals : 0
+        xaxis: {
+            tickDecimals: 0
         },
-        colors : ["#1ab394"],
-        grid : {
-            color : "#999999",
-            hoverable : true,
-            clickable : true,
-            tickColor : "#D4D4D4",
-            borderWidth : 0
+        colors: ["#1ab394"],
+        grid: {
+            color: "#999999",
+            hoverable: true,
+            clickable: true,
+            tickColor: "#D4D4D4",
+            borderWidth: 0
         },
-        legend : {
-            show : false
+        legend: {
+            show: false
         },
-        tooltip : true,
-        tooltipOpts : {
-            content : "x: %x, y: %y"
+        tooltip: true,
+        tooltipOpts: {
+            content: "x: %x, y: %y"
         }
     };
     /**
+     
      * Bar Chart data
+     
      */
     var chartData = [{
-        label : "bar",
-        data : [[1, 34], [2, 25], [3, 19], [4, 34], [5, 32], [6, 44]]
+        label: "bar",
+        data: [
+            [1, 34],
+            [2, 25],
+            [3, 19],
+            [4, 34],
+            [5, 32],
+            [6, 44]
+        ]
     }];
     /**
+     
      * Pie Chart Data
+     
      */
     var pieData = [{
-        label : "Sales 1",
-        data : 21,
-        color : "#d3d3d3"
+        label: "Sales 1",
+        data: 21,
+        color: "#d3d3d3"
     }, {
-        label : "Sales 2",
-        data : 3,
-        color : "#bababa"
+        label: "Sales 2",
+        data: 3,
+        color: "#bababa"
     }, {
-        label : "Sales 3",
-        data : 15,
-        color : "#79d2c0"
+        label: "Sales 3",
+        data: 15,
+        color: "#79d2c0"
     }, {
-        label : "Sales 4",
-        data : 52,
-        color : "#1ab394"
+        label: "Sales 4",
+        data: 52,
+        color: "#1ab394"
     }];
     /**
+     
      * Pie Chart Options
+     
      */
     var pieOptions = {
-        series : {
-            pie : {
-                show : true
+        series: {
+            pie: {
+                show: true
             }
         },
-        grid : {
-            hoverable : true
+        grid: {
+            hoverable: true
         },
-        tooltip : true,
-        tooltipOpts : {
-            content : "%p.0%, %s", // show percentages, rounding to 2 decimal places
-            shifts : {
-                x : 20,
-                y : 0
+        tooltip: true,
+        tooltipOpts: {
+            content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+            shifts: {
+                x: 20,
+                y: 0
             },
-            defaultTheme : false
+            defaultTheme: false
         }
     };
     /**
+     
      * Line Chart Options
+     
      */
     var lineOptions = {
-        series : {
-            lines : {
-                show : true,
-                lineWidth : 2,
-                fill : true,
-                fillColor : {
-                    colors : [{
-                        opacity : 0.0
+        series: {
+            lines: {
+                show: true,
+                lineWidth: 2,
+                fill: true,
+                fillColor: {
+                    colors: [{
+                        opacity: 0.0
                     }, {
-                        opacity : 0.0
+                        opacity: 0.0
                     }]
                 }
             }
         },
-        xaxis : {
-            tickDecimals : 0
+        xaxis: {
+            tickDecimals: 0
         },
-        colors : ["#1ab394"],
-        grid : {
-            color : "#999999",
-            hoverable : true,
-            clickable : true,
-            tickColor : "#D4D4D4",
-            borderWidth : 0
+        colors: ["#1ab394"],
+        grid: {
+            color: "#999999",
+            hoverable: true,
+            clickable: true,
+            tickColor: "#D4D4D4",
+            borderWidth: 0
         },
-        legend : {
-            show : false
+        legend: {
+            show: false
         },
-        tooltip : true,
-        tooltipOpts : {
-            content : "x: %x, y: %y"
+        tooltip: true,
+        tooltipOpts: {
+            content: "x: %x, y: %y"
         }
     };
     /**
+     
      * Line Chart Data
+     
      */
     var lineAreaData = [{
-        label : "line",
-        data : [[1, 34], [2, 22], [3, 19], [4, 12], [5, 32], [6, 54], [7, 23], [8, 57], [9, 12], [10, 24], [11, 44], [12, 64], [13, 21]]
+        label: "line",
+        data: [
+            [1, 34],
+            [2, 22],
+            [3, 19],
+            [4, 12],
+            [5, 32],
+            [6, 54],
+            [7, 23],
+            [8, 57],
+            [9, 12],
+            [10, 24],
+            [11, 44],
+            [12, 64],
+            [13, 21]
+        ]
     }];
     /**
+     
      * Line Area Chart Options
+     
      */
     var lineAreaOptions = {
-        series : {
-            lines : {
-                show : true,
-                lineWidth : 2,
-                fill : true,
-                fillColor : {
-                    colors : [{
-                        opacity : 0.7
+        series: {
+            lines: {
+                show: true,
+                lineWidth: 2,
+                fill: true,
+                fillColor: {
+                    colors: [{
+                        opacity: 0.7
                     }, {
-                        opacity : 0.5
+                        opacity: 0.5
                     }]
                 }
             }
         },
-        xaxis : {
-            tickDecimals : 0
+        xaxis: {
+            tickDecimals: 0
         },
-        colors : ["#1ab394"],
-        grid : {
-            color : "#999999",
-            hoverable : true,
-            clickable : true,
-            tickColor : "#D4D4D4",
-            borderWidth : 0
+        colors: ["#1ab394"],
+        grid: {
+            color: "#999999",
+            hoverable: true,
+            clickable: true,
+            tickColor: "#D4D4D4",
+            borderWidth: 0
         },
-        legend : {
-            show : false
+        legend: {
+            show: false
         },
-        tooltip : true,
-        tooltipOpts : {
-            content : "x: %x, y: %y"
+        tooltip: true,
+        tooltipOpts: {
+            content: "x: %x, y: %y"
         }
     };
     /**
+     
      * Data for Multi line chart
+     
      */
-    var oilprices = [[1167692400000, 61.05], [1167778800000, 58.32], [1167865200000, 57.35], [1167951600000, 56.31], [1168210800000, 55.55], [1168297200000, 55.64], [1168383600000, 54.02], [1168470000000, 51.88], [1168556400000, 52.99], [1168815600000, 52.99], [1168902000000, 51.21], [1168988400000, 52.24], [1169074800000, 50.48], [1169161200000, 51.99], [1169420400000, 51.13], [1169506800000, 55.04], [1169593200000, 55.37], [1169679600000, 54.23], [1169766000000, 55.42], [1170025200000, 54.01], [1170111600000, 56.97], [1170198000000, 58.14], [1170284400000, 58.14], [1170370800000, 59.02], [1170630000000, 58.74], [1170716400000, 58.88], [1170802800000, 57.71], [1170889200000, 59.71], [1170975600000, 59.89], [1171234800000, 57.81], [1171321200000, 59.06], [1171407600000, 58.00], [1171494000000, 57.99], [1171580400000, 59.39], [1171839600000, 59.39], [1171926000000, 58.07], [1172012400000, 60.07], [1172098800000, 61.14], [1172444400000, 61.39], [1172530800000, 61.46], [1172617200000, 61.79], [1172703600000, 62.00], [1172790000000, 60.07], [1173135600000, 60.69], [1173222000000, 61.82], [1173308400000, 60.05], [1173654000000, 58.91], [1173740400000, 57.93], [1173826800000, 58.16], [1173913200000, 57.55], [1173999600000, 57.11], [1174258800000, 56.59], [1174345200000, 59.61], [1174518000000, 61.69], [1174604400000, 62.28], [1174860000000, 62.91], [1174946400000, 62.93], [1175032800000, 64.03], [1175119200000, 66.03], [1175205600000, 65.87], [1175464800000, 64.64], [1175637600000, 64.38], [1175724000000, 64.28], [1175810400000, 64.28], [1176069600000, 61.51], [1176156000000, 61.89], [1176242400000, 62.01], [1176328800000, 63.85], [1176415200000, 63.63], [1176674400000, 63.61], [1176760800000, 63.10], [1176847200000, 63.13], [1176933600000, 61.83], [1177020000000, 63.38], [1177279200000, 64.58], [1177452000000, 65.84], [1177538400000, 65.06], [1177624800000, 66.46], [1177884000000, 64.40], [1178056800000, 63.68], [1178143200000, 63.19], [1178229600000, 61.93], [1178488800000, 61.47], [1178575200000, 61.55], [1178748000000, 61.81], [1178834400000, 62.37], [1179093600000, 62.46], [1179180000000, 63.17], [1179266400000, 62.55], [1179352800000, 64.94], [1179698400000, 66.27], [1179784800000, 65.50], [1179871200000, 65.77], [1179957600000, 64.18], [1180044000000, 65.20], [1180389600000, 63.15], [1180476000000, 63.49], [1180562400000, 65.08], [1180908000000, 66.30], [1180994400000, 65.96], [1181167200000, 66.93], [1181253600000, 65.98], [1181599200000, 65.35], [1181685600000, 66.26], [1181858400000, 68.00], [1182117600000, 69.09], [1182204000000, 69.10], [1182290400000, 68.19], [1182376800000, 68.19], [1182463200000, 69.14], [1182722400000, 68.19], [1182808800000, 67.77], [1182895200000, 68.97], [1182981600000, 69.57], [1183068000000, 70.68], [1183327200000, 71.09], [1183413600000, 70.92], [1183586400000, 71.81], [1183672800000, 72.81], [1183932000000, 72.19], [1184018400000, 72.56], [1184191200000, 72.50], [1184277600000, 74.15], [1184623200000, 75.05], [1184796000000, 75.92], [1184882400000, 75.57], [1185141600000, 74.89], [1185228000000, 73.56], [1185314400000, 75.57], [1185400800000, 74.95], [1185487200000, 76.83], [1185832800000, 78.21], [1185919200000, 76.53], [1186005600000, 76.86], [1186092000000, 76.00], [1186437600000, 71.59], [1186696800000, 71.47], [1186956000000, 71.62], [1187042400000, 71.00], [1187301600000, 71.98], [1187560800000, 71.12], [1187647200000, 69.47], [1187733600000, 69.26], [1187820000000, 69.83], [1187906400000, 71.09], [1188165600000, 71.73], [1188338400000, 73.36], [1188511200000, 74.04], [1188856800000, 76.30], [1189116000000, 77.49], [1189461600000, 78.23], [1189548000000, 79.91], [1189634400000, 80.09], [1189720800000, 79.10], [1189980000000, 80.57], [1190066400000, 81.93], [1190239200000, 83.32], [1190325600000, 81.62], [1190584800000, 80.95], [1190671200000, 79.53], [1190757600000, 80.30], [1190844000000, 82.88], [1190930400000, 81.66], [1191189600000, 80.24], [1191276000000, 80.05], [1191362400000, 79.94], [1191448800000, 81.44], [1191535200000, 81.22], [1191794400000, 79.02], [1191880800000, 80.26], [1191967200000, 80.30], [1192053600000, 83.08], [1192140000000, 83.69], [1192399200000, 86.13], [1192485600000, 87.61], [1192572000000, 87.40], [1192658400000, 89.47], [1192744800000, 88.60], [1193004000000, 87.56], [1193090400000, 87.56], [1193176800000, 87.10], [1193263200000, 91.86], [1193612400000, 93.53], [1193698800000, 94.53], [1193871600000, 95.93], [1194217200000, 93.98], [1194303600000, 96.37], [1194476400000, 95.46], [1194562800000, 96.32], [1195081200000, 93.43], [1195167600000, 95.10], [1195426800000, 94.64], [1195513200000, 95.10], [1196031600000, 97.70], [1196118000000, 94.42], [1196204400000, 90.62], [1196290800000, 91.01], [1196377200000, 88.71], [1196636400000, 88.32], [1196809200000, 90.23], [1196982000000, 88.28], [1197241200000, 87.86], [1197327600000, 90.02], [1197414000000, 92.25], [1197586800000, 90.63], [1197846000000, 90.63], [1197932400000, 90.49], [1198018800000, 91.24], [1198105200000, 91.06], [1198191600000, 90.49], [1198710000000, 96.62], [1198796400000, 96.00], [1199142000000, 99.62], [1199314800000, 99.18], [1199401200000, 95.09], [1199660400000, 96.33], [1199833200000, 95.67], [1200351600000, 91.90], [1200438000000, 90.84], [1200524400000, 90.13], [1200610800000, 90.57], [1200956400000, 89.21], [1201042800000, 86.99], [1201129200000, 89.85], [1201474800000, 90.99], [1201561200000, 91.64], [1201647600000, 92.33], [1201734000000, 91.75], [1202079600000, 90.02], [1202166000000, 88.41], [1202252400000, 87.14], [1202338800000, 88.11], [1202425200000, 91.77], [1202770800000, 92.78], [1202857200000, 93.27], [1202943600000, 95.46], [1203030000000, 95.46], [1203289200000, 101.74], [1203462000000, 98.81], [1203894000000, 100.88], [1204066800000, 99.64], [1204153200000, 102.59], [1204239600000, 101.84], [1204498800000, 99.52], [1204585200000, 99.52], [1204671600000, 104.52], [1204758000000, 105.47], [1204844400000, 105.15], [1205103600000, 108.75], [1205276400000, 109.92], [1205362800000, 110.33], [1205449200000, 110.21], [1205708400000, 105.68], [1205967600000, 101.84], [1206313200000, 100.86], [1206399600000, 101.22], [1206486000000, 105.90], [1206572400000, 107.58], [1206658800000, 105.62], [1206914400000, 101.58], [1207000800000, 100.98], [1207173600000, 103.83], [1207260000000, 106.23], [1207605600000, 108.50], [1207778400000, 110.11], [1207864800000, 110.14], [1208210400000, 113.79], [1208296800000, 114.93], [1208383200000, 114.86], [1208728800000, 117.48], [1208815200000, 118.30], [1208988000000, 116.06], [1209074400000, 118.52], [1209333600000, 118.75], [1209420000000, 113.46], [1209592800000, 112.52], [1210024800000, 121.84], [1210111200000, 123.53], [1210197600000, 123.69], [1210543200000, 124.23], [1210629600000, 125.80], [1210716000000, 126.29], [1211148000000, 127.05], [1211320800000, 129.07], [1211493600000, 132.19], [1211839200000, 128.85], [1212357600000, 127.76], [1212703200000, 138.54], [1212962400000, 136.80], [1213135200000, 136.38], [1213308000000, 134.86], [1213653600000, 134.01], [1213740000000, 136.68], [1213912800000, 135.65], [1214172000000, 134.62], [1214258400000, 134.62], [1214344800000, 134.62], [1214431200000, 139.64], [1214517600000, 140.21], [1214776800000, 140.00], [1214863200000, 140.97], [1214949600000, 143.57], [1215036000000, 145.29], [1215381600000, 141.37], [1215468000000, 136.04], [1215727200000, 146.40], [1215986400000, 145.18], [1216072800000, 138.74], [1216159200000, 134.60], [1216245600000, 129.29], [1216332000000, 130.65], [1216677600000, 127.95], [1216850400000, 127.95], [1217282400000, 122.19], [1217455200000, 124.08], [1217541600000, 125.10], [1217800800000, 121.41], [1217887200000, 119.17], [1217973600000, 118.58], [1218060000000, 120.02], [1218405600000, 114.45], [1218492000000, 113.01], [1218578400000, 116.00], [1218751200000, 113.77], [1219010400000, 112.87], [1219096800000, 114.53], [1219269600000, 114.98], [1219356000000, 114.98], [1219701600000, 116.27], [1219788000000, 118.15], [1219874400000, 115.59], [1219960800000, 115.46], [1220306400000, 109.71], [1220392800000, 109.35], [1220565600000, 106.23], [1220824800000, 106.34]];
-    var exchangerates = [[1167606000000, 0.7580], [1167692400000, 0.7580], [1167778800000, 0.75470], [1167865200000, 0.75490], [1167951600000, 0.76130], [1168038000000, 0.76550], [1168124400000, 0.76930], [1168210800000, 0.76940], [1168297200000, 0.76880], [1168383600000, 0.76780], [1168470000000, 0.77080], [1168556400000, 0.77270], [1168642800000, 0.77490], [1168729200000, 0.77410], [1168815600000, 0.77410], [1168902000000, 0.77320], [1168988400000, 0.77270], [1169074800000, 0.77370], [1169161200000, 0.77240], [1169247600000, 0.77120], [1169334000000, 0.7720], [1169420400000, 0.77210], [1169506800000, 0.77170], [1169593200000, 0.77040], [1169679600000, 0.7690], [1169766000000, 0.77110], [1169852400000, 0.7740], [1169938800000, 0.77450], [1170025200000, 0.77450], [1170111600000, 0.7740], [1170198000000, 0.77160], [1170284400000, 0.77130], [1170370800000, 0.76780], [1170457200000, 0.76880], [1170543600000, 0.77180], [1170630000000, 0.77180], [1170716400000, 0.77280], [1170802800000, 0.77290], [1170889200000, 0.76980], [1170975600000, 0.76850], [1171062000000, 0.76810], [1171148400000, 0.7690], [1171234800000, 0.7690], [1171321200000, 0.76980], [1171407600000, 0.76990], [1171494000000, 0.76510], [1171580400000, 0.76130], [1171666800000, 0.76160], [1171753200000, 0.76140], [1171839600000, 0.76140], [1171926000000, 0.76070], [1172012400000, 0.76020], [1172098800000, 0.76110], [1172185200000, 0.76220], [1172271600000, 0.76150], [1172358000000, 0.75980], [1172444400000, 0.75980], [1172530800000, 0.75920], [1172617200000, 0.75730], [1172703600000, 0.75660], [1172790000000, 0.75670], [1172876400000, 0.75910], [1172962800000, 0.75820], [1173049200000, 0.75850], [1173135600000, 0.76130], [1173222000000, 0.76310], [1173308400000, 0.76150], [1173394800000, 0.760], [1173481200000, 0.76130], [1173567600000, 0.76270], [1173654000000, 0.76270], [1173740400000, 0.76080], [1173826800000, 0.75830], [1173913200000, 0.75750], [1173999600000, 0.75620], [1174086000000, 0.7520], [1174172400000, 0.75120], [1174258800000, 0.75120], [1174345200000, 0.75170], [1174431600000, 0.7520], [1174518000000, 0.75110], [1174604400000, 0.7480], [1174690800000, 0.75090], [1174777200000, 0.75310], [1174860000000, 0.75310], [1174946400000, 0.75270], [1175032800000, 0.74980], [1175119200000, 0.74930], [1175205600000, 0.75040], [1175292000000, 0.750], [1175378400000, 0.74910], [1175464800000, 0.74910], [1175551200000, 0.74850], [1175637600000, 0.74840], [1175724000000, 0.74920], [1175810400000, 0.74710], [1175896800000, 0.74590], [1175983200000, 0.74770], [1176069600000, 0.74770], [1176156000000, 0.74830], [1176242400000, 0.74580], [1176328800000, 0.74480], [1176415200000, 0.7430], [1176501600000, 0.73990], [1176588000000, 0.73950], [1176674400000, 0.73950], [1176760800000, 0.73780], [1176847200000, 0.73820], [1176933600000, 0.73620], [1177020000000, 0.73550], [1177106400000, 0.73480], [1177192800000, 0.73610], [1177279200000, 0.73610], [1177365600000, 0.73650], [1177452000000, 0.73620], [1177538400000, 0.73310], [1177624800000, 0.73390], [1177711200000, 0.73440], [1177797600000, 0.73270], [1177884000000, 0.73270], [1177970400000, 0.73360], [1178056800000, 0.73330], [1178143200000, 0.73590], [1178229600000, 0.73590], [1178316000000, 0.73720], [1178402400000, 0.7360], [1178488800000, 0.7360], [1178575200000, 0.7350], [1178661600000, 0.73650], [1178748000000, 0.73840], [1178834400000, 0.73950], [1178920800000, 0.74130], [1179007200000, 0.73970], [1179093600000, 0.73960], [1179180000000, 0.73850], [1179266400000, 0.73780], [1179352800000, 0.73660], [1179439200000, 0.740], [1179525600000, 0.74110], [1179612000000, 0.74060], [1179698400000, 0.74050], [1179784800000, 0.74140], [1179871200000, 0.74310], [1179957600000, 0.74310], [1180044000000, 0.74380], [1180130400000, 0.74430], [1180216800000, 0.74430], [1180303200000, 0.74430], [1180389600000, 0.74340], [1180476000000, 0.74290], [1180562400000, 0.74420], [1180648800000, 0.7440], [1180735200000, 0.74390], [1180821600000, 0.74370], [1180908000000, 0.74370], [1180994400000, 0.74290], [1181080800000, 0.74030], [1181167200000, 0.73990], [1181253600000, 0.74180], [1181340000000, 0.74680], [1181426400000, 0.7480], [1181512800000, 0.7480], [1181599200000, 0.7490], [1181685600000, 0.74940], [1181772000000, 0.75220], [1181858400000, 0.75150], [1181944800000, 0.75020], [1182031200000, 0.74720], [1182117600000, 0.74720], [1182204000000, 0.74620], [1182290400000, 0.74550], [1182376800000, 0.74490], [1182463200000, 0.74670], [1182549600000, 0.74580], [1182636000000, 0.74270], [1182722400000, 0.74270], [1182808800000, 0.7430], [1182895200000, 0.74290], [1182981600000, 0.7440], [1183068000000, 0.7430], [1183154400000, 0.74220], [1183240800000, 0.73880], [1183327200000, 0.73880], [1183413600000, 0.73690], [1183500000000, 0.73450], [1183586400000, 0.73450], [1183672800000, 0.73450], [1183759200000, 0.73520], [1183845600000, 0.73410], [1183932000000, 0.73410], [1184018400000, 0.7340], [1184104800000, 0.73240], [1184191200000, 0.72720], [1184277600000, 0.72640], [1184364000000, 0.72550], [1184450400000, 0.72580], [1184536800000, 0.72580], [1184623200000, 0.72560], [1184709600000, 0.72570], [1184796000000, 0.72470], [1184882400000, 0.72430], [1184968800000, 0.72440], [1185055200000, 0.72350], [1185141600000, 0.72350], [1185228000000, 0.72350], [1185314400000, 0.72350], [1185400800000, 0.72620], [1185487200000, 0.72880], [1185573600000, 0.73010], [1185660000000, 0.73370], [1185746400000, 0.73370], [1185832800000, 0.73240], [1185919200000, 0.72970], [1186005600000, 0.73170], [1186092000000, 0.73150], [1186178400000, 0.72880], [1186264800000, 0.72630], [1186351200000, 0.72630], [1186437600000, 0.72420], [1186524000000, 0.72530], [1186610400000, 0.72640], [1186696800000, 0.7270], [1186783200000, 0.73120], [1186869600000, 0.73050], [1186956000000, 0.73050], [1187042400000, 0.73180], [1187128800000, 0.73580], [1187215200000, 0.74090], [1187301600000, 0.74540], [1187388000000, 0.74370], [1187474400000, 0.74240], [1187560800000, 0.74240], [1187647200000, 0.74150], [1187733600000, 0.74190], [1187820000000, 0.74140], [1187906400000, 0.73770], [1187992800000, 0.73550], [1188079200000, 0.73150], [1188165600000, 0.73150], [1188252000000, 0.7320], [1188338400000, 0.73320], [1188424800000, 0.73460], [1188511200000, 0.73280], [1188597600000, 0.73230], [1188684000000, 0.7340], [1188770400000, 0.7340], [1188856800000, 0.73360], [1188943200000, 0.73510], [1189029600000, 0.73460], [1189116000000, 0.73210], [1189202400000, 0.72940], [1189288800000, 0.72660], [1189375200000, 0.72660], [1189461600000, 0.72540], [1189548000000, 0.72420], [1189634400000, 0.72130], [1189720800000, 0.71970], [1189807200000, 0.72090], [1189893600000, 0.7210], [1189980000000, 0.7210], [1190066400000, 0.7210], [1190152800000, 0.72090], [1190239200000, 0.71590], [1190325600000, 0.71330], [1190412000000, 0.71050], [1190498400000, 0.70990], [1190584800000, 0.70990], [1190671200000, 0.70930], [1190757600000, 0.70930], [1190844000000, 0.70760], [1190930400000, 0.7070], [1191016800000, 0.70490], [1191103200000, 0.70120], [1191189600000, 0.70110], [1191276000000, 0.70190], [1191362400000, 0.70460], [1191448800000, 0.70630], [1191535200000, 0.70890], [1191621600000, 0.70770], [1191708000000, 0.70770], [1191794400000, 0.70770], [1191880800000, 0.70910], [1191967200000, 0.71180], [1192053600000, 0.70790], [1192140000000, 0.70530], [1192226400000, 0.7050], [1192312800000, 0.70550], [1192399200000, 0.70550], [1192485600000, 0.70450], [1192572000000, 0.70510], [1192658400000, 0.70510], [1192744800000, 0.70170], [1192831200000, 0.70], [1192917600000, 0.69950], [1193004000000, 0.69940], [1193090400000, 0.70140], [1193176800000, 0.70360], [1193263200000, 0.70210], [1193349600000, 0.70020], [1193436000000, 0.69670], [1193522400000, 0.6950], [1193612400000, 0.6950], [1193698800000, 0.69390], [1193785200000, 0.6940], [1193871600000, 0.69220], [1193958000000, 0.69190], [1194044400000, 0.69140], [1194130800000, 0.68940], [1194217200000, 0.68910], [1194303600000, 0.69040], [1194390000000, 0.6890], [1194476400000, 0.68340], [1194562800000, 0.68230], [1194649200000, 0.68070], [1194735600000, 0.68150], [1194822000000, 0.68150], [1194908400000, 0.68470], [1194994800000, 0.68590], [1195081200000, 0.68220], [1195167600000, 0.68270], [1195254000000, 0.68370], [1195340400000, 0.68230], [1195426800000, 0.68220], [1195513200000, 0.68220], [1195599600000, 0.67920], [1195686000000, 0.67460], [1195772400000, 0.67350], [1195858800000, 0.67310], [1195945200000, 0.67420], [1196031600000, 0.67440], [1196118000000, 0.67390], [1196204400000, 0.67310], [1196290800000, 0.67610], [1196377200000, 0.67610], [1196463600000, 0.67850], [1196550000000, 0.68180], [1196636400000, 0.68360], [1196722800000, 0.68230], [1196809200000, 0.68050], [1196895600000, 0.67930], [1196982000000, 0.68490], [1197068400000, 0.68330], [1197154800000, 0.68250], [1197241200000, 0.68250], [1197327600000, 0.68160], [1197414000000, 0.67990], [1197500400000, 0.68130], [1197586800000, 0.68090], [1197673200000, 0.68680], [1197759600000, 0.69330], [1197846000000, 0.69330], [1197932400000, 0.69450], [1198018800000, 0.69440], [1198105200000, 0.69460], [1198191600000, 0.69640], [1198278000000, 0.69650], [1198364400000, 0.69560], [1198450800000, 0.69560], [1198537200000, 0.6950], [1198623600000, 0.69480], [1198710000000, 0.69280], [1198796400000, 0.68870], [1198882800000, 0.68240], [1198969200000, 0.67940], [1199055600000, 0.67940], [1199142000000, 0.68030], [1199228400000, 0.68550], [1199314800000, 0.68240], [1199401200000, 0.67910], [1199487600000, 0.67830], [1199574000000, 0.67850], [1199660400000, 0.67850], [1199746800000, 0.67970], [1199833200000, 0.680], [1199919600000, 0.68030], [1200006000000, 0.68050], [1200092400000, 0.6760], [1200178800000, 0.6770], [1200265200000, 0.6770], [1200351600000, 0.67360], [1200438000000, 0.67260], [1200524400000, 0.67640], [1200610800000, 0.68210], [1200697200000, 0.68310], [1200783600000, 0.68420], [1200870000000, 0.68420], [1200956400000, 0.68870], [1201042800000, 0.69030], [1201129200000, 0.68480], [1201215600000, 0.68240], [1201302000000, 0.67880], [1201388400000, 0.68140], [1201474800000, 0.68140], [1201561200000, 0.67970], [1201647600000, 0.67690], [1201734000000, 0.67650], [1201820400000, 0.67330], [1201906800000, 0.67290], [1201993200000, 0.67580], [1202079600000, 0.67580], [1202166000000, 0.6750], [1202252400000, 0.6780], [1202338800000, 0.68330], [1202425200000, 0.68560], [1202511600000, 0.69030], [1202598000000, 0.68960], [1202684400000, 0.68960], [1202770800000, 0.68820], [1202857200000, 0.68790], [1202943600000, 0.68620], [1203030000000, 0.68520], [1203116400000, 0.68230], [1203202800000, 0.68130], [1203289200000, 0.68130], [1203375600000, 0.68220], [1203462000000, 0.68020], [1203548400000, 0.68020], [1203634800000, 0.67840], [1203721200000, 0.67480], [1203807600000, 0.67470], [1203894000000, 0.67470], [1203980400000, 0.67480], [1204066800000, 0.67330], [1204153200000, 0.6650], [1204239600000, 0.66110], [1204326000000, 0.65830], [1204412400000, 0.6590], [1204498800000, 0.6590], [1204585200000, 0.65810], [1204671600000, 0.65780], [1204758000000, 0.65740], [1204844400000, 0.65320], [1204930800000, 0.65020], [1205017200000, 0.65140], [1205103600000, 0.65140], [1205190000000, 0.65070], [1205276400000, 0.6510], [1205362800000, 0.64890], [1205449200000, 0.64240], [1205535600000, 0.64060], [1205622000000, 0.63820], [1205708400000, 0.63820], [1205794800000, 0.63410], [1205881200000, 0.63440], [1205967600000, 0.63780], [1206054000000, 0.64390], [1206140400000, 0.64780], [1206226800000, 0.64810], [1206313200000, 0.64810], [1206399600000, 0.64940], [1206486000000, 0.64380], [1206572400000, 0.63770], [1206658800000, 0.63290], [1206745200000, 0.63360], [1206831600000, 0.63330], [1206914400000, 0.63330], [1207000800000, 0.6330], [1207087200000, 0.63710], [1207173600000, 0.64030], [1207260000000, 0.63960], [1207346400000, 0.63640], [1207432800000, 0.63560], [1207519200000, 0.63560], [1207605600000, 0.63680], [1207692000000, 0.63570], [1207778400000, 0.63540], [1207864800000, 0.6320], [1207951200000, 0.63320], [1208037600000, 0.63280], [1208124000000, 0.63310], [1208210400000, 0.63420], [1208296800000, 0.63210], [1208383200000, 0.63020], [1208469600000, 0.62780], [1208556000000, 0.63080], [1208642400000, 0.63240], [1208728800000, 0.63240], [1208815200000, 0.63070], [1208901600000, 0.62770], [1208988000000, 0.62690], [1209074400000, 0.63350], [1209160800000, 0.63920], [1209247200000, 0.640], [1209333600000, 0.64010], [1209420000000, 0.63960], [1209506400000, 0.64070], [1209592800000, 0.64230], [1209679200000, 0.64290], [1209765600000, 0.64720], [1209852000000, 0.64850], [1209938400000, 0.64860], [1210024800000, 0.64670], [1210111200000, 0.64440], [1210197600000, 0.64670], [1210284000000, 0.65090], [1210370400000, 0.64780], [1210456800000, 0.64610], [1210543200000, 0.64610], [1210629600000, 0.64680], [1210716000000, 0.64490], [1210802400000, 0.6470], [1210888800000, 0.64610], [1210975200000, 0.64520], [1211061600000, 0.64220], [1211148000000, 0.64220], [1211234400000, 0.64250], [1211320800000, 0.64140], [1211407200000, 0.63660], [1211493600000, 0.63460], [1211580000000, 0.6350], [1211666400000, 0.63460], [1211752800000, 0.63460], [1211839200000, 0.63430], [1211925600000, 0.63460], [1212012000000, 0.63790], [1212098400000, 0.64160], [1212184800000, 0.64420], [1212271200000, 0.64310], [1212357600000, 0.64310], [1212444000000, 0.64350], [1212530400000, 0.6440], [1212616800000, 0.64730], [1212703200000, 0.64690], [1212789600000, 0.63860], [1212876000000, 0.63560], [1212962400000, 0.6340], [1213048800000, 0.63460], [1213135200000, 0.6430], [1213221600000, 0.64520], [1213308000000, 0.64670], [1213394400000, 0.65060], [1213480800000, 0.65040], [1213567200000, 0.65030], [1213653600000, 0.64810], [1213740000000, 0.64510], [1213826400000, 0.6450], [1213912800000, 0.64410], [1213999200000, 0.64140], [1214085600000, 0.64090], [1214172000000, 0.64090], [1214258400000, 0.64280], [1214344800000, 0.64310], [1214431200000, 0.64180], [1214517600000, 0.63710], [1214604000000, 0.63490], [1214690400000, 0.63330], [1214776800000, 0.63340], [1214863200000, 0.63380], [1214949600000, 0.63420], [1215036000000, 0.6320], [1215122400000, 0.63180], [1215208800000, 0.6370], [1215295200000, 0.63680], [1215381600000, 0.63680], [1215468000000, 0.63830], [1215554400000, 0.63710], [1215640800000, 0.63710], [1215727200000, 0.63550], [1215813600000, 0.6320], [1215900000000, 0.62770], [1215986400000, 0.62760], [1216072800000, 0.62910], [1216159200000, 0.62740], [1216245600000, 0.62930], [1216332000000, 0.63110], [1216418400000, 0.6310], [1216504800000, 0.63120], [1216591200000, 0.63120], [1216677600000, 0.63040], [1216764000000, 0.62940], [1216850400000, 0.63480], [1216936800000, 0.63780], [1217023200000, 0.63680], [1217109600000, 0.63680], [1217196000000, 0.63680], [1217282400000, 0.6360], [1217368800000, 0.6370], [1217455200000, 0.64180], [1217541600000, 0.64110], [1217628000000, 0.64350], [1217714400000, 0.64270], [1217800800000, 0.64270], [1217887200000, 0.64190], [1217973600000, 0.64460], [1218060000000, 0.64680], [1218146400000, 0.64870], [1218232800000, 0.65940], [1218319200000, 0.66660], [1218405600000, 0.66660], [1218492000000, 0.66780], [1218578400000, 0.67120], [1218664800000, 0.67050], [1218751200000, 0.67180], [1218837600000, 0.67840], [1218924000000, 0.68110], [1219010400000, 0.68110], [1219096800000, 0.67940], [1219183200000, 0.68040], [1219269600000, 0.67810], [1219356000000, 0.67560], [1219442400000, 0.67350], [1219528800000, 0.67630], [1219615200000, 0.67620], [1219701600000, 0.67770], [1219788000000, 0.68150], [1219874400000, 0.68020], [1219960800000, 0.6780], [1220047200000, 0.67960], [1220133600000, 0.68170], [1220220000000, 0.68170], [1220306400000, 0.68320], [1220392800000, 0.68770], [1220479200000, 0.69120], [1220565600000, 0.69140], [1220652000000, 0.70090], [1220738400000, 0.70120], [1220824800000, 0.7010], [1220911200000, 0.70050]];
+    var oilprices = [
+        [1167692400000, 61.05],
+        [1167778800000, 58.32],
+        [1167865200000, 57.35],
+        [1167951600000, 56.31],
+        [1168210800000, 55.55],
+        [1168297200000, 55.64],
+        [1168383600000, 54.02],
+        [1168470000000, 51.88],
+        [1168556400000, 52.99],
+        [1168815600000, 52.99],
+        [1168902000000, 51.21],
+        [1168988400000, 52.24],
+        [1169074800000, 50.48],
+        [1169161200000, 51.99],
+        [1169420400000, 51.13],
+        [1169506800000, 55.04],
+        [1169593200000, 55.37],
+        [1169679600000, 54.23],
+        [1169766000000, 55.42],
+        [1170025200000, 54.01],
+        [1170111600000, 56.97],
+        [1170198000000, 58.14],
+        [1170284400000, 58.14],
+        [1170370800000, 59.02],
+        [1170630000000, 58.74],
+        [1170716400000, 58.88],
+        [1170802800000, 57.71],
+        [1170889200000, 59.71],
+        [1170975600000, 59.89],
+        [1171234800000, 57.81],
+        [1171321200000, 59.06],
+        [1171407600000, 58.00],
+        [1171494000000, 57.99],
+        [1171580400000, 59.39],
+        [1171839600000, 59.39],
+        [1171926000000, 58.07],
+        [1172012400000, 60.07],
+        [1172098800000, 61.14],
+        [1172444400000, 61.39],
+        [1172530800000, 61.46],
+        [1172617200000, 61.79],
+        [1172703600000, 62.00],
+        [1172790000000, 60.07],
+        [1173135600000, 60.69],
+        [1173222000000, 61.82],
+        [1173308400000, 60.05],
+        [1173654000000, 58.91],
+        [1173740400000, 57.93],
+        [1173826800000, 58.16],
+        [1173913200000, 57.55],
+        [1173999600000, 57.11],
+        [1174258800000, 56.59],
+        [1174345200000, 59.61],
+        [1174518000000, 61.69],
+        [1174604400000, 62.28],
+        [1174860000000, 62.91],
+        [1174946400000, 62.93],
+        [1175032800000, 64.03],
+        [1175119200000, 66.03],
+        [1175205600000, 65.87],
+        [1175464800000, 64.64],
+        [1175637600000, 64.38],
+        [1175724000000, 64.28],
+        [1175810400000, 64.28],
+        [1176069600000, 61.51],
+        [1176156000000, 61.89],
+        [1176242400000, 62.01],
+        [1176328800000, 63.85],
+        [1176415200000, 63.63],
+        [1176674400000, 63.61],
+        [1176760800000, 63.10],
+        [1176847200000, 63.13],
+        [1176933600000, 61.83],
+        [1177020000000, 63.38],
+        [1177279200000, 64.58],
+        [1177452000000, 65.84],
+        [1177538400000, 65.06],
+        [1177624800000, 66.46],
+        [1177884000000, 64.40],
+        [1178056800000, 63.68],
+        [1178143200000, 63.19],
+        [1178229600000, 61.93],
+        [1178488800000, 61.47],
+        [1178575200000, 61.55],
+        [1178748000000, 61.81],
+        [1178834400000, 62.37],
+        [1179093600000, 62.46],
+        [1179180000000, 63.17],
+        [1179266400000, 62.55],
+        [1179352800000, 64.94],
+        [1179698400000, 66.27],
+        [1179784800000, 65.50],
+        [1179871200000, 65.77],
+        [1179957600000, 64.18],
+        [1180044000000, 65.20],
+        [1180389600000, 63.15],
+        [1180476000000, 63.49],
+        [1180562400000, 65.08],
+        [1180908000000, 66.30],
+        [1180994400000, 65.96],
+        [1181167200000, 66.93],
+        [1181253600000, 65.98],
+        [1181599200000, 65.35],
+        [1181685600000, 66.26],
+        [1181858400000, 68.00],
+        [1182117600000, 69.09],
+        [1182204000000, 69.10],
+        [1182290400000, 68.19],
+        [1182376800000, 68.19],
+        [1182463200000, 69.14],
+        [1182722400000, 68.19],
+        [1182808800000, 67.77],
+        [1182895200000, 68.97],
+        [1182981600000, 69.57],
+        [1183068000000, 70.68],
+        [1183327200000, 71.09],
+        [1183413600000, 70.92],
+        [1183586400000, 71.81],
+        [1183672800000, 72.81],
+        [1183932000000, 72.19],
+        [1184018400000, 72.56],
+        [1184191200000, 72.50],
+        [1184277600000, 74.15],
+        [1184623200000, 75.05],
+        [1184796000000, 75.92],
+        [1184882400000, 75.57],
+        [1185141600000, 74.89],
+        [1185228000000, 73.56],
+        [1185314400000, 75.57],
+        [1185400800000, 74.95],
+        [1185487200000, 76.83],
+        [1185832800000, 78.21],
+        [1185919200000, 76.53],
+        [1186005600000, 76.86],
+        [1186092000000, 76.00],
+        [1186437600000, 71.59],
+        [1186696800000, 71.47],
+        [1186956000000, 71.62],
+        [1187042400000, 71.00],
+        [1187301600000, 71.98],
+        [1187560800000, 71.12],
+        [1187647200000, 69.47],
+        [1187733600000, 69.26],
+        [1187820000000, 69.83],
+        [1187906400000, 71.09],
+        [1188165600000, 71.73],
+        [1188338400000, 73.36],
+        [1188511200000, 74.04],
+        [1188856800000, 76.30],
+        [1189116000000, 77.49],
+        [1189461600000, 78.23],
+        [1189548000000, 79.91],
+        [1189634400000, 80.09],
+        [1189720800000, 79.10],
+        [1189980000000, 80.57],
+        [1190066400000, 81.93],
+        [1190239200000, 83.32],
+        [1190325600000, 81.62],
+        [1190584800000, 80.95],
+        [1190671200000, 79.53],
+        [1190757600000, 80.30],
+        [1190844000000, 82.88],
+        [1190930400000, 81.66],
+        [1191189600000, 80.24],
+        [1191276000000, 80.05],
+        [1191362400000, 79.94],
+        [1191448800000, 81.44],
+        [1191535200000, 81.22],
+        [1191794400000, 79.02],
+        [1191880800000, 80.26],
+        [1191967200000, 80.30],
+        [1192053600000, 83.08],
+        [1192140000000, 83.69],
+        [1192399200000, 86.13],
+        [1192485600000, 87.61],
+        [1192572000000, 87.40],
+        [1192658400000, 89.47],
+        [1192744800000, 88.60],
+        [1193004000000, 87.56],
+        [1193090400000, 87.56],
+        [1193176800000, 87.10],
+        [1193263200000, 91.86],
+        [1193612400000, 93.53],
+        [1193698800000, 94.53],
+        [1193871600000, 95.93],
+        [1194217200000, 93.98],
+        [1194303600000, 96.37],
+        [1194476400000, 95.46],
+        [1194562800000, 96.32],
+        [1195081200000, 93.43],
+        [1195167600000, 95.10],
+        [1195426800000, 94.64],
+        [1195513200000, 95.10],
+        [1196031600000, 97.70],
+        [1196118000000, 94.42],
+        [1196204400000, 90.62],
+        [1196290800000, 91.01],
+        [1196377200000, 88.71],
+        [1196636400000, 88.32],
+        [1196809200000, 90.23],
+        [1196982000000, 88.28],
+        [1197241200000, 87.86],
+        [1197327600000, 90.02],
+        [1197414000000, 92.25],
+        [1197586800000, 90.63],
+        [1197846000000, 90.63],
+        [1197932400000, 90.49],
+        [1198018800000, 91.24],
+        [1198105200000, 91.06],
+        [1198191600000, 90.49],
+        [1198710000000, 96.62],
+        [1198796400000, 96.00],
+        [1199142000000, 99.62],
+        [1199314800000, 99.18],
+        [1199401200000, 95.09],
+        [1199660400000, 96.33],
+        [1199833200000, 95.67],
+        [1200351600000, 91.90],
+        [1200438000000, 90.84],
+        [1200524400000, 90.13],
+        [1200610800000, 90.57],
+        [1200956400000, 89.21],
+        [1201042800000, 86.99],
+        [1201129200000, 89.85],
+        [1201474800000, 90.99],
+        [1201561200000, 91.64],
+        [1201647600000, 92.33],
+        [1201734000000, 91.75],
+        [1202079600000, 90.02],
+        [1202166000000, 88.41],
+        [1202252400000, 87.14],
+        [1202338800000, 88.11],
+        [1202425200000, 91.77],
+        [1202770800000, 92.78],
+        [1202857200000, 93.27],
+        [1202943600000, 95.46],
+        [1203030000000, 95.46],
+        [1203289200000, 101.74],
+        [1203462000000, 98.81],
+        [1203894000000, 100.88],
+        [1204066800000, 99.64],
+        [1204153200000, 102.59],
+        [1204239600000, 101.84],
+        [1204498800000, 99.52],
+        [1204585200000, 99.52],
+        [1204671600000, 104.52],
+        [1204758000000, 105.47],
+        [1204844400000, 105.15],
+        [1205103600000, 108.75],
+        [1205276400000, 109.92],
+        [1205362800000, 110.33],
+        [1205449200000, 110.21],
+        [1205708400000, 105.68],
+        [1205967600000, 101.84],
+        [1206313200000, 100.86],
+        [1206399600000, 101.22],
+        [1206486000000, 105.90],
+        [1206572400000, 107.58],
+        [1206658800000, 105.62],
+        [1206914400000, 101.58],
+        [1207000800000, 100.98],
+        [1207173600000, 103.83],
+        [1207260000000, 106.23],
+        [1207605600000, 108.50],
+        [1207778400000, 110.11],
+        [1207864800000, 110.14],
+        [1208210400000, 113.79],
+        [1208296800000, 114.93],
+        [1208383200000, 114.86],
+        [1208728800000, 117.48],
+        [1208815200000, 118.30],
+        [1208988000000, 116.06],
+        [1209074400000, 118.52],
+        [1209333600000, 118.75],
+        [1209420000000, 113.46],
+        [1209592800000, 112.52],
+        [1210024800000, 121.84],
+        [1210111200000, 123.53],
+        [1210197600000, 123.69],
+        [1210543200000, 124.23],
+        [1210629600000, 125.80],
+        [1210716000000, 126.29],
+        [1211148000000, 127.05],
+        [1211320800000, 129.07],
+        [1211493600000, 132.19],
+        [1211839200000, 128.85],
+        [1212357600000, 127.76],
+        [1212703200000, 138.54],
+        [1212962400000, 136.80],
+        [1213135200000, 136.38],
+        [1213308000000, 134.86],
+        [1213653600000, 134.01],
+        [1213740000000, 136.68],
+        [1213912800000, 135.65],
+        [1214172000000, 134.62],
+        [1214258400000, 134.62],
+        [1214344800000, 134.62],
+        [1214431200000, 139.64],
+        [1214517600000, 140.21],
+        [1214776800000, 140.00],
+        [1214863200000, 140.97],
+        [1214949600000, 143.57],
+        [1215036000000, 145.29],
+        [1215381600000, 141.37],
+        [1215468000000, 136.04],
+        [1215727200000, 146.40],
+        [1215986400000, 145.18],
+        [1216072800000, 138.74],
+        [1216159200000, 134.60],
+        [1216245600000, 129.29],
+        [1216332000000, 130.65],
+        [1216677600000, 127.95],
+        [1216850400000, 127.95],
+        [1217282400000, 122.19],
+        [1217455200000, 124.08],
+        [1217541600000, 125.10],
+        [1217800800000, 121.41],
+        [1217887200000, 119.17],
+        [1217973600000, 118.58],
+        [1218060000000, 120.02],
+        [1218405600000, 114.45],
+        [1218492000000, 113.01],
+        [1218578400000, 116.00],
+        [1218751200000, 113.77],
+        [1219010400000, 112.87],
+        [1219096800000, 114.53],
+        [1219269600000, 114.98],
+        [1219356000000, 114.98],
+        [1219701600000, 116.27],
+        [1219788000000, 118.15],
+        [1219874400000, 115.59],
+        [1219960800000, 115.46],
+        [1220306400000, 109.71],
+        [1220392800000, 109.35],
+        [1220565600000, 106.23],
+        [1220824800000, 106.34]
+    ];
+    var exchangerates = [
+        [1167606000000, 0.7580],
+        [1167692400000, 0.7580],
+        [1167778800000, 0.75470],
+        [1167865200000, 0.75490],
+        [1167951600000, 0.76130],
+        [1168038000000, 0.76550],
+        [1168124400000, 0.76930],
+        [1168210800000, 0.76940],
+        [1168297200000, 0.76880],
+        [1168383600000, 0.76780],
+        [1168470000000, 0.77080],
+        [1168556400000, 0.77270],
+        [1168642800000, 0.77490],
+        [1168729200000, 0.77410],
+        [1168815600000, 0.77410],
+        [1168902000000, 0.77320],
+        [1168988400000, 0.77270],
+        [1169074800000, 0.77370],
+        [1169161200000, 0.77240],
+        [1169247600000, 0.77120],
+        [1169334000000, 0.7720],
+        [1169420400000, 0.77210],
+        [1169506800000, 0.77170],
+        [1169593200000, 0.77040],
+        [1169679600000, 0.7690],
+        [1169766000000, 0.77110],
+        [1169852400000, 0.7740],
+        [1169938800000, 0.77450],
+        [1170025200000, 0.77450],
+        [1170111600000, 0.7740],
+        [1170198000000, 0.77160],
+        [1170284400000, 0.77130],
+        [1170370800000, 0.76780],
+        [1170457200000, 0.76880],
+        [1170543600000, 0.77180],
+        [1170630000000, 0.77180],
+        [1170716400000, 0.77280],
+        [1170802800000, 0.77290],
+        [1170889200000, 0.76980],
+        [1170975600000, 0.76850],
+        [1171062000000, 0.76810],
+        [1171148400000, 0.7690],
+        [1171234800000, 0.7690],
+        [1171321200000, 0.76980],
+        [1171407600000, 0.76990],
+        [1171494000000, 0.76510],
+        [1171580400000, 0.76130],
+        [1171666800000, 0.76160],
+        [1171753200000, 0.76140],
+        [1171839600000, 0.76140],
+        [1171926000000, 0.76070],
+        [1172012400000, 0.76020],
+        [1172098800000, 0.76110],
+        [1172185200000, 0.76220],
+        [1172271600000, 0.76150],
+        [1172358000000, 0.75980],
+        [1172444400000, 0.75980],
+        [1172530800000, 0.75920],
+        [1172617200000, 0.75730],
+        [1172703600000, 0.75660],
+        [1172790000000, 0.75670],
+        [1172876400000, 0.75910],
+        [1172962800000, 0.75820],
+        [1173049200000, 0.75850],
+        [1173135600000, 0.76130],
+        [1173222000000, 0.76310],
+        [1173308400000, 0.76150],
+        [1173394800000, 0.760],
+        [1173481200000, 0.76130],
+        [1173567600000, 0.76270],
+        [1173654000000, 0.76270],
+        [1173740400000, 0.76080],
+        [1173826800000, 0.75830],
+        [1173913200000, 0.75750],
+        [1173999600000, 0.75620],
+        [1174086000000, 0.7520],
+        [1174172400000, 0.75120],
+        [1174258800000, 0.75120],
+        [1174345200000, 0.75170],
+        [1174431600000, 0.7520],
+        [1174518000000, 0.75110],
+        [1174604400000, 0.7480],
+        [1174690800000, 0.75090],
+        [1174777200000, 0.75310],
+        [1174860000000, 0.75310],
+        [1174946400000, 0.75270],
+        [1175032800000, 0.74980],
+        [1175119200000, 0.74930],
+        [1175205600000, 0.75040],
+        [1175292000000, 0.750],
+        [1175378400000, 0.74910],
+        [1175464800000, 0.74910],
+        [1175551200000, 0.74850],
+        [1175637600000, 0.74840],
+        [1175724000000, 0.74920],
+        [1175810400000, 0.74710],
+        [1175896800000, 0.74590],
+        [1175983200000, 0.74770],
+        [1176069600000, 0.74770],
+        [1176156000000, 0.74830],
+        [1176242400000, 0.74580],
+        [1176328800000, 0.74480],
+        [1176415200000, 0.7430],
+        [1176501600000, 0.73990],
+        [1176588000000, 0.73950],
+        [1176674400000, 0.73950],
+        [1176760800000, 0.73780],
+        [1176847200000, 0.73820],
+        [1176933600000, 0.73620],
+        [1177020000000, 0.73550],
+        [1177106400000, 0.73480],
+        [1177192800000, 0.73610],
+        [1177279200000, 0.73610],
+        [1177365600000, 0.73650],
+        [1177452000000, 0.73620],
+        [1177538400000, 0.73310],
+        [1177624800000, 0.73390],
+        [1177711200000, 0.73440],
+        [1177797600000, 0.73270],
+        [1177884000000, 0.73270],
+        [1177970400000, 0.73360],
+        [1178056800000, 0.73330],
+        [1178143200000, 0.73590],
+        [1178229600000, 0.73590],
+        [1178316000000, 0.73720],
+        [1178402400000, 0.7360],
+        [1178488800000, 0.7360],
+        [1178575200000, 0.7350],
+        [1178661600000, 0.73650],
+        [1178748000000, 0.73840],
+        [1178834400000, 0.73950],
+        [1178920800000, 0.74130],
+        [1179007200000, 0.73970],
+        [1179093600000, 0.73960],
+        [1179180000000, 0.73850],
+        [1179266400000, 0.73780],
+        [1179352800000, 0.73660],
+        [1179439200000, 0.740],
+        [1179525600000, 0.74110],
+        [1179612000000, 0.74060],
+        [1179698400000, 0.74050],
+        [1179784800000, 0.74140],
+        [1179871200000, 0.74310],
+        [1179957600000, 0.74310],
+        [1180044000000, 0.74380],
+        [1180130400000, 0.74430],
+        [1180216800000, 0.74430],
+        [1180303200000, 0.74430],
+        [1180389600000, 0.74340],
+        [1180476000000, 0.74290],
+        [1180562400000, 0.74420],
+        [1180648800000, 0.7440],
+        [1180735200000, 0.74390],
+        [1180821600000, 0.74370],
+        [1180908000000, 0.74370],
+        [1180994400000, 0.74290],
+        [1181080800000, 0.74030],
+        [1181167200000, 0.73990],
+        [1181253600000, 0.74180],
+        [1181340000000, 0.74680],
+        [1181426400000, 0.7480],
+        [1181512800000, 0.7480],
+        [1181599200000, 0.7490],
+        [1181685600000, 0.74940],
+        [1181772000000, 0.75220],
+        [1181858400000, 0.75150],
+        [1181944800000, 0.75020],
+        [1182031200000, 0.74720],
+        [1182117600000, 0.74720],
+        [1182204000000, 0.74620],
+        [1182290400000, 0.74550],
+        [1182376800000, 0.74490],
+        [1182463200000, 0.74670],
+        [1182549600000, 0.74580],
+        [1182636000000, 0.74270],
+        [1182722400000, 0.74270],
+        [1182808800000, 0.7430],
+        [1182895200000, 0.74290],
+        [1182981600000, 0.7440],
+        [1183068000000, 0.7430],
+        [1183154400000, 0.74220],
+        [1183240800000, 0.73880],
+        [1183327200000, 0.73880],
+        [1183413600000, 0.73690],
+        [1183500000000, 0.73450],
+        [1183586400000, 0.73450],
+        [1183672800000, 0.73450],
+        [1183759200000, 0.73520],
+        [1183845600000, 0.73410],
+        [1183932000000, 0.73410],
+        [1184018400000, 0.7340],
+        [1184104800000, 0.73240],
+        [1184191200000, 0.72720],
+        [1184277600000, 0.72640],
+        [1184364000000, 0.72550],
+        [1184450400000, 0.72580],
+        [1184536800000, 0.72580],
+        [1184623200000, 0.72560],
+        [1184709600000, 0.72570],
+        [1184796000000, 0.72470],
+        [1184882400000, 0.72430],
+        [1184968800000, 0.72440],
+        [1185055200000, 0.72350],
+        [1185141600000, 0.72350],
+        [1185228000000, 0.72350],
+        [1185314400000, 0.72350],
+        [1185400800000, 0.72620],
+        [1185487200000, 0.72880],
+        [1185573600000, 0.73010],
+        [1185660000000, 0.73370],
+        [1185746400000, 0.73370],
+        [1185832800000, 0.73240],
+        [1185919200000, 0.72970],
+        [1186005600000, 0.73170],
+        [1186092000000, 0.73150],
+        [1186178400000, 0.72880],
+        [1186264800000, 0.72630],
+        [1186351200000, 0.72630],
+        [1186437600000, 0.72420],
+        [1186524000000, 0.72530],
+        [1186610400000, 0.72640],
+        [1186696800000, 0.7270],
+        [1186783200000, 0.73120],
+        [1186869600000, 0.73050],
+        [1186956000000, 0.73050],
+        [1187042400000, 0.73180],
+        [1187128800000, 0.73580],
+        [1187215200000, 0.74090],
+        [1187301600000, 0.74540],
+        [1187388000000, 0.74370],
+        [1187474400000, 0.74240],
+        [1187560800000, 0.74240],
+        [1187647200000, 0.74150],
+        [1187733600000, 0.74190],
+        [1187820000000, 0.74140],
+        [1187906400000, 0.73770],
+        [1187992800000, 0.73550],
+        [1188079200000, 0.73150],
+        [1188165600000, 0.73150],
+        [1188252000000, 0.7320],
+        [1188338400000, 0.73320],
+        [1188424800000, 0.73460],
+        [1188511200000, 0.73280],
+        [1188597600000, 0.73230],
+        [1188684000000, 0.7340],
+        [1188770400000, 0.7340],
+        [1188856800000, 0.73360],
+        [1188943200000, 0.73510],
+        [1189029600000, 0.73460],
+        [1189116000000, 0.73210],
+        [1189202400000, 0.72940],
+        [1189288800000, 0.72660],
+        [1189375200000, 0.72660],
+        [1189461600000, 0.72540],
+        [1189548000000, 0.72420],
+        [1189634400000, 0.72130],
+        [1189720800000, 0.71970],
+        [1189807200000, 0.72090],
+        [1189893600000, 0.7210],
+        [1189980000000, 0.7210],
+        [1190066400000, 0.7210],
+        [1190152800000, 0.72090],
+        [1190239200000, 0.71590],
+        [1190325600000, 0.71330],
+        [1190412000000, 0.71050],
+        [1190498400000, 0.70990],
+        [1190584800000, 0.70990],
+        [1190671200000, 0.70930],
+        [1190757600000, 0.70930],
+        [1190844000000, 0.70760],
+        [1190930400000, 0.7070],
+        [1191016800000, 0.70490],
+        [1191103200000, 0.70120],
+        [1191189600000, 0.70110],
+        [1191276000000, 0.70190],
+        [1191362400000, 0.70460],
+        [1191448800000, 0.70630],
+        [1191535200000, 0.70890],
+        [1191621600000, 0.70770],
+        [1191708000000, 0.70770],
+        [1191794400000, 0.70770],
+        [1191880800000, 0.70910],
+        [1191967200000, 0.71180],
+        [1192053600000, 0.70790],
+        [1192140000000, 0.70530],
+        [1192226400000, 0.7050],
+        [1192312800000, 0.70550],
+        [1192399200000, 0.70550],
+        [1192485600000, 0.70450],
+        [1192572000000, 0.70510],
+        [1192658400000, 0.70510],
+        [1192744800000, 0.70170],
+        [1192831200000, 0.70],
+        [1192917600000, 0.69950],
+        [1193004000000, 0.69940],
+        [1193090400000, 0.70140],
+        [1193176800000, 0.70360],
+        [1193263200000, 0.70210],
+        [1193349600000, 0.70020],
+        [1193436000000, 0.69670],
+        [1193522400000, 0.6950],
+        [1193612400000, 0.6950],
+        [1193698800000, 0.69390],
+        [1193785200000, 0.6940],
+        [1193871600000, 0.69220],
+        [1193958000000, 0.69190],
+        [1194044400000, 0.69140],
+        [1194130800000, 0.68940],
+        [1194217200000, 0.68910],
+        [1194303600000, 0.69040],
+        [1194390000000, 0.6890],
+        [1194476400000, 0.68340],
+        [1194562800000, 0.68230],
+        [1194649200000, 0.68070],
+        [1194735600000, 0.68150],
+        [1194822000000, 0.68150],
+        [1194908400000, 0.68470],
+        [1194994800000, 0.68590],
+        [1195081200000, 0.68220],
+        [1195167600000, 0.68270],
+        [1195254000000, 0.68370],
+        [1195340400000, 0.68230],
+        [1195426800000, 0.68220],
+        [1195513200000, 0.68220],
+        [1195599600000, 0.67920],
+        [1195686000000, 0.67460],
+        [1195772400000, 0.67350],
+        [1195858800000, 0.67310],
+        [1195945200000, 0.67420],
+        [1196031600000, 0.67440],
+        [1196118000000, 0.67390],
+        [1196204400000, 0.67310],
+        [1196290800000, 0.67610],
+        [1196377200000, 0.67610],
+        [1196463600000, 0.67850],
+        [1196550000000, 0.68180],
+        [1196636400000, 0.68360],
+        [1196722800000, 0.68230],
+        [1196809200000, 0.68050],
+        [1196895600000, 0.67930],
+        [1196982000000, 0.68490],
+        [1197068400000, 0.68330],
+        [1197154800000, 0.68250],
+        [1197241200000, 0.68250],
+        [1197327600000, 0.68160],
+        [1197414000000, 0.67990],
+        [1197500400000, 0.68130],
+        [1197586800000, 0.68090],
+        [1197673200000, 0.68680],
+        [1197759600000, 0.69330],
+        [1197846000000, 0.69330],
+        [1197932400000, 0.69450],
+        [1198018800000, 0.69440],
+        [1198105200000, 0.69460],
+        [1198191600000, 0.69640],
+        [1198278000000, 0.69650],
+        [1198364400000, 0.69560],
+        [1198450800000, 0.69560],
+        [1198537200000, 0.6950],
+        [1198623600000, 0.69480],
+        [1198710000000, 0.69280],
+        [1198796400000, 0.68870],
+        [1198882800000, 0.68240],
+        [1198969200000, 0.67940],
+        [1199055600000, 0.67940],
+        [1199142000000, 0.68030],
+        [1199228400000, 0.68550],
+        [1199314800000, 0.68240],
+        [1199401200000, 0.67910],
+        [1199487600000, 0.67830],
+        [1199574000000, 0.67850],
+        [1199660400000, 0.67850],
+        [1199746800000, 0.67970],
+        [1199833200000, 0.680],
+        [1199919600000, 0.68030],
+        [1200006000000, 0.68050],
+        [1200092400000, 0.6760],
+        [1200178800000, 0.6770],
+        [1200265200000, 0.6770],
+        [1200351600000, 0.67360],
+        [1200438000000, 0.67260],
+        [1200524400000, 0.67640],
+        [1200610800000, 0.68210],
+        [1200697200000, 0.68310],
+        [1200783600000, 0.68420],
+        [1200870000000, 0.68420],
+        [1200956400000, 0.68870],
+        [1201042800000, 0.69030],
+        [1201129200000, 0.68480],
+        [1201215600000, 0.68240],
+        [1201302000000, 0.67880],
+        [1201388400000, 0.68140],
+        [1201474800000, 0.68140],
+        [1201561200000, 0.67970],
+        [1201647600000, 0.67690],
+        [1201734000000, 0.67650],
+        [1201820400000, 0.67330],
+        [1201906800000, 0.67290],
+        [1201993200000, 0.67580],
+        [1202079600000, 0.67580],
+        [1202166000000, 0.6750],
+        [1202252400000, 0.6780],
+        [1202338800000, 0.68330],
+        [1202425200000, 0.68560],
+        [1202511600000, 0.69030],
+        [1202598000000, 0.68960],
+        [1202684400000, 0.68960],
+        [1202770800000, 0.68820],
+        [1202857200000, 0.68790],
+        [1202943600000, 0.68620],
+        [1203030000000, 0.68520],
+        [1203116400000, 0.68230],
+        [1203202800000, 0.68130],
+        [1203289200000, 0.68130],
+        [1203375600000, 0.68220],
+        [1203462000000, 0.68020],
+        [1203548400000, 0.68020],
+        [1203634800000, 0.67840],
+        [1203721200000, 0.67480],
+        [1203807600000, 0.67470],
+        [1203894000000, 0.67470],
+        [1203980400000, 0.67480],
+        [1204066800000, 0.67330],
+        [1204153200000, 0.6650],
+        [1204239600000, 0.66110],
+        [1204326000000, 0.65830],
+        [1204412400000, 0.6590],
+        [1204498800000, 0.6590],
+        [1204585200000, 0.65810],
+        [1204671600000, 0.65780],
+        [1204758000000, 0.65740],
+        [1204844400000, 0.65320],
+        [1204930800000, 0.65020],
+        [1205017200000, 0.65140],
+        [1205103600000, 0.65140],
+        [1205190000000, 0.65070],
+        [1205276400000, 0.6510],
+        [1205362800000, 0.64890],
+        [1205449200000, 0.64240],
+        [1205535600000, 0.64060],
+        [1205622000000, 0.63820],
+        [1205708400000, 0.63820],
+        [1205794800000, 0.63410],
+        [1205881200000, 0.63440],
+        [1205967600000, 0.63780],
+        [1206054000000, 0.64390],
+        [1206140400000, 0.64780],
+        [1206226800000, 0.64810],
+        [1206313200000, 0.64810],
+        [1206399600000, 0.64940],
+        [1206486000000, 0.64380],
+        [1206572400000, 0.63770],
+        [1206658800000, 0.63290],
+        [1206745200000, 0.63360],
+        [1206831600000, 0.63330],
+        [1206914400000, 0.63330],
+        [1207000800000, 0.6330],
+        [1207087200000, 0.63710],
+        [1207173600000, 0.64030],
+        [1207260000000, 0.63960],
+        [1207346400000, 0.63640],
+        [1207432800000, 0.63560],
+        [1207519200000, 0.63560],
+        [1207605600000, 0.63680],
+        [1207692000000, 0.63570],
+        [1207778400000, 0.63540],
+        [1207864800000, 0.6320],
+        [1207951200000, 0.63320],
+        [1208037600000, 0.63280],
+        [1208124000000, 0.63310],
+        [1208210400000, 0.63420],
+        [1208296800000, 0.63210],
+        [1208383200000, 0.63020],
+        [1208469600000, 0.62780],
+        [1208556000000, 0.63080],
+        [1208642400000, 0.63240],
+        [1208728800000, 0.63240],
+        [1208815200000, 0.63070],
+        [1208901600000, 0.62770],
+        [1208988000000, 0.62690],
+        [1209074400000, 0.63350],
+        [1209160800000, 0.63920],
+        [1209247200000, 0.640],
+        [1209333600000, 0.64010],
+        [1209420000000, 0.63960],
+        [1209506400000, 0.64070],
+        [1209592800000, 0.64230],
+        [1209679200000, 0.64290],
+        [1209765600000, 0.64720],
+        [1209852000000, 0.64850],
+        [1209938400000, 0.64860],
+        [1210024800000, 0.64670],
+        [1210111200000, 0.64440],
+        [1210197600000, 0.64670],
+        [1210284000000, 0.65090],
+        [1210370400000, 0.64780],
+        [1210456800000, 0.64610],
+        [1210543200000, 0.64610],
+        [1210629600000, 0.64680],
+        [1210716000000, 0.64490],
+        [1210802400000, 0.6470],
+        [1210888800000, 0.64610],
+        [1210975200000, 0.64520],
+        [1211061600000, 0.64220],
+        [1211148000000, 0.64220],
+        [1211234400000, 0.64250],
+        [1211320800000, 0.64140],
+        [1211407200000, 0.63660],
+        [1211493600000, 0.63460],
+        [1211580000000, 0.6350],
+        [1211666400000, 0.63460],
+        [1211752800000, 0.63460],
+        [1211839200000, 0.63430],
+        [1211925600000, 0.63460],
+        [1212012000000, 0.63790],
+        [1212098400000, 0.64160],
+        [1212184800000, 0.64420],
+        [1212271200000, 0.64310],
+        [1212357600000, 0.64310],
+        [1212444000000, 0.64350],
+        [1212530400000, 0.6440],
+        [1212616800000, 0.64730],
+        [1212703200000, 0.64690],
+        [1212789600000, 0.63860],
+        [1212876000000, 0.63560],
+        [1212962400000, 0.6340],
+        [1213048800000, 0.63460],
+        [1213135200000, 0.6430],
+        [1213221600000, 0.64520],
+        [1213308000000, 0.64670],
+        [1213394400000, 0.65060],
+        [1213480800000, 0.65040],
+        [1213567200000, 0.65030],
+        [1213653600000, 0.64810],
+        [1213740000000, 0.64510],
+        [1213826400000, 0.6450],
+        [1213912800000, 0.64410],
+        [1213999200000, 0.64140],
+        [1214085600000, 0.64090],
+        [1214172000000, 0.64090],
+        [1214258400000, 0.64280],
+        [1214344800000, 0.64310],
+        [1214431200000, 0.64180],
+        [1214517600000, 0.63710],
+        [1214604000000, 0.63490],
+        [1214690400000, 0.63330],
+        [1214776800000, 0.63340],
+        [1214863200000, 0.63380],
+        [1214949600000, 0.63420],
+        [1215036000000, 0.6320],
+        [1215122400000, 0.63180],
+        [1215208800000, 0.6370],
+        [1215295200000, 0.63680],
+        [1215381600000, 0.63680],
+        [1215468000000, 0.63830],
+        [1215554400000, 0.63710],
+        [1215640800000, 0.63710],
+        [1215727200000, 0.63550],
+        [1215813600000, 0.6320],
+        [1215900000000, 0.62770],
+        [1215986400000, 0.62760],
+        [1216072800000, 0.62910],
+        [1216159200000, 0.62740],
+        [1216245600000, 0.62930],
+        [1216332000000, 0.63110],
+        [1216418400000, 0.6310],
+        [1216504800000, 0.63120],
+        [1216591200000, 0.63120],
+        [1216677600000, 0.63040],
+        [1216764000000, 0.62940],
+        [1216850400000, 0.63480],
+        [1216936800000, 0.63780],
+        [1217023200000, 0.63680],
+        [1217109600000, 0.63680],
+        [1217196000000, 0.63680],
+        [1217282400000, 0.6360],
+        [1217368800000, 0.6370],
+        [1217455200000, 0.64180],
+        [1217541600000, 0.64110],
+        [1217628000000, 0.64350],
+        [1217714400000, 0.64270],
+        [1217800800000, 0.64270],
+        [1217887200000, 0.64190],
+        [1217973600000, 0.64460],
+        [1218060000000, 0.64680],
+        [1218146400000, 0.64870],
+        [1218232800000, 0.65940],
+        [1218319200000, 0.66660],
+        [1218405600000, 0.66660],
+        [1218492000000, 0.66780],
+        [1218578400000, 0.67120],
+        [1218664800000, 0.67050],
+        [1218751200000, 0.67180],
+        [1218837600000, 0.67840],
+        [1218924000000, 0.68110],
+        [1219010400000, 0.68110],
+        [1219096800000, 0.67940],
+        [1219183200000, 0.68040],
+        [1219269600000, 0.67810],
+        [1219356000000, 0.67560],
+        [1219442400000, 0.67350],
+        [1219528800000, 0.67630],
+        [1219615200000, 0.67620],
+        [1219701600000, 0.67770],
+        [1219788000000, 0.68150],
+        [1219874400000, 0.68020],
+        [1219960800000, 0.6780],
+        [1220047200000, 0.67960],
+        [1220133600000, 0.68170],
+        [1220220000000, 0.68170],
+        [1220306400000, 0.68320],
+        [1220392800000, 0.68770],
+        [1220479200000, 0.69120],
+        [1220565600000, 0.69140],
+        [1220652000000, 0.70090],
+        [1220738400000, 0.70120],
+        [1220824800000, 0.7010],
+        [1220911200000, 0.70050]
+    ];
+
     function euroFormatter(v, axis) {
         return v.toFixed(axis.tickDecimals) + "€";
     }
-
     var position = 'right';
     /**
+     
      * multiData - data for multi line chart
+     
      */
     var multiData = [{
-        data : oilprices,
-        label : "Oil price ($)"
+        data: oilprices,
+        label: "Oil price ($)"
     }, {
-        data : exchangerates,
-        label : "USD/EUR exchange rate",
-        yaxis : 2
+        data: exchangerates,
+        label: "USD/EUR exchange rate",
+        yaxis: 2
     }];
     /**
+     
      * multiOptions - options for multi chart
+     
      */
     var multiOptions = {
-        xaxes : [{
-            mode : 'time'
+        xaxes: [{
+            mode: 'time'
         }],
-        yaxes : [{
-            min : 0
+        yaxes: [{
+            min: 0
         }, {
             // align if we are to the right
-            alignTicksWithAxis : position == "right" ? 1 : null,
-            position : position,
-            tickFormatter : euroFormatter
+            alignTicksWithAxis: position == "right" ? 1 : null,
+            position: position,
+            tickFormatter: euroFormatter
         }],
-        legend : {
-            position : 'sw'
+        legend: {
+            position: 'sw'
         },
-        colors : ["#1ab394"],
-        grid : {
-            color : "#999999",
-            hoverable : true,
-            clickable : true,
-            tickColor : "#D4D4D4",
-            borderWidth : 0,
-            hoverable : true
+        colors: ["#1ab394"],
+        grid: {
+            color: "#999999",
+            hoverable: true,
+            clickable: true,
+            tickColor: "#D4D4D4",
+            borderWidth: 0,
+            hoverable: true
         },
-        tooltip : true,
-        tooltipOpts : {
-            content : "%s for %x was %y",
-            xDateFormat : "%y-%0m-%0d",
-            onHover : function(flotItem, $tooltipEl) {
-            }
+        tooltip: true,
+        tooltipOpts: {
+            content: "%s for %x was %y",
+            xDateFormat: "%y-%0m-%0d",
+            onHover: function(flotItem, $tooltipEl) {}
         }
     };
     /**
+     
      * Definition of variables
+     
      * Flot chart
+     
      */
     this.flotChartData = chartData;
     this.flotBarOptions = barOptions;
@@ -1608,292 +2724,325 @@ function flotChartCtrl() {
     this.flotMultiData = multiData;
     this.flotMultiOptions = multiOptions;
 }
-
 /**
+ 
  * rickshawChartCtrl - Controller for data for all Rickshaw chart
+ 
  * used in Rickshaw chart view
+ 
  */
 function rickshawChartCtrl() {
     /**
+     
      * Data for simple chart
+     
      */
     var simpleChartSeries = [{
-        color : '#1ab394',
-        data : [{
-            x : 0,
-            y : 40
+        color: '#1ab394',
+        data: [{
+            x: 0,
+            y: 40
         }, {
-            x : 1,
-            y : 49
+            x: 1,
+            y: 49
         }, {
-            x : 2,
-            y : 38
+            x: 2,
+            y: 38
         }, {
-            x : 3,
-            y : 30
+            x: 3,
+            y: 30
         }, {
-            x : 4,
-            y : 32
+            x: 4,
+            y: 32
         }]
     }];
     /**
+     
      * Options for simple chart
+     
      */
     var simpleChartOptions = {
-        renderer : 'area'
+        renderer: 'area'
     };
     /**
+     
      * Data for Multi Area chart
+     
      */
     var multiAreaChartSeries = [{
-        data : [{
-            x : 0,
-            y : 40
+        data: [{
+            x: 0,
+            y: 40
         }, {
-            x : 1,
-            y : 49
+            x: 1,
+            y: 49
         }, {
-            x : 2,
-            y : 38
+            x: 2,
+            y: 38
         }, {
-            x : 3,
-            y : 20
+            x: 3,
+            y: 20
         }, {
-            x : 4,
-            y : 16
+            x: 4,
+            y: 16
         }],
-        color : '#1ab394',
-        stroke : '#17997f'
+        color: '#1ab394',
+        stroke: '#17997f'
     }, {
-        data : [{
-            x : 0,
-            y : 22
+        data: [{
+            x: 0,
+            y: 22
         }, {
-            x : 1,
-            y : 25
+            x: 1,
+            y: 25
         }, {
-            x : 2,
-            y : 38
+            x: 2,
+            y: 38
         }, {
-            x : 3,
-            y : 44
+            x: 3,
+            y: 44
         }, {
-            x : 4,
-            y : 46
+            x: 4,
+            y: 46
         }],
-        color : '#eeeeee',
-        stroke : '#d7d7d7'
+        color: '#eeeeee',
+        stroke: '#d7d7d7'
     }];
     /**
+     
      * Options for Multi chart
+     
      */
     var multiAreaChartOptions = {
-        renderer : 'area',
-        stroke : true
+        renderer: 'area',
+        stroke: true
     };
     /**
+     
      * Options for one line chart
+     
      */
     var oneLineChartOptions = {
-        renderer : 'line'
+        renderer: 'line'
     };
     /**
+     
      * Data for one line chart
+     
      */
     var oneLineChartSeries = [{
-        data : [{
-            x : 0,
-            y : 40
+        data: [{
+            x: 0,
+            y: 40
         }, {
-            x : 1,
-            y : 49
+            x: 1,
+            y: 49
         }, {
-            x : 2,
-            y : 38
+            x: 2,
+            y: 38
         }, {
-            x : 3,
-            y : 30
+            x: 3,
+            y: 30
         }, {
-            x : 4,
-            y : 32
+            x: 4,
+            y: 32
         }],
-        color : '#1ab394'
+        color: '#1ab394'
     }];
     /**
+     
      * Options for Multi line chart
+     
      */
     var multiLineChartOptions = {
-        renderer : 'line'
+        renderer: 'line'
     };
     /**
+     
      * Data for Multi line chart
+     
      */
     var multiLineChartSeries = [{
-        data : [{
-            x : 0,
-            y : 40
+        data: [{
+            x: 0,
+            y: 40
         }, {
-            x : 1,
-            y : 49
+            x: 1,
+            y: 49
         }, {
-            x : 2,
-            y : 38
+            x: 2,
+            y: 38
         }, {
-            x : 3,
-            y : 30
+            x: 3,
+            y: 30
         }, {
-            x : 4,
-            y : 32
+            x: 4,
+            y: 32
         }],
-        color : '#1ab394'
+        color: '#1ab394'
     }, {
-        data : [{
-            x : 0,
-            y : 20
+        data: [{
+            x: 0,
+            y: 20
         }, {
-            x : 1,
-            y : 24
+            x: 1,
+            y: 24
         }, {
-            x : 2,
-            y : 19
+            x: 2,
+            y: 19
         }, {
-            x : 3,
-            y : 15
+            x: 3,
+            y: 15
         }, {
-            x : 4,
-            y : 16
+            x: 4,
+            y: 16
         }],
-        color : '#d7d7d7'
+        color: '#d7d7d7'
     }];
     /**
+     
      * Options for Bars chart
+     
      */
     var barsChartOptions = {
-        renderer : 'bar'
+        renderer: 'bar'
     };
     /**
+     
      * Data for Bars chart
+     
      */
     var barsChartSeries = [{
-        data : [{
-            x : 0,
-            y : 40
+        data: [{
+            x: 0,
+            y: 40
         }, {
-            x : 1,
-            y : 49
+            x: 1,
+            y: 49
         }, {
-            x : 2,
-            y : 38
+            x: 2,
+            y: 38
         }, {
-            x : 3,
-            y : 30
+            x: 3,
+            y: 30
         }, {
-            x : 4,
-            y : 32
+            x: 4,
+            y: 32
         }],
-        color : '#1ab394'
+        color: '#1ab394'
     }];
     /**
+     
      * Options for Stacked chart
+     
      */
     var stackedChartOptions = {
-        renderer : 'bar'
+        renderer: 'bar'
     };
     /**
+     
      * Data for Stacked chart
+     
      */
     var stackedChartSeries = [{
-        data : [{
-            x : 0,
-            y : 40
+        data: [{
+            x: 0,
+            y: 40
         }, {
-            x : 1,
-            y : 49
+            x: 1,
+            y: 49
         }, {
-            x : 2,
-            y : 38
+            x: 2,
+            y: 38
         }, {
-            x : 3,
-            y : 30
+            x: 3,
+            y: 30
         }, {
-            x : 4,
-            y : 32
+            x: 4,
+            y: 32
         }],
-        color : '#1ab394'
+        color: '#1ab394'
     }, {
-        data : [{
-            x : 0,
-            y : 20
+        data: [{
+            x: 0,
+            y: 20
         }, {
-            x : 1,
-            y : 24
+            x: 1,
+            y: 24
         }, {
-            x : 2,
-            y : 19
+            x: 2,
+            y: 19
         }, {
-            x : 3,
-            y : 15
+            x: 3,
+            y: 15
         }, {
-            x : 4,
-            y : 16
+            x: 4,
+            y: 16
         }],
-        color : '#d7d7d7'
+        color: '#d7d7d7'
     }];
     /**
+     
      * Options for Scatterplot chart
+     
      */
     var scatterplotChartOptions = {
-        renderer : 'scatterplot',
-        stroke : true,
-        padding : {
-            top : 0.05,
-            left : 0.05,
-            right : 0.05
+        renderer: 'scatterplot',
+        stroke: true,
+        padding: {
+            top: 0.05,
+            left: 0.05,
+            right: 0.05
         }
     };
     /**
+     
      * Data for Scatterplot chart
+     
      */
     var scatterplotChartSeries = [{
-        data : [{
-            x : 0,
-            y : 15
+        data: [{
+            x: 0,
+            y: 15
         }, {
-            x : 1,
-            y : 18
+            x: 1,
+            y: 18
         }, {
-            x : 2,
-            y : 10
+            x: 2,
+            y: 10
         }, {
-            x : 3,
-            y : 12
+            x: 3,
+            y: 12
         }, {
-            x : 4,
-            y : 15
+            x: 4,
+            y: 15
         }, {
-            x : 5,
-            y : 24
+            x: 5,
+            y: 24
         }, {
-            x : 6,
-            y : 28
+            x: 6,
+            y: 28
         }, {
-            x : 7,
-            y : 31
+            x: 7,
+            y: 31
         }, {
-            x : 8,
-            y : 22
+            x: 8,
+            y: 22
         }, {
-            x : 9,
-            y : 18
+            x: 9,
+            y: 18
         }, {
-            x : 10,
-            y : 16
+            x: 10,
+            y: 16
         }],
-        color : '#1ab394'
+        color: '#1ab394'
     }];
     /**
+     
      * Definition all variables
+     
      * Rickshaw chart
+     
      */
     this.simpleSeries = simpleChartSeries;
     this.simpleOptions = simpleChartOptions;
@@ -1910,98 +3059,121 @@ function rickshawChartCtrl() {
     this.scatterplotOptions = scatterplotChartOptions;
     this.scatterplotSeries = scatterplotChartSeries;
 }
-
 /**
+ 
  * sparklineChartCtrl - Controller for data for all Sparkline chart
+ 
  * used in Sparkline chart view
+ 
  */
 function sparklineChartCtrl() {
     /**
+     
      * Inline chart
+     
      */
     var inlineData = [34, 43, 43, 35, 44, 32, 44, 52, 25];
     var inlineOptions = {
-        type : 'line',
-        lineColor : '#17997f',
-        fillColor : '#1ab394'
+        type: 'line',
+        lineColor: '#17997f',
+        fillColor: '#1ab394'
     };
     /**
+     
      * Bar chart
+     
      */
     var barSmallData = [5, 6, 7, 2, 0, -4, -2, 4];
     var barSmallOptions = {
-        type : 'bar',
-        barColor : '#1ab394',
-        negBarColor : '#c6c6c6'
+        type: 'bar',
+        barColor: '#1ab394',
+        negBarColor: '#c6c6c6'
     };
     /**
+     
      * Pie chart
+     
      */
     var smallPieData = [1, 1, 2];
     var smallPieOptions = {
-        type : 'pie',
-        sliceColors : ['#1ab394', '#b3b3b3', '#e4f0fb']
+        type: 'pie',
+        sliceColors: ['#1ab394', '#b3b3b3', '#e4f0fb']
     };
     /**
+     
      * Long line chart
+     
      */
     var longLineData = [34, 43, 43, 35, 44, 32, 15, 22, 46, 33, 86, 54, 73, 53, 12, 53, 23, 65, 23, 63, 53, 42, 34, 56, 76, 15, 54, 23, 44];
     var longLineOptions = {
-        type : 'line',
-        lineColor : '#17997f',
-        fillColor : '#ffffff'
+        type: 'line',
+        lineColor: '#17997f',
+        fillColor: '#ffffff'
     };
     /**
+     
      * Tristate chart
+     
      */
     var tristateData = [1, 1, 0, 1, -1, -1, 1, -1, 0, 0, 1, 1];
     var tristateOptions = {
-        type : 'tristate',
-        posBarColor : '#1ab394',
-        negBarColor : '#bfbfbf'
+        type: 'tristate',
+        posBarColor: '#1ab394',
+        negBarColor: '#bfbfbf'
     };
     /**
+     
      * Discrate chart
+     
      */
     var discreteData = [4, 6, 7, 7, 4, 3, 2, 1, 4, 4, 5, 6, 3, 4, 5, 8, 7, 6, 9, 3, 2, 4, 1, 5, 6, 4, 3, 7];
     var discreteOptions = {
-        type : 'discrete',
-        lineColor : '#1ab394'
+        type: 'discrete',
+        lineColor: '#1ab394'
     };
     /**
+     
      * Pie chart
+     
      */
     var pieCustomData = [52, 12, 44];
     var pieCustomOptions = {
-        type : 'pie',
-        height : '150px',
-        sliceColors : ['#1ab394', '#b3b3b3', '#e4f0fb']
+        type: 'pie',
+        height: '150px',
+        sliceColors: ['#1ab394', '#b3b3b3', '#e4f0fb']
     };
     /**
+     
      * Bar chart
+     
      */
     var barCustomData = [5, 6, 7, 2, 0, 4, 2, 4, 5, 7, 2, 4, 12, 14, 4, 2, 14, 12, 7];
     var barCustomOptions = {
-        type : 'bar',
-        barWidth : 8,
-        height : '150px',
-        barColor : '#1ab394',
-        negBarColor : '#c6c6c6'
+        type: 'bar',
+        barWidth: 8,
+        height: '150px',
+        barColor: '#1ab394',
+        negBarColor: '#c6c6c6'
     };
     /**
+     
      * Line chart
+     
      */
     var lineCustomData = [34, 43, 43, 35, 44, 32, 15, 22, 46, 33, 86, 54, 73, 53, 12, 53, 23, 65, 23, 63, 53, 42, 34, 56, 76, 15, 54, 23, 44];
     var lineCustomOptions = {
-        type : 'line',
-        lineWidth : 1,
-        height : '150px',
-        lineColor : '#17997f',
-        fillColor : '#ffffff'
+        type: 'line',
+        lineWidth: 1,
+        height: '150px',
+        lineColor: '#17997f',
+        fillColor: '#ffffff'
     };
     /**
+     
      * Definition of variables
+     
      * Flot chart
+     
      */
     this.inlineData = inlineData;
     this.inlineOptions = inlineOptions;
@@ -2022,130 +3194,163 @@ function sparklineChartCtrl() {
     this.lineCustomData = lineCustomData;
     this.lineCustomOptions = lineCustomOptions;
 }
-
 /**
+ 
  * widgetFlotChart - Data for Flot chart
+ 
  * used in Widget view
+ 
  */
 function widgetFlotChart() {
     /**
+     
      * Flot chart data and options
+     
      */
-    var d1 = [[1262304000000, 6], [1264982400000, 3057], [1267401600000, 20434], [1270080000000, 31982], [1272672000000, 26602], [1275350400000, 27826], [1277942400000, 24302], [1280620800000, 24237], [1283299200000, 21004], [1285891200000, 12144], [1288569600000, 10577], [1291161600000, 10295]];
-    var d2 = [[1262304000000, 5], [1264982400000, 200], [1267401600000, 1605], [1270080000000, 6129], [1272672000000, 11643], [1275350400000, 19055], [1277942400000, 30062], [1280620800000, 39197], [1283299200000, 37000], [1285891200000, 27000], [1288569600000, 21000], [1291161600000, 17000]];
+    var d1 = [
+        [1262304000000, 6],
+        [1264982400000, 3057],
+        [1267401600000, 20434],
+        [1270080000000, 31982],
+        [1272672000000, 26602],
+        [1275350400000, 27826],
+        [1277942400000, 24302],
+        [1280620800000, 24237],
+        [1283299200000, 21004],
+        [1285891200000, 12144],
+        [1288569600000, 10577],
+        [1291161600000, 10295]
+    ];
+    var d2 = [
+        [1262304000000, 5],
+        [1264982400000, 200],
+        [1267401600000, 1605],
+        [1270080000000, 6129],
+        [1272672000000, 11643],
+        [1275350400000, 19055],
+        [1277942400000, 30062],
+        [1280620800000, 39197],
+        [1283299200000, 37000],
+        [1285891200000, 27000],
+        [1288569600000, 21000],
+        [1291161600000, 17000]
+    ];
     var flotChartData1 = [{
-        label : "Data 1",
-        data : d1,
-        color : '#17a084'
+        label: "Data 1",
+        data: d1,
+        color: '#17a084'
     }, {
-        label : "Data 2",
-        data : d2,
-        color : '#127e68'
+        label: "Data 2",
+        data: d2,
+        color: '#127e68'
     }];
     var flotChartOptions1 = {
-        xaxis : {
-            tickDecimals : 0
+        xaxis: {
+            tickDecimals: 0
         },
-        series : {
-            lines : {
-                show : true,
-                fill : true,
-                fillColor : {
-                    colors : [{
-                        opacity : 1
+        series: {
+            lines: {
+                show: true,
+                fill: true,
+                fillColor: {
+                    colors: [{
+                        opacity: 1
                     }, {
-                        opacity : 1
+                        opacity: 1
                     }]
                 }
             },
-            points : {
-                width : 0.1,
-                show : false
+            points: {
+                width: 0.1,
+                show: false
             }
         },
-        grid : {
-            show : false,
-            borderWidth : 0
+        grid: {
+            show: false,
+            borderWidth: 0
         },
-        legend : {
-            show : false
+        legend: {
+            show: false
         }
     };
     var flotChartData2 = [{
-        label : "Data 1",
-        data : d1,
-        color : '#19a0a1'
+        label: "Data 1",
+        data: d1,
+        color: '#19a0a1'
     }];
     var flotChartOptions2 = {
-        xaxis : {
-            tickDecimals : 0
+        xaxis: {
+            tickDecimals: 0
         },
-        series : {
-            lines : {
-                show : true,
-                fill : true,
-                fillColor : {
-                    colors : [{
-                        opacity : 1
+        series: {
+            lines: {
+                show: true,
+                fill: true,
+                fillColor: {
+                    colors: [{
+                        opacity: 1
                     }, {
-                        opacity : 1
+                        opacity: 1
                     }]
                 }
             },
-            points : {
-                width : 0.1,
-                show : false
+            points: {
+                width: 0.1,
+                show: false
             }
         },
-        grid : {
-            show : false,
-            borderWidth : 0
+        grid: {
+            show: false,
+            borderWidth: 0
         },
-        legend : {
-            show : false
+        legend: {
+            show: false
         }
     };
     var flotChartData3 = [{
-        label : "Data 1",
-        data : d1,
-        color : '#fbbe7b'
+        label: "Data 1",
+        data: d1,
+        color: '#fbbe7b'
     }, {
-        label : "Data 2",
-        data : d2,
-        color : '#f8ac59'
+        label: "Data 2",
+        data: d2,
+        color: '#f8ac59'
     }];
     var flotChartOptions3 = {
-        xaxis : {
-            tickDecimals : 0
+        xaxis: {
+            tickDecimals: 0
         },
-        series : {
-            lines : {
-                show : true,
-                fill : true,
-                fillColor : {
-                    colors : [{
-                        opacity : 1
+        series: {
+            lines: {
+                show: true,
+                fill: true,
+                fillColor: {
+                    colors: [{
+                        opacity: 1
                     }, {
-                        opacity : 1
+                        opacity: 1
                     }]
                 }
             },
-            points : {
-                width : 0.1,
-                show : false
+            points: {
+                width: 0.1,
+                show: false
             }
         },
-        grid : {
-            show : false,
-            borderWidth : 0
+        grid: {
+            show: false,
+            borderWidth: 0
         },
-        legend : {
-            show : false
+        legend: {
+            show: false
         }
     };
     /**
+     
      * Definition of variables
+     
      * Flot chart
+     
      */
     this.flotChartData1 = flotChartData1;
     this.flotChartOptions1 = flotChartOptions1;
@@ -2154,46 +3359,49 @@ function widgetFlotChart() {
     this.flotChartData3 = flotChartData3;
     this.flotChartOptions3 = flotChartOptions3;
 }
-
 /**
+ 
  * modalDemoCtrl - Controller used to run modal view
+ 
  * used in Basic form view
+ 
  */
 function modalDemoCtrl($scope, $modal) {
     $scope.open = function() {
         var modalInstance = $modal.open({
-            templateUrl : 'views/modal_example.html',
-            controller : ModalInstanceCtrl
+            templateUrl: 'views/modal_example.html',
+            controller: ModalInstanceCtrl
         });
     };
     $scope.open1 = function() {
         var modalInstance = $modal.open({
-            templateUrl : 'views/modal_example1.html',
-            controller : ModalInstanceCtrl
+            templateUrl: 'views/modal_example1.html',
+            controller: ModalInstanceCtrl
         });
     };
     $scope.open2 = function() {
         var modalInstance = $modal.open({
-            templateUrl : 'views/modal_example2.html',
-            controller : ModalInstanceCtrl,
-            windowClass : "animated fadeIn"
+            templateUrl: 'views/modal_example2.html',
+            controller: ModalInstanceCtrl,
+            windowClass: "animated fadeIn"
         });
     };
     $scope.open3 = function(size) {
         var modalInstance = $modal.open({
-            templateUrl : 'views/modal_example3.html',
-            size : size,
-            controller : ModalInstanceCtrl
+            templateUrl: 'views/modal_example3.html',
+            size: size,
+            controller: ModalInstanceCtrl
         });
     };
     $scope.open4 = function() {
         var modalInstance = $modal.open({
-            templateUrl : 'views/modal_example2.html',
-            controller : ModalInstanceCtrl,
-            windowClass : "animated flipInY"
+            templateUrl: 'views/modal_example2.html',
+            controller: ModalInstanceCtrl,
+            windowClass: "animated flipInY"
         });
     };
 };
+
 function ModalInstanceCtrl($scope, $modalInstance) {
     $scope.ok = function() {
         $modalInstance.close();
@@ -2204,55 +3412,60 @@ function ModalInstanceCtrl($scope, $modalInstance) {
     $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
 };
 /**
+ 
  * ionSlider - Controller for data for Ion Slider plugin
+ 
  * used in Advanced plugin view
+ 
  */
 function ionSlider() {
     this.ionSliderOptions1 = {
-        min : 0,
-        max : 5000,
-        type : 'double',
-        prefix : "$",
-        maxPostfix : "+",
-        prettify : false,
-        hasGrid : true
+        min: 0,
+        max: 5000,
+        type: 'double',
+        prefix: "$",
+        maxPostfix: "+",
+        prettify: false,
+        hasGrid: true
     };
     this.ionSliderOptions2 = {
-        min : 0,
-        max : 10,
-        type : 'single',
-        step : 0.1,
-        postfix : " carats",
-        prettify : false,
-        hasGrid : true
+        min: 0,
+        max: 10,
+        type: 'single',
+        step: 0.1,
+        postfix: " carats",
+        prettify: false,
+        hasGrid: true
     };
     this.ionSliderOptions3 = {
-        min : -50,
-        max : 50,
-        from : 0,
-        postfix : "°",
-        prettify : false,
-        hasGrid : true
+        min: -50,
+        max: 50,
+        from: 0,
+        postfix: "°",
+        prettify: false,
+        hasGrid: true
     };
     this.ionSliderOptions4 = {
-        values : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-        type : 'single',
-        hasGrid : true
+        values: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        type: 'single',
+        hasGrid: true
     };
     this.ionSliderOptions5 = {
-        min : 10000,
-        max : 100000,
-        step : 100,
-        postfix : " km",
-        from : 55000,
-        hideMinMax : true,
-        hideFromTo : false
+        min: 10000,
+        max: 100000,
+        step: 100,
+        postfix: " km",
+        from: 55000,
+        hideMinMax: true,
+        hideFromTo: false
     };
 }
-
 /**
+ 
  * wizardCtrl - Controller for wizard functions
+ 
  * used in Wizard view
+ 
  */
 function wizardCtrl($scope, $rootScope) {
     // All data will be store in this object
@@ -2262,10 +3475,12 @@ function wizardCtrl($scope, $rootScope) {
         alert('Wizard completed');
     };
 }
-
 /**
+ 
  * CalendarCtrl - Controller for Calendar
+ 
  * Store data events for calendar
+ 
  */
 function CalendarCtrl($scope) {
     var date = new Date();
@@ -2274,32 +3489,32 @@ function CalendarCtrl($scope) {
     var y = date.getFullYear();
     // Events
     $scope.events = [{
-        title : 'All Day Event',
-        start : new Date(y, m, 1)
+        title: 'All Day Event',
+        start: new Date(y, m, 1)
     }, {
-        title : 'Long Event',
-        start : new Date(y, m, d - 5),
-        end : new Date(y, m, d - 2)
+        title: 'Long Event',
+        start: new Date(y, m, d - 5),
+        end: new Date(y, m, d - 2)
     }, {
-        id : 999,
-        title : 'Repeating Event',
-        start : new Date(y, m, d - 3, 16, 0),
-        allDay : false
+        id: 999,
+        title: 'Repeating Event',
+        start: new Date(y, m, d - 3, 16, 0),
+        allDay: false
     }, {
-        id : 999,
-        title : 'Repeating Event',
-        start : new Date(y, m, d + 4, 16, 0),
-        allDay : false
+        id: 999,
+        title: 'Repeating Event',
+        start: new Date(y, m, d + 4, 16, 0),
+        allDay: false
     }, {
-        title : 'Birthday Party',
-        start : new Date(y, m, d + 1, 19, 0),
-        end : new Date(y, m, d + 1, 22, 30),
-        allDay : false
+        title: 'Birthday Party',
+        start: new Date(y, m, d + 1, 19, 0),
+        end: new Date(y, m, d + 1, 22, 30),
+        allDay: false
     }, {
-        title : 'Click for Google',
-        start : new Date(y, m, 28),
-        end : new Date(y, m, 29),
-        url : 'http://google.com/'
+        title: 'Click for Google',
+        start: new Date(y, m, 28),
+        end: new Date(y, m, 29),
+        url: 'http://google.com/'
     }];
     /* message on eventClick */
     $scope.alertOnEventClick = function(event, allDay, jsEvent, view) {
@@ -2315,176 +3530,194 @@ function CalendarCtrl($scope) {
     };
     /* config object */
     $scope.uiConfig = {
-        calendar : {
-            height : 450,
-            editable : true,
-            header : {
-                left : 'prev,next',
-                center : 'title',
-                right : 'month,agendaWeek,agendaDay'
+        calendar: {
+            height: 450,
+            editable: true,
+            header: {
+                left: 'prev,next',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
             },
-            eventClick : $scope.alertOnEventClick,
-            eventDrop : $scope.alertOnDrop,
-            eventResize : $scope.alertOnResize
+            eventClick: $scope.alertOnEventClick,
+            eventDrop: $scope.alertOnDrop,
+            eventResize: $scope.alertOnResize
         }
     };
     /* Event sources array */
     $scope.eventSources = [$scope.events];
 }
-
 /**
+ 
  * chartJsCtrl - Controller for data for ChartJs plugin
+ 
  * used in Chart.js view
+ 
  */
 function chartJsCtrl() {
     /**
+     
      * Data for Polar chart
+     
      */
     this.polarData = [{
-        value : 300,
-        color : "#a3e1d4",
-        highlight : "#1ab394",
-        label : "App"
+        value: 300,
+        color: "#a3e1d4",
+        highlight: "#1ab394",
+        label: "App"
     }, {
-        value : 140,
-        color : "#dedede",
-        highlight : "#1ab394",
-        label : "Software"
+        value: 140,
+        color: "#dedede",
+        highlight: "#1ab394",
+        label: "Software"
     }, {
-        value : 200,
-        color : "#b5b8cf",
-        highlight : "#1ab394",
-        label : "Laptop"
+        value: 200,
+        color: "#b5b8cf",
+        highlight: "#1ab394",
+        label: "Laptop"
     }];
     /**
+     
      * Options for Polar chart
+     
      */
     this.polarOptions = {
-        scaleShowLabelBackdrop : true,
-        scaleBackdropColor : "rgba(255,255,255,0.75)",
-        scaleBeginAtZero : true,
-        scaleBackdropPaddingY : 1,
-        scaleBackdropPaddingX : 1,
-        scaleShowLine : true,
-        segmentShowStroke : true,
-        segmentStrokeColor : "#fff",
-        segmentStrokeWidth : 2,
-        animationSteps : 100,
-        animationEasing : "easeOutBounce",
-        animateRotate : true,
-        animateScale : false
+        scaleShowLabelBackdrop: true,
+        scaleBackdropColor: "rgba(255,255,255,0.75)",
+        scaleBeginAtZero: true,
+        scaleBackdropPaddingY: 1,
+        scaleBackdropPaddingX: 1,
+        scaleShowLine: true,
+        segmentShowStroke: true,
+        segmentStrokeColor: "#fff",
+        segmentStrokeWidth: 2,
+        animationSteps: 100,
+        animationEasing: "easeOutBounce",
+        animateRotate: true,
+        animateScale: false
     };
     /**
+     
      * Data for Doughnut chart
+     
      */
     this.doughnutData = [{
-        value : 300,
-        color : "#a3e1d4",
-        highlight : "#1ab394",
-        label : "App"
+        value: 300,
+        color: "#a3e1d4",
+        highlight: "#1ab394",
+        label: "App"
     }, {
-        value : 50,
-        color : "#dedede",
-        highlight : "#1ab394",
-        label : "Software"
+        value: 50,
+        color: "#dedede",
+        highlight: "#1ab394",
+        label: "Software"
     }, {
-        value : 100,
-        color : "#b5b8cf",
-        highlight : "#1ab394",
-        label : "Laptop"
+        value: 100,
+        color: "#b5b8cf",
+        highlight: "#1ab394",
+        label: "Laptop"
     }];
     /**
+     
      * Options for Doughnut chart
+     
      */
     this.doughnutOptions = {
-        segmentShowStroke : true,
-        segmentStrokeColor : "#fff",
-        segmentStrokeWidth : 2,
-        percentageInnerCutout : 45, // This is 0 for Pie charts
-        animationSteps : 100,
-        animationEasing : "easeOutBounce",
-        animateRotate : true,
-        animateScale : false
+        segmentShowStroke: true,
+        segmentStrokeColor: "#fff",
+        segmentStrokeWidth: 2,
+        percentageInnerCutout: 45, // This is 0 for Pie charts
+        animationSteps: 100,
+        animationEasing: "easeOutBounce",
+        animateRotate: true,
+        animateScale: false
     };
     /**
+     
      * Data for Line chart
+     
      */
     this.lineData = {
-        labels : ["January", "February", "March", "April", "May", "June", "July"],
-        datasets : [{
-            label : "Example dataset",
-            fillColor : "rgba(220,220,220,0.5)",
-            strokeColor : "rgba(220,220,220,1)",
-            pointColor : "rgba(220,220,220,1)",
-            pointStrokeColor : "#fff",
-            pointHighlightFill : "#fff",
-            pointHighlightStroke : "rgba(220,220,220,1)",
-            data : [65, 59, 80, 81, 56, 55, 40]
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [{
+            label: "Example dataset",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 80, 81, 56, 55, 40]
         }, {
-            label : "Example dataset",
-            fillColor : "rgba(26,179,148,0.5)",
-            strokeColor : "rgba(26,179,148,0.7)",
-            pointColor : "rgba(26,179,148,1)",
-            pointStrokeColor : "#fff",
-            pointHighlightFill : "#fff",
-            pointHighlightStroke : "rgba(26,179,148,1)",
-            data : [28, 48, 40, 19, 86, 27, 90]
+            label: "Example dataset",
+            fillColor: "rgba(26,179,148,0.5)",
+            strokeColor: "rgba(26,179,148,0.7)",
+            pointColor: "rgba(26,179,148,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(26,179,148,1)",
+            data: [28, 48, 40, 19, 86, 27, 90]
         }]
     };
     this.lineDataDashboard4 = {
-        labels : ["January", "February", "March", "April", "May", "June", "July"],
-        datasets : [{
-            label : "Example dataset",
-            fillColor : "rgba(220,220,220,0.5)",
-            strokeColor : "rgba(220,220,220,1)",
-            pointColor : "rgba(220,220,220,1)",
-            pointStrokeColor : "#fff",
-            pointHighlightFill : "#fff",
-            pointHighlightStroke : "rgba(220,220,220,1)",
-            data : [65, 59, 40, 51, 36, 25, 40]
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [{
+            label: "Example dataset",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 40, 51, 36, 25, 40]
         }, {
-            label : "Example dataset",
-            fillColor : "rgba(26,179,148,0.5)",
-            strokeColor : "rgba(26,179,148,0.7)",
-            pointColor : "rgba(26,179,148,1)",
-            pointStrokeColor : "#fff",
-            pointHighlightFill : "#fff",
-            pointHighlightStroke : "rgba(26,179,148,1)",
-            data : [48, 48, 60, 39, 56, 37, 30]
+            label: "Example dataset",
+            fillColor: "rgba(26,179,148,0.5)",
+            strokeColor: "rgba(26,179,148,0.7)",
+            pointColor: "rgba(26,179,148,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(26,179,148,1)",
+            data: [48, 48, 60, 39, 56, 37, 30]
         }]
     };
     /**
+     
      * Options for Line chart
+     
      */
     this.lineOptions = {
-        scaleShowGridLines : true,
-        scaleGridLineColor : "rgba(0,0,0,.05)",
-        scaleGridLineWidth : 1,
-        bezierCurve : true,
-        bezierCurveTension : 0.4,
-        pointDot : true,
-        pointDotRadius : 4,
-        pointDotStrokeWidth : 1,
-        pointHitDetectionRadius : 20,
-        datasetStroke : true,
-        datasetStrokeWidth : 2,
-        datasetFill : true
+        scaleShowGridLines: true,
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+        scaleGridLineWidth: 1,
+        bezierCurve: true,
+        bezierCurveTension: 0.4,
+        pointDot: true,
+        pointDotRadius: 4,
+        pointDotStrokeWidth: 1,
+        pointHitDetectionRadius: 20,
+        datasetStroke: true,
+        datasetStrokeWidth: 2,
+        datasetFill: true
     };
     /**
+     
      * Options for Bar chart
+     
      */
     this.barOptions = {
-        scaleBeginAtZero : true,
-        scaleShowGridLines : true,
-        scaleGridLineColor : "rgba(0,0,0,.05)",
-        scaleGridLineWidth : 1,
-        barShowStroke : true,
-        barStrokeWidth : 2,
-        barValueSpacing : 5,
-        barDatasetSpacing : 1
+        scaleBeginAtZero: true,
+        scaleShowGridLines: true,
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+        scaleGridLineWidth: 1,
+        barShowStroke: true,
+        barStrokeWidth: 2,
+        barValueSpacing: 5,
+        barDatasetSpacing: 1
     };
     /**
+     
      * Data for Bar chart
+     
      */
     //    this.barData = {
     //
@@ -2528,240 +3761,247 @@ function chartJsCtrl() {
     //
     //    };
     /**
+     
      * Data for Radar chart
+     
      */
     this.radarData = {
-        labels : ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
-        datasets : [{
-            label : "My First dataset",
-            fillColor : "rgba(220,220,220,0.2)",
-            strokeColor : "rgba(220,220,220,1)",
-            pointColor : "rgba(220,220,220,1)",
-            pointStrokeColor : "#fff",
-            pointHighlightFill : "#fff",
-            pointHighlightStroke : "rgba(220,220,220,1)",
-            data : [65, 59, 90, 81, 56, 55, 40]
+        labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+        datasets: [{
+            label: "My First dataset",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 90, 81, 56, 55, 40]
         }, {
-            label : "My Second dataset",
-            fillColor : "rgba(26,179,148,0.2)",
-            strokeColor : "rgba(26,179,148,1)",
-            pointColor : "rgba(26,179,148,1)",
-            pointStrokeColor : "#fff",
-            pointHighlightFill : "#fff",
-            pointHighlightStroke : "rgba(151,187,205,1)",
-            data : [28, 48, 40, 19, 96, 27, 100]
+            label: "My Second dataset",
+            fillColor: "rgba(26,179,148,0.2)",
+            strokeColor: "rgba(26,179,148,1)",
+            pointColor: "rgba(26,179,148,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19, 96, 27, 100]
         }]
     };
     /**
+     
      * Options for Radar chart
+     
      */
     this.radarOptions = {
-        scaleShowLine : true,
-        angleShowLineOut : true,
-        scaleShowLabels : false,
-        scaleBeginAtZero : true,
-        angleLineColor : "rgba(0,0,0,.1)",
-        angleLineWidth : 1,
-        pointLabelFontFamily : "'Arial'",
-        pointLabelFontStyle : "normal",
-        pointLabelFontSize : 10,
-        pointLabelFontColor : "#666",
-        pointDot : true,
-        pointDotRadius : 3,
-        pointDotStrokeWidth : 1,
-        pointHitDetectionRadius : 20,
-        datasetStroke : true,
-        datasetStrokeWidth : 2,
-        datasetFill : true
+        scaleShowLine: true,
+        angleShowLineOut: true,
+        scaleShowLabels: false,
+        scaleBeginAtZero: true,
+        angleLineColor: "rgba(0,0,0,.1)",
+        angleLineWidth: 1,
+        pointLabelFontFamily: "'Arial'",
+        pointLabelFontStyle: "normal",
+        pointLabelFontSize: 10,
+        pointLabelFontColor: "#666",
+        pointDot: true,
+        pointDotRadius: 3,
+        pointDotStrokeWidth: 1,
+        pointHitDetectionRadius: 20,
+        datasetStroke: true,
+        datasetStrokeWidth: 2,
+        datasetFill: true
     };
 };
 /**
+ 
  * GoogleMaps - Controller for data google maps
+ 
  */
 function GoogleMaps($scope) {
     $scope.mapOptions = {
-        zoom : 11,
-        center : new google.maps.LatLng(40.6700, -73.9400),
+        zoom: 11,
+        center: new google.maps.LatLng(40.6700, -73.9400),
         // Style for Google Maps
-        styles : [{
-            "featureType" : "water",
-            "stylers" : [{
-                "saturation" : 43
+        styles: [{
+            "featureType": "water",
+            "stylers": [{
+                "saturation": 43
             }, {
-                "lightness" : -11
+                "lightness": -11
             }, {
-                "hue" : "#0088ff"
+                "hue": "#0088ff"
             }]
         }, {
-            "featureType" : "road",
-            "elementType" : "geometry.fill",
-            "stylers" : [{
-                "hue" : "#ff0000"
+            "featureType": "road",
+            "elementType": "geometry.fill",
+            "stylers": [{
+                "hue": "#ff0000"
             }, {
-                "saturation" : -100
+                "saturation": -100
             }, {
-                "lightness" : 99
+                "lightness": 99
             }]
         }, {
-            "featureType" : "road",
-            "elementType" : "geometry.stroke",
-            "stylers" : [{
-                "color" : "#808080"
+            "featureType": "road",
+            "elementType": "geometry.stroke",
+            "stylers": [{
+                "color": "#808080"
             }, {
-                "lightness" : 54
+                "lightness": 54
             }]
         }, {
-            "featureType" : "landscape.man_made",
-            "elementType" : "geometry.fill",
-            "stylers" : [{
-                "color" : "#ece2d9"
+            "featureType": "landscape.man_made",
+            "elementType": "geometry.fill",
+            "stylers": [{
+                "color": "#ece2d9"
             }]
         }, {
-            "featureType" : "poi.park",
-            "elementType" : "geometry.fill",
-            "stylers" : [{
-                "color" : "#ccdca1"
+            "featureType": "poi.park",
+            "elementType": "geometry.fill",
+            "stylers": [{
+                "color": "#ccdca1"
             }]
         }, {
-            "featureType" : "road",
-            "elementType" : "labels.text.fill",
-            "stylers" : [{
-                "color" : "#767676"
+            "featureType": "road",
+            "elementType": "labels.text.fill",
+            "stylers": [{
+                "color": "#767676"
             }]
         }, {
-            "featureType" : "road",
-            "elementType" : "labels.text.stroke",
-            "stylers" : [{
-                "color" : "#ffffff"
+            "featureType": "road",
+            "elementType": "labels.text.stroke",
+            "stylers": [{
+                "color": "#ffffff"
             }]
         }, {
-            "featureType" : "poi",
-            "stylers" : [{
-                "visibility" : "off"
+            "featureType": "poi",
+            "stylers": [{
+                "visibility": "off"
             }]
         }, {
-            "featureType" : "landscape.natural",
-            "elementType" : "geometry.fill",
-            "stylers" : [{
-                "visibility" : "on"
+            "featureType": "landscape.natural",
+            "elementType": "geometry.fill",
+            "stylers": [{
+                "visibility": "on"
             }, {
-                "color" : "#b8cb93"
+                "color": "#b8cb93"
             }]
         }, {
-            "featureType" : "poi.park",
-            "stylers" : [{
-                "visibility" : "on"
+            "featureType": "poi.park",
+            "stylers": [{
+                "visibility": "on"
             }]
         }, {
-            "featureType" : "poi.sports_complex",
-            "stylers" : [{
-                "visibility" : "on"
+            "featureType": "poi.sports_complex",
+            "stylers": [{
+                "visibility": "on"
             }]
         }, {
-            "featureType" : "poi.medical",
-            "stylers" : [{
-                "visibility" : "on"
+            "featureType": "poi.medical",
+            "stylers": [{
+                "visibility": "on"
             }]
         }, {
-            "featureType" : "poi.business",
-            "stylers" : [{
-                "visibility" : "simplified"
+            "featureType": "poi.business",
+            "stylers": [{
+                "visibility": "simplified"
             }]
         }],
-        mapTypeId : google.maps.MapTypeId.ROADMAP
+        mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     $scope.mapOptions2 = {
-        zoom : 11,
-        center : new google.maps.LatLng(40.6700, -73.9400),
+        zoom: 11,
+        center: new google.maps.LatLng(40.6700, -73.9400),
         // Style for Google Maps
-        styles : [{
-            "featureType" : "all",
-            "elementType" : "all",
-            "stylers" : [{
-                "invert_lightness" : true
+        styles: [{
+            "featureType": "all",
+            "elementType": "all",
+            "stylers": [{
+                "invert_lightness": true
             }, {
-                "saturation" : 10
+                "saturation": 10
             }, {
-                "lightness" : 30
+                "lightness": 30
             }, {
-                "gamma" : 0.5
+                "gamma": 0.5
             }, {
-                "hue" : "#435158"
+                "hue": "#435158"
             }]
         }],
-        mapTypeId : google.maps.MapTypeId.ROADMAP
+        mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     $scope.mapOptions3 = {
-        center : new google.maps.LatLng(36.964645, -122.01523),
-        zoom : 18,
+        center: new google.maps.LatLng(36.964645, -122.01523),
+        zoom: 18,
         // Style for Google Maps
-        MapTypeId : google.maps.MapTypeId.SATELLITE,
-        styles : [{
-            "featureType" : "road",
-            "elementType" : "geometry",
-            "stylers" : [{
-                "visibility" : "off"
+        MapTypeId: google.maps.MapTypeId.SATELLITE,
+        styles: [{
+            "featureType": "road",
+            "elementType": "geometry",
+            "stylers": [{
+                "visibility": "off"
             }]
         }, {
-            "featureType" : "poi",
-            "elementType" : "geometry",
-            "stylers" : [{
-                "visibility" : "off"
+            "featureType": "poi",
+            "elementType": "geometry",
+            "stylers": [{
+                "visibility": "off"
             }]
         }, {
-            "featureType" : "landscape",
-            "elementType" : "geometry",
-            "stylers" : [{
-                "color" : "#fffffa"
+            "featureType": "landscape",
+            "elementType": "geometry",
+            "stylers": [{
+                "color": "#fffffa"
             }]
         }, {
-            "featureType" : "water",
-            "stylers" : [{
-                "lightness" : 50
+            "featureType": "water",
+            "stylers": [{
+                "lightness": 50
             }]
         }, {
-            "featureType" : "road",
-            "elementType" : "labels",
-            "stylers" : [{
-                "visibility" : "off"
+            "featureType": "road",
+            "elementType": "labels",
+            "stylers": [{
+                "visibility": "off"
             }]
         }, {
-            "featureType" : "transit",
-            "stylers" : [{
-                "visibility" : "off"
+            "featureType": "transit",
+            "stylers": [{
+                "visibility": "off"
             }]
         }, {
-            "featureType" : "administrative",
-            "elementType" : "geometry",
-            "stylers" : [{
-                "lightness" : 40
+            "featureType": "administrative",
+            "elementType": "geometry",
+            "stylers": [{
+                "lightness": 40
             }]
         }],
-        mapTypeId : google.maps.MapTypeId.SATELLITE
+        mapTypeId: google.maps.MapTypeId.SATELLITE
     };
     $scope.mapOptions4 = {
-        zoom : 11,
-        center : new google.maps.LatLng(40.6700, -73.9400),
+        zoom: 11,
+        center: new google.maps.LatLng(40.6700, -73.9400),
         // Style for Google Maps
-        styles : [{
-            "stylers" : [{
-                "hue" : "#18a689"
+        styles: [{
+            "stylers": [{
+                "hue": "#18a689"
             }, {
-                "visibility" : "on"
+                "visibility": "on"
             }, {
-                "invert_lightness" : true
+                "invert_lightness": true
             }, {
-                "saturation" : 40
+                "saturation": 40
             }, {
-                "lightness" : 10
+                "lightness": 10
             }]
         }],
-        mapTypeId : google.maps.MapTypeId.ROADMAP
+        mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 }
-
 /**
+ 
  * nestableCtrl - Controller for nestable list
+ 
  */
 function nestableCtrl($scope) {
     $scope.remove = function(scope) {
@@ -2777,9 +4017,9 @@ function nestableCtrl($scope) {
     $scope.newSubItem = function(scope) {
         var nodeData = scope.$modelValue;
         nodeData.nodes.push({
-            id : nodeData.id * 10 + nodeData.nodes.length,
-            title : nodeData.title + '.' + (nodeData.nodes.length + 1),
-            nodes : []
+            id: nodeData.id * 10 + nodeData.nodes.length,
+            title: nodeData.title + '.' + (nodeData.nodes.length + 1),
+            nodes: []
         });
     };
     $scope.collapseAll = function() {
@@ -2789,63 +4029,65 @@ function nestableCtrl($scope) {
         $scope.$broadcast('expandAll');
     };
     $scope.data = [{
-        "id" : 1,
-        "title" : "node1",
-        "nodes" : [{
-            "id" : 11,
-            "title" : "node1.1",
-            "nodes" : [{
-                "id" : 111,
-                "title" : "node1.1.1",
-                "nodes" : []
+        "id": 1,
+        "title": "node1",
+        "nodes": [{
+            "id": 11,
+            "title": "node1.1",
+            "nodes": [{
+                "id": 111,
+                "title": "node1.1.1",
+                "nodes": []
             }]
         }, {
-            "id" : 12,
-            "title" : "node1.2",
-            "nodes" : []
+            "id": 12,
+            "title": "node1.2",
+            "nodes": []
         }]
     }, {
-        "id" : 2,
-        "title" : "node2",
-        "nodes" : [{
-            "id" : 21,
-            "title" : "node2.1",
-            "nodes" : []
+        "id": 2,
+        "title": "node2",
+        "nodes": [{
+            "id": 21,
+            "title": "node2.1",
+            "nodes": []
         }, {
-            "id" : 22,
-            "title" : "node2.2",
-            "nodes" : []
+            "id": 22,
+            "title": "node2.2",
+            "nodes": []
         }]
     }, {
-        "id" : 3,
-        "title" : "node3",
-        "nodes" : [{
-            "id" : 31,
-            "title" : "node3.1",
-            "nodes" : []
+        "id": 3,
+        "title": "node3",
+        "nodes": [{
+            "id": 31,
+            "title": "node3.1",
+            "nodes": []
         }]
     }];
 }
-
 /**
+ 
  * codeEditorCtrl - Controller for code editor - Code Mirror
+ 
  */
 function codeEditorCtrl($scope) {
     $scope.editorOptions = {
-        lineNumbers : true,
-        matchBrackets : true,
-        styleActiveLine : true,
-        theme : "ambiance"
+        lineNumbers: true,
+        matchBrackets: true,
+        styleActiveLine: true,
+        theme: "ambiance"
     };
     $scope.editorOptions2 = {
-        lineNumbers : true,
-        matchBrackets : true,
-        styleActiveLine : true
+        lineNumbers: true,
+        matchBrackets: true,
+        styleActiveLine: true
     };
 }
-
 /**
+ 
  * CONTROLLER FOR LIST VIEW TABLE
+ 
  */
 function ngGridCtrl($scope, $http, $cookieStore) {
     //   $scope.ngData = [
@@ -2865,25 +4107,25 @@ function ngGridCtrl($scope, $http, $cookieStore) {
     $scope.ngData = [];
     $scope.mySelections = [];
     $scope.filterOptions = {
-        filterText : "",
-        externalFilter : 'searchText',
-        useExternalFilter : true
+        filterText: "",
+        externalFilter: 'searchText',
+        useExternalFilter: true
     };
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
-        pageSizes : [10, 20, 50, 100],
-        pageSize : Number($scope.main.Settings.defaultPageSize),
-        currentPage : 1
+        pageSizes: [10, 20, 50, 100],
+        pageSize: Number($scope.main.Settings.defaultPageSize),
+        currentPage: 1
     };
     // sort
     $scope.sortOptions = {
-        fields : ['contactListName'],
-        directions : ['ASC'],
-        useExternalSorting : true
+        fields: ['contactListName'],
+        directions: ['ASC'],
+        useExternalSorting: true
     };
     //GET DATA
     $scope.getPagedDataAsync = function(pageSize, page, searchText, sortFields, sortOrders) {
-        if ( typeof page == 'undefined' || page == null || page == '') {
+        if (typeof page == 'undefined' || page == null || page == '') {
             page = 0;
         }
         var orderBy = generateOrderByField(sortFields, sortOrders);
@@ -2895,43 +4137,43 @@ function ngGridCtrl($scope, $http, $cookieStore) {
             if (searchText) {
                 var ft = searchText.toLowerCase();
                 $http.post(inspiniaNS.wsUrl + "contactlist_get", $.param({
-                    sethttp : 1,
-                    apikey : $cookieStore.get('inspinia_auth_token'),
-                    accountID : $cookieStore.get('inspinia_account_id'),
-                    contactListName : ft,
-                    orderby : orderBy,
-                    limit : pageSize,
-                    offset : (page - 1) * pageSize
+                    sethttp: 1,
+                    apikey: $cookieStore.get('inspinia_auth_token'),
+                    accountID: $cookieStore.get('inspinia_account_id'),
+                    contactListName: ft,
+                    orderby: orderBy,
+                    limit: pageSize,
+                    offset: (page - 1) * pageSize
                 })).success(function(data) {
                     $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
                 }).error(
-                //An error occurred with this request
-                function(data, status, headers, config) {
-                    //alert('Unexpected error occurred when trying to fetch contact lists!');
-                    if (status == 400) {
-                        alert("An error occurred when getting contact lists! Error code: " + data.apicode);
-                        alert(JSON.stringify(data));
-                    }
-                });
+                    //An error occurred with this request
+                    function(data, status, headers, config) {
+                        //alert('Unexpected error occurred when trying to fetch contact lists!');
+                        if (status == 400) {
+                            alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+                            alert(JSON.stringify(data));
+                        }
+                    });
             } else {
                 $http.post(inspiniaNS.wsUrl + "contactlist_get", $.param({
-                    sethttp : 1,
-                    apikey : $cookieStore.get('inspinia_auth_token'),
-                    accountID : $cookieStore.get('inspinia_account_id'),
-                    orderby : orderBy,
-                    limit : pageSize,
-                    offset : (page - 1) * pageSize
+                    sethttp: 1,
+                    apikey: $cookieStore.get('inspinia_auth_token'),
+                    accountID: $cookieStore.get('inspinia_account_id'),
+                    orderby: orderBy,
+                    limit: pageSize,
+                    offset: (page - 1) * pageSize
                 })).success(function(data) {
                     $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
                 }).error(
-                //An error occurred with this request
-                function(data, status, headers, config) {
-                    //alert('Unexpected error occurred when trying to fetch contact lists!');
-                    if (status == 400) {
-                        alert("An error occurred when getting contact lists! Error code: " + data.apicode);
-                        alert(JSON.stringify(data));
-                    }
-                });
+                    //An error occurred with this request
+                    function(data, status, headers, config) {
+                        //alert('Unexpected error occurred when trying to fetch contact lists!');
+                        if (status == 400) {
+                            alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+                            alert(JSON.stringify(data));
+                        }
+                    });
             }
         }, 100);
     };
@@ -3053,66 +4295,66 @@ function ngGridCtrl($scope, $http, $cookieStore) {
     //true);
     //TABLE OPTIONS
     $scope.ngOptions = {
-        data : 'ngData',
-        enableSorting : true,
-        useExternalSorting : true,
-        sortInfo : $scope.sortOptions,
-        rowHeight : 35,
-        selectedItems : $scope.mySelections,
-        showSelectionCheckbox : true,
-        multiSelect : true,
-        selectWithCheckboxOnly : true,
-        enablePaging : true,
-        showFooter : true,
+        data: 'ngData',
+        enableSorting: true,
+        useExternalSorting: true,
+        sortInfo: $scope.sortOptions,
+        rowHeight: 35,
+        selectedItems: $scope.mySelections,
+        showSelectionCheckbox: true,
+        multiSelect: true,
+        selectWithCheckboxOnly: true,
+        enablePaging: true,
+        showFooter: true,
         //plugins: [new ngGridCsvExportPlugin()],
-        totalServerItems : 'totalServerItems',
-        pagingOptions : $scope.pagingOptions,
-        filterOptions : $scope.filterOptions,
-        primaryKey : 'contactListID',
-        columnDefs : [{
-            field : '',
-            width : 30
-            //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
-        }, {
-            field : 'contactListName',
-            displayName : 'List Name',
-            cellTemplate : 'views/table/ListNameTemplate.html'
-        }, {
-            field : 'createdDate',
-            displayName : 'Created'
-        }, {
-            field : 'status',
-            displayName : 'Status',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
-        }, {
-            field : 'messagesSent',
-            displayName : 'Sent Messages'
-        }, {
-            field : 'lastMessageSent',
-            displayName : 'Last Sent'
-        }, {
-            field : 'contactCount',
-            displayName : 'Contacts'
-        }
-        //,{
-        //
-        //
-        //
-        //  cellTemplate: 'views/table/ManageListTemplateCol.html'
-        //
-        //
-        //
-        //}
+        totalServerItems: 'totalServerItems',
+        pagingOptions: $scope.pagingOptions,
+        filterOptions: $scope.filterOptions,
+        primaryKey: 'contactListID',
+        columnDefs: [{
+                field: '',
+                width: 30
+                    //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
+            }, {
+                field: 'contactListName',
+                displayName: 'List Name',
+                cellTemplate: 'views/table/ListNameTemplate.html'
+            }, {
+                field: 'createdDate',
+                displayName: 'Created'
+            }, {
+                field: 'status',
+                displayName: 'Status',
+                cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
+            }, {
+                field: 'messagesSent',
+                displayName: 'Sent Messages'
+            }, {
+                field: 'lastMessageSent',
+                displayName: 'Last Sent'
+            }, {
+                field: 'contactCount',
+                displayName: 'Contacts'
+            }
+            //,{
+            //
+            //
+            //
+            //  cellTemplate: 'views/table/ManageListTemplateCol.html'
+            //
+            //
+            //
+            //}
         ]
     };
     $scope.changeSelectedListsStatus = function(newStatus) {
         //Check selected items
-        if ( typeof $scope.mySelections == 'undefined' || $scope.mySelections == null || $scope.mySelections.length <= 0) {
+        if (typeof $scope.mySelections == 'undefined' || $scope.mySelections == null || $scope.mySelections.length <= 0) {
             //Do nothing
             return;
         }
         //Checking input parameters
-        if ( typeof newStatus == 'undefined' || newStatus == null || newStatus == '') {
+        if (typeof newStatus == 'undefined' || newStatus == null || newStatus == '') {
             return;
         }
         var contactListIDs = '';
@@ -3123,66 +4365,66 @@ function ngGridCtrl($scope, $http, $cookieStore) {
             contactListIDs += $scope.mySelections[i].contactListID;
         }
         $http.post(inspiniaNS.wsUrl + "contactlist_modify", $.param({
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id'),
-            contactListID : contactListIDs,
-            status : newStatus
+            sethttp: 1,
+            apikey: $cookieStore.get('inspinia_auth_token'),
+            accountID: $cookieStore.get('inspinia_account_id'),
+            contactListID: contactListIDs,
+            status: newStatus
         })).success(
-        //Successful request to the server
-        function(data, status, headers, config) {
-            if (data == null || typeof data.apicode == 'undefined') {
-                //This should never happen
-                alert("Unidentified error occurred when editing contact!");
-                return;
-            }
-            if (data.apicode == 0) {
-                if (newStatus == 'A') {
-                    $scope.$broadcast("ListsSuccessfullyActivated");
-                } else if (newStatus == 'I') {
-                    $scope.$broadcast("ListsSuccessfullyDeactivated");
+            //Successful request to the server
+            function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    alert("Unidentified error occurred when editing contact!");
+                    return;
                 }
-            } else {
-                alert("An error occurred when changing your contact Error code: " + data.apicode);
-                console.log(JSON.stringify(data));
-            }
-            $scope.refresh();
-            $scope.main.CommonActions.setContactListsAndSegments();
-        }).error(
-        //An error occurred with this request
-        function(data, status, headers, config) {
-            if (newStatus == 'A') {
-                $scope.$broadcast("FailedToActivateList");
-            } else if (newStatus == 'I') {
-                $scope.$broadcast("FailedToDeactivateList");
-            }
-            $scope.refresh();
-        });
+                if (data.apicode == 0) {
+                    if (newStatus == 'A') {
+                        $scope.$broadcast("ListsSuccessfullyActivated");
+                    } else if (newStatus == 'I') {
+                        $scope.$broadcast("ListsSuccessfullyDeactivated");
+                    }
+                } else {
+                    alert("An error occurred when changing your contact Error code: " + data.apicode);
+                    console.log(JSON.stringify(data));
+                }
+                $scope.refresh();
+                $scope.main.CommonActions.setContactListsAndSegments();
+            }).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                if (newStatus == 'A') {
+                    $scope.$broadcast("FailedToActivateList");
+                } else if (newStatus == 'I') {
+                    $scope.$broadcast("FailedToDeactivateList");
+                }
+                $scope.refresh();
+            });
     };
-
     $scope.exportOptOuts = function() {
         $http.post(inspiniaNS.wsUrl + "contact_get", $.param({
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id'),
-            status : "O",
-            export : "csv"
+            sethttp: 1,
+            apikey: $cookieStore.get('inspinia_auth_token'),
+            accountID: $cookieStore.get('inspinia_account_id'),
+            status: "O",
+            export: "csv"
         })).success(function(data) {
             if (data.apicode == 0) {
                 window.location.href = data.apidata;
                 //window.open(data.apidata, "_blank");
             }
         }).error(
-        //An error occurred with this request
-        function(data, status, headers, config) {
-            alert("An error occurred when exporting Opt-outs! Error code: " + data.apicode);
-            alert(JSON.stringify(data));
-        });
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                alert("An error occurred when exporting Opt-outs! Error code: " + data.apicode);
+                alert(JSON.stringify(data));
+            });
     };
 }
-
 /**
+ 
  * CONTROLLER FOR CONTACT VIEW TABLE
+ 
  */
 function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     //   $scope.ngData = [
@@ -3203,33 +4445,30 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     $scope.main.contactListID = $state.params.id;
     $scope.mySelections = [];
     $scope.filterOptions = {
-        filterText : '',
-        filterBy : ''
-        //filterText2: '',
-        //externalFilter: '',
-        //useExternalFilter: true
+        filterText: '',
+        filterBy: ''
+            //filterText2: '',
+            //externalFilter: '',
+            //useExternalFilter: true
     };
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
-        pageSizes : [10, 20, 50, 100],
-        pageSize : Number($scope.main.Settings.defaultPageSize),
-        currentPage : 1
+        pageSizes: [10, 20, 50, 100],
+        pageSize: Number($scope.main.Settings.defaultPageSize),
+        currentPage: 1
     };
     // sort
     $scope.sortOptions = {
-        fields : ['lastName'],
-        directions : ['ASC'],
-        useExternalSorting : true
+        fields: ['lastName'],
+        directions: ['ASC'],
+        useExternalSorting: true
     };
-
     $scope.contactBlacklistAddTotalCount = 0;
     $scope.contactBlacklistAddSuccessCount = 0;
     $scope.contactBlacklistAddErrorCount = 0;
-
     $scope.contactBlacklistDeleteTotalCount = 0;
     $scope.contactBlacklistDeleteSuccessCount = 0;
     $scope.contactBlacklistDeleteErrorCount = 0;
-
     $scope.blockContacts_ngContactListCtrl = function() {
         $scope.main.CommonActions.blockContact($scope, $scope.mySelections, true, $scope.refresh);
     };
@@ -3245,7 +4484,6 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     $scope.optInContacts_ngContactListCtrl = function() {
         $scope.main.CommonActions.optInContact($scope, $scope.mySelections, true, $scope.refresh);
     };
-
     //GET DATA
     $scope.setPagingData = function(data, page, pageSize) {
         var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
@@ -3264,11 +4502,11 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
             for (var i in $scope.main.Settings.Numbers) {
                 var did = $scope.main.Settings.Numbers[i].DID;
                 $scope.main.ServerRequests.contactBlacklistGetRequest({
-                    apikey : $scope.main.authToken,
-                    accountID : $scope.main.accountID,
-                    companyID : $scope.main.accountInfo.companyID,
-                    DID : did,
-                    sethttp : 1
+                    apikey: $scope.main.authToken,
+                    accountID: $scope.main.accountID,
+                    companyID: $scope.main.accountInfo.companyID,
+                    DID: did,
+                    sethttp: 1
                 }, function(blacklistData) {
                     $scope.contactBlacklistGetTotalCount--;
                     for (var blockedContactIdx in blacklistData) {
@@ -3290,7 +4528,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         }
     };
     $scope.getPagedDataAsync = function(pageSize, page, searchText, filterBy, sortFields, sortOrders) {
-        if ( typeof page == 'undefined' || page == null || page == '') {
+        if (typeof page == 'undefined' || page == null || page == '') {
             page = 0;
         }
         //Creating a sort options string
@@ -3301,95 +4539,93 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         var i = setInterval(function() {
             if ($scope.main.keywords) {
                 clearInterval(i);
-
                 var data;
                 if (searchText) {
                     if (filterBy) {
                         var request = {
-                            sethttp : 1,
-                            apikey : $cookieStore.get('inspinia_auth_token'),
-                            accountID : $cookieStore.get('inspinia_account_id'),
-                            limit : pageSize,
-                            offset : (page - 1) * pageSize,
-                            orderby : orderBy
+                            sethttp: 1,
+                            apikey: $cookieStore.get('inspinia_auth_token'),
+                            accountID: $cookieStore.get('inspinia_account_id'),
+                            limit: pageSize,
+                            offset: (page - 1) * pageSize,
+                            orderby: orderBy
                         };
                         if ($state.params.id && $state.params.id != '') {
                             request['contactListID'] = $state.params.id;
                         }
-                        switch(filterBy) {
-                        case "ANI":
-                            request.ANI = searchText;
-                            break;
-                        case "firstName":
-                            request.firstName = searchText;
-                            break;
-                        case "lastName":
-                            request.lastName = searchText;
-                            break;
-                        case "emailAddress":
-                            request.emailAddress = searchText;
-                            break;
-                        case "custom1":
-                            request.custom1 = searchText;
-                            break;
-                        case "custom2":
-                            request.custom2 = searchText;
-                            break;
-                        case "custom3":
-                            request.custom3 = searchText;
-                            break;
-                        case "custom4":
-                            request.custom4 = searchText;
-                            break;
-                        case "custom5":
-                            request.custom5 = searchText;
-                            break;
+                        switch (filterBy) {
+                            case "ANI":
+                                request.ANI = searchText;
+                                break;
+                            case "firstName":
+                                request.firstName = searchText;
+                                break;
+                            case "lastName":
+                                request.lastName = searchText;
+                                break;
+                            case "emailAddress":
+                                request.emailAddress = searchText;
+                                break;
+                            case "custom1":
+                                request.custom1 = searchText;
+                                break;
+                            case "custom2":
+                                request.custom2 = searchText;
+                                break;
+                            case "custom3":
+                                request.custom3 = searchText;
+                                break;
+                            case "custom4":
+                                request.custom4 = searchText;
+                                break;
+                            case "custom5":
+                                request.custom5 = searchText;
+                                break;
                         }
                         $http.post(inspiniaNS.wsUrl + "contact_get", $.param(request)).success(function(data) {
                             $scope.getContactBlacklist(data.apidata, function() {
                                 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
                             });
                         }).error(
-                        //An error occurred with this request
-                        function(data, status, headers, config) {
-                            //alert('Unexpected error occurred when trying to fetch contact lists!');
-                            if (status == 400) {
-                                if (data.apicode == 4) {
-                                    //This is some invalid search field case
-                                    $scope.$broadcast("SearchTextTooShort");
-                                } else {
-                                    alert("An error occurred when getting contacts! Error code: " + data.apicode);
-                                    alert(JSON.stringify(data));
+                            //An error occurred with this request
+                            function(data, status, headers, config) {
+                                //alert('Unexpected error occurred when trying to fetch contact lists!');
+                                if (status == 400) {
+                                    if (data.apicode == 4) {
+                                        //This is some invalid search field case
+                                        $scope.$broadcast("SearchTextTooShort");
+                                    } else {
+                                        alert("An error occurred when getting contacts! Error code: " + data.apicode);
+                                        alert(JSON.stringify(data));
+                                    }
                                 }
-                            }
-                        });
+                            });
                     }
                 } else {
                     var params = {
-                        sethttp : 1,
-                        apikey : $cookieStore.get('inspinia_auth_token'),
-                        accountID : $cookieStore.get('inspinia_account_id'),
-                        limit : pageSize,
-                        offset : (page - 1) * pageSize,
-                        orderby : orderBy
+                        sethttp: 1,
+                        apikey: $cookieStore.get('inspinia_auth_token'),
+                        accountID: $cookieStore.get('inspinia_account_id'),
+                        limit: pageSize,
+                        offset: (page - 1) * pageSize,
+                        orderby: orderBy
                     };
                     if ($state.params.id && $state.params.id != '') {
                         params['contactListID'] = $state.params.id;
                     }
-
                     $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
                         $scope.getContactBlacklist(data.apidata, function() {
                             $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
                         });
                     }).error(
-                    //An error occurred with this request
-                    function(data, status, headers, config) {
-                        //alert('Unexpected error occurred when trying to fetch contact lists!');
-                        if (status == 400) {
-                            alert("An error occurred when getting contacts! Error code: " + data.apicode);
-                            alert(JSON.stringify(data));
-                        }
-                    });
+                        //An error occurred with this request
+                        function(data, status, headers, config) {
+                            //alert('Unexpected error occurred when trying to fetch contact lists!');
+                            if (status == 400) {
+                                alert("An error occurred when getting contacts! Error code: " + data.apicode);
+                                alert(JSON.stringify(data));
+                            }
+                        });
                 }
             }
         }, 100);
@@ -3403,11 +4639,17 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
     }, true);
     /*$scope.$watch('filterOptions', function() {
+
      if (!self.foInit || self.gettingData) {
+
      self.foInit = true;
+
      return;
+
      }
+
      $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
+
      }, true);*/
     $scope.$watch('sortOptions', function(newVal, oldVal) {
         //alert($scope.sortOptions.fields);
@@ -3416,90 +4658,87 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         }
     }, true);
     //TABLE OPTIONS
-
     $scope.columnDefs = [{
-        inSettings : false,
-        field : '',
-        width : 30
-        //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
+        inSettings: false,
+        field: '',
+        width: 30
+            //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
     }, {
-        inSettings : true,
-        checked : true,
-        canBeClicked : true,
-        field : 'ANI',
-        displayName : 'Phone Number'
-        //cellTemplate: 'views/table/ListNameTemplate.html'
+        inSettings: true,
+        checked: true,
+        canBeClicked: true,
+        field: 'ANI',
+        displayName: 'Phone Number'
+            //cellTemplate: 'views/table/ListNameTemplate.html'
     }, {
-        inSettings : true,
-        checked : true,
-        canBeClicked : true,
-        field : 'lastName',
-        displayName : 'Name',
-        cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
+        inSettings: true,
+        checked: true,
+        canBeClicked: true,
+        field: 'lastName',
+        displayName: 'Name',
+        cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
     }, {
-        inSettings : true,
-        checked : true,
-        canBeClicked : true,
-        field : 'emailAddress',
-        displayName : 'Email'
+        inSettings: true,
+        checked: true,
+        canBeClicked: true,
+        field: 'emailAddress',
+        displayName: 'Email'
     }, {
-        inSettings : true,
-        checked : true,
-        field : 'custom1',
-        displayName : 'Field 1'
+        inSettings: true,
+        checked: true,
+        field: 'custom1',
+        displayName: 'Field 1'
     }, {
-        inSettings : true,
-        checked : true,
-        field : 'custom2',
-        displayName : 'Field 2'
+        inSettings: true,
+        checked: true,
+        field: 'custom2',
+        displayName: 'Field 2'
     }, {
-        inSettings : true,
-        checked : true,
-        field : 'custom3',
-        displayName : 'Field 3'
+        inSettings: true,
+        checked: true,
+        field: 'custom3',
+        displayName: 'Field 3'
     }, {
-        inSettings : true,
-        checked : false,
-        field : 'custom4',
-        displayName : 'Field 4'
+        inSettings: true,
+        checked: false,
+        field: 'custom4',
+        displayName: 'Field 4'
     }, {
-        inSettings : true,
-        checked : false,
-        field : 'custom5',
-        displayName : 'Field 5'
+        inSettings: true,
+        checked: false,
+        field: 'custom5',
+        displayName: 'Field 5'
     }, {
-        inSettings : true,
-        checked : true,
-        field : 'status',
-        displayName : 'Status',
-        cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
+        inSettings: true,
+        checked: true,
+        field: 'status',
+        displayName: 'Status',
+        cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
     }, {
-        inSettings : false,
-        checked : true,
-        cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_contact({id:row.getProperty(\'contactID\')})"><i class="fa fa-pencil"></i> Edit Contact </a></div>'
+        inSettings: false,
+        checked: true,
+        cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_contact({id:row.getProperty(\'contactID\')})"><i class="fa fa-pencil"></i> Edit Contact </a></div>'
     }];
-
     $scope.ngOptions = {
-        data : 'ngData',
-        enableSorting : true,
-        useExternalSorting : true,
-        sortInfo : $scope.sortOptions,
-        rowHeight : 35,
-        selectedItems : $scope.mySelections,
-        showSelectionCheckbox : true,
-        multiSelect : true,
-        selectWithCheckboxOnly : true,
-        enablePaging : true,
-        showFooter : true,
-        footerTemplate : 'views/table/footerTemplate.html',
+        data: 'ngData',
+        enableSorting: true,
+        useExternalSorting: true,
+        sortInfo: $scope.sortOptions,
+        rowHeight: 35,
+        selectedItems: $scope.mySelections,
+        showSelectionCheckbox: true,
+        multiSelect: true,
+        selectWithCheckboxOnly: true,
+        enablePaging: true,
+        showFooter: true,
+        footerTemplate: 'views/table/footerTemplate.html',
         //plugins: [new ngGridCsvExportPlugin()],
-        totalServerItems : 'totalServerItems',
-        pagingOptions : $scope.pagingOptions,
+        totalServerItems: 'totalServerItems',
+        pagingOptions: $scope.pagingOptions,
         //filterOptions : $scope.filterOptions,
-        primaryKey : 'contactID',
-        columnDefs : 'columnDefs'
+        primaryKey: 'contactID',
+        columnDefs: 'columnDefs'
     };
-
     $scope.$watch('ngData', function() {
         $('.gridStyle').trigger('resize');
     });
@@ -3507,26 +4746,26 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
     };
     $scope.refresh();
-
     $scope.exportAll = function() {
         $scope.export(true);
     };
-
     /**
+     
      *
+     
      * @param bool all Export all
+     
      */
     $scope.export = function(all) {
         if (empty(all)) {
             all = false;
         }
-
         if (all) {
             var params = {
-                sethttp : 1,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                export : "csv"
+                sethttp: 1,
+                apikey: $cookieStore.get('inspinia_auth_token'),
+                accountID: $cookieStore.get('inspinia_account_id'),
+                export: "csv"
             };
         } else {
             var selected_ids = [];
@@ -3534,156 +4773,165 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
                 selected_ids.push($scope.mySelections[i].contactID);
             }
             selected_ids = selected_ids.join();
-
             if ($scope.mySelections.length == 0) {
                 $scope.$broadcast('ContactsNotSelectedError');
                 return;
             }
-
             var params = {
-                sethttp : 1,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                contactID : selected_ids,
-                export : "csv"
+                sethttp: 1,
+                apikey: $cookieStore.get('inspinia_auth_token'),
+                accountID: $cookieStore.get('inspinia_account_id'),
+                contactID: selected_ids,
+                export: "csv"
             };
         }
-
         if ($state.params.id && $state.params.id != '') {
             params['contactListID'] = $state.params.id;
         }
-
         var filterBy = $scope.filterOptions.filterBy;
         var searchText = $scope.filterOptions.filterText;
-
         if (searchText != '') {
-            switch(filterBy) {
-            case "ANI":
-                params.ANI = searchText;
-                break;
-            case "firstName":
-                params.firstName = searchText;
-                break;
-            case "lastName":
-                params.lastName = searchText;
-                break;
-            case "emailAddress":
-                params.emailAddress = searchText;
-                break;
-            case "custom1":
-                params.custom1 = searchText;
-                break;
-            case "custom2":
-                params.custom2 = searchText;
-                break;
-            case "custom3":
-                params.custom3 = searchText;
-                break;
-            case "custom4":
-                params.custom4 = searchText;
-                break;
-            case "custom5":
-                params.custom5 = searchText;
-                break;
+            switch (filterBy) {
+                case "ANI":
+                    params.ANI = searchText;
+                    break;
+                case "firstName":
+                    params.firstName = searchText;
+                    break;
+                case "lastName":
+                    params.lastName = searchText;
+                    break;
+                case "emailAddress":
+                    params.emailAddress = searchText;
+                    break;
+                case "custom1":
+                    params.custom1 = searchText;
+                    break;
+                case "custom2":
+                    params.custom2 = searchText;
+                    break;
+                case "custom3":
+                    params.custom3 = searchText;
+                    break;
+                case "custom4":
+                    params.custom4 = searchText;
+                    break;
+                case "custom5":
+                    params.custom5 = searchText;
+                    break;
             }
         }
-
         $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
             if (data.apicode == 0) {
                 window.location.href = data.apidata;
                 //window.open(data.apidata, "_blank");
             }
         }).error(
-        //An error occurred with this request
-        function(data, status, headers, config) {
-            alert("An error occurred when exporting contacts! Error code: " + data.apicode);
-            alert(JSON.stringify(data));
-        });
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                alert("An error occurred when exporting contacts! Error code: " + data.apicode);
+                alert(JSON.stringify(data));
+            });
     };
-
     $scope.columnSettings = {
-        columnDefs : $.extend([], $scope.columnDefs),
-        ColumnUp_onClick : function(index) {
+        columnDefs: $.extend([], $scope.columnDefs),
+        ColumnUp_onClick: function(index) {
             $scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index - 1, 1, $scope.columnSettings.columnDefs[index])[0];
         },
-        ColumnDown_onClick : function(index) {
+        ColumnDown_onClick: function(index) {
             $scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index + 1, 1, $scope.columnSettings.columnDefs[index])[0];
         },
-        UpdateColumns : function(refresh) {
+        UpdateColumns: function(refresh) {
             $scope.columnSettings.SetCookie();
             $scope.columnDefs = $.extend([], $scope.columnSettings.GrepColumnDefs($scope.columnSettings.columnDefs));
             if (refresh) {
                 $scope.refresh();
             }
         },
-        GrepColumnDefs : function(columnDefs) {
+        GrepColumnDefs: function(columnDefs) {
             return $.grep(columnDefs, function(member) {
                 return (member.canBeClicked || (!member.canBeClicked && member.checked));
             });
         },
-        GetCookie : function() {
+        GetCookie: function() {
             var columnDefsCookie = $scope.main.ipCookie('itContactsColumnDefs');
             if (columnDefsCookie == null) {
                 columnDefsCookie = [];
                 $scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
-                    expires : 365,
-                    expirationUnit : 'days'
+                    expires: 365,
+                    expirationUnit: 'days'
                 });
             }
             return columnDefsCookie;
         },
-        SetCookie : function() {
+        SetCookie: function() {
             var columnDefsCookie = [{
-                columnDefs : $scope.columnSettings.columnDefs
+                columnDefs: $scope.columnSettings.columnDefs
             }];
             $scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
-                expires : 365,
-                expirationUnit : 'days'
+                expires: 365,
+                expirationUnit: 'days'
             });
         },
-        DefaultColumns : function() {
+        DefaultColumns: function() {
             var columnDefsCookie = [];
             $scope.main.ipCookie('itContactsColumnDefs', columnDefsCookie, {
-                expires : 365,
-                expirationUnit : 'days'
+                expires: 365,
+                expirationUnit: 'days'
             });
             location.reload();
+        },
+        GetTrueIndex: function(index) {
+            var true_index = -1;
+            for (var i in $scope.columnSettings.columnDefs) {
+                var column = $scope.columnSettings.columnDefs[i];
+                if (column.inSettings) true_index++;
+                if (i == index) break;
+            }
+            return true_index;
+        },
+        GetTotal: function() {
+            var true_index = 0;
+            for (var i in $scope.columnSettings.columnDefs) {
+                var column = $scope.columnSettings.columnDefs[i];
+                if (column.inSettings) true_index++;
+            }
+            return true_index;
         }
     };
-
     var cookie = $scope.columnSettings.GetCookie();
     if (cookie != null && cookie.length != 0) {
         $scope.columnSettings.columnDefs = cookie[0].columnDefs;
     }
     $scope.columnSettings.UpdateColumns();
 }
-
 /**
+ 
  *
+ 
  * CONTROLLER FOR LIST SEGMENTS
+ 
  */
 function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
     $scope.ngData = [];
     $scope.mySelections = [];
-
     $scope.filterOptions = {
-        filterText : "",
-        externalFilter : 'searchText',
-        useExternalFilter : true
+        filterText: "",
+        externalFilter: 'searchText',
+        useExternalFilter: true
     };
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
-        pageSizes : [10, 20, 50, 100],
-        pageSize : Number($scope.main.Settings.defaultPageSize),
-        currentPage : 1
+        pageSizes: [10, 20, 50, 100],
+        pageSize: Number($scope.main.Settings.defaultPageSize),
+        currentPage: 1
     };
     // sort
     $scope.sortOptions = {
-        fields : ['contactselectionname'],
-        directions : ['ASC'],
-        useExternalSorting : true
+        fields: ['contactselectionname'],
+        directions: ['ASC'],
+        useExternalSorting: true
     };
-
     //GET DATA
     $scope.setPagingData = function(data, page, pageSize) {
         var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
@@ -3695,7 +4943,7 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
     };
     $scope.setPagingDataSliced = setPagingDataSliced;
     $scope.getPagedDataAsync = function(pageSize, page, searchText, sortFields, sortOrders) {
-        if ( typeof page == 'undefined' || page == null || page == '') {
+        if (typeof page == 'undefined' || page == null || page == '') {
             page = 0;
         }
         //Creating a sort options string
@@ -3703,26 +4951,24 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
         if (orderBy == '') {
             orderBy = 'contactSelectionName asc';
         }
-
         if (searchText) {
             var request = {
-                sethttp : 1,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                limit : pageSize,
-                offset : (page - 1) * pageSize,
-                orderby : orderBy
+                sethttp: 1,
+                apikey: $cookieStore.get('inspinia_auth_token'),
+                accountID: $cookieStore.get('inspinia_account_id'),
+                limit: pageSize,
+                offset: (page - 1) * pageSize,
+                orderby: orderBy
             };
             if ($state.params.id && $state.params.id != '') {
                 request['contactListID'] = $state.params.id;
                 $scope.ContactListFilter = {
-                    "contactListID" : $state.params.id
+                    "contactListID": $state.params.id
                 };
             }
             if (!empty(searchText)) {
                 request.contactSelectionName = searchText;
             }
-
             $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param(request)).success(function(data) {
                 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
             }).error(function(data, status, headers, config) {
@@ -3736,20 +4982,19 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
             });
         } else {
             var params = {
-                sethttp : 1,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                limit : pageSize,
-                offset : (page - 1) * pageSize,
-                orderby : orderBy
+                sethttp: 1,
+                apikey: $cookieStore.get('inspinia_auth_token'),
+                accountID: $cookieStore.get('inspinia_account_id'),
+                limit: pageSize,
+                offset: (page - 1) * pageSize,
+                orderby: orderBy
             };
             if ($state.params.id && $state.params.id != '') {
                 params['contactListID'] = $state.params.id;
                 $scope.ContactListFilter = {
-                    "contactListID" : $state.params.id
+                    "contactListID": $state.params.id
                 };
             }
-
             $http.post(inspiniaNS.wsUrl + "contactselection_get", $.param(params)).success(function(data) {
                 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
             }).error(function(data, status, headers, config) {
@@ -3759,7 +5004,6 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
             });
         }
     };
-
     //WHATCH
     $scope.$watch('pagingOptions', function() {
         if (!self.poInit || self.gettingData) {
@@ -3781,69 +5025,72 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
         }
     }, true);
     $scope.$watch('ContactListFilter.contactListID', function(newValue, oldValue) {
-        if ( typeof newValue != 'undefined') {
+        if (typeof newValue != 'undefined') {
             if (newValue != oldValue) {
                 if (newValue == 0) {
                     $state.go('lists.segments', {
-                        id : ''
+                        id: ''
                     });
                 } else {
                     $state.go('lists.segments', {
-                        id : newValue
+                        id: newValue
                     });
                 }
             }
         }
     });
-
     //TABLE OPTIONS
     $scope.ngOptions = {
-        data : 'ngData',
-        enableSorting : true,
-        useExternalSorting : true,
-        sortInfo : $scope.sortOptions,
-        rowHeight : 35,
-        showSelectionCheckbox : false,
-        enablePaging : true,
-        showFooter : true,
-        totalServerItems : 'totalServerItems',
-        footerTemplate : 'views/table/footerTemplate.html',
-        pagingOptions : $scope.pagingOptions,
-        filterOptions : $scope.filterOptions,
-        primaryKey : 'contactSelectionID',
-        columnDefs : [{
-            field : 'contactSelectionName',
-            displayName : 'Name',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})">{{row.entity.contactSelectionName}}</a></div>'
-        }, /*{
-         field : 'contactListID',
-         displayName : 'List ID',
-         cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})">{{row.entity.contactListID}}</a></div>'
-         }, */
-        {
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})"><i class="fa fa-pencil"></i> Edit Segment </a></div>',
-            width : 150
-        }, {
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ng-click="deleteSegment(row.getProperty(\'contactSelectionID\'))"><i class="fa fa-trash"></i> Delete Segment </a></div>',
-            width : 150
-        }]
-    };
+        data: 'ngData',
+        enableSorting: true,
+        useExternalSorting: true,
+        sortInfo: $scope.sortOptions,
+        rowHeight: 35,
+        showSelectionCheckbox: false,
+        enablePaging: true,
+        showFooter: true,
+        totalServerItems: 'totalServerItems',
+        footerTemplate: 'views/table/footerTemplate.html',
+        pagingOptions: $scope.pagingOptions,
+        filterOptions: $scope.filterOptions,
+        primaryKey: 'contactSelectionID',
+        columnDefs: [{
+                field: 'contactSelectionName',
+                displayName: 'Name',
+                cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})">{{row.entity.contactSelectionName}}</a></div>'
+            },
+            /*{
 
+                    field : 'contactListID',
+
+                    displayName : 'List ID',
+
+                    cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})">{{row.entity.contactListID}}</a></div>'
+
+                    }, */
+            {
+                cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_segment({id:row.getProperty(\'contactSelectionID\')})"><i class="fa fa-pencil"></i> Edit Segment </a></div>',
+                width: 150
+            }, {
+                cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ng-click="deleteSegment(row.getProperty(\'contactSelectionID\'))"><i class="fa fa-trash"></i> Delete Segment </a></div>',
+                width: 150
+            }
+        ]
+    };
     $scope.$watch('ngData', function() {
         $('.gridStyle').trigger('resize');
     });
     $scope.refresh = function() {
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.sortOptions.fields, $scope.sortOptions.directions);
     };
-
     $scope.deleteSegment = function(contactSegmentID) {
         if (confirm('Are you sure you want to delete this segment?')) {
             $scope.main.ServerRequests.deleteSegment({
-                sethttp : 1,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                companyID : $cookieStore.get('inspinia_company_id'),
-                contactSelectionID : contactSegmentID
+                sethttp: 1,
+                apikey: $cookieStore.get('inspinia_auth_token'),
+                accountID: $cookieStore.get('inspinia_account_id'),
+                companyID: $cookieStore.get('inspinia_company_id'),
+                contactSelectionID: contactSegmentID
             }, $scope, function() {
                 $scope.$broadcast('SegmentDeleted');
                 $scope.refresh();
@@ -3851,7 +5098,6 @@ function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
             });
         }
     };
-
     $scope.refresh();
 }
 
@@ -3869,7 +5115,6 @@ function parseContactFilter(data) {
             }
         }
     }
-
     if (!empty(contactFilters) && contactFilters.length > 0) {
         for (var i in contactFilters) {
             var contactFilter = contactFilters[i];
@@ -3882,27 +5127,23 @@ function parseContactFilter(data) {
                 contactFilter.replace('');
                 contactFilter = contactFilter.replace('or ', '');
             }
-
             if (contactFilter != '') {
                 var match = contactFilter.match(/^(\w+)(.*)(?=\{)\{(.*)}$/i);
                 var newSegment = {};
                 if (match.length == 4) {
                     newSegment = {
-                        field : match[1],
-                        comparator : match[2],
-                        value : match[3]
+                        field: match[1],
+                        comparator: match[2],
+                        value: match[3]
                     };
                 }
-
                 if (operator != '') {
                     newSegment.operator = operator;
                 }
-
                 segmentFilters.push(newSegment);
             }
         }
     }
-
     return segmentFilters;
 }
 
@@ -3910,10 +5151,8 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
     $window.scrollTo(0, 0);
     $scope.showPreview = false;
     $scope.previewError = false;
-
     $scope.ContactFilter = "";
     $scope.disableFields = true;
-
     $scope.DateOpened = [];
     $scope.open = function($event, index) {
         $event.preventDefault();
@@ -3926,65 +5165,59 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
         }
     };
     $scope.dateOptions = {
-        formatYear : 'yy',
-        startingDay : 1,
-        showWeeks : 'false'
+        formatYear: 'yy',
+        startingDay: 1,
+        showWeeks: 'false'
     };
     $scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
-
     $scope.availableComparators = {
-        '- - -' : ['- - -'],
-        ani : ['- - -', '=', '<>'],
-        firstname : ['- - -', '=', '<>'],
-        lastname : ['- - -', '=', '<>'],
-        emailaddress : ['- - -', '=', '<>'],
-        contactsource : ['- - -', '=', '<>'],
-        custom1 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        custom2 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        custom3 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        custom4 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        custom5 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        language : ['- - -', '=', '<>'],
-        createddate : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        statusdate : ['- - -', '=', '<', '>', '<=', '>=', '<>']
+        '- - -': ['- - -'],
+        ani: ['- - -', '=', '<>'],
+        firstname: ['- - -', '=', '<>'],
+        lastname: ['- - -', '=', '<>'],
+        emailaddress: ['- - -', '=', '<>'],
+        contactsource: ['- - -', '=', '<>'],
+        custom1: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom2: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom3: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom4: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom5: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        language: ['- - -', '=', '<>'],
+        createddate: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        updateddate: ['- - -', '=', '<', '>', '<=', '>=', '<>']
     };
-
     $scope.availableFields = {
-        ani : "Phone number",
-        firstname : "First name",
-        lastname : "Last name",
-        emailaddress : "Email address",
-        contactsource : "Source",
-        custom1 : "Custom field 1",
-        custom2 : "Custom field 2",
-        custom3 : "Custom field 3",
-        custom4 : "Custom field 4",
-        custom5 : "Custom field 5",
-        language : "Language",
-        createddate : "Created date",
-        statusdate : "Modified date"
+        ani: "Phone number",
+        firstname: "First name",
+        lastname: "Last name",
+        emailaddress: "Email address",
+        contactsource: "Source",
+        custom1: "Custom field 1",
+        custom2: "Custom field 2",
+        custom3: "Custom field 3",
+        custom4: "Custom field 4",
+        custom5: "Custom field 5",
+        language: "Language",
+        createddate: "Created date",
+        updateddate: "Modified date"
     };
     $scope.availableFieldsKeys = Object.keys($scope.availableFields);
-
     $scope.main.contactSegmentID = $state.params.id;
-
     $scope.originalSegmentName = '';
     $scope.originalContactListID = '';
     $scope.originalContactFilterText = '';
-
     $scope.segmentFieldChange = function(index) {
         $scope.segmentFilters[index].comparator = '- - -';
         $scope.segmentFilters[index].value = '';
     };
-
     $scope.removeFilter = function(index) {
         if ($scope.segmentFilters) {
             if ($scope.segmentFilters.length == 1) {
                 $scope.segmentFilters = [{
-                    field : '- - -',
-                    comparator : '- - -',
-                    value : ''
+                    field: '- - -',
+                    comparator: '- - -',
+                    value: ''
                 }];
             } else if ($scope.segmentFilters.length > 1) {
                 if (index == 0) {
@@ -3996,54 +5229,48 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
             }
         }
     };
-
     $scope.addFilter = function() {
         $scope.segmentFilters.push({
-            operator : 'and',
-            field : '- - -',
-            comparator : '- - -',
-            value : ''
+            operator: 'and',
+            field: '- - -',
+            comparator: '- - -',
+            value: ''
         });
     };
-
     var i = setInterval(function() {
         if ($scope.main.accountInfo.companyID) {
             clearInterval(i);
-
             $scope.main.ServerRequests.contactListsGet(function() {
                 // Get segment data
                 $scope.main.ServerRequests.getSegment({
-                    sethttp : 1,
-                    apikey : $cookieStore.get('inspinia_auth_token'),
-                    accountID : $cookieStore.get('inspinia_account_id'),
-                    companyID : $cookieStore.get('inspinia_company_id'),
-                    contactSelectionID : $scope.main.contactSegmentID
+                    sethttp: 1,
+                    apikey: $cookieStore.get('inspinia_auth_token'),
+                    accountID: $cookieStore.get('inspinia_account_id'),
+                    companyID: $cookieStore.get('inspinia_company_id'),
+                    contactSelectionID: $scope.main.contactSegmentID
                 }, function(data) {
                     $scope.SegmentName = data.contactSelectionName;
                     $scope.ContactList = {
-                        "contactListID" : data.contactListID
+                        "contactListID": data.contactListID
                     };
                     $scope.segmentFilters = parseContactFilter(data);
                     $scope.generateContactFilter();
                     $scope.previewSegment();
-
                     $scope.originalSegmentName = data.contactSelectionName;
                     $scope.originalContactListID = data.contactListID;
                     $scope.originalContactFilterText = data.contactFilter;
                     $scope.disableFields = false;
                 });
-
                 $scope.disableFields = false;
             });
         }
     }, 100);
-
     $scope.generateContactFilter = function(segmentFilters) {
-        if ( typeof segmentFilters == 'undefined') {
+        if (typeof segmentFilters == 'undefined') {
             segmentFilters = $scope.segmentFilters;
         }
         $scope.ContactFilter = "";
-        if ( typeof segmentFilters != 'undefined' && segmentFilters.length > 0) {
+        if (typeof segmentFilters != 'undefined' && segmentFilters.length > 0) {
             var correct_count = 0;
             for (var i in segmentFilters) {
                 var segmentFilter = segmentFilters[i];
@@ -4052,35 +5279,29 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
                     if (correct_count > 1 && segmentFilter.operator) {
                         $scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
                     }
-
-                    if ((segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate') && !empty(segmentFilter.value)) {
+                    if ((segmentFilter.field == 'createddate' || segmentFilter.field == 'updateddate') && !empty(segmentFilter.value)) {
                         segmentFilter.value = ngFunctions.ConvertDateToMySqlDate(segmentFilter.value);
                     }
-
                     $scope.ContactFilter += $.trim(segmentFilter.field) + $.trim(segmentFilter.comparator) + "{" + $.trim(segmentFilter.value) + "}";
                 }
             }
             $scope.ContactFilter = $.trim($scope.ContactFilter);
         }
     };
-
     $scope.$watch('segmentFilters', function(newValue) {
         $scope.ContactFilter = "";
-        if ( typeof newValue != 'undefined' && newValue && newValue.length > 0) {
+        if (typeof newValue != 'undefined' && newValue && newValue.length > 0) {
             $scope.generateContactFilter(newValue);
         }
     }, true);
-
     $scope.resetContactListID = function() {
         $scope.ContactList = {
-            contactListID : "0"
+            contactListID: "0"
         };
         $('select[name="ContactList"]').val('').trigger('chosen:updated');
     };
-
     $scope.saveSegment = function() {
         $scope.save_segment_form.$setSubmitted();
-
         if ($scope.save_segment_form.$valid) {
             //Checking input parameters
             if (empty($scope.SegmentName)) {
@@ -4091,57 +5312,45 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
                 // If there are no filters
                 return;
             }
-
             var params = {
-                sethttp : 1,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                companyID : $cookieStore.get('inspinia_company_id'),
-                contactSelectionID : $scope.main.contactSegmentID,
-                modifyPending : $scope.ModifyPending
+                sethttp: 1,
+                apikey: $cookieStore.get('inspinia_auth_token'),
+                accountID: $cookieStore.get('inspinia_account_id'),
+                companyID: $cookieStore.get('inspinia_company_id'),
+                contactSelectionID: $scope.main.contactSegmentID,
+                modifyPending: $scope.ModifyPending
             };
-
             if ($scope.originalSegmentName != $scope.SegmentName) {
                 params['contactSelectionName'] = $scope.SegmentName;
             }
-
             params['contactListID'] = $scope.ContactList.contactListID;
-
             if ($scope.originalContactFilterText != $scope.ContactFilter) {
                 params['contactFilter'] = $scope.ContactFilter;
             }
-
             // Set contactListID to 0 if contactList is not selected. If ContactListID=0 a global account-level contact search is conducted.
             params['contactListID'] = (!empty($scope.ContactList)) ? $scope.ContactList.contactListID : "0";
-
             $scope.main.ServerRequests.saveSegment(params, $scope, function(data) {
                 $scope.originalSegmentName = $scope.SegmentName;
                 $scope.originalContactListID = $scope.ContactList.contactListID;
                 $scope.originalContactFilterText = $scope.ContactFilter;
-
                 $scope.ModifyPending = '';
-
                 $scope.save_segment_form.$setPristine();
                 $scope.save_segment_form.$setUntouched();
-
                 $scope.$broadcast("SegmentSaved");
-
                 $scope.main.ServerRequests.contactSegmentsGet();
                 $scope.previewSegment();
                 $scope.main.CommonActions.setContactListsAndSegments();
-
             });
         }
     };
-
     $scope.deleteSegment = function() {
         if (confirm('Are you sure you want to delete this segment?')) {
             $scope.main.ServerRequests.deleteSegment({
-                sethttp : 1,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                companyID : $cookieStore.get('inspinia_company_id'),
-                contactSelectionID : $scope.main.contactSegmentID
+                sethttp: 1,
+                apikey: $cookieStore.get('inspinia_auth_token'),
+                accountID: $cookieStore.get('inspinia_account_id'),
+                companyID: $cookieStore.get('inspinia_company_id'),
+                contactSelectionID: $scope.main.contactSegmentID
             }, $scope, function() {
                 $state.go('lists.segments');
                 $window.scrollTo(0, 0);
@@ -4150,7 +5359,6 @@ function EditSegmentCtrl($scope, $state, $cookieStore, $window) {
             });
         }
     };
-
     $scope.previewSegment = function() {
         if (!empty($scope.ContactFilter)) {
             $scope.showPreview = true;
@@ -4166,7 +5374,6 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
     $scope.showPreview = false;
     $scope.previewError = false;
     $scope.ContactFilter = "";
-
     $scope.DateOpened = [];
     $scope.open = function($event, index) {
         $event.preventDefault();
@@ -4179,66 +5386,61 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
         }
     };
     $scope.dateOptions = {
-        formatYear : 'yy',
-        startingDay : 1,
-        showWeeks : 'false'
+        formatYear: 'yy',
+        startingDay: 1,
+        showWeeks: 'false'
     };
     $scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
-
     $scope.availableComparators = {
-        '- - -' : ['- - -'],
-        ani : ['- - -', '=', '<>'],
-        firstname : ['- - -', '=', '<>'],
-        lastname : ['- - -', '=', '<>'],
-        emailaddress : ['- - -', '=', '<>'],
-        contactsource : ['- - -', '=', '<>'],
-        custom1 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        custom2 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        custom3 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        custom4 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        custom5 : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        language : ['- - -', '=', '<>'],
-        createddate : ['- - -', '=', '<', '>', '<=', '>=', '<>'],
-        statusdate : ['- - -', '=', '<', '>', '<=', '>=', '<>']
+        '- - -': ['- - -'],
+        ani: ['- - -', '=', '<>'],
+        firstname: ['- - -', '=', '<>'],
+        lastname: ['- - -', '=', '<>'],
+        emailaddress: ['- - -', '=', '<>'],
+        contactsource: ['- - -', '=', '<>'],
+        custom1: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom2: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom3: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom4: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        custom5: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        language: ['- - -', '=', '<>'],
+        createddate: ['- - -', '=', '<', '>', '<=', '>=', '<>'],
+        updateddate: ['- - -', '=', '<', '>', '<=', '>=', '<>']
     };
-
     $scope.availableFields = {
-        ani : "Phone number",
-        firstname : "First name",
-        lastname : "Last name",
-        emailaddress : "Email address",
-        contactsource : "Source",
-        custom1 : "Custom field 1",
-        custom2 : "Custom field 2",
-        custom3 : "Custom field 3",
-        custom4 : "Custom field 4",
-        custom5 : "Custom field 5",
-        language : "Language",
-        createddate : "Created date",
-        statusdate : "Modified date"
+        ani: "Phone number",
+        firstname: "First name",
+        lastname: "Last name",
+        emailaddress: "Email address",
+        contactsource: "Source",
+        custom1: "Custom field 1",
+        custom2: "Custom field 2",
+        custom3: "Custom field 3",
+        custom4: "Custom field 4",
+        custom5: "Custom field 5",
+        language: "Language",
+        createddate: "Created date",
+        updateddate: "Modified date"
     };
     $scope.availableFieldsKeys = Object.keys($scope.availableFields);
-
     $scope.segmentFieldChange = function(index) {
         $scope.segmentFilters[index].comparator = '- - -';
         $scope.segmentFilters[index].value = '';
     };
-
     $scope.resetContactListID = function() {
         $scope.ContactList = {
-            contactListID : "0"
+            contactListID: "0"
         };
         $('select[name="ContactList"]').val('').trigger('chosen:updated');
     };
-
     $scope.removeFilter = function(index) {
         if ($scope.segmentFilters) {
             if ($scope.segmentFilters.length == 1) {
                 $scope.segmentFilters = [{
-                    field : '- - -',
-                    comparator : '- - -',
-                    value : ''
+                    field: '- - -',
+                    comparator: '- - -',
+                    value: ''
                 }];
             } else if ($scope.segmentFilters.length > 1) {
                 if (index == 0) {
@@ -4250,32 +5452,29 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
             }
         }
     };
-
     $scope.addFilter = function() {
         $scope.segmentFilters.push({
-            operator : 'and',
-            field : '- - -',
-            comparator : '- - -',
-            value : ''
+            operator: 'and',
+            field: '- - -',
+            comparator: '- - -',
+            value: ''
         });
     };
-
     $scope.reset = function() {
         $scope.ContactList = null;
         $scope.SegmentName = '';
         $scope.segmentFilters = [{
-            field : '- - -',
-            comparator : '- - -',
-            value : ''
+            field: '- - -',
+            comparator: '- - -',
+            value: ''
         }];
         $scope.add_segment_form.$setPristine();
         $scope.add_segment_form.$setUntouched();
         $window.scrollTo(0, 0);
     };
-
     $scope.$watch('segmentFilters', function(newValue) {
         $scope.ContactFilter = "";
-        if ( typeof newValue != 'undefined' && newValue && newValue.length > 0) {
+        if (typeof newValue != 'undefined' && newValue && newValue.length > 0) {
             var correct_count = 0;
             for (var i in newValue) {
                 var segmentFilter = newValue[i];
@@ -4284,8 +5483,7 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
                     if (correct_count > 1 && segmentFilter.operator) {
                         $scope.ContactFilter += " " + $.trim(segmentFilter.operator) + " ";
                     }
-
-                    if ((segmentFilter.field == 'createddate' || segmentFilter.field == 'statusdate') && !empty(segmentFilter.value)) {
+                    if ((segmentFilter.field == 'createddate' || segmentFilter.field == 'updateddate') && !empty(segmentFilter.value)) {
                         segmentFilter.value = ngFunctions.ConvertDateToMySqlDate(segmentFilter.value);
                     }
                     $scope.ContactFilter += $.trim(segmentFilter.field) + $.trim(segmentFilter.comparator) + "{" + $.trim(segmentFilter.value) + "}";
@@ -4294,10 +5492,8 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
         }
         $scope.ContactFilter = $.trim($scope.ContactFilter);
     }, true);
-
     $scope.addSegment = function() {
         $scope.add_segment_form.$setSubmitted();
-
         if ($scope.add_segment_form.$valid) {
             //Checking input parameters
             if (empty($scope.SegmentName)) {
@@ -4308,26 +5504,23 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
                 // If there are no filters
                 return;
             }
-
             //We have something to save.
             var requestParams = {
-                sethttp : 1,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                companyID : $cookieStore.get('inspinia_company_id'),
-                contactSelectionName : $scope.SegmentName,
-                contactFilter : $scope.ContactFilter
+                sethttp: 1,
+                apikey: $cookieStore.get('inspinia_auth_token'),
+                accountID: $cookieStore.get('inspinia_account_id'),
+                companyID: $cookieStore.get('inspinia_company_id'),
+                contactSelectionName: $scope.SegmentName,
+                contactFilter: $scope.ContactFilter
             };
-
             // Set contactListID to 0 if contactList is not selected. If ContactListID=0 a global account-level contact search is conducted.
             requestParams.contactListID = (!empty($scope.ContactList)) ? $scope.ContactList.contactListID : "0";
-
             $scope.main.ServerRequests.addSegment(requestParams, $scope, function(data) {
                 $scope.main.ServerRequests.contactSegmentsGet();
                 // Redirect to manage segment page
                 if (!empty(data)) {
                     $state.go('lists.manage_segment', {
-                        id : data
+                        id: data
                     });
                 } else {
                     $state.go('lists.segments');
@@ -4335,7 +5528,6 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
             });
         }
     };
-
     $scope.previewSegment = function() {
         if (!empty($scope.ContactFilter)) {
             $scope.showPreview = true;
@@ -4344,7 +5536,6 @@ function AddSegmentCtrl($scope, $state, $cookieStore, $window) {
             $scope.previewError = true;
         }
     };
-
     var i = setInterval(function() {
         if ($scope.main.accountInfo.companyID) {
             clearInterval(i);
@@ -4360,17 +5551,16 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
     $scope.ngData = [];
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
-        pageSizes : [10, 20, 50, 100],
-        pageSize : Number($scope.main.Settings.defaultPageSize),
-        currentPage : 1
+        pageSizes: [10, 20, 50, 100],
+        pageSize: Number($scope.main.Settings.defaultPageSize),
+        currentPage: 1
     };
     // sort
     $scope.sortOptions = {
-        fields : ['lastName'],
-        directions : ['ASC'],
-        useExternalSorting : true
+        fields: ['lastName'],
+        directions: ['ASC'],
+        useExternalSorting: true
     };
-
     //GET DATA
     $scope.setPagingData = function(data, page, pageSize) {
         var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
@@ -4389,11 +5579,11 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
             for (var i in $scope.main.Settings.Numbers) {
                 var did = $scope.main.Settings.Numbers[i].DID;
                 $scope.main.ServerRequests.contactBlacklistGetRequest({
-                    apikey : $scope.main.authToken,
-                    accountID : $scope.main.accountID,
-                    companyID : $scope.main.accountInfo.companyID,
-                    DID : did,
-                    sethttp : 1
+                    apikey: $scope.main.authToken,
+                    accountID: $scope.main.accountID,
+                    companyID: $scope.main.accountInfo.companyID,
+                    DID: did,
+                    sethttp: 1
                 }, function(blacklistData) {
                     $scope.contactBlacklistGetTotalCount--;
                     for (var blockedContactIdx in blacklistData) {
@@ -4414,9 +5604,8 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
             }
         }
     };
-
     $scope.getPagedDataAsync = function(pageSize, page, sortFields, sortOrders) {
-        if ( typeof page == 'undefined' || page == null || page == '') {
+        if (typeof page == 'undefined' || page == null || page == '') {
             page = 0;
         }
         //Creating a sort options string
@@ -4427,41 +5616,37 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
         var i = setInterval(function() {
             if ($scope.main.keywords) {
                 clearInterval(i);
-
                 var data;
                 var params = {
-                    sethttp : 1,
-                    apikey : $cookieStore.get('inspinia_auth_token'),
-                    accountID : $cookieStore.get('inspinia_account_id'),
-                    limit : pageSize,
-                    offset : (page - 1) * pageSize,
-                    orderby : orderBy,
-                    contactfilter : $scope.ContactFilter
+                    sethttp: 1,
+                    apikey: $cookieStore.get('inspinia_auth_token'),
+                    accountID: $cookieStore.get('inspinia_account_id'),
+                    limit: pageSize,
+                    offset: (page - 1) * pageSize,
+                    orderby: orderBy,
+                    contactfilter: $scope.ContactFilter
                 };
-
                 if (!empty($scope.ContactList) && $scope.ContactList.hasOwnProperty('contactListID') && $scope.ContactList.contactListID != 0) {
                     params['contactlistid'] = $scope.ContactList.contactListID;
                 }
-
                 $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
                     $scope.getContactBlacklist(data.apidata, function() {
                         $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
                         $scope.loading = false;
                     });
                 }).error(
-                //An error occurred with this request
-                function(data, status, headers, config) {
-                    //alert('Unexpected error occurred when trying to fetch contact lists!');
-                    if (status == 400) {
-                        alert("An error occurred when getting contacts! Error code: " + data.apicode);
-                        alert(JSON.stringify(data));
-                    }
-                    $scope.loading = false;
-                });
+                    //An error occurred with this request
+                    function(data, status, headers, config) {
+                        //alert('Unexpected error occurred when trying to fetch contact lists!');
+                        if (status == 400) {
+                            alert("An error occurred when getting contacts! Error code: " + data.apicode);
+                            alert(JSON.stringify(data));
+                        }
+                        $scope.loading = false;
+                    });
             }
         }, 100);
     };
-
     //WHATCH
     $scope.$watch('pagingOptions', function() {
         if ($scope.showPreview) {
@@ -4477,45 +5662,68 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
             $scope.refresh();
         }
     }, true);
-
     //TABLE OPTIONS
+    $scope.columnDefs = [{
+        inSettings: true,
+        checked: true,
+        canBeClicked: true,
+        field: 'ANI',
+        displayName: 'Phone Number'
+    }, {
+        inSettings: true,
+        checked: true,
+        field: 'lastName',
+        displayName: 'Name',
+        cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
+    }, {
+        inSettings: true,
+        checked: true,
+        field: 'emailAddress',
+        displayName: 'Email'
+    }, {
+        inSettings: true,
+        checked: true,
+        field: 'custom1',
+        displayName: 'Field 1'
+    }, {
+        inSettings: true,
+        checked: true,
+        field: 'custom2',
+        displayName: 'Field 2'
+    }, {
+        inSettings: true,
+        checked: true,
+        field: 'custom3',
+        displayName: 'Field 3'
+    }, {
+        inSettings: true,
+        checked: false,
+        field: 'custom4',
+        displayName: 'Field 4'
+    }, {
+        inSettings: true,
+        checked: false,
+        field: 'custom5',
+        displayName: 'Field 5'
+    }, {
+        field: 'status',
+        displayName: 'Status',
+        cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
+    }];
     $scope.ngOptions = {
-        data : 'ngData',
-        enableSorting : true,
-        useExternalSorting : true,
-        sortInfo : $scope.sortOptions,
-        rowHeight : 35,
-        selectedItems : $scope.mySelections,
-        enablePaging : true,
-        showFooter : true,
-        footerTemplate : 'views/table/footerTemplate.html',
-        totalServerItems : 'totalServerItems',
-        pagingOptions : $scope.pagingOptions,
-        primaryKey : 'contactID',
-        columnDefs : [{
-            field : 'ANI',
-            displayName : 'Phone Number'
-        }, {
-            field : 'lastName',
-            displayName : 'Name',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()">{{row.entity.lastName}} {{row.entity.firstName}}</div>'
-        }, {
-            field : 'emailAddress',
-            displayName : 'Email'
-        }, {
-            field : 'custom1',
-            displayName : 'Field 1'
-        }, {
-            field : 'custom2',
-            displayName : 'Field 2'
-        }, {
-            field : 'custom3',
-            displayName : 'Field 3'
-        }, {
-            field : 'status',
-            displayName : 'Status',
-            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
-        }]
+        data: 'ngData',
+        enableSorting: true,
+        useExternalSorting: true,
+        sortInfo: $scope.sortOptions,
+        rowHeight: 35,
+        selectedItems: $scope.mySelections,
+        enablePaging: true,
+        showFooter: true,
+        footerTemplate: 'views/table/footerTemplate.html',
+        totalServerItems: 'totalServerItems',
+        pagingOptions: $scope.pagingOptions,
+        primaryKey: 'contactID',
+        columnDefs: 'columnDefs'
     };
     $scope.$watch('ngData', function() {
         $('.gridStyle').trigger('resize');
@@ -4523,100 +5731,164 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
     $scope.refresh = function() {
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.sortOptions.fields, $scope.sortOptions.directions);
     };
-
     $scope.$on('ShowPreview', function(event, args) {
         $scope.loading = true;
         $scope.refresh();
     });
-
     $scope.export = function() {
         var orderBy = generateOrderByField($scope.sortOptions.fields, $scope.sortOptions.directions);
         if (orderBy == '') {
             orderBy = 'lastname asc';
         }
-
         var params = {
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id'),
-            orderby : orderBy,
-            contactfilter : $scope.ContactFilter,
-            export : "csv"
+            sethttp: 1,
+            apikey: $cookieStore.get('inspinia_auth_token'),
+            accountID: $cookieStore.get('inspinia_account_id'),
+            orderby: orderBy,
+            contactfilter: $scope.ContactFilter,
+            export: "csv"
         };
         if (!empty($scope.ContactList) && $scope.ContactList.hasOwnProperty('contactListID') && $scope.ContactList.contactListID != 0) {
             params['contactlistid'] = $scope.ContactList.contactListID;
         }
-
         $http.post(inspiniaNS.wsUrl + "contact_get", $.param(params)).success(function(data) {
             if (data.apicode == 0) {
                 window.location.href = data.apidata;
             }
         }).error(
-        //An error occurred with this request
-        function(data, status, headers, config) {
-            alert("An error occurred when exporting contacts! Error code: " + data.apicode);
-            alert(JSON.stringify(data));
-        });
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                alert("An error occurred when exporting contacts! Error code: " + data.apicode);
+                alert(JSON.stringify(data));
+            });
     };
+    $scope.columnSettings = {
+        columnDefs: $.extend([], $scope.columnDefs),
+        ColumnUp_onClick: function(index) {
+            $scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index - 1, 1, $scope.columnSettings.columnDefs[index])[0];
+        },
+        ColumnDown_onClick: function(index) {
+            $scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index + 1, 1, $scope.columnSettings.columnDefs[index])[0];
+        },
+        UpdateColumns: function(refresh) {
+            $scope.columnSettings.SetCookie();
+            $scope.columnDefs = $.extend([], $scope.columnSettings.GrepColumnDefs($scope.columnSettings.columnDefs));
+            if (refresh) {
+                $scope.refresh();
+            }
+        },
+        GrepColumnDefs: function(columnDefs) {
+            return $.grep(columnDefs, function(member) {
+                return (member.canBeClicked || (!member.canBeClicked && member.checked));
+            });
+        },
+        GetCookie: function() {
+            var columnDefsCookie = $scope.main.ipCookie('itSegmentContactsColumnDefs');
+            if (columnDefsCookie == null) {
+                columnDefsCookie = [];
+                $scope.main.ipCookie('itSegmentContactsColumnDefs', columnDefsCookie, {
+                    expires: 365,
+                    expirationUnit: 'days'
+                });
+            }
+            return columnDefsCookie;
+        },
+        SetCookie: function() {
+            var columnDefsCookie = [{
+                columnDefs: $scope.columnSettings.columnDefs
+            }];
+            $scope.main.ipCookie('itSegmentContactsColumnDefs', columnDefsCookie, {
+                expires: 365,
+                expirationUnit: 'days'
+            });
+        },
+        DefaultColumns: function() {
+            var columnDefsCookie = [];
+            $scope.main.ipCookie('itSegmentContactsColumnDefs', columnDefsCookie, {
+                expires: 365,
+                expirationUnit: 'days'
+            });
+            location.reload();
+        },
+        GetTrueIndex: function(index) {
+            var true_index = -1;
+            for (var i in $scope.columnSettings.columnDefs) {
+                var column = $scope.columnSettings.columnDefs[i];
+                if (column.inSettings) true_index++;
+                if (i == index) break;
+            }
+            return true_index;
+        },
+        GetTotal: function() {
+            var true_index = 0;
+            for (var i in $scope.columnSettings.columnDefs) {
+                var column = $scope.columnSettings.columnDefs[i];
+                if (column.inSettings) true_index++;
+            }
+            return true_index;
+        }
+    };
+    var cookie = $scope.columnSettings.GetCookie();
+    if (cookie != null && cookie.length != 0) {
+        $scope.columnSettings.columnDefs = cookie[0].columnDefs;
+    }
+    $scope.columnSettings.UpdateColumns();
 }
-
 /**
+ 
  *
+ 
  * CONTROLLER FOR ACTIVITY LOG VIEW TABLE
+ 
  */
 function ngActivityLogListCtrl($scope, $http, $cookieStore) {
     //   $scope.ngData = [
     //       {ip: "172.20.194.134", timestamp: "2015-05-21 07:20:23", userId: "12", firstName: "demo", lastName: "demo", request: "contactlist_get"},
     //   ];
-
     $scope.mySelections = [];
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
-        pageSizes : [10, 20, 50, 100],
-        pageSize : Number($scope.main.Settings.defaultPageSize),
-        currentPage : 1
+        pageSizes: [10, 20, 50, 100],
+        pageSize: Number($scope.main.Settings.defaultPageSize),
+        currentPage: 1
     };
     // sort
     $scope.sortOptions = {
-        fields : ['timestamp', 'requets'],
-        directions : ['desc'],
-        useExternalSorting : true
+        fields: ['timestamp', 'requets'],
+        directions: ['desc'],
+        useExternalSorting: true
     };
-
     $scope.getPagedDataAsync = function(pageSize, page, sortFields, sortOrders) {
         //Creating a sort options string
         var orderBy = generateOrderByField(sortFields, sortOrders);
         if (orderBy == '') {
             orderBy = 'timestamp asc';
         }
-
         setTimeout(function() {
             var data;
             self.gettingData = true;
-
             $http.post(inspiniaNS.wsUrl + "activitylog_get", $.param({
-                sethttp : 1,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id'),
-                limit : pageSize,
-                offset : (page - 1) * pageSize,
-                orderby : orderBy,
-                editsonly : 1
+                sethttp: 1,
+                apikey: $cookieStore.get('inspinia_auth_token'),
+                accountID: $cookieStore.get('inspinia_account_id'),
+                limit: pageSize,
+                offset: (page - 1) * pageSize,
+                orderby: orderBy,
+                editsonly: 1
             })).success(function(data) {
                 $scope.setPagingDataSliced($scope, data.apidata, data.apicount);
                 self.gettingData = false;
             }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                if (status == 400) {
-                    alert("An error occurred when getting activity logs! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
-                }
-                self.gettingData = false;
-            });
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    if (status == 400) {
+                        alert("An error occurred when getting activity logs! Error code: " + data.apicode);
+                        alert(JSON.stringify(data));
+                    }
+                    self.gettingData = false;
+                });
         }, 100);
     };
-
     $scope.setPagingData = function(data, page, pageSize) {
         var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
         $scope.ngData = pagedData;
@@ -4626,7 +5898,6 @@ function ngActivityLogListCtrl($scope, $http, $cookieStore) {
         }
     };
     $scope.setPagingDataSliced = setPagingDataSliced;
-
     //WHATCH
     $scope.$watch('pagingOptions', function() {
         if (!self.poInit || self.gettingData) {
@@ -4640,49 +5911,44 @@ function ngActivityLogListCtrl($scope, $http, $cookieStore) {
             self.soInit = true;
             return;
         }
-
         if (newVal !== oldVal) {
             $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.sortOptions.fields, $scope.sortOptions.directions);
         }
     }, true);
-
     $scope.refresh = function() {
         $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.sortOptions.fields, $scope.sortOptions.directions);
         $scope.mySelections.length = 0;
     };
-
     $scope.ngOptions = {
-        data : 'ngData',
-        enableSorting : true,
-        useExternalSorting : true,
-        sortInfo : $scope.sortOptions,
-        rowHeight : 35,
-        selectedItems : $scope.mySelections,
-        showSelectionCheckbox : false,
-        multiSelect : false,
-        selectWithCheckboxOnly : true,
-        enablePaging : true,
-        showFooter : true,
-        totalServerItems : 'totalServerItems',
-        pagingOptions : $scope.pagingOptions,
-        filterOptions : $scope.filterOptions,
-        primaryKey : 'timestamp',
-        columnDefs : [{
-            field : '',
-            width : 30
+        data: 'ngData',
+        enableSorting: true,
+        useExternalSorting: true,
+        sortInfo: $scope.sortOptions,
+        rowHeight: 35,
+        selectedItems: $scope.mySelections,
+        showSelectionCheckbox: false,
+        multiSelect: false,
+        selectWithCheckboxOnly: true,
+        enablePaging: true,
+        showFooter: true,
+        totalServerItems: 'totalServerItems',
+        pagingOptions: $scope.pagingOptions,
+        filterOptions: $scope.filterOptions,
+        primaryKey: 'timestamp',
+        columnDefs: [{
+            field: '',
+            width: 30
         }, {
-            field : 'timestamp',
-            displayName : 'Time',
-            width : 150
+            field: 'timestamp',
+            displayName: 'Time',
+            width: 150
         }, {
-            field : 'request',
-            displayName : 'Short description'
+            field: 'request',
+            displayName: 'Action'
         }]
     };
-
     //$scope.refresh();
 }
-
 //ADD LISTS
 function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
     if ($scope.controllerParent && $scope.controllerParent.PopulateAdd) {
@@ -4693,23 +5959,21 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
     }
     $scope.lists = {};
     $scope.lists.names = [];
-
-    //	$scope.ListsSource = 'manual';
-    //	$scope.ListsDisable = false;
-    //	$scope.$watch('ListsSource', function(newValue, oldValue){
-    //		if(newValue == 'manual'){
-    //			$scope.ListsDisable = false;
-    //		}else if(newValue == 'file'){
-    //			$scope.ListsDisable = true;
-    //		}
-    //	});
-    //	$scope.$watch('UploadType', function(newValue, oldValue){
-    //		if(newValue == 'single'){
-    //			$scope.ListsSource = 'manual';
-    //			$scope.ListsDisable = false;
-    //		}
-    //	});
-
+    //  $scope.ListsSource = 'manual';
+    //  $scope.ListsDisable = false;
+    //  $scope.$watch('ListsSource', function(newValue, oldValue){
+    //      if(newValue == 'manual'){
+    //          $scope.ListsDisable = false;
+    //      }else if(newValue == 'file'){
+    //          $scope.ListsDisable = true;
+    //      }
+    //  });
+    //  $scope.$watch('UploadType', function(newValue, oldValue){
+    //      if(newValue == 'single'){
+    //          $scope.ListsSource = 'manual';
+    //          $scope.ListsDisable = false;
+    //      }
+    //  });
     //$http({
     //  method: 'GET',
     //  url: 'views/datasets/ngData.json'
@@ -4754,130 +6018,125 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
     };
     $scope.refreshLists = function(withCheckboxes) {
         $http.post(inspiniaNS.wsUrl + "contactlist_get", $.param({
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id'),
-            status : 'A'
+            sethttp: 1,
+            apikey: $cookieStore.get('inspinia_auth_token'),
+            accountID: $cookieStore.get('inspinia_account_id'),
+            status: 'A'
         })).success(
-        //Successful request to the server
-        function(data, status, headers, config) {
-            if (data == null || typeof data.apicode == 'undefined') {
-                //This should never happen
-                $scope.lists.names = data;
-                $scope.main.contactLists = data;
-                return;
-            }
-            if (data.apicode == 0) {
-                //Reading contact lists
-                $scope.lists.names = data.apidata;
-                $scope.main.contactLists = data.apidata;
-                for (var i in $scope.lists.names) {
-                    $scope.lists.names[i].selected = false;
+            //Successful request to the server
+            function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    $scope.lists.names = data;
+                    $scope.main.contactLists = data;
+                    return;
                 }
-            } else {
-                $scope.lists.names = [];
-                $scope.main.contactLists = [];
-            }
-        }).error(
-        //An error occurred with this request
-        function(data, status, headers, config) {
-            //alert('Unexpected error occurred when trying to fetch contact lists!');
-            if (status == 400) {
-                alert("An error occurred when getting contact lists! Error code: " + data.apicode);
-                alert(JSON.stringify(data));
-            }
-        });
+                if (data.apicode == 0) {
+                    //Reading contact lists
+                    $scope.lists.names = data.apidata;
+                    $scope.main.contactLists = data.apidata;
+                    for (var i in $scope.lists.names) {
+                        $scope.lists.names[i].selected = false;
+                    }
+                } else {
+                    $scope.lists.names = [];
+                    $scope.main.contactLists = [];
+                }
+            }).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                //alert('Unexpected error occurred when trying to fetch contact lists!');
+                if (status == 400) {
+                    alert("An error occurred when getting contact lists! Error code: " + data.apicode);
+                    alert(JSON.stringify(data));
+                }
+            });
     };
     $scope.addList = function() {
         //Checking input parameters
-        if ( typeof $scope.ListName == 'undefined' || $scope.ListName == null || $.trim($scope.ListName) == '') {
+        if (typeof $scope.ListName == 'undefined' || $scope.ListName == null || $.trim($scope.ListName) == '') {
             return;
         }
         //Send request to the server
         $http.post(inspiniaNS.wsUrl + "contactlist_add", $.param({
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id'),
-            companyID : $cookieStore.get('inspinia_company_id'),
-            contactListName : $scope.ListName
+            sethttp: 1,
+            apikey: $cookieStore.get('inspinia_auth_token'),
+            accountID: $cookieStore.get('inspinia_account_id'),
+            companyID: $cookieStore.get('inspinia_company_id'),
+            contactListName: $scope.ListName
         })).success(
-        //Successful request to the server
-        function(data, status, headers, config) {
-            if (data == null || typeof data.apicode == 'undefined') {
-                //This should never happen
-                alert("Unidentified error occurred when sending your message!");
-                return;
-            }
-            if (data.apicode == 0) {
-                //Reset form and inform user about success
-                $scope.reset();
-                $scope.$broadcast("ContactListCreated", data.apidata);
-                $scope.refreshLists();
-            } else {
-                alert("An error occurred when adding contact list! Error code: " + data.apicode);
-                alert(JSON.stringify(data));
-            }
-            $scope.main.CommonActions.setContactListsAndSegments();
-        }).error(
-        //An error occurred with this request
-        function(data, status, headers, config) {
-            //alert('Unexpected error occurred when trying to send message!');
-			   if(status == 422){
-					if (data.apicode == 4) {
-						$scope.$broadcast("DuplicateContactListName", data.apidata);
-					} else {
-						alert("An error occurred when sending your message! Error code: " + data.apicode);
-						alert(JSON.stringify(data));
-					}
-					return;
-				}
-
-            if (status == 400) {
-                if (data.apicode == 1) {
-                    $scope.$broadcast("DuplicateContactListName", data.apidata);
+            //Successful request to the server
+            function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    alert("Unidentified error occurred when sending your message!");
+                    return;
+                }
+                if (data.apicode == 0) {
+                    //Reset form and inform user about success
+                    $scope.reset();
+                    $scope.$broadcast("ContactListCreated", data.apidata);
+                    $scope.refreshLists();
                 } else {
-                    alert("An error occurred when sending your message! Error code: " + data.apicode);
+                    alert("An error occurred when adding contact list! Error code: " + data.apicode);
                     alert(JSON.stringify(data));
                 }
-            }
-        });
+                $scope.main.CommonActions.setContactListsAndSegments();
+            }).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                //alert('Unexpected error occurred when trying to send message!');
+                if (status == 422) {
+                    if (data.apicode == 4) {
+                        $scope.$broadcast("DuplicateContactListName", data.apidata);
+                    } else {
+                        alert("An error occurred when sending your message! Error code: " + data.apicode);
+                        alert(JSON.stringify(data));
+                    }
+                    return;
+                }
+                if (status == 400) {
+                    if (data.apicode == 1) {
+                        $scope.$broadcast("DuplicateContactListName", data.apidata);
+                    } else {
+                        alert("An error occurred when sending your message! Error code: " + data.apicode);
+                        alert(JSON.stringify(data));
+                    }
+                }
+            });
     };
     // helper method to get selected lists
     $scope.selectedLists = function selectedLists() {
         return filterFilter($scope.lists.names, {
-            selected : true
+            selected: true
         });
     };
     $scope.addContact = function() {
         if ($scope.controllerParent) {
             $scope.controllerParent.Events.Add_onClick($scope);
         }
-
         //Fetch selected lists
         var selectedLists = $scope.selectedLists();
         if (selectedLists.length <= 0) {
             return;
         }
-
         if ($scope.UploadType == 'upload') {
             $scope.uploadContacts();
             return;
         }
-
         // Choose the import method
-        //		if ($scope.UploadType == 'upload') {
-        //			if($scope.ListsSource == 'file'){
-        //				$scope.uploadContacts();
-        //				return;
-        //			}else if (selectedLists.length <= 0) {
-        //				return;
-        //			}
-        //		}else if (selectedLists.length <= 0) {
-        //			return;
-        //		}
-
+        //      if ($scope.UploadType == 'upload') {
+        //          if($scope.ListsSource == 'file'){
+        //              $scope.uploadContacts();
+        //              return;
+        //          }else if (selectedLists.length <= 0) {
+        //              return;
+        //          }
+        //      }else if (selectedLists.length <= 0) {
+        //          return;
+        //      }
         //Checking if all required parameters are there
-        if ( typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
+        if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
             $scope.$broadcast("InvalidANI");
             return;
         }
@@ -4886,35 +6145,35 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
             phoneNo = '1' + phoneNo;
         }
         var request = {
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id'),
-            companyID : $cookieStore.get('inspinia_company_id'),
-            ANI : phoneNo,
-            status : 'A'
+            sethttp: 1,
+            apikey: $cookieStore.get('inspinia_auth_token'),
+            accountID: $cookieStore.get('inspinia_account_id'),
+            companyID: $cookieStore.get('inspinia_company_id'),
+            ANI: phoneNo,
+            status: 'A'
         };
-        if ( typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
+        if (typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
             request.firstName = $.trim($scope.FirstName);
         }
-        if ( typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
+        if (typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
             request.lastName = $.trim($scope.LastName);
         }
-        if ( typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
+        if (typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
             request.emailAddress = $.trim($scope.Email);
         }
-        if ( typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
+        if (typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
             request.custom1 = $.trim($scope.CustomField1);
         }
-        if ( typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
+        if (typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
             request.custom2 = $.trim($scope.CustomField2);
         }
-        if ( typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
+        if (typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
             request.custom3 = $.trim($scope.CustomField3);
         }
-        if ( typeof $scope.CustomField4 != 'undefined' && $scope.CustomField4 != null && $.trim($scope.CustomField4) != '') {
+        if (typeof $scope.CustomField4 != 'undefined' && $scope.CustomField4 != null && $.trim($scope.CustomField4) != '') {
             request.custom4 = $.trim($scope.CustomField4);
         }
-        if ( typeof $scope.CustomField5 != 'undefined' && $scope.CustomField5 != null && $.trim($scope.CustomField5) != '') {
+        if (typeof $scope.CustomField5 != 'undefined' && $scope.CustomField5 != null && $.trim($scope.CustomField5) != '') {
             request.custom5 = $.trim($scope.CustomField5);
         }
         var remainingListsCount = selectedLists.length;
@@ -4923,56 +6182,55 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
         for (var i in selectedLists) {
             //Send request to the server
             $http.post(inspiniaNS.wsUrl + "contact_add", $.param($.extend(request, {
-                contactListID : selectedLists[i].contactListID
+                contactListID: selectedLists[i].contactListID
             }))).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    remainingListsCount--;
-                    failedToAddToListsCount++;
-                    alert("Unidentified error occurred when adding new contact!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    remainingListsCount--;
-                    successfullyAddedToListsCount++;
-                } else {
-                    remainingListsCount--;
-                    failedToAddToListsCount++;
-                    alert("An error occurred when adding contact! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
-                }
-                if (remainingListsCount == 0) {
-                    //Reset form and inform user about success
-                    $scope.reset();
-                    $scope.$broadcast("ContactCreated", data.apidata);
-                    $scope.refreshLists();
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to send message!');
-                remainingListsCount--;
-                failedToAddToListsCount++;
-                if (status == 400) {
-                    if (data.apicode == 4) {
-                        $scope.$broadcast("InvalidANI", data.apidata);
-                    } else {
-                        $scope.$broadcast("CreateContactFailed");
+                //Successful request to the server
+                function(data, status, headers, config) {
+                    if (data == null || typeof data.apicode == 'undefined') {
+                        //This should never happen
+                        remainingListsCount--;
+                        failedToAddToListsCount++;
+                        alert("Unidentified error occurred when adding new contact!");
+                        return;
                     }
-                }
-            });
+                    if (data.apicode == 0) {
+                        remainingListsCount--;
+                        successfullyAddedToListsCount++;
+                    } else {
+                        remainingListsCount--;
+                        failedToAddToListsCount++;
+                        alert("An error occurred when adding contact! Error code: " + data.apicode);
+                        alert(JSON.stringify(data));
+                    }
+                    if (remainingListsCount == 0) {
+                        //Reset form and inform user about success
+                        $scope.reset();
+                        $scope.$broadcast("ContactCreated", data.apidata);
+                        $scope.refreshLists();
+                    }
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    //alert('Unexpected error occurred when trying to send message!');
+                    remainingListsCount--;
+                    failedToAddToListsCount++;
+                    if (status == 400) {
+                        if (data.apicode == 4) {
+                            $scope.$broadcast("InvalidANI", data.apidata);
+                        } else {
+                            $scope.$broadcast("CreateContactFailed");
+                        }
+                    }
+                });
         }
     };
     $scope.refreshLists();
-
     $scope.fileUploader = new FileUploader({
         //url: "ajax.php",
-        url : inspiniaNS.wsUrl + "contact_upload",
-        queueLimit : 1,
-        onSuccessItem : function(item, data, status, headers) {
-            if ( typeof data == 'undefined' || data == null) {
+        url: inspiniaNS.wsUrl + "contact_upload",
+        queueLimit: 1,
+        onSuccessItem: function(item, data, status, headers) {
+            if (typeof data == 'undefined' || data == null) {
                 //This should never happen
                 alert("Unknown error occurred when trying to upload file!");
                 return;
@@ -4983,7 +6241,7 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
             $("#csvFile").val('');
             $scope.refreshLists();
         },
-        onErrorItem : function(item, data, status, headers) {
+        onErrorItem: function(item, data, status, headers) {
             $scope.$broadcast("ImportFailed");
             $("#csvFile").val('');
             $scope.refreshLists();
@@ -4993,7 +6251,6 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
         if ($scope.fileUploader.queue.length <= 0) {
             return;
         }
-
         //if($scope.ListsSource != 'file'){
         var selectedLists = $scope.selectedLists();
         if (selectedLists.length > 1) {
@@ -5001,28 +6258,25 @@ function AddListsCtrl($scope, $http, $cookieStore, filterFilter, FileUploader) {
             return;
         }
         //}
-
         var uploadItem = $scope.fileUploader.queue[0];
         uploadItem.removeAfterUpload = true;
         uploadItem.formData.push({
-            sethttp : 1
+            sethttp: 1
         });
         uploadItem.formData.push({
-            apikey : $cookieStore.get('inspinia_auth_token')
+            apikey: $cookieStore.get('inspinia_auth_token')
         });
         uploadItem.formData.push({
-            accountID : $cookieStore.get('inspinia_account_id')
+            accountID: $cookieStore.get('inspinia_account_id')
         });
         uploadItem.formData.push({
-            companyID : $cookieStore.get('inspinia_company_id')
+            companyID: $cookieStore.get('inspinia_company_id')
         });
-
         //if($scope.ListsSource != 'file'){
         uploadItem.formData.push({
-            contactListID : selectedLists[0].contactListID
+            contactListID: selectedLists[0].contactListID
         });
         //}
-
         uploadItem.upload();
     };
 }
@@ -5031,10 +6285,10 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
     //Fetch contact data
     $scope.refresh = function() {
         $http.post(inspiniaNS.wsUrl + "contact_get", $.param({
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id'),
-            contactID : $state.params.id
+            sethttp: 1,
+            apikey: $cookieStore.get('inspinia_auth_token'),
+            accountID: $cookieStore.get('inspinia_account_id'),
+            contactID: $state.params.id
         })).success(function(data) {
             if (data == null || typeof data.apicode == 'undefined') {
                 alert("An unknown error occurred when getting contact info!");
@@ -5045,7 +6299,7 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
                 alert(JSON.stringify(data));
                 return;
             }
-            if ( typeof data.apidata != 'undefined' && data.apidata != null && data.apidata.length > 0) {
+            if (typeof data.apidata != 'undefined' && data.apidata != null && data.apidata.length > 0) {
                 //Everything is fine, read contact data
                 $scope.PhoneNumber = data.apidata[0].ANI;
                 $scope.FirstName = data.apidata[0].firstName;
@@ -5059,18 +6313,18 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
                 $scope.ContactListID = data.apidata[0].contactListID;
             }
         }).error(
-        //An error occurred with this request
-        function(data, status, headers, config) {
-            //alert('Unexpected error occurred when trying to fetch contact lists!');
-            if (status == 400) {
-                alert("An error occurred when getting contact info! Error code: " + data.apicode);
-                alert(JSON.stringify(data));
-            }
-        });
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                //alert('Unexpected error occurred when trying to fetch contact lists!');
+                if (status == 400) {
+                    alert("An error occurred when getting contact info! Error code: " + data.apicode);
+                    alert(JSON.stringify(data));
+                }
+            });
     };
     $scope.saveContact = function() {
         //Checking if all required parameters are there
-        if ( typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
+        if (typeof $scope.PhoneNumber == 'undefined' || $scope.PhoneNumber == null || $.trim($scope.PhoneNumber).length < 10 || $.trim($scope.PhoneNumber).length > 11) {
             $scope.$broadcast("InvalidANI");
             return;
         }
@@ -5079,34 +6333,34 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
             phoneNo = '1' + phoneNo;
         }
         var request = {
-            sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountId : $cookieStore.get('inspinia_account_id'),
-            contactID : $state.params.id,
-            ANI : phoneNo
+            sethttp: 1,
+            apikey: $cookieStore.get('inspinia_auth_token'),
+            accountId: $cookieStore.get('inspinia_account_id'),
+            contactID: $state.params.id,
+            ANI: phoneNo
         };
-        if ( typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
+        if (typeof $scope.FirstName != 'undefined' && $scope.FirstName != null && $.trim($scope.FirstName) != '') {
             request.firstName = $.trim($scope.FirstName);
         }
-        if ( typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
+        if (typeof $scope.LastName != 'undefined' && $scope.LastName != null && $.trim($scope.LastName) != '') {
             request.lastName = $.trim($scope.LastName);
         }
-        if ( typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
+        if (typeof $scope.Email != 'undefined' && $scope.Email != null && $.trim($scope.Email) != '') {
             request.emailAddress = $.trim($scope.Email);
         }
-        if ( typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
+        if (typeof $scope.CustomField1 != 'undefined' && $scope.CustomField1 != null && $.trim($scope.CustomField1) != '') {
             request.custom1 = $.trim($scope.CustomField1);
         }
-        if ( typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
+        if (typeof $scope.CustomField2 != 'undefined' && $scope.CustomField2 != null && $.trim($scope.CustomField2) != '') {
             request.custom2 = $.trim($scope.CustomField2);
         }
-        if ( typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
+        if (typeof $scope.CustomField3 != 'undefined' && $scope.CustomField3 != null && $.trim($scope.CustomField3) != '') {
             request.custom3 = $.trim($scope.CustomField3);
         }
-        if ( typeof $scope.CustomField4 != 'undefined' && $scope.CustomField4 != null && $.trim($scope.CustomField4) != '') {
+        if (typeof $scope.CustomField4 != 'undefined' && $scope.CustomField4 != null && $.trim($scope.CustomField4) != '') {
             request.custom4 = $.trim($scope.CustomField4);
         }
-        if ( typeof $scope.CustomField5 != 'undefined' && $scope.CustomField5 != null && $.trim($scope.CustomField5) != '') {
+        if (typeof $scope.CustomField5 != 'undefined' && $scope.CustomField5 != null && $.trim($scope.CustomField5) != '') {
             request.custom5 = $.trim($scope.CustomField5);
         }
         // console.log(main)
@@ -5115,9 +6369,9 @@ function EditContactCtrl($scope, $http, $cookieStore, $window, $state) {
     };
     $scope.refresh();
 }
-
 //NOTIFY CTRL
 var notifyInitialised = false;
+
 function notifyCtrl($scope, notify) {
     // I don't know what purpose does notifyInitialised serve and I tried to go around it with an optional $scope.forceNotifyInit
     // on pages where notifications didn't work but it won't work in Chrome at all so I removed it for now.
@@ -5126,9 +6380,9 @@ function notifyCtrl($scope, notify) {
     $scope.msg = 'Hello! This is a sample message!';
     $scope.demo = function() {
         notify({
-            message : $scope.msg,
-            classes : $scope.classes,
-            templateUrl : $scope.template
+            message: $scope.msg,
+            classes: $scope.classes,
+            templateUrl: $scope.template
         });
     };
     $scope.closeAll = function() {
@@ -5137,261 +6391,260 @@ function notifyCtrl($scope, notify) {
     $scope.inspiniaTemplate = 'views/common/notify.html';
     $scope.inspiniaDemo1 = function() {
         notify({
-            message : 'Info - This is a Inspinia info notification',
-            classes : 'alert-info',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Info - This is a Inspinia info notification',
+            classes: 'alert-info',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.inspiniaDemo2 = function() {
         notify({
-            message : 'Success - This is a Inspinia success notification',
-            classes : 'alert-success',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Success - This is a Inspinia success notification',
+            classes: 'alert-success',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.inspiniaDemo3 = function() {
         notify({
-            message : 'Warning - This is a Inspinia warning notification',
-            classes : 'alert-warning',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Warning - This is a Inspinia warning notification',
+            classes: 'alert-warning',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.inspiniaDemo4 = function() {
         notify({
-            message : 'Danger - This is a Inspinia danger notification',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Danger - This is a Inspinia danger notification',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.SavedDraftMsg = function() {
         notify({
-            message : 'Your message has been saved to drafts!',
-            classes : 'alert-success'
+            message: 'Your message has been saved to drafts!',
+            classes: 'alert-success'
         });
     };
     $scope.ResetMsg = function() {
         notify({
-            message : 'Your message has been discarded!',
-            classes : 'alert-success'
+            message: 'Your message has been discarded!',
+            classes: 'alert-success'
         });
     };
     $scope.SentMsg = function() {
         notify({
-            message : 'Your message has been sent!',
-            classes : 'alert-success'
+            message: 'Your message has been sent!',
+            classes: 'alert-success'
         });
     };
     $scope.ScheduledMsg = function() {
         notify({
-            message : 'Your message has been scheduled!',
-            classes : 'alert-success'
+            message: 'Your message has been scheduled!',
+            classes: 'alert-success'
         });
     };
     $scope.RescheduledMsg = function() {
         notify({
-            message : 'Your message has been rescheduled!',
-            classes : 'alert-success'
+            message: 'Your message has been rescheduled!',
+            classes: 'alert-success'
         });
     };
     $scope.AniOptedOutMsg = function() {
         notify({
-            message : 'ANI that you are trying to send message to is opted-out!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'ANI that you are trying to send message to is opted-out!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.DuplicateContactListNameMsg = function() {
         notify({
-            message : 'Contact list with specified name already exists!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Contact list with specified name already exists!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.ContactListCreatedMsg = function() {
         notify({
-            message : 'Contact list is successfully created!',
-            classes : 'alert-success'
+            message: 'Contact list is successfully created!',
+            classes: 'alert-success'
         });
     };
     $scope.ContactCreatedMsg = function() {
         notify({
-            message : 'Contact is successfully created!',
-            classes : 'alert-success'
+            message: 'Contact is successfully created!',
+            classes: 'alert-success'
         });
     };
     $scope.CreateContactFailedMsg = function() {
         notify({
-            message : 'An error occurred when adding new contact to the contact list!',
-            classes : 'alert-success'
+            message: 'An error occurred when adding new contact to the contact list!',
+            classes: 'alert-success'
         });
     };
     $scope.ContactsUploadedMsg = function() {
         notify({
-            message : 'Contact list is successfully uploaded!',
-            classes : 'alert-success'
+            message: 'Contact list is successfully uploaded!',
+            classes: 'alert-success'
         });
     };
     $scope.ContactsUploadFailedMsg = function() {
         notify({
-            message : 'Failed to upload contact list!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Failed to upload contact list!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.InvalidANIMsg = function() {
         notify({
-            message : 'Invalid phone number!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Invalid phone number!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.ContactSavedMsg = function() {
         notify({
-            message : 'Contact is successfully saved!',
-            classes : 'alert-success'
+            message: 'Contact is successfully saved!',
+            classes: 'alert-success'
         });
     };
     $scope.SearchTextTooShortMsg = function() {
         notify({
-            message : 'Search text is too short!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Search text is too short!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.ListsSuccessfullyActivatedMsg = function() {
         notify({
-            message : 'All lists are successfully activated.',
-            classes : 'alert-success'
+            message: 'All lists are successfully activated.',
+            classes: 'alert-success'
         });
     };
     $scope.ListsSuccessfullyDeactivatedMsg = function() {
         notify({
-            message : 'All lists are successfully deactivated.',
-            classes : 'alert-success'
+            message: 'All lists are successfully deactivated.',
+            classes: 'alert-success'
         });
     };
     $scope.FailedToActivateListMsg = function() {
         notify({
-            message : 'Failed to activate list!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Failed to activate list!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.FailedToDeactivateListMsg = function() {
         notify({
-            message : 'Failed to deactivate list!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Failed to deactivate list!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.ImportSucceededMsg = function(inserted, updated, invalid) {
         if (invalid > 0) {
             notify({
-                message : 'There are ' + invalid + ' invalid items in your input file. Number of inserted items: ' + inserted + '. Number of updated items: ' + updated + '.',
-                classes : 'alert-danger',
-                templateUrl : $scope.inspiniaTemplate
+                message: 'There are ' + invalid + ' invalid items in your input file. Number of inserted items: ' + inserted + '. Number of updated items: ' + updated + '.',
+                classes: 'alert-danger',
+                templateUrl: $scope.inspiniaTemplate
             });
         } else {
             notify({
-                message : 'Import succeeded. Number of inserted items: ' + inserted + '. Number of updated items: ' + updated + '. Number of invalid items: ' + invalid,
-                classes : 'alert-success'
+                message: 'Import succeeded. Number of inserted items: ' + inserted + '. Number of updated items: ' + updated + '. Number of invalid items: ' + invalid,
+                classes: 'alert-success'
             });
         }
     };
     $scope.ImportFailedMsg = function() {
         notify({
-            message : 'Failed to import data from the specified file. Please check if file is in valid CSV format and if the content of the file is proper.',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Failed to import data from the specified file. Please check if file is in valid CSV format and if the content of the file is proper.',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.UploadToMultipleListsNotSupportedMsg = function() {
         notify({
-            message : 'Importing contacts to multiple contact lists is currently not supported. Please select single list to import contacts to.',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Importing contacts to multiple contact lists is currently not supported. Please select single list to import contacts to.',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.ModifyDIDForwardEmailSuccessMsg = function() {
         notify({
-            message : 'Forward Email Address is successfully saved.',
-            classes : 'alert-success'
+            message: 'Forward Email Address is successfully saved.',
+            classes: 'alert-success'
         });
     };
     $scope.ModifyDIDForwardEmailFailedMsg = function() {
         notify({
-            message : 'Failed to save Forward Email Address!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Failed to save Forward Email Address!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.ModifyAccountEmail2SMSSuccessMsg = function() {
         notify({
-            message : 'Email to SMS settings successfully saved.',
-            classes : 'alert-success'
+            message: 'Email to SMS settings successfully saved.',
+            classes: 'alert-success'
         });
     };
     $scope.ModifyAccountEmail2SMSFailedMsg = function() {
         notify({
-            message : 'Failed to save Forward Email to SMS settings!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Failed to save Forward Email to SMS settings!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.ContactsNotSelectedErrorMsg = function() {
         notify({
-            message : 'There are no selected contacts!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'There are no selected contacts!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.SegmentCreatedMsg = function() {
         notify({
-            message : 'Segment is successfully created.',
-            classes : 'alert-success'
+            message: 'Segment is successfully created.',
+            classes: 'alert-success'
         });
     };
     $scope.SegmentCreateFailMsg = function() {
         notify({
-            message : 'Failed to create segment!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Failed to create segment!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.DuplicateSegmentNameMsg = function() {
         notify({
-            message : 'Segment with specified name already exists!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Segment with specified name already exists!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.SegmentSavedMsg = function() {
         notify({
-            message : 'Segment is successfully saved.',
-            classes : 'alert-success'
+            message: 'Segment is successfully saved.',
+            classes: 'alert-success'
         });
     };
     $scope.SegmentSaveFailMsg = function() {
         notify({
-            message : 'Failed to save segment!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Failed to save segment!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
     $scope.SegmentDeletedMsg = function() {
         notify({
-            message : 'Segment deleted successfully!',
-            classes : 'alert-success'
+            message: 'Segment deleted successfully!',
+            classes: 'alert-success'
         });
     };
     $scope.SegmentDeleteFailMsg = function() {
         notify({
-            message : 'Failed to delete segment!',
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: 'Failed to delete segment!',
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     };
-
     //If SendingMessageSucceeded event is triggered, show related message
     $scope.$on('SendingMessageSucceeded', function(event, args) {
         $scope.SentMsg();
@@ -5477,23 +6730,23 @@ function notifyCtrl($scope, notify) {
     });
     $scope.$on('RequestSuccess', function(event, args, name) {
         notify({
-            message : name,
-            classes : 'alert-success',
-            templateUrl : $scope.inspiniaTemplate
+            message: name,
+            classes: 'alert-success',
+            templateUrl: $scope.inspiniaTemplate
         });
     });
     $scope.$on('RequestError', function(event, args, name) {
         notify({
-            message : name + ', ' + 'apicode: ' + args.apicode + ', ' + args.apitext,
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: name + ', ' + 'apicode: ' + args.apicode + ', ' + args.apitext,
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     });
     $scope.$on('GeneralError', function(text) {
         notify({
-            message : text,
-            classes : 'alert-danger',
-            templateUrl : $scope.inspiniaTemplate
+            message: text,
+            classes: 'alert-danger',
+            templateUrl: $scope.inspiniaTemplate
         });
     });
     $scope.$on('ModifyDIDForwardEmailSuccess', function(event, args) {
@@ -5511,7 +6764,6 @@ function notifyCtrl($scope, notify) {
     $scope.$on('ContactsNotSelectedError', function(event, args) {
         $scope.ContactsNotSelectedErrorMsg();
     });
-
     //If ScopeCreated event is triggered, show related message
     $scope.$on('SegmentCreated', function(event, args) {
         $scope.SegmentCreatedMsg();
@@ -5535,7 +6787,6 @@ function notifyCtrl($scope, notify) {
     $scope.$on('SegmentDeleteFail', function(event, args) {
         $scope.SegmentDeleteFailMsg();
     });
-
     //}
 }
 
@@ -5564,19 +6815,19 @@ function imageCrop($scope) {
 
 function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracker) {
     $scope.PhoneNumberArrayValidator = {
-        PhoneNumbers : {
-            inputNumberString : '',
-            outputNumberString : '',
-            errorNumber : '',
-            errorMessage : ''
+        PhoneNumbers: {
+            inputNumberString: '',
+            outputNumberString: '',
+            errorNumber: '',
+            errorMessage: ''
         },
-        setError : function(phoneNumber, message) {
+        setError: function(phoneNumber, message) {
             $scope.PhoneNumberArrayValidator.PhoneNumbers.outputNumberString = '';
             $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString = '';
             $scope.PhoneNumberArrayValidator.PhoneNumbers.errorNumber = phoneNumber;
             $scope.PhoneNumberArrayValidator.PhoneNumbers.errorMessage = message;
         },
-        addPhoneToOutput : function(phoneNumber) {
+        addPhoneToOutput: function(phoneNumber) {
             var commaPosition_ = $scope.PhoneNumberArrayValidator.PhoneNumbers.inputNumberString.indexOf(',');
             if ($scope.PhoneNumberArrayValidator.validatePhoneNumber(phoneNumber)) {
                 if ($scope.PhoneNumberArrayValidator.PhoneNumbers.outputNumberString.length > 0) {
@@ -5591,7 +6842,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 }
             }
         },
-        validatePhoneNumber : function(phoneNumber) {
+        validatePhoneNumber: function(phoneNumber) {
             if (phoneNumber) {
                 if (parseInt(phoneNumber.substring(0, 1)) < 2) {
                     //var msg = 'Error: ' + phoneNumber + ' second digit is not in range (2-9)!';
@@ -5637,7 +6888,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 return true;
             }
         },
-        ParseAndValidateNumbers : function(numbersString) {
+        ParseAndValidateNumbers: function(numbersString) {
             if (numbersString == null) {
                 numbersString = '';
             }
@@ -5681,7 +6932,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.$watch('FromNumber', function() {
         $scope.FromNameLoading = true;
         $scope.FromName = '';
-
         var successDidGet = function(data, status, headers, config, $inScope) {
             $inScope.main.fromNumbersString = '';
             if (data == null || typeof data.apicode == 'undefined') {
@@ -5694,7 +6944,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 $inScope.main.fromNumbers = [];
                 $inScope.main.Settings.Numbers = [];
             }
-
             for (var j = 0; j < $inScope.main.fromNumbers.length; j++) {
                 $inScope.main.fromNumbersString = $inScope.main.fromNumbersString + ' +' + $inScope.main.fromNumbers[j].DID.toString();
                 if (j < $inScope.main.fromNumbers.length - 1) {
@@ -5707,16 +6956,14 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     }
                 }
             }
-
             if ($inScope.main.Settings.Numbers && $inScope.main.Settings.Numbers.length > 0 && $inScope.FromNumber && $inScope.FromNumber.DID) {
-                var Number = $.grep($inScope.main.Settings.Numbers, function(member){
-                return member.DID == $inScope.FromNumber.DID;
+                var Number = $.grep($inScope.main.Settings.Numbers, function(member) {
+                    return member.DID == $inScope.FromNumber.DID;
                 })[0];
-                if ( typeof Number != 'undefined' && Number.name != null && Number.name != '') {
+                if (typeof Number != 'undefined' && Number.name != null && Number.name != '') {
                     $inScope.FromName = Number.name;
                 }
             }
-
             $inScope.FromNameLoading = false;
         };
         var errorDidGet = function(data, status, headers, config, $inScope) {
@@ -5741,32 +6988,31 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     }, true);
     //OptOutFields
     $scope.optFields = {
-        OptOutTxt1 : '',
-        OptOutTxt2 : '',
-        OptOutTxt3 : ''
+        OptOutTxt1: '',
+        OptOutTxt2: '',
+        OptOutTxt3: ''
     };
-
     $scope.contactLists = [];
     $scope.contactSegments = [];
     $scope.contactGroups = [];
+
     function setContactListsAndSegments() {
         if ($scope.main.contactLists) {
             $scope.contactLists = $scope.main.contactLists;
             for (var i in $scope.contactLists) {
                 $scope.contactGroups.push({
-                    id : $scope.contactLists[i].contactListID,
-                    name : $scope.contactLists[i].contactListName,
-                    group : 'Lists'
+                    id: $scope.contactLists[i].contactListID,
+                    name: $scope.contactLists[i].contactListName,
+                    group: 'Lists'
                 });
             }
-
             if ($scope.contactSegments) {
                 $scope.contactSegments = $scope.main.contactSegments;
                 for (var i in $scope.contactSegments) {
                     $scope.contactGroups.push({
-                        id : $scope.contactSegments[i].contactSelectionID,
-                        name : $scope.contactSegments[i].contactSelectionName,
-                        group : 'Segments'
+                        id: $scope.contactSegments[i].contactSelectionID,
+                        name: $scope.contactSegments[i].contactSelectionName,
+                        group: 'Segments'
                     });
                 }
             } else {
@@ -5780,9 +7026,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
             }, 500);
         }
     }
-
     setContactListsAndSegments();
-
     $scope.fromNumbers = [];
     //send form initial states
     $scope.initial = "";
@@ -5803,16 +7047,16 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
             }
             $scope.fromNumbers = $scope.main.fromNumbers;
             if (defaultNumberDID != '') {
-                $scope.FromNumber = $.grep($scope.fromNumbers, function(number){
-                return number.DID == defaultNumberDID;
+                $scope.FromNumber = $.grep($scope.fromNumbers, function(number) {
+                    return number.DID == defaultNumberDID;
                 })[0];
                 $scope.FromName = defaultNumberName;
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
             } else {
-                $scope.FromNumber = $.grep($scope.fromNumbers, function(number){
-                return number.DIDID == $scope.main.accountInfo.primaryDIDID;
+                $scope.FromNumber = $.grep($scope.fromNumbers, function(number) {
+                    return number.DIDID == $scope.main.accountInfo.primaryDIDID;
                 })[0];
                 if (!$scope.$$phase) {
                     $scope.$apply();
@@ -5824,9 +7068,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
             }, 500);
         }
     }
-
     setFromNumber();
-
     $scope.OptOutMsg = "";
     $scope.ScheduleCheck = "";
     $scope.SendToList = false;
@@ -5834,12 +7076,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.ArrayScheduledDateTime = [];
     var scheduledDateTime = new $scope.main.DataConstructors.ScheduledDateTime();
     $scope.ArrayScheduledDateTime.push(scheduledDateTime);
-
     $scope.AddScheduledDateTime = function() {
         var scheduledDateTime = new $scope.main.DataConstructors.ScheduledDateTime();
         $scope.ArrayScheduledDateTime.push(scheduledDateTime);
     };
-
     $scope.clear = function() {
         for (var i = 0; i < $scope.ArrayScheduledDateTime.length; i++) {
             $scope.ArrayScheduledDateTime[i].SetDate = null;
@@ -5865,11 +7105,11 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         sheduledDateTime.opened_recurring = true;
     };
     $scope.dateOptions = {
-        formatYear : 'yy',
-        startingDay : 1,
-        showWeeks : 'false'
-        // comented out because of an error that prevents datepicker from working properly
-        //initDate : 'false'
+        formatYear: 'yy',
+        startingDay: 1,
+        showWeeks: 'false'
+            // comented out because of an error that prevents datepicker from working properly
+            //initDate : 'false'
     };
     $scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
@@ -5893,7 +7133,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         $scope.ArrayScheduledDateTime.push(scheduledDateTime);
         $scope.SendToList = false;
     };
-
     //helper function for generating message text
     $scope.generateMessageText = function() {
         //Checking the type of opt out message
@@ -5905,13 +7144,13 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
             //todo: check how to receive custom opt out message for the account
             optOutMessage = $scope.optFields.OptOutTxt2;
         } else if ($scope.OptOutMsg == 'write') {
-            if ( typeof $scope.optFields.OptOutTxt3 != 'undefined' && $scope.optFields.OptOutTxt3 != null) {
+            if (typeof $scope.optFields.OptOutTxt3 != 'undefined' && $scope.optFields.OptOutTxt3 != null) {
                 optOutMessage = $scope.optFields.OptOutTxt3;
             }
         }
         //Generate a message text
         var messageText = '';
-        if ( typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
+        if (typeof $scope.FromName != 'undefined' && $scope.FromName != null) {
             messageText += $.trim($scope.FromName);
             if (messageText.length > 0) {
                 messageText += ': ';
@@ -5927,57 +7166,55 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     $scope.sendMessage = function(scheduled) {
         var requestData = {
             // sethttp : 1,
-            apikey : $cookieStore.get('inspinia_auth_token'),
-            accountID : $cookieStore.get('inspinia_account_id')
+            apikey: $cookieStore.get('inspinia_auth_token'),
+            accountID: $cookieStore.get('inspinia_account_id')
         };
         var messageText;
         if ($scope.controllerParent) {
             $scope.controllerParent.Events.Send_onClick($scope);
         }
-
         messageText = $scope.generateMessageText();
         // Trigger validation flag.
         //$scope.submitted = true;
-        if (($scope.SendToList && ( typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0)) && (!$scope.SendToList && ( typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == ''))) {
+        if (($scope.SendToList && (typeof $scope.ToList == 'undefined' || $scope.ToList == null || $scope.ToList == '' || $scope.ToList.length <= 0)) && (!$scope.SendToList && (typeof $scope.ToNumber == 'undefined' || $scope.ToNumber == null || $scope.ToNumber == ''))) {
             return;
         }
-        if ( typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
+        if (typeof $scope.MessageTxt == 'undefined' || $scope.MessageTxt == null || $scope.MessageTxt == '') {
             return;
         }
         if (scheduled) {
             for (var i = 0; i < $scope.ArrayScheduledDateTime.length; i++) {
                 var currentDate = $scope.ArrayScheduledDateTime[i];
-                if ( typeof currentDate.SetDate == 'undefined' || currentDate.SetDate == null || currentDate.SetDate == '') {
+                if (typeof currentDate.SetDate == 'undefined' || currentDate.SetDate == null || currentDate.SetDate == '') {
                     return;
                 }
                 //If time is not set and scheduled message sending is invoked, set time to midnight
-                if ( typeof currentDate.SetTimeHour == 'undefined' || currentDate.SetTimeHour == null || currentDate.SetTimeHour == '') {
+                if (typeof currentDate.SetTimeHour == 'undefined' || currentDate.SetTimeHour == null || currentDate.SetTimeHour == '') {
                     currentDate.SetTimeHour = String((new Date()).getHours() + 1);
                     if (currentDate.SetTimeHour.length < 2) {
                         currentDate.SetTimeHour = '0' + currentDate.SetTimeHour;
                     }
                 }
-                if ( typeof currentDate.SetTimeMinute == 'undefined' || currentDate.SetTimeMinute == null || currentDate.SetTimeMinute == '') {
+                if (typeof currentDate.SetTimeMinute == 'undefined' || currentDate.SetTimeMinute == null || currentDate.SetTimeMinute == '') {
                     currentDate.SetTimeMinute = "00";
                 }
-                if ( typeof currentDate.SetRecurringEndDate == 'undefined' || currentDate.SetRecurringEndDate == null) {
+                if (typeof currentDate.SetRecurringEndDate == 'undefined' || currentDate.SetRecurringEndDate == null) {
                     currentDate.SetRecurringEndDate = '';
                 }
-                if ( typeof currentDate.SetRecurringType == 'undefined' || currentDate.SetRecurringType == null || currentDate.SetRecurringType == '') {
+                if (typeof currentDate.SetRecurringType == 'undefined' || currentDate.SetRecurringType == null || currentDate.SetRecurringType == '') {
                     currentDate.SetRecurringType = "";
                 }
             }
         }
-
         //Adding schedule date if one is specified
         for (var k = 0; k < $scope.ArrayScheduledDateTime.length; k++) {
             // //Creating a api request data object
             var requestData = {
-                sethttp : 1,
-                DID : $scope.FromNumber.DID,
-                message : messageText,
-                apikey : $cookieStore.get('inspinia_auth_token'),
-                accountID : $cookieStore.get('inspinia_account_id')
+                sethttp: 1,
+                DID: $scope.FromNumber.DID,
+                message: messageText,
+                apikey: $cookieStore.get('inspinia_auth_token'),
+                accountID: $cookieStore.get('inspinia_account_id')
             };
             if ($scope.SendToList && typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
                 if ($scope.ToList.constructor === Array) {
@@ -6017,7 +7254,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 }
                 requestData.ANI = toNumbers;
             }
-
             var setTimezoneOffsetDate = function(currentInDate, hours, minutes) {
                 var timezoneOffsetMinutes = new Date().getTimezoneOffset();
                 var selectedDate = new Date(currentInDate.getFullYear(), currentInDate.getMonth(), currentInDate.getDate());
@@ -6047,11 +7283,9 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 }
                 return (dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2] + " " + dateParts[3] + ":" + dateParts[4]);
             };
-
             var currentDateTime = $scope.ArrayScheduledDateTime[k];
             if (scheduled) {
                 requestData.scheduledDate = setTimezoneOffsetDate(currentDateTime.SetDate, currentDateTime.SetTimeHour, currentDateTime.SetTimeMinute);
-
                 requestData.recurringtype = currentDateTime.SetRecurringType;
                 if (requestData.recurringtype != '') {
                     requestData.recurringstart = requestData.scheduledDate;
@@ -6062,70 +7296,67 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                     delete requestData.recurringtype;
                 }
             }
-
             var action = 'message_send';
             if (scheduled && $scope.controllerParent) {
                 action = 'message_modify';
                 requestData.outboundmessageid = $scope.controllerParent.clickedMessage.outboundMessageID;
             }
-
             //Send request to the server
             $http.post(inspiniaNS.wsUrl + action, $.param(requestData)).success(
-            //Successful request to the server
-            function(data, status, headers, config) {
-                if (data == null || typeof data.apicode == 'undefined') {
-                    //This should never happen
-                    alert("Unidentified error occurred when sending your message!");
-                    return;
-                }
-                if (data.apicode == 0) {
-                    //Reset form and inform user about success
-                    $scope.reset();
-                    if (scheduled) {
-                        if ($scope.controllerParent) {
-                            $scope.controllerParent.DontShowMessage = true;
-                            // this call is not needed since message_modify is introduced
-                            //ngInbox._internal.Methods.DeleteMessage($scope.controllerParent);
-                            $scope.controllerParent.$scope.getPagedDataAsync($scope.controllerParent);
-                            $scope.controllerParent.Events.ShowList($scope.controllerParent);
-
-                            $scope.$broadcast("ReschedulingMessageSucceeded", data.apidata);
+                //Successful request to the server
+                function(data, status, headers, config) {
+                    if (data == null || typeof data.apicode == 'undefined') {
+                        //This should never happen
+                        alert("Unidentified error occurred when sending your message!");
+                        return;
+                    }
+                    if (data.apicode == 0) {
+                        //Reset form and inform user about success
+                        $scope.reset();
+                        if (scheduled) {
+                            if ($scope.controllerParent) {
+                                $scope.controllerParent.DontShowMessage = true;
+                                // this call is not needed since message_modify is introduced
+                                //ngInbox._internal.Methods.DeleteMessage($scope.controllerParent);
+                                $scope.controllerParent.$scope.getPagedDataAsync($scope.controllerParent);
+                                $scope.controllerParent.Events.ShowList($scope.controllerParent);
+                                $scope.$broadcast("ReschedulingMessageSucceeded", data.apidata);
+                            } else {
+                                $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
+                            }
                         } else {
-                            $scope.$broadcast("SchedulingMessageSucceeded", data.apidata);
+                            $scope.$broadcast("SendingMessageSucceeded", data.apidata);
                         }
                     } else {
-                        $scope.$broadcast("SendingMessageSucceeded", data.apidata);
-                    }
-                } else {
-                    alert("An error occurred when sending your message! Error code: " + data.apicode);
-                    alert(JSON.stringify(data));
-                }
-            }).error(
-            //An error occurred with this request
-            function(data, status, headers, config) {
-                //alert('Unexpected error occurred when trying to send message!');
-                if (status == 500) {
-                    if (data.apicode == 1) {
-                        $scope.$broadcast("AniOptedOut", data.apidata);
-                    } else {
                         alert("An error occurred when sending your message! Error code: " + data.apicode);
                         alert(JSON.stringify(data));
                     }
-                }
-                if (status == 400) {
-                    if (data.apicode == 1) {
-                        $scope.$broadcast("AniOptedOut", data.apidata);
-                    } else if (data.apicode == 4) {
-                        $scope.$broadcast("InvalidANI", data.apidata);
-                    } else {
-                        alert("An error occurred when sending your message! Error code: " + data.apicode);
-                        alert(JSON.stringify(data));
+                }).error(
+                //An error occurred with this request
+                function(data, status, headers, config) {
+                    //alert('Unexpected error occurred when trying to send message!');
+                    if (status == 500) {
+                        if (data.apicode == 1) {
+                            $scope.$broadcast("AniOptedOut", data.apidata);
+                        } else {
+                            alert("An error occurred when sending your message! Error code: " + data.apicode);
+                            alert(JSON.stringify(data));
+                        }
                     }
-                } else {
-                    //Just non handled errors by optout are counted
-                    $scope.$broadcast("RequestError", data, 'message_send');
-                }
-            });
+                    if (status == 400) {
+                        if (data.apicode == 1) {
+                            $scope.$broadcast("AniOptedOut", data.apidata);
+                        } else if (data.apicode == 4) {
+                            $scope.$broadcast("InvalidANI", data.apidata);
+                        } else {
+                            alert("An error occurred when sending your message! Error code: " + data.apicode);
+                            alert(JSON.stringify(data));
+                        }
+                    } else {
+                        //Just non handled errors by optout are counted
+                        $scope.$broadcast("RequestError", data, 'message_send');
+                    }
+                });
         }
     };
     //Create a function for saving drafts
@@ -6137,80 +7368,77 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         var messageText = $scope.generateMessageText();
         //Creating a api request data object
         var requestData = {
-            sethttp : 1,
-            accountID : $scope.main.accountID,
-            companyID : $scope.main.accountInfo.companyID,
-            message : messageText,
-            apikey : $cookieStore.get('inspinia_auth_token')
+            sethttp: 1,
+            accountID: $scope.main.accountID,
+            companyID: $scope.main.accountInfo.companyID,
+            message: messageText,
+            apikey: $cookieStore.get('inspinia_auth_token')
         };
         //Send request to the server
         $http.post(inspiniaNS.wsUrl + "draft_add", $.param(requestData)).success(
-        //Successful request to the server
-        function(data, status, headers, config) {
-            if (data == null || typeof data.apicode == 'undefined') {
-                //This should never happen
-                alert("Unidentified error occurred when saving your message!");
-                return;
-            }
-            if (data.apicode == 0) {
-                //Reset form and inform user about success
-                $scope.reset();
-                $scope.$broadcast("SaveDraftSucceeded", data.apidata);
-            } else {
-                alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
-                alert(JSON.stringify(data));
-            }
-        }).error(
-        //An error occurred with this request
-        function(data, status, headers, config) {
-            //alert('Unexpected error occurred when trying to send message!');
-            if (status == 400) {
-                alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
-                alert(JSON.stringify(data));
-            }
-        });
+            //Successful request to the server
+            function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    alert("Unidentified error occurred when saving your message!");
+                    return;
+                }
+                if (data.apicode == 0) {
+                    //Reset form and inform user about success
+                    $scope.reset();
+                    $scope.$broadcast("SaveDraftSucceeded", data.apidata);
+                } else {
+                    alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
+                    alert(JSON.stringify(data));
+                }
+            }).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                //alert('Unexpected error occurred when trying to send message!');
+                if (status == 400) {
+                    alert("An error occurred when saving your message as draft! Error code: " + data.apicode);
+                    alert(JSON.stringify(data));
+                }
+            });
     };
-
     // Dynamic content (tags)
     $scope.dynamicContent = {
-        '{firstname}' : 'first name',
-        '{lastname}' : 'last name',
-        '{emailaddress}' : 'email',
-        '{contactsource}' : 'contact source',
-        '{custom1}' : 'custom 1',
-        '{custom2}' : 'custom 2',
-        '{custom3}' : 'custom 3',
-        '{custom4}' : 'custom 4',
-        '{custom5}' : 'custom 5'
+        '{firstname}': 'first name',
+        '{lastname}': 'last name',
+        '{emailaddress}': 'email',
+        '{contactsource}': 'contact source',
+        '{custom1}': 'custom 1',
+        '{custom2}': 'custom 2',
+        '{custom3}': 'custom 3',
+        '{custom4}': 'custom 4',
+        '{custom5}': 'custom 5'
     };
     $scope.dynamicContentKeys = Object.keys($scope.dynamicContent);
     $scope.insertDynamicContent = function(elem_id, tag) {
         $scope.MessageTxt = FrontendHelper.insertAtCaret(elem_id, tag);
     };
-
     $scope.$watch('MessageTxt', function(newValue) {
         $scope.hasTags = false;
         for (var tag in $scope.dynamicContent) {
-            if ( typeof newValue !== 'undefined' && newValue.indexOf(tag) > -1) {
+            if (typeof newValue !== 'undefined' && newValue.indexOf(tag) > -1) {
                 $scope.hasTags = true;
                 break;
             }
         }
     });
-
     // Recurring types
     $scope.RecurringTypes = [{
-        value : '',
-        label : "No"
+        value: '',
+        label: "No"
     }, {
-        value : 'D',
-        label : 'Every day'
+        value: 'D',
+        label: 'Every day'
     }, {
-        value : 'W',
-        label : 'Every week'
+        value: 'W',
+        label: 'Every week'
     }, {
-        value : 'M',
-        label : 'Every month'
+        value: 'M',
+        label: 'Every month'
     }];
 }
 
@@ -6222,11 +7450,14 @@ function ScheduleRepeatCtrl($scope) {
         }
     }, true);
 }
-
 /**
+ 
  * Controller for the login functionality.
+ 
  *
+ 
  * @param $scope   angular js scope
+ 
  */
 function loginCtrl($scope, $cookieStore, $http, $window) {
     $scope.invalidCredentials = false;
@@ -6238,55 +7469,53 @@ function loginCtrl($scope, $cookieStore, $http, $window) {
     $scope.login = function() {
         $scope.invalidCredentials = false;
         //Checking if username and password are provided
-        if ( typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
+        if (typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
             return;
         }
-        if ( typeof $scope.password == 'undefined' || $scope.password == null || $scope.password == '') {
+        if (typeof $scope.password == 'undefined' || $scope.password == null || $scope.password == '') {
             return;
         }
         //Calling rest service to sign in
         $http.post(inspiniaNS.wsUrl + "login", $.param({
-            username : $scope.username,
-            password : $scope.password
+            username: $scope.username,
+            password: $scope.password
         })).success(
-        //Successful request to the server
-        function(data, status, headers, config) {
-            if (data == null || typeof data.apicode == 'undefined') {
-                //This should never happen
-                alert("Unknown error occurred when trying to sign in! Please try again.");
-                return;
-            }
-            if (data.apicode == 0) {
-                //User signed in successfully
-                $cookieStore.put('inspinia_auth_token', data.apikey);
-                $cookieStore.put('inspinia_account_id', data.apidata.accountID);
-                $cookieStore.put('inspinia_company_id', data.apidata.companyID);
-                $window.location.href = "/#/dashboard";
-            } else if (data.apicode == 2) {
-                //Invalid credentials
-                $scope.invalidCredentials = true;
-            } else {
-                alert("An error occurred when trying to sign in. Error code: " + data.apicode);
-            }
-        }).error(
-        //An error occurred with this request
-        function(data, status, headers, config) {
-            alert("Failed to sign in! Please try again.");
-        });
+            //Successful request to the server
+            function(data, status, headers, config) {
+                if (data == null || typeof data.apicode == 'undefined') {
+                    //This should never happen
+                    alert("Unknown error occurred when trying to sign in! Please try again.");
+                    return;
+                }
+                if (data.apicode == 0) {
+                    //User signed in successfully
+                    $cookieStore.put('inspinia_auth_token', data.apikey);
+                    $cookieStore.put('inspinia_account_id', data.apidata.accountID);
+                    $cookieStore.put('inspinia_company_id', data.apidata.companyID);
+                    $window.location.href = "/#/dashboard";
+                } else if (data.apicode == 2) {
+                    //Invalid credentials
+                    $scope.invalidCredentials = true;
+                } else {
+                    alert("An error occurred when trying to sign in. Error code: " + data.apicode);
+                }
+            }).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                alert("Failed to sign in! Please try again.");
+            });
     };
-
     $scope.resetPassword = function() {
-        if ( typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
+        if (typeof $scope.username == 'undefined' || $scope.username == null || $scope.username == '') {
             return;
         }
-        if ( typeof $scope.emailaddress == 'undefined' || $scope.emailaddress == null || $scope.emailaddress == '') {
+        if (typeof $scope.emailaddress == 'undefined' || $scope.emailaddress == null || $scope.emailaddress == '') {
             return;
         }
-
         // user_passwordresetrequest
         $http.post(inspiniaNS.wsUrl + "user_passwordresetrequest", $.param({
-            user : $scope.username,
-            emailaddress : $scope.emailaddress
+            user: $scope.username,
+            emailaddress: $scope.emailaddress
         })).success(function(data) {
             if (data && data.hasOwnProperty('apicode') && data.apicode == 0) {
                 alert("Reset password email sent. Please check your email.");
@@ -6302,7 +7531,6 @@ function loginCtrl($scope, $cookieStore, $http, $window) {
         });
     };
 }
-
 /** QR GENERATOR **/
 function qrCtrl($scope) {
     $scope.qrcodeString = '';
@@ -6312,34 +7540,43 @@ function qrCtrl($scope) {
     $scope.inputMode = '';
     $scope.image = true;
 }
-
 /**
+ 
  *
+ 
  * Inbox
+ 
  */
 /**
+ 
  *
+ 
  * Pass all functions into module
+ 
  */
 function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
     /**
+     
      * Options for Bar chart
+     
      */
     $scope.barOptions = {
-        scaleBeginAtZero : true,
-        scaleShowGridLines : true,
-        scaleGridLineColor : "rgba(0,0,0,.05)",
-        scaleGridLineWidth : 1,
-        barShowStroke : true,
-        barStrokeWidth : 2,
-        barValueSpacing : 5,
-        barDatasetSpacing : 1
+        scaleBeginAtZero: true,
+        scaleShowGridLines: true,
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+        scaleGridLineWidth: 1,
+        barShowStroke: true,
+        barStrokeWidth: 2,
+        barValueSpacing: 5,
+        barDatasetSpacing: 1
     };
     /**
+     
      * Data for Bar chart
+     
      */
     $scope.barData = {
-        labels : ["Monthly statistics"],
+        labels: ["Monthly statistics"],
         // datasets : [{
         // label : "Sent messages",
         // fillColor : "rgba(229,229,229,0.5)",
@@ -6362,44 +7599,43 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
         // highlightStroke : "rgba(0,95,171,1)",
         // data : []
         // }]
-        datasets : [{
-            label : "Received messages",
-            fillColor : "rgba(0,94,170,0.5)",
-            strokeColor : "rgba(0,94,170,0.5)",
-            highlightFill : "rgba(0,94,170,0.8)",
-            highlightStroke : "rgba(0,94,170,1)",
-            data : []
+        datasets: [{
+            label: "Received messages",
+            fillColor: "rgba(0,94,170,0.5)",
+            strokeColor: "rgba(0,94,170,0.5)",
+            highlightFill: "rgba(0,94,170,0.8)",
+            highlightStroke: "rgba(0,94,170,1)",
+            data: []
         }, {
-            label : "Sent messages",
-            fillColor : "rgba(227,111,30,0.5)",
-            strokeColor : "rgba(227,111,30,0.5)",
-            highlightFill : "rgba(227,111,30,0.8)",
-            highlightStroke : "rgba(227,111,30,1)",
-            data : []
+            label: "Sent messages",
+            fillColor: "rgba(227,111,30,0.5)",
+            strokeColor: "rgba(227,111,30,0.5)",
+            highlightFill: "rgba(227,111,30,0.8)",
+            highlightStroke: "rgba(227,111,30,1)",
+            data: []
         }, {
-            label : "Contacts",
-            fillColor : "rgba(0,125,50,0.5)",
-            strokeColor : "rgba(0,125,50,0.5)",
-            highlightFill : "rgba(0,125,50,0.8)",
-            highlightStroke : "rgba(0,125,50,1)",
-            data : []
+            label: "Contacts",
+            fillColor: "rgba(0,125,50,0.5)",
+            strokeColor: "rgba(0,125,50,0.5)",
+            highlightFill: "rgba(0,125,50,0.8)",
+            highlightStroke: "rgba(0,125,50,1)",
+            data: []
         }, {
-            label : "Opt-outs",
-            fillColor : "rgba(159,74,156,0.5)",
-            strokeColor : "rgba(159,74,156,0.5)",
-            highlightFill : "rgba(159,74,156,0.8)",
-            highlightStroke : "rgba(159,74,156,1)",
-            data : []
+            label: "Opt-outs",
+            fillColor: "rgba(159,74,156,0.5)",
+            strokeColor: "rgba(159,74,156,0.5)",
+            highlightFill: "rgba(159,74,156,0.8)",
+            highlightStroke: "rgba(159,74,156,1)",
+            data: []
         }, {
-            label : "Senders",
-            fillColor : "rgba(159,159,159,0.5)",
-            strokeColor : "rgba(159,159,159,0.5)",
-            highlightFill : "rgba(159,159,159,0.8)",
-            highlightStroke : "rgba(159,159,159,1)",
-            data : []
+            label: "Senders",
+            fillColor: "rgba(159,159,159,0.5)",
+            strokeColor: "rgba(159,159,159,0.5)",
+            highlightFill: "rgba(159,159,159,0.8)",
+            highlightStroke: "rgba(159,159,159,1)",
+            data: []
         }]
     };
-
     //var updateBarOptions = function() {
     //        barData[0].value = pCtrl.bucketOfMessages;
     //        barData[1].value = pCtrl.messageCount;
@@ -6407,46 +7643,39 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
     //
     //    $scope.$watch('pCtrl.messageCount', updateBarOptions, true);
     //    //$scope.$watch('pCtrl.bucketOfMessages', updateDouhnutOptions, true);
-
     callback = function(inData) {
         // $scope.SentMessages = inData.apidata.totalMessagesDelivered;
         // $scope.ReceivedMessages = inData.apidata.totalReplies;
         // $scope.TotalContacts = inData.apidata.totalContacts;
         // $scope.TotalOptOuts = inData.apidata.totalOptOuts;
         // $scope.NumberOfSenders = inData.apidata.uniqueReplyAni;
-
         $scope.SentMessages = inData.apidata.totalMessagesDelivered;
         $scope.ReceivedMessages = inData.apidata.totalReplies;
         $scope.Contacts = inData.apidata.totalContacts;
         $scope.OptOuts = inData.apidata.totalOptOuts;
         $scope.ReceivedMessages = inData.apidata.uniqueReplyAni;
-
         $scope.barData.datasets[0].data = [];
         $scope.barData.datasets[1].data = [];
         $scope.barData.datasets[2].data = [];
         $scope.barData.datasets[3].data = [];
         $scope.barData.datasets[4].data = [];
-
         // $scope.barData.datasets[0].data.push($scope.SentMessages);
         // $scope.barData.datasets[1].data.push($scope.TotalOptOuts);
         // $scope.barData.datasets[2].data.push($scope.ReceivedMessages);
-
         $scope.barData.datasets[0].data.push($scope.SentMessages);
         $scope.barData.datasets[1].data.push($scope.ReceivedMessages);
         $scope.barData.datasets[2].data.push($scope.Contacts);
         $scope.barData.datasets[3].data.push($scope.OptOuts);
         $scope.barData.datasets[4].data.push($scope.ReceivedMessages);
-
         // $scope.StartDate = String(inData.apidata.startDateTime).substring(0, 10);
         // $scope.EndDate = String(inData.apidata.endDateTime).substring(0, 10);
     };
     var startOfMonth = new Date();
     startOfMonth.setDate(1);
     startOfMonth = startOfMonth.toISOString().substring(0, 10);
-
     $scope.params = {
-        startdatetime : startOfMonth + ' 00:00:00',
-        enddatetime : null
+        startdatetime: startOfMonth + ' 00:00:00',
+        enddatetime: null
     };
 
     function callRequest() {
@@ -6460,64 +7689,63 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
     };
     callRequest();
 }
-
 /**
+ 
  * DASHBOARD CALENDAR
+ 
  */
 function DashboardCalendarCtrl($scope, $http, $cookieStore) {
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
-
     // Events
     $scope.events = [
-    //{title: 'All Day Event',start: new Date(y, m, 1)},
-    //
-    //{title: 'Long Event',start: new Date(y, m, d - 5),end: new Date(y, m, d - 2)},
-    //
-    //{id: 999,title: 'Repeating Event',start: new Date(y, m, d - 3, 16, 0),allDay: false},
-    //
-    //{id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
-    //
-    //{title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false},
-    // {
-    // title : 'Scheduled',
-    // start : new Date(y, m, 05),
-    // end : new Date(y, m, 05),
-    // url : '#/messages/messages_scheduled'
-    // }, {
-    // title : 'Scheduled',
-    // start : new Date(y, m, 06),
-    // end : new Date(y, m, 06),
-    // url : '#/messages/messages_scheduled'
-    // }, {
-    // title : 'Scheduled',
-    // start : new Date(y, m, 22),
-    // end : new Date(y, m, 22),
-    // url : '#/messages/messages_scheduled'
-    // }, {
-    // title : 'Scheduled',
-    // start : new Date(y, m, 30),
-    // end : new Date(y, m, 30),
-    // url : '#/messages/messages_scheduled'
-    // }, {
-    // title : 'Scheduled',
-    // start : new Date(y, m, 30),
-    // end : new Date(y, m, 30),
-    // url : '#/messages/messages_scheduled'
-    // }
+        //{title: 'All Day Event',start: new Date(y, m, 1)},
+        //
+        //{title: 'Long Event',start: new Date(y, m, d - 5),end: new Date(y, m, d - 2)},
+        //
+        //{id: 999,title: 'Repeating Event',start: new Date(y, m, d - 3, 16, 0),allDay: false},
+        //
+        //{id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
+        //
+        //{title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false},
+        // {
+        // title : 'Scheduled',
+        // start : new Date(y, m, 05),
+        // end : new Date(y, m, 05),
+        // url : '#/messages/messages_scheduled'
+        // }, {
+        // title : 'Scheduled',
+        // start : new Date(y, m, 06),
+        // end : new Date(y, m, 06),
+        // url : '#/messages/messages_scheduled'
+        // }, {
+        // title : 'Scheduled',
+        // start : new Date(y, m, 22),
+        // end : new Date(y, m, 22),
+        // url : '#/messages/messages_scheduled'
+        // }, {
+        // title : 'Scheduled',
+        // start : new Date(y, m, 30),
+        // end : new Date(y, m, 30),
+        // url : '#/messages/messages_scheduled'
+        // }, {
+        // title : 'Scheduled',
+        // start : new Date(y, m, 30),
+        // end : new Date(y, m, 30),
+        // url : '#/messages/messages_scheduled'
+        // }
     ];
-
     /* config object */
     $scope.uiConfig = {
-        calendar : {
-            height : 250,
-            editable : false,
-            header : {
-                left : 'prev,next',
-                center : 'title',
-                right : 'month,agendaWeek,agendaDay'
+        calendar: {
+            height: 250,
+            editable: false,
+            header: {
+                left: 'prev,next',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
             }
             // ,
             // eventClick : $scope.alertOnEventClick,
@@ -6528,55 +7756,48 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
     /* Event sources array */
     $scope.eventSources = [$scope.events];
     //$scope.eventSources = [];
-
     var $paramS = $.param({
-        apikey : $scope.main.authToken,
-        accountID : $scope.main.accountID,
-        status : 'S',
-        sethttp : 1
+        apikey: $scope.main.authToken,
+        accountID: $scope.main.accountID,
+        status: 'S',
+        sethttp: 1
     });
-
     // Scheduled messages
     //POST
     $http.post(inspiniaNS.wsUrl + 'messages_outbound', $paramS)
-    // success function
-    .success(function(result) {
-        if (result.apicode == 0) {
-            for (var event in result.apidata) {
-                var currentEvent = result.apidata[event];
-                var date = new Date(currentEvent.scheduledDate.substring(0, 10));
-                var callendarEvent = {
-                    originalTitle : 'Scheduled',
-                    no : 1,
-                    start : date,
-                    end : date,
-                    url : '#/messages/messages_scheduled'
-                };
-
-                var dateString = new Date(date).toISOString().substring(0, 10);
-
-                var dayEvents = $.grep($scope.events, function(dayEvent) {
-                    var dayEventString = new Date(dayEvent.start).toISOString().substring(0, 10);
-                    return dayEventString == dateString;
-                });
-
-                if (dayEvents.length > 0) {
-                    dayEvents[0].no++;
-                    dayEvents[0].title = dayEvents[0].originalTitle + ' (' + dayEvents[0].no + ')';
-                } else {
-                    callendarEvent.title = callendarEvent.originalTitle;
-                    $scope.events.push(callendarEvent);
+        // success function
+        .success(function(result) {
+            if (result.apicode == 0) {
+                for (var event in result.apidata) {
+                    var currentEvent = result.apidata[event];
+                    var date = new Date(currentEvent.scheduledDate.substring(0, 10));
+                    var callendarEvent = {
+                        originalTitle: 'Scheduled',
+                        no: 1,
+                        start: date,
+                        end: date,
+                        url: '#/messages/messages_scheduled'
+                    };
+                    var dateString = new Date(date).toISOString().substring(0, 10);
+                    var dayEvents = $.grep($scope.events, function(dayEvent) {
+                        var dayEventString = new Date(dayEvent.start).toISOString().substring(0, 10);
+                        return dayEventString == dateString;
+                    });
+                    if (dayEvents.length > 0) {
+                        dayEvents[0].no++;
+                        dayEvents[0].title = dayEvents[0].originalTitle + ' (' + dayEvents[0].no + ')';
+                    } else {
+                        callendarEvent.title = callendarEvent.originalTitle;
+                        $scope.events.push(callendarEvent);
+                    }
                 }
+                $scope.eventSources = [$scope.events];
             }
-
-            $scope.eventSources = [$scope.events];
-        }
-    })
-    // error function
-    .error(function(data, status, headers, config) {
-        console.log(ngInbox._internal.ErrorMsg);
-    });
-
+        })
+        // error function
+        .error(function(data, status, headers, config) {
+            console.log(ngInbox._internal.ErrorMsg);
+        });
     // //Recuring messages
     // var $paramT = $.param({
     // apikey : $scope.main.authToken,
@@ -6624,7 +7845,6 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
     // .error(function(data, status, headers, config) {
     // console.log(ngInbox._internal.ErrorMsg);
     // });
-
 }
 
 function DashboardInboxCtrl($scope, $http, $cookieStore) {
@@ -6632,43 +7852,42 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
     $scope.SentResults = null;
     //get messages count
     var $paramInbound = $.param({
-        apikey : $scope.main.authToken,
-        accountID : $scope.main.accountID,
-        sethttp : 1,
-        status : "U",
-        orderby : "createddate desc"
+        apikey: $scope.main.authToken,
+        accountID: $scope.main.accountID,
+        sethttp: 1,
+        status: "U",
+        orderby: "createddate desc"
     });
     var $paramOutbound = $.param({
-        apikey : $scope.main.authToken,
-        accountID : $scope.main.accountID,
-        sethttp : 1,
-        status : "C",
-        orderby : "sendenddate desc"
+        apikey: $scope.main.authToken,
+        accountID: $scope.main.accountID,
+        sethttp: 1,
+        status: "C",
+        orderby: "sendenddate desc"
     });
     $http.post(inspiniaNS.wsUrl + 'messages_inbound', $paramInbound)
-    // success function
-    .success(function(result) {
-        ngFunctions.ConvertObjectUTCDateTimePropsToLocalTime(result.apidata);
-        $scope.InboxResults = result.apidata;
-        //iCtrl.Message = result.apidata.message;
-    })
-    // error function
-    .error(function(data, status, headers, config) {
-        console.log('messages_inbound error');
-    });
+        // success function
+        .success(function(result) {
+            ngFunctions.ConvertObjectUTCDateTimePropsToLocalTime(result.apidata);
+            $scope.InboxResults = result.apidata;
+            //iCtrl.Message = result.apidata.message;
+        })
+        // error function
+        .error(function(data, status, headers, config) {
+            console.log('messages_inbound error');
+        });
     $http.post(inspiniaNS.wsUrl + 'messages_outbound', $paramOutbound)
-    // success function
-    .success(function(result) {
-        ngFunctions.ConvertObjectUTCDateTimePropsToLocalTime(result.apidata);
-        $scope.SentResults = result.apidata;
-        //iCtrl.Message = result.apidata.message;
-    })
-    // error function
-    .error(function(data, status, headers, config) {
-        console.log('messages_outbound error');
-    });
+        // success function
+        .success(function(result) {
+            ngFunctions.ConvertObjectUTCDateTimePropsToLocalTime(result.apidata);
+            $scope.SentResults = result.apidata;
+            //iCtrl.Message = result.apidata.message;
+        })
+        // error function
+        .error(function(data, status, headers, config) {
+            console.log('messages_outbound error');
+        });
 }
-
 // /**
 // *
 // * Reports
@@ -6826,7 +8045,6 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
 // };
 // callRequest();
 // }
-
 /*SEARCH BY DATE*/
 function SearchByDateCtrl($scope, $http, $cookieStore, $state) {
     $scope.StartDate = '';
@@ -6861,37 +8079,33 @@ function SearchByDateCtrl($scope, $http, $cookieStore, $state) {
         $scope.opened2 = true;
     };
     $scope.dateOptions = {
-        formatYear : 'yy',
-        startingDay : 1,
-        showWeeks : 'false',
-        initDate : 'false'
+        formatYear: 'yy',
+        startingDay: 1,
+        showWeeks: 'false',
+        initDate: 'false'
     };
 }
-
-
 angular.module('inspinia').filter('makeRange', function() {
     return function(input) {
         var lowBound,
             highBound;
         switch (input.length) {
-        case 1:
-            lowBound = 0;
-            highBound = parseInt(input[0]) - 1;
-            break;
-        case 2:
-            lowBound = parseInt(input[0]);
-            highBound = parseInt(input[1]);
-            break;
-        default:
-            return input;
+            case 1:
+                lowBound = 0;
+                highBound = parseInt(input[0]) - 1;
+                break;
+            case 2:
+                lowBound = parseInt(input[0]);
+                highBound = parseInt(input[1]);
+                break;
+            default:
+                return input;
         }
         var result = [];
-        for (var i = lowBound; i <= highBound; i++)
-            result.push(i);
+        for (var i = lowBound; i <= highBound; i++) result.push(i);
         return result;
     };
 });
-
 angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', '$state', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
 angular.module('inspinia').controller('dashboardFlotTwo', dashboardFlotTwo);
