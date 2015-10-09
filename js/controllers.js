@@ -3299,7 +3299,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
             orderBy = 'lastname asc';
         }
         var i = setInterval(function() {
-            if ($scope.main.keywords) {
+            if ($scope.main.Settings.Numbers) {
                 clearInterval(i);
 
                 var data;
@@ -4425,7 +4425,7 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
             orderBy = 'lastname asc';
         }
         var i = setInterval(function() {
-            if ($scope.main.keywords) {
+            if ($scope.main.Settings.Numbers) {
                 clearInterval(i);
 
                 var data;
