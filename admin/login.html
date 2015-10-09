@@ -5,7 +5,6 @@
         <!-- load bootstrap and fontawesome via CDN -->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
             <link rel="stylesheet" href="css/bootstrap.min.css" />
-
             <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
             <link rel="stylesheet" href="js/nggrid/ng-grid.css" />
             <link rel="stylesheet" href="css/custom.css" />
@@ -13,51 +12,48 @@
             <!-- load angular and angular route via CDN -->
             <!-- load angular and angular route via CDN -->
             <script src="js/jquery-2.1.1.min.js"></script>
-
             <script src="js/angular/angular.min.js"></script>
-
             <script src="js/angular/angular-route.min.js"></script>
             <script src="js/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
             <script src="js/angular-notify/angular-notify.min.js"></script>
             <script src="js/nggrid/ng-grid-2.0.14.min.js"></script>
             <script src="js/angular/angular-cookies.min.js"></script>
-
             <script src="js/app.js"></script>
             <script src="js/config.js"></script>
             <script src="js/controllers.js"></script>
-
         </head>
-    <body class="gray-bg">
-        <div class="middle-box text-center loginscreen  animated fadeInDown">
-            <div  ng-controller="loginCtrl">
-                <div>
-                    <h1 class="logo-name"><img src="img/login_logo.png" class="img-responsive"></h1>
-                </div>
-                <h3>ImpactText Admin Portal</h3>
-                <br>
-                <p>Log in to access your account.</p>
-                <br>
-                <div class="alert alert-danger" ng-show="invalidCredentials">
-                    Username or password is incorrect.
-                </div>
-                <form class="m-t" role="form">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Username" required="" ng-model="username">
+        <body class="gray-bg">
+            <div class="middle-box text-center loginscreen  animated fadeInDown">
+                <div  ng-controller="loginCtrl">
+                    <div>
+                        <h3>Welcome to</h3>
+
+
+                        <div class="logo-name"><img src="../img/login_logo.png" class="img-responsive" style="margin:20px auto;"></div>
+
+
+                        <p>Log in to access admin portal.</p>
+                        <div class="alert alert-danger" ng-show="invalidCredentials">
+                            Username or password is incorrect.
+                        </div>
+                        <br>
+                        <form class="m-t" role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Username" required="" ng-model="username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" placeholder="Password" required="" ng-model="password">
+                            </div>
+                            <button type="submit" class="btn btn-primary block full-width m-b" ng-click="login()">Login</button>
+                            <!-- Hidden for now !
+                                                                                        <a href="#"><small>Forgot password?</small></a>
+                                                                                        <p class="text-muted text-center"><small>Do not have an account?</small></p>
+                                                                                        <a class="btn btn-sm btn-gray btn-block" href="register.html">Create an account</a>
+                            -->
+                        </form>
+                        <br>
+                        <p class="m-t"> <small>&copy;  2015 CentralMessage. All rights reserved.</small> </p>
                     </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Password" required="" ng-model="password">
-                    </div>
-                    <button type="submit" class="btn btn-primary block full-width m-b" ng-click="login()">Login</button>
-                    <!-- Hidden for now !
-                                    <a href="#"><small>Forgot password?</small></a>
-                                    <p class="text-muted text-center"><small>Do not have an account?</small></p>
-                                    <a class="btn btn-sm btn-gray btn-block" href="register.html">Create an account</a>
-                    -->
-                </form>
-                <br>
-                <p class="m-t"> <small>&copy;  2015 Impact Telecom. All rights reserved.</small> </p>
-            </div>
-        </div>
-       
-    </body>
-</html>
+                </div>
+            </body>
+        </html>

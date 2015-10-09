@@ -1,46 +1,56 @@
 nav.navbar.navbar-default {
-    background: #007d32;
+    background: #2269d1;
     height: 97px;
     border: none;
     border-radius: 0;
 }
+
 .navbar.navbar-default img {
     margin-top: 15px;
 }
+
 .navbar.navbar-default p {
     margin-top: 35px;
     font-size: 15px;
     color: #b4ecca;
 }
+
 body {
     background: #efeff2;
     font-family: Open Sans;
 }
+
 .content-holder {
     background: white;
     padding: 25px;
     border: 1px solid lightgrey;
 }
+
 .content-holder label {
     text-align: right;
 }
+
 h1 {
     font-size: 24px;
 }
+
 p {
     font-size: 13px;
     font-weight: 500;
 }
+
 h2 {
-    color: #007d32;
+    color: #2269d1;
     font-size: 24px;
     font-weight: 300;
     margin: 15px 20px 30px 20px;
 }
+
 .form-control {
     border-radius: 0;
     box-shadow: none;
 }
+
 .content-holder label {
     text-align: right;
     height: 34px;
@@ -49,58 +59,75 @@ h2 {
     vertical-align: middle;
     line-height: 34px;
 }
+
+
 /*.content-holder label.double {
+
     line-height: 17px;
+
 }*/
+
 .content-holder label.triple {
     line-height: 17px;
 }
+
 i.fa.fa-info-circle {
     color: lightgrey;
     position: absolute;
     left: 0;
     top: 9px;
-	 cursor: help;
+    cursor: help;
 }
+
 .accordion-toggle {
     font-size: 24px;
     font-weight: 300;
     color: #959595 !important;
     text-decoration: none !important;
 }
+
 .accordion-toggle:hover, .accordion-toggle:active {
     text-decoration: none !important;
 }
+
 .panel-group {
     margin-bottom: 0;
     margin: 20px -25px;
 }
+
 .panel-default {
     border: none;
 }
+
 .panel-default>.panel-heading+.panel-collapse>.panel-body {
     border-top-color: #ddd;
     border: none;
 }
+
 .panel-body {
     padding: 30px 15px;
     background: #f8f8f8;
 }
+
 .panel-default>.panel-heading {
     background-color: #f8f8f8;
 }
+
 .panel-group .panel+.panel {
     margin-top: 0;
 }
+
 .panel-heading {
     padding: 20px 35px;
     border-top: 1px solid lightgrey;
 }
+
 .panel-heading p {
     font-weight: 400;
     color: #363636;
     margin: 0;
 }
+
 .content-holder .checkbox label {
     text-align: left;
     height: initial;
@@ -109,25 +136,30 @@ i.fa.fa-info-circle {
     vertical-align: middle;
     line-height: initial;
 }
+
 .box {
     border: 1px solid lightgrey;
     width: 100%;
     background: white;
 }
+
 .box ul {
     list-style: none;
     padding-left: 0;
     padding: 15px;
 }
+
 .box ul li {
     font-weight: 700;
 }
+
 .box-header {
     padding: 5px 15px;
     border-bottom: 1px solid lightgrey;
     text-transform: uppercase;
     font-weight: 600;
 }
+
 .btn {
     padding: 4px 15px;
     font-size: 12px;
@@ -135,185 +167,220 @@ i.fa.fa-info-circle {
     border: 1px solid lightgrey;
     border-radius: 3px;
 }
+
 .btn.save-btn {
-    border: 1px solid #007d32;
+    border: 1px solid #ff9700;
     border-radius: 3px;
-    color: #007d32;
+    color: #ff9700;
 }
+
 .btn.delete-btn {
     border: 1px solid lightgrey;
     background: lightgrey;
 }
+
 .bottom-buttons.col-sm-8.col-sm-offset-3 {
     text-align: right;
     margin-top: 20px;
 }
+
 .left {
     float: left;
 }
-.panel-default: last-child {
+
+.panel-default:last-child {
     border-bottom: 1px solid #ddd;
 }
+
 .account-bottom-buttons {
     text-align: right;
 }
+
 .account-bottom-buttons .btn.delete-btn {
-    border: 1px solid #acacac;
-    background: #acacac;
+    border: 1px solid #297fe5;
+    background: #297fe5;
     color: white;
 }
+
 .account-bottom-buttons .btn.save-btn {
-    border: 1px solid #007d32;
+    border: 1px solid #ff9700;
     border-radius: 3px;
-    background: #007d32;
+    background: #ff9700;
     color: white;
     width: 120px;
 }
+
 .btn.back-btn {
     color: #005eaa;
     border: none;
     margin-top: 40px;
 }
+
 .dropdown-alerts {
     padding: 10px;
     text-align: center;
     font-size: 12px;
 }
+
 .gridStyle {
     border: none;
     width: 100%;
     height: auto !important;
 }
+
 .ngViewport {
     overflow: auto;
     height: auto !important;
     background: white;
 }
+
 .ngHeaderText {
     background: white;
-    color: #007d32;
+    color: #2269d1;
 }
+
 .ngVerticalBarVisible {
     width: 1px;
     background-color: transparent;
 }
+
 .ngRow {
     border-bottom: 1px solid #d4d4d4;
     background: none !important;
 }
+
 .ngGrid {
     background-color: transparent;
     font-size: 13px;
 }
+
 .ngHeaderScroller {
     background: white;
 }
+
 .ngGrid .btn {
     padding: 0;
     font-size: 12px;
     background: white;
     border: none;
     border-radius: 0;
-    color: green;
+    color: grey;
     font-weight: 700;
 }
+
 .ngCellText.ng-scope.col5.colt5, .ngCellText.ng-scope.col6.colt6 {
     text-align: right;
 }
+
 .ngCanvas, .ngRow {
     width: 100% !important;
 }
+
 .page-select-wrapper {
     text-align: right;
 }
+
 .search-input {
     width: 100%;
     padding-left: 10px;
     border: 1px solid lightgrey;
     height: 30px;
 }
+
 .top-search {
     margin: 20px -15px;
 }
+
 .btn.add-btn {
-    background: #005eaa;
+    background: #2269d1;
     border: 1px solid #005eaa;
     color: white;
 }
+
 .ngCellText {
     padding: 7px;
 }
+
 .ngFooterPanel {
     background-color: white;
     padding: 0;
     border-top: none;
     position: relative;
 }
+
 .ngSelectionCell {
     margin-top: 11px;
     margin-left: 6px;
 }
+
 select.page-select {
     border: 1px solid lightgrey;
     height: 30px;
 }
+
 .radio label {
-  display: inline-block;
-  height: auto;
-  line-height: initial;
-  margin-right: 20px;
-  margin-bottom: 20px;  
+    display: inline-block;
+    height: auto;
+    line-height: initial;
+    margin-right: 20px;
+    margin-bottom: 20px;
 }
 
 .logo-name img {
     margin: 0 auto 60px auto;
 }
+
 .middle-box {
     width: 320px;
     margin-left: -160px;
     margin-top: -330px;
     position: absolute;
-    left:50%;
+    left: 50%;
     top: 50%
 }
+
 .btn-primary {
     background-color: #e36f1e;
     border-color: #e36f1e;
     color: #FFFFFF;
 }
+
 .btn-primary:hover, .btn-primary:active {
     background-color: #d26315;
     border-color: #d26315;
     color: #FFFFFF;
 }
+
 .btn-gray {
     color: white;
     background: #959595;
     border: 1px solid #959595;
 }
+
 .btn-gray:hover, .btn-gray:active {
     color: white;
     background: #878787;
     border: 1px solid #878787;
 }
+
 .search-input {
-  width: 60%;
-  padding-left: 10px;
-  border: 1px solid lightgrey;
-  height: 30px;
+    width: 60%;
+    padding-left: 10px;
+    border: 1px solid lightgrey;
+    height: 30px;
 }
 
 select {
-  height: 30px;
-  border: 1px solid lightgrey;
+    height: 30px;
+    border: 1px solid lightgrey;
 }
 
 button.btn.btn-search {
-  border: none;
-  font-size: 20px;
-  color: #005eaa;
-  padding: 0;
-  margin-left: 5px;
+    border: none;
+    font-size: 20px;
+    color: #005eaa;
+    padding: 0;
+    margin-left: 5px;
 }
 
 .box ul li {
@@ -321,25 +388,27 @@ button.btn.btn-search {
 }
 
 .box ul {
-  list-style: none;
-  padding-left: 0;
-  padding: 0 15px;
-  margin-bottom: 0;
-  margin-top: 10px;
+    list-style: none;
+    padding-left: 0;
+    padding: 0 15px;
+    margin-bottom: 0;
+    margin-top: 10px;
 }
 
 .box ul:last-child {
-  list-style: none;
-  padding-left: 0;
-  padding: 0 15px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+    list-style: none;
+    padding-left: 0;
+    padding: 0 15px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
-.address-2 { margin-top: 15px; }
+.address-2 {
+    margin-top: 15px;
+}
 
 .btn {
-margin-bottom:5px;
+    margin-bottom: 5px;
 }
 
 .navbar.navbar-default img {
@@ -351,34 +420,82 @@ margin-bottom:5px;
 .navbar.navbar-default p {
     margin-top: 35px;
     font-size: 15px;
-    color: #b4ecca;
+    color: #54a0fc;
     float: left;
 }
 
-@media (max-width:1200px) {
-.content-holder label.double {
-    line-height: 17px;
-}
-}
-@media (max-width:992px) {
-.form-group {
-    position: relative;
+.discard-btn {
+    color: #297fe5;
+    border:1px solid #297fe5;
 }
 
-.form-group .tip {
-    position: absolute;
-    top: 40px;
-    right: -30px;
+.gray-bg {
+    background: #ebf2fc url(../../img/background.png) no-repeat;
+    background-position-y: 150px;
+    background-position-x: 50%;
 }
-    
-    .content-holder label {
-    text-align: left;
-    }
-    
+
+.loginscreen .form-control, .loginscreen  .single-line {
+    background-color: #2269D1;
+    border: none;
+    color: white;
+}
+
+.loginscreen .btn.btn-primary {
+    background-color: #FF9700;
+    border-color: transparent;
+    color: #FFFFFF;
+    width: auto !important;
+    margin: 0 auto;
+    padding: 5px 8px;
+}
+
+.loginscreen ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:   lightblue!important;
+}
+.loginscreen :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    lightblue !important;
+   opacity:  1;
+}
+.loginscreen ::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    lightblue !important;
+   opacity:  1;
+}
+.loginscreen :-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:    lightblue !important;
+}
+
+a.logout-btn {
+    float: right;
+    margin-top: 35px;
+    color: white;
+}
+a.logout-btn:hover {
+    color: lightblue;
+    text-decoration: none;
+}
+@media (max-width:1200px) {
     .content-holder label.double {
-    line-height: 34px;
+        line-height: 17px;
+    }
 }
+
+@media (max-width:992px) {
+    .form-group {
+        position: relative;
+    }
+    .form-group .tip {
+        position: absolute;
+        top: 40px;
+        right: -30px;
+    }
+    .content-holder label {
+        text-align: left;
+    }
+    .content-holder label.double {
+        line-height: 34px;
+    }
     .bottom-buttons {
-    margin-bottom: 30px;
-}
+        margin-bottom: 30px;
+    }
 }
