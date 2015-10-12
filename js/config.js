@@ -769,7 +769,7 @@ app.filter('iif', function() {
 var inspiniaNS = {};
 inspiniaNS.wsUrl = "http://tlsionweb01.excel.com/mercury/cmp/";
 inspiniaNS.maUrl = 'http://dalmw01.matrixvalue.com:83/us/MyAccount/LogOn';
-if ((window.location.href.indexOf('portal.impacttext.com') > -1) || (window.location.href.indexOf('54.152.199.114') > -1)) {
+if (window.location.href.indexOf('xchangetel.impacttext.com') > -1) {
     inspiniaNS.wsUrl = 'http://api.impacttext.com/';
     inspiniaNS.maUrl = 'https://myaccount.impacttelecom.com/us/MyAccount/LogOn';
 }
