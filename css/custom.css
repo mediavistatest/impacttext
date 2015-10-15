@@ -146,22 +146,26 @@ nav.navbar-default.navbar-static-side.ng-scope {}
 
 .blue {
     background: #2269d1;
-    color: #54a0fc;
+    /*color: #54a0fc;*/
+    color:#C3E2F7;
 }
 
 .blue-light {
     background: #297fe5;
-    color: #58b8f9;
+    /*color: #58b8f9;*/
+    color:#C3E2F7;
 }
 
 .yellow {
     background: #ffd731;
-    color: #bf9e13;
+    /*color: #bf9e13;*/
+    color:#8A720F;
 }
 
 .orange {
     background: #ff9700;
-    color: #c67504;
+   /*color: #c67504;*/
+   color:#885518;
 }
 
 .green {
@@ -1677,7 +1681,8 @@ span.li-label {
 
 .orange {
     background: #ff9700;
-    color: #c67009;
+    /*color: #c67009;*/
+    color: #885518;
 }
 
 .dashboard-table td, .dashboard-table th {
@@ -2851,26 +2856,19 @@ body.mini-navbar .navbar-default .nav li a span.icon {
     color: black;
 }
 
-.loginscreen::-webkit-input-placeholder {
-    /* WebKit, Blink, Edge */
-    color: lightblue!important;
+.loginscreen ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:   lightblue!important;
 }
-
-.loginscreen:-moz-placeholder {
-    /* Mozilla Firefox 4 to 18 */
-    color: lightblue !important;
-    opacity: 1;
+.loginscreen :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    lightblue !important;
+   opacity:  1;
 }
-
-.loginscreen::-moz-placeholder {
-    /* Mozilla Firefox 19+ */
-    color: lightblue !important;
-    opacity: 1;
+.loginscreen ::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    lightblue !important;
+   opacity:  1;
 }
-
-.loginscreen:-ms-input-placeholder {
-    /* Internet Explorer 10-11 */
-    color: lightblue !important;
+.loginscreen :-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:    lightblue !important;
 }
 
 .loginscreen .gray-bg {
