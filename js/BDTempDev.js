@@ -137,7 +137,7 @@ var profile = {
         });
 
         pCtrl.Submit = function() {
-            var to = 'customersupport@impacttelecom.com';
+            var to = 'support@centralmessage.com';
             var inMessage = 'Please, change my plan from ' + pCtrl.CurrentPlan.Name + ' to ' + pCtrl.SelectedPlan.Name + '. Thank you.';
 
             var message = inMessage.replace(/\ /g, '%20');

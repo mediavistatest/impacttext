@@ -255,7 +255,9 @@ body {
     float: left;
     margin-left: 15px;
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 18px;
+    /* font-weight: 600; */
+    color:#2269d1;
 }
 
 .nav.navbar-top-links a {
