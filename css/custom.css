@@ -2528,6 +2528,29 @@ body.mini-navbar .nav-header {
     padding: 15px 2px 0 2px;
 }
 
+a.btn.test-btn {
+    margin: 0 0 0 -15px;
+    padding: 7px 10px 8px 10px;
+}
+
+.chosen-container-single .chosen-single div b {
+    background-position: 0px 6px !important;
+}
+
+.priority .chosen-container {
+    width: 80px !important;
+}
+
+.test-sms {
+    padding: 20px 0;
+    border-top: 1px solid whitesmoke;
+    border-bottom: 1px solid whitesmoke;
+}
+
+.test-sms label {
+    margin:0;
+} 
+
 /*MEDIA QUERIES*/
 
 @media (max-width: 1375px) {

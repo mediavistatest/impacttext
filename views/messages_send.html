@@ -66,6 +66,18 @@
                 </div>
             </div>
         </div>
+        
+        <div class="form-group clearfix">
+            <label class="col-sm-2 control-label"> Priority: </label>
+            <div class="col-sm-3 priority">
+                <select chosen data-placeholder="Select priority" disable-search="true"  class="form-control m-b" name="SelectPriority">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+        </div>
+        
         <div class="form-group clearfix">
             <label class="col-sm-2 control-label"> From: </label>
             <div class="col-sm-6">
@@ -104,6 +116,17 @@
             </div>
         </div>
         <div class="form-group clearfix">
+            <label class="col-sm-2 control-label"> Language: </label>
+            <div class="col-sm-6">
+                <select chosen data-placeholder="Select Message Language" disable-search="true"  class="form-control m-b" name="SelectLanguage">
+                    <option value=""></option>
+                    <option value="1">English</option>
+                    <option value="2">French</option>
+                    <option value="3">Spanish</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group clearfix">
             <label class="col-sm-2 control-label"> Message text: </label>
             <div class="col-sm-6">
                 <div class="text-dynamic-tags" ng-if="SendToList">
@@ -118,7 +141,7 @@
                 </div>
                 <div ng-hide="SendForm.$error.maxlength" class="text-counter">
                     <!--{{ 160 - (MessageTxt.length + FromName.length + optFields.OptOutTxt1.length + optFields.OptOutTxt3.length) - (FromName.length>0|iif:2:0) - (optFields.OptOutTxt1.length|iif:2:0) - (optFields.OptOutTxt3.length|iif:2:0)}}-->
-                    {{ 160 - ((FromName.length > 0 && FromName.length + 2 || FromName.length) + MessageTxt.length + (optFields.OptOutTxt1.length > 0 && optFields.OptOutTxt1.length + 1 || optFields.OptOutTxt1.length)  + (optFields.OptOutTxt2.length > 0 && optFields.OptOutTxt2.length + 1 || optFields.OptOutTxt2.length)+ (optFields.OptOutTxt3.length > 0 && optFields.OptOutTxt3.length + 1 || optFields.OptOutTxt3.length)) }} characters left.
+                    {{ 136 - ((FromName.length > 0 && FromName.length + 2 || FromName.length) + MessageTxt.length + (optFields.OptOutTxt1.length > 0 && optFields.OptOutTxt1.length + 1 || optFields.OptOutTxt1.length)  + (optFields.OptOutTxt2.length > 0 && optFields.OptOutTxt2.length + 1 || optFields.OptOutTxt2.length)+ (optFields.OptOutTxt3.length > 0 && optFields.OptOutTxt3.length + 1 || optFields.OptOutTxt3.length)) }} characters left.
                 </div>
                 <div ng-show="SendForm.$error.maxlength" class="text-counter error">
                     Limit reached!
@@ -299,6 +322,24 @@
         <!--<div ng-controller="DateTimePickerCtrl">
         <datetimepicker min-date="minDate" show-weeks="showWeeks" hour-step="hourStep" minute-step="minuteStep" ng-model="date" show-meridian="showMeridian" date-format="mm/dd/yyyy" date-options="dateOptions" date-disabled="disabled(date, mode)" readonly-time="false"></datetimepicker>
         </div>-->
+        <br>
+        <div class="form-group clearfix">
+            <label class="col-sm-6 col-md-offset-2 checkbox">
+                <div class="icheckbox_square-green" style="position: relative;"><input icheck="" type="checkbox" value="blank" ng-model="" class="ng-untouched ng-valid ng-dirty ng-valid-parse" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
+                Compliance acknowledgement </label>
+        </div>
+        <br>
+        
+        <div class="send-message-from-name form-group clearfix test-sms">
+            <label class="col-sm-2 control-label"> Test SMS: </label>
+            <div class="col-sm-4">
+                <input type="text" name="TestSMS" placeholder="Enter Test Number" class="form-control ng-pristine ng-valid ng-touched" ng-trim="false">
+            </div>
+            <div class="col-sm-4 tip">
+                <!--<i class="fa fa-info-circle" tooltip="Test SMS"> </i>-->
+                <a class="btn test-btn" ng-click="">Send test sms</a>
+            </div>
+        </div>
         <br>
         <br>
         <br>
