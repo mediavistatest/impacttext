@@ -2,65 +2,65 @@ var profile = {
     Controller : function($scope, $http) {
         var pCtrl = this;
         pCtrl.PlansArray = [{
-            Value : 'TXT500',
-            Name : 'ImpactText500',
-            Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
-            Price : '$19.99',
-            Outgoing : '500',
-            Incoming : 'FREE',
-            Additional : '5.5¢ per text',
-            CodeType : 'Long code (dedicated)',
-            Keywords : '1'
+            Value : 'CM1000',
+            Name : 'CentralMessage 1000',
+            //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
+            MonthlyFee : '$39.00',
+            MRC : 'ARR',
+            FreeMessages : '1.000',
+            Keywords : '1',
+            CodeType : 'SHORT',
+            MultipleCodes : 'YES'
         }, {
-            Value : 'TXT1200',
-            Name : 'ImpactText1200',
-            Desc : 'is the perfect plan for you if you are new to texting and want to get your feet wet.',
-            Price : '$39.99',
-            Outgoing : '1,200',
-            Incoming : 'FREE',
-            Additional : '5¢ per text',
-            CodeType : 'Long code (dedicated)',
-            Keywords : '1'
+            Value : 'CM5000',
+            Name : 'CentralMessage 5000',
+            //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
+            MonthlyFee : '$175.00',
+            MRC : 'ARR',
+            FreeMessages : '5.000',
+            Keywords : '1',
+            CodeType : 'SHORT',
+            MultipleCodes : 'YES'
         }, {
-            Value : 'TXT2400',
-            Name : 'ImpactText2400',
-            Desc : 'is the right plan for you if you are sending frequent messages to a small group of contacts and want to take advantage of increased message throughput and an additional keyword.',
-            Price : '$49.99',
-            Outgoing : '2,400',
-            Incoming : 'FREE',
-            Additional : '3¢ per text',
-            CodeType : 'Short code (shared)',
-            Keywords : '2'
+            Value : 'CM Pro',
+            Name : 'CentralMessage Pro',
+            //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
+            MonthlyFee : '$290.00',
+            MRC : 'ARR',
+            FreeMessages : '10.000',
+            Keywords : '2',
+            CodeType : 'SHORT',
+            MultipleCodes : 'YES'
         }, {
-            Value : 'TXT5000',
-            Name : 'ImpactText5000',
-            Desc : 'is recommended for those businesses that want to use autoresponders, message automation and increased message throughput with an additional keyword.',
-            Price : '$99.99',
-            Outgoing : '5,000',
-            Incoming : 'FREE',
-            Additional : '2.5¢ per text',
-            CodeType : 'Short code (shared)',
-            Keywords : '2'
+            Value : 'CM Elite',
+            Name : 'CentralMessage Elite',
+            //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
+            MonthlyFee : '$550.00',
+            MRC : 'ARR',
+            FreeMessages : '20.000',
+            Keywords : '5',
+            CodeType : 'SHORT',
+            MultipleCodes : 'YES'
         }, {
-            Value : 'TXT11000',
-            Name : 'ImpactText11000',
-            Desc : 'is a high-volume plan designed for businesses that are sending frequent texts, using autoresponders and automated scheduling. It includes shared short code use with a total of 5 keywords.',
-            Price : '$199.99',
-            Outgoing : '11,000',
-            Incoming : 'FREE',
-            Additional : '2.5¢ per text',
-            CodeType : 'Short code (shared)',
-            Keywords : '5'
+            Value : 'CM Enterprise',
+            Name : 'CentralMessage Enterprise',
+            //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
+            MonthlyFee : 'Per Request',
+            MRC : 'ARR',
+            FreeMessages : '50.000',
+            Keywords : '10',
+            CodeType : 'SHORT',
+            MultipleCodes : 'YES'
         }, {
-            Value : 'TXT30000',
-            Name : 'ImpactText30000',
-            Desc : 'is our top tier high-volume plan designed for businesses that are sending frequent texts, using autoresponders and automated scheduling. It includes shared short code use as well as 5 keywords.',
-            Price : '$499.99',
-            Outgoing : '30,000',
-            Incoming : 'FREE',
-            Additional : '2.5¢ per text',
-            CodeType : 'Short code (shared)',
-            Keywords : '5'
+            Value : 'CM Pay&Go',
+            Name : 'CentralMessage Pay&Go',
+            //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
+            MonthlyFee : '$0.00',
+            MRC : 'ARR',
+            FreeMessages : '0',
+            Keywords : '1',
+            CodeType : 'SHORT',
+            MultipleCodes : 'YES'
         }];
 
         pCtrl.SelectedPlan = pCtrl.PlansArray[0];

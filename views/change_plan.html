@@ -35,38 +35,38 @@ Change Plan
         <div class="animate-switch-container plan-desc" >
 
             <div >
-                <p>
+                <!--<p>
                     <strong>
                     {{pCtrl.SelectedPlan.Name}} 
                     </strong>
                     {{pCtrl.SelectedPlan.Desc}}
-                </p>
+                </p>-->
 
                 <ul>
                     <li>
-                        Price/month:
+                        Monthly Fee:
                         <strong>
-                        {{pCtrl.SelectedPlan.Price}}
+                        {{pCtrl.SelectedPlan.MonthlyFee}}
                         </strong>
                     </li>
                     <li>
-                        Outgoing texts:
+                        MRC Advance or Arrears:
                         <strong>
-                        {{pCtrl.SelectedPlan.Outgoing}}
+                        {{pCtrl.SelectedPlan.MRC}}
                         </strong>
                     </li>
                     <li>
-                        Incoming texts:
+                        Free Messages (BOM):
                         <strong>
-                        {{pCtrl.SelectedPlan.Incoming}}
+                        {{pCtrl.SelectedPlan.FreeMessages}}
                         </strong>
                     </li>
-                    <li>
+                    <!--<li>
                         Additional texts:
                         <strong>
                         {{pCtrl.SelectedPlan.Additional}}
                         </strong>
-                    </li>
+                    </li>-->
                     <li>
                         Code type:
                         <strong>
@@ -77,6 +77,12 @@ Change Plan
                         Keywords:
                         <strong>
                         {{pCtrl.SelectedPlan.Keywords}}
+                        </strong>
+                    </li>
+                    <li>
+                        Multiple codes supported on account:
+                        <strong>
+                        {{pCtrl.SelectedPlan.MultipleCodes}}
                         </strong>
                     </li>
                 </ul>
