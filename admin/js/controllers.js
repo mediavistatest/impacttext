@@ -657,7 +657,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 				if (data.apicode == 0) {
 					$scope.DidList = data.apidata;
 					$.each(data.apidata, function(key, value) {
-						if (value.DID.length < 11) {
+						if (value.DID.length < 10) {
 							$scope.shortCodeDisabled = true;
 						}
 					});
