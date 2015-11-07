@@ -3895,6 +3895,7 @@ var ngSettings = {
 
             cpo.$scope = $scope;
             cpo.arCtrl = arCtrl;
+            cpo.arCtrl.autoresponder = {};
             cpo.arCtrl.fromNumber = {};
             cpo.arCtrl.fromName = '';
             cpo.$http = $http;
