@@ -3836,7 +3836,6 @@ var ngSettings = {
         }],
         clickedKeyword : null,
         keywordActionRules : null,
-        autoresponder : {},
         FillAutoresponder : function(cpo) {
             ngSettings.Autoresponder._internal.ResetList(cpo);
             if (cpo.arCtrl.fromNumber && cpo.arCtrl.fromNumber.DID) {
@@ -3896,6 +3895,7 @@ var ngSettings = {
 
             cpo.$scope = $scope;
             cpo.arCtrl = arCtrl;
+            cpo.arCtrl.autoresponder = {};
             cpo.arCtrl.fromNumber = {};
             cpo.arCtrl.fromName = '';
             cpo.$http = $http;
