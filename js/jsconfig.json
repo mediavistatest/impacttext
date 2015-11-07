@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "ES6",
+		"module": "commonjs"
+	},
+	"files": [
+		"app.js",
+		"BDTempDev.js",
+		"config.js",
+		"phoneNumberValidator.js",
+		"inspinia.js",
+		"controllers.js",
+		"directives.js",
+		"../typings/jquery/jquery.d.ts",
+		"../typings/angularjs/angular.d.ts"
+	]
+}
