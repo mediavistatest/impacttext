@@ -3896,6 +3896,7 @@ var ngSettings = {
             cpo.$scope = $scope;
             cpo.arCtrl = arCtrl;
             cpo.arCtrl.fromNumber = {};
+            cpo.arCtrl.autoresponder = {};
             cpo.arCtrl.fromName = '';
             cpo.$http = $http;
             cpo.$cookieStore = $cookieStore;
