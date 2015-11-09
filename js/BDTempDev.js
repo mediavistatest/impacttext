@@ -3282,7 +3282,7 @@ var ngSettings = {
                 };
                 var $param = $.param(params);
 
-                cpo.$http.post(inspiniaNS.wsUrl + "did_modify", $param).success(function(result) {
+                cpo.$http.post(inspiniaNS.wsUrl + "did_setautoresponder", $param).success(function(result) {
                     callback(cpo, result);
                 }).error(function(result) {
                     cpo.$scope.$broadcast('itError', {
