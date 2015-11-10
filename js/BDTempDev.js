@@ -2539,7 +2539,7 @@ var ngSettings = {
                                 }
                             }
                         } else if (keyword_value != '') {
-                            if (keyword_value != keyword_original) {
+									if (empty(keyword_id) || keyword_value != keyword_original) {
                                 keyword_add.push({
                                     did : cpo.numCtrl.numbers[j].DID,
                                     keyword_value : keyword_value
