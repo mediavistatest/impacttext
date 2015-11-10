@@ -2,7 +2,8 @@ var profile = {
     Controller : function($scope, $http) {
         var pCtrl = this;
         pCtrl.PlansArray = [{
-            Value : 'CM1000Plus5',
+            // Value : 'CM1000Plus5',
+            Value : 'CM 1,000 Plus 5',
             Name : 'CM 1,000 Plus 5',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$39.00',
@@ -12,7 +13,8 @@ var profile = {
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         }, {
-            Value : 'CM1000Plus10',
+            // Value : 'CM1000Plus10',
+            Value : 'CM 1,000 Plus 10',
             Name : 'CM 1,000 Plus 10',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$49.00',
@@ -22,7 +24,8 @@ var profile = {
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         }, {
-            Value : 'CM2500Plus5',
+            // Value : 'CM2500Plus5',
+            Value : 'CM 2,500 Plus 5',
             Name : 'CM 2,500 Plus 5',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$79.00',
@@ -32,7 +35,8 @@ var profile = {
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         }, {
-            Value : 'CM2500Plus10',
+            // Value : 'CM2500Plus10',
+            Value : 'CM 2,500 Plus 10',
             Name : 'CM 2,500 Plus 10',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$89.00',
@@ -42,7 +46,8 @@ var profile = {
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         }, {
-            Value : 'CM5000Plus5',
+            // Value : 'CM5000Plus5',
+            Value : 'CM 5,000 Plus 5',
             Name : 'CM 5,000 Plus 5',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$149.00',
@@ -52,7 +57,8 @@ var profile = {
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         },  {
-            Value : 'CM5000Plus10',
+            // Value : 'CM5000Plus10',
+            Value : 'CM 5,000 Plus 10',
             Name : 'CM 5,000 Plus 10',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$159.00',
@@ -62,7 +68,8 @@ var profile = {
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         }, {
-            Value : 'CM10000Plus10',
+            // Value : 'CM10000Plus10',
+            Value : 'CM 10,000 Plus 10',
             Name : 'CM 10,000 Plus 10',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$249.00',
@@ -72,7 +79,8 @@ var profile = {
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         }, {
-            Value : 'CM10000Plus15',
+            // Value : 'CM10000Plus15',
+            Value : 'CM 10,000 Plus 15',
             Name : 'CM 10,000 Plus 15',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$259.00',
@@ -82,7 +90,8 @@ var profile = {
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         }, {
-            Value : 'CM20000Plus10',
+            // Value : 'CM20000Plus10',
+            Value : 'CM 20,000 Plus 10',
             Name : 'CM 20,000 Plus 10',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : 'Per Request',
@@ -92,7 +101,8 @@ var profile = {
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         }, {
-            Value : 'CM20000Plus15',
+            // Value : 'CM20000Plus15',
+            Value : 'CM 20,000 Plus 15',
             Name : 'CM 20,000 Plus 15',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : 'Per Request',
@@ -102,7 +112,8 @@ var profile = {
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         }, {
-            Value : 'CM50000Plus10',
+            // Value : 'CM50000Plus10',
+            Value : 'CM 50,000 Plus 10',
             Name : 'CM 50,000 Plus 10',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : 'Per Request',
@@ -112,7 +123,8 @@ var profile = {
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         }, {
-            Value : 'CMPlay&Go',
+            // Value : 'CMPlay&Go',
+            Value : 'CM Play & Go',
             Name : 'CM Play & Go',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : 'n/a',
