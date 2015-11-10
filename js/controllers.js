@@ -895,7 +895,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                     return;
                 }
                 if (data.apicode == 0) {
-                    main.fromNumbers = data.apidata;
+                    //main.fromNumbers = data.apidata;
+                    $inScope.main.fromNumbers = $.grep(data.apidata,function(member){return member.status=='A'});
                 } else {
                     main.fromNumbers = [];
                     main.Settings.Numbers = [];
@@ -5803,7 +5804,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 return;
             }
             if (data.apicode == 0) {
-                $inScope.main.fromNumbers = data.apidata;
+                // $inScope.main.fromNumbers = data.apidata;
+                $inScope.main.fromNumbers = $.grep(data.apidata,function(member){return member.status=='A'});
             } else {
                 $inScope.main.fromNumbers = [];
                 $inScope.main.Settings.Numbers = [];
