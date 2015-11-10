@@ -95,7 +95,7 @@ Settings
 
 							<div class="keyword-input first">
 								<input type="text" name="Keywords[]" data-didid="{{Number.DIDID}}" data-keyword-id="{{numCtrl.keywords[Number.DIDID][0].accountKeywordID}}" data-keyword-original="{{::numCtrl.keywords[Number.DIDID][0].keyword}}" ng-model="numCtrl.keywords[Number.DIDID][0].keyword" class="form-control" ng-class="keyword_change_errors.keyword_id[numCtrl.keywords[Number.DIDID][0].accountKeywordID] ? 'error' : ''" ng-trim="false" autocomplete="off">
-								<small ng-if="keyword_change_errors.keyword_id[numCtrl.keywords[Number.DIDID][n+1].accountKeywordID]" class="error-hint">{{keyword_change_errors.keyword_id[numCtrl.keywords[Number.DIDID][0].accountKeywordID]}}</small>
+								<small ng-if="keyword_change_errors.keyword_id[numCtrl.keywords[Number.DIDID][0].accountKeywordID]" class="error-hint">{{keyword_change_errors.keyword_id[numCtrl.keywords[Number.DIDID][0].accountKeywordID]}}</small>
 							</div>
 
 							<div ng-repeat="n in [numCtrl.keywords[Number.DIDID].length - 1] | makeRange">
