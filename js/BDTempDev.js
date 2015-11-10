@@ -2317,6 +2317,11 @@ var ngSettings = {
                 cpo.$http.post(inspiniaNS.wsUrl + "did_get", $param).success(function(data) {
                     if (data.apicode == 0) {
                         if ( typeof success == 'function') {
+									if ( typeof data.apidata != 'undefined' && data.apidata != null && data.apidata != '' && data.apidata.constructor === Array && data.apidata.length > 0) {
+										data.apidata = jQuery.grep(data.apidata, function(elem){
+											return elem.status.toUpperCase() == 'A';
+										});
+									}
                             success(data);
                         }
                     } else {
