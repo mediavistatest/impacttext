@@ -57,3 +57,7 @@ if((window.location.href.indexOf('portal.impacttext.com') > -1) || (window.locat
 	inspiniaAdminNS.wsUrl = 'http://api.impacttext.com/';
 	inspiniaAdminNS.developmentEnvironment = false; //this MUST be set to false when moving to production
 }
+
+var HARDCODED = {
+	globalShortCode: '766337'
+};

@@ -315,12 +315,15 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			notify("Please enter the valid long code.");
 			return;
 		}
-		if($scope.PrimaryDID[0] == '1' && $scope.PrimaryDID.length != 11){
-			notify("Long code that starts with '1' must be 11 characters long!");
-			return;
-		}else if($scope.PrimaryDID[0] != '1' && $scope.PrimaryDID.length != 10){
-			notify("Long code length must be 10 characters!");
-			return;
+
+		if($scope.UseShortPrimary == 0){
+			if($scope.PrimaryDID[0] == '1' && $scope.PrimaryDID.length != 11){
+				notify("Long code that starts with '1' must be 11 characters long!");
+				return;
+			}else if($scope.PrimaryDID[0] != '1' && $scope.PrimaryDID.length != 10){
+				notify("Long code length must be 10 characters!");
+				return;
+			}
 		}
 
 		//Setting request parameters
@@ -430,7 +433,8 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			$scope.Zip = null,
 			$scope.Country = null,
 			$scope.ExternalAccount = null,
-			$scope.PrimaryDID = null
+			$scope.PrimaryDID = null;
+		$scope.UseShortPrimary = 0;
 	};
 
 	$scope.restorePreviousAccountData = function() {
@@ -576,6 +580,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 
 	$scope.refreshPrimaryDID = function() {
 		if (typeof $scope.primaryDidId == 'undefined' || $scope.primaryDidId == null || $scope.primaryDidId == '') {
+			$scope.UseShortPrimary = 0;
 			return;
 		}
 
@@ -592,6 +597,11 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			function (data) {
 				if (data.apicode == 0) {
 					$scope.PrimaryDID = data.apidata[0].DID;
+					if($scope.PrimaryDID.length == 10 || $scope.PrimaryDID.length == 11){
+						$scope.UseShortPrimary = 0;
+					}else{
+						$scope.UseShortPrimary = 1;
+					}
 				}
 			}).error(
 			//An error occurred with this request
@@ -600,6 +610,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 					alert("An error occurred when getting primary data! Error code: " + data.apicode);
 					alert(JSON.stringify(data));
 				}
+				$scope.UseShortPrimary = 0;
 			}
 		);
 	};
@@ -1219,6 +1230,17 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.refreshDidList();
 		$scope.refreshUsersList();
 		$scope.resetUserData();
+	});
+
+	$scope.$watch('UseShortPrimary', function(newValue, oldValue){
+		if(newValue == 1){
+			/*angular.forEach($scope.DidList, function(value, key){
+				if(value.status == 'A' && value.DID.length < 10){
+					$scope.PrimaryDID = value.DID;
+				}
+			});*/
+			$scope.PrimaryDID = HARDCODED.globalShortCode;
+		}
 	});
 });
 
