@@ -8,7 +8,7 @@ var profile = {
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$39.00',
             MRC : 'ARR',
-            FreeMessages : '1.000',
+            FreeMessages : '1,000',
             Keywords : '5',
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
@@ -19,7 +19,7 @@ var profile = {
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$49.00',
             MRC : 'ARR',
-            FreeMessages : '1.000',
+            FreeMessages : '1,000',
             Keywords : '10',
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
@@ -30,7 +30,7 @@ var profile = {
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$79.00',
             MRC : 'ARR',
-            FreeMessages : '2.500',
+            FreeMessages : '2,500',
             Keywords : '5',
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
@@ -41,7 +41,7 @@ var profile = {
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$89.00',
             MRC : 'ARR',
-            FreeMessages : '2.500',
+            FreeMessages : '2,500',
             Keywords : '10',
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
@@ -52,7 +52,7 @@ var profile = {
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$149.00',
             MRC : 'ARR',
-            FreeMessages : '5.000',
+            FreeMessages : '5,000',
             Keywords : '5',
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
@@ -63,7 +63,7 @@ var profile = {
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$159.00',
             MRC : 'ARR',
-            FreeMessages : '5.000',
+            FreeMessages : '5,000',
             Keywords : '10',
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
@@ -74,7 +74,7 @@ var profile = {
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$249.00',
             MRC : 'ARR',
-            FreeMessages : '10.000',
+            FreeMessages : '10,000',
             Keywords : '10',
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
@@ -85,7 +85,7 @@ var profile = {
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : '$259.00',
             MRC : 'ARR',
-            FreeMessages : '10.000',
+            FreeMessages : '10,000',
             Keywords : '15',
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
@@ -96,7 +96,7 @@ var profile = {
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : 'Per Request',
             MRC : 'ARR',
-            FreeMessages : '20.000',
+            FreeMessages : '20,000',
             Keywords : '10',
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
@@ -107,7 +107,7 @@ var profile = {
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : 'Per Request',
             MRC : 'ARR',
-            FreeMessages : '20.000',
+            FreeMessages : '20,000',
             Keywords : '15',
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
@@ -118,14 +118,14 @@ var profile = {
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : 'Per Request',
             MRC : 'ARR',
-            FreeMessages : '50.000',
+            FreeMessages : '50,000',
             Keywords : '20',
             CodeType : 'SHORT & LONG',
             MultipleCodes : 'YES'
         }, {
-            // Value : 'CMPlay&Go',
-            Value : 'CM Play & Go',
-            Name : 'CM Play & Go',
+            // Value : 'CMPay&Go',
+            Value : 'CM Pay & Go',
+            Name : 'CM Pay & Go',
             //Desc : 'is our entry-level plan which will allow you to test the platform and see the power of text messaging.',
             MonthlyFee : 'n/a',
             MRC : 'ARR',
