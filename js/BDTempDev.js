@@ -2827,7 +2827,7 @@ var ngSettings = {
                                     numCtrl.numbers.keywords = numCtrl.keywords[number.DIDID];
                                 }
                                 for (var n in numCtrl.keywords) {
-                                    numCtrl.keywords[n].splice(2);
+											   numCtrl.keywords[n].splice($scope.main.accountInfo.sharedDIDKeywordMax);
                                 }
 
                                 for (var i in cpo.numCtrl.numbers) {
