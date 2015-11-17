@@ -802,6 +802,51 @@ var ngInbox = {
                     controllerParent.$scope.$broadcast("ErrorOnMessages", 'Request error: ' + ngInbox._internal.ErrorMsg);
                 });
             },
+            OutboundRestore : function(controllerParent, messageToChangeStatusArray, changeToStatus, callback) {
+                var params = {
+                    apikey : controllerParent.$cookieStore.get('inspinia_auth_token'),
+                    accountID : controllerParent.$cookieStore.get('inspinia_account_id')
+                };
+
+                var msgList_ = '';
+                for (var j = 0; j < messageToChangeStatusArray.length; j++) {
+                    var tempId_= messageToChangeStatusArray[j].outboundMessageID;
+
+                    if (msgList_ == '') {
+                        msgList_ = tempId_;
+                    } else {
+                        msgList_ = msgList_ + ',' + tempId_;
+                    }
+
+                }
+                var apiCallAction_ = 'message_restoreoutbound';
+                    params.outboundmessageid = msgList_;
+                    params.sethttp = 1;
+                    params.companyid = controllerParent.$scope.main.accountInfo.companyID;
+
+                var $param = $.param(params);
+
+                //POST
+                controllerParent.$http.post(inspiniaNS.wsUrl + apiCallAction_, $param)
+                // success function
+                .success(function(result) {
+                    if (result == null || typeof result.apicode == 'undefined') {
+                        //This should never happen
+                        controllerParent.$scope.$broadcast("ErrorOnMessages", ngInbox._internal.ErrorMsg);
+                        return;
+                    }
+                    if (result.apicode == 0) {
+                        //Reset form and inform user about success
+                        callback();
+                    } else {
+                        controllerParent.$scope.$broadcast("ErrorOnMessages", ngInbox._internal.ErrorMsg + ' Error code: ' + result.apicode + ' ' + result.apitext);
+                    }
+                })
+                // error function
+                .error(function(data, status, headers, config) {
+                    controllerParent.$scope.$broadcast("ErrorOnMessages", 'Request error: ' + ngInbox._internal.ErrorMsg);
+                });
+            },
             DeleteMessage : function(controllerParent, messageList) {
                 ngInbox._internal.ErrorMsg = 'Delete message(s) failed!';
                 var callback = function() {
@@ -860,8 +905,14 @@ var ngInbox = {
                 if (!messageList) {
                     messageList = [controllerParent.clickedMessage];
                 }
-
-                ngInbox._internal.Methods.StatusChange(controllerParent, messageList, controllerParent.restoreMessageStatus, callback);
+                switch (controllerParent.getListAction) {
+                case 'messages_inbound' :
+                    ngInbox._internal.Methods.StatusChange(controllerParent, messageList, controllerParent.restoreMessageStatus, callback);
+                    break;
+                case 'messages_outbound' :
+                    ngInbox._internal.Methods.OutboundRestore(controllerParent, messageList, controllerParent.restoreMessageStatus, callback);
+                    break;
+                }
             },
             RestoreToInboxMessages : function(controllerParent) {
                 ngInbox._internal.Methods.RestoreToInboxMessage(controllerParent, controllerParent.$scope.mySelections);
@@ -1168,7 +1219,7 @@ var ngInbox = {
             };
             $scope.RestoreToInboxMsg = function() {
                 notify({
-                    message : 'Your message(s) has been restored to inbox!',
+                    message : 'Your message(s) has been restored!',
                     classes : 'alert-success'
                 });
             };
@@ -2317,11 +2368,11 @@ var ngSettings = {
                 cpo.$http.post(inspiniaNS.wsUrl + "did_get", $param).success(function(data) {
                     if (data.apicode == 0) {
                         if ( typeof success == 'function') {
-									if ( typeof data.apidata != 'undefined' && data.apidata != null && data.apidata != '' && data.apidata.constructor === Array && data.apidata.length > 0) {
-										data.apidata = jQuery.grep(data.apidata, function(elem){
-											return elem.status.toUpperCase() == 'A';
-										});
-									}
+                            if ( typeof data.apidata != 'undefined' && data.apidata != null && data.apidata != '' && data.apidata.constructor === Array && data.apidata.length > 0) {
+                                data.apidata = jQuery.grep(data.apidata, function(elem) {
+                                    return elem.status.toUpperCase() == 'A';
+                                });
+                            }
                             success(data);
                         }
                     } else {
@@ -2544,7 +2595,7 @@ var ngSettings = {
                                 }
                             }
                         } else if (keyword_value != '') {
-									if (empty(keyword_id) || keyword_value != keyword_original) {
+                            if (empty(keyword_id) || keyword_value != keyword_original) {
                                 keyword_add.push({
                                     did : cpo.numCtrl.numbers[j].DID,
                                     keyword_value : keyword_value
@@ -2614,68 +2665,68 @@ var ngSettings = {
                 var keyword_update_count = keyword_update.length;
                 var keyword_update_current = 0;
                 var waitForKeywordUpdate = $q.defer();
-					waitForKeywordDelete.promise.then(function() {
-						if (keyword_update_count > 0) {
-							for (var idx in keyword_update) {
-								ngSettings.NumberNames.ServerRequests.ModifyKeyword(cpo, keyword_update[idx].keyword_id, keyword_update[idx].keyword_value,
-									// success
-									function() {
-										keyword_update_current++;
-										if (keyword_update_current == keyword_update_count) {
-											waitForKeywordUpdate.resolve();
-										}
-									},
-									// error
-									function(data, keyword_id) {
-										var errorMessageParts = data.apitext.split(':');
-										var message = (errorMessageParts.length > 1) ? $.trim(errorMessageParts[1]) : 'Failed to update keyword';
+                waitForKeywordDelete.promise.then(function() {
+                    if (keyword_update_count > 0) {
+                        for (var idx in keyword_update) {
+                            ngSettings.NumberNames.ServerRequests.ModifyKeyword(cpo, keyword_update[idx].keyword_id, keyword_update[idx].keyword_value,
+                            // success
+                            function() {
+                                keyword_update_current++;
+                                if (keyword_update_current == keyword_update_count) {
+                                    waitForKeywordUpdate.resolve();
+                                }
+                            },
+                            // error
+                            function(data, keyword_id) {
+                                var errorMessageParts = data.apitext.split(':');
+                                var message = (errorMessageParts.length > 1) ? $.trim(errorMessageParts[1]) : 'Failed to update keyword';
 
-										keyword_update_current++;
-										keyword_change_errors.push({
-											keyword_id : keyword_id,
-											message : message
-										});
-										if (keyword_update_current == keyword_update_count) {
-											waitForKeywordUpdate.resolve();
-										}
-									});
-							}
-						} else {
-							waitForKeywordUpdate.resolve();
-						}
-					});
+                                keyword_update_current++;
+                                keyword_change_errors.push({
+                                    keyword_id : keyword_id,
+                                    message : message
+                                });
+                                if (keyword_update_current == keyword_update_count) {
+                                    waitForKeywordUpdate.resolve();
+                                }
+                            });
+                        }
+                    } else {
+                        waitForKeywordUpdate.resolve();
+                    }
+                });
 
                 // add keywords
                 var keyword_add_count = keyword_add.length;
                 var keyword_add_current = 0;
                 var waitForKeywordAdd = $q.defer();
-					waitForKeywordUpdate.promise.then(function() {
-						if (keyword_add_count > 0) {
-							for (var idx in keyword_add) {
-								ngSettings.NumberNames.ServerRequests.AddKeyword(cpo, keyword_add[idx].did, keyword_add[idx].keyword_value,
-									// success
-									function() {
-										keyword_add_current++;
-										if (keyword_add_current == keyword_add_count) {
-											waitForKeywordAdd.resolve(keyword_change_errors);
-										}
-									},
-									// error
-									function(data, did) {
-										keyword_add_current++;
-										keyword_change_errors.push({
-											did : did,
-											message : 'Failed to add keyword(s)'
-										});
-										if (keyword_add_current == keyword_add_count) {
-											waitForKeywordAdd.resolve(keyword_change_errors);
-										}
-									});
-							}
-						} else {
-							waitForKeywordAdd.resolve(keyword_change_errors);
-						}
-					});
+                waitForKeywordUpdate.promise.then(function() {
+                    if (keyword_add_count > 0) {
+                        for (var idx in keyword_add) {
+                            ngSettings.NumberNames.ServerRequests.AddKeyword(cpo, keyword_add[idx].did, keyword_add[idx].keyword_value,
+                            // success
+                            function() {
+                                keyword_add_current++;
+                                if (keyword_add_current == keyword_add_count) {
+                                    waitForKeywordAdd.resolve(keyword_change_errors);
+                                }
+                            },
+                            // error
+                            function(data, did) {
+                                keyword_add_current++;
+                                keyword_change_errors.push({
+                                    did : did,
+                                    message : 'Failed to add keyword(s)'
+                                });
+                                if (keyword_add_current == keyword_add_count) {
+                                    waitForKeywordAdd.resolve(keyword_change_errors);
+                                }
+                            });
+                        }
+                    } else {
+                        waitForKeywordAdd.resolve(keyword_change_errors);
+                    }
+                });
 
                 waitForKeywordAdd.promise.then(function(keyword_change_errors) {
                     if (keyword_change_errors.length > 0) {
@@ -2755,7 +2806,7 @@ var ngSettings = {
                                     numCtrl.numbers.keywords = numCtrl.keywords[number.DIDID];
                                 }
                                 for (var n in numCtrl.keywords) {
-											  numCtrl.keywords[n].splice($scope.main.accountInfo.sharedDIDKeywordMax);
+                                    numCtrl.keywords[n].splice($scope.main.accountInfo.sharedDIDKeywordMax);
                                 }
 
                                 for (var i in cpo.numCtrl.numbers) {
