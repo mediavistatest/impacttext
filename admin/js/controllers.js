@@ -321,7 +321,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 				notify("Long code that starts with '1' must be 11 characters long!");
 				return;
 			}else if($scope.PrimaryDID[0] != '1' && $scope.PrimaryDID.length != 10){
-				notify("Long code length must be 10 characters!");
+				notify("Long Code length must be 10 digits!");
 				return;
 			}
 		}

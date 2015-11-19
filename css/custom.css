@@ -2896,6 +2896,13 @@ body.mini-navbar .nav-header {
 }
 
 
+.white {
+color:white;
+}
+.black {
+color:black;
+}
+
 /*MEDIA QUERIES*/
 
 @media (max-width: 1375px) {
