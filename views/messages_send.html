@@ -333,11 +333,12 @@
         <div class="send-message-from-name form-group clearfix test-sms">
             <label class="col-sm-2 control-label"> Test SMS: </label>
             <div class="col-sm-4">
-                <input type="text" name="TestSMS" placeholder="Enter Test Number" class="form-control ng-pristine ng-valid ng-touched" ng-trim="false">
+                <input type="text" name="TestSMS" placeholder="Enter Test Number" class="form-control ng-pristine ng-valid ng-touched" ng-trim="false" ng-model="testSMSNumber" ng-change="testSMSSubmit = false">
+                <small ng-if="testSMSSubmit && !testSMSNumber" class="error-hint">Please specify a number for the test SMS toi be sent to.</small>
             </div>
             <div class="col-sm-4 tip">
                 <!--<i class="fa fa-info-circle" tooltip="Test SMS"> </i>-->
-                <a class="btn test-btn" ng-click="">Send test sms</a>
+                <a class="btn test-btn" ng-click="sendTestSMS()">Send test sms</a>
             </div>
         </div>
         <br>

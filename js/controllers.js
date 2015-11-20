@@ -6008,6 +6008,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         var scheduledDateTime = new $scope.main.DataConstructors.ScheduledDateTime();
         $scope.ArrayScheduledDateTime.push(scheduledDateTime);
         $scope.SendToList = false;
+		  $scope.testSMSSubmit = false;
+		  $scope.testSMSNumber = '';
     };
 
     //helper function for generating message text
@@ -6328,6 +6330,69 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         value : 'M',
         label : 'Every month'
     }];
+
+	$scope.sendTestSMS = function(){
+		$scope.testSMSSubmit = true;
+		if(!empty($scope.testSMSNumber)){
+			var messageText = $scope.generateMessageText();
+			if(empty(messageText)) {
+				alert("Message is empty. Please add some content and try again.");
+				return;
+			}
+
+			var requestData = {
+				sethttp : 1,
+				DID : $scope.FromNumber.DID,
+				message : messageText,
+				apikey : $cookieStore.get('inspinia_auth_token'),
+				accountID : $cookieStore.get('inspinia_account_id'),
+				ANI : $scope.testSMSNumber
+			};
+
+			$http.post(inspiniaNS.wsUrl + 'message_send', $.param(requestData)).success(
+				//Successful request to the server
+				function(data, status, headers, config) {
+					if (data == null || typeof data.apicode == 'undefined') {
+						//This should never happen
+						alert("Unidentified error occurred when sending your message!");
+						return;
+					}
+					if (data.apicode == 0) {
+						//Reset form and inform user about success
+						//$scope.reset();
+						$scope.$broadcast("SendingMessageSucceeded", data.apidata);
+					} else {
+						alert("An error occurred when sending your message! Error code: " + data.apicode);
+						alert(JSON.stringify(data));
+					}
+				}).error(
+				//An error occurred with this request
+				function(data, status, headers, config) {
+					//alert('Unexpected error occurred when trying to send message!');
+					if (status == 500) {
+						if (data.apicode == 1) {
+							$scope.$broadcast("AniOptedOut", data.apidata);
+						} else {
+							alert("An error occurred when sending your message! Error code: " + data.apicode);
+							alert(JSON.stringify(data));
+						}
+					}
+					if (status == 400) {
+						if (data.apicode == 1) {
+							$scope.$broadcast("AniOptedOut", data.apidata);
+						} else if (data.apicode == 4) {
+							$scope.$broadcast("InvalidANI", data.apidata);
+						} else {
+							alert("An error occurred when sending your message! Error code: " + data.apicode);
+							alert(JSON.stringify(data));
+						}
+					} else {
+						//Just non handled errors by optout are counted
+						$scope.$broadcast("RequestError", data, 'message_send');
+					}
+				});
+		}
+	}
 }
 
 function ScheduleRepeatCtrl($scope) {
