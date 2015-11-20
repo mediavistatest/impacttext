@@ -1,45 +1,45 @@
 /*
- 
+
  * Functions (controllers)
- 
+
  *  - MainCtrl
- 
+
  *  - dashboardFlotOne
- 
+
  *  - dashboardFlotTwo
- 
+
  *  - dashboardMap
- 
+
  *  - flotChartCtrl
- 
+
  *  - rickshawChartCtrl
- 
+
  *  - sparklineChartCtrl
- 
+
  *  - widgetFlotChart
- 
+
  *  - modalDemoCtrl
- 
+
  *  - ionSlider
- 
+
  *  - wizardCtrl
- 
+
  *  - CalendarCtrl
- 
+
  *  - chartJsCtrl
- 
+
  *  - GoogleMaps
- 
+
  *  - ngGridCtrl
- 
+
  *  - codeEditorCtrl
- 
+
  *  - nestableCtrl
- 
+
  *  - notifyCtrl
- 
+
  *  - translateCtrl
- 
+
  */
 var mainObject;
 
@@ -79,13 +79,13 @@ function generateOrderByField(sortFields, sortOrders) {
     return orderBy;
 }
 /**
- 
+
  * MainCtrl - controller
- 
+
  * Contains severals global data used in diferent view
- 
+
  *
- 
+
  */
 function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
     var main = this;
@@ -913,21 +913,21 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
             }
         });
     /**
-     
+
      * slideInterval - Interval for bootstrap Carousel, in milliseconds:
-     
+
      */
     this.slideInterval = 5000;
     /**
-     
+
      * states - Data used in Advanced Form view for Chosen plugin
-     
+
      */
     this.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
     /**
-     
+
      * persons - Data used in Tables view for Data Tables plugin
-     
+
      */
     this.persons = [{
         id: '1',
@@ -951,9 +951,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         lastName: 'Rosowski'
     }];
     /**
-     
+
      * Lists - Data used in Tables view for Data Tables plugin
-     
+
      */
     this.Lists = [{
         Id: '1',
@@ -992,26 +992,26 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         LastSent: 'Feb 9 9:00 AM'
     }];
     /**
-     
+
      * check's - Few variables for checkbox input used in iCheck plugin. Only for demo purpose
-     
+
      */
     this.checkOne = true;
     this.checkTwo = true;
     this.checkThree = true;
     this.checkFour = true;
     /**
-     
+
      * knobs - Few variables for knob plugin used in Advanced Plugins view
-     
+
      */
     this.knobOne = 75;
     this.knobTwo = 25;
     this.knobThree = 50;
     /**
-     
+
      * Variables used for Ui Elements view
-     
+
      */
     this.bigTotalItems = 175;
     this.bigCurrentPage = 1;
@@ -1024,9 +1024,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         right: false
     };
     /**
-     
+
      * groups - used for Collapse panels in Tabs and Panels view
-     
+
      */
     this.groups = [{
         title: 'Dynamic Group Header - 1',
@@ -1036,9 +1036,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         content: 'Dynamic Group Body - 2'
     }];
     /**
-     
+
      * alerts - used for dynamic alerts in Notifications and Tooltips view
-     
+
      */
     this.alerts = [{
         type: 'danger',
@@ -1051,9 +1051,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         msg: 'OK, You are done a great job man.'
     }];
     /**
-     
+
      * addAlert, closeAlert  - used to manage alerts in Notifications and Tooltips view
-     
+
      */
     this.addAlert = function() {
         this.alerts.push({
@@ -1064,9 +1064,9 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         this.alerts.splice(index, 1);
     };
     /**
-     
+
      * randomStacked - used for progress bar (stacked type) in Badges adn Labels view
-     
+
      */
     this.randomStacked = function() {
         this.stacked = [];
@@ -1081,23 +1081,23 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         }
     };
     /**
-     
+
      * initial run for random stacked value
-     
+
      */
     this.randomStacked();
     /**
-     
+
      * summernoteText - used for Summernote plugin
-     
+
      */
     this.summernoteText = ['<h3>Hello Jonathan! </h3>', '<p>dummy text of the printing and typesetting industry. <strong>Lorem Ipsum has been the dustrys</strong> standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more', 'recently with</p>'].join('');
     /**
-     
+
      * General variables for Peity Charts
-     
+
      * used in many view so this is in Main controller
-     
+
      */
     this.BarChart = {
         data: [5, 3, 9, 6, 5, 9, 7, 3, 5, 2, 4, 7, 3, 2, 7, 9, 6, 4, 5, 7, 3, 2, 1, 0, 9, 5, 6, 8, 3, 2, 1],
@@ -1198,11 +1198,11 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
     }, true);
 }
 /**
- 
+
  * dashboardFlotOne - simple controller for data
- 
+
  * for Flot chart in Dashboard view
- 
+
  */
 function dashboardFlotOne() {
     var data1 = [
@@ -1286,21 +1286,21 @@ function dashboardFlotOne() {
         tooltip: false
     };
     /**
-     
+
      * Definition of variables
-     
+
      * Flot chart
-     
+
      */
     this.flotData = [data1, data2];
     this.flotOptions = options;
 }
 /**
- 
+
  * dashboardFlotTwo - simple controller for data
- 
+
  * for Flot chart in Dashboard view
- 
+
  */
 function dashboardFlotTwo() {
     var data1 = [
@@ -1451,21 +1451,21 @@ function dashboardFlotTwo() {
         return new Date(year, month - 1, day).getTime();
     }
     /**
-     
+
      * Definition of variables
-     
+
      * Flot chart
-     
+
      */
     this.flotData = dataset;
     this.flotOptions = options;
 }
 /**
- 
+
  * dashboardMap - data for Map plugin
- 
+
  * used in Dashboard 2 view
- 
+
  */
 function dashboardMap() {
     var data = {
@@ -1482,17 +1482,17 @@ function dashboardMap() {
     this.data = data;
 }
 /**
- 
+
  * flotChartCtrl - Controller for data for All flot chart
- 
+
  * used in Flot chart view
- 
+
  */
 function flotChartCtrl() {
     /**
-     
+
      * Bar Chart Options
-     
+
      */
     var barOptions = {
         series: {
@@ -1529,9 +1529,9 @@ function flotChartCtrl() {
         }
     };
     /**
-     
+
      * Bar Chart data
-     
+
      */
     var chartData = [{
         label: "bar",
@@ -1545,9 +1545,9 @@ function flotChartCtrl() {
         ]
     }];
     /**
-     
+
      * Pie Chart Data
-     
+
      */
     var pieData = [{
         label: "Sales 1",
@@ -1567,9 +1567,9 @@ function flotChartCtrl() {
         color: "#1ab394"
     }];
     /**
-     
+
      * Pie Chart Options
-     
+
      */
     var pieOptions = {
         series: {
@@ -1591,9 +1591,9 @@ function flotChartCtrl() {
         }
     };
     /**
-     
+
      * Line Chart Options
-     
+
      */
     var lineOptions = {
         series: {
@@ -1630,9 +1630,9 @@ function flotChartCtrl() {
         }
     };
     /**
-     
+
      * Line Chart Data
-     
+
      */
     var lineAreaData = [{
         label: "line",
@@ -1653,9 +1653,9 @@ function flotChartCtrl() {
         ]
     }];
     /**
-     
+
      * Line Area Chart Options
-     
+
      */
     var lineAreaOptions = {
         series: {
@@ -1692,9 +1692,9 @@ function flotChartCtrl() {
         }
     };
     /**
-     
+
      * Data for Multi line chart
-     
+
      */
     var oilprices = [
         [1167692400000, 61.05],
@@ -2660,9 +2660,9 @@ function flotChartCtrl() {
     }
     var position = 'right';
     /**
-     
+
      * multiData - data for multi line chart
-     
+
      */
     var multiData = [{
         data: oilprices,
@@ -2673,9 +2673,9 @@ function flotChartCtrl() {
         yaxis: 2
     }];
     /**
-     
+
      * multiOptions - options for multi chart
-     
+
      */
     var multiOptions = {
         xaxes: [{
@@ -2709,11 +2709,11 @@ function flotChartCtrl() {
         }
     };
     /**
-     
+
      * Definition of variables
-     
+
      * Flot chart
-     
+
      */
     this.flotChartData = chartData;
     this.flotBarOptions = barOptions;
@@ -2726,17 +2726,17 @@ function flotChartCtrl() {
     this.flotMultiOptions = multiOptions;
 }
 /**
- 
+
  * rickshawChartCtrl - Controller for data for all Rickshaw chart
- 
+
  * used in Rickshaw chart view
- 
+
  */
 function rickshawChartCtrl() {
     /**
-     
+
      * Data for simple chart
-     
+
      */
     var simpleChartSeries = [{
         color: '#1ab394',
@@ -2758,17 +2758,17 @@ function rickshawChartCtrl() {
         }]
     }];
     /**
-     
+
      * Options for simple chart
-     
+
      */
     var simpleChartOptions = {
         renderer: 'area'
     };
     /**
-     
+
      * Data for Multi Area chart
-     
+
      */
     var multiAreaChartSeries = [{
         data: [{
@@ -2810,26 +2810,26 @@ function rickshawChartCtrl() {
         stroke: '#d7d7d7'
     }];
     /**
-     
+
      * Options for Multi chart
-     
+
      */
     var multiAreaChartOptions = {
         renderer: 'area',
         stroke: true
     };
     /**
-     
+
      * Options for one line chart
-     
+
      */
     var oneLineChartOptions = {
         renderer: 'line'
     };
     /**
-     
+
      * Data for one line chart
-     
+
      */
     var oneLineChartSeries = [{
         data: [{
@@ -2851,17 +2851,17 @@ function rickshawChartCtrl() {
         color: '#1ab394'
     }];
     /**
-     
+
      * Options for Multi line chart
-     
+
      */
     var multiLineChartOptions = {
         renderer: 'line'
     };
     /**
-     
+
      * Data for Multi line chart
-     
+
      */
     var multiLineChartSeries = [{
         data: [{
@@ -2901,17 +2901,17 @@ function rickshawChartCtrl() {
         color: '#d7d7d7'
     }];
     /**
-     
+
      * Options for Bars chart
-     
+
      */
     var barsChartOptions = {
         renderer: 'bar'
     };
     /**
-     
+
      * Data for Bars chart
-     
+
      */
     var barsChartSeries = [{
         data: [{
@@ -2933,17 +2933,17 @@ function rickshawChartCtrl() {
         color: '#1ab394'
     }];
     /**
-     
+
      * Options for Stacked chart
-     
+
      */
     var stackedChartOptions = {
         renderer: 'bar'
     };
     /**
-     
+
      * Data for Stacked chart
-     
+
      */
     var stackedChartSeries = [{
         data: [{
@@ -2983,9 +2983,9 @@ function rickshawChartCtrl() {
         color: '#d7d7d7'
     }];
     /**
-     
+
      * Options for Scatterplot chart
-     
+
      */
     var scatterplotChartOptions = {
         renderer: 'scatterplot',
@@ -2997,9 +2997,9 @@ function rickshawChartCtrl() {
         }
     };
     /**
-     
+
      * Data for Scatterplot chart
-     
+
      */
     var scatterplotChartSeries = [{
         data: [{
@@ -3039,11 +3039,11 @@ function rickshawChartCtrl() {
         color: '#1ab394'
     }];
     /**
-     
+
      * Definition all variables
-     
+
      * Rickshaw chart
-     
+
      */
     this.simpleSeries = simpleChartSeries;
     this.simpleOptions = simpleChartOptions;
@@ -3061,17 +3061,17 @@ function rickshawChartCtrl() {
     this.scatterplotSeries = scatterplotChartSeries;
 }
 /**
- 
+
  * sparklineChartCtrl - Controller for data for all Sparkline chart
- 
+
  * used in Sparkline chart view
- 
+
  */
 function sparklineChartCtrl() {
     /**
-     
+
      * Inline chart
-     
+
      */
     var inlineData = [34, 43, 43, 35, 44, 32, 44, 52, 25];
     var inlineOptions = {
@@ -3080,9 +3080,9 @@ function sparklineChartCtrl() {
         fillColor: '#1ab394'
     };
     /**
-     
+
      * Bar chart
-     
+
      */
     var barSmallData = [5, 6, 7, 2, 0, -4, -2, 4];
     var barSmallOptions = {
@@ -3091,9 +3091,9 @@ function sparklineChartCtrl() {
         negBarColor: '#c6c6c6'
     };
     /**
-     
+
      * Pie chart
-     
+
      */
     var smallPieData = [1, 1, 2];
     var smallPieOptions = {
@@ -3101,9 +3101,9 @@ function sparklineChartCtrl() {
         sliceColors: ['#1ab394', '#b3b3b3', '#e4f0fb']
     };
     /**
-     
+
      * Long line chart
-     
+
      */
     var longLineData = [34, 43, 43, 35, 44, 32, 15, 22, 46, 33, 86, 54, 73, 53, 12, 53, 23, 65, 23, 63, 53, 42, 34, 56, 76, 15, 54, 23, 44];
     var longLineOptions = {
@@ -3112,9 +3112,9 @@ function sparklineChartCtrl() {
         fillColor: '#ffffff'
     };
     /**
-     
+
      * Tristate chart
-     
+
      */
     var tristateData = [1, 1, 0, 1, -1, -1, 1, -1, 0, 0, 1, 1];
     var tristateOptions = {
@@ -3123,9 +3123,9 @@ function sparklineChartCtrl() {
         negBarColor: '#bfbfbf'
     };
     /**
-     
+
      * Discrate chart
-     
+
      */
     var discreteData = [4, 6, 7, 7, 4, 3, 2, 1, 4, 4, 5, 6, 3, 4, 5, 8, 7, 6, 9, 3, 2, 4, 1, 5, 6, 4, 3, 7];
     var discreteOptions = {
@@ -3133,9 +3133,9 @@ function sparklineChartCtrl() {
         lineColor: '#1ab394'
     };
     /**
-     
+
      * Pie chart
-     
+
      */
     var pieCustomData = [52, 12, 44];
     var pieCustomOptions = {
@@ -3144,9 +3144,9 @@ function sparklineChartCtrl() {
         sliceColors: ['#1ab394', '#b3b3b3', '#e4f0fb']
     };
     /**
-     
+
      * Bar chart
-     
+
      */
     var barCustomData = [5, 6, 7, 2, 0, 4, 2, 4, 5, 7, 2, 4, 12, 14, 4, 2, 14, 12, 7];
     var barCustomOptions = {
@@ -3157,9 +3157,9 @@ function sparklineChartCtrl() {
         negBarColor: '#c6c6c6'
     };
     /**
-     
+
      * Line chart
-     
+
      */
     var lineCustomData = [34, 43, 43, 35, 44, 32, 15, 22, 46, 33, 86, 54, 73, 53, 12, 53, 23, 65, 23, 63, 53, 42, 34, 56, 76, 15, 54, 23, 44];
     var lineCustomOptions = {
@@ -3170,11 +3170,11 @@ function sparklineChartCtrl() {
         fillColor: '#ffffff'
     };
     /**
-     
+
      * Definition of variables
-     
+
      * Flot chart
-     
+
      */
     this.inlineData = inlineData;
     this.inlineOptions = inlineOptions;
@@ -3196,17 +3196,17 @@ function sparklineChartCtrl() {
     this.lineCustomOptions = lineCustomOptions;
 }
 /**
- 
+
  * widgetFlotChart - Data for Flot chart
- 
+
  * used in Widget view
- 
+
  */
 function widgetFlotChart() {
     /**
-     
+
      * Flot chart data and options
-     
+
      */
     var d1 = [
         [1262304000000, 6],
@@ -3347,11 +3347,11 @@ function widgetFlotChart() {
         }
     };
     /**
-     
+
      * Definition of variables
-     
+
      * Flot chart
-     
+
      */
     this.flotChartData1 = flotChartData1;
     this.flotChartOptions1 = flotChartOptions1;
@@ -3361,11 +3361,11 @@ function widgetFlotChart() {
     this.flotChartOptions3 = flotChartOptions3;
 }
 /**
- 
+
  * modalDemoCtrl - Controller used to run modal view
- 
+
  * used in Basic form view
- 
+
  */
 function modalDemoCtrl($scope, $modal) {
     $scope.open = function() {
@@ -3413,11 +3413,11 @@ function ModalInstanceCtrl($scope, $modalInstance) {
     $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
 };
 /**
- 
+
  * ionSlider - Controller for data for Ion Slider plugin
- 
+
  * used in Advanced plugin view
- 
+
  */
 function ionSlider() {
     this.ionSliderOptions1 = {
@@ -3462,11 +3462,11 @@ function ionSlider() {
     };
 }
 /**
- 
+
  * wizardCtrl - Controller for wizard functions
- 
+
  * used in Wizard view
- 
+
  */
 function wizardCtrl($scope, $rootScope) {
     // All data will be store in this object
@@ -3477,11 +3477,11 @@ function wizardCtrl($scope, $rootScope) {
     };
 }
 /**
- 
+
  * CalendarCtrl - Controller for Calendar
- 
+
  * Store data events for calendar
- 
+
  */
 function CalendarCtrl($scope) {
     var date = new Date();
@@ -3548,17 +3548,17 @@ function CalendarCtrl($scope) {
     $scope.eventSources = [$scope.events];
 }
 /**
- 
+
  * chartJsCtrl - Controller for data for ChartJs plugin
- 
+
  * used in Chart.js view
- 
+
  */
 function chartJsCtrl() {
     /**
-     
+
      * Data for Polar chart
-     
+
      */
     this.polarData = [{
         value: 300,
@@ -3577,9 +3577,9 @@ function chartJsCtrl() {
         label: "Laptop"
     }];
     /**
-     
+
      * Options for Polar chart
-     
+
      */
     this.polarOptions = {
         scaleShowLabelBackdrop: true,
@@ -3597,9 +3597,9 @@ function chartJsCtrl() {
         animateScale: false
     };
     /**
-     
+
      * Data for Doughnut chart
-     
+
      */
     this.doughnutData = [{
         value: 300,
@@ -3618,9 +3618,9 @@ function chartJsCtrl() {
         label: "Laptop"
     }];
     /**
-     
+
      * Options for Doughnut chart
-     
+
      */
     this.doughnutOptions = {
         segmentShowStroke: true,
@@ -3633,9 +3633,9 @@ function chartJsCtrl() {
         animateScale: false
     };
     /**
-     
+
      * Data for Line chart
-     
+
      */
     this.lineData = {
         labels: ["January", "February", "March", "April", "May", "June", "July"],
@@ -3682,9 +3682,9 @@ function chartJsCtrl() {
         }]
     };
     /**
-     
+
      * Options for Line chart
-     
+
      */
     this.lineOptions = {
         scaleShowGridLines: true,
@@ -3701,9 +3701,9 @@ function chartJsCtrl() {
         datasetFill: true
     };
     /**
-     
+
      * Options for Bar chart
-     
+
      */
     this.barOptions = {
         scaleBeginAtZero: true,
@@ -3716,9 +3716,9 @@ function chartJsCtrl() {
         barDatasetSpacing: 1
     };
     /**
-     
+
      * Data for Bar chart
-     
+
      */
     //    this.barData = {
     //
@@ -3762,9 +3762,9 @@ function chartJsCtrl() {
     //
     //    };
     /**
-     
+
      * Data for Radar chart
-     
+
      */
     this.radarData = {
         labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
@@ -3789,9 +3789,9 @@ function chartJsCtrl() {
         }]
     };
     /**
-     
+
      * Options for Radar chart
-     
+
      */
     this.radarOptions = {
         scaleShowLine: true,
@@ -3814,9 +3814,9 @@ function chartJsCtrl() {
     };
 };
 /**
- 
+
  * GoogleMaps - Controller for data google maps
- 
+
  */
 function GoogleMaps($scope) {
     $scope.mapOptions = {
@@ -4000,9 +4000,9 @@ function GoogleMaps($scope) {
     };
 }
 /**
- 
+
  * nestableCtrl - Controller for nestable list
- 
+
  */
 function nestableCtrl($scope) {
     $scope.remove = function(scope) {
@@ -4068,9 +4068,9 @@ function nestableCtrl($scope) {
     }];
 }
 /**
- 
+
  * codeEditorCtrl - Controller for code editor - Code Mirror
- 
+
  */
 function codeEditorCtrl($scope) {
     $scope.editorOptions = {
@@ -4086,9 +4086,9 @@ function codeEditorCtrl($scope) {
     };
 }
 /**
- 
+
  * CONTROLLER FOR LIST VIEW TABLE
- 
+
  */
 function ngGridCtrl($scope, $http, $cookieStore) {
     //   $scope.ngData = [
@@ -4423,9 +4423,9 @@ function ngGridCtrl($scope, $http, $cookieStore) {
     };
 }
 /**
- 
+
  * CONTROLLER FOR CONTACT VIEW TABLE
- 
+
  */
 function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     //   $scope.ngData = [
@@ -4751,11 +4751,11 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
         $scope.export(true);
     };
     /**
-     
+
      *
-     
+
      * @param bool all Export all
-     
+
      */
     $scope.export = function(all) {
         if (empty(all)) {
@@ -4907,11 +4907,11 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     $scope.columnSettings.UpdateColumns();
 }
 /**
- 
+
  *
- 
+
  * CONTROLLER FOR LIST SEGMENTS
- 
+
  */
 function ngSegmentListCtrl($scope, $http, $cookieStore, $state) {
     $scope.ngData = [];
@@ -5836,11 +5836,11 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
     $scope.columnSettings.UpdateColumns();
 }
 /**
- 
+
  *
- 
+
  * CONTROLLER FOR ACTIVITY LOG VIEW TABLE
- 
+
  */
 function ngActivityLogListCtrl($scope, $http, $cookieStore) {
     //   $scope.ngData = [
@@ -7453,13 +7453,13 @@ function ScheduleRepeatCtrl($scope) {
     }, true);
 }
 /**
- 
+
  * Controller for the login functionality.
- 
+
  *
- 
+
  * @param $scope   angular js scope
- 
+
  */
 function loginCtrl($scope, $cookieStore, $http, $window) {
     $scope.invalidCredentials = false;
@@ -7543,24 +7543,24 @@ function qrCtrl($scope) {
     $scope.image = true;
 }
 /**
- 
+
  *
- 
+
  * Inbox
- 
+
  */
 /**
- 
+
  *
- 
+
  * Pass all functions into module
- 
+
  */
 function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
     /**
-     
+
      * Options for Bar chart
-     
+
      */
     $scope.barOptions = {
         scaleBeginAtZero: true,
@@ -7573,9 +7573,9 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
         barDatasetSpacing: 1
     };
     /**
-     
+
      * Data for Bar chart
-     
+
      */
     $scope.barData = {
         labels: ["Monthly statistics"],
@@ -7692,9 +7692,9 @@ function DashboardBarCtrl($scope, $http, $cookieStore, $state) {
     callRequest();
 }
 /**
- 
+
  * DASHBOARD CALENDAR
- 
+
  */
 function DashboardCalendarCtrl($scope, $http, $cookieStore) {
     var date = new Date();
@@ -8049,6 +8049,8 @@ function DashboardInboxCtrl($scope, $http, $cookieStore) {
 // }
 /*SEARCH BY DATE*/
 function SearchByDateCtrl($scope, $http, $cookieStore, $state) {
+    $scope.format = 'MM/dd/yyyy';
+
     $scope.StartDate = '';
     $scope.EndDate = '';
     $scope.today = function() {

@@ -419,7 +419,7 @@ var ngInbox = {
                 return orderBy;
             },
             GetLocalDateTimeString : function(utcDateTime) {
-                var dateOutputFormat = 'YYYY-mm-DD HH:MM:SS';
+                var dateOutputFormat = 'MM/DD/YYYY HH:MM:SS';
                 if (utcDateTime) {
                     var dateStr = '';
                     var resDate = '';
@@ -433,48 +433,24 @@ var ngInbox = {
                     tmpDate.setUTCMinutes(minPart);
                     tmpDate.setUTCSeconds(secPart);
                     // dateStr = tmpDate.toLocaleDateString();
-                    var year;
-                    var month;
-                    var day;
-                    var hour;
-                    var minutes;
-                    var seconds;
+
+                    var year = '' + tmpDate.getFullYear();
+                    var month = ('0' + (tmpDate.getMonth() + 1)).substr(-2);
+                    var day = ('0' + tmpDate.getDate()).substr(-2);
+                    var hour = ('0' + tmpDate.getHours()).substr(-2);
+                    var minutes = ('0' + tmpDate.getMinutes()).substr(-2);
+                    var seconds = ('0' + tmpDate.getSeconds()).substr(-2);
 
                     switch (dateOutputFormat) {
                     case 'YYYY-mm-DD HH:MM:SS' :
-                        var year = '' + tmpDate.getFullYear();
-                        var month = ('0' + (tmpDate.getMonth() + 1)).substr(-2);
-                        var day = ('0' + tmpDate.getDate()).substr(-2);
-                        var hour = ('0' + tmpDate.getHours()).substr(-2);
-                        var minutes = ('0' + tmpDate.getMinutes()).substr(-2);
-                        var seconds = ('0' + tmpDate.getSeconds()).substr(-2);
-
                         resDate = year + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds;
 
-                        // console.log('resDate:' + resDate)
+                        break;
+                    case 'MM/DD/YYYY HH:MM:SS':
+                        resDate = month + '/' + day + '/' + year + ' ' + hour + ':' + minutes + ':' + seconds;
                         break;
                     }
 
-                    // console.log(dateStr)
-
-                    // while (dateStr.indexOf('/') > -1) {
-                    // if (resDate) {
-                    // resDate =(dateStr.substring(0, dateStr.indexOf('/'))).slice(-2) + '-' + resDate;
-                    // } else {
-                    // resDate = (dateStr.substring(0, dateStr.indexOf('/'))).slice(-2);
-                    // }
-                    //
-                    // dateStr = dateStr.substring(dateStr.indexOf('/') + 1, dateStr.length);
-                    // }
-                    //
-                    // while (dateStr.indexOf('/') > -1) {
-                    // dateStr
-                    // }
-
-                    // resDate = dateStr.replace(/\//g, "-");
-                    // resDate = resDate + ' ' + tmpDate.toLocaleTimeString();
-
-                    // console.log('---------------' + resDate)
                     return resDate;
                 }
             },
@@ -882,7 +858,7 @@ var ngInbox = {
 
                 var msgList_ = '';
                 for (var j = 0; j < messageToChangeStatusArray.length; j++) {
-                    var tempId_= messageToChangeStatusArray[j].outboundMessageID;
+                    var tempId_ = messageToChangeStatusArray[j].outboundMessageID;
 
                     if (msgList_ == '') {
                         msgList_ = tempId_;
@@ -892,9 +868,9 @@ var ngInbox = {
 
                 }
                 var apiCallAction_ = 'message_restoreoutbound';
-                    params.outboundmessageid = msgList_;
-                    params.sethttp = 1;
-                    params.companyid = controllerParent.$scope.main.accountInfo.companyID;
+                params.outboundmessageid = msgList_;
+                params.sethttp = 1;
+                params.companyid = controllerParent.$scope.main.accountInfo.companyID;
 
                 var $param = $.param(params);
 
