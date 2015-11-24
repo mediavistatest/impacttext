@@ -318,7 +318,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 
 		if($scope.UseShortPrimary == 0){
 			if($scope.PrimaryDID[0] == '1' && $scope.PrimaryDID.length != 11){
-				notify("Long code that starts with '1' must be 11 characters long!");
+				notify("Long code that starts with '1' must be 11 digits long!");
 				return;
 			}else if($scope.PrimaryDID[0] != '1' && $scope.PrimaryDID.length != 10){
 				notify("Long Code length must be 10 digits!");
@@ -731,10 +731,10 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 				return;
 			}
 			if($scope.smsCode.LongCode[0] == '1' && $scope.smsCode.LongCode.length != 11){
-				notify("Long code that starts with '1' must be 11 characters long!");
+				notify("Long code that starts with '1' must be 11 digits long!");
 				return;
 			}else if($scope.smsCode.LongCode[0] != '1' && $scope.smsCode.LongCode.length != 10){
-				notify("Long code length must be 10 characters!");
+				notify("Long code length must be 10 digits!");
 				return;
 			}
 			if (typeof $scope.smsCode.LongCodeName == 'undefined' || $scope.smsCode.LongCodeName == null || $.trim($scope.smsCode.LongCodeName) == '') {
