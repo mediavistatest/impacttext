@@ -185,6 +185,32 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                 }
             });
         },
+        languagesGet : function() {
+            main.languages = [];
+
+            //Read the data from the remote server. First read the contact lists.
+            $http.post(inspiniaNS.wsUrl + "languages_get", $.param({
+                sethttp : 1,
+                apikey : main.authToken
+            })).success(
+            //Successful request to the server
+            function(data, status, headers, config) {
+                if (data.apicode == 0) {
+                    //Reading contact lists
+                    main.languages = data.apidata;
+                } else {
+                    main.languages = [];
+                }
+            }).error(
+            //An error occurred with this request
+            function(data, status, headers, config) {
+                //alert('Unexpected error occurred when trying to fetch contact lists!');
+                if (status == 400) {
+                    alert("An error occurred when getting languege lists! Error code: " + data.apicode);
+                    alert(JSON.stringify(data));
+                }
+            });
+        },
         contactSegmentsGet : function(callback) {
             main.contactSegments = [];
 
@@ -885,6 +911,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
 
             main.ServerRequests.autoresponderActionGet();
 
+            main.ServerRequests.languagesGet();
+
             main.CommonActions.setContactListsAndSegments();
 
             var successDidGet = function(data, status, headers, config, $inScope) {
@@ -1584,8 +1612,7 @@ function flotChartCtrl() {
             hoverable : true,
             clickable : true,
             tickColor : "#D4D4D4",
-            borderWidth : 0,
-            hoverable : true
+            borderWidth : 0
         },
         tooltip : true,
         tooltipOpts : {

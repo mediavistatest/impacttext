@@ -3289,17 +3289,17 @@ var ngSettings = {
 			},
 			SelectLanguage : function(cpo, languageCode) {
 				cpo.SelectedLanguage = null;
-				if (cpo.arCtrl.Languages) {
+				if (cpo.$scope.main.languages) {
 					if (languageCode) {
-						for (var i = 0; i < cpo.arCtrl.Languages.length; i++) {
-							if (cpo.arCtrl.Languages[i].languageCode == String(languageCode)) {
-								cpo.SelectedLanguage = cpo.arCtrl.Languages[i];
+						for (var i = 0; i < cpo.$scope.main.languages.length; i++) {
+							if (cpo.$scope.main.languages[i].languageCode == String(languageCode)) {
+								cpo.SelectedLanguage = cpo.$scope.main.languages[i];
 								break;
 							}
 						}
 					}
 					if (!cpo.SelectedLanguage) {
-						cpo.SelectedLanguage = cpo.arCtrl.Languages[0];
+						cpo.SelectedLanguage = cpo.$scope.main.languages[0];
 					}
 				} else {
 					setTimeout(function() {
