@@ -63,7 +63,7 @@ function generateOrderByField(sortFields, sortOrders) {
  * Contains severals global data used in diferent view
  *
  */
-function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
+function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state, $q) {
     var main = this;
     mainObject = this;
     //main.notify = notify;
@@ -868,6 +868,8 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         }
     };
 
+	// TODO: apply this fix to all other branches
+	 main.numbersLoaded = $q.defer();
     $http.post(inspiniaNS.wsUrl + "account_get", $.param({
         apikey : main.authToken,
         accountID : main.accountID,
@@ -887,6 +889,17 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
 
             main.CommonActions.setContactListsAndSegments();
 
+			   var accountKeywordGetCallback = function(){
+					for (var j in main.fromNumbers) {
+						if ( typeof main.Settings.Numbers[j] !== 'undefined') {
+							main.Settings.Numbers[j].name = main.fromNumbers[j].fromName;
+						}
+					}
+
+					main.numbersLoaded.resolve();
+					main.loaded = true;
+				};
+
             var successDidGet = function(data, status, headers, config, $inScope) {
                 main.fromNumbersString = '';
                 if (data == null || typeof data.apicode == 'undefined') {
@@ -902,24 +915,25 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                     main.Settings.Numbers = [];
                 }
 
-                main.ServerRequests.accountKeywordGet();
+                main.ServerRequests.accountKeywordGet(accountKeywordGetCallback, accountKeywordGetCallback);
 
                 for (var j in main.fromNumbers) {
                     main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();
                     if (j < main.fromNumbers.length - 1) {
                         main.fromNumbersString += ',';
                     }
-
-                    if ( typeof main.Settings.Numbers[j] !== 'undefined') {
-                        main.Settings.Numbers[j].name = main.fromNumbers[j].fromName;
-                    }
                 }
+
+					 //accountKeywordGetCallback();
             };
             var errorDidGet = function(data, status, headers, config, $inScope) {
                 if (status == 400) {
                     alert("An error occurred when getting DID! Error code: " + data.apicode);
                     console.log(JSON.stringify(data));
                 }
+
+					 main.numbersLoaded.resolve();
+					 main.loaded = true;
             };
             main.ServerRequests.didGet(successDidGet, errorDidGet, $scope);
             main.ServerRequests.getCustomOptOutMessage();
@@ -5819,6 +5833,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 for (var k = 0; k < $inScope.main.Settings.Numbers.length; k++) {
                     if ($inScope.main.Settings.Numbers[k].DIDID == $inScope.main.fromNumbers[j].DIDID) {
                         $inScope.main.Settings.Numbers[k].name = $inScope.main.fromNumbers[j].fromName;
+							   $inScope.main.Settings.Numbers[k].priorities = $inScope.main.fromNumbers[j].priorityMessaging;
                         break;
                     }
                 }
@@ -5826,10 +5841,18 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
             if ($inScope.main.Settings.Numbers && $inScope.main.Settings.Numbers.length > 0 && $inScope.FromNumber && $inScope.FromNumber.DID) {
                 var Number = $.grep($inScope.main.Settings.Numbers, function(member){
-                return member.DID == $inScope.FromNumber.DID;
+                	return member.DID == $inScope.FromNumber.DID;
                 })[0];
-                if ( typeof Number != 'undefined' && Number.name != null && Number.name != '') {
-                    $inScope.FromName = Number.name;
+                if ( typeof Number != 'undefined') {
+						  if(Number.name != null && Number.name != ''){
+                    		$inScope.FromName = Number.name;
+						  }
+						  $inScope.Priorities = (!empty(Number.priorities)) ? Number.priorities : 1;
+
+						  if(!isNaN($inScope.Priorities)){
+							  var slider = jQuery('form[name="SendForm"] .form-group .priority input[ion-range-slider]').data("ionRangeSlider");
+							  slider.update({max: $inScope.Priorities});
+						  }
                 }
             }
 
@@ -5941,7 +5964,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         }
     }
 
-    setFromNumber();
+	 if($scope.main.loaded){
+		 setFromNumber();
+	 }
+	 $scope.main.numbersLoaded.promise.then(setFromNumber);
 
     $scope.OptOutMsg = "";
     $scope.ScheduleCheck = "";
@@ -7073,7 +7099,7 @@ angular.module('inspinia').filter('makeRange', function() {
     };
 });
 
-angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', '$state', MainCtrl]);
+angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', '$state', '$q', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
 angular.module('inspinia').controller('dashboardFlotTwo', dashboardFlotTwo);
 angular.module('inspinia').controller('dashboardMap', dashboardMap);

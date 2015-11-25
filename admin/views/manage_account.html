@@ -222,6 +222,22 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                             <i class="fa fa-info-circle" tooltip='Long Keyword'></i>
                         </div>
                     </div>
+                    <div class="form-group clearfix">
+                        <label class="col-md-3 control-label">Available Priorities:</label>
+                        <div class="col-md-8" ng-init="smsCode.LongPriorities = 0">
+                            <select name="Priorities" ng-model="smsCode.LongPriorities" class="form-control">
+                                <option value="0">Disable Priorities</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1 tip">
+                            <i class="fa fa-info-circle" tooltip='Allow message send priorities for this long code'></i>
+                        </div>
+                    </div>
                     </div>
                     <!--END LONG CODE-->
                     <!--START SHORT CODE-->
@@ -251,6 +267,22 @@ nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
                         </div>
                         <div class="col-md-1 tip">
                             <i class="fa fa-info-circle" tooltip='Short Keyword'></i>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-md-3 control-label">Available Priorities:</label>
+                        <div class="col-md-8" ng-init="smsCode.LongPriorities = 0">
+                            <select name="Priorities" ng-model="smsCode.ShortPriorities" class="form-control">
+                                <option value="0">Disable Priorities</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1 tip">
+                            <i class="fa fa-info-circle" tooltip='Allow message send priorities for this long code'></i>
                         </div>
                     </div>
                     </div>

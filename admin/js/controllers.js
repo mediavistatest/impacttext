@@ -691,6 +691,8 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.smsCode.AccCode = 'Long';
 		$scope.smsCode.LongCode = null;
 		$scope.smsCode.LongCodeName = null;
+		$scope.smsCode.LongPriorities = 0;
+		$scope.smsCode.ShortPriorities = 0;
 		$scope.smsCode.LongKeyword = 'YES';
 		$scope.smsCode.ShortCode = 766337;
 		$scope.smsCode.ShortCodeName = null;
@@ -725,6 +727,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			}
 			request.DID = $scope.smsCode.ShortCode;
 			request.DIDName = $scope.smsCode.ShortCodeName;
+			request.priorityMessaging = $scope.smsCode.ShortPriorities;
 		} else {
 			if (typeof $scope.smsCode.LongCode == 'undefined' || $scope.smsCode.LongCode == null || $.trim($scope.smsCode.LongCode) == '') {
 				notify("Please enter the valid long code.");
@@ -743,6 +746,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			}
 			request.DID = $scope.smsCode.LongCode;
 			request.DIDName = $scope.smsCode.LongCodeName;
+			request.priorityMessaging = $scope.smsCode.LongPriorities;
 		}
 		//Set the start date
 		var now = new Date();
@@ -809,12 +813,14 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 				return;
 			}
 			request.DIDName = $scope.smsCode.ShortCodeName;
+			request.priorityMessaging = $scope.smsCode.ShortPriorities;
 		} else {
 			if (typeof $scope.smsCode.LongCodeName == 'undefined' || $scope.smsCode.LongCodeName == null || $.trim($scope.smsCode.LongCodeName) == '') {
 				notify("Please enter the valid long code name.");
 				return;
 			}
 			request.DIDName = $scope.smsCode.LongCodeName;
+			request.priorityMessaging = $scope.smsCode.LongPriorities;
 		}
 
 		$http
@@ -965,11 +971,13 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			$scope.smsCode.AccCode = 'Short';
 			$scope.smsCode.ShortCode = smsCodeData.DID;
 			$scope.smsCode.ShortCodeName = smsCodeData.DIDName;
+			$scope.smsCode.ShortPriorities = smsCodeData.priorityMessaging;
 		} else {
 			//This is long code
 			$scope.smsCode.AccCode = 'Long';
 			$scope.smsCode.LongCode = smsCodeData.DID;
 			$scope.smsCode.LongCodeName = smsCodeData.DIDName;
+			$scope.smsCode.LongPriorities = smsCodeData.priorityMessaging;
 		}
 		$scope.smsCode.selectedDidId = smsCodeData.DIDID;
 		$scope.smsCode.status = smsCodeData.status;
