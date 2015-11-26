@@ -5884,12 +5884,14 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 						  if(!isNaN($inScope.Priorities)){
 							  var slider = jQuery('form[name="SendForm"] .form-group .priority input[ion-range-slider]').data("ionRangeSlider");
-							  var allPriorityLabels = ['Low', 'Medium', 'High', 'Immediate', 'Emergency'];
-							  var availablePriorityLabels = [];
-							  for (var i = 0; i <= $inScope.Priorities; i++) {
-								  availablePriorityLabels[i] = allPriorityLabels[i];
+							  if (slider) {
+								  var allPriorityLabels = ['Low', 'Medium', 'High', 'Immediate', 'Emergency'];
+								  var availablePriorityLabels = [];
+								  for (var i = 0; i <= $inScope.Priorities; i++) {
+									  availablePriorityLabels[i] = allPriorityLabels[i];
+								  }
+								  slider.update({max: $inScope.Priorities, values: availablePriorityLabels});
 							  }
-							  slider.update({max: $inScope.Priorities, values: availablePriorityLabels});
 						  }
                 }
             }
