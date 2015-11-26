@@ -68,8 +68,8 @@ superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', '$l
 	};
 	$scope.totalServerItems = 0;
 	$scope.pagingOptions = {
-		pageSizes: [2, 5, 10, 20, 100],
-		pageSize: 100,
+		pageSizes: [2, 5, 10, 20, 50, 100],
+		pageSize: 50,
 		currentPage: 1
 	};
 	// sort
@@ -342,6 +342,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 			country: $scope.Country,
 			externalAccountNumber: $scope.ExternalAccount,
 			primaryDID: $scope.PrimaryDID,
+			compliance: $scope.Compliance,
 			apikey: $cookieStore.get('inspinia_auth_token'),
 			sethttp: 1
 		};
@@ -422,19 +423,20 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.ProductPackage = null;
 		$scope.CompanyID = 1;
 		$scope.smsCode.AccCode = 'Long';
-		$scope.BillingCycle = null,
-			$scope.FirstName = null,
-			$scope.LastName = null,
-			$scope.EmailAddress = null,
-			$scope.Address1 = null,
-			$scope.Address2 = null,
-			$scope.City = null,
-			$scope.State = null,
-			$scope.Zip = null,
-			$scope.Country = null,
-			$scope.ExternalAccount = null,
-			$scope.PrimaryDID = null;
+		$scope.BillingCycle = null;
+		$scope.FirstName = null;
+		$scope.LastName = null;
+		$scope.EmailAddress = null;
+		$scope.Address1 = null;
+		$scope.Address2 = null;
+		$scope.City = null;
+		$scope.State = null;
+		$scope.Zip = null;
+		$scope.Country = null;
+		$scope.ExternalAccount = null;
+		$scope.PrimaryDID = null;
 		$scope.UseShortPrimary = 0;
+		$scope.Compliance = 'CA';
 	};
 
 	$scope.restorePreviousAccountData = function() {
@@ -464,6 +466,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.previousAccountData.externalAccountNumber = $scope.ExternalAccount;
 		$scope.previousAccountData.primaryDIDID = $scope.primaryDidId;
 		$scope.previousAccountData.status = $scope.accountStatus;
+		$scope.previousAccountData.compliance = $scope.Compliance;
 	};
 
 	$scope.updateAccountFields = function(accountData) {
@@ -486,6 +489,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.primaryDidId = accountData.primaryDIDID;
 		$scope.refreshPrimaryDID();
 		$scope.accountStatus = accountData.status;
+		$scope.Compliance = accountData.compliance;
 		$scope.previousAccountData = accountData;
 	};
 
