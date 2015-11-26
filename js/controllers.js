@@ -5407,6 +5407,13 @@ function notifyCtrl($scope, notify) {
             templateUrl : $scope.inspiniaTemplate
         });
     };
+    $scope.ComplianceMustBeSelectedMsg = function() {
+        notify({
+            message : 'Compliance checkbox must be checked!',
+            classes : 'alert-danger',
+            templateUrl : $scope.inspiniaTemplate
+        });
+    };
     $scope.ContactSavedMsg = function() {
         notify({
             message : 'Contact is successfully saved!',
@@ -5600,6 +5607,10 @@ function notifyCtrl($scope, notify) {
     //If InvalidANI event is triggered, show related message
     $scope.$on('InvalidANI', function(event, args) {
         $scope.InvalidANIMsg();
+    });
+    //If ComplianceMustBeSelected event is triggered, show related message
+    $scope.$on('ComplianceMustBeSelected', function(event, args) {
+        $scope.ComplianceMustBeSelectedMsg();
     });
     //If ContactSaved event is triggered, show related message
     $scope.$on('ContactSaved', function(event, args) {
@@ -6157,7 +6168,6 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
         //Calculate selected priority based on it's string value
         var selectedPriority = messagePriorityValuesMap[$scope.SelectedPriority];
-
         //Adding schedule date if one is specified
         for (var k = 0; k < $scope.ArrayScheduledDateTime.length; k++) {
             // //Creating a api request data object
@@ -6169,6 +6179,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 apikey : $cookieStore.get('inspinia_auth_token'),
                 accountID : $cookieStore.get('inspinia_account_id')
             };
+            if ($scope.ComplianceAcknowledged) {
+					requestData.compliance = 1;
+				}
+
             if ($scope.SendToList && typeof $scope.ToList != 'undefined' && $scope.ToList != null && $scope.ToList != '' && ($scope.ToList.constructor === Object || ($scope.ToList.constructor === Array && $scope.ToList.length > 0))) {
                 if ($scope.ToList.constructor === Array) {
                     //Sending message to contact lists
@@ -6311,7 +6325,9 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                         alert("An error occurred when sending your message! Error code: " + data.apicode);
                         alert(JSON.stringify(data));
                     }
-                } else {
+                } else if (status == 422 && data.apitext == 'compliance: must be set'){
+                    $scope.$broadcast("ComplianceMustBeSelected", data.apidata);
+					 } else {
                     //Just non handled errors by optout are counted
                     $scope.$broadcast("RequestError", data, 'message_send');
                 }
