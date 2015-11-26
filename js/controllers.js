@@ -21,6 +21,12 @@
  *  - translateCtrl
  */
 var mainObject;
+var messagePriorityValuesMap = [];
+messagePriorityValuesMap['Low'] = 0;
+messagePriorityValuesMap['Medium'] = 1;
+messagePriorityValuesMap['High'] = 2;
+messagePriorityValuesMap['Immediate'] = 3;
+messagePriorityValuesMap['Emergency'] = 4;
 
 function empty(value) {
     return typeof value == 'undefined' || value == null || value == "";
@@ -5878,7 +5884,12 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 
 						  if(!isNaN($inScope.Priorities)){
 							  var slider = jQuery('form[name="SendForm"] .form-group .priority input[ion-range-slider]').data("ionRangeSlider");
-							  slider.update({max: $inScope.Priorities});
+							  var allPriorityLabels = ['Low', 'Medium', 'High', 'Immediate', 'Emergency'];
+							  var availablePriorityLabels = [];
+							  for (var i = 0; i <= $inScope.Priorities; i++) {
+								  availablePriorityLabels[i] = allPriorityLabels[i];
+							  }
+							  slider.update({max: $inScope.Priorities, values: availablePriorityLabels});
 						  }
                 }
             }
@@ -5996,6 +6007,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 	 }
 	 $scope.main.numbersLoaded.promise.then(setFromNumber);
 
+	$scope.SelectedPriority = 'Low';
     $scope.OptOutMsg = "";
     $scope.ScheduleCheck = "";
     $scope.SendToList = false;
@@ -6049,6 +6061,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         }
         $scope.FromName = $scope.initial;
         $scope.MessageType = 'SMS';
+		 $scope.SelectedPriority = 'Low';
         $scope.FromNumber = 'default';
         $scope.ToList = $scope.initial;
         $scope.ToNumber = $scope.initial;
@@ -6140,12 +6153,16 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
             }
         }
 
+        //Calculate selected priority based on it's string value
+        var selectedPriority = messagePriorityValuesMap[$scope.SelectedPriority];
+
         //Adding schedule date if one is specified
         for (var k = 0; k < $scope.ArrayScheduledDateTime.length; k++) {
             // //Creating a api request data object
             var requestData = {
                 sethttp : 1,
                 DID : $scope.FromNumber.DID,
+                priority: selectedPriority > $scope.FromNumber.priorityMessaging ? $scope.FromNumber.priorityMessaging : selectedPriority,
                 message : messageText,
                 apikey : $cookieStore.get('inspinia_auth_token'),
                 accountID : $cookieStore.get('inspinia_account_id')
