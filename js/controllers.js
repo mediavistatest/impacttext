@@ -6021,6 +6021,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 	 $scope.main.numbersLoaded.promise.then(setFromNumber);
 
 	$scope.SelectedPriority = 'Low';
+    $scope.ComplianceAcknowledged = false;
     $scope.OptOutMsg = "";
     $scope.ScheduleCheck = "";
     $scope.SendToList = false;
@@ -6075,6 +6076,11 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         $scope.FromName = $scope.initial;
         $scope.MessageType = 'SMS';
 		 $scope.SelectedPriority = 'Low';
+		 var slider = jQuery('form[name="SendForm"] .form-group .priority input[ion-range-slider]').data("ionRangeSlider");
+		 if (slider) {
+			 slider.update({from: $scope.SelectedPriority});
+		 }
+        $scope.ComplianceAcknowledged = false;
         $scope.FromNumber = 'default';
         $scope.ToList = $scope.initial;
         $scope.ToNumber = $scope.initial;

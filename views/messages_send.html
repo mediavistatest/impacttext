@@ -319,7 +319,7 @@
         <datetimepicker min-date="minDate" show-weeks="showWeeks" hour-step="hourStep" minute-step="minuteStep" ng-model="date" show-meridian="showMeridian" date-format="mm/dd/yyyy" date-options="dateOptions" date-disabled="disabled(date, mode)" readonly-time="false"></datetimepicker>
         </div>-->
         <br>
-        <div class="form-group clearfix">
+        <div class="form-group clearfix" ng-show="main.accountInfo.compliance != null && main.accountInfo.compliance != '' && main.accountInfo.compliance != 0">
             <label class="col-sm-6 col-md-offset-2 checkbox">
                 <div class="icheckbox_square-green" style="position: relative;">
                     <!-- TODO -->
