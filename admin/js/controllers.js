@@ -184,6 +184,10 @@ superAdmin.controller('AccountListCtrl', ['$scope', '$cookieStore', '$http', '$l
 			$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText, $scope.filterOptions.filterBy, $scope.sortOptions.fields, $scope.sortOptions.directions);
 		}
 	}, true);
+	
+	$scope.$watch('gridData', function() {
+		$('.gridStyle').trigger('resize');
+	});
 
 	$scope.getPagedDataAsync = function(pageSize, page, searchText, filterBy, sortFields, sortOrders) {
 		if (typeof page == 'undefined' || page == null || page == '') {
