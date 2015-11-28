@@ -63,7 +63,7 @@ function generateOrderByField(sortFields, sortOrders) {
  * Contains severals global data used in diferent view
  *
  */
-function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
+function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state, $q) {
     var main = this;
     mainObject = this;
     //main.notify = notify;
@@ -868,6 +868,7 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
         }
     };
 
+	 main.numbersLoaded = $q.defer();
     $http.post(inspiniaNS.wsUrl + "account_get", $.param({
         apikey : main.authToken,
         accountID : main.accountID,
@@ -887,6 +888,17 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
 
             main.CommonActions.setContactListsAndSegments();
 
+			   var accountKeywordGetCallback = function(){
+					for (var j in main.fromNumbers) {
+						if ( typeof main.Settings.Numbers[j] !== 'undefined') {
+							main.Settings.Numbers[j].name = main.fromNumbers[j].fromName;
+						}
+					}
+
+					main.numbersLoaded.resolve();
+					main.loaded = true;
+				};
+
             var successDidGet = function(data, status, headers, config, $inScope) {
                 main.fromNumbersString = '';
                 if (data == null || typeof data.apicode == 'undefined') {
@@ -895,31 +907,32 @@ function MainCtrl($scope, $http, $cookieStore, $window, ipCookie, $state) {
                     return;
                 }
                 if (data.apicode == 0) {
-                    //main.fromNumbers = data.apidata;
+                    // main.fromNumbers = data.apidata;
                     $inScope.main.fromNumbers = $.grep(data.apidata,function(member){return member.status=='A'});
                 } else {
                     main.fromNumbers = [];
                     main.Settings.Numbers = [];
                 }
 
-                main.ServerRequests.accountKeywordGet();
+                main.ServerRequests.accountKeywordGet(accountKeywordGetCallback, accountKeywordGetCallback);
 
                 for (var j in main.fromNumbers) {
                     main.fromNumbersString = main.fromNumbersString + ' +' + main.fromNumbers[j].DID.toString();
                     if (j < main.fromNumbers.length - 1) {
                         main.fromNumbersString += ',';
                     }
-
-                    if ( typeof main.Settings.Numbers[j] !== 'undefined') {
-                        main.Settings.Numbers[j].name = main.fromNumbers[j].fromName;
-                    }
                 }
+
+					 //accountKeywordGetCallback();
             };
             var errorDidGet = function(data, status, headers, config, $inScope) {
                 if (status == 400) {
                     alert("An error occurred when getting DID! Error code: " + data.apicode);
                     console.log(JSON.stringify(data));
                 }
+
+					 main.numbersLoaded.resolve();
+					 main.loaded = true;
             };
             main.ServerRequests.didGet(successDidGet, errorDidGet, $scope);
             main.ServerRequests.getCustomOptOutMessage();
@@ -5941,7 +5954,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         }
     }
 
-    setFromNumber();
+	 if($scope.main.loaded){
+		 setFromNumber();
+	 }
+	 $scope.main.numbersLoaded.promise.then(setFromNumber);
 
     $scope.OptOutMsg = "";
     $scope.ScheduleCheck = "";
@@ -7008,7 +7024,7 @@ angular.module('inspinia').filter('makeRange', function() {
     };
 });
 
-angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', '$state', MainCtrl]);
+angular.module('inspinia').controller('MainCtrl', ['$scope', '$http', '$cookieStore', '$window', 'ipCookie', '$state', '$q', MainCtrl]);
 angular.module('inspinia').controller('dashboardFlotOne', dashboardFlotOne);
 angular.module('inspinia').controller('dashboardFlotTwo', dashboardFlotTwo);
 angular.module('inspinia').controller('dashboardMap', dashboardMap);
