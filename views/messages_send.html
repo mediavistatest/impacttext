@@ -117,11 +117,7 @@
         <div class="form-group clearfix">
             <label class="col-sm-2 control-label"> Language: </label>
             <div class="col-sm-6">
-                <select chosen data-placeholder="Select Message Language" disable-search="true"  class="form-control m-b" name="SelectLanguage">
-                    <option value=""></option>
-                    <option value="1">English</option>
-                    <option value="2">French</option>
-                    <option value="3">Spanish</option>
+                <select chosen ng-model="SelectedLanguage" ng-options="language.languageName for language in main.languages" data-placeholder="Select Message Language" disable-search="true"  class="form-control m-b" name="SelectLanguage">
                 </select>
             </div>
         </div>

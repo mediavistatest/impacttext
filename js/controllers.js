@@ -5972,7 +5972,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
     }
 
     setContactListsAndSegments();
-
+    
     $scope.fromNumbers = [];
     //send form initial states
     $scope.initial = "";
@@ -6181,10 +6181,21 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 sethttp : 1,
                 DID : $scope.FromNumber.DID,
                 priority: selectedPriority > $scope.FromNumber.priorityMessaging ? $scope.FromNumber.priorityMessaging : selectedPriority,
-                message : messageText,
+                //message : messageText,
                 apikey : $cookieStore.get('inspinia_auth_token'),
                 accountID : $cookieStore.get('inspinia_account_id')
             };
+            
+            // if ($scope.SelectedLanguage && $scope.SelectedLanguage.languageCode){
+            //     requestData.languages = JSON.stringify([{
+            //         key: $scope.SelectedLanguage.languageCode,
+            //         value: messageText
+            //     }]);
+            //     requestData.message = '';                
+            // }else{
+                requestData.message = messageText;
+            // }
+            
             if ($scope.ComplianceAcknowledged) {
 					requestData.compliance = 1;
 				}
