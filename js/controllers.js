@@ -3466,11 +3466,6 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     //TABLE OPTIONS
 
     $scope.columnDefs = [{
-        inSettings : false,
-        field : '',
-        width : 30
-        //        cellTemplate: '<div class="ngSelectionCell"><label><input tabindex="-1" class="regular-checkbox" type="checkbox" ng-model="checkOne" ng-checked="row.selected"></label></div>'
-    }, {
         inSettings : true,
         checked : true,
         canBeClicked : true,
@@ -3493,38 +3488,46 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
     }, {
         inSettings : true,
         checked : true,
+        canBeClicked : true,
         field : 'custom1',
         displayName : 'Field 1'
     }, {
         inSettings : true,
         checked : true,
+        canBeClicked : true,
         field : 'custom2',
         displayName : 'Field 2'
     }, {
         inSettings : true,
         checked : true,
+        canBeClicked : true,
         field : 'custom3',
         displayName : 'Field 3'
     }, {
         inSettings : true,
         checked : false,
+        canBeClicked : false,
         field : 'custom4',
         displayName : 'Field 4'
     }, {
         inSettings : true,
         checked : false,
+        canBeClicked : false,
         field : 'custom5',
         displayName : 'Field 5'
     }, {
         inSettings : true,
+        checked : false,
+        canBeClicked : false,
+        field : 'language',
+        displayName : 'Language'
+    }, {
+        inSettings : true,
         checked : true,
+        canBeClicked : true,
         field : 'status',
         displayName : 'Status',
         cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
-    }, {
-        inSettings : false,
-        checked : true,
-        cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><a class="btn" ui-sref="lists.manage_contact({id:row.getProperty(\'contactID\')})"><i class="fa fa-pencil"></i> Edit Contact </a></div>'
     }];
 
     $scope.ngOptions = {
@@ -3658,15 +3661,15 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
             $scope.columnSettings.columnDefs[index] = $scope.columnSettings.columnDefs.splice(index + 1, 1, $scope.columnSettings.columnDefs[index])[0];
         },
         UpdateColumns : function(refresh) {
-            $scope.columnSettings.SetCookie();
             $scope.columnDefs = $.extend([], $scope.columnSettings.GrepColumnDefs($scope.columnSettings.columnDefs));
             if (refresh) {
                 $scope.refresh();
-            }
+            };
+            $scope.columnSettings.SetCookie();
         },
         GrepColumnDefs : function(columnDefs) {
             return $.grep(columnDefs, function(member) {
-                return (member.canBeClicked || (!member.canBeClicked && member.checked));
+                return (member && member.checked);
             });
         },
         GetCookie : function() {
@@ -3701,7 +3704,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 			 var true_index = -1;
 			 for(var i in $scope.columnSettings.columnDefs){
 				 var column = $scope.columnSettings.columnDefs[i];
-				 if(column.inSettings) true_index++;
+				 if(column && column.inSettings) true_index++;
 				 if(i == index) break;
 			 }
 			 return true_index;
@@ -3710,7 +3713,7 @@ function ngContactListCtrl($scope, $http, $cookieStore, $state) {
 			 var true_index = 0;
 			 for(var i in $scope.columnSettings.columnDefs){
 				 var column = $scope.columnSettings.columnDefs[i];
-				 if(column.inSettings) true_index++;
+				 if(column && column.inSettings) true_index++;
 			 }
 			 return true_index;
 		 }
@@ -4587,6 +4590,11 @@ function PreviewSegmentCtrl($scope, $state, $cookieStore, $window, $http) {
 		 field : 'custom5',
 		 displayName : 'Field 5'
 	 }, {
+        inSettings : true,
+        checked : false,
+        field : 'language',
+        displayName : 'Language'
+    }, {
 		 field : 'status',
 		 displayName : 'Status',
 		 cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span class="{{row.getProperty(col.field)}}">{{row.getProperty(col.field)}}</span></div>'
