@@ -5917,12 +5917,21 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
         };
         $scope.main.ServerRequests.didGet(successDidGet, errorDidGet, $scope);
     });
+    $scope.$watch('testSMSNumber', function() {
+        // clearInterval(phoneCheckInterval);
+        // phoneCheckInterval = setTimeout(function(){
+        $scope.PhoneNumberArrayValidator.ParseAndValidateNumbers($scope.testSMSNumber);
+        $scope.PhoneNumberArrayValidator.PhoneNumbers.errorMessagetestSMSNumber = $scope.PhoneNumberArrayValidator.PhoneNumbers.errorMessage;
+        // },2000);
+    }, true);
     $scope.$watch('ToNumber', function() {
         // clearInterval(phoneCheckInterval);
         // phoneCheckInterval = setTimeout(function(){
         $scope.PhoneNumberArrayValidator.ParseAndValidateNumbers($scope.ToNumber);
+        $scope.PhoneNumberArrayValidator.PhoneNumbers.errorMessageToNumber = $scope.PhoneNumberArrayValidator.PhoneNumbers.errorMessage;
+        
         // },2000);
-    }, true);
+    }, true);    
     $scope.$watch('FromName', function() {
         maxLengthCalc();
     }, true);
@@ -6439,6 +6448,10 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 	$scope.sendTestSMS = function(){
 		$scope.testSMSSubmit = true;
 		if(!empty($scope.testSMSNumber)){
+
+			
+		//TODO ddddddddddddddddddddddddddddddd	
+			
 			var messageText = $scope.generateMessageText();
 			if(empty(messageText)) {
 				alert("Message is empty. Please add some content and try again.");
@@ -6497,7 +6510,7 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 					}
 				});
 		}
-	}
+	};
 }
 
 function ScheduleRepeatCtrl($scope) {

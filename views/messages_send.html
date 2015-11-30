@@ -22,7 +22,7 @@
             <p>
                 "Hello {firstname}, thanks for joining my list" will result in text messages customized with each contact’s first name.
             </p>
-            
+
             <a href="http://www.impacttext.com/support/how-to/messages" target="_blank">Learn more.</a>
         </div>
     </div>
@@ -67,8 +67,6 @@
             </div>
         </div>
 
-        
-        
         <div class="form-group clearfix">
             <label class="col-sm-2 control-label"> From: </label>
             <div class="col-sm-6">
@@ -84,7 +82,7 @@
                 <input type="text" ion-range-slider range-options="{type: 'single', min: 0, max: 1, step: 1, grid: true, grid_snap: true, hide_min_max: true}" ng-model="SelectedPriority" />
             </div>
         </div>
-        
+
         <div class="send-message-from-name form-group clearfix">
             <label class="col-sm-2 control-label"> From Name: </label>
             <div class="col-sm-6">
@@ -109,16 +107,15 @@
             </div>
             <div class="col-md-4 col-sm-3 tip">
                 <i ng-show="!SendToList" class="fa fa-info-circle" tooltip='Enter a phone number starting with the area code. Separate multiple numbers with a comma.'> </i>
-                <div ng-show="PhoneNumberArrayValidator.PhoneNumbers.errorMessage && !SendToList" class="right-side-message error">
-                    {{PhoneNumberArrayValidator.PhoneNumbers.errorMessage}}
+                <div ng-show="PhoneNumberArrayValidator.PhoneNumbers.errorMessageToNumber && !SendToList" class="right-side-message error">
+                    {{PhoneNumberArrayValidator.PhoneNumbers.errorMessageToNumber}}
                 </div>
             </div>
         </div>
         <div class="form-group clearfix">
             <label class="col-sm-2 control-label"> Language: </label>
             <div class="col-sm-6">
-                <select chosen ng-model="SelectedLanguage" ng-options="language.languageName for language in main.languages" data-placeholder="Select Message Language" disable-search="true"  class="form-control m-b" name="SelectLanguage">
-                </select>
+                <select chosen ng-model="SelectedLanguage" ng-options="language.languageName for language in main.languages" data-placeholder="Select Message Language" disable-search="true"  class="form-control m-b" name="SelectLanguage"></select>
             </div>
         </div>
         <div class="form-group clearfix">
@@ -171,16 +168,18 @@
                 <i class="fa fa-info-circle" tooltip='This will count in your character limit.'> </i>
             </div>
         </div>
-        
+
         <br>
-        
+
         <div class="form-group clearfix">
             <label class="col-sm-6 col-md-offset-2 checkbox">
                 <input icheck type="checkbox" value="schedule" ng-model="ScheduleCheck">
                 Schedule for later </label>
         </div>
         <div ng-show="ScheduleCheck">
-            <div ng-show="ScheduleCheck&&!SendForm.$valid" class="error-box">All dates should be in future on reccuring and schedule messages</div>
+            <div ng-show="ScheduleCheck&&!SendForm.$valid" class="error-box">
+                All dates should be in future on reccuring and schedule messages
+            </div>
             <div class="form-group clearfix" ng-repeat="sheduledDateTime in ArrayScheduledDateTime" ng-controller="ScheduleRepeatCtrl">
                 <div class="row">
                     <label class="col-sm-2 control-label">
@@ -322,23 +321,30 @@
             <label class="col-sm-6 col-md-offset-2 checkbox">
                 <div class="icheckbox_square-green" style="position: relative;">
                     <!-- TODO -->
-                    <input icheck="" type="checkbox" value="1" ng-model="ComplianceAcknowledged" class="ng-untouched ng-valid ng-dirty ng-valid-parse" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
-                </div>
-                Compliance acknowledgement </label>
+                    <input icheck="" type="checkbox" value="1" ng-model="ComplianceAcknowledged" class="ng-untouched ng-valid ng-dirty ng-valid-parse" style="position: absolute; opacity: 0;">
+                    <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
+                </div> Compliance acknowledgement </label>
         </div>
         <br>
-        
+
         <div class="send-message-from-name form-group clearfix test-sms">
             <label class="col-sm-2 control-label"> Test SMS: </label>
-            <div class="col-sm-4">
+            <div class="col-sm-2">
                 <input type="text" name="TestSMS" placeholder="Enter Test Number" class="form-control ng-pristine ng-valid ng-touched" ng-trim="false" ng-model="testSMSNumber" ng-change="testSMSSubmit = false">
                 <small ng-if="testSMSSubmit && !testSMSNumber" class="error-hint">Please specify a number for the test SMS toi be sent to.</small>
             </div>
-            <div class="col-sm-4 tip">
+            <div class="col-sm-2 tip">
                 <!--<i class="fa fa-info-circle" tooltip="Test SMS"> </i>-->
                 <a class="btn test-btn" ng-click="sendTestSMS()">Send test sms</a>
             </div>
+            <div class="col-md-2 tip">
+                <i ng-show="!SendToList" class="fa fa-info-circle" tooltip='Enter a phone number starting with the area code. Separate multiple numbers with a comma.'> </i>
+                <div ng-show="PhoneNumberArrayValidator.PhoneNumbers.errorMessagetestSMSNumber && !SendToList &&testSMSNumber" class="right-side-message error">
+                    {{PhoneNumberArrayValidator.PhoneNumbers.errorMessagetestSMSNumber}}
+                </div>
+            </div>
         </div>
+
         <br>
         <br>
         <br>
@@ -368,7 +374,7 @@
                 Send now</span> </a>
             <a class="btn btn-send right" ng-click="sendMessage(true)" ng-show="ScheduleCheck" ng-disabled="!SendForm.$valid"> <span><i class="fa fa-clock-o"> </i>
                 Schedule</span> </a>
-            
+
         </div>
     </form>
 </div>
