@@ -6203,15 +6203,14 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
                 accountID : $cookieStore.get('inspinia_account_id')
             };
             
-            // if ($scope.SelectedLanguage && $scope.SelectedLanguage.languageCode){
-            //     requestData.languages = JSON.stringify([{
-            //         key: $scope.SelectedLanguage.languageCode,
-            //         value: messageText
-            //     }]);
-            //     requestData.message = '';                
-            // }else{
+            if ($scope.SelectedLanguage && $scope.SelectedLanguage.languageCode){
+                var languageMessage_ = {};
+                languageMessage_[$scope.SelectedLanguage.languageCode] = messageText;
+                requestData.languages = JSON.stringify(languageMessage_);
+                requestData.message = '';                
+            }else{
                 requestData.message = messageText;
-            // }
+            }
             
             if ($scope.ComplianceAcknowledged) {
 					requestData.compliance = 1;
