@@ -928,6 +928,7 @@ var ngInbox = {
                         // sethttp : 1
                     };
                     params.message = messageToSendArray[j].message;
+                    params.priority = messageToSendArray[j].priority;
 
                     if (parseInt(messageToSendArray[j].contactListID)) {
                         params.contactListID = parseInt(messageToSendArray[j].contactListID);
@@ -1467,6 +1468,38 @@ var ngInbox = {
                 $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function (member) {
                 return member.DID == $sendScope.controllerParent.clickedMessage.DID;
                 })[0];
+
+                // if ($sendScope.controllerParent.clickedMessage.priority) {
+                // var slider = jQuery('form[name="SendForm"] .form-group .priority input[ion-range-slider]').data("ionRangeSlider");
+                // if (slider) {
+                // slider.update({
+                // from : $sendScope.controllerParent.clickedMessage.priority
+                // });
+                // } else {
+                // switch ($sendScope.controllerParent.clickedMessage.priority) {
+                // case '0':
+                // $sendScope.SelectedPriority = 'Low';
+                // break;
+                // case '1':
+                // $sendScope.SelectedPriority = 'Medium';
+                // break;
+                // case '2':
+                // $sendScope.SelectedPriority = 'High';
+                // break;
+                // case '3':
+                // $sendScope.SelectedPriority = 'Immediate';
+                // break;
+                // case '4':
+                // $sendScope.SelectedPriority = 'Emergency';
+                // break;
+                // default:
+                // $sendScope.SelectedPriority = 'Low';
+                // break;
+                // }
+                // }
+                // }
+
+                $sendScope.SelectedPriority = 'Low';
             } catch (e) {
                 //TODO skloniti ovaj try-catch kada se odradi inicijalna clickedMessage
             }

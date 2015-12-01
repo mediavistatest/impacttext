@@ -5902,15 +5902,26 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 						  $inScope.Priorities = (!empty(Number.priorities)) ? Number.priorities : 1;
 
 						  if(!isNaN($inScope.Priorities)){
-							  var slider = jQuery('form[name="SendForm"] .form-group .priority input[ion-range-slider]').data("ionRangeSlider");
-							  if (slider) {
-								  var allPriorityLabels = ['Low', 'Medium', 'High', 'Immediate', 'Emergency'];
-								  var availablePriorityLabels = [];
-								  for (var i = 0; i <= $inScope.Priorities; i++) {
-									  availablePriorityLabels[i] = allPriorityLabels[i];
-								  }
-								  slider.update({max: $inScope.Priorities, values: availablePriorityLabels});
-							  }
+                            var allPriorityLabels = ['Low', 'Medium', 'High', 'Immediate', 'Emergency'];
+                            var availablePriorityLabels = [];
+                            for (var i = 0; i <= $inScope.Priorities; i++) {
+                                availablePriorityLabels[i] = allPriorityLabels[i];
+                            }
+                              
+                            var sliderSend = jQuery('form[name="SendForm"] .form-group .priority input[ion-range-slider]').data("ionRangeSlider");
+                            if (sliderSend) {
+                                sliderSend.update({max: $inScope.Priorities, values: availablePriorityLabels});
+                            }
+                            
+                            var sliderForward = jQuery('form[name="ForwardForm"] .form-group .priority input[ion-range-slider]').data("ionRangeSlider");
+                            if (sliderForward) {
+                                sliderForward.update({max: $inScope.Priorities, values: availablePriorityLabels});
+                            }
+                            
+                            var sliderReply = jQuery('form[name="ReplyForm"] .form-group .priority input[ion-range-slider]').data("ionRangeSlider");
+                            if (sliderReply) {
+                                sliderReply.update({max: $inScope.Priorities, values: availablePriorityLabels});
+                            }
 						  }
                 }
             }
