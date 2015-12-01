@@ -222,9 +222,8 @@ var profile = {
 var ngFunctions = {
     ConvertDateToYYYYmmDD : function(inDate, inFormat) {
         var tmpDate = new Date(inDate);
-
+        var dateInYYYYmmDD;
         if (isNaN(tmpDate)) {
-            var dateInYYYYmmDD;
             switch (inFormat) {
             case 'YYYY-DD-mm' :
                 dateInYYYYmmDD = inDate.substring(0, 4) + '-' + inDate.substring(8, 10) + '-' + inDate.substring(5, 7);
@@ -232,10 +231,24 @@ var ngFunctions = {
             default:
                 break;
             }
-            return dateInYYYYmmDD;
         } else {
-            return inDate;
+            var day = tmpDate.getDay().toString();
+            if (day.length == 1){
+                day = '0'+day;
+            }
+            var month = tmpDate.getMonth().toString();
+            if (month.length == 1){
+                month = '0'+month;
+            }
+            switch (inFormat) {
+            case 'YYYY-DD-mm' :
+                dateInYYYYmmDD = tmpDate.getFullYear() + '-' + day + '-' + month;
+                break;
+            default:
+                break;
+            }
         }
+        return dateInYYYYmmDD;
     },
     newDateWrapper : function(inDate) {
 
