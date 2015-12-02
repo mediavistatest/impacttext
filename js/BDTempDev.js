@@ -1816,7 +1816,7 @@ var ngInbox = {
             try {
                 $sendScope.FromName = $sendScope.initial;
                 $sendScope.MessageType = 'SMS';
-                $sendScope.ComplianceAcknowledged = true;
+                $sendScope.ComplianceAcknowledged = false;
 
                 continueFunction = function() {
                     $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function (member) {
@@ -2040,7 +2040,7 @@ var ngInbox = {
             try {
                 $sendScope.FromName = $sendScope.initial;
                 $sendScope.MessageType = 'SMS';
-                $sendScope.ComplianceAcknowledged = true;
+                $sendScope.ComplianceAcknowledged = false;
 
                 continueFunction = function() {
                     $sendScope.FromNumber = $.grep($sendScope.fromNumbers, function (member) {
