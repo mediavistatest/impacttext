@@ -288,9 +288,9 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 
 	$scope.smsCode = {};
 	$scope.smsCode.AccCode = 'Long';
-	$scope.smsCode.ShortCode = '766337';
+	$scope.smsCode.ShortCode = '111222';
 	$scope.smsCode.ShortKeyword = 'Automatically Generated';
-	$scope.CompanyID = 1;
+	$scope.CompanyID = 3;
 	$scope.accountId = typeof $routeParams.accountId == 'undefined' ? null : $routeParams.accountId;
 	$scope.DidList = [];
 	$scope.UsersList = [];
@@ -425,7 +425,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.accountId = null;
 		$scope.AccountName = null;
 		$scope.ProductPackage = null;
-		$scope.CompanyID = 1;
+		$scope.CompanyID = 3;
 		$scope.smsCode.AccCode = 'Long';
 		$scope.BillingCycle = null;
 		$scope.FirstName = null;
@@ -702,7 +702,7 @@ superAdmin.controller('ManageAccountCtrl', function($scope, $http, $cookieStore,
 		$scope.smsCode.LongPriorities = 0;
 		$scope.smsCode.ShortPriorities = 0;
 		$scope.smsCode.LongKeyword = 'YES';
-		$scope.smsCode.ShortCode = 766337;
+		$scope.smsCode.ShortCode = 111222;
 		$scope.smsCode.ShortCodeName = null;
 		$scope.smsCode.ShortKeyword = 'Automatically Generated';
 		$scope.smsCode.status = null;
