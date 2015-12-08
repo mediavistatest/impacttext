@@ -6475,6 +6475,12 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 				alert("Message is empty. Please add some content and try again.");
 				return;
 			}
+            
+            var smsNumber_ = String($scope.testSMSNumber);
+            
+            if (smsNumber_.length < 11) {
+                smsNumber_ = '1' + smsNumber_;
+            }
 
 			var requestData = {
 				sethttp : 1,
@@ -6482,7 +6488,8 @@ function FormSendCtrl($scope, $cookieStore, $http, $log, $timeout, promiseTracke
 				message : messageText,
 				apikey : $cookieStore.get('inspinia_auth_token'),
 				accountID : $cookieStore.get('inspinia_account_id'),
-				ANI : $scope.testSMSNumber
+                compliance : 1,
+				ANI : smsNumber_
 			};
 
 			$http.post(inspiniaNS.wsUrl + 'message_send', $.param(requestData)).success(
