@@ -53,7 +53,7 @@ var inspiniaAdminNS = {};
 inspiniaAdminNS.wsUrl = "http://tlsionweb01.excel.com/mercury/cmp/";
 inspiniaAdminNS.developmentEnvironment = true; //this MUST be set to false when moving to production
 
-if ((window.location.href.indexOf('portal.impacttext.com') > -1) || (window.location.href.indexOf('tceng.workingpanel.com') > -1)) {
+if ((window.location.href.indexOf('tc.impacttext.com') > -1) || (window.location.href.indexOf('tceng.workingpanel.com') > -1)) {
 	inspiniaNS.wsUrl = 'http://tc-api.impacttext.com/';
 	inspiniaAdminNS.developmentEnvironment = false; //this MUST be set to false when moving to production
 }
