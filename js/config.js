@@ -766,7 +766,7 @@ app.filter('iif', function() {
 var inspiniaNS = {};
 inspiniaNS.wsUrl = "http://tlsionweb01.excel.com/mercury/cmp/";
 inspiniaNS.maUrl = 'http://dalmw01.matrixvalue.com:83/us/MyAccount/LogOn';
-if ((window.location.href.indexOf('tc.impacttext.com/') > -1) || (window.location.href.indexOf('tceng.workingpanel.com') > -1)) {
+if ((window.location.href.indexOf('tc.impacttext.com') > -1) || (window.location.href.indexOf('tceng.workingpanel.com') > -1)) {
     inspiniaNS.wsUrl = 'http://tc-api.impacttext.com/';
     inspiniaNS.maUrl = 'https://myaccount.impacttelecom.com/us/MyAccount/LogOn';
 }
