@@ -59,5 +59,5 @@ if ((window.location.href.indexOf('tc.impacttext.com') > -1) || (window.location
 }
 
 var HARDCODED = {
-	globalShortCode: '766337'
+	globalShortCode: '111222'
 };
