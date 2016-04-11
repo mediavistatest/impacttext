@@ -1597,8 +1597,7 @@ function flotChartCtrl() {
             hoverable : true,
             clickable : true,
             tickColor : "#D4D4D4",
-            borderWidth : 0,
-            hoverable : true
+            borderWidth : 0
         },
         tooltip : true,
         tooltipOpts : {
@@ -6676,7 +6675,7 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
         if (result.apicode == 0) {
             for (var event in result.apidata) {
                 var currentEvent = result.apidata[event];
-                var date = new Date(currentEvent.scheduledDate.substring(0, 10));
+                var date = new Date(currentEvent.scheduledDate);
                 var callendarEvent = {
                     originalTitle : 'Scheduled',
                     no : 1,
