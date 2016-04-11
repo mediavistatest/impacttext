@@ -6868,7 +6868,7 @@ function DashboardCalendarCtrl($scope, $http, $cookieStore) {
         if (result.apicode == 0) {
             for (var event in result.apidata) {
                 var currentEvent = result.apidata[event];
-                var date = new Date(currentEvent.scheduledDate.substring(0, 10));
+                var date = new Date(currentEvent.scheduledDate);
                 var callendarEvent = {
                     originalTitle : 'Scheduled',
                     no : 1,
